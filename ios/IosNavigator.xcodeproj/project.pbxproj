@@ -7,10 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-
-		5E555C0D2413F4C50049A1A2 /* IosNavigator.m in Sources */ = {isa = PBXBuildFile; fileRef = B3E7B5891CC2AC0600A0062D /* IosNavigator.m */; };
-		F4FF95D7245B92E800C19C63 /*  IosNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4FF95D6245B92E800C19C63 /*  IosNavigator.swift */; };
-
+		886E06EA259D01D500593A03 /* RNINavigatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886E06E9259D01D500593A03 /* RNINavigatorView.swift */; };
+		886E06ED259D020200593A03 /* RNINavigatorViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886E06EC259D020200593A03 /* RNINavigatorViewManager.swift */; };
+		886E06F0259D021500593A03 /* RNINavigatorViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 886E06EF259D021500593A03 /* RNINavigatorViewManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -27,11 +26,10 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libIosNavigator.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libIosNavigator.a; sourceTree = BUILT_PRODUCTS_DIR; };
-
-		B3E7B5891CC2AC0600A0062D /* IosNavigator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IosNavigator.m; sourceTree = "<group>"; };
-		F4FF95D5245B92E700C19C63 /* IosNavigator-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "IosNavigator-Bridging-Header.h"; sourceTree = "<group>"; };
-		F4FF95D6245B92E800C19C63 /* IosNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IosNavigator.swift; sourceTree = "<group>"; };
-
+		886E06E2259CF95B00593A03 /* IosNavigator-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "IosNavigator-Bridging-Header.h"; sourceTree = "<group>"; };
+		886E06E9259D01D500593A03 /* RNINavigatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNINavigatorView.swift; sourceTree = "<group>"; };
+		886E06EC259D020200593A03 /* RNINavigatorViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNINavigatorViewManager.swift; sourceTree = "<group>"; };
+		886E06EF259D021500593A03 /* RNINavigatorViewManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNINavigatorViewManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,13 +54,36 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
-
-				F4FF95D6245B92E800C19C63 /* IosNavigator.swift */,
-				B3E7B5891CC2AC0600A0062D /* IosNavigator.m */,
-				F4FF95D5245B92E700C19C63 /* IosNavigator-Bridging-Header.h */,
-
+				886E06DD259CF8D000593A03 /* Src */,
 				134814211AA4EA7D00B7C361 /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		886E06DD259CF8D000593A03 /* Src */ = {
+			isa = PBXGroup;
+			children = (
+				886E06E7259D019400593A03 /* ReactNative */,
+				886E06E2259CF95B00593A03 /* IosNavigator-Bridging-Header.h */,
+			);
+			path = Src;
+			sourceTree = "<group>";
+		};
+		886E06E7259D019400593A03 /* ReactNative */ = {
+			isa = PBXGroup;
+			children = (
+				886E06E8259D01A400593A03 /* RNINavigatorView */,
+			);
+			path = ReactNative;
+			sourceTree = "<group>";
+		};
+		886E06E8259D01A400593A03 /* RNINavigatorView */ = {
+			isa = PBXGroup;
+			children = (
+				886E06E9259D01D500593A03 /* RNINavigatorView.swift */,
+				886E06EC259D020200593A03 /* RNINavigatorViewManager.swift */,
+				886E06EF259D021500593A03 /* RNINavigatorViewManager.m */,
+			);
+			path = RNINavigatorView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -92,10 +113,11 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0920;
-				ORGANIZATIONNAME = Facebook;
+				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					58B511DA1A9E6C8500147676 = {
 						CreatedOnToolsVersion = 6.1.1;
+						LastSwiftMigration = 1230;
 					};
 				};
 			};
@@ -122,10 +144,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-
-				F4FF95D7245B92E800C19C63 /* IosNavigator.swift in Sources */,
-				B3E7B58A1CC2AC0600A0062D /* IosNavigator.m in Sources */,
-
+				886E06F0259D021500593A03 /* RNINavigatorViewManager.m in Sources */,
+				886E06ED259D020200593A03 /* RNINavigatorViewManager.swift in Sources */,
+				886E06EA259D01D500593A03 /* RNINavigatorView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -228,41 +249,41 @@
 		58B511F01A9E6C8500147676 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../../../React/**",
 					"$(SRCROOT)/../../react-native/React/**",
 				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = IosNavigator;
 				SKIP_INSTALL = YES;
-
-				SWIFT_OBJC_BRIDGING_HEADER = "IosNavigator-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Src/IosNavigator-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-
 			};
 			name = Debug;
 		};
 		58B511F11A9E6C8500147676 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../../../React/**",
 					"$(SRCROOT)/../../react-native/React/**",
 				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = IosNavigator;
 				SKIP_INSTALL = YES;
-
-				SWIFT_OBJC_BRIDGING_HEADER = "IosNavigator-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Src/IosNavigator-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
-
 			};
 			name = Release;
 		};

@@ -1,13 +1,26 @@
-import { requireNativeComponent, ViewStyle } from 'react-native';
+import React from 'react';
+import { StyleSheet, requireNativeComponent, ViewStyle } from 'react-native';
 
-type IosNavigatorProps = {
-  color: string;
+type RNINavigatorViewProps = {
   style: ViewStyle;
 };
 
+const componentName    = "RNINavigatorView";
+const RNINavigatorView = requireNativeComponent<RNINavigatorViewProps>(componentName);
 
-export const IosNavigatorViewManager = requireNativeComponent<IosNavigatorProps>(
-  'IosNavigatorView'
-);
+export class NavigatorView extends React.PureComponent {
+  render(){
+    return (
+      <RNINavigatorView style={styles.navigatorView}>
+        {this.props.children}
+      </RNINavigatorView>
+    );
+  };
+};
 
-export default IosNavigatorViewManager;
+const styles = StyleSheet.create({
+  navigatorView: {
+    flex: 1,
+    backgroundColor: 'red',
+  },
+});
