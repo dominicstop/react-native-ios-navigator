@@ -1,14 +1,14 @@
 //
-//  RNINavigatorViewManager.swift
-//  IosNavigator
+//  RNINavigatorRouteViewManager.swift
+//  IosNavigatorExample
 //
-//  Created by Dominic Go on 12/31/20.
+//  Created by Dominic Go on 1/1/21.
 //
 
 import Foundation
 
-@objc(RNINavigatorViewManager)
-class RNINavigatorViewManager: RCTViewManager {
+@objc(RNINavigatorRouteViewManager)
+class RNINavigatorRouteViewManager: RCTViewManager {
   
   override static func requiresMainQueueSetup() -> Bool {
     // run init in bg thread
@@ -19,3 +19,4 @@ class RNINavigatorViewManager: RCTViewManager {
     return RNINavigatorView(bridge: self.bridge);
   };
 };
+

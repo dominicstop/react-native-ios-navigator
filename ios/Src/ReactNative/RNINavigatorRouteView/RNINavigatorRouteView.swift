@@ -1,13 +1,13 @@
 //
-//  RNINavigatorView.swift
-//  IosNavigator
+//  RNINavigatorRouteView.swift
+//  IosNavigatorExample
 //
-//  Created by Dominic Go on 12/31/20.
+//  Created by Dominic Go on 1/1/21.
 //
 
 import UIKit;
 
-class RNINavigatorView: UIView {
+class RNINavigatorRouteView: UIView {
   
   // ----------------
   // MARK: Properties
