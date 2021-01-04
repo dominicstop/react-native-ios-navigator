@@ -15,12 +15,32 @@ class RNINavigatorRouteView: UIView {
   
   weak var bridge: RCTBridge!;
   
+  // -----------------------
+  // MARK: RN Exported Props
+  // -----------------------
+  
+  @objc var routeKey: NSString? {
+    didSet {
+      guard let routeKey = self.routeKey else { return };
+      print("debug - routeKey: \(routeKey)");
+    }
+  };
+  
+  @objc var routeIndex: NSNumber? {
+    didSet {
+      guard let routeIndex = self.routeIndex else { return };
+      print("debug - routeIndex: \(routeIndex)");
+    }
+  };
+  
   // ----------------
   // MARK: Initialize
   // ----------------
   
   init(bridge: RCTBridge) {
     super.init(frame: CGRect());
+    
+    self.isHidden = true;
     
     self.bridge = bridge;
   };

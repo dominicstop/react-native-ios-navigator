@@ -7,7 +7,12 @@ import { NavigatorView } from 'react-native-ios-navigator';
 export default function App() {
   return (
     <View style={styles.container}>
-      <NavigatorView/>
+      <NavigatorView
+        routes={[{
+          routeKey: 'routeFirst'
+        }]}
+        initialRoute={{routeKey: 'routeFirst'}}
+      />
     </View>
   );
 }

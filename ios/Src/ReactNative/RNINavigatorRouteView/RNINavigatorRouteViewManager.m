@@ -9,4 +9,11 @@
 
 @interface RCT_EXTERN_MODULE(RNINavigatorRouteViewManager, RCTViewManager)
 
+// ---------------------------
+// MARK: Export Props - Values
+// ---------------------------
+
+RCT_EXPORT_VIEW_PROPERTY(routeKey, NSString);
+RCT_EXPORT_VIEW_PROPERTY(routeIndex, NSNumber);
+
 @end

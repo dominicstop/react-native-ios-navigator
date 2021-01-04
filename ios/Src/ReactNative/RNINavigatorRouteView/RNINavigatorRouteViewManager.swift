@@ -16,7 +16,7 @@ class RNINavigatorRouteViewManager: RCTViewManager {
   };
   
   override func view() -> UIView! {
-    return RNINavigatorView(bridge: self.bridge);
+    return RNINavigatorRouteView(bridge: self.bridge);
   };
 };
 

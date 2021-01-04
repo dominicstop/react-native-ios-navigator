@@ -9,4 +9,6 @@
 
 @interface RCT_EXTERN_MODULE(RNINavigatorViewManager, RCTViewManager)
 
+
+
 @end
