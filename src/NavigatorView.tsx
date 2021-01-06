@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { ReactComponentElement } from 'react';
 import { StyleSheet, requireNativeComponent, ViewStyle } from 'react-native';
 
+import { NavigatorViewModule } from './NavigatorViewModule';
 import { NavigatorRouteView } from './NavigatorRouteView';
+
+import * as Helpers from './Helpers';
 
 //#region - Type Definitions
 /** Represents the current status of the navigator */
@@ -38,24 +41,53 @@ type NavigatorViewState = {
 //#endregion
 
 
-const componentName    = "RNINavigatorView";
-const RNINavigatorView = requireNativeComponent<RNINavigatorViewProps>(componentName);
+export const RNINavigatorView = 
+  requireNativeComponent<RNINavigatorViewProps>('RNINavigatorView');
 
 
 export class NavigatorView extends React.PureComponent<NavigatorViewProps, NavigatorViewState> {
   //#region - Property Declarations
-  navStatus: NavStatus;
   state: NavigatorViewState;
+  navStatus: NavStatus;
+  /** Used to communicate with `RNINavigatorView` native comp. */
+  navigatorModule: NavigatorViewModule;
+  /** A ref to the `RNINavigatorView` native component. */
+  nativeRef: React.Component;
   //#endregion
 
   constructor(props: NavigatorViewProps){
     super(props);
 
     this.navStatus = NavStatus.IDLE_INIT;
+    this.navigatorModule = new NavigatorViewModule();
 
     this.state = {
       activeRoutes: [props.initialRoute],
     };
+  };
+
+  componentDidMount(){
+    // pass a `RNINavigatorView` ref to native comp
+    this.navigatorModule.setRef(this.nativeRef);
+  };
+
+  async push(params: { routeKey: String }){
+    const { activeRoutes } = this.state;
+
+    await Helpers.setStateAsync<NavigatorViewState>(this, (prevState) => ({
+      activeRoutes: [...prevState.activeRoutes, {
+        routeKey: params.routeKey
+      }]
+    }));
+
+    // temp
+    await Helpers.timeout(500);
+
+    await this.navigatorModule.push({routeKey: params.routeKey});
+  };
+
+  _handleGetRefToNavigator = (): NavigatorView => {
+    return this;
   };
   
   render(){
@@ -67,11 +99,15 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         routeKey={route.routeKey}
         routeProps={route.routeProps}
         routeIndex={index}
+        getRefToNavigator={this._handleGetRefToNavigator}
       />
     ));
 
     return (
-      <RNINavigatorView style={styles.navigatorView}>
+      <RNINavigatorView 
+        ref={r => this.nativeRef = r}
+        style={styles.navigatorView}
+      >
         {routes}
       </RNINavigatorView>
     );

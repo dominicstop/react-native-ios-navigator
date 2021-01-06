@@ -1,5 +1,8 @@
 import React from 'react';
-import { StyleSheet, requireNativeComponent, ViewStyle, Text } from 'react-native';
+import { StyleSheet, requireNativeComponent, ViewStyle, View, Text } from 'react-native';
+
+import type { NavigatorView } from './NavigatorView';
+
 
 //#region - Type Definitions
 type RNINavigatorViewProps = {
@@ -12,13 +15,14 @@ type NavigatorRouteViewProps = {
   routeKey: String;
   routeProps: Object;
   routeIndex: Number;
+  getRefToNavigator: () => NavigatorView,
 };
 
 
 //#endregion
 
-const componentName = "RNINavigatorRouteView";
-const RNINavigatorRouteView = requireNativeComponent<RNINavigatorViewProps>(componentName);
+export const RNINavigatorRouteView = 
+  requireNativeComponent<RNINavigatorViewProps>('RNINavigatorRouteView');
 
 /** */
 export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewProps> {
@@ -31,9 +35,21 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
         routeKey={props.routeKey}
         routeIndex={props.routeIndex}
       >
-        <Text style={{fontSize: 32, padding: 20}}>
-          {`Hello World, Route: ${props.routeKey}, routeIndex: ${props.routeIndex}`}
-        </Text>
+        <View style={{paddingTop: 80, paddingHorizontal: 20}}>
+          <Text style={{fontSize: 32}}>
+            {`Hello World, Route: ${props.routeKey}, routeIndex: ${props.routeIndex}`}
+          </Text>
+          <Text 
+            style={{fontSize: 32}}
+            onPress={() => {
+              const props = this.props;
+              const navigatorRef = props.getRefToNavigator();
+              navigatorRef.push({routeKey: "routeSecond"})
+            }}
+          >
+            {`Navigate: push`}
+          </Text>
+        </View>
       </RNINavigatorRouteView>
     );
   };
@@ -41,7 +57,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
 
 const styles = StyleSheet.create({
   navigatorRouteView: {
-    flex: 1,
+    position: 'absolute',
     backgroundColor: 'yellow',
   },
 });

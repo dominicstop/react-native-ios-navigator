@@ -13,7 +13,12 @@ class RNINavigatorView: UIView {
   // MARK: Properties
   // ----------------
   
+  /** ref to the RN view manager's bridge singleton instance */
   weak var bridge: RCTBridge!;
+  
+  /** store weak refs for the nav's route items */
+  private var routeVCs: [RNINavigatorRouteViewController] = [];
+  //private var routeVCs = NSHashTable<RNINavigatorRouteViewController>.weakObjects();
   
   var navigationVC: UINavigationController!;
   
@@ -39,22 +44,31 @@ class RNINavigatorView: UIView {
   override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
     super.insertSubview(subview, at: atIndex);
     
+    /// note: all of the `RNINavigatorView` children is a
+    /// `RNINavigatorRouteView` instance.
     guard let routeView = subview as? RNINavigatorRouteView
     else { return };
     
     // do not show as subview, remove from view hieaarchy
     routeView.removeFromSuperview();
     
-    let vc = UIViewController();
-    vc.view = subview;
+    /// create the wrapper vc that holds the `routeView`
+    let vc = RNINavigatorRouteViewController();
+    vc.routeView = routeView;
     
-    print("RNINavigatorView - insertReactSubview"
+    /// save a ref to `routeView`'s vc instance
+    self.routeVCs.append(vc)
+    
+    #if DEBUG
+    print("LOG - NativeView, RNINavigatorView: insertReactSubview"
       + " - atIndex: \(atIndex)"
       + " - routeView.routeKey: \(routeView.routeKey ?? "N/A")"
-      + " - routeView.routeIndex: \(routeView.routeIndex ?? -1   )"
+      + " - routeView.routeIndex: \(routeView.routeIndex ?? -1)"
     );
+    #endif
     
     if atIndex == 0 {
+      // the first item will become navController's root vc
       self.navigationVC.setViewControllers([vc], animated: false);
     };
   };
@@ -67,36 +81,55 @@ class RNINavigatorView: UIView {
 fileprivate extension RNINavigatorView {
   
   func embedNavigationVC(){
-    // create nav controller + save a ref to this instance
-    self.navigationVC = {
-      let vc = UINavigationController();
-      vc.view.frame = self.bounds;
-      
-      // add vc's view as subview
-      self.addSubview(vc.view);
-      
-      // enable autolayout
-      vc.view.translatesAutoresizingMaskIntoConstraints = false;
-      // stretch vc to fit/fill this view
-      NSLayoutConstraint.activate([
-        vc.view.topAnchor     .constraint(equalTo: self.topAnchor     ),
-        vc.view.bottomAnchor  .constraint(equalTo: self.bottomAnchor  ),
-        vc.view.leadingAnchor .constraint(equalTo: self.leadingAnchor ),
-        vc.view.trailingAnchor.constraint(equalTo: self.trailingAnchor)
-      ]);
-      
-      return vc;
-    }();
+    // create nav controller
+    let navigationVC = UINavigationController();
+    navigationVC.view.frame = self.bounds;
     
-    // TODO: Remove the ff:
-    /// get the closest vc instance that's responsible for this view...
-    /// in most RN apps, this is going to be `RCTRootView` instance.
-    if let closestParentVC = self.reactViewController() {
-      // add vc as a child to parent vc
-      closestParentVC.addChild(self.navigationVC);
-      
-      // notify vc that it's moved to a parent
-      self.navigationVC.didMove(toParent: closestParentVC);
+    // add vc's view as subview
+    self.addSubview(navigationVC.view);
+    // save a ref to this instance
+    self.navigationVC = navigationVC;
+    
+    // enable autolayout
+    navigationVC.view.translatesAutoresizingMaskIntoConstraints = false;
+    // stretch vc to fit/fill this view
+    NSLayoutConstraint.activate([
+      navigationVC.view.topAnchor     .constraint(equalTo: self.topAnchor     ),
+      navigationVC.view.bottomAnchor  .constraint(equalTo: self.bottomAnchor  ),
+      navigationVC.view.leadingAnchor .constraint(equalTo: self.leadingAnchor ),
+      navigationVC.view.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+    ]);
+  };
+};
+
+// ---------------------------
+// MARK:- Functions for Module
+// ---------------------------
+
+extension RNINavigatorView {
+  func push(routeKey: NSString){
+    /// get the `routeView` to be pushed in the nav stack
+    guard let routeViewVC = self.routeVCs.last,
+          routeViewVC.routeView.routeKey == routeKey
+    else {
+      #if DEBUG
+      print("LOG - NativeView, RNINavigatorView: push error"
+        + " - with params - routeKey: \(routeKey)"
+        + " - Error: guard check failed"
+        + " - last item's routeKey: \(self.routeVCs.last?.routeView.routeKey ?? "N/A")"
+        + " - routeViews allObjects count: \(self.routeVCs.count)"
+      );
+      #endif
+      return;
     };
+    
+    #if DEBUG
+    print("LOG - NativeView, RNINavigatorView: push"
+      + " - with params - routeKey: \(routeKey)"
+    );
+    #endif
+    
+    self.navigationVC.pushViewController(routeViewVC, animated: true);
+    
   };
 };
