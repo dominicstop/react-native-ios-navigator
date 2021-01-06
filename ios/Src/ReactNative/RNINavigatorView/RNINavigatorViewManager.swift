@@ -52,10 +52,7 @@ class RNINavigatorViewManager: RCTViewManager {
       Self.sharedBridge = self.bridge;
     };
     
-    // send a ref to bridge, and this manager instance
-    return RNINavigatorView(
-      bridge : self.bridge,
-      manager: self
-    );
+    // send a ref to bridge instance
+    return RNINavigatorView(bridge: self.bridge);
   };
 };

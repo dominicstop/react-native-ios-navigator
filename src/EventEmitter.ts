@@ -3,7 +3,7 @@
 type EventListener = (data?: any) => void;
 
 /** shim that tries to match the ts's builtin `enum` type */
-type Enum = {[key: string]: string};
+export type Enum = {[key: string]: string};
 //#endregion
 
 export class EventEmitter<EventsT extends keyof Enum> {

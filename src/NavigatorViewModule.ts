@@ -1,10 +1,9 @@
 import type React from 'react';
 import { NativeModules, NativeEventEmitter, EventSubscriptionVendor, findNodeHandle } from 'react-native';
 
-
 //#region - Type Definitions
 /** Corresponds to the RNINavigatorViewModule.Events */
-enum RNINavigatorViewModuleEvents {
+export enum RNINavigatorViewModuleEvents {
   onNavRouteViewAdded = "onNavRouteViewAdded"
 };
 
@@ -47,7 +46,7 @@ export class NavigatorViewModule {
       await RNINavigatorViewModule.setNode(this.node);
 
       // instantiate the event emitter
-      //this.nativeEvents = new NativeEventEmitter(RNINavigatorViewModule)
+      this.nativeEvents = new NativeEventEmitter(RNINavigatorViewModule)
 
       // update flag
       this.isModuleNodeSet = true;
@@ -68,4 +67,5 @@ export class NavigatorViewModule {
       throw new Error(`NavigatorViewModule, push error: ${error}`);
     };
   };
+  //#endregion
 };

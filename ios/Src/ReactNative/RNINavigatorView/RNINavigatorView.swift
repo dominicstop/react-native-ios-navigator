@@ -7,20 +7,22 @@
 
 import UIKit;
 
+protocol RNINavigatorViewEventsDelegate: AnyObject {
+  func onNavRouteViewAdded(routeKey: NSString, routeIndex: NSNumber);
+};
+
 class RNINavigatorView: UIView {
   
   // ----------------
   // MARK: Properties
   // ----------------
   
-  /** ref to the RN view manager's bridge instance */
+  /// ref to the RN view manager singleton's bridge instance
   weak var bridge: RCTBridge!;
-  /** ref to the RN view manager singleton instance */
-  weak var manager: RNINavigatorViewManager!;
+  /// delegate for sending events to the ` RNINavigatorViewModule.Manager`
+  weak var eventsDelegate: RNINavigatorViewEventsDelegate?;
   
-  weak var moduleEventsDelegate: RNINavigatorViewModuleEventsDelegate?;
-  
-  /** the `activeRoute` items */
+  /** the`activeRoute` items: routes to be added/added to the nav stack*/
   private var routeVCs: [RNINavigatorRouteViewController] = [];
   
   var navigationVC: UINavigationController!;
@@ -29,12 +31,10 @@ class RNINavigatorView: UIView {
   // MARK: Initialize
   // ----------------
   
-  init(bridge: RCTBridge, manager: RNINavigatorViewManager) {
+  init(bridge: RCTBridge) {
     super.init(frame: CGRect());
     
-    self.bridge  = bridge;
-    self.manager = manager;
-    
+    self.bridge = bridge;
     self.embedNavigationVC();
   };
   
@@ -69,8 +69,8 @@ class RNINavigatorView: UIView {
     if let routeKey   = routeView.routeKey,
        let routeIndex = routeView.routeIndex {
       
-      // notify module that a new route view was added
-      self.moduleEventsDelegate?
+      // notify delegate that a new route view was added
+      self.eventsDelegate?
           .onNavRouteViewAdded(routeKey: routeKey, routeIndex: routeIndex);
     };
     
@@ -144,8 +144,8 @@ extension RNINavigatorView {
     );
     #endif
     
+    // push route to the nav stack
     self.navigationVC.pushViewController(routeViewVC, animated: true);
-    
   };
 };
 

@@ -7,9 +7,6 @@
 
 import Foundation
 
-protocol RNINavigatorViewModuleEventsDelegate: AnyObject {
-  func onNavRouteViewAdded(routeKey: NSString, routeIndex: NSNumber);
-};
 
 @objc(RNINavigatorViewModule)
 class RNINavigatorViewModule: RCTEventEmitter {
@@ -26,11 +23,14 @@ class RNINavigatorViewModule: RCTEventEmitter {
     // MARK: Manager - Properties
     // --------------------------
     
-    var node: NSNumber?;
+    var node: NSNumber;
+    
+    /// a ref to `RNINavigatorViewModule` singleton instance
+    weak var module: RNINavigatorViewModule?;
     weak var navigatorView: RNINavigatorView? {
       didSet {
-        // set the delegate to receive events from `RNINavigatorView` instance
-        self.navigatorView?.moduleEventsDelegate = self;
+        /// set the delegate to receive events from `RNINavigatorView` instance
+        self.navigatorView?.eventsDelegate = self;
       }
     };
     
@@ -38,21 +38,24 @@ class RNINavigatorViewModule: RCTEventEmitter {
     // MARK: Manager - Methods
     // -----------------------
     
-    
-    func setNode(){
-      //
+    init(node: NSNumber, module: RNINavigatorViewModule, navigatorView: RNINavigatorView) {
+      self.node = node;
+      self.module = module;
+      self.navigatorView = navigatorView;
     };
   };
   
   enum Events: String, CaseIterable {
-    /** a new `RNINavigatorRouteView` was added in `RNINavigatorView` */
-    case onNavRouteViewAdded;
+    // TODO: Impl.
+    case placeholder;
   };
   
   // --------------------------
   // MARK: Module - Properties
   // --------------------------
   
+  /// dict. that holds the manager instance.
+  /// each "manager" corresponds to a `RNINavigatorView`
   var managers = [Int: Manager]();
   
   // --------------------
@@ -67,13 +70,12 @@ class RNINavigatorViewModule: RCTEventEmitter {
     return Self.Events.allCases.map { $0.rawValue };
   };
   
-  
   // ---------------------
   // MARK: Module Commands
   // ---------------------
   
   /// This "command" is used to create a new `Manager` instance that will be
-  /// responsible for a "RNINavigatorView" instance that matches `node`.
+  /// responsible for some "RNINavigatorView" instance that matches `node`.
   @objc func setNode(
     _ node : NSNumber,
     resolve: @escaping RCTPromiseResolveBlock,
@@ -106,13 +108,11 @@ class RNINavigatorViewModule: RCTEventEmitter {
         return;
       };
       
-      self.managers[node.intValue] = {
-        let manager = Manager();
-        manager.node = node;
-        manager.navigatorView = navigatorView;
-        
-        return manager;
-      }();
+      self.managers[node.intValue] = Manager(
+        node         : node,
+        module       : self,
+        navigatorView: navigatorView
+      );
       
       // resolve promise
       resolve([:]);
@@ -146,6 +146,9 @@ class RNINavigatorViewModule: RCTEventEmitter {
         print("LOG - \(errorMessage)");
         #endif
         
+        /// remove manager bc's it's `navigatorView` is nil
+        self.managers.removeValue(forKey: node.intValue);
+        
         // reject promise w/: code, message, error
         reject("LIB_ERROR", errorMessage, nil);
         return;
@@ -167,20 +170,22 @@ class RNINavigatorViewModule: RCTEventEmitter {
   };
 };
 
-// ----------------------------------------------------
-// MARK: Manager - RNINavigatorViewModuleEventsDelegate
-// ----------------------------------------------------
+// ----------------------------------------------
+// MARK: Manager - RNINavigatorViewEventsDelegate
+// ----------------------------------------------
 
-extension RNINavigatorViewModule.Manager: RNINavigatorViewModuleEventsDelegate {
+extension RNINavigatorViewModule.Manager: RNINavigatorViewEventsDelegate {
   
   func onNavRouteViewAdded(routeKey: NSString, routeIndex: NSNumber) {
     #if DEBUG
     print("LOG - NativeModule, RNINavigatorView.Manager"
       + " - RNINavigatorViewModuleEventsDelegate: onNavRouteViewAdded"
-      + " - for node: \(self.node ?? -1)"
+      + " - for node: \(self.node)"
       + " - with params - routeKey: \(routeKey)"
       + " - routeIndex: \(routeIndex)"
     );
     #endif
+    
+
   };
 };
