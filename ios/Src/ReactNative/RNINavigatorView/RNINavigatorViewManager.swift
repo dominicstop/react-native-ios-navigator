@@ -10,9 +10,9 @@ import Foundation
 @objc(RNINavigatorViewManager)
 class RNINavigatorViewManager: RCTViewManager {
   
-  // -------------------
-  // MARK: Shared Bridge
-  // -------------------
+  // ----------------------
+  // MARK: Shared Instances
+  // ----------------------
   
   static var sharedBridge: RCTBridge? {
     didSet {
@@ -52,6 +52,10 @@ class RNINavigatorViewManager: RCTViewManager {
       Self.sharedBridge = self.bridge;
     };
     
-    return RNINavigatorView(bridge: self.bridge);
+    // send a ref to bridge, and this manager instance
+    return RNINavigatorView(
+      bridge : self.bridge,
+      manager: self
+    );
   };
 };

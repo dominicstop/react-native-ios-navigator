@@ -15,6 +15,14 @@ export default function App() {
         }]}
         initialRoute={{routeKey: 'routeFirst'}}
       />
+      <NavigatorView
+        routes={[{
+          routeKey: 'routeFirst'
+        }, {
+          routeKey: 'routeSecond'
+        }]}
+        initialRoute={{routeKey: 'routeFirst'}}
+      />
     </View>
   );
 }

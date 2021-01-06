@@ -13,12 +13,15 @@ class RNINavigatorView: UIView {
   // MARK: Properties
   // ----------------
   
-  /** ref to the RN view manager's bridge singleton instance */
+  /** ref to the RN view manager's bridge instance */
   weak var bridge: RCTBridge!;
+  /** ref to the RN view manager singleton instance */
+  weak var manager: RNINavigatorViewManager!;
   
-  /** store weak refs for the nav's route items */
+  weak var moduleEventsDelegate: RNINavigatorViewModuleEventsDelegate?;
+  
+  /** the `activeRoute` items */
   private var routeVCs: [RNINavigatorRouteViewController] = [];
-  //private var routeVCs = NSHashTable<RNINavigatorRouteViewController>.weakObjects();
   
   var navigationVC: UINavigationController!;
   
@@ -26,10 +29,12 @@ class RNINavigatorView: UIView {
   // MARK: Initialize
   // ----------------
   
-  init(bridge: RCTBridge) {
+  init(bridge: RCTBridge, manager: RNINavigatorViewManager) {
     super.init(frame: CGRect());
     
-    self.bridge = bridge;
+    self.bridge  = bridge;
+    self.manager = manager;
+    
     self.embedNavigationVC();
   };
   
@@ -55,9 +60,19 @@ class RNINavigatorView: UIView {
     /// create the wrapper vc that holds the `routeView`
     let vc = RNINavigatorRouteViewController();
     vc.routeView = routeView;
+    // listen for naviagtor-related events
+    vc.delegate = self;
     
     /// save a ref to `routeView`'s vc instance
     self.routeVCs.append(vc)
+    
+    if let routeKey   = routeView.routeKey,
+       let routeIndex = routeView.routeIndex {
+      
+      // notify module that a new route view was added
+      self.moduleEventsDelegate?
+          .onNavRouteViewAdded(routeKey: routeKey, routeIndex: routeIndex);
+    };
     
     #if DEBUG
     print("LOG - NativeView, RNINavigatorView: insertReactSubview"
@@ -130,6 +145,16 @@ extension RNINavigatorView {
     #endif
     
     self.navigationVC.pushViewController(routeViewVC, animated: true);
+    
+  };
+};
+
+// -----------------------------------
+// MARK: RNINavigatorRouteViewDelegate
+// -----------------------------------
+
+extension RNINavigatorView: RNINavigatorRouteViewDelegate {
+  func onBackButttonPressed(routeKey: String, routeIndex: Int) {
     
   };
 };

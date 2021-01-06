@@ -10,6 +10,7 @@
 #import <React/RCTView.h>
 #import <React/RCTTouchHandler.h>
 #import <React/RCTUIManager.h>
+#import "React/RCTEventEmitter.h"
 
 #import <React/RCTConvert.h>
 #import <React/RCTImageSource.h>
