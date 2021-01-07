@@ -18,8 +18,7 @@ enum NavStatus {
 };
 
 enum NavEvents {
-  onNavRouteViewAdded   = "onNavRouteViewAdded"  ,
-  onNavRouteViewRemoved = "onNavRouteViewRemoved",
+  onNavRouteViewAdded = "onNavRouteViewAdded"
 };
 
 /** Represents a route in the navigation stack. */
@@ -61,11 +60,9 @@ type onNavRouteDidPopPayload = { nativeEvent: {
 type RNINavigatorViewProps = {
   style: ViewStyle;
   // Native Events
-  onNavRouteViewAdded  ?: (events: onNavRouteViewAddedPayload  ) => void;
-  onNavRouteViewRemoved?: (events: onNavRouteViewRemovedPayload) => void;
-
-  onNavRouteWillPop?: (events: onNavRouteWillPopPayload) => void;
-  onNavRouteDidPop ?: (events: onNavRouteDidPopPayload ) => void;
+  onNavRouteViewAdded?: (events: onNavRouteViewAddedPayload) => void;
+  onNavRouteWillPop  ?: (events: onNavRouteWillPopPayload  ) => void;
+  onNavRouteDidPop   ?: (events: onNavRouteDidPopPayload   ) => void;
 };
 
 /** `NavigatorView` comp. props */
@@ -143,33 +140,18 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
   private removeRoute = (params: { routeKey: string, routeIndex: number }) => {
     console.log(`removeRoute - active routes: ${this.state.activeRoutes.length}`);
-    return Promise.all([
-      // -----------------------------------------------------
-      // 1. Wait for the new route to be removed in native side.
-      //    note: This promise will reject if `onNavRouteViewRemoved` fails to fire
-      //    within 500 ms (i.e. if it takes to long for the promise to be fulfilled).
-      // ----------------------------------------------------------------------------
-      Helpers.promiseWithTimeout(500, new Promise<void>(resolve => {
-        this.emitter.once(NavEvents.onNavRouteViewRemoved, () => {
-          resolve();
-        })
-      })),
-      // --------------------------------------
-      // 2. Remove route to `activeRoutes`.
-      //    The route will be "removed" from `RNINavigatorView`'s subviews.
-      // ------------------------------------------------------------------
-      Helpers.setStateAsync<NavigatorViewState>(this, (prevState) => ({
-        activeRoutes: prevState.activeRoutes.filter((route, index) => !(
-          (index          == params.routeIndex) &&
-          (route.routeKey == params.routeKey  )
-        ))
-      }))
-    ]);
+
+    // Remove route to `activeRoutes`
+    // The route will be "removed" from `RNINavigatorView`'s subviews.
+    return Helpers.setStateAsync<NavigatorViewState>(this, (prevState) => ({
+      activeRoutes: prevState.activeRoutes.filter((route, index) => !(
+        (index          == params.routeIndex) &&
+        (route.routeKey == params.routeKey  )
+      ))
+    }));
   };
 
   push = async (params: { routeKey: string }) => {
-    const { activeRoutes } = this.state;
-
     // update nav status to busy
     this.navStatus = NavStatus.NAV_PUSHING;
 
@@ -202,16 +184,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     });
   };
 
-  /** Handler for native event: `onNavRouteViewRemoved` */
-  _handleOnNavRouteViewRemoved  = ({nativeEvent}: onNavRouteViewRemovedPayload) => {
-    // emit event: nav. route was removed from `RNINavigatorView`'s subviews
-    this.emitter.emit(NavEvents.onNavRouteViewRemoved, {
-      target    : nativeEvent.target,
-      routeKey  : nativeEvent.routeKey,
-      routeIndex: nativeEvent.routeIndex,
-    });
-  };
-  
   /** Handler for native event: `onNavRouteWillPop` */
   _handleOnNavRouteWillPop = ({nativeEvent}: onNavRouteWillPopPayload) => {
     // a route is about to be removed either through a tap on the "back" button,
@@ -253,7 +225,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         ref={r => this.nativeRef = r}
         style={styles.navigatorView}
         onNavRouteViewAdded={this._handleOnNavRouteViewAdded}
-        onNavRouteViewRemoved={this._handleOnNavRouteViewRemoved}
         onNavRouteWillPop={this._handleOnNavRouteWillPop}
         onNavRouteDidPop={this._handleOnNavRouteDidPop}
       >

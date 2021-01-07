@@ -13,8 +13,7 @@
 // MARK: Export Props - Events
 // ---------------------------
 
-RCT_EXPORT_VIEW_PROPERTY(onNavRouteViewAdded  , RCTBubblingEventBlock);
-RCT_EXPORT_VIEW_PROPERTY(onNavRouteViewRemoved, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onNavRouteViewAdded, RCTBubblingEventBlock);
 
 RCT_EXPORT_VIEW_PROPERTY(onNavRouteWillPop, RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onNavRouteDidPop , RCTBubblingEventBlock);

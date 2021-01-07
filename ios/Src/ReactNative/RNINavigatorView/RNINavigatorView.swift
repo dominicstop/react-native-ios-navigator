@@ -32,10 +32,7 @@ class RNINavigatorView: UIView {
   // -----------------------------
   
   /// A `RNINavigatorRouteView` instance was added as a subview.
-  @objc var onNavRouteViewAdded: RCTBubblingEventBlock?;
-  /// A `RNINavigatorRouteView` instance was removed from the subviews.
-  @objc var onNavRouteViewRemoved: RCTBubblingEventBlock?;
-  
+  @objc var onNavRouteViewAdded: RCTBubblingEventBlock?;  
   
   /// Fired when a route is *about to be* "popped", either due to a "user intiated"
   /// pop (because the "back" button was pressed or it was swiped back via a
@@ -107,32 +104,6 @@ class RNINavigatorView: UIView {
       // the first item will become navController's root vc
       self.navigationVC.setViewControllers([vc], animated: false);
     };
-  };
-  
-  override func removeReactSubview(_ subview: UIView!) {
-    super.removeReactSubview(subview);
-    
-    print("LOG - NativeView, RNINavigatorView: removeReactSubview");
-    
-    /// note: all of the `RNINavigatorView` children is a `RNINavigatorRouteView`
-    /// instance, so anything removed will also be a `RNINavigatorRouteView`.
-    guard let routeView  = subview as? RNINavigatorRouteView,
-          let routeKey   = routeView.routeKey,
-          let routeIndex = routeView.routeIndex
-    else { return };
-    
-    // send event: notify js navigator that a route view has been removed.
-    self.onNavRouteViewRemoved?([
-      "routeKey"  : routeKey,
-      "routeIndex": routeIndex
-    ]);
-    
-    #if DEBUG
-    print("LOG - NativeView, RNINavigatorView: removeReactSubview"
-      + " - routeView.routeKey: \(routeView.routeKey ?? "N/A")"
-      + " - routeView.routeIndex: \(routeView.routeIndex ?? -1)"
-    );
-    #endif
   };
 };
 
