@@ -27,17 +27,27 @@ type NavRouteItem = {
   routeProps?: Object;
 };
 
+//#region - `RNINavigatorView` Events
 type onNavRouteViewAddedPayload = { nativeEvent: {
   target    : number,
   routeKey  : string,
   routeIndex: number
 }};
 
+type onNavRouteWillPopPayload = { nativeEvent: {
+  target         : number,
+  routeKey       : string,
+  routeIndex     : number,
+  isUserInitiated: boolean
+}};
+//#endregion
+
 /** `RNINavigatorView` native comp. props */
 type RNINavigatorViewProps = {
   style: ViewStyle;
   // Native Events
-  onNavRouteViewAdded: (events: onNavRouteViewAddedPayload) => void;
+  onNavRouteViewAdded?: (events: onNavRouteViewAddedPayload) => void;
+  onNavRouteWillPop?: (events: onNavRouteWillPopPayload) => void;
 };
 
 /** `NavigatorView` comp. props */
@@ -98,7 +108,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       await Promise.all([
         // 1. wait for the new route to be added in native side.
         // note: this promise will reject if the `onNavRouteViewAdded` fails to fire within
-        // with 500 ms (i.e. if it takes to long for the promise to be fulfilled)
+        // 500 ms (i.e. if it takes to long for the promise to be fulfilled)
         Helpers.promiseWithTimeout(500, new Promise<void>(resolve => {
           this.emitter.once(NavEvents.onNavRouteViewAdded, () => {
             resolve();
@@ -127,15 +137,23 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     return this;
   };
 
+  //#region - Native Event Handlers
   _handleOnNavRouteViewAdded = ({nativeEvent}: onNavRouteViewAddedPayload) => {
-    console.log("emit: onNavRouteViewAdded");
-
+    // emit event
     this.emitter.emit(NavEvents.onNavRouteViewAdded, {
       target    : nativeEvent.target,
       routeKey  : nativeEvent.routeKey,
       routeIndex: nativeEvent.routeIndex,
     });
   };
+
+  _handleOnNavRouteWillPop = ({nativeEvent}: onNavRouteWillPopPayload) => {
+    if(nativeEvent.isUserInitiated){
+      // a route was removed either through a tap on the "back" button, or through
+      // a swipe back gesture.
+    };
+  };
+  //#endregion
   
   render(){
     const { activeRoutes } = this.state;
@@ -155,6 +173,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         ref={r => this.nativeRef = r}
         style={styles.navigatorView}
         onNavRouteViewAdded={this._handleOnNavRouteViewAdded}
+        onNavRouteWillPop={this._handleOnNavRouteWillPop}
       >
         {routes}
       </RNINavigatorView>

@@ -54,16 +54,49 @@ export class NavigatorViewModule {
     } catch (error) {
       // update flag
       this.isModuleNodeSet = false;
-      // throw error
+
+      //#region - 🐞 DEBUG 🐛
+      LIB_GLOBAL.debugLog && console.warn(
+          `LOG - Fatal Error - RNINavigatorViewModule, setRef`
+        + ` - for node: ${this.node}`
+        + ` - isModuleNodeSet: ${this.isModuleNodeSet}`
+        + ` - error message: ${error}`
+        + ` - note: this should never happen ☹️`
+      );
+      //#endregion
+
+      // throw error w/ message
       throw new Error(`NavigatorViewModule, setRef error: ${error}`);
     };
   };
 
   async push({routeKey}: NavigatorViewModulePushParams){
+    //#region - 🐞 DEBUG 🐛
+    LIB_GLOBAL.debugLog && console.log(
+        `LOG - RNINavigatorViewModule, push`
+      + ` - for node: ${this.node}`
+      + ` - isModuleNodeSet: ${this.isModuleNodeSet}`
+      + ` - with routeKey: ${routeKey}`
+    );
+    //#endregion
+
     try {
+      // forward command to nav view: js:module -> n:module -> n:view
       await RNINavigatorViewModule.push(this.node, routeKey);
 
     } catch (error) {
+      //#region - 🐞 DEBUG 🐛
+      LIB_GLOBAL.debugLog && console.warn(
+          `LOG, - Error - RNINavigatorViewModule, push`
+        + ` - note: \`NavigatorViewModule\` failed to push`
+        + ` - for node: ${this.node}`
+        + ` - isModuleNodeSet: ${this.isModuleNodeSet}`
+        + ` - with routeKey: ${routeKey}`
+        + ` - error message: \(error)`
+      );
+      //#endregion
+
+      // throw error with message
       throw new Error(`NavigatorViewModule, push error: ${error}`);
     };
   };
