@@ -52,8 +52,6 @@ class RNINavigatorRouteView: UIView {
   init(bridge: RCTBridge) {
     super.init(frame: CGRect());
     
-    self.isHidden = true;
-    
     self.bridge = bridge;
   };
   

@@ -57,7 +57,10 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
 
 const styles = StyleSheet.create({
   navigatorRouteView: {
-    position: 'absolute',
     backgroundColor: 'yellow',
+    // don't show on first mount
+    position: 'absolute',
+    width: 0,
+    height: 0,
   },
 });
