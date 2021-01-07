@@ -31,17 +31,20 @@ class RNINavigatorView: UIView {
   // MARK: RN Exported Event Props
   // -----------------------------
   
-  /// A `RNINavigatorRouteView` instances was added as a subview
+  /// A `RNINavigatorRouteView` instance was added as a subview.
   @objc var onNavRouteViewAdded: RCTBubblingEventBlock?;
+  /// A `RNINavigatorRouteView` instance was removed from the subviews.
+  @objc var onNavRouteViewRemoved: RCTBubblingEventBlock?;
   
-  /// Fired when a route's "back button" is pressed
-  @objc var onNavRouteBackButttonPressed: RCTBubblingEventBlock?;
-    
-  /// Fired when a route has been "popped" because the "back" button is pressed
-  /// or was swiped back via a gesture.
-  @objc var onNavUserInitiatedPop: RCTBubblingEventBlock?;
-  /// Fired when a route has been "popped" programmatically
-  @objc var onNavRequestedPop: RCTBubblingEventBlock?;
+  
+  /// Fired when a route is *about to be* "popped", either due to a "user intiated"
+  /// pop (because the "back" button was pressed or it was swiped back via a
+  /// gesture), or due to it being "popped" programmatically via the nav.
+  @objc var onNavRouteWillPop: RCTBubblingEventBlock?;
+  /// Fired when a route *has abeen* "popped", either due to a "user intiated"
+  /// pop (because the "back" button was pressed or it was swiped back via a
+  /// gesture), or due to it being "popped" programmatically via the nav.
+  @objc var onNavRouteDidPop: RCTBubblingEventBlock?;
   
   // ----------------
   // MARK: Initialize
@@ -105,6 +108,32 @@ class RNINavigatorView: UIView {
       self.navigationVC.setViewControllers([vc], animated: false);
     };
   };
+  
+  override func removeReactSubview(_ subview: UIView!) {
+    super.removeReactSubview(subview);
+    
+    print("LOG - NativeView, RNINavigatorView: removeReactSubview");
+    
+    /// note: all of the `RNINavigatorView` children is a `RNINavigatorRouteView`
+    /// instance, so anything removed will also be a `RNINavigatorRouteView`.
+    guard let routeView  = subview as? RNINavigatorRouteView,
+          let routeKey   = routeView.routeKey,
+          let routeIndex = routeView.routeIndex
+    else { return };
+    
+    // send event: notify js navigator that a route view has been removed.
+    self.onNavRouteViewRemoved?([
+      "routeKey"  : routeKey,
+      "routeIndex": routeIndex
+    ]);
+    
+    #if DEBUG
+    print("LOG - NativeView, RNINavigatorView: removeReactSubview"
+      + " - routeView.routeKey: \(routeView.routeKey ?? "N/A")"
+      + " - routeView.routeIndex: \(routeView.routeIndex ?? -1)"
+    );
+    #endif
+  };
 };
 
 // ------------------------
@@ -113,6 +142,7 @@ class RNINavigatorView: UIView {
 
 fileprivate extension RNINavigatorView {
   
+  /// setup - create nav. and add it as a subview
   func embedNavigationVC(){
     // create nav controller
     let navigationVC = UINavigationController();
@@ -132,6 +162,35 @@ fileprivate extension RNINavigatorView {
       navigationVC.view.leadingAnchor .constraint(equalTo: self.leadingAnchor ),
       navigationVC.view.trailingAnchor.constraint(equalTo: self.trailingAnchor)
     ]);
+  };
+  
+  /// remove route from `navRoutes`
+  func removeRoute(
+    reactTag  : NSNumber, routeKey: NSString,
+    routeIndex: NSNumber
+  ){
+    #if DEBUG
+    let prevCountRouteVCs = self.routeVCs.count;
+    #endif
+    
+    // remove "popped" route from `navRoutes`
+    self.routeVCs = self.routeVCs.filter {!(
+      ($0.routeView.reactTag   == reactTag  ) &&
+      ($0.routeView.routeKey   == routeKey  ) &&
+      ($0.routeView.routeIndex == routeIndex)
+    )};
+    
+    #if DEBUG
+    let nextCountRouteVCs = self.routeVCs.count;
+    print("LOG - NativeView, RNINavigatorView: removeRoute"
+      + " - with routeKey: \(routeKey)"
+      + " - with routeIndex: \(routeIndex)"
+      + " - removing popped route from `routeVCs`"
+      + " - prevCountRouteVCs: \(prevCountRouteVCs)"
+      + " - nextCountRouteVCs: \(nextCountRouteVCs)"
+      + " - routeVCs removed count: \(prevCountRouteVCs - nextCountRouteVCs)"
+    );
+    #endif
   };
 };
 
@@ -171,21 +230,53 @@ extension RNINavigatorView {
 // MARK: RNINavigatorRouteViewDelegate
 // -----------------------------------
 
+/// receive events from route vc's
 extension RNINavigatorView: RNINavigatorRouteViewDelegate {
-  func onNavUserInitiatedPop(routeKey: NSString, routeIndex: NSNumber) {
+  
+  func onNavRouteWillPop(
+    reactTag  : NSNumber, routeKey       : NSString,
+    routeIndex: NSNumber, isUserInitiated: Bool
+  ) {
     #if DEBUG
     print("LOG - NativeView, RNINavigatorView"
-      + " - RNINavigatorRouteViewDelegate, onNavUserInitiatedPop"
+      + " - RNINavigatorRouteViewDelegate, onNavRouteWillPop"
       + " - with routeKey: \(routeKey)"
       + " - with routeIndex: \(routeIndex)"
     );
     #endif
     
-    // send event: notify js navigator that a route's back button was pressed
-    // or was swiped back via a gesture.
-    self.onNavRouteBackButttonPressed?([
-      "routeKey"  : routeKey,
-      "routeIndex": routeIndex
+    // send event: notify js navigator that a route is about to be "popped"
+    self.onNavRouteWillPop?([
+      "routeKey"       : routeKey,
+      "routeIndex"     : routeIndex,
+      "isUserInitiated": isUserInitiated,
     ]);
+  };
+  
+  func onNavRouteDidPop(
+    reactTag  : NSNumber, routeKey       : NSString,
+    routeIndex: NSNumber, isUserInitiated: Bool
+  ) {
+    #if DEBUG
+    print("LOG - NativeView, RNINavigatorView"
+      + " - RNINavigatorRouteViewDelegate, onNavRouteDidPop"
+      + " - with routeKey: \(routeKey)"
+      + " - with routeIndex: \(routeIndex)"
+    );
+    #endif
+    
+    // send event: notify js navigator that a route has been "popped"
+    self.onNavRouteDidPop?([
+      "routeKey"       : routeKey,
+      "routeIndex"     : routeIndex,
+      "isUserInitiated": isUserInitiated,
+    ]);
+    
+    // remove route from `navRoutes`
+    self.removeRoute(
+      reactTag  : reactTag,
+      routeKey  : routeKey,
+      routeIndex: routeIndex
+    );
   };
 };

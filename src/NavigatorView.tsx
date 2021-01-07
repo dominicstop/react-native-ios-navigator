@@ -18,7 +18,8 @@ enum NavStatus {
 };
 
 enum NavEvents {
-  onNavRouteViewAdded = "onNavRouteViewAdded"
+  onNavRouteViewAdded   = "onNavRouteViewAdded"  ,
+  onNavRouteViewRemoved = "onNavRouteViewRemoved",
 };
 
 /** Represents a route in the navigation stack. */
@@ -34,20 +35,37 @@ type onNavRouteViewAddedPayload = { nativeEvent: {
   routeIndex: number
 }};
 
+type onNavRouteViewRemovedPayload = { nativeEvent: {
+  target    : number,
+  routeKey  : string,
+  routeIndex: number
+}};
+
 type onNavRouteWillPopPayload = { nativeEvent: {
   target         : number,
   routeKey       : string,
   routeIndex     : number,
   isUserInitiated: boolean
 }};
+
+type onNavRouteDidPopPayload = { nativeEvent: {
+  target         : number,
+  routeKey       : string,
+  routeIndex     : number,
+  isUserInitiated: boolean
+}};
+
 //#endregion
 
 /** `RNINavigatorView` native comp. props */
 type RNINavigatorViewProps = {
   style: ViewStyle;
   // Native Events
-  onNavRouteViewAdded?: (events: onNavRouteViewAddedPayload) => void;
+  onNavRouteViewAdded  ?: (events: onNavRouteViewAddedPayload  ) => void;
+  onNavRouteViewRemoved?: (events: onNavRouteViewRemovedPayload) => void;
+
   onNavRouteWillPop?: (events: onNavRouteWillPopPayload) => void;
+  onNavRouteDidPop ?: (events: onNavRouteDidPopPayload ) => void;
 };
 
 /** `NavigatorView` comp. props */
@@ -97,31 +115,67 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     this.navigatorModule.setRef(this.nativeRef);
   };
 
-  push = async (params: { routeKey: String }) => {
+  /** Add route to `state.activeRoutes` and wait for it to be added in
+    * the native side as a subview (i.e. `RNINavigatorView`) */
+  private addRoute = (params: { routeKey: String }) => {
+    return Promise.all([
+      // -----------------------------------------------------
+      // 1. Wait for the new route to be added in native side.
+      //    note: This promise will reject if `onNavRouteViewAdded` fails to fire
+      //    within 500 ms (i.e. if it takes to long for the promise to be fulfilled).
+      // ----------------------------------------------------------------------------
+      Helpers.promiseWithTimeout(500, new Promise<void>(resolve => {
+        this.emitter.once(NavEvents.onNavRouteViewAdded, () => {
+          resolve();
+        })
+      })),
+      // --------------------------------------
+      // 2. Append new route to `activeRoutes`.
+      //    The new route will be "received" from `RNINavigatorView`.
+      // ------------------------------------------------------------
+      Helpers.setStateAsync<NavigatorViewState>(this, (prevState) => ({
+        activeRoutes: [...prevState.activeRoutes, {
+          routeKey: params.routeKey
+        }]
+      }))
+    ]);
+  };
+
+  private removeRoute = (params: { routeKey: string, routeIndex: number }) => {
+    console.log(`removeRoute - active routes: ${this.state.activeRoutes.length}`);
+    return Promise.all([
+      // -----------------------------------------------------
+      // 1. Wait for the new route to be removed in native side.
+      //    note: This promise will reject if `onNavRouteViewRemoved` fails to fire
+      //    within 500 ms (i.e. if it takes to long for the promise to be fulfilled).
+      // ----------------------------------------------------------------------------
+      Helpers.promiseWithTimeout(500, new Promise<void>(resolve => {
+        this.emitter.once(NavEvents.onNavRouteViewRemoved, () => {
+          resolve();
+        })
+      })),
+      // --------------------------------------
+      // 2. Remove route to `activeRoutes`.
+      //    The route will be "removed" from `RNINavigatorView`'s subviews.
+      // ------------------------------------------------------------------
+      Helpers.setStateAsync<NavigatorViewState>(this, (prevState) => ({
+        activeRoutes: prevState.activeRoutes.filter((route, index) => !(
+          (index          == params.routeIndex) &&
+          (route.routeKey == params.routeKey  )
+        ))
+      }))
+    ]);
+  };
+
+  push = async (params: { routeKey: string }) => {
     const { activeRoutes } = this.state;
 
     // update nav status to busy
     this.navStatus = NavStatus.NAV_PUSHING;
 
     try {
-      // add new route
-      await Promise.all([
-        // 1. wait for the new route to be added in native side.
-        // note: this promise will reject if the `onNavRouteViewAdded` fails to fire within
-        // 500 ms (i.e. if it takes to long for the promise to be fulfilled)
-        Helpers.promiseWithTimeout(500, new Promise<void>(resolve => {
-          this.emitter.once(NavEvents.onNavRouteViewAdded, () => {
-            resolve();
-          })
-        })),
-        // 2. append new route to `activeRoutes`
-        // the new route will be "received" from `RNINavigatorView`
-        Helpers.setStateAsync<NavigatorViewState>(this, (prevState) => ({
-          activeRoutes: [...prevState.activeRoutes, {
-            routeKey: params.routeKey
-          }]
-        }))
-      ]);
+      // add new route, and wait for it be added
+      await this.addRoute(params);
       
       // forward "push" request to native module
       await this.navigatorModule.push({routeKey: params.routeKey});
@@ -138,8 +192,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   };
 
   //#region - Native Event Handlers
+  /** Handler for native event: `onNavRouteViewAdded` */
   _handleOnNavRouteViewAdded = ({nativeEvent}: onNavRouteViewAddedPayload) => {
-    // emit event
+    // emit event: nav. route was added to `RNINavigatorView`'s subviews
     this.emitter.emit(NavEvents.onNavRouteViewAdded, {
       target    : nativeEvent.target,
       routeKey  : nativeEvent.routeKey,
@@ -147,10 +202,35 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     });
   };
 
+  /** Handler for native event: `onNavRouteViewRemoved` */
+  _handleOnNavRouteViewRemoved  = ({nativeEvent}: onNavRouteViewRemovedPayload) => {
+    // emit event: nav. route was removed from `RNINavigatorView`'s subviews
+    this.emitter.emit(NavEvents.onNavRouteViewRemoved, {
+      target    : nativeEvent.target,
+      routeKey  : nativeEvent.routeKey,
+      routeIndex: nativeEvent.routeIndex,
+    });
+  };
+  
+  /** Handler for native event: `onNavRouteWillPop` */
   _handleOnNavRouteWillPop = ({nativeEvent}: onNavRouteWillPopPayload) => {
+    // a route is about to be removed either through a tap on the "back" button,
+      // or through a swipe back gesture.
     if(nativeEvent.isUserInitiated){
-      // a route was removed either through a tap on the "back" button, or through
-      // a swipe back gesture.
+      
+    };
+  };
+
+  /** Handler for native event: `onNavRouteDidPop` */
+  _handleOnNavRouteDidPop = ({nativeEvent}: onNavRouteDidPopPayload) => {
+    // A: A route has been removed either through a tap on the "back" 
+    //    button, or through a swipe back gesture.
+    if(nativeEvent.isUserInitiated){
+      // A1: Remove route
+      this.removeRoute({
+        routeKey  : nativeEvent.routeKey,
+        routeIndex: nativeEvent.routeIndex
+      });
     };
   };
   //#endregion
@@ -173,7 +253,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         ref={r => this.nativeRef = r}
         style={styles.navigatorView}
         onNavRouteViewAdded={this._handleOnNavRouteViewAdded}
+        onNavRouteViewRemoved={this._handleOnNavRouteViewRemoved}
         onNavRouteWillPop={this._handleOnNavRouteWillPop}
+        onNavRouteDidPop={this._handleOnNavRouteDidPop}
       >
         {routes}
       </RNINavigatorView>
