@@ -22,9 +22,10 @@ export function timeout(ms: Number) {
   });
 };
 
-export function promiseWithTimeout(ms, promise){
+/** Wraps a promise that will reject if not not resolved in <ms> milliseconds */
+export function promiseWithTimeout(ms: Number, promise: Promise<void>){
   // Create a promise that rejects in <ms> milliseconds
-  const timeoutPromise = new Promise((resolve, reject) => {
+  const timeoutPromise = new Promise<void>((_, reject) => {
     const timeoutID = setTimeout(() => {
       clearTimeout(timeoutID);
       reject(`Promise timed out in ${ms} ms.`)
