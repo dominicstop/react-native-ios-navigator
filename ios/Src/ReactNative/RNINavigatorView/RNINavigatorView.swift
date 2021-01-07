@@ -31,8 +31,17 @@ class RNINavigatorView: UIView {
   // MARK: RN Exported Event Props
   // -----------------------------
   
-  /** a `RNINavigatorRouteView` instances was added as a subview */
+  /// A `RNINavigatorRouteView` instances was added as a subview
   @objc var onNavRouteViewAdded: RCTBubblingEventBlock?;
+  
+  /// Fired when a route's "back button" is pressed
+  @objc var onNavRouteBackButttonPressed: RCTBubblingEventBlock?;
+    
+  /// Fired when a route has been "popped" because the "back" button is pressed
+  /// or was swiped back via a gesture.
+  @objc var onNavUserInitiatedPop: RCTBubblingEventBlock?;
+  /// Fired when a route has been "popped" programmatically
+  @objc var onNavRequestedPop: RCTBubblingEventBlock?;
   
   // ----------------
   // MARK: Initialize
@@ -76,7 +85,7 @@ class RNINavigatorView: UIView {
     if let routeKey   = routeView.routeKey,
        let routeIndex = routeView.routeIndex {
       
-      // notify js navigator that a new route view was added
+      // send event: notify js navigator that a new route view was added
       self.onNavRouteViewAdded?([
         "routeKey"  : routeKey,
         "routeIndex": routeIndex
@@ -163,7 +172,20 @@ extension RNINavigatorView {
 // -----------------------------------
 
 extension RNINavigatorView: RNINavigatorRouteViewDelegate {
-  func onBackButttonPressed(routeKey: String, routeIndex: Int) {
+  func onNavUserInitiatedPop(routeKey: NSString, routeIndex: NSNumber) {
+    #if DEBUG
+    print("LOG - NativeView, RNINavigatorView"
+      + " - RNINavigatorRouteViewDelegate, onNavUserInitiatedPop"
+      + " - with routeKey: \(routeKey)"
+      + " - with routeIndex: \(routeIndex)"
+    );
+    #endif
     
+    // send event: notify js navigator that a route's back button was pressed
+    // or was swiped back via a gesture.
+    self.onNavRouteBackButttonPressed?([
+      "routeKey"  : routeKey,
+      "routeIndex": routeIndex
+    ]);
   };
 };

@@ -14,5 +14,7 @@
 // ---------------------------
 
 RCT_EXPORT_VIEW_PROPERTY(onNavRouteViewAdded, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onNavUserInitiatedPop, RCTBubblingEventBlock);
+
 
 @end
