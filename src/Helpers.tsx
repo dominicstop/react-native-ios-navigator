@@ -21,3 +21,16 @@ export function timeout(ms: Number) {
     }, ms)
   });
 };
+
+export function promiseWithTimeout(ms, promise){
+  // Create a promise that rejects in <ms> milliseconds
+  const timeoutPromise = new Promise((resolve, reject) => {
+    const timeoutID = setTimeout(() => {
+      clearTimeout(timeoutID);
+      reject(`Promise timed out in ${ms} ms.`)
+    }, ms);
+  });
+
+  // Returns a race between our timeout and the passed in promise
+  return Promise.race([promise, timeoutPromise]);
+};
