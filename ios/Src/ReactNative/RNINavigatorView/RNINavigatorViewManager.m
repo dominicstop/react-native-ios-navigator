@@ -9,6 +9,10 @@
 
 @interface RCT_EXTERN_MODULE(RNINavigatorViewManager, RCTViewManager)
 
+// ---------------------------
+// MARK: Export Props - Events
+// ---------------------------
 
+RCT_EXPORT_VIEW_PROPERTY(onNavRouteViewAdded, RCTBubblingEventBlock);
 
 @end

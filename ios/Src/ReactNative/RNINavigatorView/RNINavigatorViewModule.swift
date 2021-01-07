@@ -66,6 +66,8 @@ class RNINavigatorViewModule: RCTEventEmitter {
     return false;
   };
   
+  /// Note: The events are global, i.e. the events will be sent to all
+  /// instances of the emitter across our app.
   override func supportedEvents() -> [String]! {
     return Self.Events.allCases.map { $0.rawValue };
   };
@@ -175,17 +177,5 @@ class RNINavigatorViewModule: RCTEventEmitter {
 // ----------------------------------------------
 
 extension RNINavigatorViewModule.Manager: RNINavigatorViewEventsDelegate {
-  
-  func onNavRouteViewAdded(routeKey: NSString, routeIndex: NSNumber) {
-    #if DEBUG
-    print("LOG - NativeModule, RNINavigatorView.Manager"
-      + " - RNINavigatorViewModuleEventsDelegate: onNavRouteViewAdded"
-      + " - for node: \(self.node)"
-      + " - with params - routeKey: \(routeKey)"
-      + " - routeIndex: \(routeIndex)"
-    );
-    #endif
-    
-
-  };
+  // TODO: Impl.
 };

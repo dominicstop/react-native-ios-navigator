@@ -8,7 +8,7 @@
 import UIKit;
 
 protocol RNINavigatorViewEventsDelegate: AnyObject {
-  func onNavRouteViewAdded(routeKey: NSString, routeIndex: NSNumber);
+  // TODO: Add Functions
 };
 
 class RNINavigatorView: UIView {
@@ -26,6 +26,13 @@ class RNINavigatorView: UIView {
   private var routeVCs: [RNINavigatorRouteViewController] = [];
   
   var navigationVC: UINavigationController!;
+  
+  // -----------------------------
+  // MARK: RN Exported Event Props
+  // -----------------------------
+  
+  /** a `RNINavigatorRouteView` instances was added as a subview */
+  @objc var onNavRouteViewAdded: RCTBubblingEventBlock?;
   
   // ----------------
   // MARK: Initialize
@@ -69,9 +76,11 @@ class RNINavigatorView: UIView {
     if let routeKey   = routeView.routeKey,
        let routeIndex = routeView.routeIndex {
       
-      // notify delegate that a new route view was added
-      self.eventsDelegate?
-          .onNavRouteViewAdded(routeKey: routeKey, routeIndex: routeIndex);
+      // notify js navigator that a new route view was added
+      self.onNavRouteViewAdded?([
+        "routeKey"  : routeKey,
+        "routeIndex": routeIndex
+      ]);
     };
     
     #if DEBUG
