@@ -87,23 +87,25 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     this.navigatorModule.setRef(this.nativeRef);
   };
 
-  async push (params: { routeKey: String }) {
+  push = async (params: { routeKey: String }) => {
     const { activeRoutes } = this.state;
 
-    // 
+    // update nav status to busy
     this.navStatus = NavStatus.NAV_PUSHING;
 
     try {
       // add new route
       await Promise.all([
-        // 2. wait for the new route to be added
-        new Promise<void>(resolve => {
+        // 1. wait for the new route to be added in native side.
+        // note: this promise will reject if the `onNavRouteViewAdded` fails to fire within
+        // with 500 ms (i.e. if it takes to long for the promise to be fulfilled)
+        Helpers.promiseWithTimeout(500, new Promise<void>(resolve => {
           this.emitter.once(NavEvents.onNavRouteViewAdded, () => {
-            console.log("onNavRouteViewAdded");
             resolve();
           })
-        }),
-        // 1. append new route to `activeRoutes`
+        })),
+        // 2. append new route to `activeRoutes`
+        // the new route will be "received" from `RNINavigatorView`
         Helpers.setStateAsync<NavigatorViewState>(this, (prevState) => ({
           activeRoutes: [...prevState.activeRoutes, {
             routeKey: params.routeKey
@@ -111,9 +113,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         }))
       ]);
       
-      // send "push" request to native module
+      // forward "push" request to native module
       await this.navigatorModule.push({routeKey: params.routeKey});
-
+      // update nav status to idle
       this.navStatus = NavStatus.IDLE;
 
     } catch(error){
