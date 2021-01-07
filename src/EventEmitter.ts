@@ -18,7 +18,7 @@ export class EventEmitter<EventsT extends keyof Enum> {
   addListener(eventKey: EventsT, listener: EventListener) {
     const hasEvents = this.events[eventKey] != null;
     
-    if (hasEvents) {
+    if (!hasEvents) {
       // initialize with empty array...
       // The array will be used to store the event listeners
       this.events[eventKey] = [];
@@ -28,8 +28,10 @@ export class EventEmitter<EventsT extends keyof Enum> {
   };
 
   removeListener(eventKey: EventsT, listenerToRemove: EventListener) {
+    const hasEvents = this.events[eventKey] != null;
+
     // event does not exist (maybe: throw an error?)
-    if (!this.events[eventKey]) return;
+    if (!hasEvents) return;
 
     this.events[eventKey] = this.events[eventKey].filter(listener => (
       listener !== listenerToRemove
@@ -37,10 +39,12 @@ export class EventEmitter<EventsT extends keyof Enum> {
   };
 
   once(eventKey: EventsT, listener: EventListener){
-    this.addListener(eventKey, (data) => {
+    const tempListener: EventListener = (data) => {
       listener(data);
-      this.removeListener(eventKey, listener);
-    });
+      this.removeListener(eventKey, tempListener);
+    };
+
+    this.addListener(eventKey, tempListener);
   };
 
   removeAllListeners(){
@@ -48,8 +52,10 @@ export class EventEmitter<EventsT extends keyof Enum> {
   };
 
   emit(eventKey: EventsT, data: any) {
+    const hasEvents = this.events[eventKey] != null;
+
     // event does not exist
-    if (!this.events[eventKey]) return;
+    if (!hasEvents) return;
 
     this.events[eventKey].forEach(callback => {
       callback(data);
