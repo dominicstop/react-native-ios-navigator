@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, requireNativeComponent, NativeAppEventEmitter,  ViewStyle } from 'react-native';
+import { StyleSheet, requireNativeComponent,  ViewStyle } from 'react-native';
 
 import { NavigatorViewModule } from './NavigatorViewModule';
 import { NavigatorRouteView } from './NavigatorRouteView';
@@ -29,12 +29,6 @@ type NavRouteItem = {
 
 //#region - `RNINavigatorView` Events
 type onNavRouteViewAddedPayload = { nativeEvent: {
-  target    : number,
-  routeKey  : string,
-  routeIndex: number
-}};
-
-type onNavRouteViewRemovedPayload = { nativeEvent: {
   target    : number,
   routeKey  : string,
   routeIndex: number
@@ -115,6 +109,14 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   /** Add route to `state.activeRoutes` and wait for it to be added in
     * the native side as a subview (i.e. `RNINavigatorView`) */
   private addRoute = (params: { routeKey: String }) => {
+    //#region - 🐞 DEBUG 🐛
+    LIB_GLOBAL.debugLog && console.log(
+        `LOG - NavigatorView, addRoute`
+      + ` - with routeKey: ${params.routeKey}`
+      + ` - current activeRoutes: ${this.state.activeRoutes.length}`
+    );
+    //#endregion
+
     return Promise.all([
       // -----------------------------------------------------
       // 1. Wait for the new route to be added in native side.
@@ -138,10 +140,18 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     ]);
   };
 
+  /** Remove route to `state.activeRoutes` */
   private removeRoute = (params: { routeKey: string, routeIndex: number }) => {
-    console.log(`removeRoute - active routes: ${this.state.activeRoutes.length}`);
+    //#region - 🐞 DEBUG 🐛
+    LIB_GLOBAL.debugLog && console.log(
+        `LOG - NavigatorView, removeRoute`
+      + ` - with routeKey: ${params.routeKey}`
+      + ` - routeIndex: ${params.routeIndex}`
+      + ` - current activeRoutes: ${this.state.activeRoutes.length}`
+    );
+    //#endregion
 
-    // Remove route to `activeRoutes`
+    // Remove route from `activeRoutes`.
     // The route will be "removed" from `RNINavigatorView`'s subviews.
     return Helpers.setStateAsync<NavigatorViewState>(this, (prevState) => ({
       activeRoutes: prevState.activeRoutes.filter((route, index) => !(
@@ -151,7 +161,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     }));
   };
 
-  push = async (params: { routeKey: string }) => {
+  public push = async (params: { routeKey: string }) => {
     // update nav status to busy
     this.navStatus = NavStatus.NAV_PUSHING;
 
@@ -169,13 +179,13 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
   };
 
-  _handleGetRefToNavigator = (): NavigatorView => {
+  private _handleGetRefToNavigator = (): NavigatorView => {
     return this;
   };
 
   //#region - Native Event Handlers
   /** Handler for native event: `onNavRouteViewAdded` */
-  _handleOnNavRouteViewAdded = ({nativeEvent}: onNavRouteViewAddedPayload) => {
+  private _handleOnNavRouteViewAdded = ({nativeEvent}: onNavRouteViewAddedPayload) => {
     // emit event: nav. route was added to `RNINavigatorView`'s subviews
     this.emitter.emit(NavEvents.onNavRouteViewAdded, {
       target    : nativeEvent.target,
@@ -185,16 +195,16 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   };
 
   /** Handler for native event: `onNavRouteWillPop` */
-  _handleOnNavRouteWillPop = ({nativeEvent}: onNavRouteWillPopPayload) => {
+  private _handleOnNavRouteWillPop = ({nativeEvent}: onNavRouteWillPopPayload) => {
     // a route is about to be removed either through a tap on the "back" button,
       // or through a swipe back gesture.
     if(nativeEvent.isUserInitiated){
-      
+      // TODO
     };
   };
 
   /** Handler for native event: `onNavRouteDidPop` */
-  _handleOnNavRouteDidPop = ({nativeEvent}: onNavRouteDidPopPayload) => {
+  private _handleOnNavRouteDidPop = ({nativeEvent}: onNavRouteDidPopPayload) => {
     // A: A route has been removed either through a tap on the "back" 
     //    button, or through a swipe back gesture.
     if(nativeEvent.isUserInitiated){

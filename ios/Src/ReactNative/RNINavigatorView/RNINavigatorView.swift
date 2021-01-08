@@ -7,6 +7,8 @@
 
 import UIKit;
 
+typealias Completion = () -> Void;
+
 protocol RNINavigatorViewEventsDelegate: AnyObject {
   // TODO: Add Functions
 };
@@ -70,7 +72,9 @@ class RNINavigatorView: UIView {
     guard let routeView = subview as? RNINavigatorRouteView
     else { return };
     
-    // do not show as subview, remove from view hieaarchy
+    /// do not show as subview, remove from view hieaarchy.
+    /// note: once removed, `removeReactSubview` will not be called if that
+    /// subview/child is removed from `render()` in the js side.
     routeView.removeFromSuperview();
     
     /// create the wrapper vc that holds the `routeView`
@@ -105,6 +109,7 @@ class RNINavigatorView: UIView {
       self.navigationVC.setViewControllers([vc], animated: false);
     };
   };
+
 };
 
 // ------------------------
@@ -170,7 +175,8 @@ fileprivate extension RNINavigatorView {
 // ---------------------------
 
 extension RNINavigatorView {
-  func push(routeKey: NSString){
+  
+  func push(routeKey: NSString, completion: @escaping Completion){
     /// get the `routeView` to be pushed in the nav stack
     guard let routeViewVC = self.routeVCs.last,
           routeViewVC.routeView.routeKey == routeKey
@@ -192,8 +198,9 @@ extension RNINavigatorView {
     );
     #endif
     
-    // push route to the nav stack
-    self.navigationVC.pushViewController(routeViewVC, animated: true);
+    self.navigationVC.pushViewController(
+      routeViewVC, animated: true, completion: completion
+    );
   };
 };
 

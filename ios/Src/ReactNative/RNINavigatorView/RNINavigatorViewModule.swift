@@ -164,10 +164,10 @@ class RNINavigatorViewModule: RCTEventEmitter {
       #endif
       
       // forward push command to navigator
-      navigatorView.push(routeKey: routeKey);
-      
-      // resolve promise
-      resolve([:]);
+      navigatorView.push(routeKey: routeKey){
+        // resolve promise after "push" is complete
+        resolve([:]);
+      };
     };
   };
 };

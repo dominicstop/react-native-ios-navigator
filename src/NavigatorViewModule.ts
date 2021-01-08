@@ -1,6 +1,9 @@
 import type React from 'react';
 import { NativeModules, NativeEventEmitter, EventSubscriptionVendor, findNodeHandle } from 'react-native';
 
+import * as Helpers from './Helpers';
+
+
 //#region - Type Definitions
 /** Corresponds to the RNINavigatorViewModule.Events */
 export enum RNINavigatorViewModuleEvents {
@@ -81,8 +84,11 @@ export class NavigatorViewModule {
     //#endregion
 
     try {
-      // forward command to nav view: js:module -> n:module -> n:view
-      await RNINavigatorViewModule.push(this.node, routeKey);
+      // forward command to nav view: js:module -> n:module -> n:view,
+      // and reject if command takes too long to resolve.
+      await Helpers.promiseWithTimeout(1000,
+        RNINavigatorViewModule.push(this.node, routeKey)
+      );
 
     } catch (error) {
       //#region - 🐞 DEBUG 🐛
