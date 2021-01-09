@@ -98,7 +98,7 @@ export class NavigatorViewModule {
         + ` - for node: ${this.node}`
         + ` - isModuleNodeSet: ${this.isModuleNodeSet}`
         + ` - with routeKey: ${routeKey}`
-        + ` - error message: \(error)`
+        + ` - error message: ${error}`
       );
       //#endregion
 

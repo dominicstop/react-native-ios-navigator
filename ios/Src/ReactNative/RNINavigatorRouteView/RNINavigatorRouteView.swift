@@ -16,7 +16,7 @@ class RNINavigatorRouteView: UIView {
   weak var bridge: RCTBridge!;
   
   /** content to show in the navigator */
-  var reactView: UIView?;
+  weak var reactView: UIView?;
   
   // -----------------------
   // MARK: RN Exported Props
@@ -54,6 +54,15 @@ class RNINavigatorRouteView: UIView {
     
     self.bridge = bridge;
   };
+  
+  #if DEBUG
+  deinit {
+    print("LOG - deinit - NativeView, RNINavigatorRouteView"
+      + " - for routeKey: \(self.routeKey ?? "N/A")"
+      + " - routeIndex: \(self.routeIndex ?? -1)"
+    );
+  };
+  #endif
   
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented");

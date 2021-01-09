@@ -24,7 +24,10 @@ class RNINavigatorView: UIView {
   /// delegate for sending events to the ` RNINavigatorViewModule.Manager`
   weak var eventsDelegate: RNINavigatorViewEventsDelegate?;
   
-  /** the`activeRoute` items: routes to be added/added to the nav stack*/
+  /// The`activeRoute` items, i.e.the routes added/to be added to the nav. stack.
+  /// Note: This has to have strong ref. to the routes so that they will be
+  /// retained. Once the routes are "popped", they should be removed from here
+  /// so that they will be "released".
   private var routeVCs: [RNINavigatorRouteViewController] = [];
   
   var navigationVC: UINavigationController!;
@@ -109,7 +112,6 @@ class RNINavigatorView: UIView {
       self.navigationVC.setViewControllers([vc], animated: false);
     };
   };
-
 };
 
 // ------------------------
@@ -145,16 +147,40 @@ fileprivate extension RNINavigatorView {
     reactTag  : NSNumber, routeKey: NSString,
     routeIndex: NSNumber
   ){
+    
     #if DEBUG
     let prevCountRouteVCs = self.routeVCs.count;
     #endif
     
+    let removedRoutes = self.routeVCs.filter {
+      ($0.routeView?.reactTag   == reactTag  ) &&
+      ($0.routeView?.routeKey   == routeKey  ) &&
+      ($0.routeView?.routeIndex == routeIndex)
+    };
+    
+    let _rootViewTags = self.bridge.uiManager.value(forKey: "_rootViewTags") as! NSMutableSet;
+    print("LOG - DEBUG - _rootViewTags: \(_rootViewTags.debugDescription)");
+    
+    removedRoutes.forEach {
+      print("LOG - DEBUG - removedRoutes tag: \($0.routeView?.reactTag ?? -1)");
+      
+      
+      RNIUtilities.recursivelyRemoveFromViewRegistry(
+        bridge: self.bridge,
+        reactView: $0.routeView!
+      );
+      
+
+      self.removeReactSubview($0.routeView);
+      ($0 as? RCTInvalidating)?.invalidate();
+    };
+    
     // remove "popped" route from `navRoutes`
-    self.routeVCs = self.routeVCs.filter {!(
-      ($0.routeView.reactTag   == reactTag  ) &&
-      ($0.routeView.routeKey   == routeKey  ) &&
-      ($0.routeView.routeIndex == routeIndex)
-    )};
+    self.routeVCs.removeAll {
+      ($0.routeView?.reactTag   == reactTag  ) &&
+      ($0.routeView?.routeKey   == routeKey  ) &&
+      ($0.routeView?.routeIndex == routeIndex)
+    };
     
     #if DEBUG
     let nextCountRouteVCs = self.routeVCs.count;
@@ -179,13 +205,13 @@ extension RNINavigatorView {
   func push(routeKey: NSString, completion: @escaping Completion){
     /// get the `routeView` to be pushed in the nav stack
     guard let routeViewVC = self.routeVCs.last,
-          routeViewVC.routeView.routeKey == routeKey
+          routeViewVC.routeView?.routeKey == routeKey
     else {
       #if DEBUG
       print("LOG - NativeView, RNINavigatorView: push error"
         + " - with params - routeKey: \(routeKey)"
         + " - Error: guard check failed"
-        + " - last item's routeKey: \(self.routeVCs.last?.routeView.routeKey ?? "N/A")"
+        + " - last item's routeKey: \(self.routeVCs.last?.routeView?.routeKey ?? "N/A")"
         + " - routeViews allObjects count: \(self.routeVCs.count)"
       );
       #endif
@@ -240,6 +266,10 @@ extension RNINavigatorView: RNINavigatorRouteViewDelegate {
       + " - RNINavigatorRouteViewDelegate, onNavRouteDidPop"
       + " - with routeKey: \(routeKey)"
       + " - with routeIndex: \(routeIndex)"
+      /////
+            + " - reactSubviews: \(self.reactSubviews()?.count ?? -1)"
+            + " - subviews: \(self.subviews.count)"
+            + " - subviews's subview: \(self.subviews.first?.subviews.count ?? -1)"
     );
     #endif
     

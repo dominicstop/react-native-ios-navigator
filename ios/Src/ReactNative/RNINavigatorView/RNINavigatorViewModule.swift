@@ -15,8 +15,11 @@ class RNINavigatorViewModule: RCTEventEmitter {
   // MARK: Nested Types
   // ------------------
   
-  /// Each `Manager` instance has a corresponding view instance, specifically,
-  /// each instance of this manager is paired with a `RNINavigatorView` instance.
+  /// Each instance of `RNINavigatorView` is paired with a "manager".
+  /// The job of the manager is to hold a ref to a `RNINavigatorView` so that the
+  /// `RNINavigatorViewModule` native module (which is a singleton) can forward
+  /// the commands it receives from the JS comp. to the corresponding native
+  /// view instance: (JS:Component -> N:Module -> N:View).
   class Manager {
     
     // --------------------------
@@ -27,6 +30,8 @@ class RNINavigatorViewModule: RCTEventEmitter {
     
     /// a ref to `RNINavigatorViewModule` singleton instance
     weak var module: RNINavigatorViewModule?;
+    
+    /// a ref to the `RNINavigatorView` that this manager is responsible for
     weak var navigatorView: RNINavigatorView? {
       didSet {
         /// set the delegate to receive events from `RNINavigatorView` instance

@@ -33,9 +33,9 @@ class RNINavigatorRouteViewController: UIViewController {
   // ----------------
   
   /// The  content to show in the popover
-  var routeView: RNINavigatorRouteView!;
+  weak var routeView: RNINavigatorRouteView?;
   /// Used to send/forward navigation-related events
-  var delegate: RNINavigatorRouteViewDelegate?;
+  weak var delegate: RNINavigatorRouteViewDelegate?;
   
   /// A flag that indicates that the nav. controller responsible for this vc is
   /// about to remove it from the nav. stack. This is used to differentiate if
@@ -53,31 +53,22 @@ class RNINavigatorRouteViewController: UIViewController {
     
     // unwrap `routeView` and add it as child view
     guard let routeView = self.routeView else { return };
-    self.view.addSubview(routeView);
-    
-    // enable autolayout
-    routeView.translatesAutoresizingMaskIntoConstraints = false;
-    // pin `routeView` to vc's edges to fill/fit the parent view
-    NSLayoutConstraint.activate([
-      routeView.topAnchor     .constraint(equalTo: self.view.topAnchor     ),
-      routeView.bottomAnchor  .constraint(equalTo: self.view.bottomAnchor  ),
-      routeView.leadingAnchor .constraint(equalTo: self.view.leadingAnchor ),
-      routeView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-    ]);
+    self.view = routeView;
   };
   
   override func viewWillLayoutSubviews() {
     super.viewWillLayoutSubviews();
     /// update `routeView`'s size
-    self.routeView.notifyForBoundsChange(self.view.bounds);
+    self.routeView?.notifyForBoundsChange(self.view.bounds);
   };
   
   override func willMove(toParent parent: UIViewController?){
     super.willMove(toParent: parent);
     
     guard let delegate   = self.delegate,
-          let routeKey   = self.routeView.routeKey,
-          let routeIndex = self.routeView.routeIndex
+          let routeView  = self.routeView,
+          let routeKey   = routeView.routeKey,
+          let routeIndex = routeView.routeIndex
     else { return };
     
     // this vc 'will' be popped
@@ -93,7 +84,7 @@ class RNINavigatorRouteViewController: UIViewController {
       
       // notify parent (i.e. `RNINavigatorView`) that this vc will be "popped".
       delegate.onNavRouteWillPop(
-        reactTag  : self.routeView.reactTag,
+        reactTag  : routeView.reactTag,
         routeKey  : routeKey  ,
         routeIndex: routeIndex,
         // note: if `isToBeRemoved` is false, then "pop"/back is user initiated.
@@ -109,8 +100,9 @@ class RNINavigatorRouteViewController: UIViewController {
     super.didMove(toParent: parent);
     
     guard let delegate   = self.delegate,
-          let routeKey   = self.routeView.routeKey,
-          let routeIndex = self.routeView.routeIndex
+          let routeView  = self.routeView,
+          let routeKey   = routeView.routeKey,
+          let routeIndex = routeView.routeIndex
     else { return };
     
     // this vc 'will' be popped
@@ -126,7 +118,7 @@ class RNINavigatorRouteViewController: UIViewController {
       
       // notify parent (i.e. `RNINavigatorView`) that this vc has been "popped".
       delegate.onNavRouteDidPop(
-        reactTag  : self.routeView.reactTag,
+        reactTag  : routeView.reactTag,
         routeKey  : routeKey  ,
         routeIndex: routeIndex,
         // note: if `isToBeRemoved` is false, then "pop"/back is user initiated.
@@ -136,5 +128,20 @@ class RNINavigatorRouteViewController: UIViewController {
     } else {
       // TODO: View controller was moved, possibly due replacing a route?
     };
-  }
+  };
+  
+  #if DEBUG
+  deinit {
+    print("LOG - deinit - VC, RNINavigatorRouteViewController"
+      + " - for routeKey: \(self.routeView?.routeKey ?? "N/A")"
+      + " - routeIndex: \(self.routeView?.routeIndex ?? -1)"
+      + " - isUserInitiated: \(!self.isToBeRemoved)"
+    );
+    self.routeView?.reactView?.removeFromSuperview();
+    self.routeView?.reactView = nil;
+    self.routeView?.removeFromSuperview();
+    self.routeView = nil;
+    self.view = nil;
+  };
+  #endif
 };

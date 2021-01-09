@@ -14,7 +14,7 @@ class RNINavigatorViewManager: RCTViewManager {
   // MARK: Shared Instances
   // ----------------------
   
-  static var sharedBridge: RCTBridge? {
+  static weak var sharedBridge: RCTBridge? {
     didSet {
       #if DEBUG
       print("RNINavigatorViewManager, sharedBridge: didSet");
