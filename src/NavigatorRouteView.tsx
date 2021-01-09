@@ -50,10 +50,13 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
   //#region - Native Event Handlers
   /** Handler for native event: `onNavRouteWillPop` */
   private _handleOnNavRouteWillPop = () => {
+    
   };
 
   /** Handler for native event: `onNavRouteDidPop` */
   private _handleOnNavRouteDidPop = () => {
+    // unmount views
+    this.setState({isMounted: false});
   };
   //#endregion
   

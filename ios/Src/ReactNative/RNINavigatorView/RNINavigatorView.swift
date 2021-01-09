@@ -75,7 +75,7 @@ class RNINavigatorView: UIView {
     guard let routeView = subview as? RNINavigatorRouteView
     else { return };
     
-    /// do not show as subview, remove from view hieaarchy.
+    /// do not show as subview, i.e. remove from view hieaarchy.
     /// note: once removed, `removeReactSubview` will not be called if that
     /// subview/child is removed from `render()` in the js side.
     routeView.removeFromSuperview();
@@ -151,30 +151,24 @@ fileprivate extension RNINavigatorView {
     #if DEBUG
     let prevCountRouteVCs = self.routeVCs.count;
     #endif
-    
-    let removedRoutes = self.routeVCs.filter {
-      ($0.routeView?.reactTag   == reactTag  ) &&
-      ($0.routeView?.routeKey   == routeKey  ) &&
-      ($0.routeView?.routeIndex == routeIndex)
-    };
-    
-    let _rootViewTags = self.bridge.uiManager.value(forKey: "_rootViewTags") as! NSMutableSet;
-    print("LOG - DEBUG - _rootViewTags: \(_rootViewTags.debugDescription)");
-    
-    removedRoutes.forEach {
-      print("LOG - DEBUG - removedRoutes tag: \($0.routeView?.reactTag ?? -1)");
 
-      //RNIUtilities.recursivelyRemoveFromViewRegistry(
-      //  bridge: self.bridge,
-      //  reactView: $0.routeView!
-      //);
-    };
-    
     // remove "popped" route from `navRoutes`
     self.routeVCs.removeAll {
-      ($0.routeView?.reactTag   == reactTag  ) &&
-      ($0.routeView?.routeKey   == routeKey  ) &&
-      ($0.routeView?.routeIndex == routeIndex)
+      let isMatch = (
+        ($0.routeView?.reactTag   == reactTag  ) &&
+        ($0.routeView?.routeKey   == routeKey  ) &&
+        ($0.routeView?.routeIndex == routeIndex)
+      );
+      
+      if isMatch {
+        // cleanup: manually remove routes from view registry
+        RNIUtilities.recursivelyRemoveFromViewRegistry(
+          bridge   : self.bridge,
+          reactView: $0.routeView!
+        );
+      };
+      
+      return isMatch;
     };
     
     #if DEBUG
