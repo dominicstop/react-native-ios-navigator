@@ -137,11 +137,6 @@ class RNINavigatorRouteViewController: UIViewController {
       + " - routeIndex: \(self.routeView?.routeIndex ?? -1)"
       + " - isUserInitiated: \(!self.isToBeRemoved)"
     );
-    self.routeView?.reactView?.removeFromSuperview();
-    self.routeView?.reactView = nil;
-    self.routeView?.removeFromSuperview();
-    self.routeView = nil;
-    self.view = nil;
   };
   #endif
 };

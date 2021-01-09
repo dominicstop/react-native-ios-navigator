@@ -31,6 +31,7 @@ class RNIUtilities {
           let viewRegistry  = value as? NSMutableDictionary
     else { return };
     
+    // recursively remove subviews
     func removeView(_ v: UIView){
       /// if this really is a "react view" then it should have a `reactTag`
       if let reactTag = v.reactTag {
@@ -47,11 +48,14 @@ class RNIUtilities {
       /// remove other subviews...
       for subview in v.subviews {
         removeView(subview);
+        subview.removeReactSubview(subview);
       };
       
+      /// remove other react subviews...
       if let reactView = v.reactSubviews() {
         for subview in reactView {
           removeView(subview);
+          subview.removeReactSubview(subview);
         };
       };
     };
