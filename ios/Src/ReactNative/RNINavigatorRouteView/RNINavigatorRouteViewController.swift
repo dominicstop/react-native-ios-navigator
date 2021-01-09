@@ -33,7 +33,7 @@ class RNINavigatorRouteViewController: UIViewController {
   // ----------------
   
   /// The  content to show in the popover
-  weak var routeView: RNINavigatorRouteView?;
+  var routeView: RNINavigatorRouteView!;
   /// Used to send/forward navigation-related events
   weak var delegate: RNINavigatorRouteViewDelegate?;
   
@@ -58,6 +58,7 @@ class RNINavigatorRouteViewController: UIViewController {
   
   override func viewWillLayoutSubviews() {
     super.viewWillLayoutSubviews();
+    
     /// update `routeView`'s size
     self.routeView?.notifyForBoundsChange(self.view.bounds);
   };
@@ -81,6 +82,9 @@ class RNINavigatorRouteViewController: UIViewController {
         + " - isUserInitiated: \(!self.isToBeRemoved)"
       );
       #endif
+      
+      // send event: notify js nav. route view that it's going to be popped.
+      self.routeView?.onNavRouteWillPop?([:]);
       
       // notify parent (i.e. `RNINavigatorView`) that this vc will be "popped".
       delegate.onNavRouteWillPop(
@@ -115,6 +119,9 @@ class RNINavigatorRouteViewController: UIViewController {
         + " - isUserInitiated: \(!self.isToBeRemoved)"
       );
       #endif
+      
+      // send event: notify js nav. route view that it's been popped.
+      self.routeView?.onNavRouteDidPop?([:]);
       
       // notify parent (i.e. `RNINavigatorView`) that this vc has been "popped".
       delegate.onNavRouteDidPop(

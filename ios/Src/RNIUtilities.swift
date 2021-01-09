@@ -27,8 +27,8 @@ class RNIUtilities {
     /// Note: Unlike objc properties, ivars are "private" so they aren't
     /// automagically exposed/bridged to swift.
     guard let value = bridge.uiManager.value(forKey: "_viewRegistry"),
-          /// Note: key: `NSNumber` (the `reactTag`), and value: `UIView`
-          let viewRegistry  = value as? NSMutableDictionary
+          /// Note - key: `NSNumber` (the `reactTag`), and value: `UIView`
+          let viewRegistry = value as? NSMutableDictionary
     else { return };
     
     // recursively remove subviews
@@ -48,14 +48,12 @@ class RNIUtilities {
       /// remove other subviews...
       for subview in v.subviews {
         removeView(subview);
-        subview.removeReactSubview(subview);
       };
       
       /// remove other react subviews...
       if let reactView = v.reactSubviews() {
         for subview in reactView {
           removeView(subview);
-          subview.removeReactSubview(subview);
         };
       };
     };

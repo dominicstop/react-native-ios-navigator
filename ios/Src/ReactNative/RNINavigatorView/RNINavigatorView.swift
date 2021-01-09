@@ -164,10 +164,10 @@ fileprivate extension RNINavigatorView {
     removedRoutes.forEach {
       print("LOG - DEBUG - removedRoutes tag: \($0.routeView?.reactTag ?? -1)");
 
-      RNIUtilities.recursivelyRemoveFromViewRegistry(
-        bridge: self.bridge,
-        reactView: $0.routeView!
-      );
+      //RNIUtilities.recursivelyRemoveFromViewRegistry(
+      //  bridge: self.bridge,
+      //  reactView: $0.routeView!
+      //);
     };
     
     // remove "popped" route from `navRoutes`

@@ -17,6 +17,19 @@ class RNINavigatorRouteView: UIView {
   
   /** content to show in the navigator */
   weak var reactView: UIView?;
+    
+  // -----------------------------
+  // MARK: RN Exported Event Props
+  // -----------------------------
+  
+  /// Fired when a route is *about to be* "popped", either due to a "user intiated"
+  /// pop (because the "back" button was pressed or it was swiped back via a
+  /// gesture), or due to it being "popped" programmatically via the nav.
+  @objc var onNavRouteWillPop: RCTBubblingEventBlock?;
+  /// Fired when a route *has abeen* "popped", either due to a "user intiated"
+  /// pop (because the "back" button was pressed or it was swiped back via a
+  /// gesture), or due to it being "popped" programmatically via the nav.
+  @objc var onNavRouteDidPop: RCTBubblingEventBlock?;
   
   // -----------------------
   // MARK: RN Exported Props
