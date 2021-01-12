@@ -10,11 +10,12 @@ import { EventEmitter } from './EventEmitter';
 //#region - Type Definitions
 /** Represents the current status of the navigator */
 enum NavStatus {
-  IDLE        = "IDLE"       ,
-  IDLE_INIT   = "IDLE_INIT"  ,
-  IDLE_ERROR  = "IDLE_ERROR" ,
-  NAV_PUSHING = "NAV_PUSHING",
-  NAV_POPPING = "NAV_POPPING",
+  INIT        = "INIT"       , // init. status: preparing nav.
+  IDLE        = "IDLE"       , // nav. is idle, not busy
+  IDLE_INIT   = "IDLE_INIT"  , // nav. just finished init.
+  IDLE_ERROR  = "IDLE_ERROR" , // nav. is idle due to error
+  NAV_PUSHING = "NAV_PUSHING", // nav. is busy pushing
+  NAV_POPPING = "NAV_POPPING", // nav. is just popping
 };
 
 enum NavEvents {
@@ -90,8 +91,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
   constructor(props: NavigatorViewProps){
     super(props);
-
-    this.navStatus = NavStatus.IDLE_INIT;
+  
+    this.navStatus = NavStatus.INIT;
 
     this.emitter = new EventEmitter<NavEvents>();
     this.navigatorModule = new NavigatorViewModule();
@@ -102,8 +103,16 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   };
 
   componentDidMount(){
-    // pass a `RNINavigatorView` ref to native comp
-    this.navigatorModule.setRef(this.nativeRef);
+    this.initNavModule();
+  };
+
+  private async initNavModule(){
+    if(!this.navigatorModule.isModuleNodeSet){
+      // pass a `RNINavigatorView` ref to native comp
+      await this.navigatorModule.setRef(this.nativeRef);
+      // update nav status: ready for commands
+      this.navStatus = NavStatus.IDLE_INIT;
+    };
   };
 
   /** Add route to `state.activeRoutes` and wait for it to be added in
@@ -162,15 +171,46 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   };
 
   public push = async (params: { routeKey: string }) => {
-    // update nav status to busy
-    this.navStatus = NavStatus.NAV_PUSHING;
+    // TEMP, replace with queue - skip if nav. is busy
+    if(NavigatorViewUtils.isNavStateBusy(this.navStatus)) return;
 
     try {
+      // init. `NavigatorViewModule` if haven't already
+      await this.initNavModule();
+
+      // update nav status to busy
+      this.navStatus = NavStatus.NAV_PUSHING;
+
       // add new route, and wait for it be added
       await this.addRoute(params);
       
       // forward "push" request to native module
       await this.navigatorModule.push({routeKey: params.routeKey});
+      // update nav status to idle
+      this.navStatus = NavStatus.IDLE;
+
+    } catch(error){
+      this.navStatus = NavStatus.IDLE_ERROR;
+    };
+  };
+
+  public pop = async () => {
+    // TEMP, replace with queue - skip if nav. is busy
+    if(NavigatorViewUtils.isNavStateBusy(this.navStatus)) return;
+
+    try {
+      // init. `NavigatorViewModule` if haven't already
+      await this.initNavModule();
+
+      // update nav status to busy
+      this.navStatus = NavStatus.NAV_POPPING;
+
+      // forward "pop" request to native module
+      const result = await this.navigatorModule.pop();
+
+      // remove popped route from `activeRoutes`
+      await this.removeRoute(result);
+
       // update nav status to idle
       this.navStatus = NavStatus.IDLE;
 
@@ -246,12 +286,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
 /** Utilities for `NavigatorView` */
 class NavigatorViewUtils {
-  static isNavStateBusy(navStatus: NavStatus){
-    return (
-      navStatus == NavStatus.NAV_POPPING ||
-      navStatus == NavStatus.NAV_PUSHING 
-    );
-  };
 
   static isNavStateIdle(navStatus: NavStatus){
     return (
@@ -259,6 +293,10 @@ class NavigatorViewUtils {
       navStatus == NavStatus.IDLE_INIT  ||
       navStatus == NavStatus.IDLE_ERROR
     );
+  };
+
+  static isNavStateBusy(navStatus: NavStatus){
+    return !NavigatorViewUtils.isNavStateIdle(navStatus);
   };
 };
 

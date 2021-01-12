@@ -86,6 +86,16 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
           >
             {`Navigate: push`}
           </Text>
+          <Text 
+            style={{fontSize: 32}}
+            onPress={() => {
+              const props = this.props;
+              const navigatorRef = props.getRefToNavigator();
+              navigatorRef.pop();
+            }}
+          >
+            {`Navigate: Pop`}
+          </Text>
         </View>
       </RNINavigatorRouteView>
     );

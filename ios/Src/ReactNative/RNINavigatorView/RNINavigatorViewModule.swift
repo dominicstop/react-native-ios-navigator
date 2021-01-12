@@ -175,6 +175,56 @@ class RNINavigatorViewModule: RCTEventEmitter {
       };
     };
   };
+  
+  // TODO: Add options param
+  @objc func pop(
+    _ node  : NSNumber,
+    resolve : @escaping RCTPromiseResolveBlock,
+    reject  : @escaping RCTPromiseRejectBlock
+  ){
+    
+    DispatchQueue.main.async {
+      // get manager/view instance that matches node/reactTag
+      guard let manager = self.managers[node.intValue],
+            let navigatorView = manager.navigatorView
+      else {
+        // construct error message for promise
+        let errorMessage = (
+            "NativeModule, RCTPopoverViewModule: pop"
+          + " - for node: \(node)"
+          + " - Error: guard check failed"
+          + " - no corresponding manager found for node"
+          + " - make sure that `setNode` command is called first."
+        );
+        
+        #if DEBUG
+        print("LOG - \(errorMessage)");
+        #endif
+        
+        /// remove manager bc's it's `navigatorView` is `nil`
+        self.managers.removeValue(forKey: node.intValue);
+        
+        // reject promise w/: code, message, error
+        reject("LIB_ERROR", errorMessage, nil);
+        return;
+      };
+      
+      #if DEBUG
+      print("LOG - NativeModule, RCTPopoverViewModule: pop"
+        + " - for node: \(node)"
+      );
+      #endif
+      
+      // forward "pop" command to navigator
+      navigatorView.pop(){
+        // resolve promise after "pop" is complete
+        resolve([
+          "routeKey"  : $0,
+          "routeIndex": $1
+        ]);
+      };
+    };
+  };
 };
 
 // ----------------------------------------------

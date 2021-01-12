@@ -21,7 +21,7 @@ class RNINavigatorView: UIView {
   
   /// ref to the RN view manager singleton's bridge instance
   weak var bridge: RCTBridge!;
-  /// delegate for sending events to the ` RNINavigatorViewModule.Manager`
+  /// delegate for sending events to the `RNINavigatorViewModule.Manager`
   weak var eventsDelegate: RNINavigatorViewEventsDelegate?;
   
   /// The`activeRoute` items, i.e.the routes added/to be added to the nav. stack.
@@ -217,6 +217,35 @@ extension RNINavigatorView {
       routeViewVC, animated: true, completion: completion
     );
   };
+  
+  func pop(completion: @escaping (_ routeKey: NSString, _ routeIndex: NSNumber) -> Void){
+    
+    guard self.routeVCs.count > 1,
+          /// get the last routes
+          let lastNavVC   = self.navigationVC.viewControllers.last as? RNINavigatorRouteViewController,
+          let lastRouteVC = self.routeVCs.last,
+          /// get the `lastRouteVC`'s `routeKey` and `routeIndex`
+          let lastRouteKey   = lastRouteVC.routeView.routeKey,
+          let lastRouteIndex = lastRouteVC.routeView.routeIndex,
+          /// make sure that the vc that we will be "popping" is the same as the
+          /// last route in `routeVCs`
+          lastNavVC.routeView.routeKey   == lastRouteKey,
+          lastNavVC.routeView.routeIndex == lastRouteIndex
+    else {
+      #if DEBUG
+      print("LOG - NativeView, RNINavigatorView: pop error"
+        + " - Error: guard check failed"
+        + " - last routeVCs's routeKey: \(self.routeVCs.last?.routeView?.routeKey ?? "N/A")"
+        + " - routeViews count: \(self.routeVCs.count)"
+      );
+      #endif
+      return;
+    };
+    
+    self.navigationVC.popViewController(animated: true){
+      completion(lastRouteKey, lastRouteIndex);
+    };
+  };
 };
 
 // -----------------------------------
@@ -255,10 +284,6 @@ extension RNINavigatorView: RNINavigatorRouteViewDelegate {
       + " - RNINavigatorRouteViewDelegate, onNavRouteDidPop"
       + " - with routeKey: \(routeKey)"
       + " - with routeIndex: \(routeIndex)"
-      /////
-            + " - reactSubviews: \(self.reactSubviews()?.count ?? -1)"
-            + " - subviews: \(self.subviews.count)"
-            + " - subviews's subview: \(self.subviews.first?.subviews.count ?? -1)"
     );
     #endif
     

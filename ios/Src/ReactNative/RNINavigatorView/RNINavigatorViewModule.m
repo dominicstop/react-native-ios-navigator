@@ -18,7 +18,13 @@ RCT_EXTERN_METHOD(setNode: (nonnull NSNumber)node
 RCT_EXTERN_METHOD(push    : (nonnull NSNumber)node
                   routeKey: (nonnull NSString *)routeKey
                   // promise blocks -----------------------
-                  resolve : (RCTPromiseResolveBlock)resolve
-                  reject  : (RCTPromiseRejectBlock )reject);
+                  resolve: (RCTPromiseResolveBlock)resolve
+                  reject : (RCTPromiseRejectBlock )reject);
+
+
+RCT_EXTERN_METHOD(pop: (nonnull NSNumber)node
+                  // promise blocks -----------------------
+                  resolve: (RCTPromiseResolveBlock)resolve
+                  reject : (RCTPromiseRejectBlock )reject);
 
 @end

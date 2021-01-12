@@ -13,6 +13,7 @@ export enum RNINavigatorViewModuleEvents {
 interface IRNINavigatorViewModule extends EventSubscriptionVendor {
   setNode(node: Number): Promise<void>;
   push(node: Number, routeKey: String): Promise<void>;
+  pop(node: Number): Promise<{routeKey: string, routeIndex: number}>;
 };
 
 type NavigatorViewModulePushParams = {
@@ -104,6 +105,40 @@ export class NavigatorViewModule {
 
       // throw error with message
       throw new Error(`NavigatorViewModule, push error: ${error}`);
+    };
+  };
+
+  async pop(){
+    //#region - 🐞 DEBUG 🐛
+    LIB_GLOBAL.debugLog && console.log(
+        `LOG - RNINavigatorViewModule, pop`
+      + ` - for node: ${this.node}`
+      + ` - isModuleNodeSet: ${this.isModuleNodeSet}`
+    );
+    //#endregion
+
+    try {
+      // forward command to nav view: js:module -> n:module -> n:view,
+      // and reject if command takes too long to resolve.
+      const result = await Helpers.promiseWithTimeout(1000,
+        RNINavigatorViewModule.pop(this.node)
+      );
+
+      return result;
+
+    } catch (error) {
+      //#region - 🐞 DEBUG 🐛
+      LIB_GLOBAL.debugLog && console.warn(
+          `LOG, - Error - RNINavigatorViewModule, pop`
+        + ` - note: \`NavigatorViewModule\` failed to pop`
+        + ` - for node: ${this.node}`
+        + ` - isModuleNodeSet: ${this.isModuleNodeSet}`
+        + ` - error message: ${error}`
+      );
+      //#endregion
+
+      // throw error with message
+      throw new Error(`NavigatorViewModule, pop error: ${error}`);
     };
   };
   //#endregion

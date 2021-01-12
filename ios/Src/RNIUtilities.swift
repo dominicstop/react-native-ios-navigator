@@ -9,9 +9,9 @@ import Foundation
 
 class RNIUtilities {
   
-  /// If you remove a "react view" from the view hierarchy (e.g. via `removeFromSuperview`),
-  /// it won't be released, because it's being retained by the `_viewRegistry`
-  /// ivar inside the shared `UIManager` (singleton) instance.
+  /// If you remove a "react view" from the view hierarchy (e.g. via
+  /// `removeFromSuperview`), it won't be released, because it's being retained
+  /// by the `_viewRegistry` ivar in the shared `UIManager` (singleton) instance.
   ///
   /// The `_viewRegistry` keeps a ref. to all of the "react views" in the app.
   /// This explains how you can get a ref. to a view via `viewForReactTag` and
