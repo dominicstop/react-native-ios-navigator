@@ -98,7 +98,7 @@ class RNINavigatorView: UIView {
     }();
     
     /// save a ref to `routeView`'s vc instance
-    self.routeVCs.append(routeVC)
+    self.routeVCs.append(routeVC);
     
     if let routeKey   = routeView.routeKey,
        let routeIndex = routeView.routeIndex {

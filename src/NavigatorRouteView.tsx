@@ -10,24 +10,25 @@ import type { NavigatorView } from './NavigatorView';
 
 type RNINavigatorViewProps = {
   style: ViewStyle;
-  routeKey: String;
-  routeIndex: Number;
-  routeTitle: String;
+  routeKey: string;
+  routeIndex: number;
+  routeTitle: string;
     // Native Events
   onNavRouteWillPop?: () => void;
   onNavRouteDidPop ?: () => void;
 };
 
 type NavigatorRouteViewProps = {
-  routeKey: String;
-  routeProps: Object;
-  routeIndex: Number;
+  routeKey: string;
+  routeIndex: number;
+  routeProps: object;
+  initialRouteTitle: string;
   getRefToNavigator: () => NavigatorView,
 };
 
 /** `NavigatorView` comp. state */
 type NavigatorRouteViewState = {
-  isMounted: Boolean;
+  isMounted: boolean;
   routeTitle: string;
 };
 //#endregion
@@ -41,12 +42,12 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
   state: NavigatorRouteViewState;
   //#endregion
 
-  constructor(props){
+  constructor(props: NavigatorRouteViewProps){
     super(props);
 
     this.state = {
       isMounted: true,
-      routeTitle: 'hello world',
+      routeTitle: props.initialRouteTitle,
     };
   };
 

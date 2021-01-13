@@ -22,10 +22,15 @@ enum NavEvents {
   onNavRouteViewAdded = "onNavRouteViewAdded"
 };
 
+type RouteOptions = {
+  routeTitle: string;
+};
+
 /** Represents a route in the navigation stack. */
 type NavRouteItem = {
-  routeKey: String;
-  routeProps?: Object;
+  routeKey     : string;
+  routeProps  ?: object;
+  routeOptions?: RouteOptions;
 };
 
 //#region - `RNINavigatorView` Events
@@ -63,7 +68,7 @@ type RNINavigatorViewProps = {
 /** `NavigatorView` comp. props */
 type NavigatorViewProps = {
   routes: Array<NavRouteItem>;
-  initialRoute: NavRouteItem;
+  initialRouteKey: string;
 };
 
 /** `NavigatorView` comp. state */
@@ -97,8 +102,12 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     this.emitter = new EventEmitter<NavEvents>();
     this.navigatorModule = new NavigatorViewModule();
 
+    const initialRoute = props.routes.find(item => (
+      item.routeKey == props.initialRouteKey
+    ));
+
     this.state = {
-      activeRoutes: [props.initialRoute],
+      activeRoutes: [initialRoute],
     };
   };
 
@@ -117,11 +126,11 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
   /** Add route to `state.activeRoutes` and wait for it to be added in
     * the native side as a subview (i.e. `RNINavigatorView`) */
-  private addRoute = (params: { routeKey: String }) => {
+  private addRoute = (routeItem: NavRouteItem) => {
     //#region - 🐞 DEBUG 🐛
     LIB_GLOBAL.debugLog && console.log(
         `LOG - NavigatorView, addRoute`
-      + ` - with routeKey: ${params.routeKey}`
+      + ` - with routeKey: ${routeItem.routeKey}`
       + ` - current activeRoutes: ${this.state.activeRoutes.length}`
     );
     //#endregion
@@ -143,7 +152,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       // ------------------------------------------------------------
       Helpers.setStateAsync<NavigatorViewState>(this, (prevState) => ({
         activeRoutes: [...prevState.activeRoutes, {
-          routeKey: params.routeKey
+          routeKey    : routeItem.routeKey    ,
+          routeProps  : routeItem.routeProps  ,
+          routeOptions: routeItem.routeOptions,
         }]
       }))
     ]);
@@ -170,7 +181,13 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     }));
   };
 
-  public push = async (params: { routeKey: string }) => {
+  public push = async (routeItem: NavRouteItem) => {
+    const props = this.props;
+
+    const routeDefault = props.routes.find(item => (
+      item.routeKey == routeItem.routeKey
+    ));
+
     // TEMP, replace with queue - skip if nav. is busy
     if(NavigatorViewUtils.isNavStateBusy(this.navStatus)) return;
 
@@ -182,10 +199,19 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       this.navStatus = NavStatus.NAV_PUSHING;
 
       // add new route, and wait for it be added
-      await this.addRoute(params);
+      await this.addRoute({
+        routeKey: routeItem.routeKey,
+        routeOptions: {
+          routeTitle: (
+            routeItem   .routeOptions?.routeTitle ?? 
+            routeDefault.routeOptions?.routeTitle
+          ),
+        }
+      });
       
       // forward "push" request to native module
-      await this.navigatorModule.push({routeKey: params.routeKey});
+      await this.navigatorModule.push({routeKey: routeItem.routeKey});
+
       // update nav status to idle
       this.navStatus = NavStatus.IDLE;
 
@@ -263,9 +289,10 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     const routes = activeRoutes.map((route, index) => (
       <NavigatorRouteView
         key={`${route.routeKey}-${index}`}
+        routeIndex={index}
         routeKey={route.routeKey}
         routeProps={route.routeProps}
-        routeIndex={index}
+        initialRouteTitle={route.routeOptions?.routeTitle}
         getRefToNavigator={this._handleGetRefToNavigator}
       />
     ));

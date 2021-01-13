@@ -9,19 +9,31 @@ export default function App() {
     <View style={styles.container}>
       <NavigatorView
         routes={[{
-          routeKey: 'routeFirst'
+          routeKey: 'routeFirst',
+          routeOptions: {
+            routeTitle: "Route First"
+          }
         }, {
-          routeKey: 'routeSecond'
+          routeKey: 'routeSecond',
+          routeOptions: {
+            routeTitle: "Route Second"
+          }
         }]}
-        initialRoute={{routeKey: 'routeFirst'}}
+        initialRouteKey={'routeFirst'}
       />
       <NavigatorView
         routes={[{
-          routeKey: 'routeFirst'
+          routeKey: 'routeFirst',
+          routeOptions: {
+            routeTitle: "Route First"
+          }
         }, {
-          routeKey: 'routeSecond'
+          routeKey: 'routeSecond',
+          routeOptions: {
+            routeTitle: "Route Second"
+          }
         }]}
-        initialRoute={{routeKey: 'routeFirst'}}
+        initialRouteKey={'routeFirst'}
       />
     </View>
   );
