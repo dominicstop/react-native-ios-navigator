@@ -12,6 +12,7 @@ type RNINavigatorViewProps = {
   style: ViewStyle;
   routeKey: String;
   routeIndex: Number;
+  routeTitle: String;
     // Native Events
   onNavRouteWillPop?: () => void;
   onNavRouteDidPop ?: () => void;
@@ -27,6 +28,7 @@ type NavigatorRouteViewProps = {
 /** `NavigatorView` comp. state */
 type NavigatorRouteViewState = {
   isMounted: Boolean;
+  routeTitle: string;
 };
 //#endregion
 
@@ -43,7 +45,8 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     super(props);
 
     this.state = {
-      isMounted: true
+      isMounted: true,
+      routeTitle: 'hello world',
     };
   };
 
@@ -61,14 +64,17 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
   //#endregion
   
   render(){
-    if(!this.state.isMounted) return null;
     const props = this.props;
+    const state = this.state;
+
+    if(!this.state.isMounted) return null;
     
     return (
       <RNINavigatorRouteView 
         style={styles.navigatorRouteView}
         routeKey={props.routeKey}
         routeIndex={props.routeIndex}
+        routeTitle={state.routeTitle}
         onNavRouteWillPop={this._handleOnNavRouteWillPop}
         onNavRouteDidPop={this._handleOnNavRouteDidPop}
       >

@@ -22,5 +22,6 @@ RCT_EXPORT_VIEW_PROPERTY(onNavRouteDidPop , RCTBubblingEventBlock);
 
 RCT_EXPORT_VIEW_PROPERTY(routeKey, NSString);
 RCT_EXPORT_VIEW_PROPERTY(routeIndex, NSNumber);
+RCT_EXPORT_VIEW_PROPERTY(routeTitle, NSString);
 
 @end

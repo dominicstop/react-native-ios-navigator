@@ -15,9 +15,12 @@ class RNINavigatorRouteView: UIView {
   
   weak var bridge: RCTBridge!;
   
-  /** content to show in the navigator */
+  /// content to show in the navigator
   weak var reactView: UIView?;
-    
+  
+  /// ref. to the parent route vc
+  weak var routeVC: RNINavigatorRouteViewController?;
+
   // -----------------------------
   // MARK: RN Exported Event Props
   // -----------------------------
@@ -55,6 +58,16 @@ class RNINavigatorRouteView: UIView {
         + " - didSet, routeIndex: \(routeIndex)"
       );
       #endif
+    }
+  };
+  
+  @objc var routeTitle: NSString? {
+    didSet {
+      guard let routeTitle = self.routeTitle as String?
+      else { return };
+      
+      self.routeVC?.title = routeTitle;
+      print("routeTitle: \(routeTitle)");
     }
   };
   

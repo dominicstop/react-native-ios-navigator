@@ -80,14 +80,25 @@ class RNINavigatorView: UIView {
     /// subview/child is removed from `render()` in the js side.
     routeView.removeFromSuperview();
     
-    /// create the wrapper vc that holds the `routeView`
-    let vc = RNINavigatorRouteViewController();
-    vc.routeView = routeView;
-    // listen for naviagtor-related events
-    vc.delegate = self;
+    let routeVC: RNINavigatorRouteViewController = {
+      /// create the wrapper vc that holds the `routeView`
+      let vc = RNINavigatorRouteViewController();
+      vc.routeView = routeView;
+      // listen for naviagtor-related events
+      vc.delegate = self;
+      
+      /// init. the vc's title for the 1st time
+      if let routeTitle = routeView.routeTitle {
+        vc.title = routeTitle as String;
+      };
+      
+      routeView.routeVC = vc;
+      
+      return vc;
+    }();
     
     /// save a ref to `routeView`'s vc instance
-    self.routeVCs.append(vc)
+    self.routeVCs.append(routeVC)
     
     if let routeKey   = routeView.routeKey,
        let routeIndex = routeView.routeIndex {
@@ -109,7 +120,7 @@ class RNINavigatorView: UIView {
     
     if atIndex == 0 {
       // the first item will become navController's root vc
-      self.navigationVC.setViewControllers([vc], animated: false);
+      self.navigationVC.setViewControllers([routeVC], animated: false);
     };
   };
 };

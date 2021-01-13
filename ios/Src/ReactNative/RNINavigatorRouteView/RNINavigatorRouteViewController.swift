@@ -32,7 +32,7 @@ class RNINavigatorRouteViewController: UIViewController {
   // MARK: Properties
   // ----------------
   
-  /// The  content to show in the popover
+  /// The content to show in the route
   var routeView: RNINavigatorRouteView!;
   /// Used to send/forward navigation-related events
   weak var delegate: RNINavigatorRouteViewDelegate?;
