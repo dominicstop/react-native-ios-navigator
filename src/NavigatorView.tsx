@@ -228,6 +228,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
     } catch(error){
       this.navStatus = NavStatus.IDLE_ERROR;
+      throw new Error("`NavigatorView` failed to do: `push`");
     };
   };
 
@@ -253,6 +254,16 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
     } catch(error){
       this.navStatus = NavStatus.IDLE_ERROR;
+      throw new Error("`NavigatorView` failed to do: `pop`");
+    };
+  };
+
+  public async setNavigationBarHidden(isHidden: boolean, animated: boolean){
+    try {
+      await this.navigatorModule.setNavigationBarHidden(isHidden, animated);
+
+    } catch(error){
+      throw new Error("`NavigatorView` failed to do: `setNavigationBarHidden`");
     };
   };
 

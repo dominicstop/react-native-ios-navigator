@@ -47,4 +47,22 @@ extension UINavigationController {
       completion();
     };
   };
+  
+  public func setNavigationBarHidden(
+    _ hidden  : Bool,
+    animated  : Bool,
+    completion: @escaping () -> Void
+  ) {
+    if animated {
+      CATransaction.begin();
+      CATransaction.setCompletionBlock { completion() };
+      
+      self.setNavigationBarHidden(hidden, animated: animated);
+      CATransaction.commit()
+      
+    } else {
+      self.setNavigationBarHidden(hidden, animated: animated);
+      completion();
+    };
+  };
 };

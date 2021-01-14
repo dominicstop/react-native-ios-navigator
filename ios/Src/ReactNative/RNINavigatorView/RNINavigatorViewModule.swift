@@ -225,6 +225,52 @@ class RNINavigatorViewModule: RCTEventEmitter {
       };
     };
   };
+  
+  func setNavigationBarHidden(
+    _ node  : NSNumber,
+    isHidden: Bool,
+    animated: Bool,
+    resolve : @escaping RCTPromiseResolveBlock,
+    reject  : @escaping RCTPromiseRejectBlock
+  ){
+    
+    DispatchQueue.main.async {
+      // get manager/view instance that matches node/reactTag
+      guard let manager = self.managers[node.intValue],
+            let navigatorView = manager.navigatorView
+      else {
+        // construct error message for promise
+        let errorMessage = (
+            "NativeModule, RCTPopoverViewModule: setNavigationBarHidden"
+          + " - for node: \(node)"
+          + " - Error: guard check failed"
+          + " - no corresponding manager found for node"
+          + " - make sure that `setNode` command is called first."
+        );
+        
+        #if DEBUG
+        print("LOG - \(errorMessage)");
+        #endif
+        
+        /// remove manager bc's it's `navigatorView` is `nil`
+        self.managers.removeValue(forKey: node.intValue);
+        
+        // reject promise w/: code, message, error
+        reject("LIB_ERROR", errorMessage, nil);
+        return;
+      };
+      
+      #if DEBUG
+      print("LOG - NativeModule, RCTPopoverViewModule: setNavigationBarHidden"
+        + " - for node: \(node)"
+      );
+      #endif
+      
+      navigatorView.navigationVC.setNavigationBarHidden(isHidden, animated: animated){
+        resolve([:]);
+      };
+    };
+  };
 };
 
 // ----------------------------------------------

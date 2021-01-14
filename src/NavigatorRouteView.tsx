@@ -90,9 +90,8 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
         onNavRouteDidPop={this._handleOnNavRouteDidPop}
       >
         <View style={styles.routeContentContainer}>
-          {React.cloneElement<any>(
+          {React.cloneElement<RouteContentProps>(
             props.renderRouteContent(), {
-              test: 'test',
               getRefToRoute: this._getRefToRoute,
               getRefToNavigator: () => props.getRefToNavigator(),
             }

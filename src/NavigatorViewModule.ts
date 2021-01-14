@@ -11,13 +11,14 @@ export enum RNINavigatorViewModuleEvents {
 };
 
 interface IRNINavigatorViewModule extends EventSubscriptionVendor {
-  setNode(node: Number): Promise<void>;
-  push(node: Number, routeKey: String): Promise<void>;
-  pop(node: Number): Promise<{routeKey: string, routeIndex: number}>;
+  setNode(node: number): Promise<void>;
+  push(node: number, routeKey: string): Promise<void>;
+  pop(node: number): Promise<{routeKey: string, routeIndex: number}>;
+  setNavigationBarHidden(node: number, isHidden: boolean, animated: boolean): Promise<void>
 };
 
 type NavigatorViewModulePushParams = {
-  routeKey: String
+  routeKey: string
 };
 //#endregion
 
@@ -32,7 +33,7 @@ export const RNINavigatorViewModule: IRNINavigatorViewModule =
  */
 export class NavigatorViewModule {
   //#region - Properties
-  node?: Number;
+  node?: number;
   nativeRef?: React.Component;
   nativeEvents?: NativeEventEmitter;
   isModuleNodeSet: boolean = false;
@@ -139,6 +140,42 @@ export class NavigatorViewModule {
 
       // throw error with message
       throw new Error(`NavigatorViewModule, pop error: ${error}`);
+    };
+  };
+
+  async setNavigationBarHidden(isHidden: boolean, animated: boolean){
+    //#region - 🐞 DEBUG 🐛
+    LIB_GLOBAL.debugLog && console.log(
+        `LOG - RNINavigatorViewModule, setNavigationBarHidden`
+      + ` - for node: ${this.node}`
+      + ` - isHidden: ${isHidden}`
+      + ` - animated: ${animated}`
+      + ` - isModuleNodeSet: ${this.isModuleNodeSet}`
+    );
+    //#endregion
+
+    try {
+      // forward command to nav view: js:module -> n:module -> n:view,
+      // and reject if command takes too long to resolve.
+      await Helpers.promiseWithTimeout(1000,
+        RNINavigatorViewModule.setNavigationBarHidden(this.node, isHidden, animated)
+      );
+
+    } catch (error) {
+      //#region - 🐞 DEBUG 🐛
+      LIB_GLOBAL.debugLog && console.warn(
+          `LOG, - Error - RNINavigatorViewModule, setNavigationBarHidden`
+        + ` - note: \`NavigatorViewModule\` failed`
+        + ` - for node: ${this.node}`
+        + ` - isHidden: ${isHidden}`
+        + ` - animated: ${animated}`
+        + ` - isModuleNodeSet: ${this.isModuleNodeSet}`
+        + ` - error message: ${error}`
+      );
+      //#endregion
+
+      // throw error with message
+      throw new Error(`NavigatorViewModule, setNavigationBarHidden error: ${error}`);
     };
   };
   //#endregion

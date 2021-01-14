@@ -230,7 +230,6 @@ extension RNINavigatorView {
   };
   
   func pop(completion: @escaping (_ routeKey: NSString, _ routeIndex: NSNumber) -> Void){
-    
     guard self.routeVCs.count > 1,
           /// get the last routes
           let lastNavVC   = self.navigationVC.viewControllers.last as? RNINavigatorRouteViewController,
