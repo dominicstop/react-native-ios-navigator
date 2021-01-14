@@ -21,10 +21,54 @@ const colors = [
 ];
 
 function randomBGColor(){
-  return {backgroundColor: Helpers.randomElement<string>(colors)};
+  return Helpers.randomElement<string>(colors);
 };
 
-export class NavigatorExample01 extends React.Component<RouteContentProps> {
+// extend
+interface ExampleRouteProps extends RouteContentProps {
+  routeKey: string;
+  routeIndex: number;
+};
+
+function ExampleRoute(props: ExampleRouteProps){
+  const [bgColor] = React.useState(randomBGColor());
+
+  const routeContainerStyle = { backgroundColor: bgColor };
+
+  return (
+    <View style={[styles.routeContainer, routeContainerStyle]}>
+      <Text style={styles.textRoute}>
+        {`Debug: ${props.routeKey} - ${props.routeIndex}`}
+      </Text>
+      <TouchableOpacity
+        style={styles.buttonContainer}
+        onPress={() => {
+          const navRef = props.getRefToNavigator();
+          navRef.push({routeKey: 'routeA'});
+        }}
+      >
+        <Text style={styles.buttonText}>
+          {'Push: RouteA'}
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.buttonContainer}
+        onPress={() => {
+          const navRef = props.getRefToNavigator();
+          navRef.push({routeKey: 'routeB', routeOptions: {
+            routeTitle: `Route B${props.routeIndex + 1}`
+          }});
+        }}
+      >
+        <Text style={styles.buttonText}>
+          {'Push: RouteB'}
+        </Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+export class NavigatorExample01 extends React.Component {
   navRef: NavigatorView;
 
   render(){
@@ -41,31 +85,10 @@ export class NavigatorExample01 extends React.Component<RouteContentProps> {
               routeTitle: "Route A",
             },
             renderRoute: (route, index) => (
-              <View style={[styles.routeContainer, randomBGColor()]}>
-                <Text style={styles.textRoute}>
-                  {`Debug: ${route.routeKey} - ${index}`}
-                </Text>
-                <TouchableOpacity
-                  style={styles.buttonContainer}
-                  onPress={() => {
-                    this.navRef.push({routeKey: 'routeA'});
-                  }}
-                >
-                  <Text style={styles.buttonText}>
-                    {'Push: RouteA'}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.buttonContainer}
-                  onPress={() => {
-                    this.navRef.push({routeKey: 'routeB'});
-                  }}
-                >
-                  <Text style={styles.buttonText}>
-                    {'Push: RouteB'}
-                  </Text>
-                </TouchableOpacity>
-              </View>
+              <ExampleRoute
+                routeIndex={index}
+                routeKey={route.routeKey}
+              />
             ),
           }, {
             routeKey: 'routeB',
@@ -73,11 +96,10 @@ export class NavigatorExample01 extends React.Component<RouteContentProps> {
               routeTitle: "Route B",
             },
             renderRoute: (route, index) => (
-              <View style={styles.routeContainer}>
-                <Text style={styles.textRoute}>
-                  {`Debug: ${route.routeKey} - ${index}`}
-                </Text>
-              </View>
+              <ExampleRoute
+                routeIndex={index}
+                routeKey={route.routeKey}
+              />
             ),
           }]}
         />
