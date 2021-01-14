@@ -3,39 +3,11 @@ import * as React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { NavigatorView } from 'react-native-ios-navigator';
 
+import { NavigatorExample01 } from './components/NavigatorExample01';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <NavigatorView
-        routes={[{
-          routeKey: 'routeFirst',
-          routeOptions: {
-            routeTitle: "Route First"
-          }
-        }, {
-          routeKey: 'routeSecond',
-          routeOptions: {
-            routeTitle: "Route Second"
-          }
-        }]}
-        initialRouteKey={'routeFirst'}
-      />
-      <NavigatorView
-        routes={[{
-          routeKey: 'routeFirst',
-          routeOptions: {
-            routeTitle: "Route First"
-          }
-        }, {
-          routeKey: 'routeSecond',
-          routeOptions: {
-            routeTitle: "Route Second"
-          }
-        }]}
-        initialRouteKey={'routeFirst'}
-      />
-    </View>
+    <NavigatorExample01/>
   );
 }
 
