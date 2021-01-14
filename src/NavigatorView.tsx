@@ -1,11 +1,13 @@
-import React from 'react';
-import { StyleSheet, requireNativeComponent,  ViewStyle } from 'react-native';
+import React, { Component, ReactElement } from 'react';
+import { StyleSheet, requireNativeComponent,  ViewStyle, Text } from 'react-native';
 
 import { NavigatorViewModule } from './NavigatorViewModule';
 import { NavigatorRouteView } from './NavigatorRouteView';
 
 import * as Helpers from './Helpers';
 import { EventEmitter } from './EventEmitter';
+
+import type { RouteContentProps } from './NavigatorRouteView';
 
 //#region - Type Definitions
 /** Represents the current status of the navigator */
@@ -31,6 +33,13 @@ type NavRouteItem = {
   routeKey     : string;
   routeProps  ?: object;
   routeOptions?: RouteOptions;
+};
+
+type NavRouteConfigItem = {
+  routeKey     : string;
+  routeProps  ?: object;
+  routeOptions?: RouteOptions;
+  renderRoute  : (routeItem: NavRouteItem, routeIndex: number) => ReactElement<RouteContentProps>;
 };
 
 //#region - `RNINavigatorView` Events
@@ -67,7 +76,7 @@ type RNINavigatorViewProps = {
 
 /** `NavigatorView` comp. props */
 type NavigatorViewProps = {
-  routes: Array<NavRouteItem>;
+  routes: Array<NavRouteConfigItem>;
   initialRouteKey: string;
 };
 
@@ -122,6 +131,12 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       // update nav status: ready for commands
       this.navStatus = NavStatus.IDLE_INIT;
     };
+  };
+
+  private getMatchingRoute = (routeItem: NavRouteItem) => {
+    return this.props.routes.find(item => (
+      item.routeKey == routeItem.routeKey
+    ));
   };
 
   /** Add route to `state.activeRoutes` and wait for it to be added in
@@ -182,12 +197,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   };
 
   public push = async (routeItem: NavRouteItem) => {
-    const props = this.props;
-
-    const routeDefault = props.routes.find(item => (
-      item.routeKey == routeItem.routeKey
-    ));
-
+    const routeDefault = this.getMatchingRoute(routeItem);
+    
     // TEMP, replace with queue - skip if nav. is busy
     if(NavigatorViewUtils.isNavStateBusy(this.navStatus)) return;
 
@@ -294,6 +305,10 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         routeProps={route.routeProps}
         initialRouteTitle={route.routeOptions?.routeTitle}
         getRefToNavigator={this._handleGetRefToNavigator}
+        renderRouteContent={() => {
+          const routeItem = this.getMatchingRoute(route);
+          return routeItem.renderRoute(routeItem, index);
+        }}
       />
     ));
 
@@ -313,7 +328,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
 /** Utilities for `NavigatorView` */
 class NavigatorViewUtils {
-
   static isNavStateIdle(navStatus: NavStatus){
     return (
       navStatus == NavStatus.IDLE       ||

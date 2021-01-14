@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { StyleSheet, requireNativeComponent, ViewStyle, View, Text } from 'react-native';
 
 import type { NavigatorView } from './NavigatorView';
 
 
 //#region - Type Definitions
+export interface RouteContentProps {
+  getRefToRoute?: () => NavigatorRouteView,
+  getRefToNavigator?: () => NavigatorView,
+};
+
 //#region - `RNINavigatorRouteView` Events
 //#endregion
 
@@ -13,7 +18,7 @@ type RNINavigatorViewProps = {
   routeKey: string;
   routeIndex: number;
   routeTitle: string;
-    // Native Events
+  // Native Events
   onNavRouteWillPop?: () => void;
   onNavRouteDidPop ?: () => void;
 };
@@ -24,6 +29,7 @@ type NavigatorRouteViewProps = {
   routeProps: object;
   initialRouteTitle: string;
   getRefToNavigator: () => NavigatorView,
+  renderRouteContent: () => ReactElement<RouteContentProps>;
 };
 
 /** `NavigatorView` comp. state */
@@ -51,6 +57,10 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     };
   };
 
+  private _getRefToRoute = () => {
+    return this;
+  };
+
   //#region - Native Event Handlers
   /** Handler for native event: `onNavRouteWillPop` */
   private _handleOnNavRouteWillPop = () => {
@@ -69,7 +79,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     const state = this.state;
 
     if(!this.state.isMounted) return null;
-    
+
     return (
       <RNINavigatorRouteView 
         style={styles.navigatorRouteView}
@@ -79,30 +89,14 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
         onNavRouteWillPop={this._handleOnNavRouteWillPop}
         onNavRouteDidPop={this._handleOnNavRouteDidPop}
       >
-        <View style={{paddingTop: 80, paddingHorizontal: 20}}>
-          <Text style={{fontSize: 32}}>
-            {`Hello World, Route: ${props.routeKey}, routeIndex: ${props.routeIndex}`}
-          </Text>
-          <Text 
-            style={{fontSize: 32}}
-            onPress={() => {
-              const props = this.props;
-              const navigatorRef = props.getRefToNavigator();
-              navigatorRef.push({routeKey: "routeSecond"})
-            }}
-          >
-            {`Navigate: push`}
-          </Text>
-          <Text 
-            style={{fontSize: 32}}
-            onPress={() => {
-              const props = this.props;
-              const navigatorRef = props.getRefToNavigator();
-              navigatorRef.pop();
-            }}
-          >
-            {`Navigate: Pop`}
-          </Text>
+        <View style={styles.routeContentContainer}>
+          {React.cloneElement<any>(
+            props.renderRouteContent(), {
+              test: 'test',
+              getRefToRoute: this._getRefToRoute,
+              getRefToNavigator: () => props.getRefToNavigator(),
+            }
+          )}
         </View>
       </RNINavigatorRouteView>
     );
@@ -111,10 +105,12 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
 
 const styles = StyleSheet.create({
   navigatorRouteView: {
-    backgroundColor: 'yellow',
     // don't show on first mount
     position: 'absolute',
     width: 0,
     height: 0,
+  },
+  routeContentContainer: {
+    // can't add `flex: 1` else it disappears
   },
 });

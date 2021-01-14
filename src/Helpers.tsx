@@ -1,4 +1,4 @@
-import type React from 'react';
+import React, { ReactElement } from 'react';
 
 // wrapper func for setState that returns a promise
 export function setStateAsync<T>(
