@@ -25,7 +25,7 @@ enum NavEvents {
 };
 
 type RouteOptions = {
-  routeTitle: string;
+  routeTitle?: string;
 };
 
 /** Represents a route in the navigation stack. */
@@ -35,7 +35,7 @@ type NavRouteItem = {
   routeOptions?: RouteOptions;
 };
 
-type NavRouteConfigItem = {
+export type NavRouteConfigItem = {
   routeKey     : string;
   routeProps  ?: object;
   routeOptions?: RouteOptions;
@@ -215,7 +215,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         routeOptions: {
           routeTitle: (
             routeItem   .routeOptions?.routeTitle ?? 
-            routeDefault.routeOptions?.routeTitle
+            routeDefault.routeOptions?.routeTitle ??
+            routeItem   .routeKey
           ),
         }
       });
@@ -308,20 +309,25 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   render(){
     const { activeRoutes } = this.state;
 
-    const routes = activeRoutes.map((route, index) => (
-      <NavigatorRouteView
-        key={`${route.routeKey}-${index}`}
-        routeIndex={index}
-        routeKey={route.routeKey}
-        routeProps={route.routeProps}
-        initialRouteTitle={route.routeOptions?.routeTitle}
-        getRefToNavigator={this._handleGetRefToNavigator}
-        renderRouteContent={() => {
-          const routeItem = this.getMatchingRoute(route);
-          return routeItem.renderRoute(routeItem, index);
-        }}
-      />
-    ));
+    const routes = activeRoutes.map((route, index) => {
+      return (
+        <NavigatorRouteView
+          key={`${route.routeKey}-${index}`}
+          routeIndex={index}
+          routeKey={route.routeKey}
+          routeProps={route.routeProps}
+          getRefToNavigator={this._handleGetRefToNavigator}
+          initialRouteTitle={(
+            route.routeOptions?.routeTitle ??
+            route.routeKey
+          )}
+          renderRouteContent={() => {
+            const routeItem = this.getMatchingRoute(route);
+            return routeItem.renderRoute(routeItem, index);
+          }}
+        />
+      );
+    });
 
     return (
       <RNINavigatorView 
