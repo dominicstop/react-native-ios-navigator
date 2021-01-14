@@ -50,10 +50,26 @@ class RNINavigatorRouteViewController: UIViewController {
   
   override func loadView() {
     super.loadView();
-    
-    // unwrap `routeView` and add it as child view
+
     guard let routeView = self.routeView else { return };
-    self.view = routeView;
+    
+    if #available(iOS 11.0, *){
+      self.view.addSubview(routeView);
+      
+      routeView.translatesAutoresizingMaskIntoConstraints = false;
+      let safeArea = view.safeAreaLayoutGuide;
+      
+      NSLayoutConstraint.activate([
+        // pin content to parent edges w/o the arrow
+        routeView.topAnchor     .constraint(equalTo: safeArea.topAnchor     ),
+        routeView.bottomAnchor  .constraint(equalTo: safeArea.bottomAnchor  ),
+        routeView.leadingAnchor .constraint(equalTo: safeArea.leadingAnchor ),
+        routeView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
+      ]);
+      
+    } else {
+      self.view = routeView;
+    };
   };
   
   override func viewWillLayoutSubviews() {
