@@ -25,41 +25,6 @@ class RNINavigatorViewModule: NSObject {
   // MARK: Module Commands
   // ---------------------
   
-  /// This "command" is used to create a new `Manager` instance that will be
-  /// responsible for some "RNINavigatorView" instance that matches `node`.
-  @objc func setNode(
-    _ node : NSNumber,
-    resolve: @escaping RCTPromiseResolveBlock,
-    reject : @escaping RCTPromiseRejectBlock
-  ){
-    
-    DispatchQueue.main.async {
-      // get `RNINavigatorView` instance that matches node/reactTag
-      guard let navView = Self.getNavigatorView(node) else {
-        // construct error message for promise
-        let errorMessage = (
-            "NativeModule, RCTPopoverViewModule: setNode"
-          + " - with params - node: \(node)"
-          + " - Error: guard check failed"
-          + " - could not get `RNINavigatorView` instance"
-        );
-        
-        #if DEBUG
-        print("LOG - \(errorMessage)");
-        #endif
-        
-        // reject promise w/: code, message, error
-        reject("LIB_ERROR", errorMessage, nil);
-        return;
-      };
-      
-      // TODO
-      
-      // resolve promise
-      resolve([:]);
-    };
-  };
-  
   // TODO: Add options param
   @objc func push(
     _ node  : NSNumber,

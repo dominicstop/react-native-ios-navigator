@@ -176,7 +176,7 @@ fileprivate extension RNINavigatorView {
       );
       
       if isMatch {
-        // cleanup: manually remove routes from view registry
+        // cleanup: manually remove route from view registry
         RNIUtilities.recursivelyRemoveFromViewRegistry(
           bridge   : self.bridge,
           reactView: $0.routeView!

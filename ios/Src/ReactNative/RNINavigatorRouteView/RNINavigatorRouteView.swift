@@ -67,13 +67,12 @@ class RNINavigatorRouteView: UIView {
       else { return };
       
       self.routeVC?.title = routeTitle;
-      print("routeTitle: \(routeTitle)");
     }
   };
   
-  // ----------------
-  // MARK: Initialize
-  // ----------------
+  // --------------------
+  // MARK: Init/Lifecycle
+  // --------------------
   
   init(bridge: RCTBridge) {
     super.init(frame: CGRect());

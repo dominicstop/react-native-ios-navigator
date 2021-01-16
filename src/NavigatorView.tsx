@@ -1,7 +1,7 @@
-import React, { Component, ReactElement } from 'react';
+import React, { ReactElement } from 'react';
 import { StyleSheet, requireNativeComponent, findNodeHandle, ViewStyle } from 'react-native';
 
-import { RNINavigatorViewModule } from './NavigatorViewModule';
+import { RNINavigatorViewModule } from './RNINavigatorViewModule';
 import { NavigatorRouteView } from './NavigatorRouteView';
 
 import * as Helpers from './Helpers';
@@ -130,7 +130,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   private addRoute = (routeItem: NavRouteItem) => {
     //#region - 🐞 DEBUG 🐛
     LIB_GLOBAL.debugLog && console.log(
-        `LOG - NavigatorView, addRoute`
+        `LOG/JS - NavigatorView, addRoute`
       + ` - with routeKey: ${routeItem.routeKey}`
       + ` - current activeRoutes: ${this.state.activeRoutes.length}`
     );
@@ -165,7 +165,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   private removeRoute = (params: { routeKey: string, routeIndex: number }) => {
     //#region - 🐞 DEBUG 🐛
     LIB_GLOBAL.debugLog && console.log(
-        `LOG - NavigatorView, removeRoute`
+        `LOG/JS - NavigatorView, removeRoute`
       + ` - with routeKey: ${params.routeKey}`
       + ` - routeIndex: ${params.routeIndex}`
       + ` - current activeRoutes: ${this.state.activeRoutes.length}`
@@ -223,7 +223,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     } catch(error){
       //#region - 🐞 DEBUG 🐛
       LIB_GLOBAL.debugLog && console.log(
-          `LOG - NavigatorView, push`
+          `LOG/JS - NavigatorView, push`
         + ` - error message: ${error}`
       );
       //#endregion
@@ -270,6 +270,13 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       );
 
     } catch(error){
+      //#region - 🐞 DEBUG 🐛
+      LIB_GLOBAL.debugLog && console.log(
+          `LOG/JS - NavigatorView, setNavigationBarHidden`
+        + ` - error message: ${error}`
+      );
+      //#endregion
+
       throw new Error("`NavigatorView` failed to do: `setNavigationBarHidden`");
     };
   };
