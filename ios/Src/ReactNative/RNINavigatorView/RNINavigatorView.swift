@@ -9,9 +9,6 @@ import UIKit;
 
 typealias Completion = () -> Void;
 
-protocol RNINavigatorViewEventsDelegate: AnyObject {
-  // TODO: Add Functions
-};
 
 class RNINavigatorView: UIView {
   
@@ -21,8 +18,6 @@ class RNINavigatorView: UIView {
   
   /// ref to the RN view manager singleton's bridge instance
   weak var bridge: RCTBridge!;
-  /// delegate for sending events to the `RNINavigatorViewModule.Manager`
-  weak var eventsDelegate: RNINavigatorViewEventsDelegate?;
   
   /// The`activeRoute` items, i.e.the routes added/to be added to the nav. stack.
   /// Note: This has to have strong ref. to the routes so that they will be
@@ -48,9 +43,9 @@ class RNINavigatorView: UIView {
   /// gesture), or due to it being "popped" programmatically via the nav.
   @objc var onNavRouteDidPop: RCTBubblingEventBlock?;
   
-  // ----------------
-  // MARK: Initialize
-  // ----------------
+  // --------------------
+  // MARK: Init/Lifecycle
+  // --------------------
   
   init(bridge: RCTBridge) {
     super.init(frame: CGRect());
@@ -61,6 +56,16 @@ class RNINavigatorView: UIView {
   
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented");
+  };
+  
+  override func didMoveToWindow() {
+    if self.window == nil {
+      // remove from view registry
+      RNIUtilities.recursivelyRemoveFromViewRegistry(
+        bridge   : self.bridge,
+        reactView: self
+      );
+    };
   };
   
   // ------------------
@@ -93,7 +98,6 @@ class RNINavigatorView: UIView {
       };
       
       routeView.routeVC = vc;
-      
       return vc;
     }();
     

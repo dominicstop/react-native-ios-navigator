@@ -9,72 +9,16 @@ import Foundation
 
 
 @objc(RNINavigatorViewModule)
-class RNINavigatorViewModule: RCTEventEmitter {
+class RNINavigatorViewModule: NSObject {
   
-  // ------------------
-  // MARK: Nested Types
-  // ------------------
-  
-  /// Each instance of `RNINavigatorView` is paired with a "manager".
-  /// The job of the manager is to hold a ref to a `RNINavigatorView` so that the
-  /// `RNINavigatorViewModule` native module (which is a singleton) can forward
-  /// the commands it receives from the JS comp. to the corresponding native
-  /// view instance: (JS:Component -> N:Module -> N:View).
-  class Manager {
+  static func getNavigatorView(_ node: NSNumber) -> RNINavigatorView? {
+    // get shared bridge instance from view manager
+    guard let bridge  = RNINavigatorViewManager.sharedBridge,
+          let view    = bridge.uiManager?.view(forReactTag: node),
+          let navView = view as? RNINavigatorView
+    else { return nil };
     
-    // --------------------------
-    // MARK: Manager - Properties
-    // --------------------------
-    
-    var node: NSNumber;
-    
-    /// a ref to `RNINavigatorViewModule` singleton instance
-    weak var module: RNINavigatorViewModule?;
-    
-    /// a ref to the `RNINavigatorView` that this manager is responsible for
-    weak var navigatorView: RNINavigatorView? {
-      didSet {
-        /// set the delegate to receive events from `RNINavigatorView` instance
-        self.navigatorView?.eventsDelegate = self;
-      }
-    };
-    
-    // -----------------------
-    // MARK: Manager - Methods
-    // -----------------------
-    
-    init(node: NSNumber, module: RNINavigatorViewModule, navigatorView: RNINavigatorView) {
-      self.node = node;
-      self.module = module;
-      self.navigatorView = navigatorView;
-    };
-  };
-  
-  enum Events: String, CaseIterable {
-    // TODO: Impl.
-    case placeholder;
-  };
-  
-  // --------------------------
-  // MARK: Module - Properties
-  // --------------------------
-  
-  /// dict. that holds the manager instance.
-  /// each "manager" corresponds to a `RNINavigatorView`
-  var managers = [Int: Manager]();
-  
-  // --------------------
-  // MARK: Module - Setup
-  // --------------------
-  
-  @objc override static func requiresMainQueueSetup() -> Bool {
-    return false;
-  };
-  
-  /// Note: The events are global, i.e. the events will be sent to all
-  /// instances of the emitter across our app.
-  override func supportedEvents() -> [String]! {
-    return Self.Events.allCases.map { $0.rawValue };
+    return navView;
   };
   
   // ---------------------
@@ -89,15 +33,9 @@ class RNINavigatorViewModule: RCTEventEmitter {
     reject : @escaping RCTPromiseRejectBlock
   ){
     
-    // get shared bridge instance from view manager
-    guard let bridge = RNINavigatorViewManager.sharedBridge
-    else { return };
-    
     DispatchQueue.main.async {
-      // get view instance that matches node/reactTag
-      guard let view          = bridge.uiManager?.view(forReactTag: node),
-            let navigatorView = view as? RNINavigatorView
-      else {
+      // get `RNINavigatorView` instance that matches node/reactTag
+      guard let navView = Self.getNavigatorView(node) else {
         // construct error message for promise
         let errorMessage = (
             "NativeModule, RCTPopoverViewModule: setNode"
@@ -115,11 +53,7 @@ class RNINavigatorViewModule: RCTEventEmitter {
         return;
       };
       
-      self.managers[node.intValue] = Manager(
-        node         : node,
-        module       : self,
-        navigatorView: navigatorView
-      );
+      // TODO
       
       // resolve promise
       resolve([:]);
@@ -135,10 +69,8 @@ class RNINavigatorViewModule: RCTEventEmitter {
   ){
     
     DispatchQueue.main.async {
-      // get manager/view instance that matches node/reactTag
-      guard let manager = self.managers[node.intValue],
-            let navigatorView = manager.navigatorView
-      else {
+      // get `RNINavigatorView` instance that matches node/reactTag
+      guard let navigatorView = Self.getNavigatorView(node) else {
         // construct error message for promise
         let errorMessage = (
             "NativeModule, RCTPopoverViewModule: push"
@@ -152,9 +84,6 @@ class RNINavigatorViewModule: RCTEventEmitter {
         #if DEBUG
         print("LOG - \(errorMessage)");
         #endif
-        
-        /// remove manager bc's it's `navigatorView` is nil
-        self.managers.removeValue(forKey: node.intValue);
         
         // reject promise w/: code, message, error
         reject("LIB_ERROR", errorMessage, nil);
@@ -184,10 +113,8 @@ class RNINavigatorViewModule: RCTEventEmitter {
   ){
     
     DispatchQueue.main.async {
-      // get manager/view instance that matches node/reactTag
-      guard let manager = self.managers[node.intValue],
-            let navigatorView = manager.navigatorView
-      else {
+      // get `RNINavigatorView` instance that matches node/reactTag
+      guard let navigatorView = Self.getNavigatorView(node) else {
         // construct error message for promise
         let errorMessage = (
             "NativeModule, RCTPopoverViewModule: pop"
@@ -200,9 +127,6 @@ class RNINavigatorViewModule: RCTEventEmitter {
         #if DEBUG
         print("LOG - \(errorMessage)");
         #endif
-        
-        /// remove manager bc's it's `navigatorView` is `nil`
-        self.managers.removeValue(forKey: node.intValue);
         
         // reject promise w/: code, message, error
         reject("LIB_ERROR", errorMessage, nil);
@@ -235,10 +159,8 @@ class RNINavigatorViewModule: RCTEventEmitter {
   ){
     
     DispatchQueue.main.async {
-      // get manager/view instance that matches node/reactTag
-      guard let manager = self.managers[node.intValue],
-            let navigatorView = manager.navigatorView
-      else {
+      // get `RNINavigatorView` instance that matches node/reactTag
+      guard let navigatorView = Self.getNavigatorView(node) else {
         // construct error message for promise
         let errorMessage = (
             "NativeModule, RCTPopoverViewModule: setNavigationBarHidden"
@@ -251,9 +173,6 @@ class RNINavigatorViewModule: RCTEventEmitter {
         #if DEBUG
         print("LOG - \(errorMessage)");
         #endif
-        
-        /// remove manager bc's it's `navigatorView` is `nil`
-        self.managers.removeValue(forKey: node.intValue);
         
         // reject promise w/: code, message, error
         reject("LIB_ERROR", errorMessage, nil);
@@ -271,12 +190,4 @@ class RNINavigatorViewModule: RCTEventEmitter {
       };
     };
   };
-};
-
-// ----------------------------------------------
-// MARK: Manager - RNINavigatorViewEventsDelegate
-// ----------------------------------------------
-
-extension RNINavigatorViewModule.Manager: RNINavigatorViewEventsDelegate {
-  // TODO: Impl.
 };

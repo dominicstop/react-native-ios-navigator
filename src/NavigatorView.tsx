@@ -1,7 +1,7 @@
 import React, { Component, ReactElement } from 'react';
-import { StyleSheet, requireNativeComponent,  ViewStyle, Text } from 'react-native';
+import { StyleSheet, requireNativeComponent, findNodeHandle, ViewStyle } from 'react-native';
 
-import { NavigatorViewModule } from './NavigatorViewModule';
+import { RNINavigatorViewModule } from './NavigatorViewModule';
 import { NavigatorRouteView } from './NavigatorRouteView';
 
 import * as Helpers from './Helpers';
@@ -12,7 +12,6 @@ import type { RouteContentProps } from './NavigatorRouteView';
 //#region - Type Definitions
 /** Represents the current status of the navigator */
 enum NavStatus {
-  INIT        = "INIT"       , // init. status: preparing nav.
   IDLE        = "IDLE"       , // nav. is idle, not busy
   IDLE_INIT   = "IDLE_INIT"  , // nav. just finished init.
   IDLE_ERROR  = "IDLE_ERROR" , // nav. is idle due to error
@@ -97,8 +96,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   navStatus: NavStatus;
   emitter: EventEmitter<NavEvents>;
 
-  /** Used to communicate with `RNINavigatorView` native comp. */
-  navigatorModule: NavigatorViewModule;
   /** A ref to the `RNINavigatorView` native component. */
   nativeRef: React.Component;
   //#endregion
@@ -106,10 +103,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   constructor(props: NavigatorViewProps){
     super(props);
   
-    this.navStatus = NavStatus.INIT;
+    this.navStatus = NavStatus.IDLE_INIT;
 
     this.emitter = new EventEmitter<NavEvents>();
-    this.navigatorModule = new NavigatorViewModule();
 
     const initialRoute = props.routes.find(item => (
       item.routeKey == props.initialRouteKey
@@ -120,17 +116,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
   };
 
-  componentDidMount(){
-    this.initNavModule();
-  };
-
-  private async initNavModule(){
-    if(!this.navigatorModule.isModuleNodeSet){
-      // pass a `RNINavigatorView` ref to native comp
-      await this.navigatorModule.setRef(this.nativeRef);
-      // update nav status: ready for commands
-      this.navStatus = NavStatus.IDLE_INIT;
-    };
+  componentWillUnmount(){
   };
 
   private getMatchingRoute = (routeItem: NavRouteItem) => {
@@ -198,13 +184,15 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
   public push = async (routeItem: NavRouteItem) => {
     const routeDefault = this.getMatchingRoute(routeItem);
+
+    if(!routeDefault){
+      throw new Error("`NavigatorView` failed to do: `push`: Invalid `routeKey`");
+    };
     
     // TEMP, replace with queue - skip if nav. is busy
     if(NavigatorViewUtils.isNavStateBusy(this.navStatus)) return;
 
     try {
-      // init. `NavigatorViewModule` if haven't already
-      await this.initNavModule();
 
       // update nav status to busy
       this.navStatus = NavStatus.NAV_PUSHING;
@@ -220,14 +208,26 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
           ),
         }
       });
-      
-      // forward "push" request to native module
-      await this.navigatorModule.push({routeKey: routeItem.routeKey});
 
+      // forward "push" request to native module
+      await Helpers.promiseWithTimeout(1000,
+        RNINavigatorViewModule.push(
+          findNodeHandle(this.nativeRef),
+          routeItem.routeKey
+        )
+      );
+      
       // update nav status to idle
       this.navStatus = NavStatus.IDLE;
 
     } catch(error){
+      //#region - 🐞 DEBUG 🐛
+      LIB_GLOBAL.debugLog && console.log(
+          `LOG - NavigatorView, push`
+        + ` - error message: ${error}`
+      );
+      //#endregion
+
       this.navStatus = NavStatus.IDLE_ERROR;
       throw new Error("`NavigatorView` failed to do: `push`");
     };
@@ -238,14 +238,15 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     if(NavigatorViewUtils.isNavStateBusy(this.navStatus)) return;
 
     try {
-      // init. `NavigatorViewModule` if haven't already
-      await this.initNavModule();
-
       // update nav status to busy
       this.navStatus = NavStatus.NAV_POPPING;
 
       // forward "pop" request to native module
-      const result = await this.navigatorModule.pop();
+      const result = await Helpers.promiseWithTimeout(1000,
+        RNINavigatorViewModule.pop(
+          findNodeHandle(this.nativeRef)
+        )
+      );
 
       // remove popped route from `activeRoutes`
       await this.removeRoute(result);
@@ -261,7 +262,12 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
   public async setNavigationBarHidden(isHidden: boolean, animated: boolean){
     try {
-      await this.navigatorModule.setNavigationBarHidden(isHidden, animated);
+      await Helpers.promiseWithTimeout(1000,
+        RNINavigatorViewModule.setNavigationBarHidden(
+          findNodeHandle(this.nativeRef),
+          isHidden, animated
+        )
+      );
 
     } catch(error){
       throw new Error("`NavigatorView` failed to do: `setNavigationBarHidden`");
