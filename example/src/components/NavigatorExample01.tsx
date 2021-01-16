@@ -1,10 +1,11 @@
 import * as React from 'react';
-
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { NavigatorView, RouteContentProps } from 'react-native-ios-navigator';
+
+import { NavigatorView, NavRouteEvents, RouteContentProps, useNavRouteEvents } from 'react-native-ios-navigator';
 
 import * as Colors  from '../constants/Colors';
 import * as Helpers from '../functions/Helpers';
+
 
 const colors = [
   Colors.PINK.A700,
@@ -68,51 +69,38 @@ function ExampleRoute(props: ExampleRouteProps){
   );
 };
 
-export class NavigatorExample01 extends React.Component<RouteContentProps> {
-  navRef: NavigatorView;
-
-  async componentDidMount(){
-    // ref to the parent/root navigator
-    const navRef = this.props.getRefToNavigator();
-    await Helpers.timeout(1000);
-    navRef.setNavigationBarHidden(true, true);
-  };
-
-  render(){
-    const props = this.props;
-
-    return(
-      <View style={styles.rootContainer}>
-        <NavigatorView
-          ref={r => this.navRef = r}
-          initialRouteKey={'routeA'}
-          routes={[{
-            routeKey: 'routeA',
-            routeOptions: {
-              routeTitle: "Route A",
-            },
-            renderRoute: (route, index) => (
-              <ExampleRoute
-                routeIndex={index}
-                routeKey={route.routeKey}
-              />
-            ),
-          }, {
-            routeKey: 'routeB',
-            routeOptions: {
-              routeTitle: "Route B",
-            },
-            renderRoute: (route, index) => (
-              <ExampleRoute
-                routeIndex={index}
-                routeKey={route.routeKey}
-              />
-            ),
-          }]}
-        />
-      </View>
-    );
-  };
+export function NavigatorExample01() {
+  return(
+    <View style={styles.rootContainer}>
+      <NavigatorView
+        ref={r => this.navRef = r}
+        initialRouteKey={'routeA'}
+        routes={[{
+          routeKey: 'routeA',
+          routeOptions: {
+            routeTitle: "Route A",
+          },
+          renderRoute: (route, index) => (
+            <ExampleRoute
+              routeIndex={index}
+              routeKey={route.routeKey}
+            />
+          ),
+        }, {
+          routeKey: 'routeB',
+          routeOptions: {
+            routeTitle: "Route B",
+          },
+          renderRoute: (route, index) => (
+            <ExampleRoute
+              routeIndex={index}
+              routeKey={route.routeKey}
+            />
+          ),
+        }]}
+      />
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
