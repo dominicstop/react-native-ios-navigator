@@ -1,13 +1,16 @@
 import React, { ReactElement } from 'react';
-import { StyleSheet, requireNativeComponent, findNodeHandle, ViewStyle } from 'react-native';
+import { StyleSheet, findNodeHandle } from 'react-native';
 
-import { RNINavigatorViewModule } from './RNINavigatorViewModule';
-import { NavigatorRouteView } from './NavigatorRouteView';
+import { RNINavigatorView } from 'src/native_components/RNINavigatorView';
+import { RNINavigatorViewModule } from 'src/native_modules/RNINavigatorViewModule';
 
-import * as Helpers from './Helpers';
-import { EventEmitter } from './EventEmitter';
+import { NavigatorRouteView } from 'src/components/NavigatorRouteView';
 
-import type { RouteContentProps } from './NavigatorRouteView';
+import type { RouteContentProps } from 'src/components/NavigatorRouteView';
+
+import * as Helpers from 'src/functions/Helpers';
+import { EventEmitter } from 'src/functions/EventEmitter';
+
 
 //#region - Type Definitions
 /** Represents the current status of the navigator */
@@ -41,38 +44,6 @@ export type NavRouteConfigItem = {
   renderRoute  : (routeItem: NavRouteItem, routeIndex: number) => ReactElement<RouteContentProps>;
 };
 
-//#region - `RNINavigatorView` Events
-type onNavRouteViewAddedPayload = { nativeEvent: {
-  target    : number,
-  routeKey  : string,
-  routeIndex: number
-}};
-
-type onNavRouteWillPopPayload = { nativeEvent: {
-  target         : number,
-  routeKey       : string,
-  routeIndex     : number,
-  isUserInitiated: boolean
-}};
-
-type onNavRouteDidPopPayload = { nativeEvent: {
-  target         : number,
-  routeKey       : string,
-  routeIndex     : number,
-  isUserInitiated: boolean
-}};
-
-//#endregion
-
-/** `RNINavigatorView` native comp. props */
-type RNINavigatorViewProps = {
-  style: ViewStyle;
-  // Native Events
-  onNavRouteViewAdded?: (events: onNavRouteViewAddedPayload) => void;
-  onNavRouteWillPop  ?: (events: onNavRouteWillPopPayload  ) => void;
-  onNavRouteDidPop   ?: (events: onNavRouteDidPopPayload   ) => void;
-};
-
 /** `NavigatorView` comp. props */
 type NavigatorViewProps = {
   routes: Array<NavRouteConfigItem>;
@@ -84,10 +55,6 @@ type NavigatorViewState = {
   activeRoutes: Array<NavRouteItem>,
 };
 //#endregion
-
-
-export const RNINavigatorView = 
-  requireNativeComponent<RNINavigatorViewProps>('RNINavigatorView');
 
 
 export class NavigatorView extends React.PureComponent<NavigatorViewProps, NavigatorViewState> {

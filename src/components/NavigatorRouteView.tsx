@@ -1,29 +1,15 @@
 import React, { ReactElement } from 'react';
-import { StyleSheet, requireNativeComponent, ViewStyle, View, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
-import type { NavigatorView } from './NavigatorView';
+import { RNINavigatorRouteView } from 'src/native_components/RNINavigatorRouteView';
+
+import type { NavigatorView } from 'src/components/NavigatorView';
 
 
 //#region - Type Definitions
 export interface RouteContentProps {
   getRefToRoute?: () => NavigatorRouteView,
   getRefToNavigator?: () => NavigatorView,
-};
-
-//#region - `RNINavigatorRouteView` Events
-//#endregion
-
-type RNINavigatorViewProps = {
-  style: ViewStyle;
-  routeKey: string;
-  routeIndex: number;
-  routeTitle: string;
-  // Native Events
-  onNavRouteWillPush?: () => void;
-  onNavRouteDidPush ?: () => void;
-
-  onNavRouteWillPop?: () => void;
-  onNavRouteDidPop ?: () => void;
 };
 
 type NavigatorRouteViewProps = {
@@ -42,8 +28,6 @@ type NavigatorRouteViewState = {
 };
 //#endregion
 
-export const RNINavigatorRouteView = 
-  requireNativeComponent<RNINavigatorViewProps>('RNINavigatorRouteView');
 
 /** */
 export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewProps, NavigatorRouteViewState> {
@@ -96,7 +80,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     if(!this.state.isMounted) return null;
 
     return (
-      <RNINavigatorRouteView 
+      <RNINavigatorRouteView
         style={styles.navigatorRouteView}
         routeKey={props.routeKey}
         routeIndex={props.routeIndex}

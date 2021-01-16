@@ -1,4 +1,3 @@
-
 //#region - Type Definitions
 type EventListener = (data?: any) => void;
 
