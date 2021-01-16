@@ -4,16 +4,20 @@ import { StyleSheet, View, Text, FlatList, TouchableOpacity } from 'react-native
 import { NavigatorView, RouteContentProps } from 'react-native-ios-navigator';
 
 import { NavigatorExample01 } from './components/NavigatorExample01';
+import { NavigatorTest01 } from './components/NavigatorTest01';
 
-import * as Colors  from './constants/Colors';
+import * as Colors from './constants/Colors';
 
 const RouteKeys = {
   Home: 'Home',
   NavigatorExample01: 'NavigatorExample01',
+  NavigatorTest01: 'NavigatorTest01',
 };
 
 const RouteItems = [{ 
-  routeKey: RouteKeys.NavigatorExample01 
+  routeKey: RouteKeys.NavigatorExample01,
+}, {
+  routeKey: RouteKeys.NavigatorTest01,
 }];
 
 
@@ -37,9 +41,10 @@ class HomeRoute extends React.PureComponent<RouteContentProps> {
     },
   });
 
-  _handleOnPressItem = ({item, index}) => {
+  _handleOnPressItem = async ({item, index}) => {
     const navRef = this.props.getRefToNavigator();
-    navRef.push({routeKey: item.routeKey});
+    await navRef.setNavigationBarHidden(true, true);
+    await navRef.push({routeKey: item.routeKey});
   };
 
   _renderItem = ({item, index}) => {
@@ -76,8 +81,6 @@ class HomeRoute extends React.PureComponent<RouteContentProps> {
   }; 
 };
 
-
-
 export default function App() {
   return (
     <View style={styles.container}>
@@ -93,6 +96,11 @@ export default function App() {
           routeKey: RouteKeys.NavigatorExample01,
           renderRoute: () => (
             <NavigatorExample01/>
+          ),
+        }, {
+          routeKey: RouteKeys.NavigatorTest01,
+          renderRoute: () => (
+            <NavigatorTest01/>
           ),
         }]}
       />
