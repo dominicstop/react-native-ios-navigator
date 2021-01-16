@@ -21,7 +21,7 @@ type RNINavigatorViewProps = {
   // Native Events
   onNavRouteWillPush?: () => void;
   onNavRouteDidPush ?: () => void;
-  
+
   onNavRouteWillPop?: () => void;
   onNavRouteDidPop ?: () => void;
 };
@@ -49,6 +49,7 @@ export const RNINavigatorRouteView =
 export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewProps, NavigatorRouteViewState> {
   //#region - Property Declarations
   state: NavigatorRouteViewState;
+  routeContentRef: React.Component<RouteContentProps>;
   //#endregion
 
   constructor(props: NavigatorRouteViewProps){
@@ -60,9 +61,11 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     };
   };
 
-  private _getRefToRoute = () => {
+  //#region - Handlers
+  private _handleGetRefToRoute = () => {
     return this;
   };
+  //#endregion
 
   //#region - Native Event Handlers
   /** Handler for native event: `onNavRouteWillPop` */
@@ -75,6 +78,15 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     // unmount views
     this.setState({isMounted: false});
   };
+
+  private _handleOnNavRouteWillPush = () => {
+
+  };
+
+  private _handleOnNavRouteDidPush = () => {
+
+  };
+
   //#endregion
   
   render(){
@@ -91,12 +103,14 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
         routeTitle={state.routeTitle}
         onNavRouteWillPop={this._handleOnNavRouteWillPop}
         onNavRouteDidPop={this._handleOnNavRouteDidPop}
+        onNavRouteWillPush={this._handleOnNavRouteWillPush}
+        onNavRouteDidPush={this._handleOnNavRouteDidPush}
       >
         <View style={styles.routeContentContainer}>
           {React.cloneElement<RouteContentProps>(
             props.renderRouteContent(), {
-              getRefToRoute: this._getRefToRoute,
-              getRefToNavigator: () => props.getRefToNavigator(),
+              getRefToRoute: this._handleGetRefToRoute,
+              getRefToNavigator: props.getRefToNavigator,
             }
           )}
         </View>
