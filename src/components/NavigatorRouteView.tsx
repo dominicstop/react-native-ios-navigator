@@ -1,9 +1,10 @@
 import React, { ReactElement } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { RNINavigatorRouteView } from 'src/native_components/RNINavigatorRouteView';
+import type { NavigatorView } from './NavigatorView';
+import { RNINavigatorRouteView } from '../native_components/RNINavigatorRouteView';
 
-import type { NavigatorView } from 'src/components/NavigatorView';
+import { EventEmitter } from '../functions/EventEmitter';
 
 
 //#region - Type Definitions

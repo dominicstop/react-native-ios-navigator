@@ -1,15 +1,16 @@
 import React, { ReactElement } from 'react';
 import { StyleSheet, findNodeHandle } from 'react-native';
 
-import { RNINavigatorView } from 'src/native_components/RNINavigatorView';
-import { RNINavigatorViewModule } from 'src/native_modules/RNINavigatorViewModule';
+import { RNINavigatorView } from '../native_components/RNINavigatorView';
+import { RNINavigatorViewModule } from '../native_modules/RNINavigatorViewModule';
 
-import { NavigatorRouteView } from 'src/components/NavigatorRouteView';
+import { NavigatorRouteView } from './NavigatorRouteView';
 
-import type { RouteContentProps } from 'src/components/NavigatorRouteView';
+import type { onNavRouteDidPopPayload, onNavRouteViewAddedPayload, onNavRouteWillPopPayload } from '../native_components/RNINavigatorView';
+import type { RouteContentProps } from '../components/NavigatorRouteView';
 
-import * as Helpers from 'src/functions/Helpers';
-import { EventEmitter } from 'src/functions/EventEmitter';
+import * as Helpers from '../functions/Helpers';
+import { EventEmitter } from '../functions/EventEmitter';
 
 
 //#region - Type Definitions

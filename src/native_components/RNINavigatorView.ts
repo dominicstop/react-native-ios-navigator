@@ -1,20 +1,20 @@
 import { ViewStyle, requireNativeComponent } from 'react-native';
 
 //#region - `RNINavigatorView` Event Payloads
-type onNavRouteViewAddedPayload = { nativeEvent: {
+export type onNavRouteViewAddedPayload = { nativeEvent: {
   target    : number,
   routeKey  : string,
   routeIndex: number
 }};
 
-type onNavRouteWillPopPayload = { nativeEvent: {
+export type onNavRouteWillPopPayload = { nativeEvent: {
   target         : number,
   routeKey       : string,
   routeIndex     : number,
   isUserInitiated: boolean
 }};
 
-type onNavRouteDidPopPayload = { nativeEvent: {
+export type onNavRouteDidPopPayload = { nativeEvent: {
   target         : number,
   routeKey       : string,
   routeIndex     : number,

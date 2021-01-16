@@ -1,4 +1,4 @@
 import './Globals';
 
-export * from 'src/components/NavigatorRouteView';
-export * from 'src/components/NavigatorView';
+export * from './components/NavigatorRouteView';
+export * from './components/NavigatorView';
