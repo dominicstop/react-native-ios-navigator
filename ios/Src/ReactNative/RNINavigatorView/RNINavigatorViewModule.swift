@@ -115,7 +115,7 @@ class RNINavigatorViewModule: NSObject {
     };
   };
   
-  func setNavigationBarHidden(
+  @objc func setNavigationBarHidden(
     _ node  : NSNumber,
     isHidden: Bool,
     animated: Bool,

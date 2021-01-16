@@ -27,4 +27,11 @@ RCT_EXTERN_METHOD(pop: (nonnull NSNumber)node
                   resolve: (RCTPromiseResolveBlock)resolve
                   reject : (RCTPromiseRejectBlock )reject);
 
+RCT_EXTERN_METHOD(setNavigationBarHidden: (nonnull NSNumber)node
+                  isHidden: (nonnull BOOL) isHidden
+                  animated: (nonnull BOOL) animated
+                  // promise blocks -----------------------
+                  resolve: (RCTPromiseResolveBlock)resolve
+                  reject : (RCTPromiseRejectBlock )reject);
+
 @end
