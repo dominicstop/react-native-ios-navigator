@@ -209,6 +209,8 @@ extension RNINavigatorView {
   func push(routeKey: NSString, completion: @escaping Completion){
     /// get the `routeView` to be pushed in the nav stack
     guard let routeViewVC = self.routeVCs.last,
+          let routeView   = routeViewVC.routeView,
+          // make sure this is the correct route to be "popped"
           routeViewVC.routeView?.routeKey == routeKey
     else {
       #if DEBUG
@@ -228,9 +230,15 @@ extension RNINavigatorView {
     );
     #endif
     
-    self.navigationVC.pushViewController(
-      routeViewVC, animated: true, completion: completion
-    );
+    // notify js `RNINavigatorRouteView` that it's about to be pushed
+    routeView.onNavRouteWillPush?([:]);
+    
+    self.navigationVC.pushViewController(routeViewVC, animated: true){
+      completion();
+      
+      // notify js `RNINavigatorRouteView` that it's been pushed
+      routeView.onNavRouteDidPush?([:]);
+    };
   };
   
   func pop(completion: @escaping (_ routeKey: NSString, _ routeIndex: NSNumber) -> Void){
@@ -267,7 +275,7 @@ extension RNINavigatorView {
 // -----------------------------------
 
 /// receive events from route vc's
-extension RNINavigatorView: RNINavigatorRouteViewDelegate {
+extension RNINavigatorView: RNINavigatorRouteViewControllerDelegate {
   
   func onNavRouteWillPop(
     reactTag  : NSNumber, routeKey       : NSString,

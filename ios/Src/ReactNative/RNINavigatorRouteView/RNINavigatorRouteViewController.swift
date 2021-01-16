@@ -7,7 +7,7 @@
 
 import UIKit;
 
-protocol RNINavigatorRouteViewDelegate: AnyObject {
+protocol RNINavigatorRouteViewControllerDelegate: AnyObject {
   
   /// Fired when a route is *about to be* "popped", either due to a "user intiated"
   /// pop (i.e. a route's "back button" was pressed, or was swiped back via a
@@ -35,7 +35,7 @@ class RNINavigatorRouteViewController: UIViewController {
   /// The content to show in the route
   var routeView: RNINavigatorRouteView!;
   /// Used to send/forward navigation-related events
-  weak var delegate: RNINavigatorRouteViewDelegate?;
+  weak var delegate: RNINavigatorRouteViewControllerDelegate?;
   
   /// A flag that indicates that the nav. controller responsible for this vc is
   /// about to remove it from the nav. stack. This is used to differentiate if

@@ -19,6 +19,9 @@ type RNINavigatorViewProps = {
   routeIndex: number;
   routeTitle: string;
   // Native Events
+  onNavRouteWillPush?: () => void;
+  onNavRouteDidPush ?: () => void;
+  
   onNavRouteWillPop?: () => void;
   onNavRouteDidPop ?: () => void;
 };
