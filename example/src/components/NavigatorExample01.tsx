@@ -68,8 +68,15 @@ function ExampleRoute(props: ExampleRouteProps){
   );
 };
 
-export class NavigatorExample01 extends React.Component {
+export class NavigatorExample01 extends React.Component<RouteContentProps> {
   navRef: NavigatorView;
+
+  async componentDidMount(){
+    // ref to the parent/root navigator
+    const navRef = this.props.getRefToNavigator();
+    await Helpers.timeout(1000);
+    navRef.setNavigationBarHidden(true, true);
+  };
 
   render(){
     const props = this.props;
