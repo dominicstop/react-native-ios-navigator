@@ -84,9 +84,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
   };
 
-  componentWillUnmount(){
-  };
-
+  //#region - Private Functions
   private getMatchingRoute = (routeItem: NavRouteItem) => {
     return this.props.routes.find(item => (
       item.routeKey == routeItem.routeKey
@@ -150,6 +148,12 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     }));
   };
 
+  private _handleGetRefToNavigator = (): NavigatorView => {
+    return this;
+  };
+  //#endregion
+
+  //#region - Public Functions
   public push = async (routeItem: NavRouteItem) => {
     const routeDefault = this.getMatchingRoute(routeItem);
 
@@ -228,7 +232,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
   };
 
-  public async setNavigationBarHidden(isHidden: boolean, animated: boolean){
+  public setNavigationBarHidden = async (isHidden: boolean, animated: boolean) => {
     try {
       await Helpers.promiseWithTimeout(1000,
         RNINavigatorViewModule.setNavigationBarHidden(
@@ -248,10 +252,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       throw new Error("`NavigatorView` failed to do: `setNavigationBarHidden`");
     };
   };
-
-  private _handleGetRefToNavigator = (): NavigatorView => {
-    return this;
-  };
+  //#endregion
 
   //#region - Native Event Handlers
   /** Handler for native event: `onNavRouteViewAdded` */
@@ -290,25 +291,23 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   render(){
     const { activeRoutes } = this.state;
 
-    const routes = activeRoutes.map((route, index) => {
-      return (
-        <NavigatorRouteView
-          key={`${route.routeKey}-${index}`}
-          routeIndex={index}
-          routeKey={route.routeKey}
-          routeProps={route.routeProps}
-          getRefToNavigator={this._handleGetRefToNavigator}
-          initialRouteTitle={(
-            route.routeOptions?.routeTitle ??
-            route.routeKey
-          )}
-          renderRouteContent={() => {
-            const routeItem = this.getMatchingRoute(route);
-            return routeItem.renderRoute(routeItem, index);
-          }}
-        />
-      );
-    });
+    const routes = activeRoutes.map((route, index) => (
+      <NavigatorRouteView
+        key={`${route.routeKey}-${index}`}
+        routeIndex={index}
+        routeKey={route.routeKey}
+        routeProps={route.routeProps}
+        getRefToNavigator={this._handleGetRefToNavigator}
+        initialRouteTitle={(
+          route.routeOptions?.routeTitle ??
+          route.routeKey
+        )}
+        renderRouteContent={() => {
+          const routeItem = this.getMatchingRoute(route);
+          return routeItem.renderRoute(routeItem, index);
+        }}
+      />
+    ));
 
     return (
       <RNINavigatorView 
