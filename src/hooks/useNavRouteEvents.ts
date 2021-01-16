@@ -4,7 +4,7 @@ import type { NavRouteEvents } from '../components/NavigatorRouteView';
 import { NavRouteViewContext } from '../context/NavRouteViewContext';
 
 
-export function useNavRouteEvents(eventName: NavRouteEvents, handler: () => void){
+export function useNavRouteEvents(eventName: NavRouteEvents, once: boolean, handler: () => void){
   const { getEmitterRef } = useContext(NavRouteViewContext);
   
   // Create a ref that stores handler
@@ -23,12 +23,20 @@ export function useNavRouteEvents(eventName: NavRouteEvents, handler: () => void
 
     // create event listener that calls handler function stored in ref
     const eventListener = (params) => savedHandler.current(params);
-    // subscribe to events
-    emitterRef.addListener(eventName, eventListener);
-    
+
+    if(once){
+      emitterRef.once(eventName, eventListener);
+
+    } else {
+      // subscribe to events
+      emitterRef.addListener(eventName, eventListener);
+    };
+
     return () => {
-      // remove event listener on cleanup
-      emitterRef.removeListener(eventName, eventListener);
+      if(!once){
+        // remove event listener on cleanup
+        emitterRef.removeListener(eventName, eventListener);
+      };
     };
   });
 };

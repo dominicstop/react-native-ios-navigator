@@ -17,6 +17,8 @@ export enum NavRouteEvents {
 };
 
 export interface RouteContentProps {
+  routeKey?: string;
+  routeIndex?: number;
   getRefToRoute?: () => NavigatorRouteView;
   getRefToNavigator?: () => NavigatorView;
   getRefToNavRouteEmitter?: () => EventEmitter<NavRouteEvents>;
@@ -87,9 +89,6 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
   /** Handler for `RNINavigatorRouteView` native event: `onNavRouteDidPop` */
   private _handleOnNavRouteDidPop = () => {
     this.emitter.emit(NavRouteEvents.onNavRouteDidPop, null);
-
-    // unmount views
-    this.setState({isMounted: false});
   };
 
   /** Handler for `RNINavigatorRouteView` native event: `onNavRouteWillPus` */
@@ -129,6 +128,12 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
           <View style={styles.routeContentContainer}>
             {React.cloneElement<RouteContentProps>(
               props.renderRouteContent(), {
+                // pass down route props
+                ...props.routeProps,
+                // pass down route details
+                routeKey: props.routeKey,
+                routeIndex: props.routeIndex,
+                // pass down 'get ref' functions
                 getRefToRoute: this._handleGetRefToRoute,
                 getRefToNavigator: props.getRefToNavigator,
                 getRefToNavRouteEmitter: this._handleGetRefToNavRouteEmitter
