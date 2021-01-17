@@ -25,87 +25,331 @@ function randomBGColor(){
   return Helpers.randomElement<string>(colors);
 };
 
-function NestTestContent(props: RouteContentProps & {
-  offset: number
+function BlankRoute(props: RouteContentProps & {
+  offsetA?: number
+  offsetB?: number
 }){
   const [bgColor] = React.useState(randomBGColor());
-  const rootContainerStyle = { backgroundColor: bgColor };
+  const containerStyle = { backgroundColor: bgColor };
 
-  return(
-    <View style={[styles.nestTestContentContainer, rootContainerStyle]}>
-      <Text style={styles.textNestTestContentTitle}>
-        {props.routeIndex + props.offset}
+  const offset = (
+    (props.offsetA ?? 0) +
+    (props.offsetB ?? 0)
+  );
+
+  return (
+    <View style={[styles.centeredContentContainer, containerStyle]}>
+      <Text style={styles.textCenteredTitle}>
+        {`${offset + props.routeIndex + 1}`}
       </Text>
     </View>
   );
 };
 
-class NestTest extends React.PureComponent<{
-  offset: number
+//#region - Nest Test A
+class NestTestA2 extends React.PureComponent<{
+  offsetB?: number;
+  onDidFinish?: () => void;
 }> {
-  navRef: NavigatorView;
+  navRefA: NavigatorView;
+  navRefB: NavigatorView;
+
+  async pushAndPop(total: number){
+    const props = this.props;
+
+    const offset = props.offsetB ?? 0;
+
+    for (let i = 0; i < total; i++) {
+      await Promise.all([
+        this.navRefA.push({
+          routeKey: 'BlankRoute', 
+          routeOptions: { routeTitle: `A2-${i + 1 + offset}`},
+          routeProps: { offsetB: 0 },
+        }),
+        this.navRefB.push({
+          routeKey: 'BlankRoute', 
+          routeOptions: { routeTitle: `A2-${i + 2 + offset}`},
+          routeProps: { offsetB: 1 },
+        }),
+      ]);
+    };
+
+    for (let i = 0; i < total; i++) {
+      await Promise.all([
+        this.navRefA.pop(),
+        this.navRefB.pop(),
+      ]);
+    };
+  };
 
   async componentDidMount(){
-    await Helpers.timeout(1000);
+    const props = this.props;
+    await Helpers.timeout(500);
 
-    const level = 4;
+    await this.pushAndPop(3);
 
-    for(let i = 0; i < level; i++) {
-      await Promise.all([
-        Helpers.timeout(750),
-        this.navRef.push({routeKey: 'routeA', routeOptions: {
-          routeTitle: `${i + 1}`
-        }})
-      ]);
-    };
+    await Promise.all([
+      this.navRefA.setNavigationBarHidden(true, true),
+      this.navRefB.setNavigationBarHidden(true, true),
+    ]);
 
-    for(let i = 0; i < level; i++) {
-      await Promise.all([
-        Helpers.timeout(750),
-        this.navRef.pop(),
-      ]);
-    };
+    await this.pushAndPop(1);
+
+    props.onDidFinish?.();
   };
 
   render(){
     const props = this.props;
-
     return(
-      <NavigatorView
-        ref={r => this.navRef = r}
-        initialRouteKey={'routeA'}
-        routes={[{
-          routeKey: 'routeA',
-          routeOptions: {
-            routeTitle: "Route A",
-          },
-          renderRoute: () => (
-            <NestTestContent
-              offset={props.offset}
-            />
-          ),
-        }]}
-      />
+      <View style={styles.rowContainer}>
+        <NavigatorView
+          ref={r => this.navRefA = r}
+          initialRouteKey={'BlankRoute'}
+          routes={[{
+            routeKey: 'BlankRoute',
+            routeOptions: {
+              routeTitle: "Left",
+            },
+            renderRoute: () => (
+              <BlankRoute
+                offsetA={0}
+                offsetB={props.offsetB}
+              />
+            ),
+          }]}
+        />
+        <NavigatorView
+          ref={r => this.navRefB = r}
+          initialRouteKey={'BlankRoute'}
+          routes={[{
+            routeKey: 'BlankRoute',
+            routeOptions: {
+              routeTitle: "Right",
+            },
+            renderRoute: () => (
+              <BlankRoute
+                offsetA={1}
+                offsetB={props.offsetB}
+              />
+            ),
+          }]}
+        />
+      </View>
     );
   };
 };
 
+class NestTestA1 extends React.PureComponent<{
+  onDidFinish?: () => void;
+}> {
+  navRefA: NavigatorView;
+  navRefB: NavigatorView;
+
+  callback: () => void;
+
+  async pushAndPop(total: number){
+    for (let i = 0; i < total; i++) {
+      await Promise.all([
+        this.navRefA.push({routeKey: 'BlankRoute', routeOptions: {
+          routeTitle: `A1-${i + 1}`
+        }}),
+        this.navRefB.push({routeKey: 'BlankRoute', routeOptions: {
+          routeTitle: `A1-${i + 2}`
+        }}),
+      ]);
+    };
+
+    for (let i = 0; i < total; i++) {
+      await Promise.all([
+        this.navRefA.pop(),
+        this.navRefB.pop(),
+      ]);
+    };
+  };
+
+
+  async componentDidMount(){
+    const props = this.props;
+    await Helpers.timeout(500);
+
+    await this.pushAndPop(2);
+
+    await Promise.all([
+      this.navRefA.setNavigationBarHidden(true, true),
+      this.navRefB.setNavigationBarHidden(true, true),
+    ]);
+
+    // NestTestA2: Start
+    await Promise.all([
+      this.navRefA.push({routeKey: 'NestTestA2', routeOptions: {
+        routeTitle: 'A1-3'
+      }}),
+      this.navRefB.push({routeKey: 'NestTestA2', routeOptions: {
+        routeTitle: 'A1-4'
+      }}),
+    ]);
+
+    // NestTestA2: End
+    await new Promise<void>(resolve => {
+      this.callback = resolve;
+    });
+
+    await Promise.all([
+      this.navRefA.setNavigationBarHidden(false, true),
+      this.navRefB.setNavigationBarHidden(false, true),
+    ]);
+
+    await Promise.all([
+      this.navRefA.pop(),
+      this.navRefB.pop(),
+    ]);
+
+    await this.pushAndPop(1);
+
+    props.onDidFinish?.();
+  };
+
+  render(){
+    return(
+      <View style={styles.rootContainer}>
+        <NavigatorView
+          ref={r => this.navRefA = r}
+          initialRouteKey={'BlankRoute'}
+          routes={[{
+            routeKey: 'BlankRoute',
+            routeOptions: {
+              routeTitle: "Top",
+            },
+            renderRoute: () => (
+              <BlankRoute
+                offsetA={0}
+              />
+            ),
+          }, {
+            routeKey: 'NestTestA2',
+            routeOptions: {
+              routeTitle: "A2",
+            },
+            renderRoute: () => (
+              <NestTestA2
+                offsetB={0}
+                onDidFinish={() => {
+                  this.callback?.();
+                }}
+              />
+            ),
+          }]}
+        />
+        <NavigatorView
+          ref={r => this.navRefB = r}
+          initialRouteKey={'BlankRoute'}
+          routes={[{
+            routeKey: 'BlankRoute',
+            routeOptions: {
+              routeTitle: "Bottom",
+            },
+            renderRoute: () => (
+              <BlankRoute
+                offsetA={1}
+              />
+            ),
+          }, {
+            routeKey: 'NestTestA2',
+            routeOptions: {
+              routeTitle: "A2",
+            },
+            renderRoute: () => (
+              <NestTestA2
+                offsetB={2}
+                onDidFinish={() => {
+                  this.callback?.();
+                }}
+              />
+            ),
+          }]}
+        />
+      </View>
+    );
+  };
+};
+//#endregion
+
+
 /**
  * 
  */
-export function NavigatorTest01() {
-  return(
-    <View style={styles.rootContainer}>
-      <View style={styles.rowContainer}>
-        <NestTest offset={1}/>
-        <NestTest offset={2}/>
+export class NavigatorTest01 extends React.Component {
+  navRef: NavigatorView;
+  callbackA1: () => void;
+
+  async pushAndPopBlank(total: number){
+    for (let i = 0; i < total; i++) {
+      await Promise.all([
+        this.navRef.push({routeKey: 'BlankRoute', routeOptions: {
+          routeTitle: `${i + 1}`
+        }}),
+      ]);
+    };
+
+    for (let i = 0; i < total; i++) {
+      await this.navRef.pop();
+    };
+  };
+
+  async componentDidMount(){
+    await Helpers.timeout(1000);
+
+    await this.pushAndPopBlank(1);
+
+    await this.navRef.setNavigationBarHidden(true, true);
+
+    // NestTestA1: Start
+    await this.navRef.push({routeKey: 'NestTestA1'});
+
+    // NestTestA1: Finished
+    await new Promise<void>(resolve => {
+      this.callbackA1 = resolve;
+    });
+
+    await this.navRef.setNavigationBarHidden(false, true);
+
+    // pop: NestTestA1
+    await this.navRef.pop();
+    await this.pushAndPopBlank(1);
+
+  };
+
+  render(){
+    return(
+      <View style={styles.rootContainer}>
+        <NavigatorView
+          ref={r => this.navRef = r}
+          initialRouteKey={'BlankRoute'}
+          routes={[{
+            routeKey: 'BlankRoute',
+            routeOptions: {
+              routeTitle: "Start",
+            },
+            renderRoute: () => (
+              <BlankRoute/>
+            ),
+          }, {
+            routeKey: 'NestTestA1',
+            routeOptions: {
+              routeTitle: "A",
+            },
+            renderRoute: () => (
+              <NestTestA1
+                onDidFinish={() => {
+                  this.callbackA1?.();
+                }}
+              />
+            ),
+          }]}
+        />
       </View>
-      <View style={styles.rowContainer}>
-        <NestTest offset={3}/>
-        <NestTest offset={4}/>
-      </View>
-    </View>
-  );
+    );
+  };
 };
 
 const styles = StyleSheet.create({
@@ -116,12 +360,12 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
   },
-  nestTestContentContainer: {
+  centeredContentContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  textNestTestContentTitle: {
+  textCenteredTitle: {
     fontWeight: '900',
     color: 'white',
     fontSize: 64,
