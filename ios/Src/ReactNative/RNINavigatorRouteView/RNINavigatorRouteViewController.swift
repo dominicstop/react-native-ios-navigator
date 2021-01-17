@@ -76,7 +76,7 @@ class RNINavigatorRouteViewController: UIViewController {
     super.viewWillLayoutSubviews();
     
     /// update `routeView`'s size
-    self.routeView?.notifyForBoundsChange(self.view.bounds);
+    self.routeView?.notifyForBoundsChange(self.view.frame);
   };
   
   override func willMove(toParent parent: UIViewController?){
@@ -162,4 +162,5 @@ class RNINavigatorRouteViewController: UIViewController {
     );
   };
   #endif
+  
 };

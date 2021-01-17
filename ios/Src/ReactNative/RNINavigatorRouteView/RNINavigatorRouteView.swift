@@ -110,6 +110,7 @@ class RNINavigatorRouteView: UIView {
     /// is the content to show in the navigator
     if atIndex == 0 {
       self.reactView = subview;
+      
     };
   };
   

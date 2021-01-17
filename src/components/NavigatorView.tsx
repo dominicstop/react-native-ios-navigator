@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { StyleSheet, findNodeHandle } from 'react-native';
+import { StyleSheet, findNodeHandle, processColor } from 'react-native';
 
 import { RNINavigatorView } from '../native_components/RNINavigatorView';
 import { RNINavigatorViewModule } from '../native_modules/RNINavigatorViewModule';
@@ -49,6 +49,10 @@ export type NavRouteConfigItem = {
 type NavigatorViewProps = {
   routes: Array<NavRouteConfigItem>;
   initialRouteKey: string;
+  // navigation bar props
+  navigationBarStyle?: string;
+  navigationBarTintColor?: string;
+  navigationBarIsTranslucent?: boolean;
 };
 
 /** `NavigatorView` comp. state */
@@ -290,6 +294,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   //#endregion
   
   render(){
+    const props = this.props;
     const { activeRoutes } = this.state;
 
     const routes = activeRoutes.map((route, index) => (
@@ -314,9 +319,13 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       <RNINavigatorView 
         ref={r => this.nativeRef = r}
         style={styles.navigatorView}
-        onNavRouteViewAdded={this._handleOnNavRouteViewAdded}
+        navigationBarStyle={props.navigationBarStyle}
+        navigationBarTintColor={processColor(props.navigationBarTintColor)}
+        navigationBarIsTranslucent={props.navigationBarIsTranslucent}
+        // event handlers
         onNavRouteWillPop={this._handleOnNavRouteWillPop}
         onNavRouteDidPop={this._handleOnNavRouteDidPop}
+        onNavRouteViewAdded={this._handleOnNavRouteViewAdded}
       >
         {routes}
       </RNINavigatorView>

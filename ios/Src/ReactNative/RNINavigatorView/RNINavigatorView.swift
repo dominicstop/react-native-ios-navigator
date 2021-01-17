@@ -43,6 +43,36 @@ class RNINavigatorView: UIView {
   /// gesture), or due to it being "popped" programmatically via the nav.
   @objc var onNavRouteDidPop: RCTBubblingEventBlock?;
   
+  // ------------------------
+  // MARK: RN Exported  Props
+  // ------------------------
+  
+  @objc var navigationBarStyle: NSString? {
+    didSet {
+      guard let string = self.navigationBarStyle as String?,
+            let barStyle = UIBarStyle(string: string)
+      else { return };
+      
+      self.navigationVC.navigationBar.barStyle = barStyle;
+    }
+  };
+  
+  @objc var navigationBarIsTranslucent: Bool = true {
+    willSet {
+      self.navigationVC.navigationBar.isTranslucent = newValue;
+    }
+  };
+  
+  @objc var navigationBarTintColor: NSNumber? {
+    didSet {
+      guard let number  = self.navigationBarTintColor,
+            let uiColor = RCTConvert.uiColor(number)
+      else { return };
+      
+      self.navigationVC.navigationBar.barTintColor = uiColor;
+    }
+  };
+  
   // --------------------
   // MARK: Init/Lifecycle
   // --------------------
@@ -139,12 +169,12 @@ fileprivate extension RNINavigatorView {
   func embedNavigationVC(){
     // create nav controller
     let navigationVC = UINavigationController();
-    navigationVC.view.frame = self.bounds;
+    // save a ref to this instance
+    self.navigationVC = navigationVC;
     
     // add vc's view as subview
     self.addSubview(navigationVC.view);
-    // save a ref to this instance
-    self.navigationVC = navigationVC;
+    navigationVC.view.frame = self.bounds;
     
     // enable autolayout
     navigationVC.view.translatesAutoresizingMaskIntoConstraints = false;

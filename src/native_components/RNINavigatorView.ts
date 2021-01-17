@@ -25,6 +25,10 @@ export type onNavRouteDidPopPayload = { nativeEvent: {
 /** `RNINavigatorView` native comp. props */
 type RNINavigatorViewProps = {
   style: ViewStyle;
+
+  navigationBarStyle: string;
+  navigationBarTintColor: number;
+  navigationBarIsTranslucent: boolean;
   // Native Events
   onNavRouteViewAdded?: (events: onNavRouteViewAddedPayload) => void;
   onNavRouteWillPop  ?: (events: onNavRouteWillPopPayload  ) => void;
