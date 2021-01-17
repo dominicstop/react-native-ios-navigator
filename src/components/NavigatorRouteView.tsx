@@ -7,6 +7,8 @@ import { RNINavigatorRouteView } from '../native_components/RNINavigatorRouteVie
 import { EventEmitter } from '../functions/EventEmitter';
 import { NavRouteViewContext } from '../context/NavRouteViewContext';
 
+import * as Helpers from '../functions/Helpers';
+
 
 //#region - Type Definitions
 export enum NavRouteEvents {
@@ -41,7 +43,6 @@ type NavigatorRouteViewState = {
 //#endregion
 
 
-
 export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewProps, NavigatorRouteViewState> {
   //#region - Property Declarations
   state: NavigatorRouteViewState;
@@ -67,6 +68,12 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
 
   public getEmitterRef = () => {
     return this.emitter;
+  };
+
+  public setRouteTitle = async (title: string) => {
+    await Helpers.setStateAsync<Partial<NavigatorRouteViewState>>(this, {
+      routeTitle: title
+    });
   };
   //#endregion
 
