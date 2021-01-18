@@ -1,4 +1,4 @@
-import { ViewStyle, requireNativeComponent } from 'react-native';
+import { ViewStyle, TextStyle, TextStyleIOS, requireNativeComponent } from 'react-native';
 
 //#region - `RNINavigatorView` Event Payloads
 export type onNavRouteViewAddedPayload = { nativeEvent: {
@@ -26,9 +26,10 @@ export type onNavRouteDidPopPayload = { nativeEvent: {
 type RNINavigatorViewProps = {
   style: ViewStyle;
 
-  navigationBarStyle: string;
-  navigationBarTintColor: number;
+  navigationBarStyle?: string;
+  navigationBarTintColor?: number;
   navigationBarIsTranslucent: boolean;
+  navigationBarTitleTextStyle?: TextStyle & TextStyleIOS;
   // Native Events
   onNavRouteViewAdded?: (events: onNavRouteViewAddedPayload) => void;
   onNavRouteWillPop  ?: (events: onNavRouteWillPopPayload  ) => void;

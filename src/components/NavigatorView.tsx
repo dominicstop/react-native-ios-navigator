@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { StyleSheet, findNodeHandle, processColor } from 'react-native';
+import { StyleSheet, findNodeHandle, processColor, TextStyle, TextStyleIOS } from 'react-native';
 
 import { RNINavigatorView } from '../native_components/RNINavigatorView';
 import { RNINavigatorViewModule } from '../native_modules/RNINavigatorViewModule';
@@ -53,6 +53,7 @@ type NavigatorViewProps = {
   navigationBarStyle?: string;
   navigationBarTintColor?: string;
   navigationBarIsTranslucent?: boolean;
+  navigationBarTitleTextStyle?: TextStyle & TextStyleIOS;
 };
 
 /** `NavigatorView` comp. state */
@@ -321,7 +322,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         style={styles.navigatorView}
         navigationBarStyle={props.navigationBarStyle}
         navigationBarTintColor={processColor(props.navigationBarTintColor)}
-        navigationBarIsTranslucent={props.navigationBarIsTranslucent}
+        navigationBarIsTranslucent={props.navigationBarIsTranslucent ?? true}
+        navigationBarTitleTextStyle={props.navigationBarTitleTextStyle}
         // event handlers
         onNavRouteWillPop={this._handleOnNavRouteWillPop}
         onNavRouteDidPop={this._handleOnNavRouteDidPop}

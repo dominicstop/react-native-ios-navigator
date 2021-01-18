@@ -73,6 +73,19 @@ class RNINavigatorView: UIView {
     }
   };
   
+  private var _navigationBarTitleTextStyle = RCTTextAttributes();
+  @objc var navigationBarTitleTextStyle: NSDictionary? {
+    didSet {
+      guard let dict = self.navigationBarTitleTextStyle, dict.count > 0
+      else { return };
+      
+      self._navigationBarTitleTextStyle.apply(RCTTextAttributes(dict: dict));
+      
+      self.navigationVC.navigationBar.titleTextAttributes =
+        self._navigationBarTitleTextStyle.effectiveTextAttributes();
+    }
+  };
+  
   // --------------------
   // MARK: Init/Lifecycle
   // --------------------

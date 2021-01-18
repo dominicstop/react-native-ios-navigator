@@ -13,5 +13,9 @@
 #import "React/RCTEventEmitter.h"
 
 #import <React/RCTConvert.h>
+#import <React/RCTTextAttributes.h>
+#import <React/RCTTextDecorationLineType.h>
+#import <React/RCTTextTransform.h>
+
 #import <React/RCTImageSource.h>
 #import <React/RCTImageLoader.h>

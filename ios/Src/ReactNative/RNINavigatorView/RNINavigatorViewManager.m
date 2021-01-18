@@ -25,5 +25,7 @@ RCT_EXPORT_VIEW_PROPERTY(onNavRouteDidPop , RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(navigationBarStyle, NSString);
 RCT_EXPORT_VIEW_PROPERTY(navigationBarIsTranslucent, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(navigationBarTintColor, NSNumber);
+RCT_EXPORT_VIEW_PROPERTY(navigationBarTitleTextStyle, NSDictionary);
+
 
 @end
