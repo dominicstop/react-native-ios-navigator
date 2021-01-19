@@ -50,10 +50,10 @@ type NavigatorViewProps = {
   routes: Array<NavRouteConfigItem>;
   initialRouteKey: string;
   // navigation bar props
-  navigationBarStyle?: string;
-  navigationBarTintColor?: string;
-  navigationBarIsTranslucent?: boolean;
-  navigationBarTitleTextStyle?: TextStyle & TextStyleIOS;
+  navBarStyle?: string;
+  navBarTintColor?: string;
+  navBarIsTranslucent?: boolean;
+  navBarTitleTextStyle?: TextStyle & TextStyleIOS;
 };
 
 /** `NavigatorView` comp. state */
@@ -320,10 +320,10 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       <RNINavigatorView 
         ref={r => this.nativeRef = r}
         style={styles.navigatorView}
-        navigationBarStyle={props.navigationBarStyle}
-        navigationBarTintColor={processColor(props.navigationBarTintColor)}
-        navigationBarIsTranslucent={props.navigationBarIsTranslucent ?? true}
-        navigationBarTitleTextStyle={props.navigationBarTitleTextStyle}
+        navBarStyle={props.navBarStyle}
+        navBarTintColor={processColor(props.navBarTintColor)}
+        navBarIsTranslucent={props.navBarIsTranslucent ?? true}
+        navBarTitleTextStyle={props.navBarTitleTextStyle}
         // event handlers
         onNavRouteWillPop={this._handleOnNavRouteWillPop}
         onNavRouteDidPop={this._handleOnNavRouteDidPop}

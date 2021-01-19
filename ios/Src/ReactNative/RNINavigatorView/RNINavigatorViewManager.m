@@ -22,10 +22,10 @@ RCT_EXPORT_VIEW_PROPERTY(onNavRouteDidPop , RCTBubblingEventBlock);
 // MARK: Export Props - Values
 // ---------------------------
 
-RCT_EXPORT_VIEW_PROPERTY(navigationBarStyle, NSString);
-RCT_EXPORT_VIEW_PROPERTY(navigationBarIsTranslucent, BOOL);
-RCT_EXPORT_VIEW_PROPERTY(navigationBarTintColor, NSNumber);
-RCT_EXPORT_VIEW_PROPERTY(navigationBarTitleTextStyle, NSDictionary);
+RCT_EXPORT_VIEW_PROPERTY(navBarStyle, NSString);
+RCT_EXPORT_VIEW_PROPERTY(navBarIsTranslucent, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(navBarTintColor, NSNumber);
+RCT_EXPORT_VIEW_PROPERTY(navBarTitleTextStyle, NSDictionary);
 
 
 @end

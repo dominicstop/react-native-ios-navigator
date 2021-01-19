@@ -27,6 +27,14 @@ class RNINavigatorView: UIView {
   
   var navigationVC: UINavigationController!;
   
+  // ----------------------------------
+  // MARK: Convenient Property Wrappers
+  // ----------------------------------
+  
+  var navigationBar: UINavigationBar {
+    self.navigationVC.navigationBar;
+  };
+  
   // -----------------------------
   // MARK: RN Exported Event Props
   // -----------------------------
@@ -47,42 +55,46 @@ class RNINavigatorView: UIView {
   // MARK: RN Exported  Props
   // ------------------------
   
-  @objc var navigationBarStyle: NSString? {
+  @objc var navnBarStyle: NSString? {
     didSet {
-      guard let string = self.navigationBarStyle as String?,
+      guard let string = self.navnBarStyle as String?,
             let barStyle = UIBarStyle(string: string)
       else { return };
       
-      self.navigationVC.navigationBar.barStyle = barStyle;
+      self.navigationBar.barStyle = barStyle;
     }
   };
   
-  @objc var navigationBarIsTranslucent: Bool = true {
+  @objc var navBarIsTranslucent: Bool = true {
     willSet {
-      self.navigationVC.navigationBar.isTranslucent = newValue;
+      self.navigationBar.isTranslucent = newValue;
+      
+      if newValue {
+        //navigationBar.setBackgroundImage(UIImage(), for: .default);
+      };
     }
   };
   
-  @objc var navigationBarTintColor: NSNumber? {
+  @objc var navBarTintColor: NSNumber? {
     didSet {
-      guard let number  = self.navigationBarTintColor,
+      guard let number  = self.navBarTintColor,
             let uiColor = RCTConvert.uiColor(number)
       else { return };
       
-      self.navigationVC.navigationBar.barTintColor = uiColor;
+      self.navigationBar.barTintColor = uiColor;
     }
   };
   
-  private var _navigationBarTitleTextStyle = RCTTextAttributes();
-  @objc var navigationBarTitleTextStyle: NSDictionary? {
+  private var _navBarTitleTextStyle = RCTTextAttributes();
+  @objc var navBarTitleTextStyle: NSDictionary? {
     didSet {
-      guard let dict = self.navigationBarTitleTextStyle, dict.count > 0
+      guard let dict = self.navBarTitleTextStyle, dict.count > 0
       else { return };
       
-      self._navigationBarTitleTextStyle.apply(RCTTextAttributes(dict: dict));
+      self._navBarTitleTextStyle.apply(RCTTextAttributes(dict: dict));
       
-      self.navigationVC.navigationBar.titleTextAttributes =
-        self._navigationBarTitleTextStyle.effectiveTextAttributes();
+      self.navigationBar.titleTextAttributes =
+        self._navBarTitleTextStyle.effectiveTextAttributes();
     }
   };
   
