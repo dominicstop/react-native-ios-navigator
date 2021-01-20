@@ -1,23 +1,24 @@
 //
-//  RNINavigatorRouteViewManager.swift
+//  RNIRouteNavBarItemViewManager.swift
 //  IosNavigatorExample
 //
-//  Created by Dominic Go on 1/1/21.
+//  Created by Dominic Go on 1/21/21.
 //
 
 import Foundation
 
-@objc(RNINavigatorRouteViewManager)
-class RNINavigatorRouteViewManager: RCTViewManager {
+
+@objc(RNIRouteNavBarItemViewManager)
+class RNIRouteNavBarItemViewManager: RCTViewManager {
   
-  // -------------------
-  // MARK: Shared Bridge
-  // -------------------
+  // ----------------------
+  // MARK: Shared Instances
+  // ----------------------
   
-  static var sharedBridge: RCTBridge? {
+  static weak var sharedBridge: RCTBridge? {
     didSet {
       #if DEBUG
-      print("RNINavigatorRouteViewManager, sharedBridge: didSet");
+      print("RNIRouteNavBarItemManager, sharedBridge: didSet");
       
       // when RN app reloads, set `sharedBridge` to nil
       NotificationCenter.default.addObserver(Self.self,
@@ -32,7 +33,7 @@ class RNINavigatorRouteViewManager: RCTViewManager {
   /// invalidate RCTBridge instance
   @objc static func resetSharedBridge() {
     #if DEBUG
-    print("RNINavigatorRouteViewManager: resetSharedBridge...");
+    print("RNIRouteNavBarItemManager: resetSharedBridge...");
     #endif
     Self.sharedBridge = nil;
   };
@@ -40,7 +41,7 @@ class RNINavigatorRouteViewManager: RCTViewManager {
   // ---------------------
   // MARK: RN Module Setup
   // ---------------------
-  
+
   override static func requiresMainQueueSetup() -> Bool {
     // run init in bg thread
     return false;
@@ -52,7 +53,7 @@ class RNINavigatorRouteViewManager: RCTViewManager {
       Self.sharedBridge = self.bridge;
     };
     
-    return RNINavigatorRouteView(bridge: self.bridge);
+    // send a ref to bridge instance
+    return RNIRouteNavBarItemView(bridge: self.bridge);
   };
 };
-

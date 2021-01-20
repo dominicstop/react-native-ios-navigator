@@ -1,18 +1,22 @@
 import React, { ReactElement } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, findNodeHandle } from 'react-native';
 
 import type { NavigatorView } from './NavigatorView';
-import { RNINavigatorRouteView } from '../native_components/RNINavigatorRouteView';
+
+import { RNINavigatorRouteView, RNINavigatorRouteViewProps } from '../native_components/RNINavigatorRouteView';
+import { RNINavigatorRouteViewModule } from '../native_modules/RNINavigatorRouteViewModule';
 
 import * as Helpers from '../functions/Helpers';
 import { EventEmitter } from '../functions/EventEmitter';
 
 import { NavRouteViewContext } from '../context/NavRouteViewContext';
 import { NativeIDKeys } from '../constants/LibraryConstants';
-import type { NavigatorRouteViewRegistry } from './NavigatorRouteRegistry';
+
 
 
 //#region - Type Definitions
+type ComponentRef = number | React.Component | React.ComponentClass;
+
 export enum NavRouteEvents {
   onNavRouteWillPush = "onNavRouteWillPush",
   onNavRouteDidPush  = "onNavRouteDidPush" ,
@@ -45,7 +49,6 @@ type NavigatorRouteViewProps = {
 type NavigatorRouteViewState = {
   isMounted: boolean;
   routeTitle: string;
-  hasRouteRegistry: boolean;
 };
 //#endregion
 
@@ -56,19 +59,33 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
   routeContentRef: React.Component<RouteContentProps>;
   emitter: EventEmitter<NavRouteEvents>;
 
+  private _routeViewRef: React.Component<RNINavigatorRouteViewProps>;
   private _routeContentRef: ReactElement;
-  private _routeRegistryRef: NavigatorRouteViewRegistry;
+
+  private nativeCompRegistryQueue: Array<{ref: ComponentRef, nativeID: NativeIDKeys}>
   //#endregion
 
   constructor(props: NavigatorRouteViewProps){
     super(props);
 
+    this.nativeCompRegistryQueue = [];
     this.emitter = new EventEmitter<NavRouteEvents>();
 
     this.state = {
       isMounted: true,
-      hasRouteRegistry: false,
       routeTitle: props.initialRouteTitle,
+    };
+  };
+
+  componentDidMount = async () => {
+    while(this.nativeCompRegistryQueue.length > 0){
+      const queueItem = this.nativeCompRegistryQueue.pop();
+
+       RNINavigatorRouteViewModule.registerNativeComponent(
+        findNodeHandle(this._routeViewRef),
+        findNodeHandle(queueItem.ref),
+        queueItem.nativeID
+      );
     };
   };
 
@@ -87,10 +104,11 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     });
   };
 
-  public setRouteRegistryRef = (ref: NavigatorRouteViewRegistry) => {
-    this._routeRegistryRef = ref;
-    this.setState({hasRouteRegistry: true});
-  };
+  public registerNativeComponent = (ref: ComponentRef, nativeID: NativeIDKeys) => {
+    this.nativeCompRegistryQueue.push({ref, nativeID});
+  }; 
+
+  
   //#endregion
 
   //#region - Handlers
@@ -158,60 +176,6 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     );
   };
 
-  _renderNavBarItems = () => {
-    const props = this.props;
-    const registryProps = this._routeRegistryRef?.props;
-
-    const sharedParams = {
-      getRouterRef : this.getRouterRef,
-      getEmitterRef: this.getEmitterRef,
-    };
-
-    const navBarLeftItem = (
-      registryProps?.renderNavBarLeftItem?.(sharedParams) ??
-      props.renderNavBarLeftItem?.() 
-    );
-
-    const navBarRightItem = (
-      registryProps?.renderNavBarRightItem?.(sharedParams) ??
-      props.renderNavBarRightItem?.()
-    );
-
-    const navBarTitleItem = (
-      registryProps?.renderNavBarTitleItem?.(sharedParams) ??
-      props.renderNavBarTitleItem?.()
-    );
-
-    return(
-      <React.Fragment>
-        {navBarLeftItem && (
-          <View 
-            style={styles.routeItem}
-            nativeID={NativeIDKeys.NavBarLeftItem}
-          >
-            {navBarLeftItem}
-          </View>
-        )}
-        {navBarRightItem && (
-          <View  
-            style={styles.routeItem}
-            nativeID={NativeIDKeys.NavBarRightItem}
-          >
-            {navBarRightItem}
-          </View>
-        )}
-        {navBarTitleItem && (
-          <View 
-            style={styles.routeItem}
-            nativeID={NativeIDKeys.NavBarTitleItem}
-          >
-            {navBarTitleItem}
-          </View>
-        )}
-      </React.Fragment>
-    );
-  };
-
   render(){
     const props = this.props;
     const state = this.state;
@@ -225,6 +189,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
         getEmitterRef: this.getEmitterRef,
       }}>
         <RNINavigatorRouteView
+          ref={r => this._routeViewRef = r}
           style={styles.navigatorRouteView}
           routeKey={props.routeKey}
           routeIndex={props.routeIndex}
@@ -236,7 +201,6 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
           onNavRouteDidPush={this._handleOnNavRouteDidPush}
         >
           {this._renderRouteContents()}
-          {this._renderNavBarItems()}
         </RNINavigatorRouteView>
       </NavRouteViewContext.Provider>
     );
