@@ -10,6 +10,13 @@ import UIKit;
 
 class RNINavigatorRouteView: UIView {
   
+  struct NativeIDKeys {
+    static let RouteContent    = "RouteContent";
+    static let NavBarLeftItem  = "NavBarLeftItem";
+    static let NavBarRightItem = "NavBarRightItem";
+    static let NavBarTitleItem = "NavBarTitleItem";
+  };
+  
   // ----------------
   // MARK: Properties
   // ----------------
@@ -17,7 +24,12 @@ class RNINavigatorRouteView: UIView {
   weak var bridge: RCTBridge!;
   
   /// content to show in the navigator
-  weak var reactView: UIView?;
+  var reactRouteContent: UIView?;
+  
+  // custom navigation bar items...
+  var reactNavBarLeftItem : UIView?;
+  var reactNavBarRightItem: UIView?;
+  var reactNavBarTitleItem: UIView?;
   
   /// ref. to the parent route vc
   weak var routeVC: RNINavigatorRouteViewController?;
@@ -106,11 +118,34 @@ class RNINavigatorRouteView: UIView {
   override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
     super.insertSubview(subview, at: atIndex);
     
-    /// `RNINavigatorRouteView` will only ever receive 1 child, and that child
-    /// is the content to show in the navigator
-    if atIndex == 0 {
-      self.reactView = subview;
-      
+    guard let nativeID = subview.nativeID else {
+      print("LOG - ERROR - NativeView, RNINavigatorRouteView"
+        + " - insertReactSubview: Received unknown child!"
+      );
+      return;
+    };
+    
+    if nativeID != NativeIDKeys.RouteContent {
+      // do not show as subview, i.e. remove from view hieaarchy
+      subview.removeFromSuperview();
+    };
+    
+    /// receive child comps. from `RNINavigatorRouteView`.
+    /// note: the child comp. can be identified based on their `nativeID`
+    switch nativeID {
+      case NativeIDKeys.RouteContent:
+        self.reactRouteContent = subview;
+        
+      case NativeIDKeys.NavBarRightItem:
+        self.reactNavBarRightItem = subview;
+        
+      case NativeIDKeys.NavBarLeftItem:
+        self.reactNavBarLeftItem = subview;
+        
+      case NativeIDKeys.NavBarTitleItem:
+        self.reactNavBarTitleItem = subview;
+        
+      default: break;
     };
   };
   
@@ -120,10 +155,34 @@ class RNINavigatorRouteView: UIView {
   
   func notifyForBoundsChange(_ newBounds: CGRect){
     guard let bridge    = self.bridge,
-          let reactView = self.reactView
+          let reactView = self.reactRouteContent
     else { return };
     
     // update react view's size
     bridge.uiManager.setSize(newBounds.size, for: reactView);
+  };
+  
+  func cleanup(){
+    let viewsToRemove = [
+      self.reactRouteContent   ,
+      self.reactNavBarLeftItem ,
+      self.reactNavBarRightItem,
+      self.reactNavBarTitleItem,
+      self
+    ];
+    
+    for case let view? in viewsToRemove {
+      // cleanup: manually remove route from view registry
+      RNIUtilities.recursivelyRemoveFromViewRegistry(
+        bridge   : self.bridge,
+        reactView: view
+      );
+    };
+    
+    // remove references to the react views
+    self.reactRouteContent    = nil;
+    self.reactNavBarLeftItem  = nil;
+    self.reactNavBarRightItem = nil;
+    self.reactNavBarTitleItem = nil;
   };
 };

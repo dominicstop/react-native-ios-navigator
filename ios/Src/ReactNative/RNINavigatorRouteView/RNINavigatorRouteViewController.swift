@@ -33,7 +33,13 @@ class RNINavigatorRouteViewController: UIViewController {
   // ----------------
   
   /// The content to show in the route
-  var routeView: RNINavigatorRouteView!;
+  var routeView: RNINavigatorRouteView! {
+    didSet {
+      // `routeView` has been set, start setup
+      self.setup();
+    }
+  };
+  
   /// Used to send/forward navigation-related events
   weak var delegate: RNINavigatorRouteViewControllerDelegate?;
   
@@ -50,25 +56,26 @@ class RNINavigatorRouteViewController: UIViewController {
   
   override func loadView() {
     super.loadView();
-
-    guard let routeView = self.routeView else { return };
+    
+    // add custom items to nav bar
+    self.setupNavBarItems();
     
     if #available(iOS 11.0, *){
-      self.view.addSubview(routeView);
+      self.view.addSubview(self.routeView);
       
-      routeView.translatesAutoresizingMaskIntoConstraints = false;
+      self.routeView.translatesAutoresizingMaskIntoConstraints = false;
       let safeArea = view.safeAreaLayoutGuide;
       
       NSLayoutConstraint.activate([
         // pin content to parent edges w/o the arrow
-        routeView.topAnchor     .constraint(equalTo: safeArea.topAnchor     ),
-        routeView.bottomAnchor  .constraint(equalTo: safeArea.bottomAnchor  ),
-        routeView.leadingAnchor .constraint(equalTo: safeArea.leadingAnchor ),
-        routeView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
+        self.routeView.topAnchor     .constraint(equalTo: safeArea.topAnchor     ),
+        self.routeView.bottomAnchor  .constraint(equalTo: safeArea.bottomAnchor  ),
+        self.routeView.leadingAnchor .constraint(equalTo: safeArea.leadingAnchor ),
+        self.routeView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
       ]);
       
     } else {
-      self.view = routeView;
+      self.view = self.routeView;
     };
   };
   
@@ -163,4 +170,33 @@ class RNINavigatorRouteViewController: UIViewController {
   };
   #endif
   
+  // -----------------------
+  // MARK: Private Functions
+  // -----------------------
+  
+  private func setup(){
+    // set the vc's title for the 1st time
+    if let routeTitle = self.routeView.routeTitle {
+      self.title = routeTitle as String;
+    };
+  };
+  
+  private func setupNavBarItems(){
+    // set nav bar right item
+    if let rightBarItem = self.routeView.reactNavBarRightItem {
+      let barItem = UIBarButtonItem(customView: rightBarItem);
+      self.navigationItem.rightBarButtonItem = barItem;
+    };
+    
+    // set nav bar left item
+    if let leftBarItem = self.routeView.reactNavBarLeftItem {
+      let barItem = UIBarButtonItem(customView: leftBarItem);
+      self.navigationItem.leftBarButtonItem = barItem;
+    };
+    
+    // set nav bar title item
+    if let titleBarItem = self.routeView.reactNavBarTitleItem {
+      self.navigationItem.titleView = titleBarItem;
+    };
+  };
 };

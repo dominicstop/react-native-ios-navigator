@@ -115,11 +115,16 @@ class RNINavigatorView: UIView {
   
   override func didMoveToWindow() {
     if self.window == nil {
-      // remove from view registry
+      // remove this from the view registry
       RNIUtilities.recursivelyRemoveFromViewRegistry(
         bridge   : self.bridge,
         reactView: self
       );
+      
+      // remove routes from view registry
+      self.routeVCs.forEach {
+        $0.routeView.cleanup();
+      };
     };
   };
   
@@ -143,14 +148,12 @@ class RNINavigatorView: UIView {
     let routeVC: RNINavigatorRouteViewController = {
       /// create the wrapper vc that holds the `routeView`
       let vc = RNINavigatorRouteViewController();
-      vc.routeView = routeView;
       // listen for naviagtor-related events
       vc.delegate = self;
       
-      /// init. the vc's title for the 1st time
-      if let routeTitle = routeView.routeTitle {
-        vc.title = routeTitle as String;
-      };
+      // set the react view to show in the route vc
+      // note: this will trigger the "setup" function...
+      vc.routeView = routeView;
       
       routeView.routeVC = vc;
       return vc;
@@ -231,11 +234,8 @@ fileprivate extension RNINavigatorView {
       );
       
       if isMatch {
-        // cleanup: manually remove route from view registry
-        RNIUtilities.recursivelyRemoveFromViewRegistry(
-          bridge   : self.bridge,
-          reactView: $0.routeView!
-        );
+        // unregister views from view registry
+        $0.routeView.cleanup();
       };
       
       return isMatch;

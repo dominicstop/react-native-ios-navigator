@@ -4,10 +4,11 @@ import { StyleSheet, View } from 'react-native';
 import type { NavigatorView } from './NavigatorView';
 import { RNINavigatorRouteView } from '../native_components/RNINavigatorRouteView';
 
-import { EventEmitter } from '../functions/EventEmitter';
-import { NavRouteViewContext } from '../context/NavRouteViewContext';
-
 import * as Helpers from '../functions/Helpers';
+import { EventEmitter } from '../functions/EventEmitter';
+
+import { NavRouteViewContext } from '../context/NavRouteViewContext';
+import { NativeIDKeys, NavRoutePortalKeys } from '../constants/LibraryConstants';
 
 
 //#region - Type Definitions
@@ -32,13 +33,18 @@ type NavigatorRouteViewProps = {
   routeProps: object;
   initialRouteTitle: string;
   getRefToNavigator: () => NavigatorView,
-  renderRouteContent: () => ReactElement<RouteContentProps>;
+  renderRouteContent: () => ReactElement<RouteContentProps>
+  // render nav bar items
+  renderNavBarLeftItem ?: () => ReactElement;
+  renderNavBarRightItem?: () => ReactElement;
+  renderNavBarTitleItem?: () => ReactElement;
 };
 
 /** `NavigatorView` comp. state */
 type NavigatorRouteViewState = {
   isMounted: boolean;
   routeTitle: string;
+  portalGates: {[key: string]: ReactElement};
 };
 //#endregion
 
@@ -58,7 +64,17 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     this.state = {
       isMounted: true,
       routeTitle: props.initialRouteTitle,
+      portalGates: {},
     };
+  };
+
+  private portalTeleport = (gateName: string, element: React.ReactElement) => {
+    this.setState((prevState) => ({
+      portalGates: {
+        ...prevState.portalGates,
+        [gateName]: element
+      }
+    }));
   };
 
   //#region - Public Functions
@@ -109,44 +125,119 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
   };
   //#endregion
   
+  _renderRouteContents = () => {
+    const props = this.props;
+    const routeContent = props.renderRouteContent();
+
+    // @ts-ignore
+    const routeContentWithProps = React.cloneElement<RouteContentProps>(
+      routeContent, {
+        // pass down route props
+        ...props.routeProps,
+        // pass down route details
+        routeKey: props.routeKey,
+        routeIndex: props.routeIndex,
+        // pass down 'get ref' functions
+        getRefToRoute: this._handleGetRefToRoute,
+        getRefToNavigator: props.getRefToNavigator,
+        getRefToNavRouteEmitter: this._handleGetRefToNavRouteEmitter,
+        // store a ref to this element
+        ...(Helpers.isClassComponent(routeContent) && {
+          ref: node => {
+            // keep a copy of the ref
+            //this._routeContentRef = node;
+          }
+        }),
+      }
+    );
+
+    return(
+      <View
+        style={styles.routeItem}
+        nativeID={NativeIDKeys.RouteContent}
+      >
+        {routeContentWithProps}
+      </View>
+    );
+  };
+
+  _renderNavBarItems = () => {
+    const props = this.props;
+    const state = this.state;
+
+    const navBarLeftItem = (
+      state.portalGates[NavRoutePortalKeys.NavBarLeftItem] ??
+      props.renderNavBarLeftItem?.() 
+    );
+
+    const navBarRightItem = (
+      state.portalGates[NavRoutePortalKeys.NavBarRightItem] ??
+      props.renderNavBarRightItem?.()
+    );
+
+    const navBarTitleItem = (
+      state.portalGates[NavRoutePortalKeys.NavBarTitleItem] ??
+      props.renderNavBarTitleItem?.()
+    );
+
+    return(
+      <React.Fragment>
+        {navBarLeftItem && (
+          <View 
+            style={styles.routeItem}
+            nativeID={NativeIDKeys.NavBarLeftItem}
+          >
+            {navBarLeftItem}
+          </View>
+        )}
+        {navBarRightItem && (
+          <View  
+            style={styles.routeItem}
+            nativeID={NativeIDKeys.NavBarRightItem}
+          >
+            {navBarRightItem}
+          </View>
+        )}
+        {navBarTitleItem && (
+          <View 
+            style={styles.routeItem}
+            nativeID={NativeIDKeys.NavBarTitleItem}
+          >
+            {navBarTitleItem}
+          </View>
+        )}
+      </React.Fragment>
+    );
+  };
+
   render(){
     const props = this.props;
     const state = this.state;
 
-    if(!this.state.isMounted) return null;
+    if(!state.isMounted) return null;
 
     return(
       <NavRouteViewContext.Provider value={{
         // pass down function to get refs
-        //getModalRef  : this._handleGetModalRef,
+        getRouterRef: this.getRouterRef,
         getEmitterRef: this.getEmitterRef,
-        getRouterRef: this.getRouterRef
+        //
+        portalGates: state.portalGates, 
+        portalTeleport: this.portalTeleport 
       }}>
         <RNINavigatorRouteView
           style={styles.navigatorRouteView}
           routeKey={props.routeKey}
           routeIndex={props.routeIndex}
           routeTitle={state.routeTitle}
+          // nav route events
           onNavRouteWillPop={this._handleOnNavRouteWillPop}
           onNavRouteDidPop={this._handleOnNavRouteDidPop}
           onNavRouteWillPush={this._handleOnNavRouteWillPush}
           onNavRouteDidPush={this._handleOnNavRouteDidPush}
         >
-          <View style={styles.routeContentContainer}>
-            {React.cloneElement<RouteContentProps>(
-              props.renderRouteContent(), {
-                // pass down route props
-                ...props.routeProps,
-                // pass down route details
-                routeKey: props.routeKey,
-                routeIndex: props.routeIndex,
-                // pass down 'get ref' functions
-                getRefToRoute: this._handleGetRefToRoute,
-                getRefToNavigator: props.getRefToNavigator,
-                getRefToNavRouteEmitter: this._handleGetRefToNavRouteEmitter
-              }
-            )}
-          </View>
+          {this._renderRouteContents()}
+          {this._renderNavBarItems()}
         </RNINavigatorRouteView>
       </NavRouteViewContext.Provider>
     );
@@ -154,6 +245,9 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
 };
 
 const styles = StyleSheet.create({
+  routeItem: {
+    position: 'absolute',
+  },
   navigatorRouteView: {
     // don't show on first mount
     position: 'absolute',

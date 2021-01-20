@@ -38,11 +38,17 @@ type NavRouteItem = {
   routeOptions?: RouteOptions;
 };
 
+type RenderNavBarItem = (routeItem: NavRouteItem, routeIndex: number) => ReactElement;
+
 export type NavRouteConfigItem = {
-  routeKey     : string;
-  routeProps  ?: object;
+  routeKey: string;
+  routeProps?: object;
   routeOptions?: RouteOptions;
-  renderRoute  : (routeItem: NavRouteItem, routeIndex: number) => ReactElement<RouteContentProps>;
+  renderRoute: (routeItem: NavRouteItem, routeIndex: number) => ReactElement<RouteContentProps>;
+  // render nav bar items
+  renderNavBarLeftItem ?: RenderNavBarItem;
+  renderNavBarRightItem?: RenderNavBarItem;
+  renderNavBarTitleItem?: RenderNavBarItem;
 };
 
 /** `NavigatorView` comp. props */
@@ -54,6 +60,10 @@ type NavigatorViewProps = {
   navBarTintColor?: string;
   navBarIsTranslucent?: boolean;
   navBarTitleTextStyle?: TextStyle & TextStyleIOS;
+  // global/shared nav bar items
+  renderNavBarLeftItem ?: RenderNavBarItem;
+  renderNavBarRightItem?: RenderNavBarItem;
+  renderNavBarTitleItem?: RenderNavBarItem;
 };
 
 /** `NavigatorView` comp. state */
@@ -293,28 +303,53 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
   };
   //#endregion
-  
-  render(){
+
+  _renderRoutes(){
     const props = this.props;
     const { activeRoutes } = this.state;
 
-    const routes = activeRoutes.map((route, index) => (
-      <NavigatorRouteView
-        key={`${route.routeKey}-${index}`}
-        routeIndex={index}
-        routeKey={route.routeKey}
-        routeProps={route.routeProps}
-        getRefToNavigator={this._handleGetRefToNavigator}
-        initialRouteTitle={(
-          route.routeOptions?.routeTitle ??
-          route.routeKey
-        )}
-        renderRouteContent={() => {
-          const routeItem = this.getMatchingRoute(route);
-          return routeItem.renderRoute(routeItem, index);
-        }}
-      />
-    ));
+    return activeRoutes.map((route, index) => {
+      const routeConfig = this.getMatchingRoute(route);
+
+      const routeItem: NavRouteItem = {
+        routeKey    : routeConfig.routeKey,
+        routeProps  : routeConfig.routeProps,
+        routeOptions: routeConfig.routeOptions,
+      };
+
+      return (
+        <NavigatorRouteView
+          key={`${route.routeKey}-${index}`}
+          routeIndex={index}
+          routeKey={route.routeKey}
+          routeProps={route.routeProps}
+          getRefToNavigator={this._handleGetRefToNavigator}
+          initialRouteTitle={(
+            route.routeOptions?.routeTitle ??
+            route.routeKey
+          )}
+          renderRouteContent={() => (
+            routeConfig.renderRoute(routeItem, index)
+          )}
+          renderNavBarLeftItem={() => (
+            routeConfig.renderNavBarLeftItem?.(routeItem, index) ??
+            props      .renderNavBarLeftItem?.(routeItem, index)
+          )}
+          renderNavBarRightItem={() => (
+            routeConfig.renderNavBarRightItem?.(routeItem, index) ??
+            props      .renderNavBarRightItem?.(routeItem, index)
+          )}
+          renderNavBarTitleItem={() => (
+            routeConfig.renderNavBarTitleItem?.(routeItem, index) ??
+            props      .renderNavBarTitleItem?.(routeItem, index)
+          )}
+        />
+      );
+    });
+  };
+  
+  render(){
+    const props = this.props;
 
     return (
       <RNINavigatorView 
@@ -329,7 +364,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         onNavRouteDidPop={this._handleOnNavRouteDidPop}
         onNavRouteViewAdded={this._handleOnNavRouteViewAdded}
       >
-        {routes}
+        {this._renderRoutes()}
       </RNINavigatorView>
     );
   };

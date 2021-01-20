@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Text, FlatList, TouchableOpacity } from 'react-native';
-import { NavigatorView, RouteContentProps } from 'react-native-ios-navigator';
+import { NavigatorRouteViewRegistry, NavigatorView, RouteContentProps } from 'react-native-ios-navigator';
 
 import { NavigatorExample01 } from './components/NavigatorExample01';
 import { NavigatorTest01 } from './components/NavigatorTest01';

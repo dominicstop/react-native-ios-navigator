@@ -35,3 +35,10 @@ export function promiseWithTimeout<T>(ms: Number, promise: Promise<T>){
   // Returns a race between our timeout and the passed in promise
   return Promise.race([promise, timeoutPromise]);
 };
+
+export function isClassComponent(component) {
+  return !!(
+    typeof component === 'function'
+    && component?.prototype?.isReactComponent
+  );
+}
