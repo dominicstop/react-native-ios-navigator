@@ -46,7 +46,6 @@ type NavigatorRouteViewState = {
   isMounted: boolean;
   routeTitle: string;
   hasRouteRegistry: boolean;
-  portalGates: {[key: string]: ReactElement};
 };
 //#endregion
 
@@ -70,7 +69,6 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
       isMounted: true,
       hasRouteRegistry: false,
       routeTitle: props.initialRouteTitle,
-      portalGates: {},
     };
   };
 

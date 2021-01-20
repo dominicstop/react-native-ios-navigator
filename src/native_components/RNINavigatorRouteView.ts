@@ -1,6 +1,6 @@
 import { requireNativeComponent, ViewStyle } from 'react-native';
 
-type RNINavigatorViewProps = {
+export type RNINavigatorRouteViewProps = {
   style: ViewStyle;
   routeKey: string;
   routeIndex: number;
@@ -14,4 +14,4 @@ type RNINavigatorViewProps = {
 };
 
 export const RNINavigatorRouteView = 
-  requireNativeComponent<RNINavigatorViewProps>('RNINavigatorRouteView');
+  requireNativeComponent<RNINavigatorRouteViewProps>('RNINavigatorRouteView');

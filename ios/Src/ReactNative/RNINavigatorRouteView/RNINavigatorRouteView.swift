@@ -119,9 +119,11 @@ class RNINavigatorRouteView: UIView {
     super.insertSubview(subview, at: atIndex);
     
     guard let nativeID = subview.nativeID else {
+      #if DEBUG
       print("LOG - ERROR - NativeView, RNINavigatorRouteView"
         + " - insertReactSubview: Received unknown child!"
       );
+      #endif
       return;
     };
     

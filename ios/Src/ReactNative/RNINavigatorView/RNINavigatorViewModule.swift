@@ -38,12 +38,11 @@ class RNINavigatorViewModule: NSObject {
       guard let navigatorView = Self.getNavigatorView(node) else {
         // construct error message for promise
         let errorMessage = (
-            "NativeModule, RCTPopoverViewModule: push"
+            "NativeModule, RNINavigatorViewModule: push"
           + " - for node: \(node)"
           + " - with params - routeKey: \(routeKey)"
           + " - Error: guard check failed"
           + " - no corresponding manager found for node"
-          + " - make sure that `setNode` command is called first."
         );
         
         #if DEBUG
@@ -56,7 +55,7 @@ class RNINavigatorViewModule: NSObject {
       };
       
       #if DEBUG
-      print("LOG - NativeModule, RCTPopoverViewModule: push"
+      print("LOG - NativeModule, RNINavigatorViewModule: push"
         + " - for node: \(node)"
         + " - with params - routeKey: \(routeKey)"
       );
@@ -82,7 +81,7 @@ class RNINavigatorViewModule: NSObject {
       guard let navigatorView = Self.getNavigatorView(node) else {
         // construct error message for promise
         let errorMessage = (
-            "NativeModule, RCTPopoverViewModule: pop"
+            "NativeModule, RNINavigatorViewModule: pop"
           + " - for node: \(node)"
           + " - Error: guard check failed"
           + " - no corresponding manager found for node"
@@ -99,7 +98,7 @@ class RNINavigatorViewModule: NSObject {
       };
       
       #if DEBUG
-      print("LOG - NativeModule, RCTPopoverViewModule: pop"
+      print("LOG - NativeModule, RNINavigatorViewModule: pop"
         + " - for node: \(node)"
       );
       #endif
@@ -128,11 +127,10 @@ class RNINavigatorViewModule: NSObject {
       guard let navigatorView = Self.getNavigatorView(node) else {
         // construct error message for promise
         let errorMessage = (
-            "NativeModule, RCTPopoverViewModule: setNavigationBarHidden"
+            "NativeModule, RNINavigatorViewModule: setNavigationBarHidden"
           + " - for node: \(node)"
           + " - Error: guard check failed"
           + " - no corresponding manager found for node"
-          + " - make sure that `setNode` command is called first."
         );
         
         #if DEBUG
@@ -145,7 +143,7 @@ class RNINavigatorViewModule: NSObject {
       };
       
       #if DEBUG
-      print("LOG - NativeModule, RCTPopoverViewModule: setNavigationBarHidden"
+      print("LOG - NativeModule, RNINavigatorViewModule: setNavigationBarHidden"
         + " - for node: \(node)"
       );
       #endif
