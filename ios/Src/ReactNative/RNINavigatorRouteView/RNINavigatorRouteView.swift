@@ -118,7 +118,7 @@ class RNINavigatorRouteView: UIView {
   override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
     super.insertSubview(subview, at: atIndex);
     
-    guard subview.nativeID == NativeIDKeys.RouteContent else {
+    guard let nativeID = subview.nativeID else {
       #if DEBUG
       print("LOG - ERROR - NativeView, RNINavigatorRouteView"
         + " - insertReactSubview: Received unknown child!"
@@ -127,50 +127,33 @@ class RNINavigatorRouteView: UIView {
       return;
     };
     
-    self.reactRouteContent = subview;
+    if nativeID != NativeIDKeys.RouteContent {
+      // do not show as subview, i.e. remove from view hieaarchy
+      subview.removeFromSuperview();
+    };
+    
+    /// receive child comps. from `RNINavigatorRouteView`.
+    /// note: the child comp. can be identified based on their `nativeID`
+    switch nativeID {
+      case NativeIDKeys.RouteContent:
+        self.reactRouteContent = subview;
+        
+      case NativeIDKeys.NavBarRightItem:
+        self.reactNavBarRightItem = subview;
+        
+      case NativeIDKeys.NavBarLeftItem:
+        self.reactNavBarLeftItem = subview;
+        
+      case NativeIDKeys.NavBarTitleItem:
+        self.reactNavBarTitleItem = subview;
+        
+      default: break;
+    };
   };
   
   // ----------------------
   // MARK: Public Functions
   // ----------------------
-  
-  func registerNativeComponent(nativeID: String, component: UIView){
-
-    
-    /*
-    // set nav bar right item
-    if let rightBarItem = self.routeView.reactNavBarRightItem {
-      let barItem = UIBarButtonItem(customView: rightBarItem);
-      self.navigationItem.rightBarButtonItem = barItem;
-    };
-    
-    // set nav bar left item
-    if let leftBarItem = self.routeView.reactNavBarLeftItem {
-      let barItem = UIBarButtonItem(customView: leftBarItem);
-      self.navigationItem.leftBarButtonItem = barItem;
-    };
-    
-    // set nav bar title item
-    if let titleBarItem = self.routeView.reactNavBarTitleItem {
-      
-    };
-    */
-    
-    if let navBarItem = component as? RNIRouteNavBarItemView {
-      switch nativeID {
-        case NativeIDKeys.NavBarRightItem:
-          self.reactNavBarRightItem = navBarItem.reactContent;
-          
-        case NativeIDKeys.NavBarLeftItem:
-          self.reactNavBarLeftItem = navBarItem.reactContent;
-          
-        case NativeIDKeys.NavBarTitleItem:
-          self.reactNavBarTitleItem = navBarItem.reactContent;
-          
-        default: break;
-      };
-    };
-  };
   
   func notifyForBoundsChange(_ newBounds: CGRect){
     guard let bridge    = self.bridge,

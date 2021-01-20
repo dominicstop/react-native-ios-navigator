@@ -47,11 +47,6 @@ class RNINavigatorRouteViewManager: RCTViewManager {
   };
   
   override func view() -> UIView! {
-    // save a ref to this module's RN bridge instance
-    if Self.sharedBridge == nil {
-      Self.sharedBridge = self.bridge;
-    };
-    
     return RNINavigatorRouteView(bridge: self.bridge);
   };
 };
