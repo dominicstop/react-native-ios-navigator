@@ -8,7 +8,8 @@ import * as Helpers from '../functions/Helpers';
 import { EventEmitter } from '../functions/EventEmitter';
 
 import { NavRouteViewContext } from '../context/NavRouteViewContext';
-import { NativeIDKeys, NavRoutePortalKeys } from '../constants/LibraryConstants';
+import { NativeIDKeys } from '../constants/LibraryConstants';
+import type { NavigatorRouteViewRegistry } from './NavigatorRouteRegistry';
 
 
 //#region - Type Definitions
@@ -44,6 +45,7 @@ type NavigatorRouteViewProps = {
 type NavigatorRouteViewState = {
   isMounted: boolean;
   routeTitle: string;
+  hasRouteRegistry: boolean;
   portalGates: {[key: string]: ReactElement};
 };
 //#endregion
@@ -54,6 +56,9 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
   state: NavigatorRouteViewState;
   routeContentRef: React.Component<RouteContentProps>;
   emitter: EventEmitter<NavRouteEvents>;
+
+  private _routeContentRef: ReactElement;
+  private _routeRegistryRef: NavigatorRouteViewRegistry;
   //#endregion
 
   constructor(props: NavigatorRouteViewProps){
@@ -63,18 +68,10 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
 
     this.state = {
       isMounted: true,
+      hasRouteRegistry: false,
       routeTitle: props.initialRouteTitle,
       portalGates: {},
     };
-  };
-
-  private portalTeleport = (gateName: string, element: React.ReactElement) => {
-    this.setState((prevState) => ({
-      portalGates: {
-        ...prevState.portalGates,
-        [gateName]: element
-      }
-    }));
   };
 
   //#region - Public Functions
@@ -90,6 +87,11 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     await Helpers.setStateAsync<Partial<NavigatorRouteViewState>>(this, {
       routeTitle: title
     });
+  };
+
+  public setRouteRegistryRef = (ref: NavigatorRouteViewRegistry) => {
+    this._routeRegistryRef = ref;
+    this.setState({hasRouteRegistry: true});
   };
   //#endregion
 
@@ -143,10 +145,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
         getRefToNavRouteEmitter: this._handleGetRefToNavRouteEmitter,
         // store a ref to this element
         ...(Helpers.isClassComponent(routeContent) && {
-          ref: node => {
-            // keep a copy of the ref
-            //this._routeContentRef = node;
-          }
+          ref: node => { this._routeContentRef = node }
         }),
       }
     );
@@ -163,20 +162,25 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
 
   _renderNavBarItems = () => {
     const props = this.props;
-    const state = this.state;
+    const registryProps = this._routeRegistryRef?.props;
+
+    const sharedParams = {
+      getRouterRef : this.getRouterRef,
+      getEmitterRef: this.getEmitterRef,
+    };
 
     const navBarLeftItem = (
-      state.portalGates[NavRoutePortalKeys.NavBarLeftItem] ??
+      registryProps?.renderNavBarLeftItem?.(sharedParams) ??
       props.renderNavBarLeftItem?.() 
     );
 
     const navBarRightItem = (
-      state.portalGates[NavRoutePortalKeys.NavBarRightItem] ??
+      registryProps?.renderNavBarRightItem?.(sharedParams) ??
       props.renderNavBarRightItem?.()
     );
 
     const navBarTitleItem = (
-      state.portalGates[NavRoutePortalKeys.NavBarTitleItem] ??
+      registryProps?.renderNavBarTitleItem?.(sharedParams) ??
       props.renderNavBarTitleItem?.()
     );
 
@@ -221,9 +225,6 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
         // pass down function to get refs
         getRouterRef: this.getRouterRef,
         getEmitterRef: this.getEmitterRef,
-        //
-        portalGates: state.portalGates, 
-        portalTeleport: this.portalTeleport 
       }}>
         <RNINavigatorRouteView
           style={styles.navigatorRouteView}

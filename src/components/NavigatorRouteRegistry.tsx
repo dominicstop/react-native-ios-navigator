@@ -5,7 +5,6 @@ import type { NavigatorRouteView, NavRouteEvents } from '../components/Navigator
 import type { EventEmitter } from '../functions/EventEmitter';
 
 import { NavRouteViewContext, NavRouteViewContextProps } from '../context/NavRouteViewContext';
-import { NavRoutePortalKeys } from '../constants/LibraryConstants';
 
 
 type NavRouteRegistryRender = (params: {
@@ -26,36 +25,10 @@ export class NavigatorRouteViewRegistry extends React.Component<NavRouteViewRegi
 
   async componentDidMount(){
     const context = this.context;
-    const props = this.props;
 
-    const sharedParams = {
-      getRouterRef: context.getRouterRef,
-      getEmitterRef: context.getEmitterRef,
-    };
 
-    // delay updating to prevent React from going to infinite loop
-    await Promise.resolve();
-
-    if(props.renderNavBarLeftItem){
-      context.portalTeleport(
-        NavRoutePortalKeys.NavBarLeftItem,
-        props.renderNavBarLeftItem(sharedParams)
-      );
-    };
-
-    if(props.renderNavBarRightItem){
-      context.portalTeleport(
-        NavRoutePortalKeys.NavBarRightItem,
-        props.renderNavBarRightItem(sharedParams)
-      );
-    };
-
-    if(props.renderNavBarTitleItem){
-      context.portalTeleport(
-        NavRoutePortalKeys.NavBarTitleItem,
-        props.renderNavBarTitleItem(sharedParams)
-      );
-    };
+    const routerRef = context.getRouterRef();
+    routerRef.setRouteRegistryRef(this);
   };
 
   render(){
