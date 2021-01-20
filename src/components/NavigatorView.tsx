@@ -320,7 +320,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       return (
         <NavigatorRouteView
           key={`${route.routeKey}-${index}`}
-          style={styles.routeView}
           routeIndex={index}
           routeKey={route.routeKey}
           routeProps={route.routeProps}
@@ -389,11 +388,5 @@ class NavigatorViewUtils {
 const styles = StyleSheet.create({
   navigatorView: {
     flex: 1,
-  },
-  routeView: {
-    // don't show
-    position: 'absolute',
-    width: 0,
-    height: 0,
   },
 });

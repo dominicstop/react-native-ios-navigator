@@ -7,18 +7,18 @@ import type { EventEmitter } from '../functions/EventEmitter';
 import { NavRouteViewContext, NavRouteViewContextProps } from '../context/NavRouteViewContext';
 
 
-type NavRouteRegistryRender = (params: {
+type RouteViewPortalRender = (params: {
   getRouterRef : () => NavigatorRouteView,
   getEmitterRef: () => EventEmitter<NavRouteEvents>,
 }) => ReactElement;
 
-type NavRouteViewRegistryProps = {
-  renderNavBarLeftItem ?: NavRouteRegistryRender;
-  renderNavBarRightItem?: NavRouteRegistryRender;
-  renderNavBarTitleItem?: NavRouteRegistryRender;
+type RouteViewPortalProps = {
+  renderNavBarLeftItem ?: RouteViewPortalRender;
+  renderNavBarRightItem?: RouteViewPortalRender;
+  renderNavBarTitleItem?: RouteViewPortalRender;
 };
   
-export class NavigatorRouteViewRegistry extends React.Component<NavRouteViewRegistryProps> {
+export class RouteViewPortal extends React.Component<RouteViewPortalProps> {
   static contextType = NavRouteViewContext;
   
   context: NavRouteViewContextProps;
