@@ -2,6 +2,8 @@ import React, { ReactElement } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import type { NavigatorView } from './NavigatorView';
+import type { RouteViewPortal } from './RouteViewPortal';
+
 import { RNINavigatorRouteView } from '../native_components/RNINavigatorRouteView';
 
 import * as Helpers from '../functions/Helpers';
@@ -9,7 +11,6 @@ import { EventEmitter } from '../functions/EventEmitter';
 
 import { NavRouteViewContext } from '../context/NavRouteViewContext';
 import { NativeIDKeys } from '../constants/LibraryConstants';
-import type { NavigatorRouteViewRegistry } from './NavigatorRouteRegistry';
 
 
 //#region - Type Definitions
@@ -45,7 +46,7 @@ type NavigatorRouteViewProps = {
 type NavigatorRouteViewState = {
   isMounted: boolean;
   routeTitle: string;
-  hasRouteRegistry: boolean;
+  hasRoutePortal: boolean;
 };
 //#endregion
 
@@ -57,7 +58,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
   emitter: EventEmitter<NavRouteEvents>;
 
   private _routeContentRef: ReactElement;
-  private _routeRegistryRef: NavigatorRouteViewRegistry;
+  private _routeViewPortalRef: RouteViewPortal;
   //#endregion
 
   constructor(props: NavigatorRouteViewProps){
@@ -67,7 +68,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
 
     this.state = {
       isMounted: true,
-      hasRouteRegistry: false,
+      hasRoutePortal: false,
       routeTitle: props.initialRouteTitle,
     };
   };
@@ -87,9 +88,9 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     });
   };
 
-  public setRouteRegistryRef = (ref: NavigatorRouteViewRegistry) => {
-    this._routeRegistryRef = ref;
-    this.setState({hasRouteRegistry: true});
+  public setRouteRegistryRef = (ref: RouteViewPortal) => {
+    this._routeViewPortalRef = ref;
+    this.setState({hasRoutePortal: true});
   };
   //#endregion
 
@@ -160,7 +161,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
 
   _renderNavBarItems = () => {
     const props = this.props;
-    const registryProps = this._routeRegistryRef?.props;
+    const registryProps = this._routeViewPortalRef?.props;
 
     const sharedParams = {
       getRouterRef : this.getRouterRef,

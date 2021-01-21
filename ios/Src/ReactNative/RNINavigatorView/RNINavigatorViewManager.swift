@@ -29,13 +29,14 @@ class RNINavigatorViewManager: RCTViewManager {
     }
   };
   
-  /// invalidate RCTBridge instance
+  
+  #if DEBUG
+  /// reset RCTBridge instance
   @objc static func resetSharedBridge() {
-    #if DEBUG
     print("RNINavigatorViewManager: resetSharedBridge...");
-    #endif
     Self.sharedBridge = nil;
   };
+  #endif
   
   // ---------------------
   // MARK: RN Module Setup

@@ -68,10 +68,6 @@ class RNINavigatorView: UIView {
   @objc var navBarIsTranslucent: Bool = true {
     willSet {
       self.navigationBar.isTranslucent = newValue;
-      
-      if newValue {
-        //navigationBar.setBackgroundImage(UIImage(), for: .default);
-      };
     }
   };
   
@@ -114,8 +110,9 @@ class RNINavigatorView: UIView {
   };
   
   override func didMoveToWindow() {
+    // this view has been unmounted...
     if self.window == nil {
-      // remove this from the view registry
+      // remove this view from the view registry
       RNIUtilities.recursivelyRemoveFromViewRegistry(
         bridge   : self.bridge,
         reactView: self
