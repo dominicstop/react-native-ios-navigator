@@ -26,7 +26,6 @@ export class RouteViewPortal extends React.Component<RouteViewPortalProps> {
   async componentDidMount(){
     const context = this.context;
 
-
     const routerRef = context.getRouterRef();
     routerRef.setRouteRegistryRef(this);
   };

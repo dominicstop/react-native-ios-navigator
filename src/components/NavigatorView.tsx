@@ -158,7 +158,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   private removeRoute = async (params?: { routeKey: string, routeIndex: number }) => { 
     if(params){
       // To prevent too many state updates, the routes to be removed
-      // are queued/grouped and are removed in batches...
+      // are queued/grouped, and are removed in batches...
       this.routesToRemove.push(params);
     };
 
@@ -194,10 +194,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       this.routesToRemove = [];
 
       // Remove `routesToRemove` from `activeRoutes`.
-      // note: triple `!` to cast: "truthy" to bool, e.g. truthy -> `False` -> `True`
       await Helpers.setStateAsync<NavigatorViewState>(this, ({activeRoutes: prevRoutes}) => ({
-        activeRoutes: prevRoutes.filter((prevRoute) => !!!(
-          toBeRemoved.find((removedRoute) => (
+        activeRoutes: prevRoutes.filter((prevRoute) => !(
+          toBeRemoved.some((removedRoute) => (
             (removedRoute.routeKey   == prevRoute.routeKey  ) &&
             (removedRoute.routeIndex == prevRoute.routeIndex) 
           ))
@@ -261,8 +260,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     } catch(error){
       //#region - 🐞 DEBUG 🐛
       LIB_GLOBAL.debugLog && console.log(
-          `LOG/JS - NavigatorView, push`
-        + ` - error message: ${error}`
+          `LOG/JS - NavigatorView, push - error message: ${error}`
       );
       //#endregion
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 
-import { NavigatorView, NavRouteEvents, RouteContentProps, useNavRouteEvents } from 'react-native-ios-navigator';
+import { NavigatorView, RouteContentProps } from 'react-native-ios-navigator';
 
 import * as Colors  from '../constants/Colors';
 import * as Helpers from '../functions/Helpers';
