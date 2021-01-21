@@ -1,10 +1,11 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Text, FlatList, TouchableOpacity } from 'react-native';
-import { NavigatorRouteViewRegistry, NavigatorView, RouteContentProps } from 'react-native-ios-navigator';
+import { NavigatorView, RouteContentProps } from 'react-native-ios-navigator';
 
 import { NavigatorExample01 } from './components/NavigatorExample01';
 import { NavigatorTest01 } from './components/NavigatorTest01';
+import { NavigatorTest02 } from './components/NavigatorTest02';
 
 import * as Colors from './constants/Colors';
 
@@ -12,12 +13,15 @@ const RouteKeys = {
   Home: 'Home',
   NavigatorExample01: 'NavigatorExample01',
   NavigatorTest01: 'NavigatorTest01',
+  NavigatorTest02: 'NavigatorTest02',
 };
 
 const RouteItems = [{ 
   routeKey: RouteKeys.NavigatorExample01,
 }, {
   routeKey: RouteKeys.NavigatorTest01,
+}, {
+  routeKey: RouteKeys.NavigatorTest02,
 }];
 
 
@@ -66,17 +70,19 @@ class HomeRoute extends React.PureComponent<RouteContentProps> {
       </TouchableOpacity>
     );
   };
-  
+
   render(){
     const { styles } = HomeRoute;
 
     return (
-      <FlatList
-        style={styles.rootContainer}
-        data={RouteItems}
-        keyExtractor={(item) => item.routeKey}
-        renderItem={this._renderItem}
-      />
+      <React.Fragment>
+        <FlatList
+          style={styles.rootContainer}
+          data={RouteItems}
+          keyExtractor={(item) => item.routeKey}
+          renderItem={this._renderItem}
+        />
+      </React.Fragment>
     );
   }; 
 };
@@ -101,6 +107,11 @@ export default function App() {
           routeKey: RouteKeys.NavigatorTest01,
           renderRoute: () => (
             <NavigatorTest01/>
+          ),
+        }, {
+          routeKey: RouteKeys.NavigatorTest02,
+          renderRoute: () => (
+            <NavigatorTest02/>
           ),
         }]}
       />
