@@ -27,12 +27,12 @@ enum NavEvents {
   onNavRouteViewAdded = "onNavRouteViewAdded"
 };
 
-type RouteOptions = {
+export type RouteOptions = {
   routeTitle?: string;
 };
 
 /** Represents a route in the navigation stack. */
-type NavRouteItem = {
+export type NavRouteItem = {
   routeKey     : string;
   routeProps  ?: object;
   routeOptions?: RouteOptions;
@@ -366,11 +366,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
           routeIndex={route.routeIndex}
           routeKey={route.routeKey}
           routeProps={route.routeProps}
+          routeOptions={route.routeOptions}
           getRefToNavigator={this._handleGetRefToNavigator}
-          initialRouteTitle={(
-            route.routeOptions?.routeTitle ??
-            route.routeKey
-          )}
           renderRouteContent={() => (
             routeConfig.renderRoute(route)
           )}

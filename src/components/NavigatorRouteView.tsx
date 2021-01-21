@@ -1,8 +1,8 @@
 import React, { ReactElement } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import type { NavigatorView } from './NavigatorView';
 import type { RouteViewPortal } from './RouteViewPortal';
+import type { NavigatorView, RouteOptions } from './NavigatorView';
 
 import { RNINavigatorRouteView } from '../native_components/RNINavigatorRouteView';
 
@@ -33,7 +33,7 @@ type NavigatorRouteViewProps = {
   routeKey: string;
   routeIndex: number;
   routeProps: object;
-  initialRouteTitle: string;
+  routeOptions: RouteOptions;
   getRefToNavigator: () => NavigatorView,
   renderRouteContent: () => ReactElement<RouteContentProps>
   // render nav bar items
@@ -69,11 +69,19 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     this.state = {
       isMounted: true,
       hasRoutePortal: false,
-      routeTitle: props.initialRouteTitle,
+      routeTitle: (
+        // get the initial route title
+        props.routeOptions?.routeTitle ??
+        props.routeKey
+      ),
     };
   };
 
   //#region - Public Functions
+  public getRefToNavigator = () => {
+    return this.props.getRefToNavigator();
+  };
+
   public getRouterRef = () => {
     return this;
   };
@@ -161,25 +169,37 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
 
   _renderNavBarItems = () => {
     const props = this.props;
-    const registryProps = this._routeViewPortalRef?.props;
+    const state = this.state;
+
+    const portalProps = this._routeViewPortalRef?.props;
 
     const sharedParams = {
-      getRouterRef : this.getRouterRef,
-      getEmitterRef: this.getEmitterRef,
+      // pass "get ref" functions...
+      getRouterRef     : this.getRouterRef     ,
+      getEmitterRef    : this.getEmitterRef    ,
+      getRefToNavigator: this.getRefToNavigator,
+      // pass down route props...
+      routeKey    : props.routeKey  ,
+      routeIndex  : props.routeIndex,
+      routeProps  : props.routeProps,
+      routeOptions: {
+        ...props.routeOptions,
+        routeTitle: state.routeTitle,
+      },
     };
 
     const navBarLeftItem = (
-      registryProps?.renderNavBarLeftItem?.(sharedParams) ??
-      props.renderNavBarLeftItem?.() 
+      portalProps?.renderNavBarLeftItem?.(sharedParams) ??
+      props.renderNavBarLeftItem?.()
     );
 
     const navBarRightItem = (
-      registryProps?.renderNavBarRightItem?.(sharedParams) ??
+      portalProps?.renderNavBarRightItem?.(sharedParams) ??
       props.renderNavBarRightItem?.()
     );
 
     const navBarTitleItem = (
-      registryProps?.renderNavBarTitleItem?.(sharedParams) ??
+      portalProps?.renderNavBarTitleItem?.(sharedParams) ??
       props.renderNavBarTitleItem?.()
     );
 

@@ -1,6 +1,7 @@
 
 import React, { ReactElement } from 'react';
 
+import type { NavigatorView, RouteOptions } from './NavigatorView';
 import type { NavigatorRouteView, NavRouteEvents } from '../components/NavigatorRouteView';
 import type { EventEmitter } from '../functions/EventEmitter';
 
@@ -8,8 +9,14 @@ import { NavRouteViewContext, NavRouteViewContextProps } from '../context/NavRou
 
 
 type RouteViewPortalRender = (params: {
-  getRouterRef : () => NavigatorRouteView,
-  getEmitterRef: () => EventEmitter<NavRouteEvents>,
+  routeKey    : string;
+  routeIndex  : number;
+  routeProps  : object;
+  routeOptions: RouteOptions;
+  // "get ref" functions
+  getRefToNavigator: () => NavigatorView;
+  getRouterRef     : () => NavigatorRouteView;
+  getEmitterRef    : () => EventEmitter<NavRouteEvents>;
 }) => ReactElement;
 
 type RouteViewPortalProps = {
