@@ -41,4 +41,9 @@ export function isClassComponent(component) {
     typeof component === 'function'
     && component?.prototype?.isReactComponent
   );
-}
+};
+
+export function lastElement<T>(array: Array<T>): T | undefined {
+  if(!array) return undefined;
+  return array[array.length - 1];
+};

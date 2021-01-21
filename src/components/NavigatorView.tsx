@@ -20,7 +20,7 @@ enum NavStatus {
   IDLE_INIT   = "IDLE_INIT"  , // nav. just finished init.
   IDLE_ERROR  = "IDLE_ERROR" , // nav. is idle due to error
   NAV_PUSHING = "NAV_PUSHING", // nav. is busy pushing
-  NAV_POPPING = "NAV_POPPING", // nav. is just popping
+  NAV_POPPING = "NAV_POPPING", // nav. is busy popping
 };
 
 enum NavEvents {
@@ -38,13 +38,18 @@ type NavRouteItem = {
   routeOptions?: RouteOptions;
 };
 
-type RenderNavBarItem = (routeItem: NavRouteItem, routeIndex: number) => ReactElement;
+/** Represents a route in the nav. `state.activeRoutes` */
+interface NavRouteStateItem extends NavRouteItem {
+  routeIndex: number;
+};
+
+type RenderNavBarItem = (routeItem: NavRouteStateItem) => ReactElement;
 
 export type NavRouteConfigItem = {
   routeKey: string;
   routeProps?: object;
   routeOptions?: RouteOptions;
-  renderRoute: (routeItem: NavRouteItem, routeIndex: number) => ReactElement<RouteContentProps>;
+  renderRoute: (routeItem: NavRouteItem) => ReactElement<RouteContentProps>;
   // render nav bar items
   renderNavBarLeftItem ?: RenderNavBarItem;
   renderNavBarRightItem?: RenderNavBarItem;
@@ -68,7 +73,7 @@ type NavigatorViewProps = {
 
 /** `NavigatorView` comp. state */
 type NavigatorViewState = {
-  activeRoutes: Array<NavRouteItem>,
+  activeRoutes: Array<NavRouteStateItem>,
 };
 //#endregion
 
@@ -95,7 +100,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     ));
 
     this.state = {
-      activeRoutes: [initialRoute],
+      activeRoutes: [{...initialRoute, routeIndex: 0}],
     };
   };
 
@@ -132,11 +137,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       // 2. Append new route to `activeRoutes`.
       //    The new route will be "received" from `RNINavigatorView`.
       // ------------------------------------------------------------
-      Helpers.setStateAsync<NavigatorViewState>(this, (prevState) => ({
-        activeRoutes: [...prevState.activeRoutes, {
-          routeKey    : routeItem.routeKey    ,
-          routeProps  : routeItem.routeProps  ,
-          routeOptions: routeItem.routeOptions,
+      Helpers.setStateAsync<NavigatorViewState>(this, ({activeRoutes: prevRoutes}) => ({
+        activeRoutes: [...prevRoutes, {...routeItem,
+          routeIndex: ((Helpers.lastElement(prevRoutes)?.routeIndex ?? 0) + 1)
         }]
       }))
     ]);
@@ -156,9 +159,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     // Remove route from `activeRoutes`.
     // The route will be "removed" from `RNINavigatorView`'s subviews.
     return Helpers.setStateAsync<NavigatorViewState>(this, (prevState) => ({
-      activeRoutes: prevState.activeRoutes.filter((route, index) => !(
-        (index          == params.routeIndex) &&
-        (route.routeKey == params.routeKey  )
+      activeRoutes: prevState.activeRoutes.filter((route) => !(
+        (route.routeIndex == params.routeIndex) &&
+        (route.routeKey   == params.routeKey  )
       ))
     }));
   };
@@ -170,9 +173,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
   //#region - Public Functions
   public push = async (routeItem: NavRouteItem) => {
-    const routeDefault = this.getMatchingRoute(routeItem);
+    const routeConfig = this.getMatchingRoute(routeItem);
 
-    if(!routeDefault){
+    if(!routeConfig){
       throw new Error("`NavigatorView` failed to do: `push`: Invalid `routeKey`");
     };
     
@@ -180,7 +183,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     if(NavigatorViewUtils.isNavStateBusy(this.navStatus)) return;
 
     try {
-
       // update nav status to busy
       this.navStatus = NavStatus.NAV_PUSHING;
 
@@ -190,9 +192,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         routeProps: routeItem.routeProps ?? {},
         routeOptions: {
           routeTitle: (
-            routeItem   .routeOptions?.routeTitle ?? 
-            routeDefault.routeOptions?.routeTitle ??
-            routeItem   .routeKey
+            routeItem  .routeOptions?.routeTitle ?? 
+            routeConfig.routeOptions?.routeTitle ??
+            routeItem  .routeKey
           ),
         }
       });
@@ -308,19 +310,13 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     const props = this.props;
     const { activeRoutes } = this.state;
 
-    return activeRoutes.map((route, index) => {
+    return activeRoutes.map(route => {
       const routeConfig = this.getMatchingRoute(route);
-
-      const routeItem: NavRouteItem = {
-        routeKey    : routeConfig.routeKey,
-        routeProps  : routeConfig.routeProps,
-        routeOptions: routeConfig.routeOptions,
-      };
 
       return (
         <NavigatorRouteView
-          key={`${route.routeKey}-${index}`}
-          routeIndex={index}
+          key={`${route.routeKey}-${route.routeIndex}`}
+          routeIndex={route.routeIndex}
           routeKey={route.routeKey}
           routeProps={route.routeProps}
           getRefToNavigator={this._handleGetRefToNavigator}
@@ -329,19 +325,19 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
             route.routeKey
           )}
           renderRouteContent={() => (
-            routeConfig.renderRoute(routeItem, index)
+            routeConfig.renderRoute(route)
           )}
           renderNavBarLeftItem={() => (
-            routeConfig.renderNavBarLeftItem?.(routeItem, index) ??
-            props      .renderNavBarLeftItem?.(routeItem, index)
+            routeConfig.renderNavBarLeftItem?.(route) ??
+            props      .renderNavBarLeftItem?.(route)
           )}
           renderNavBarRightItem={() => (
-            routeConfig.renderNavBarRightItem?.(routeItem, index) ??
-            props      .renderNavBarRightItem?.(routeItem, index)
+            routeConfig.renderNavBarRightItem?.(route) ??
+            props      .renderNavBarRightItem?.(route)
           )}
           renderNavBarTitleItem={() => (
-            routeConfig.renderNavBarTitleItem?.(routeItem, index) ??
-            props      .renderNavBarTitleItem?.(routeItem, index)
+            routeConfig.renderNavBarTitleItem?.(route) ??
+            props      .renderNavBarTitleItem?.(route)
           )}
         />
       );
