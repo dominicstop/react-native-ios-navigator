@@ -81,19 +81,22 @@ type NavigatorViewState = {
 export class NavigatorView extends React.PureComponent<NavigatorViewProps, NavigatorViewState> {
   //#region - Property Declarations
   state: NavigatorViewState;
-  navStatus: NavStatus;
-  emitter: EventEmitter<NavEvents>;
 
   /** A ref to the `RNINavigatorView` native component. */
   nativeRef: React.Component;
+  
+  private navStatus: NavStatus;
+  private emitter: EventEmitter<NavEvents>;
+  private routesToRemove: Array<{routeKey: string, routeIndex: number}>;
+
   //#endregion
 
   constructor(props: NavigatorViewProps){
     super(props);
-  
-    this.navStatus = NavStatus.IDLE_INIT;
 
+    this.navStatus = NavStatus.IDLE_INIT;
     this.emitter = new EventEmitter<NavEvents>();
+    this.routesToRemove = [];
 
     const initialRoute = props.routes.find(item => (
       item.routeKey == props.initialRouteKey
@@ -105,6 +108,12 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   };
 
   //#region - Private Functions
+  private isValidRouteKey = (routeKey: string) => {
+    return this.props.routes.some(route => (
+      route.routeKey == routeKey
+    ));
+  };
+
   private getMatchingRoute = (routeItem: NavRouteItem) => {
     return this.props.routes.find(item => (
       item.routeKey == routeItem.routeKey
@@ -146,24 +155,63 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   };
 
   /** Remove route to `state.activeRoutes` */
-  private removeRoute = (params: { routeKey: string, routeIndex: number }) => {
-    //#region - 🐞 DEBUG 🐛
-    LIB_GLOBAL.debugLog && console.log(
-        `LOG/JS - NavigatorView, removeRoute`
-      + ` - with routeKey: ${params.routeKey}`
-      + ` - routeIndex: ${params.routeIndex}`
-      + ` - current activeRoutes: ${this.state.activeRoutes.length}`
-    );
-    //#endregion
+  private removeRoute = async (params?: { routeKey: string, routeIndex: number }) => { 
+    if(params){
+      // To prevent too many state updates, the routes to be removed
+      // are queued/grouped and are removed in batches...
+      this.routesToRemove.push(params);
+    };
 
-    // Remove route from `activeRoutes`.
-    // The route will be "removed" from `RNINavigatorView`'s subviews.
-    return Helpers.setStateAsync<NavigatorViewState>(this, (prevState) => ({
-      activeRoutes: prevState.activeRoutes.filter((route) => !(
-        (route.routeIndex == params.routeIndex) &&
-        (route.routeKey   == params.routeKey  )
-      ))
-    }));
+    // trigger remove if:
+    const shouldRemove = (
+      // - A the route to be removed has a valid `routeKey`
+      (this.isValidRouteKey(params.routeKey)) &&
+      // - B. there are queued items to remove and...
+      (this.routesToRemove.length > 0) &&
+      // - C. navigator isn't busy, or remove is triggered by recursive call.
+      (NavigatorViewUtils.isNavStateIdle(this.navStatus) || false)
+    );
+
+    if(shouldRemove){
+      //#region - 🐞 DEBUG 🐛
+      LIB_GLOBAL.debugLog && console.log(
+          `LOG/JS - NavigatorView, removeRoute`
+        + ` - with routeKey: ${params.routeKey}`
+        + ` - routeIndex: ${params.routeIndex}`
+        + ` - navStatus: ${this.navStatus}`
+        + ` - current activeRoutes: ${this.state.activeRoutes.length}`
+        + ` - current routesToRemove: ${this.routesToRemove.length}`
+        + ` - activeRoutes: ${JSON.stringify(this.state.activeRoutes)}`
+      );
+      //#endregion
+      
+      this.navStatus = NavStatus.NAV_POPPING;
+      // delay, so `routesToRemove` queue gets filled first
+      await Helpers.timeout(500);
+
+      // make a copy of `routesToRemove` and then clear original
+      const toBeRemoved = [...this.routesToRemove];
+      this.routesToRemove = [];
+
+      // Remove `routesToRemove` from `activeRoutes`.
+      // note: triple `!` to cast: "truthy" to bool, e.g. truthy -> `False` -> `True`
+      await Helpers.setStateAsync<NavigatorViewState>(this, ({activeRoutes: prevRoutes}) => ({
+        activeRoutes: prevRoutes.filter((prevRoute) => !!!(
+          toBeRemoved.find((removedRoute) => (
+            (removedRoute.routeKey   == prevRoute.routeKey  ) &&
+            (removedRoute.routeIndex == prevRoute.routeIndex) 
+          ))
+        ))
+      }));
+
+      // recursively remove routes from `routesToRemove`
+      if(this.routesToRemove.length > 0){
+        this.removeRoute();
+
+      } else {
+        this.navStatus = NavStatus.IDLE;
+      };
+    };
   };
 
   private _handleGetRefToNavigator = (): NavigatorView => {
@@ -286,9 +334,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   /** Handler for native event: `onNavRouteWillPop` */
   private _handleOnNavRouteWillPop = ({nativeEvent}: onNavRouteWillPopPayload) => {
     // a route is about to be removed either through a tap on the "back" button,
-      // or through a swipe back gesture.
+    // or through a swipe back gesture.
     if(nativeEvent.isUserInitiated){
-      // TODO
+      
     };
   };
 
@@ -302,6 +350,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         routeKey  : nativeEvent.routeKey,
         routeIndex: nativeEvent.routeIndex
       });
+      
     };
   };
   //#endregion
