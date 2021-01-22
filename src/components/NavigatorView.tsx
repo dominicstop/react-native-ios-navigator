@@ -32,7 +32,7 @@ export type RouteOptions = {
 };
 
 /** Represents a route in the navigation stack. */
-export type NavRouteItem = {
+type NavRouteItem = {
   routeKey     : string;
   routeProps  ?: object;
   routeOptions?: RouteOptions;
@@ -47,8 +47,8 @@ type RenderNavBarItem = (routeItem: NavRouteStateItem) => ReactElement;
 
 export type NavRouteConfigItem = {
   routeKey: string;
-  routeProps?: object;
-  routeOptions?: RouteOptions;
+  initialRouteProps?: object;
+  initialRouteOptions?: RouteOptions;
   renderRoute: (routeItem: NavRouteItem) => ReactElement<RouteContentProps>;
   // render nav bar items
   renderNavBarLeftItem ?: RenderNavBarItem;
@@ -239,8 +239,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         routeProps: routeItem.routeProps ?? {},
         routeOptions: {
           routeTitle: (
-            routeItem  .routeOptions?.routeTitle ?? 
-            routeConfig.routeOptions?.routeTitle ??
+            routeItem  .routeOptions       ?.routeTitle ??
+            routeConfig.initialRouteOptions?.routeTitle ??
             routeItem  .routeKey
           ),
         }
@@ -366,7 +366,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
           routeIndex={route.routeIndex}
           routeKey={route.routeKey}
           routeProps={route.routeProps}
-          routeOptions={route.routeOptions}
+          initialRouteOptions={route.routeOptions}
           getRefToNavigator={this._handleGetRefToNavigator}
           renderRouteContent={() => (
             routeConfig.renderRoute(route)

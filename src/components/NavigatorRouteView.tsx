@@ -13,6 +13,7 @@ import { NavRouteViewContext } from '../context/NavRouteViewContext';
 import { NativeIDKeys } from '../constants/LibraryConstants';
 
 
+
 //#region - Type Definitions
 export enum NavRouteEvents {
   onNavRouteWillPush = "onNavRouteWillPush",
@@ -33,7 +34,7 @@ type NavigatorRouteViewProps = {
   routeKey: string;
   routeIndex: number;
   routeProps: object;
-  routeOptions: RouteOptions;
+  initialRouteOptions: RouteOptions;
   getRefToNavigator: () => NavigatorView,
   renderRouteContent: () => ReactElement<RouteContentProps>
   // render nav bar items
@@ -48,6 +49,8 @@ type NavigatorRouteViewState = {
   routeTitle: string;
   hasRoutePortal: boolean;
 };
+
+
 //#endregion
 
 
@@ -71,7 +74,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
       hasRoutePortal: false,
       routeTitle: (
         // get the initial route title
-        props.routeOptions?.routeTitle ??
+        props.initialRouteOptions?.routeTitle ??
         props.routeKey
       ),
     };
@@ -183,7 +186,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
       routeIndex  : props.routeIndex,
       routeProps  : props.routeProps,
       routeOptions: {
-        ...props.routeOptions,
+        ...props.initialRouteOptions,
         routeTitle: state.routeTitle,
       },
     };
