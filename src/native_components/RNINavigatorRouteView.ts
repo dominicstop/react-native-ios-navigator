@@ -16,6 +16,12 @@ export type RNINavigatorRouteViewProps = {
   navBarButtonLeftItemsConfig ?: NavBarItemConfig;
   navBarButtonRightItemsConfig?: NavBarItemConfig;
 
+  // Navbar back button item config
+  leftItemsSupplementBackButton?: boolean;
+  backButtonTitle?: string;
+  backButtonDisplayMode?: BackButtonDisplayMode;
+  hidesBackButton?: boolean;
+
   // Native Events
   onNavRouteWillPush?: () => void;
   onNavRouteDidPush ?: () => void;

@@ -36,4 +36,10 @@ RCT_EXPORT_VIEW_PROPERTY(navBarButtonBackItemConfig  , NSArray);
 RCT_EXPORT_VIEW_PROPERTY(navBarButtonLeftItemsConfig , NSArray);
 RCT_EXPORT_VIEW_PROPERTY(navBarButtonRightItemsConfig, NSArray);
 
+// Navbar back button item config
+RCT_EXPORT_VIEW_PROPERTY(leftItemsSupplementBackButton, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(backButtonTitle, NSString);
+RCT_EXPORT_VIEW_PROPERTY(backButtonDisplayMode, NSString);
+RCT_EXPORT_VIEW_PROPERTY(hidesBackButton, BOOL);
+
 @end

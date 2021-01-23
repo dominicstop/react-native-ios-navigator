@@ -169,24 +169,43 @@ class RNINavigatorRouteViewController: UIViewController {
 };
 
 extension RNINavigatorRouteViewController: RNINavigatorRouteViewDelegate {
-  
-  func didReceiveRouteTitle(title: String) {
+  func didReceiveRouteTitle(_ title: String) {
     self.navigationItem.title = title;
   };
   
-  func didReceiveNavBarButtonTitleView(titleView: UIView) {
+  func didReceiveNavBarButtonTitleView(_ titleView: UIView) {
     self.navigationItem.titleView = titleView;
   };
   
-  func didReceiveNavBarButtonBackItem(item: UIBarButtonItem?) {
+  func didReceiveNavBarButtonBackItem(_ item: UIBarButtonItem?) {
     self.navigationItem.backBarButtonItem = item;
   };
   
-  func didReceiveNavBarButtonLeftItems(items: [UIBarButtonItem]?) {
+  func didReceiveNavBarButtonLeftItems(_ items: [UIBarButtonItem]?) {
     self.navigationItem.leftBarButtonItems = items;
   };
   
-  func didReceiveNavBarButtonRightItems(items: [UIBarButtonItem]?) {
+  func didReceiveNavBarButtonRightItems(_ items: [UIBarButtonItem]?) {
     self.navigationItem.rightBarButtonItems = items;
+  };
+  
+  func didReceiveLeftItemsSupplementBackButton(_ bool: Bool) {
+    self.navigationItem.leftItemsSupplementBackButton = bool;
+  };
+  
+  func didReceiveBackButtonTitle(_ title: String?) {
+    if #available(iOS 11.0, *) {
+      self.navigationItem.backButtonTitle = title;
+    };
+  };
+  
+  func didReceiveBackButtonDisplayMode(_ displayMode: UINavigationItem.BackButtonDisplayMode){
+    if #available(iOS 14.0, *) {
+      self.navigationItem.backButtonDisplayMode = displayMode;
+    };
+  };
+  
+  func didReceiveHidesBackButton(_ hidesBackButton: Bool){
+    self.navigationItem.hidesBackButton = hidesBackButton;
   };
 };

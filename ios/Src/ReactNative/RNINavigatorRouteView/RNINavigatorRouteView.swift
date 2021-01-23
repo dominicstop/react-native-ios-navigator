@@ -10,16 +10,23 @@ import UIKit;
 
 protocol RNINavigatorRouteViewDelegate: AnyObject {
   
-  func didReceiveRouteTitle(title: String);
+  func didReceiveRouteTitle(_ title: String);
   
-  func didReceiveNavBarButtonTitleView(titleView: UIView);
+  func didReceiveNavBarButtonTitleView(_ titleView: UIView);
   
-  func didReceiveNavBarButtonBackItem(item: UIBarButtonItem?);
+  func didReceiveNavBarButtonBackItem(_ item: UIBarButtonItem?);
   
-  func didReceiveNavBarButtonLeftItems(items: [UIBarButtonItem]?);
+  func didReceiveNavBarButtonLeftItems(_ items: [UIBarButtonItem]?);
   
-  func didReceiveNavBarButtonRightItems(items: [UIBarButtonItem]?);
+  func didReceiveNavBarButtonRightItems(_ items: [UIBarButtonItem]?);
   
+  func didReceiveLeftItemsSupplementBackButton(_ bool: Bool);
+  
+  func didReceiveBackButtonTitle(_ title: String?);
+  
+  func didReceiveBackButtonDisplayMode(_ displayMode: UINavigationItem.BackButtonDisplayMode);
+  
+  func didReceiveHidesBackButton(_ hidesBackButton: Bool);  
 };
 
 class RNINavigatorRouteView: UIView {
@@ -73,6 +80,7 @@ class RNINavigatorRouteView: UIView {
   /// gesture), or due to it being "popped" programmatically via the nav.
   @objc var onNavRouteDidPop: RCTBubblingEventBlock?;
   
+  /// Fired when the nav bar's back item is pressed and is a custom nav bar item.
   @objc var onPressNavBarBackItem: RCTBubblingEventBlock?;
   @objc var onPressNavBarLeftItem: RCTBubblingEventBlock?;
   @objc var onPressNavBarRightItem: RCTBubblingEventBlock?;
@@ -109,7 +117,7 @@ class RNINavigatorRouteView: UIView {
       guard let routeTitle = self.routeTitle as String?
       else { return };
       
-      delegate?.didReceiveRouteTitle(title: routeTitle as String);
+      delegate?.didReceiveRouteTitle(routeTitle as String);
     }
   };
   
@@ -125,7 +133,7 @@ class RNINavigatorRouteView: UIView {
         configItem.customView = self.reactNavBarBackItem;
       };
       
-      delegate?.didReceiveNavBarButtonBackItem(item: self.backBarButtonItem);
+      delegate?.didReceiveNavBarButtonBackItem(self.backBarButtonItem);
       self._navBarButtonBackItemConfig = configItem;
     }
   };
@@ -147,7 +155,7 @@ class RNINavigatorRouteView: UIView {
         configItem.customView = self.reactNavBarLeftItem;
       };
       
-      delegate?.didReceiveNavBarButtonLeftItems(items: self.leftBarButtonItems);
+      delegate?.didReceiveNavBarButtonLeftItems(self.leftBarButtonItems);
       self._navBarButtonLeftItemsConfig = configItems;
     }
   };
@@ -169,10 +177,49 @@ class RNINavigatorRouteView: UIView {
         configItem.customView = self.reactNavBarRightItem;
       };
       
-      delegate?.didReceiveNavBarButtonRightItems(items: self.rightBarButtonItems);
+      delegate?.didReceiveNavBarButtonRightItems(self.rightBarButtonItems);
       self._navBarButtonRightItemsConfig = configItems;
     }
   };
+  
+  @objc var leftItemsSupplementBackButton: Bool = true {
+    didSet {
+      guard self.leftItemsSupplementBackButton != oldValue
+      else { return };
+      
+      delegate?.didReceiveLeftItemsSupplementBackButton(
+        self.leftItemsSupplementBackButton
+      );
+    }
+  };
+  
+  @objc var backButtonTitle: NSString? {
+    didSet {
+      guard self.backButtonTitle != oldValue else { return };
+      delegate?.didReceiveBackButtonTitle(self.backButtonTitle as String?);
+    }
+  };
+  
+  private var _backButtonDisplayMode: UINavigationItem.BackButtonDisplayMode?;
+  @objc var backButtonDisplayMode: NSString? {
+    didSet {
+      guard self.backButtonDisplayMode != oldValue,
+            let string      = self.backButtonDisplayMode as String?,
+            let displayMode = UINavigationItem.BackButtonDisplayMode(string: string)
+      else { return };
+      
+      delegate?.didReceiveBackButtonDisplayMode(displayMode);
+      self._backButtonDisplayMode = displayMode;
+    }
+  };
+  
+  @objc var hidesBackButton: Bool = false {
+    didSet {
+      guard self.hidesBackButton != oldValue else { return };
+      delegate?.didReceiveHidesBackButton(self.hidesBackButton);
+    }
+  };
+  
   
   // -----------------------------------
   // MARK: Convenience Property Wrappers
@@ -288,7 +335,7 @@ class RNINavigatorRouteView: UIView {
         
       case NativeIDKeys.NavBarBackItem:
         self.reactNavBarBackItem = subview;
-        delegate?.didReceiveNavBarButtonTitleView(titleView: subview);
+        delegate?.didReceiveNavBarButtonTitleView(subview);
         
       case NativeIDKeys.NavBarLeftItem:
         self.reactNavBarLeftItem = subview;
@@ -354,21 +401,38 @@ class RNINavigatorRouteView: UIView {
 
     // set the vc's title for the 1st time
     if let routeTitle = self.routeTitle {
-      delegate?.didReceiveRouteTitle(title: routeTitle as String);
+      delegate?.didReceiveRouteTitle(routeTitle as String);
     };
     
     // set nav bar back item
-    delegate?.didReceiveNavBarButtonBackItem(item: self.backBarButtonItem);
+    delegate?.didReceiveNavBarButtonBackItem(self.backBarButtonItem);
     
     // set nav bar left item
-    delegate?.didReceiveNavBarButtonLeftItems(items: self.leftBarButtonItems);
+    delegate?.didReceiveNavBarButtonLeftItems(self.leftBarButtonItems);
     
     // set nav bar right item
-    delegate?.didReceiveNavBarButtonRightItems(items: self.rightBarButtonItems);
+    delegate?.didReceiveNavBarButtonRightItems(self.rightBarButtonItems);
     
     // set nav bar title item
     if let titleBarItem = self.reactNavBarTitleItem {
-      delegate?.didReceiveNavBarButtonTitleView(titleView: titleBarItem);
+      delegate?.didReceiveNavBarButtonTitleView(titleBarItem);
     };
+    
+    // init `navigationItem` property from `leftItemsSupplementBackButton` prop
+    delegate?.didReceiveLeftItemsSupplementBackButton(
+      self.leftItemsSupplementBackButton
+    );
+    
+    // init `navigationItem` property from `backButtonTitle` prop
+    delegate?.didReceiveBackButtonTitle(self.backButtonTitle as String?);
+    
+    // init `navigationItem` property from `backButtonDisplayMode` prop
+    if let displayMode = self._backButtonDisplayMode {
+      delegate?.didReceiveBackButtonDisplayMode(displayMode);
+    };
+    
+    // init `navigationItem` property from `hidesBackButton` prop
+    delegate?.didReceiveHidesBackButton(self.hidesBackButton);
+    
   };
 };
