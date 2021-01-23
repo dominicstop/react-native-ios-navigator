@@ -98,6 +98,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     // Technically, this whole thing could be done like this:
     // `{...defaultRouteOptions, ...routeOptions}`
     // but it's less clear/explicit, idk refactor this later.
+
     return {
       // Navbar item config
       routeTitle: (
@@ -134,6 +135,16 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
         defaultRouteOptions?.hidesBackButton
       ),
     };
+  };
+  
+  public setRouteOptions = async (routeOptions: RouteOptions) => {
+    await Helpers.setStateAsync<NavigatorRouteViewState>(this, (prevState) => ({
+      ...prevState, 
+      routeOptions: {
+        ...prevState.routeOptions,
+        ...routeOptions,
+      },
+    }));
   };
 
   public setRouteTitle = async (title: string) => {

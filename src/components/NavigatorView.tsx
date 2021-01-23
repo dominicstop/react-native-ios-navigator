@@ -7,7 +7,7 @@ import { RNINavigatorViewModule } from '../native_modules/RNINavigatorViewModule
 import { NavigatorRouteView } from './NavigatorRouteView';
 
 import type { RouteContentProps } from '../components/NavigatorRouteView';
-import type { BackButtonDisplayMode, NavBarBackItemConfig, NavBarItemConfig } from '../types/NavBarItemConfig';
+import type { BackButtonDisplayMode, NavBarBackItemConfig, NavBarItemsConfig } from '../types/NavBarItemConfig';
 import type { onNavRouteDidPopPayload, onNavRouteViewAddedPayload, onNavRouteWillPopPayload } from '../native_components/RNINavigatorView';
 
 
@@ -33,8 +33,8 @@ export type RouteOptions = {
   // Navbar item config
   routeTitle?: string;
   navBarButtonBackItemConfig  ?: NavBarBackItemConfig;
-  navBarButtonLeftItemsConfig ?: NavBarItemConfig;
-  navBarButtonRightItemsConfig?: NavBarItemConfig;
+  navBarButtonLeftItemsConfig ?: NavBarItemsConfig;
+  navBarButtonRightItemsConfig?: NavBarItemsConfig;
 
   // Navbar back button item config
   leftItemsSupplementBackButton?: boolean;

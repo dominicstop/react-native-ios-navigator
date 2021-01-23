@@ -94,15 +94,11 @@ export type NavBarBackItemConfig =
   (NavBarItemConfigBase | NavBarItemConfigCustomBase) &
   NavBarItemConfigShared
 
-export type NavBarItemConfig =
- | Array<NavBarItemConfigBase & NavBarItemConfigShared>
- | ArrayWithOneElement<NavBarItemConfigCustomBase & NavBarItemConfigShared>;
+export type NavBarItemConfig = NavBarItemConfigBase & NavBarItemConfigShared;
 
-export type NavBarBackButtonConfig = {
-  backButtonTitle?: string;
-  hidesBackButton: boolean;
-  backButtonDisplayMode?: BackButtonDisplayMode;
-};
+export type NavBarItemsConfig = 
+ | Array<NavBarItemConfig>
+ | ArrayWithOneElement<NavBarItemConfig>;
 
 export type BackButtonDisplayMode =
   /** The navigation item attempts to display a specific title, a generic title, or no title for the Back button, depending on the space available. */
