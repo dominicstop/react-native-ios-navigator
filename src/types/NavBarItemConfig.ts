@@ -94,7 +94,9 @@ export type NavBarBackItemConfig =
   (NavBarItemConfigBase | NavBarItemConfigCustomBase) &
   NavBarItemConfigShared
 
-export type NavBarItemConfig = NavBarItemConfigBase & NavBarItemConfigShared;
+export type NavBarItemConfig = 
+  (NavBarItemConfigBase | NavBarItemConfigCustomBase) & 
+  NavBarItemConfigShared;
 
 export type NavBarItemsConfig = 
  | Array<NavBarItemConfig>
