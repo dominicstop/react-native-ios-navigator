@@ -133,8 +133,8 @@ class RNINavigatorRouteView: UIView {
         configItem.customView = self.reactNavBarBackItem;
       };
       
-      delegate?.didReceiveNavBarButtonBackItem(self.backBarButtonItem);
       self._navBarButtonBackItemConfig = configItem;
+      delegate?.didReceiveNavBarButtonBackItem(self.backBarButtonItem);
     }
   };
   
@@ -155,8 +155,11 @@ class RNINavigatorRouteView: UIView {
         configItem.customView = self.reactNavBarLeftItem;
       };
       
-      delegate?.didReceiveNavBarButtonLeftItems(self.leftBarButtonItems);
+      print("DEBUG X- didSet prop - navBarButtonLeftItemsConfig array: \(array)");
+      print("DEBUG X- didSet prop - navBarButtonLeftItemsConfig configItem: \(configItems)");
+      
       self._navBarButtonLeftItemsConfig = configItems;
+      delegate?.didReceiveNavBarButtonLeftItems(self.leftBarButtonItems);
     }
   };
   
@@ -177,8 +180,8 @@ class RNINavigatorRouteView: UIView {
         configItem.customView = self.reactNavBarRightItem;
       };
       
-      delegate?.didReceiveNavBarButtonRightItems(self.rightBarButtonItems);
       self._navBarButtonRightItemsConfig = configItems;
+      delegate?.didReceiveNavBarButtonRightItems(self.rightBarButtonItems);
     }
   };
   
@@ -208,8 +211,8 @@ class RNINavigatorRouteView: UIView {
             let displayMode = UINavigationItem.BackButtonDisplayMode(string: string)
       else { return };
       
-      delegate?.didReceiveBackButtonDisplayMode(displayMode);
       self._backButtonDisplayMode = displayMode;
+      delegate?.didReceiveBackButtonDisplayMode(displayMode);
     }
   };
   
@@ -400,6 +403,8 @@ class RNINavigatorRouteView: UIView {
   /// Because the "route view" is created first, by the time the "route vc" is
   /// created and added as a delegate, it has already missed a few events.
   private func setupRouteVC(){
+    
+    print("DEBUG X- setupRouteVC - navBarButtonLeftItemsConfig: \(self.navBarButtonLeftItemsConfig)");
 
     // set the vc's title for the 1st time
     if let routeTitle = self.routeTitle {
