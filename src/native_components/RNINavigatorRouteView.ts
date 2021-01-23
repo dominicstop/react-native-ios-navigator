@@ -1,5 +1,5 @@
 import { requireNativeComponent, ViewStyle } from 'react-native';
-import type { BackButtonDisplayMode, NavBarBackItemConfig, NavBarItemConfig } from 'src/types/NavBarItemConfig';
+import type { BackButtonDisplayMode, NavBarBackItemConfig, NavBarItemConfig } from '../types/NavBarItemConfig';
 
 type onPressNavBarItem = (event: {
   nativeEvent: { key: string, type: string }
@@ -9,9 +9,9 @@ export type RNINavigatorRouteViewProps = {
   style: ViewStyle;
   routeKey: string;
   routeIndex: number;
-  routeTitle: string;
 
   // Navbar item config
+  routeTitle?: string;
   navBarButtonBackItemConfig  ?: NavBarBackItemConfig;
   navBarButtonLeftItemsConfig ?: NavBarItemConfig;
   navBarButtonRightItemsConfig?: NavBarItemConfig;

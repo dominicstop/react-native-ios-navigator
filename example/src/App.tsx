@@ -95,6 +95,9 @@ export default function App() {
         initialRouteKey={RouteKeys.Home}
         routes={[{
           routeKey: RouteKeys.Home,
+          initialRouteOptions: {
+            routeTitle: "Initial Route Title",
+          },
           renderRoute: () => (
             <HomeRoute/>
           ),

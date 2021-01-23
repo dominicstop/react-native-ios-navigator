@@ -46,7 +46,7 @@ type NavigatorRouteViewProps = {
 /** `NavigatorView` comp. state */
 type NavigatorRouteViewState = {
   isMounted: boolean;
-  routeTitle: string;
+  routeOptions: RouteOptions;
   hasRoutePortal: boolean;
 };
 
@@ -72,11 +72,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     this.state = {
       isMounted: true,
       hasRoutePortal: false,
-      routeTitle: (
-        // get the initial route title
-        props.initialRouteOptions?.routeTitle ??
-        props.routeKey
-      ),
+      routeOptions: {},
     };
   };
 
@@ -93,10 +89,61 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     return this.emitter;
   };
 
+  public getRouteOptions: (() => RouteOptions) = () => {
+    const props = this.props;
+
+    const { initialRouteOptions: defaultRouteOptions } = this.props;
+    const { routeOptions } = this.state;
+
+    // Technically, this whole thing could be done like this:
+    // `{...defaultRouteOptions, ...routeOptions}`
+    // but it's less clear/explicit, idk refactor this later.
+    return {
+      // Navbar item config
+      routeTitle: (
+        routeOptions       ?.routeTitle ??
+        defaultRouteOptions?.routeTitle ?? props.routeKey
+      ),
+      navBarButtonBackItemConfig: (
+        routeOptions       ?.navBarButtonBackItemConfig ??
+        defaultRouteOptions?.navBarButtonBackItemConfig
+      ),
+      navBarButtonLeftItemsConfig: (
+        routeOptions       ?.navBarButtonLeftItemsConfig ??
+        defaultRouteOptions?.navBarButtonLeftItemsConfig
+      ),
+      navBarButtonRightItemsConfig: (
+        routeOptions       ?.navBarButtonRightItemsConfig ??
+        defaultRouteOptions?.navBarButtonRightItemsConfig
+      ),
+      leftItemsSupplementBackButton: (
+        routeOptions       ?.leftItemsSupplementBackButton ??
+        defaultRouteOptions?.leftItemsSupplementBackButton
+      ),
+      // Navbar back button item config
+      backButtonTitle: (
+        routeOptions       ?.backButtonTitle ??
+        defaultRouteOptions?.backButtonTitle
+      ),
+      backButtonDisplayMode: (
+        routeOptions       ?.backButtonDisplayMode ??
+        defaultRouteOptions?.backButtonDisplayMode
+      ),
+      hidesBackButton: (
+        routeOptions       ?.hidesBackButton ??
+        defaultRouteOptions?.hidesBackButton
+      ),
+    };
+  };
+
   public setRouteTitle = async (title: string) => {
-    await Helpers.setStateAsync<Partial<NavigatorRouteViewState>>(this, {
-      routeTitle: title
-    });
+    await Helpers.setStateAsync<NavigatorRouteViewState>(this, (prevState) => ({
+      ...prevState, 
+      routeOptions: {
+        ...prevState.routeOptions,
+        routeTitle: title,
+      },
+    }));
   };
 
   public setRouteRegistryRef = (ref: RouteViewPortal) => {
@@ -185,10 +232,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
       routeKey    : props.routeKey  ,
       routeIndex  : props.routeIndex,
       routeProps  : props.routeProps,
-      routeOptions: {
-        ...props.initialRouteOptions,
-        routeTitle: state.routeTitle,
-      },
+      routeOptions: this.getRouteOptions(),
     };
 
     const navBarBackItem = (
@@ -254,6 +298,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     const state = this.state;
 
     if(!state.isMounted) return null;
+    const routeOptions = this.getRouteOptions();
 
     return(
       <NavRouteViewContext.Provider value={{
@@ -262,19 +307,17 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
         getEmitterRef: this.getEmitterRef,
       }}>
         <RNINavigatorRouteView
+          // pass down: navbar item config + back button item config
+          {...routeOptions}
           style={styles.navigatorRouteView}
           routeKey={props.routeKey}
           routeIndex={props.routeIndex}
-          routeTitle={state.routeTitle}
-          // navbar back button item config
-          
+          routeTitle={routeOptions.routeTitle}
           // nav route events
           onNavRouteWillPop={this._handleOnNavRouteWillPop}
           onNavRouteDidPop={this._handleOnNavRouteDidPop}
           onNavRouteWillPush={this._handleOnNavRouteWillPush}
           onNavRouteDidPush={this._handleOnNavRouteDidPush}
-          // navbar item config
-
         >
           {this._renderRouteContents()}
           {this._renderNavBarItems()}

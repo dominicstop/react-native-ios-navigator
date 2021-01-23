@@ -6,8 +6,10 @@ import { RNINavigatorViewModule } from '../native_modules/RNINavigatorViewModule
 
 import { NavigatorRouteView } from './NavigatorRouteView';
 
-import type { onNavRouteDidPopPayload, onNavRouteViewAddedPayload, onNavRouteWillPopPayload } from '../native_components/RNINavigatorView';
 import type { RouteContentProps } from '../components/NavigatorRouteView';
+import type { BackButtonDisplayMode, NavBarBackItemConfig, NavBarItemConfig } from '../types/NavBarItemConfig';
+import type { onNavRouteDidPopPayload, onNavRouteViewAddedPayload, onNavRouteWillPopPayload } from '../native_components/RNINavigatorView';
+
 
 import * as Helpers from '../functions/Helpers';
 import { EventEmitter } from '../functions/EventEmitter';
@@ -28,7 +30,17 @@ enum NavEvents {
 };
 
 export type RouteOptions = {
+  // Navbar item config
   routeTitle?: string;
+  navBarButtonBackItemConfig  ?: NavBarBackItemConfig;
+  navBarButtonLeftItemsConfig ?: NavBarItemConfig;
+  navBarButtonRightItemsConfig?: NavBarItemConfig;
+
+  // Navbar back button item config
+  leftItemsSupplementBackButton?: boolean;
+  backButtonTitle?: string;
+  backButtonDisplayMode?: BackButtonDisplayMode;
+  hidesBackButton?: boolean;
 };
 
 /** Represents a route in the navigation stack. */
@@ -235,15 +247,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       // add new route, and wait for it be added
       await this.addRoute({
-        routeKey  : routeItem.routeKey,
-        routeProps: routeItem.routeProps ?? {},
-        routeOptions: {
-          routeTitle: (
-            routeItem  .routeOptions       ?.routeTitle ??
-            routeConfig.initialRouteOptions?.routeTitle ??
-            routeItem  .routeKey
-          ),
-        }
+        routeKey    : routeItem.routeKey,
+        routeProps  : routeItem.routeProps   ?? {},
+        routeOptions: routeItem.routeOptions ?? {},
       });
 
       // forward "push" request to native module
@@ -365,8 +371,14 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
           key={`${route.routeKey}-${route.routeIndex}`}
           routeIndex={route.routeIndex}
           routeKey={route.routeKey}
-          routeProps={route.routeProps}
-          initialRouteOptions={route.routeOptions}
+          routeProps={(
+            route      .routeProps ??
+            routeConfig.initialRouteProps
+          )}
+          initialRouteOptions={(
+            route      .routeOptions ??
+            routeConfig.initialRouteOptions
+          )}
           getRefToNavigator={this._handleGetRefToNavigator}
           renderRouteContent={() => (
             routeConfig.renderRoute(route)
