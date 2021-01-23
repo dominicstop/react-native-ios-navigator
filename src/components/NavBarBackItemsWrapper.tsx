@@ -125,7 +125,5 @@ export class NavBarItemsWrapper extends React.Component<NavBarBackItemsWrapperPr
 const styles = StyleSheet.create({
   navBarItemContainer: {
     position: 'absolute',
-    width: 0,
-    height: 0,
   },
 });
