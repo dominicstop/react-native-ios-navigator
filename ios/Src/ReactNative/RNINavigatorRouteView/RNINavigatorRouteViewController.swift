@@ -169,19 +169,24 @@ class RNINavigatorRouteViewController: UIViewController {
 };
 
 extension RNINavigatorRouteViewController: RNINavigatorRouteViewDelegate {
+  
+  func didReceiveRouteTitle(title: String) {
+    self.navigationItem.title = title;
+  };
+  
   func didReceiveNavBarButtonTitleView(titleView: UIView) {
-    print("DEBUG *- didReceiveNavBarButtonTitleView");
+    self.navigationItem.titleView = titleView;
   };
   
-  func didReceiveNavBarButtonBackItemConfig(configItem: RNINavBarItemConfig) {
-    print("DEBUG *- didReceiveNavBarButtonBackItemConfig");
+  func didReceiveNavBarButtonBackItem(item: UIBarButtonItem?) {
+    self.navigationItem.backBarButtonItem = item;
   };
   
-  func didReceiveNavBarButtonLeftItemsConfig(configItems: [RNINavBarItemConfig]) {
-    print("DEBUG *- didReceiveNavBarButtonLeftItemsConfig");
+  func didReceiveNavBarButtonLeftItems(items: [UIBarButtonItem]?) {
+    self.navigationItem.leftBarButtonItems = items;
   };
   
-  func didReceiveNavBarButtonRightItemsConfig(configItems: [RNINavBarItemConfig]) {
-    print("DEBUG *- didReceiveNavBarButtonRightItemsConfig");
+  func didReceiveNavBarButtonRightItems(items: [UIBarButtonItem]?) {
+    self.navigationItem.rightBarButtonItems = items;
   };
 };

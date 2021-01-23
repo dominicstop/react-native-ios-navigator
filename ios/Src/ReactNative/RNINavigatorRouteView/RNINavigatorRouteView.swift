@@ -10,13 +10,15 @@ import UIKit;
 
 protocol RNINavigatorRouteViewDelegate: AnyObject {
   
+  func didReceiveRouteTitle(title: String);
+  
   func didReceiveNavBarButtonTitleView(titleView: UIView);
   
-  func didReceiveNavBarButtonBackItemConfig(configItem: RNINavBarItemConfig);
+  func didReceiveNavBarButtonBackItem(item: UIBarButtonItem?);
   
-  func didReceiveNavBarButtonLeftItemsConfig(configItems: [RNINavBarItemConfig]);
+  func didReceiveNavBarButtonLeftItems(items: [UIBarButtonItem]?);
   
-  func didReceiveNavBarButtonRightItemsConfig(configItems: [RNINavBarItemConfig]);
+  func didReceiveNavBarButtonRightItems(items: [UIBarButtonItem]?);
   
 };
 
@@ -107,7 +109,7 @@ class RNINavigatorRouteView: UIView {
       guard let routeTitle = self.routeTitle as String?
       else { return };
       
-      self.routeVC?.title = routeTitle;
+      delegate?.didReceiveRouteTitle(title: routeTitle as String);
     }
   };
   
@@ -123,7 +125,7 @@ class RNINavigatorRouteView: UIView {
         configItem.customView = self.reactNavBarBackItem;
       };
       
-      delegate?.didReceiveNavBarButtonBackItemConfig(configItem: configItem);
+      delegate?.didReceiveNavBarButtonBackItem(item: self.backBarButtonItem);
       self._navBarButtonBackItemConfig = configItem;
     }
   };
@@ -145,7 +147,7 @@ class RNINavigatorRouteView: UIView {
         configItem.customView = self.reactNavBarLeftItem;
       };
       
-      delegate?.didReceiveNavBarButtonLeftItemsConfig(configItems: configItems);
+      delegate?.didReceiveNavBarButtonLeftItems(items: self.leftBarButtonItems);
       self._navBarButtonLeftItemsConfig = configItems;
     }
   };
@@ -167,9 +169,71 @@ class RNINavigatorRouteView: UIView {
         configItem.customView = self.reactNavBarRightItem;
       };
       
-      delegate?.didReceiveNavBarButtonRightItemsConfig(configItems: configItems);
+      delegate?.didReceiveNavBarButtonRightItems(items: self.rightBarButtonItems);
       self._navBarButtonRightItemsConfig = configItems;
     }
+  };
+  
+  // -----------------------------------
+  // MARK: Convenience Property Wrappers
+  // -----------------------------------
+  
+  /// Creates a back nav bar button item based on `navBarButtonBackItemConfig`
+  var backBarButtonItem: UIBarButtonItem? {
+    guard let backConfigItem = self._navBarButtonBackItemConfig
+    else { return nil };
+    
+    return backConfigItem.createUIBarButtonItem { [unowned self] config in
+      #if DEBUG
+      print("LOG - NativeView, RNINavigatorRouteView"
+        + " - onPress: `backBarButtonItem`"
+      );
+      #endif
+      
+      self.onPressNavBarBackItem?(
+        config.makeNavBarItemEventParams()
+      );
+    };
+  };
+  
+  /// Creates a left nav bar button item based on `navBarButtonLeftItemsConfig`
+  var leftBarButtonItems: [UIBarButtonItem]? {
+    guard let leftConfigItems = self._navBarButtonLeftItemsConfig
+    else { return nil };
+    
+    return leftConfigItems.compactMap {
+      $0.createUIBarButtonItem { [unowned self] config in
+        #if DEBUG
+        print("LOG - NativeView, RNINavigatorRouteView"
+          + " - onPress: `leftBarButtonItem`"
+        );
+        #endif
+        
+        self.onPressNavBarLeftItem?(
+          config.makeNavBarItemEventParams()
+        );
+      };
+    };
+  };
+  
+  /// Creates a right nav bar button item based on `navBarButtonRightItemsConfig`
+  var rightBarButtonItems: [UIBarButtonItem]? {
+    guard let rightConfigItems = self._navBarButtonRightItemsConfig
+    else { return nil };
+    
+    return rightConfigItems.compactMap {
+      $0.createUIBarButtonItem { [unowned self] config in
+        #if DEBUG
+        print("LOG - NativeView, RNINavigatorRouteView"
+          + " - onPress: `rightBarButtonItem`"
+        );
+        #endif
+        
+        self.onPressNavBarRightItem?(
+          config.makeNavBarItemEventParams()
+        );
+      };
+    };
   };
   
   // --------------------
@@ -284,66 +348,27 @@ class RNINavigatorRouteView: UIView {
   
   /// the `routeVC` has been assigned to this "route view" for the first time,
   /// so we need to init. and prepare it.
+  /// Because the "route view" is created first, by the time the "route vc" is
+  /// created and added as a delegate, it has already missed a few events.
   private func setupRouteVC(){
-    let navigationItem = self.routeVC!.navigationItem;
-    
+
     // set the vc's title for the 1st time
     if let routeTitle = self.routeTitle {
-      self.routeVC!.title = routeTitle as String;
+      delegate?.didReceiveRouteTitle(title: routeTitle as String);
     };
     
     // set nav bar back item
-    if let backConfigItem = self._navBarButtonBackItemConfig {
-      navigationItem.backBarButtonItem = backConfigItem.createUIBarButtonItem { config in
-        #if DEBUG
-        print("LOG - NativeView, RNINavigatorRouteView"
-          + " - onPress: `backBarButtonItem`"
-        );
-        #endif
-        
-        self.onPressNavBarBackItem?(
-          config.makeNavBarItemEventParams()
-        );
-      };
-    };
+    delegate?.didReceiveNavBarButtonBackItem(item: self.backBarButtonItem);
     
     // set nav bar left item
-    if let leftConfigItems = self._navBarButtonLeftItemsConfig {
-      navigationItem.leftBarButtonItems = leftConfigItems.compactMap {
-        $0.createUIBarButtonItem { config in
-          #if DEBUG
-          print("LOG - NativeView, RNINavigatorRouteView"
-            + " - onPress: `leftBarButtonItem`"
-          );
-          #endif
-          
-          self.onPressNavBarLeftItem?(
-            config.makeNavBarItemEventParams()
-          );
-        };
-      };
-    };
+    delegate?.didReceiveNavBarButtonLeftItems(items: self.leftBarButtonItems);
     
     // set nav bar right item
-    if let rightConfigItems = self._navBarButtonRightItemsConfig {
-      navigationItem.rightBarButtonItems = rightConfigItems.compactMap {
-        $0.createUIBarButtonItem { config in
-          #if DEBUG
-          print("LOG - NativeView, RNINavigatorRouteView"
-            + " - onPress: `rightBarButtonItem`"
-          );
-          #endif
-          
-          self.onPressNavBarRightItem?(
-            config.makeNavBarItemEventParams()
-          );
-        };
-      };
-    };
+    delegate?.didReceiveNavBarButtonRightItems(items: self.rightBarButtonItems);
     
     // set nav bar title item
     if let titleBarItem = self.reactNavBarTitleItem {
-      navigationItem.titleView = titleBarItem;
+      delegate?.didReceiveNavBarButtonTitleView(titleView: titleBarItem);
     };
   };
 };
