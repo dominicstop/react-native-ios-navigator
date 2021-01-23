@@ -38,6 +38,7 @@ type NavigatorRouteViewProps = {
   getRefToNavigator: () => NavigatorView,
   renderRouteContent: () => ReactElement<RouteContentProps>
   // render nav bar items
+  renderNavBarBackItem ?: () => ReactElement;
   renderNavBarLeftItem ?: () => ReactElement;
   renderNavBarRightItem?: () => ReactElement;
   renderNavBarTitleItem?: () => ReactElement;
@@ -191,6 +192,11 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
       },
     };
 
+    const navBarBackItem = (
+      portalProps?.renderNavBarBackItem?.(sharedParams) ??
+      props.renderNavBarBackItem?.()
+    );
+
     const navBarLeftItem = (
       portalProps?.renderNavBarLeftItem?.(sharedParams) ??
       props.renderNavBarLeftItem?.()
@@ -208,6 +214,14 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
 
     return(
       <React.Fragment>
+        {navBarBackItem && (
+          <View 
+            style={styles.routeItem}
+            nativeID={NativeIDKeys.NavBarBackItem}
+          >
+            {navBarBackItem}
+          </View>
+        )}
         {navBarLeftItem && (
           <View 
             style={styles.routeItem}

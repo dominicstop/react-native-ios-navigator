@@ -35,8 +35,8 @@ class RNINavigatorRouteViewController: UIViewController {
   /// The content to show in the route
   var routeView: RNINavigatorRouteView! {
     didSet {
-      // `routeView` has been set, start setup
-      self.setup();
+      // receive "events" from `RNINavigatorRouteViewDelegate`
+      self.routeView!.delegate = self;
     }
   };
   
@@ -56,9 +56,6 @@ class RNINavigatorRouteViewController: UIViewController {
   
   override func loadView() {
     super.loadView();
-    
-    // add custom items to nav bar
-    self.setupNavBarItems();
     
     if #available(iOS 11.0, *){
       self.view.addSubview(self.routeView);
@@ -169,34 +166,22 @@ class RNINavigatorRouteViewController: UIViewController {
     );
   };
   #endif
-  
-  // -----------------------
-  // MARK: Private Functions
-  // -----------------------
-  
-  private func setup(){
-    // set the vc's title for the 1st time
-    if let routeTitle = self.routeView.routeTitle {
-      self.title = routeTitle as String;
-    };
+};
+
+extension RNINavigatorRouteViewController: RNINavigatorRouteViewDelegate {
+  func didReceiveNavBarButtonTitleView(titleView: UIView) {
+    print("DEBUG *- didReceiveNavBarButtonTitleView");
   };
   
-  private func setupNavBarItems(){
-    // set nav bar right item
-    if let rightBarItem = self.routeView.reactNavBarRightItem {
-      let barItem = UIBarButtonItem(customView: rightBarItem);
-      self.navigationItem.rightBarButtonItem = barItem;
-    };
-    
-    // set nav bar left item
-    if let leftBarItem = self.routeView.reactNavBarLeftItem {
-      let barItem = UIBarButtonItem(customView: leftBarItem);
-      self.navigationItem.leftBarButtonItem = barItem;
-    };
-    
-    // set nav bar title item
-    if let titleBarItem = self.routeView.reactNavBarTitleItem {
-      self.navigationItem.titleView = titleBarItem;
-    };
+  func didReceiveNavBarButtonBackItemConfig(configItem: RNINavBarItemConfig) {
+    print("DEBUG *- didReceiveNavBarButtonBackItemConfig");
+  };
+  
+  func didReceiveNavBarButtonLeftItemsConfig(configItems: [RNINavBarItemConfig]) {
+    print("DEBUG *- didReceiveNavBarButtonLeftItemsConfig");
+  };
+  
+  func didReceiveNavBarButtonRightItemsConfig(configItems: [RNINavBarItemConfig]) {
+    print("DEBUG *- didReceiveNavBarButtonRightItemsConfig");
   };
 };

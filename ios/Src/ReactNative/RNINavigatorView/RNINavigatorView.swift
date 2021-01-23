@@ -145,13 +145,15 @@ class RNINavigatorView: UIView {
     let routeVC: RNINavigatorRouteViewController = {
       /// create the wrapper vc that holds the `routeView`
       let vc = RNINavigatorRouteViewController();
-      // listen for naviagtor-related events
+      
+      // listen for route navigator-related events
       vc.delegate = self;
       
-      // set the react view to show in the route vc
-      // note: this will trigger the "setup" function...
+      // set the "react view" to show in the route vc
       vc.routeView = routeView;
       
+      // note: this will trigger the "setup" function so that the
+      // `routeView` can prepare `routeVC` for the 1st time...
       routeView.routeVC = vc;
       return vc;
     }();

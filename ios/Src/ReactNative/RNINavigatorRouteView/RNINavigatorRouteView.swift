@@ -8,10 +8,23 @@
 import UIKit;
 
 
+protocol RNINavigatorRouteViewDelegate: AnyObject {
+  
+  func didReceiveNavBarButtonTitleView(titleView: UIView);
+  
+  func didReceiveNavBarButtonBackItemConfig(configItem: RNINavBarItemConfig);
+  
+  func didReceiveNavBarButtonLeftItemsConfig(configItems: [RNINavBarItemConfig]);
+  
+  func didReceiveNavBarButtonRightItemsConfig(configItems: [RNINavBarItemConfig]);
+  
+};
+
 class RNINavigatorRouteView: UIView {
   
   struct NativeIDKeys {
     static let RouteContent    = "RouteContent";
+    static let NavBarBackItem  = "NavBarBackItem";
     static let NavBarLeftItem  = "NavBarLeftItem";
     static let NavBarRightItem = "NavBarRightItem";
     static let NavBarTitleItem = "NavBarTitleItem";
@@ -22,17 +35,23 @@ class RNINavigatorRouteView: UIView {
   // ----------------
   
   weak var bridge: RCTBridge!;
+  weak var delegate: RNINavigatorRouteViewDelegate?;
   
   /// content to show in the navigator
   var reactRouteContent: UIView?;
   
   // custom navigation bar items...
+  var reactNavBarBackItem : UIView?;
   var reactNavBarLeftItem : UIView?;
   var reactNavBarRightItem: UIView?;
   var reactNavBarTitleItem: UIView?;
   
   /// ref. to the parent route vc
-  weak var routeVC: RNINavigatorRouteViewController?;
+  weak var routeVC: RNINavigatorRouteViewController? {
+    didSet {
+      self.setupRouteVC();
+    }
+  };
 
   // -----------------------------
   // MARK: RN Exported Event Props
@@ -51,6 +70,10 @@ class RNINavigatorRouteView: UIView {
   /// pop (because the "back" button was pressed or it was swiped back via a
   /// gesture), or due to it being "popped" programmatically via the nav.
   @objc var onNavRouteDidPop: RCTBubblingEventBlock?;
+  
+  @objc var onPressNavBarBackItem: RCTBubblingEventBlock?;
+  @objc var onPressNavBarLeftItem: RCTBubblingEventBlock?;
+  @objc var onPressNavBarRightItem: RCTBubblingEventBlock?;
   
   // -----------------------
   // MARK: RN Exported Props
@@ -85,6 +108,67 @@ class RNINavigatorRouteView: UIView {
       else { return };
       
       self.routeVC?.title = routeTitle;
+    }
+  };
+  
+  private var _navBarButtonBackItemConfig: RNINavBarItemConfig?;
+  @objc var navBarButtonBackItemConfig: NSDictionary? {
+    didSet {
+      guard self.navBarButtonBackItemConfig != oldValue,
+            let dict       = self.navBarButtonBackItemConfig,
+            let configItem = RNINavBarItemConfig(dictionary: dict)
+      else { return };
+      
+      if configItem.type == .CUSTOM {
+        configItem.customView = self.reactNavBarBackItem;
+      };
+      
+      delegate?.didReceiveNavBarButtonBackItemConfig(configItem: configItem);
+      self._navBarButtonBackItemConfig = configItem;
+    }
+  };
+  
+  private var _navBarButtonLeftItemsConfig: [RNINavBarItemConfig]?;
+  @objc var navBarButtonLeftItemsConfig: NSArray? {
+    didSet {
+      guard self.navBarButtonLeftItemsConfig != oldValue,
+            let arrayAny = self.navBarButtonLeftItemsConfig,
+            let array    = arrayAny as? [NSDictionary]
+      else { return };
+      
+      let configItems = array.compactMap {
+        RNINavBarItemConfig(dictionary: $0);
+      };
+      
+      if let configItem = configItems.first, configItem.type == .CUSTOM {
+        // set custom view for `navBarButtonLeftItemsConfig`
+        configItem.customView = self.reactNavBarLeftItem;
+      };
+      
+      delegate?.didReceiveNavBarButtonLeftItemsConfig(configItems: configItems);
+      self._navBarButtonLeftItemsConfig = configItems;
+    }
+  };
+  
+  private var _navBarButtonRightItemsConfig: [RNINavBarItemConfig]?;
+  @objc var navBarButtonRightItemsConfig: NSArray? {
+    didSet {
+      guard self.navBarButtonRightItemsConfig != oldValue,
+            let arrayAny = self.navBarButtonRightItemsConfig,
+            let array    = arrayAny as? [NSDictionary]
+      else { return };
+      
+      let configItems = array.compactMap {
+        RNINavBarItemConfig(dictionary: $0);
+      };
+      
+      if let configItem = configItems.first, configItem.type == .CUSTOM {
+        // set custom view for `navBarButtonRightItemsConfig`
+        configItem.customView = self.reactNavBarRightItem;
+      };
+      
+      delegate?.didReceiveNavBarButtonRightItemsConfig(configItems: configItems);
+      self._navBarButtonRightItemsConfig = configItems;
     }
   };
   
@@ -138,11 +222,15 @@ class RNINavigatorRouteView: UIView {
       case NativeIDKeys.RouteContent:
         self.reactRouteContent = subview;
         
-      case NativeIDKeys.NavBarRightItem:
-        self.reactNavBarRightItem = subview;
+      case NativeIDKeys.NavBarBackItem:
+        self.reactNavBarBackItem = subview;
+        delegate?.didReceiveNavBarButtonTitleView(titleView: subview);
         
       case NativeIDKeys.NavBarLeftItem:
         self.reactNavBarLeftItem = subview;
+        
+      case NativeIDKeys.NavBarRightItem:
+        self.reactNavBarRightItem = subview;
         
       case NativeIDKeys.NavBarTitleItem:
         self.reactNavBarTitleItem = subview;
@@ -167,6 +255,7 @@ class RNINavigatorRouteView: UIView {
   func cleanup(){
     let viewsToRemove = [
       self.reactRouteContent   ,
+      self.reactNavBarBackItem ,
       self.reactNavBarLeftItem ,
       self.reactNavBarRightItem,
       self.reactNavBarTitleItem,
@@ -183,8 +272,78 @@ class RNINavigatorRouteView: UIView {
     
     // remove references to the react views
     self.reactRouteContent    = nil;
+    self.reactNavBarBackItem  = nil;
     self.reactNavBarLeftItem  = nil;
     self.reactNavBarRightItem = nil;
     self.reactNavBarTitleItem = nil;
+  };
+  
+  // -----------------------
+  // MARK: Private Functions
+  // -----------------------
+  
+  /// the `routeVC` has been assigned to this "route view" for the first time,
+  /// so we need to init. and prepare it.
+  private func setupRouteVC(){
+    let navigationItem = self.routeVC!.navigationItem;
+    
+    // set the vc's title for the 1st time
+    if let routeTitle = self.routeTitle {
+      self.routeVC!.title = routeTitle as String;
+    };
+    
+    // set nav bar back item
+    if let backConfigItem = self._navBarButtonBackItemConfig {
+      navigationItem.backBarButtonItem = backConfigItem.createUIBarButtonItem { config in
+        #if DEBUG
+        print("LOG - NativeView, RNINavigatorRouteView"
+          + " - onPress: `backBarButtonItem`"
+        );
+        #endif
+        
+        self.onPressNavBarBackItem?(
+          config.makeNavBarItemEventParams()
+        );
+      };
+    };
+    
+    // set nav bar left item
+    if let leftConfigItems = self._navBarButtonLeftItemsConfig {
+      navigationItem.leftBarButtonItems = leftConfigItems.compactMap {
+        $0.createUIBarButtonItem { config in
+          #if DEBUG
+          print("LOG - NativeView, RNINavigatorRouteView"
+            + " - onPress: `leftBarButtonItem`"
+          );
+          #endif
+          
+          self.onPressNavBarLeftItem?(
+            config.makeNavBarItemEventParams()
+          );
+        };
+      };
+    };
+    
+    // set nav bar right item
+    if let rightConfigItems = self._navBarButtonRightItemsConfig {
+      navigationItem.rightBarButtonItems = rightConfigItems.compactMap {
+        $0.createUIBarButtonItem { config in
+          #if DEBUG
+          print("LOG - NativeView, RNINavigatorRouteView"
+            + " - onPress: `rightBarButtonItem`"
+          );
+          #endif
+          
+          self.onPressNavBarRightItem?(
+            config.makeNavBarItemEventParams()
+          );
+        };
+      };
+    };
+    
+    // set nav bar title item
+    if let titleBarItem = self.reactNavBarTitleItem {
+      navigationItem.titleView = titleBarItem;
+    };
   };
 };

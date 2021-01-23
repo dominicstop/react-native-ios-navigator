@@ -20,6 +20,7 @@ type RouteViewPortalRender = (params: {
 }) => ReactElement;
 
 type RouteViewPortalProps = {
+  renderNavBarBackItem ?: RouteViewPortalRender;
   renderNavBarLeftItem ?: RouteViewPortalRender;
   renderNavBarRightItem?: RouteViewPortalRender;
   renderNavBarTitleItem?: RouteViewPortalRender;
