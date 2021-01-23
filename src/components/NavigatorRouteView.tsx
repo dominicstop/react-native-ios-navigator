@@ -4,6 +4,8 @@ import { StyleSheet, View } from 'react-native';
 import type { RouteViewPortal } from './RouteViewPortal';
 import type { NavigatorView, RouteOptions } from './NavigatorView';
 
+import { NavBarItemsWrapper } from './NavBarBackItemsWrapper';
+
 import { RNINavigatorRouteView } from '../native_components/RNINavigatorRouteView';
 
 import * as Helpers from '../functions/Helpers';
@@ -22,10 +24,11 @@ export enum NavRouteEvents {
 };
 
 export interface RouteContentProps {
-  routeKey?: string;
+  routeKey  ?: string;
   routeIndex?: number;
-  getRefToRoute?: () => NavigatorRouteView;
-  getRefToNavigator?: () => NavigatorView;
+  // get ref functions
+  getRefToRoute          ?: () => NavigatorRouteView;
+  getRefToNavigator      ?: () => NavigatorView;
   getRefToNavRouteEmitter?: () => EventEmitter<NavRouteEvents>;
 };
 
@@ -54,20 +57,23 @@ type NavigatorRouteViewState = {
 //#endregion
 
 
+
+
 export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewProps, NavigatorRouteViewState> {
   //#region - Property Declarations
   state: NavigatorRouteViewState;
   routeContentRef: React.Component<RouteContentProps>;
-  emitter: EventEmitter<NavRouteEvents>;
-
-  private _routeContentRef: ReactElement;
-  private _routeViewPortalRef: RouteViewPortal;
+  // references
+  private _emitter              : EventEmitter<NavRouteEvents>;
+  private _routeContentRef      : ReactElement;
+  private _routeViewPortalRef   : RouteViewPortal;
+  private _navBarItemsWrapperRef: NavBarItemsWrapper
   //#endregion
 
   constructor(props: NavigatorRouteViewProps){
     super(props);
 
-    this.emitter = new EventEmitter<NavRouteEvents>();
+    this._emitter = new EventEmitter<NavRouteEvents>();
 
     this.state = {
       isMounted: true,
@@ -86,7 +92,15 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
   };
 
   public getEmitterRef = () => {
-    return this.emitter;
+    return this._emitter;
+  };
+
+  public getPortalRef = () => {
+    return this._routeViewPortalRef;
+  };
+
+  public getNavBarItemsWrapperRef = () => {
+    return this._navBarItemsWrapperRef;
   };
 
   public getRouteOptions: (() => RouteOptions) = () => {
@@ -145,6 +159,8 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
         ...routeOptions,
       },
     }));
+    console.log("NavigatorRouteView, setRouteOptions - routeOptions: ", this.state.routeOptions); //
+
   };
 
   public setRouteTitle = async (title: string) => {
@@ -157,8 +173,10 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     }));
   };
 
-  public setRouteRegistryRef = (ref: RouteViewPortal) => {
+  public setRouteViewPortalRef = (ref: RouteViewPortal) => {
     this._routeViewPortalRef = ref;
+    this._navBarItemsWrapperRef?.setPortalRef(ref);
+
     this.setState({hasRoutePortal: true});
   };
   //#endregion
@@ -169,29 +187,29 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
   };
 
   private _handleGetRefToNavRouteEmitter = () => {
-    return this.emitter;
+    return this._emitter;
   };
   //#endregion
 
   //#region - Native Event Handlers
   /** Handler for `RNINavigatorRouteView` native event: `onNavRouteWillPop` */
   private _handleOnNavRouteWillPop = () => {
-    this.emitter.emit(NavRouteEvents.onNavRouteWillPop, null);
+    this._emitter.emit(NavRouteEvents.onNavRouteWillPop, null);
   };
 
   /** Handler for `RNINavigatorRouteView` native event: `onNavRouteDidPop` */
   private _handleOnNavRouteDidPop = () => {
-    this.emitter.emit(NavRouteEvents.onNavRouteDidPop, null);
+    this._emitter.emit(NavRouteEvents.onNavRouteDidPop, null);
   };
 
   /** Handler for `RNINavigatorRouteView` native event: `onNavRouteWillPus` */
   private _handleOnNavRouteWillPush = () => {
-    this.emitter.emit(NavRouteEvents.onNavRouteWillPush, null);
+    this._emitter.emit(NavRouteEvents.onNavRouteWillPush, null);
   };
 
   /** Handler for `RNINavigatorRouteView` native event: `onNavRouteDidPush` */
   private _handleOnNavRouteDidPush = () => {
-    this.emitter.emit(NavRouteEvents.onNavRouteDidPush, null);
+    this._emitter.emit(NavRouteEvents.onNavRouteDidPush, null);
   };
   //#endregion
   
@@ -228,82 +246,6 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     );
   };
 
-  _renderNavBarItems = () => {
-    const props = this.props;
-    const state = this.state;
-
-    const portalProps = this._routeViewPortalRef?.props;
-
-    const sharedParams = {
-      // pass "get ref" functions...
-      getRouterRef     : this.getRouterRef     ,
-      getEmitterRef    : this.getEmitterRef    ,
-      getRefToNavigator: this.getRefToNavigator,
-      // pass down route props...
-      routeKey    : props.routeKey  ,
-      routeIndex  : props.routeIndex,
-      routeProps  : props.routeProps,
-      routeOptions: this.getRouteOptions(),
-    };
-
-    const navBarBackItem = (
-      portalProps?.renderNavBarBackItem?.(sharedParams) ??
-      props.renderNavBarBackItem?.()
-    );
-
-    const navBarLeftItem = (
-      portalProps?.renderNavBarLeftItem?.(sharedParams) ??
-      props.renderNavBarLeftItem?.()
-    );
-
-    const navBarRightItem = (
-      portalProps?.renderNavBarRightItem?.(sharedParams) ??
-      props.renderNavBarRightItem?.()
-    );
-
-    const navBarTitleItem = (
-      portalProps?.renderNavBarTitleItem?.(sharedParams) ??
-      props.renderNavBarTitleItem?.()
-    );
-
-    return(
-      <React.Fragment>
-        {navBarBackItem && (
-          <View 
-            style={styles.routeItem}
-            nativeID={NativeIDKeys.NavBarBackItem}
-          >
-            {navBarBackItem}
-          </View>
-        )}
-        {navBarLeftItem && (
-          <View 
-            style={styles.routeItem}
-            nativeID={NativeIDKeys.NavBarLeftItem}
-          >
-            {navBarLeftItem}
-          </View>
-        )}
-        {navBarRightItem && (
-          <View  
-            style={styles.routeItem}
-            nativeID={NativeIDKeys.NavBarRightItem}
-          >
-            {navBarRightItem}
-          </View>
-        )}
-        {navBarTitleItem && (
-          <View 
-            style={styles.routeItem}
-            nativeID={NativeIDKeys.NavBarTitleItem}
-          >
-            {navBarTitleItem}
-          </View>
-        )}
-      </React.Fragment>
-    );
-  };
-
   render(){
     const props = this.props;
     const state = this.state;
@@ -318,8 +260,6 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
         getEmitterRef: this.getEmitterRef,
       }}>
         <RNINavigatorRouteView
-          // pass down: navbar item config + back button item config
-          {...routeOptions}
           style={styles.navigatorRouteView}
           routeKey={props.routeKey}
           routeIndex={props.routeIndex}
@@ -329,9 +269,27 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
           onNavRouteDidPop={this._handleOnNavRouteDidPop}
           onNavRouteWillPush={this._handleOnNavRouteWillPush}
           onNavRouteDidPush={this._handleOnNavRouteDidPush}
+          // pass down: navbar item config + back button item config
+          {...routeOptions}
         >
           {this._renderRouteContents()}
-          {this._renderNavBarItems()}
+          <NavBarItemsWrapper
+            ref={r => this._navBarItemsWrapperRef = r}
+            routeKey={props.routeKey}
+            routeIndex={props.routeIndex}
+            routeProps={props.routeProps}
+            routeOptions={routeOptions}
+            // get ref functions
+            getRefToNavigator={props.getRefToNavigator}
+            getEmitterRef={this.getEmitterRef}
+            getRouterRef={this.getRouterRef}
+            getPortalRef={this.getPortalRef}
+            // render nav bar items
+            renderNavBarBackItem={props.renderNavBarBackItem}
+            renderNavBarLeftItem={props.renderNavBarLeftItem}
+            renderNavBarRightItem={props.renderNavBarRightItem}
+            renderNavBarTitleItem={props.renderNavBarTitleItem}
+          />
         </RNINavigatorRouteView>
       </NavRouteViewContext.Provider>
     );

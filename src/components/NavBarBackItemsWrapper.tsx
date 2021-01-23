@@ -1,0 +1,120 @@
+import React, { ReactElement } from 'react';
+import { StyleSheet, View } from 'react-native';
+
+import type { RouteViewPortal } from './RouteViewPortal';
+import type { NavigatorView, RouteOptions } from './NavigatorView';
+import type { NavigatorRouteView, NavRouteEvents } from './NavigatorRouteView';
+import type { EventEmitter } from '../functions/EventEmitter';
+
+import { NativeIDKeys } from '../constants/LibraryConstants';
+
+
+type NavBarBackItemsWrapperProps = {
+  routeKey    : string;
+  routeIndex  : number;
+  routeProps  : object;
+  routeOptions: RouteOptions;
+  // get ref functions
+  getRefToNavigator: () => NavigatorView;
+  getEmitterRef    : () => EventEmitter<NavRouteEvents>;
+  getRouterRef     : () => NavigatorRouteView;
+  getPortalRef     : () => RouteViewPortal;
+  // render nav bar items
+  renderNavBarBackItem : () => ReactElement;
+  renderNavBarLeftItem : () => ReactElement;
+  renderNavBarRightItem: () => ReactElement;
+  renderNavBarTitleItem: () => ReactElement;
+};
+
+export class NavBarItemsWrapper extends React.Component<NavBarBackItemsWrapperProps> {
+  private _routeViewPortalRef: RouteViewPortal;
+
+  componentDidMount(){
+    const props = this.props;
+    this._routeViewPortalRef = props.getPortalRef();
+  };
+
+  setPortalRef = (portalRef: RouteViewPortal) => {
+    this._routeViewPortalRef = portalRef;
+  };
+
+  render(){
+    const props = this.props;
+    const portalProps = this._routeViewPortalRef?.props;
+
+    const sharedParams = {
+      // pass "get ref" functions...
+      getRouterRef     : props.getRouterRef     ,
+      getEmitterRef    : props.getEmitterRef    ,
+      getRefToNavigator: props.getRefToNavigator,
+      // pass down route props...
+      routeKey    : props.routeKey    ,
+      routeIndex  : props.routeIndex  ,
+      routeProps  : props.routeProps  ,
+      routeOptions: props.routeOptions,
+    };
+
+    const navBarBackItem = (
+      portalProps?.renderNavBarBackItem?.(sharedParams) ??
+      props.renderNavBarBackItem?.()
+    );
+
+    const navBarLeftItem = (
+      portalProps?.renderNavBarLeftItem?.(sharedParams) ??
+      props.renderNavBarLeftItem?.()
+    );
+
+    const navBarRightItem = (
+      portalProps?.renderNavBarRightItem?.(sharedParams) ??
+      props.renderNavBarRightItem?.()
+    );
+
+    const navBarTitleItem = (
+      portalProps?.renderNavBarTitleItem?.(sharedParams) ??
+      props.renderNavBarTitleItem?.()
+    );
+
+    return(
+      <React.Fragment>
+        {navBarBackItem && (
+          <View 
+            style={styles.routeItem}
+            nativeID={NativeIDKeys.NavBarBackItem}
+          >
+            {navBarBackItem}
+          </View>
+        )}
+        {navBarLeftItem && (
+          <View 
+            style={styles.routeItem}
+            nativeID={NativeIDKeys.NavBarLeftItem}
+          >
+            {navBarLeftItem}
+          </View>
+        )}
+        {navBarRightItem && (
+          <View  
+            style={styles.routeItem}
+            nativeID={NativeIDKeys.NavBarRightItem}
+          >
+            {navBarRightItem}
+          </View>
+        )}
+        {navBarTitleItem && (
+          <View 
+            style={styles.routeItem}
+            nativeID={NativeIDKeys.NavBarTitleItem}
+          >
+            {navBarTitleItem}
+          </View>
+        )}
+      </React.Fragment>
+    );
+  };
+};
+
+const styles = StyleSheet.create({
+  routeItem: {
+    position: 'absolute',
+  },
+});

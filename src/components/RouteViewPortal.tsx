@@ -51,12 +51,16 @@ export class RouteViewPortal extends React.Component<RouteViewPortalProps> {
   };
 
   async componentDidMount(){
+    const props = this.props;
     const context = this.context;
 
     const routerRef = context.getRouterRef();
-    this.routerRef = routerRef;
+    routerRef.setRouteViewPortalRef(this);
+    routerRef.setRouteOptions(props.routeOptions);
 
-    routerRef.setRouteRegistryRef(this);
+    console.log("RouteViewPortal, routeOptions: ", props.routeOptions); //
+
+    this.routerRef = routerRef;
   };
 
   render(){
