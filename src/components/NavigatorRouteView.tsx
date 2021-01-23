@@ -101,15 +101,22 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
 
   public getRouteOptions: (() => RouteOptions) = () => {
     const props = this.props;
+    const portalProps = this._routeViewPortalRef?.props;
 
     const { initialRouteOptions: defaultRouteOptions } = this.props;
     const { routeOptions } = this.state;
 
-    // Technically, this whole thing could be done like this:
-    // `{...defaultRouteOptions, ...routeOptions}`
-    // but it's less clear/explicit, idk refactor this later.
+    // check if portal has custom nav bar items
+    const hasNavBarBackItem  = (portalProps?.renderNavBarBackItem  != null);
+    const hasNavBarLeftItem  = (portalProps?.renderNavBarLeftItem  != null);
+    const hasNavBarRightItem = (portalProps?.renderNavBarRightItem != null);
 
     return {
+      // ------------------------------------------------------
+      // Technically, this whole thing could be done like this:
+      // `{...defaultRouteOptions, ...routeOptions}`
+      // but it's less clear/explicit, idk refactor this later.
+      // ------------------------------------------------------
       // Navbar item config
       routeTitle: (
         routeOptions       ?.routeTitle ??
@@ -117,15 +124,24 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
       ),
       navBarButtonBackItemConfig: (
         routeOptions       ?.navBarButtonBackItemConfig ??
-        defaultRouteOptions?.navBarButtonBackItemConfig
+        defaultRouteOptions?.navBarButtonBackItemConfig ??
+        // custom back bar item was set, so we implicitly/automatically
+        // create a `type: CUSTOM` nav bar item config...
+        (hasNavBarBackItem? { type: 'CUSTOM' } : null)
       ),
       navBarButtonLeftItemsConfig: (
         routeOptions       ?.navBarButtonLeftItemsConfig ??
-        defaultRouteOptions?.navBarButtonLeftItemsConfig
+        defaultRouteOptions?.navBarButtonLeftItemsConfig ??
+        // custom left bar item was set, so we implicitly/automatically
+        // create a `type: CUSTOM` nav bar item config...
+        (hasNavBarLeftItem? [{ type: 'CUSTOM' }] : null)
       ),
       navBarButtonRightItemsConfig: (
         routeOptions       ?.navBarButtonRightItemsConfig ??
-        defaultRouteOptions?.navBarButtonRightItemsConfig
+        defaultRouteOptions?.navBarButtonRightItemsConfig ??
+        // custom right bar item was set, so we implicitly/automatically
+        // create a `type: CUSTOM` nav bar item config...
+        (hasNavBarRightItem? [{ type: 'CUSTOM' }] : null)
       ),
       leftItemsSupplementBackButton: (
         routeOptions       ?.leftItemsSupplementBackButton ??
