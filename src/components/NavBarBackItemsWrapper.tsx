@@ -26,6 +26,15 @@ type NavBarBackItemsWrapperProps = {
   renderNavBarTitleItem: () => ReactElement;
 };
 
+/** 
+ * This component is used to hold `NavigatorRouteView`'s navigation bar items.
+ * This component needs to wrap the navigation bar items so that they can re-render and
+ * update when needed.
+ * 
+ * This component receives the navigation bar items from `RouteViewPortal`. Whenever
+ * `RouteViewPortal` updates, this comp. will also update, causing the nav. bar items
+ * to re-render and update.
+ */
 export class NavBarItemsWrapper extends React.Component<NavBarBackItemsWrapperProps> {
   private _routeViewPortalRef: RouteViewPortal;
 
@@ -78,7 +87,7 @@ export class NavBarItemsWrapper extends React.Component<NavBarBackItemsWrapperPr
       <React.Fragment>
         {navBarBackItem && (
           <View 
-            style={styles.routeItem}
+            style={styles.navBarItemContainer}
             nativeID={NativeIDKeys.NavBarBackItem}
           >
             {navBarBackItem}
@@ -86,7 +95,7 @@ export class NavBarItemsWrapper extends React.Component<NavBarBackItemsWrapperPr
         )}
         {navBarLeftItem && (
           <View 
-            style={styles.routeItem}
+            style={styles.navBarItemContainer}
             nativeID={NativeIDKeys.NavBarLeftItem}
           >
             {navBarLeftItem}
@@ -94,7 +103,7 @@ export class NavBarItemsWrapper extends React.Component<NavBarBackItemsWrapperPr
         )}
         {navBarRightItem && (
           <View  
-            style={styles.routeItem}
+            style={styles.navBarItemContainer}
             nativeID={NativeIDKeys.NavBarRightItem}
           >
             {navBarRightItem}
@@ -102,7 +111,7 @@ export class NavBarItemsWrapper extends React.Component<NavBarBackItemsWrapperPr
         )}
         {navBarTitleItem && (
           <View 
-            style={styles.routeItem}
+            style={styles.navBarItemContainer}
             nativeID={NativeIDKeys.NavBarTitleItem}
           >
             {navBarTitleItem}
@@ -114,7 +123,9 @@ export class NavBarItemsWrapper extends React.Component<NavBarBackItemsWrapperPr
 };
 
 const styles = StyleSheet.create({
-  routeItem: {
+  navBarItemContainer: {
     position: 'absolute',
+    width: 0,
+    height: 0,
   },
 });

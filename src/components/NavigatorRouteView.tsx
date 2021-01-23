@@ -52,11 +52,7 @@ type NavigatorRouteViewState = {
   routeOptions: RouteOptions;
   hasRoutePortal: boolean;
 };
-
-
 //#endregion
-
-
 
 
 export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewProps, NavigatorRouteViewState> {
@@ -159,8 +155,6 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
         ...routeOptions,
       },
     }));
-    console.log("NavigatorRouteView, setRouteOptions - routeOptions: ", this.state.routeOptions); //
-
   };
 
   public setRouteTitle = async (title: string) => {

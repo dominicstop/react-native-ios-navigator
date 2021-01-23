@@ -193,7 +193,6 @@ extension RNINavigatorRouteViewController: RNINavigatorRouteViewDelegate {
   };
   
   func didReceiveNavBarButtonLeftItems(_ items: [UIBarButtonItem]?) {
-    print("DEBUG X- didReceiveNavBarButtonLeftItems: \(items)");
     self.navigationItem.leftBarButtonItems = items;
   };
   

@@ -155,9 +155,6 @@ class RNINavigatorRouteView: UIView {
         configItem.customView = self.reactNavBarLeftItem;
       };
       
-      print("DEBUG X- didSet prop - navBarButtonLeftItemsConfig array: \(array)");
-      print("DEBUG X- didSet prop - navBarButtonLeftItemsConfig configItem: \(configItems)");
-      
       self._navBarButtonLeftItemsConfig = configItems;
       delegate?.didReceiveNavBarButtonLeftItems(self.leftBarButtonItems);
     }
@@ -404,8 +401,6 @@ class RNINavigatorRouteView: UIView {
   /// created and added as a delegate, it has already missed a few events.
   private func setupRouteVC(){
     
-    print("DEBUG X- setupRouteVC - navBarButtonLeftItemsConfig: \(self.navBarButtonLeftItemsConfig)");
-
     // set the vc's title for the 1st time
     if let routeTitle = self.routeTitle {
       delegate?.didReceiveRouteTitle(routeTitle as String);
