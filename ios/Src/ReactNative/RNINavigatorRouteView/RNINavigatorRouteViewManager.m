@@ -9,9 +9,9 @@
 
 @interface RCT_EXTERN_MODULE(RNINavigatorRouteViewManager, RCTViewManager)
 
-// ---------------------------
-// MARK: Export Props - Events
-// ---------------------------
+// ----------------------------
+// MARK:- Export Props - Events
+// ----------------------------
 
 RCT_EXPORT_VIEW_PROPERTY(onNavRouteWillPush, RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onNavRouteDidPush , RCTBubblingEventBlock);
@@ -23,20 +23,20 @@ RCT_EXPORT_VIEW_PROPERTY(onPressNavBarBackItem , RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onPressNavBarLeftItem , RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onPressNavBarRightItem, RCTBubblingEventBlock);
 
-// ---------------------------
-// MARK: Export Props - Values
-// ---------------------------
+// ----------------------------
+// MARK:- Export Props - Values
+// ----------------------------
 
 RCT_EXPORT_VIEW_PROPERTY(routeKey  , NSString);
 RCT_EXPORT_VIEW_PROPERTY(routeIndex, NSNumber);
 RCT_EXPORT_VIEW_PROPERTY(routeTitle, NSString);
 
-// Navbar item config
+// MARK: Navbar item config
 RCT_EXPORT_VIEW_PROPERTY(navBarButtonBackItemConfig  , NSArray);
 RCT_EXPORT_VIEW_PROPERTY(navBarButtonLeftItemsConfig , NSArray);
 RCT_EXPORT_VIEW_PROPERTY(navBarButtonRightItemsConfig, NSArray);
 
-// Navbar back button item config
+// MARK: Navbar back button item config
 RCT_EXPORT_VIEW_PROPERTY(leftItemsSupplementBackButton, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(backButtonTitle, NSString);
 RCT_EXPORT_VIEW_PROPERTY(backButtonDisplayMode, NSString);

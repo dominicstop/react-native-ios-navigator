@@ -10,6 +10,10 @@ import Foundation
 
 class RNINavBarItemConfig {
   
+  // ---------------------
+  // MARK:- Embedded Types
+  // ---------------------
+  
   typealias NavBarItemAction = ((_ config: RNINavBarItemConfig) -> ());
   
   enum ItemType: String {
@@ -21,9 +25,9 @@ class RNINavBarItemConfig {
     case CUSTOM;
   };
   
-  // ----------------
-  // MARK: Properties
-  // ----------------
+  // -----------------
+  // MARK:- Properties
+  // -----------------
   
   // the anon. func to invoke when a nav bar item is tapped
   private var action: NavBarItemAction?;
@@ -82,9 +86,9 @@ class RNINavBarItemConfig {
   // used for type: "CUSTOM"
   weak var customView: UIView?;
   
-  // ----------
-  // MARK: Init
-  // ----------
+  // -----------
+  // MARK:- Init
+  // -----------
   
   init?(dictionary: NSDictionary){
     guard let type     = dictionary["type"] as? String,
@@ -140,9 +144,9 @@ class RNINavBarItemConfig {
     };
   };
   
-  // ---------------
-  // MARK: Functions
-  // ---------------
+  // ----------------
+  // MARK:- Functions
+  // ----------------
   
   @objc private func onNavBarItemPressed(_ sender: UIBarButtonItem){
     self.action?(self);

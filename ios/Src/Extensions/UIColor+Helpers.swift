@@ -198,6 +198,7 @@ fileprivate class UIColorHelpers {
 };
 
 extension UIColor {
+  /// create color from css color code string
   public convenience init?(cssColorCode: String) {
     guard let color = UIColorHelpers.cssColorsToRGB[cssColorCode.lowercased()]
     else { return nil };
@@ -205,6 +206,7 @@ extension UIColor {
     self.init(red: color.r, green: color.g, blue: color.b, alpha: 1);
   };
   
+  /// create color from hex color string
   public convenience init?(hexString: String) {
     guard hexString.hasPrefix("#") else { return nil };
     let hexColor: String = UIColorHelpers.normalizeHexString(hexString);
@@ -226,6 +228,7 @@ extension UIColor {
     );
   };
   
+  /// create color from rgb/rgba string
   public convenience init?(rgbString: String){
     // create mutable copy...
     var rgbString = rgbString;
@@ -278,7 +281,7 @@ extension UIColor {
     };
   };
   
-  // create color from rgb/rgba/hex/csscolor strings
+  /// create color from rgb/rgba/hex/csscolor strings
   public convenience init?(cssColor: String){
     // remove whitespace characters
     let colorString = cssColor.trimmingCharacters(in: .whitespacesAndNewlines);

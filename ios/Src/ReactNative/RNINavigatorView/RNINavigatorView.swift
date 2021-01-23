@@ -12,9 +12,9 @@ typealias Completion = () -> Void;
 
 class RNINavigatorView: UIView {
   
-  // ----------------
-  // MARK: Properties
-  // ----------------
+  // -----------------
+  // MARK:- Properties
+  // -----------------
   
   /// ref to the RN view manager singleton's bridge instance
   weak var bridge: RCTBridge!;
@@ -51,13 +51,13 @@ class RNINavigatorView: UIView {
   /// gesture), or due to it being "popped" programmatically via the nav.
   @objc var onNavRouteDidPop: RCTBubblingEventBlock?;
   
-  // ------------------------
-  // MARK: RN Exported  Props
-  // ------------------------
+  // -------------------------
+  // MARK:- RN Exported  Props
+  // -------------------------
   
-  @objc var navnBarStyle: NSString? {
+  @objc var navBarStyle: NSString? {
     didSet {
-      guard let string = self.navnBarStyle as String?,
+      guard let string = self.navBarStyle as String?,
             let barStyle = UIBarStyle(string: string)
       else { return };
       
@@ -94,9 +94,9 @@ class RNINavigatorView: UIView {
     }
   };
   
-  // --------------------
-  // MARK: Init/Lifecycle
-  // --------------------
+  // ---------------------
+  // MARK:- Init/Lifecycle
+  // ---------------------
   
   init(bridge: RCTBridge) {
     super.init(frame: CGRect());
@@ -125,9 +125,9 @@ class RNINavigatorView: UIView {
     };
   };
   
-  // ------------------
-  // MARK: RN Lifecycle
-  // ------------------
+  // -------------------
+  // MARK:- RN Lifecycle
+  // -------------------
   
   override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
     super.insertSubview(subview, at: atIndex);
@@ -324,9 +324,9 @@ extension RNINavigatorView {
   };
 };
 
-// -----------------------------------
-// MARK: RNINavigatorRouteViewDelegate
-// -----------------------------------
+// -----------------------------------------------
+// MARK:- Extension: RNINavigatorRouteViewDelegate
+// -----------------------------------------------
 
 /// receive events from route vc's
 extension RNINavigatorView: RNINavigatorRouteViewControllerDelegate {

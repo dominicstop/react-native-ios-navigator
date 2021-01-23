@@ -10,9 +10,9 @@ import Foundation
 @objc(RNINavigatorViewManager)
 class RNINavigatorViewManager: RCTViewManager {
   
-  // ----------------------
-  // MARK: Shared Instances
-  // ----------------------
+  // -----------------------
+  // MARK:- Shared Instances
+  // -----------------------
   
   static weak var sharedBridge: RCTBridge? {
     didSet {
@@ -38,9 +38,9 @@ class RNINavigatorViewManager: RCTViewManager {
   };
   #endif
   
-  // ---------------------
-  // MARK: RN Module Setup
-  // ---------------------
+  // ----------------------
+  // MARK:- RN Module Setup
+  // ----------------------
 
   override static func requiresMainQueueSetup() -> Bool {
     // run init in bg thread

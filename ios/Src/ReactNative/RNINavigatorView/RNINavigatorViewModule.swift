@@ -21,9 +21,9 @@ class RNINavigatorViewModule: NSObject {
     return navView;
   };
   
-  // ---------------------
-  // MARK: Module Commands
-  // ---------------------
+  // ----------------------
+  // MARK:- Module Commands
+  // ----------------------
   
   // TODO: Add options param
   @objc func push(

@@ -10,9 +10,9 @@ import Foundation
 @objc(RNINavigatorRouteViewManager)
 class RNINavigatorRouteViewManager: RCTViewManager {
   
-  // -------------------
-  // MARK: Shared Bridge
-  // -------------------
+  // --------------------
+  // MARK:- Shared Bridge
+  // --------------------
   
   static var sharedBridge: RCTBridge? {
     didSet {
@@ -37,9 +37,9 @@ class RNINavigatorRouteViewManager: RCTViewManager {
   };
   #endif
   
-  // ---------------------
-  // MARK: RN Module Setup
-  // ---------------------
+  // ----------------------
+  // MARK:- RN Module Setup
+  // ----------------------
   
   override static func requiresMainQueueSetup() -> Bool {
     // run init in bg thread

@@ -28,9 +28,9 @@ protocol RNINavigatorRouteViewControllerDelegate: AnyObject {
 
 class RNINavigatorRouteViewController: UIViewController {
   
-  // ----------------
-  // MARK: Properties
-  // ----------------
+  // -----------------
+  // MARK:- Properties
+  // -----------------
   
   /// The content to show in the route
   var routeView: RNINavigatorRouteView! {
@@ -51,7 +51,7 @@ class RNINavigatorRouteViewController: UIViewController {
   var isToBeRemoved = false;
   
   // -------------------------------
-  // MARK: View Controller Lifecycle
+  // MARK:- View Controller Lifecycle
   // -------------------------------
   
   override func loadView() {
@@ -168,7 +168,18 @@ class RNINavigatorRouteViewController: UIViewController {
   #endif
 };
 
+// -----------------------------------------------
+// MARK:- Extension: RNINavigatorRouteViewDelegate
+// -----------------------------------------------
+
+/// Receive events from the "route view" that is paired with this vc.
+/// This delegate is used to receive "props" from `RNINavigatorRouteView`.
 extension RNINavigatorRouteViewController: RNINavigatorRouteViewDelegate {
+  
+  // ---------------------------------
+  // MARK: Receive Props: navbar items
+  // ---------------------------------
+  
   func didReceiveRouteTitle(_ title: String) {
     self.navigationItem.title = title;
   };
@@ -188,6 +199,10 @@ extension RNINavigatorRouteViewController: RNINavigatorRouteViewDelegate {
   func didReceiveNavBarButtonRightItems(_ items: [UIBarButtonItem]?) {
     self.navigationItem.rightBarButtonItems = items;
   };
+  
+  // ---------------------------------------------------
+  // MARK: Receive Props: navbar back button item config
+  // ---------------------------------------------------
   
   func didReceiveLeftItemsSupplementBackButton(_ bool: Bool) {
     self.navigationItem.leftItemsSupplementBackButton = bool;

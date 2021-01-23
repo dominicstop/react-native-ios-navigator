@@ -13,7 +13,6 @@ import { NavRouteViewContext } from '../context/NavRouteViewContext';
 import { NativeIDKeys } from '../constants/LibraryConstants';
 
 
-
 //#region - Type Definitions
 export enum NavRouteEvents {
   onNavRouteWillPush = "onNavRouteWillPush",
@@ -268,22 +267,14 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
           routeIndex={props.routeIndex}
           routeTitle={state.routeTitle}
           // navbar back button item config
-          // todo: test - remove later
-          leftItemsSupplementBackButton={true}
-          backButtonTitle={"Test"}
-          backButtonDisplayMode={'minimal'}
-          hidesBackButton={false}
+          
           // nav route events
           onNavRouteWillPop={this._handleOnNavRouteWillPop}
           onNavRouteDidPop={this._handleOnNavRouteDidPop}
           onNavRouteWillPush={this._handleOnNavRouteWillPush}
           onNavRouteDidPush={this._handleOnNavRouteDidPush}
           // navbar item config
-          // todo: test - remove later
-          navBarButtonLeftItemsConfig={[{type: 'TEXT', title: 'Test'}]}
-          navBarButtonRightItemsConfig={[{type: 'TEXT', title: 'Test'}]}
-          onPressNavBarLeftItem={() => {alert("onPressNavBarLeftItem")}}
-          onPressNavBarRightItem={() => {alert("onPressNavBarRightItem")}}
+
         >
           {this._renderRouteContents()}
           {this._renderNavBarItems()}

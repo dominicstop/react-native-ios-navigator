@@ -363,6 +363,8 @@ class RNINavigatorRouteView: UIView {
     bridge.uiManager.setSize(newBounds.size, for: reactView);
   };
   
+  /// Once we're done w/ this "route view" (e.g. it has been popped or removed),
+  /// then we need to cleanup to prevent this instance from leaking.
   func cleanup(){
     let viewsToRemove = [
       self.reactRouteContent   ,
