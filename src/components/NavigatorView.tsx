@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { StyleSheet, findNodeHandle, processColor, TextStyle, TextStyleIOS } from 'react-native';
+import { StyleSheet, findNodeHandle, processColor, TextStyle, TextStyleIOS, ViewStyle } from 'react-native';
 
 import { RNINavigatorView } from '../native_components/RNINavigatorView';
 import { RNINavigatorViewModule } from '../native_modules/RNINavigatorViewModule';
@@ -72,6 +72,7 @@ export type NavRouteConfigItem = {
 type NavigatorViewProps = {
   routes: Array<NavRouteConfigItem>;
   initialRouteKey: string;
+  routeContainerStyle: ViewStyle;
   // navigation bar props
   navBarStyle?: string;
   navBarTintColor?: string;
@@ -369,6 +370,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       return (
         <NavigatorRouteView
           key={`${route.routeKey}-${route.routeIndex}`}
+          routeContainerStyle={props.routeContainerStyle}
           routeIndex={route.routeIndex}
           routeKey={route.routeKey}
           routeProps={(

@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, ViewStyle } from 'react-native';
 
 import type { RouteViewPortal } from './RouteViewPortal';
 import type { NavigatorView, RouteOptions } from './NavigatorView';
@@ -37,6 +37,7 @@ type NavigatorRouteViewProps = {
   routeIndex: number;
   routeProps: object;
   initialRouteOptions: RouteOptions;
+  routeContainerStyle?: ViewStyle,
   getRefToNavigator: () => NavigatorView,
   renderRouteContent: () => ReactElement<RouteContentProps>
   // render nav bar items
@@ -270,7 +271,8 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
         getEmitterRef: this.getEmitterRef,
       }}>
         <RNINavigatorRouteView
-          style={styles.navigatorRouteView}
+          // @ts-ignore
+          style={[styles.navigatorRouteView, props.routeContainerStyle]}
           routeKey={props.routeKey}
           routeIndex={props.routeIndex}
           routeTitle={routeOptions.routeTitle}
@@ -315,6 +317,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 0,
     height: 0,
+    backgroundColor: 'white',
   },
   routeContentContainer: {
     // can't add `flex: 1` else it disappears
