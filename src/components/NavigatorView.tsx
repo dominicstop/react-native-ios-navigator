@@ -200,7 +200,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       
       this.navStatus = NavStatus.NAV_POPPING;
       // delay, so `routesToRemove` queue gets filled first
-      await Helpers.timeout(500);
+      await Helpers.timeout(300);
 
       // make a copy of `routesToRemove` and then clear original
       const toBeRemoved = [...this.routesToRemove];
