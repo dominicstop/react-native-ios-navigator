@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { StyleSheet, View, ViewStyle } from 'react-native';
+import { StyleSheet, View, ViewStyle, findNodeHandle } from 'react-native';
 
 import type { RouteViewPortal } from './RouteViewPortal';
 import type { NavigatorView, RouteOptions } from './NavigatorView';
@@ -7,6 +7,7 @@ import type { NavigatorView, RouteOptions } from './NavigatorView';
 import { NavBarItemsWrapper } from './NavBarBackItemsWrapper';
 
 import { RNINavigatorRouteView } from '../native_components/RNINavigatorRouteView';
+import { RNINavigatorRouteViewModule } from '../native_modules/RNINavigatorRouteViewModule';
 
 import * as Helpers from '../functions/Helpers';
 import { EventEmitter } from '../functions/EventEmitter';
@@ -62,6 +63,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
   routeContentRef: React.Component<RouteContentProps>;
   // references
   private _emitter              : EventEmitter<NavRouteEvents>;
+  private _nativeRef            : RNINavigatorRouteView;
   private _routeContentRef      : ReactElement;
   private _routeViewPortalRef   : RouteViewPortal;
   private _navBarItemsWrapperRef: NavBarItemsWrapper
@@ -174,21 +176,32 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     }));
   };
 
-  public setRouteTitle = async (title: string) => {
-    await Helpers.setStateAsync<NavigatorRouteViewState>(this, (prevState) => ({
-      ...prevState, 
-      routeOptions: {
-        ...prevState.routeOptions,
-        routeTitle: title,
-      },
-    }));
-  };
-
   public setRouteViewPortalRef = (ref: RouteViewPortal) => {
     this._routeViewPortalRef = ref;
     this._navBarItemsWrapperRef?.setPortalRef(ref);
 
     this.setState({hasRoutePortal: true});
+  };
+
+  public setHidesBackButton = async (isHidden: boolean, animated: boolean) => {
+    try {
+      await Helpers.promiseWithTimeout(1000,
+        RNINavigatorRouteViewModule.setHidesBackButton(
+          findNodeHandle(this._nativeRef),
+          isHidden, animated
+        )
+      );
+
+    } catch(error){
+      //#region - 🐞 DEBUG 🐛
+      LIB_GLOBAL.debugLog && console.log(
+          `LOG/JS - NavigatorRouteView, setHidesBackButton`
+        + ` - error message: ${error}`
+      );
+      //#endregion
+
+      throw new Error("`NavigatorRouteView` failed to do: `setHidesBackButton`");
+    };
   };
   //#endregion
 
@@ -273,6 +286,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
         <RNINavigatorRouteView
           // @ts-ignore
           style={[styles.navigatorRouteView, props.routeContainerStyle]}
+          ref={r => this._nativeRef = r}
           routeKey={props.routeKey}
           routeIndex={props.routeIndex}
           routeTitle={routeOptions.routeTitle}

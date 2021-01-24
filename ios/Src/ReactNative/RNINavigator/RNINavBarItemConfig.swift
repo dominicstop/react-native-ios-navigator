@@ -90,6 +90,7 @@ class RNINavBarItemConfig {
   // MARK:- Init
   // -----------
   
+  /// Init. from a dictionary
   init?(dictionary: NSDictionary){
     guard let type     = dictionary["type"] as? String,
           let itemType = ItemType(rawValue: type)
@@ -142,6 +143,18 @@ class RNINavBarItemConfig {
     if let imageValue = dictionary["imageValue"] {
       self._imageValue = imageValue;
     };
+  };
+  
+  /// Init. from a custom view
+  init(customView: UIView){
+    self.type = .CUSTOM;
+    self.customView = customView;
+  };
+  
+  /// Init. from an optional custom view
+  convenience init?(customView: UIView?){
+    guard let view = customView else { return nil };
+    self.init(customView: view);
   };
   
   // ----------------

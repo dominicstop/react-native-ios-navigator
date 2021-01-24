@@ -39,21 +39,15 @@ class RNINavigatorRouteView: UIView {
     static let NavBarTitleItem = "NavBarTitleItem";
   };
   
-  // ----------------
-  // MARK: Properties
-  // ----------------
+  // -----------------
+  // MARK:- Properties
+  // -----------------
   
   weak var bridge: RCTBridge!;
   weak var delegate: RNINavigatorRouteViewDelegate?;
   
   /// content to show in the navigator
   var reactRouteContent: UIView?;
-  
-  // custom navigation bar items...
-  var reactNavBarBackItem : UIView?;
-  var reactNavBarLeftItem : UIView?;
-  var reactNavBarRightItem: UIView?;
-  var reactNavBarTitleItem: UIView?;
   
   /// ref. to the parent route vc
   weak var routeVC: RNINavigatorRouteViewController? {
@@ -62,9 +56,21 @@ class RNINavigatorRouteView: UIView {
     }
   };
 
-  // -----------------------------
-  // MARK: RN Exported Event Props
-  // -----------------------------
+  
+  // MARK: Custom navigation bar items...
+  
+  // custom right bar item was set, but no config was given, so we
+  // implicitly/automatically show the custom bar item...
+  
+  var reactNavBarBackItem : UIView?;
+  var reactNavBarLeftItem : UIView?;
+  var reactNavBarRightItem: UIView?;
+  var reactNavBarTitleItem: UIView?;
+  
+  
+  // ------------------------------
+  // MARK:- RN Exported Event Props
+  // ------------------------------
   
   /// Fired when a route is *about to be* "pushed"
   @objc var onNavRouteWillPush: RCTBubblingEventBlock?;
@@ -85,9 +91,9 @@ class RNINavigatorRouteView: UIView {
   @objc var onPressNavBarLeftItem: RCTBubblingEventBlock?;
   @objc var onPressNavBarRightItem: RCTBubblingEventBlock?;
   
-  // -----------------------
-  // MARK: RN Exported Props
-  // -----------------------
+  // ------------------------
+  // MARK:- RN Exported Props
+  // ------------------------
   
   @objc var routeKey: NSString? {
     didSet {
@@ -221,9 +227,9 @@ class RNINavigatorRouteView: UIView {
   };
   
   
-  // -----------------------------------
-  // MARK: Convenience Property Wrappers
-  // -----------------------------------
+  // ------------------------------------
+  // MARK:- Convenience Property Wrappers
+  // ------------------------------------
   
   /// Creates a back nav bar button item based on `navBarButtonBackItemConfig`
   var backBarButtonItem: UIBarButtonItem? {
@@ -283,9 +289,9 @@ class RNINavigatorRouteView: UIView {
     };
   };
   
-  // --------------------
-  // MARK: Init/Lifecycle
-  // --------------------
+  // ---------------------
+  // MARK:- Init/Lifecycle
+  // ---------------------
   
   init(bridge: RCTBridge) {
     super.init(frame: CGRect());
@@ -306,9 +312,9 @@ class RNINavigatorRouteView: UIView {
     fatalError("init(coder:) has not been implemented");
   };
   
-  // ------------------
-  // MARK: RN Lifecycle
-  // ------------------
+  // -------------------
+  // MARK:- RN Lifecycle
+  // -------------------
   
   override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
     super.insertSubview(subview, at: atIndex);
@@ -350,9 +356,9 @@ class RNINavigatorRouteView: UIView {
     };
   };
   
-  // ----------------------
-  // MARK: Public Functions
-  // ----------------------
+  // -----------------------
+  // MARK:- Public Functions
+  // -----------------------
   
   func notifyForBoundsChange(_ newBounds: CGRect){
     guard let bridge    = self.bridge,
@@ -391,9 +397,9 @@ class RNINavigatorRouteView: UIView {
     self.reactNavBarTitleItem = nil;
   };
   
-  // -----------------------
-  // MARK: Private Functions
-  // -----------------------
+  // ------------------------
+  // MARK:- Private Functions
+  // ------------------------
   
   /// the `routeVC` has been assigned to this "route view" for the first time,
   /// so we need to init. and prepare it.
