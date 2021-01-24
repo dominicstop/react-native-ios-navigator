@@ -125,6 +125,10 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
         routeOptions       ?.routeTitle ??
         defaultRouteOptions?.routeTitle ?? props.routeKey
       ),
+      prompt: (
+        routeOptions       ?.prompt ??
+        defaultRouteOptions?.prompt 
+      ),
       navBarButtonBackItemConfig: (
         routeOptions       ?.navBarButtonBackItemConfig ??
         defaultRouteOptions?.navBarButtonBackItemConfig ??

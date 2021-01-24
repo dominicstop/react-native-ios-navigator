@@ -184,6 +184,10 @@ extension RNINavigatorRouteViewController: RNINavigatorRouteViewDelegate {
     self.navigationItem.title = title;
   };
   
+  func didReceivePrompt(_ prompt: String?) {
+    self.navigationItem.prompt = prompt;
+  };
+  
   func didReceiveNavBarButtonTitleView(_ titleView: UIView) {
     self.navigationItem.titleView = titleView;
   };

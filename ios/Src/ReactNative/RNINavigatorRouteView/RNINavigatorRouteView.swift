@@ -12,6 +12,8 @@ protocol RNINavigatorRouteViewDelegate: AnyObject {
   
   func didReceiveRouteTitle(_ title: String);
   
+  func didReceivePrompt(_ title: String?);
+  
   func didReceiveNavBarButtonTitleView(_ titleView: UIView);
   
   func didReceiveNavBarButtonBackItem(_ item: UIBarButtonItem?);
@@ -124,6 +126,13 @@ class RNINavigatorRouteView: UIView {
       else { return };
       
       delegate?.didReceiveRouteTitle(routeTitle as String);
+    }
+  };
+  
+  @objc var prompt: NSString? {
+    didSet {
+      guard self.prompt != oldValue else { return };
+      self.delegate?.didReceivePrompt(self.prompt as String?);
     }
   };
   
@@ -411,6 +420,9 @@ class RNINavigatorRouteView: UIView {
     if let routeTitle = self.routeTitle {
       delegate?.didReceiveRouteTitle(routeTitle as String);
     };
+    
+    // set nav bar prompt
+    delegate?.didReceivePrompt(self.prompt as String?);
     
     // set nav bar back item
     delegate?.didReceiveNavBarButtonBackItem(self.backBarButtonItem);

@@ -10,8 +10,9 @@ export type RNINavigatorRouteViewProps = {
   routeKey: string;
   routeIndex: number;
 
-  // Navbar item config
   routeTitle?: string;
+  prompt?: String;
+  // Navbar item config
   navBarButtonBackItemConfig  ?: NavBarBackItemConfig;
   navBarButtonLeftItemsConfig ?: NavBarItemsConfig;
   navBarButtonRightItemsConfig?: NavBarItemsConfig;

@@ -30,8 +30,10 @@ enum NavEvents {
 };
 
 export type RouteOptions = {
-  // Navbar item config
   routeTitle?: string;
+  prompt?: string;
+
+  // Navbar item config
   navBarButtonBackItemConfig  ?: NavBarBackItemConfig;
   navBarButtonLeftItemsConfig ?: NavBarItemsConfig;
   navBarButtonRightItemsConfig?: NavBarItemsConfig;
