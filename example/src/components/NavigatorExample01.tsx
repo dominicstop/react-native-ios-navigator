@@ -27,8 +27,6 @@ function randomBGColor(){
 
 // extend
 interface ExampleRouteProps extends RouteContentProps {
-  routeKey: string;
-  routeIndex: number;
 };
 
 function ExampleRoute(props: ExampleRouteProps){
@@ -77,25 +75,19 @@ export function NavigatorExample01() {
         initialRouteKey={'routeA'}
         routes={[{
           routeKey: 'routeA',
-          routeOptions: {
+          initialRouteOptions: {
             routeTitle: "Route A",
           },
-          renderRoute: (route, index) => (
-            <ExampleRoute
-              routeIndex={index}
-              routeKey={route.routeKey}
-            />
+          renderRoute: () => (
+            <ExampleRoute/>
           ),
         }, {
           routeKey: 'routeB',
-          routeOptions: {
+          initialRouteOptions: {
             routeTitle: "Route B",
           },
-          renderRoute: (route, index) => (
-            <ExampleRoute
-              routeIndex={index}
-              routeKey={route.routeKey}
-            />
+          renderRoute: () => (
+            <ExampleRoute/>
           ),
         }]}
       />

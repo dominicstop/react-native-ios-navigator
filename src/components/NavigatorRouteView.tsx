@@ -6,7 +6,7 @@ import type { NavigatorView, RouteOptions } from './NavigatorView';
 
 import { NavBarItemsWrapper } from './NavBarBackItemsWrapper';
 
-import { RNINavigatorRouteView } from '../native_components/RNINavigatorRouteView';
+import { RNINavigatorRouteView, RNINavigatorRouteViewProps } from '../native_components/RNINavigatorRouteView';
 import { RNINavigatorRouteViewModule } from '../native_modules/RNINavigatorRouteViewModule';
 
 import * as Helpers from '../functions/Helpers';
@@ -63,7 +63,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
   routeContentRef: React.Component<RouteContentProps>;
   // references
   private _emitter              : EventEmitter<NavRouteEvents>;
-  private _nativeRef            : RNINavigatorRouteView;
+  private _nativeRef            : React.Component<RNINavigatorRouteViewProps>;
   private _routeContentRef      : ReactElement;
   private _routeViewPortalRef   : RouteViewPortal;
   private _navBarItemsWrapperRef: NavBarItemsWrapper

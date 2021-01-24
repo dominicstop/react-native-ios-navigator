@@ -74,7 +74,7 @@ export type NavRouteConfigItem = {
 type NavigatorViewProps = {
   routes: Array<NavRouteConfigItem>;
   initialRouteKey: string;
-  routeContainerStyle: ViewStyle;
+  routeContainerStyle?: ViewStyle;
   // navigation bar props
   navBarStyle?: string;
   navBarTintColor?: string;
