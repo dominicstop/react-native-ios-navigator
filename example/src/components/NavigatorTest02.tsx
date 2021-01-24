@@ -4,15 +4,23 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { RouteViewPortal, NavigatorView, NavRouteEvents, RouteContentProps, useNavRouteEvents } from 'react-native-ios-navigator';
 import * as Colors from '../constants/Colors';
 
-function ExampleRoute(props: RouteContentProps){
+export function NavigatorTest02(props: RouteContentProps){
   const [index, setIndex] = React.useState(0);
 
   return (
     <View style={styles.routeContainer}>
       <RouteViewPortal
-        renderNavBarLeftItem={() => (
+        routeOptions={{
+          routeTitle: `index: ${index}`,
+          navBarButtonLeftItemsConfig: [{
+            type: 'TEXT',
+            title: `index: ${index}`,
+            tintColor: 'red',
+          }],
+        }}
+        renderNavBarRightItem={() => (
           <Text>
-            {`Custom Left`}
+            {`Custom Right`}
           </Text>
         )}
         renderNavBarTitleItem={() => (
@@ -41,25 +49,6 @@ function ExampleRoute(props: RouteContentProps){
   );
 };
 
-export function NavigatorTest02() {
-  return(
-    <View style={styles.rootContainer}>
-      <NavigatorView
-        ref={r => this.navRef = r}
-        initialRouteKey={'routeA'}
-        routes={[{
-          routeKey: 'routeA',
-          routeOptions: {
-            routeTitle: "Route A",
-          },
-          renderRoute: () => (
-            <ExampleRoute/>
-          ),
-        }]}
-      />
-    </View>
-  );
-};
 
 const styles = StyleSheet.create({
   rootContainer: {

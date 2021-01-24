@@ -47,7 +47,7 @@ class HomeRoute extends React.PureComponent<RouteContentProps> {
 
   _handleOnPressItem = async ({item, index}) => {
     const navRef = this.props.getRefToNavigator();
-    await navRef.setNavigationBarHidden(true, true);
+    //await navRef.setNavigationBarHidden(true, true);
     await navRef.push({routeKey: item.routeKey});
   };
 
