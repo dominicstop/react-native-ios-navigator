@@ -57,11 +57,15 @@ class RNINavigatorView: UIView {
   
   @objc var navBarStyle: NSString? {
     didSet {
-      guard let string = self.navBarStyle as String?,
-            let barStyle = UIBarStyle(string: string)
-      else { return };
+      guard self.navBarStyle != oldValue else { return };
       
-      self.navigationBar.barStyle = barStyle;
+      self.navigationBar.barStyle = {
+        guard let string = self.navBarStyle as String?,
+              let barStyle = UIBarStyle(string: string)
+        else { return .default };
+        
+        return barStyle;
+      }();
     }
   };
   
@@ -73,24 +77,27 @@ class RNINavigatorView: UIView {
   
   @objc var navBarTintColor: NSNumber? {
     didSet {
-      guard let number  = self.navBarTintColor,
-            let uiColor = RCTConvert.uiColor(number)
-      else { return };
-      
-      self.navigationBar.barTintColor = uiColor;
+      guard self.navBarTintColor != oldValue else { return };
+     
+      self.navigationBar.barTintColor = {
+        guard let number  = self.navBarTintColor else { return nil };
+        return RCTConvert.uiColor(number);
+      }();
     }
   };
   
   private var _navBarTitleTextStyle = RCTTextAttributes();
   @objc var navBarTitleTextStyle: NSDictionary? {
     didSet {
-      guard let dict = self.navBarTitleTextStyle, dict.count > 0
-      else { return };
+      guard self.navBarTitleTextStyle != oldValue else { return };
       
-      self._navBarTitleTextStyle.apply(RCTTextAttributes(dict: dict));
-      
-      self.navigationBar.titleTextAttributes =
-        self._navBarTitleTextStyle.effectiveTextAttributes();
+      self.navigationBar.titleTextAttributes = {
+        guard let dict = self.navBarTitleTextStyle, dict.count > 0
+        else { return nil };
+        
+        self._navBarTitleTextStyle.apply(RCTTextAttributes(dict: dict));
+        return self._navBarTitleTextStyle.effectiveTextAttributes();
+      }();
     }
   };
   
