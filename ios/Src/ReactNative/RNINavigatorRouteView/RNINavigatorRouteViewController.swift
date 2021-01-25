@@ -53,7 +53,6 @@ class RNINavigatorRouteViewController: UIViewController {
   /// A ref. to the `ScrollView` subview of the `reactRouteContent`
   var reactScrollView: RCTScrollView?;
 
-  
   // --------------------------------
   // MARK:- View Controller Lifecycle
   // --------------------------------
@@ -200,6 +199,7 @@ extension RNINavigatorRouteViewController: RNINavigatorRouteViewDelegate {
   func didReceiveLargeTitleDisplayMode(_ displayMode: UINavigationItem.LargeTitleDisplayMode) {
     if #available(iOS 11.0, *) {
       self.navigationItem.largeTitleDisplayMode = displayMode;
+      print("DEBUG -* didReceiveLargeTitleDisplayMode: \(displayMode)");
     };
   };
   

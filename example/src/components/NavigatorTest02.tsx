@@ -12,7 +12,7 @@ export function NavigatorTest02(props: RouteContentProps){
       <RouteViewPortal
         routeOptions={{
           routeTitle: `index: ${index}`,
-          largeTitleDisplayMode: 'always',
+          largeTitleDisplayMode: 'never',
           navBarButtonLeftItemsConfig: [{
             type: 'TEXT',
             title: `index: ${index}`,

@@ -151,10 +151,13 @@ class RNINavigatorRouteView: UIView {
       let displayMode: UINavigationItem.LargeTitleDisplayMode = {
         guard let string = self.largeTitleDisplayMode as String?,
               let mode = UINavigationItem.LargeTitleDisplayMode(string: string)
-        else { return .automatic };
+        else { print("DEBUG -* largeTitleDisplayMode didSet: auto"); return .automatic };
         
+        print("DEBUG -* largeTitleDisplayMode didSet: \(string)");
         return mode;
       }();
+      
+      print("DEBUG -* largeTitleDisplayMode didSet: \(largeTitleDisplayMode)");
       
       self._largeTitleDisplayMode = displayMode;
       self.delegate?.didReceiveLargeTitleDisplayMode(displayMode);
