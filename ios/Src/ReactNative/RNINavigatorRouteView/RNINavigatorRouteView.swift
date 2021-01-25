@@ -14,6 +14,8 @@ protocol RNINavigatorRouteViewDelegate: AnyObject {
   
   func didReceivePrompt(_ title: String?);
   
+  func didReceiveLargeTitleDisplayMode(_ displayMode: UINavigationItem.LargeTitleDisplayMode);
+  
   func didReceiveNavBarButtonTitleView(_ titleView: UIView);
   
   func didReceiveNavBarButtonBackItem(_ item: UIBarButtonItem?);
@@ -133,6 +135,24 @@ class RNINavigatorRouteView: UIView {
     didSet {
       guard self.prompt != oldValue else { return };
       self.delegate?.didReceivePrompt(self.prompt as String?);
+    }
+  };
+  
+  private var _largeTitleDisplayMode: UINavigationItem.LargeTitleDisplayMode?;
+  @objc var largeTitleDisplayMode: NSString? {
+    didSet {
+      guard self.largeTitleDisplayMode != oldValue else { return };
+      
+      let displayMode: UINavigationItem.LargeTitleDisplayMode = {
+        guard let string = self.largeTitleDisplayMode as String?,
+              let mode = UINavigationItem.LargeTitleDisplayMode(string: string)
+        else { return .automatic };
+        
+        return mode;
+      }();
+      
+      self._largeTitleDisplayMode = displayMode;
+      self.delegate?.didReceiveLargeTitleDisplayMode(displayMode);
     }
   };
   
@@ -423,6 +443,11 @@ class RNINavigatorRouteView: UIView {
     
     // set nav bar prompt
     delegate?.didReceivePrompt(self.prompt as String?);
+    
+    // set nav bar large title display mode
+    if let titleDisplayMode = self._largeTitleDisplayMode {
+      self.delegate?.didReceiveLargeTitleDisplayMode(titleDisplayMode);
+    };
     
     // set nav bar back item
     delegate?.didReceiveNavBarButtonBackItem(self.backBarButtonItem);

@@ -12,7 +12,15 @@ export type BackButtonDisplayMode =
   /**The navigation item attempts to display a generic title or no title for the Back button, depending on the space available. */
   | 'generic'
   /** The navigation item displays the Back button indicator instead of a title. */
-  |'minimal'
+  | 'minimal';
+
+export type LargeTitleDisplayMode =
+  /** Inherit the display mode from the previous navigation item. */
+  | 'automatic'
+  /** Always display a large title. */
+  | 'always'
+  /** Never display a large title. */
+  | 'never';
 
 export type RNINavigatorRouteViewProps = {
   style: ViewStyle;
@@ -21,6 +29,7 @@ export type RNINavigatorRouteViewProps = {
 
   routeTitle?: string;
   prompt?: String;
+  largeTitleDisplayMode?: LargeTitleDisplayMode;
   // Navbar item config
   navBarButtonBackItemConfig  ?: NavBarBackItemConfig;
   navBarButtonLeftItemsConfig ?: NavBarItemsConfig;

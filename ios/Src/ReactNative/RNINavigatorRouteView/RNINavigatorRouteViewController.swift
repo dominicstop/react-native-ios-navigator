@@ -188,6 +188,12 @@ extension RNINavigatorRouteViewController: RNINavigatorRouteViewDelegate {
     self.navigationItem.prompt = prompt;
   };
   
+  func didReceiveLargeTitleDisplayMode(_ displayMode: UINavigationItem.LargeTitleDisplayMode) {
+    if #available(iOS 11.0, *) {
+      self.navigationItem.largeTitleDisplayMode = displayMode;
+    };
+  };
+  
   func didReceiveNavBarButtonTitleView(_ titleView: UIView) {
     self.navigationItem.titleView = titleView;
   };

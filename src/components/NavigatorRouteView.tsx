@@ -129,6 +129,10 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
         routeOptions       ?.prompt ??
         defaultRouteOptions?.prompt 
       ),
+      largeTitleDisplayMode: (
+        routeOptions       ?.largeTitleDisplayMode ??
+        defaultRouteOptions?.largeTitleDisplayMode 
+      ),
       navBarButtonBackItemConfig: (
         routeOptions       ?.navBarButtonBackItemConfig ??
         defaultRouteOptions?.navBarButtonBackItemConfig ??
@@ -266,7 +270,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
 
     return(
       <View
-        style={styles.routeItem}
+        style={[styles.routeItem, props.routeContainerStyle]}
         nativeID={NativeIDKeys.RouteContent}
       >
         {routeContentWithProps}
@@ -288,8 +292,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
         getEmitterRef: this.getEmitterRef,
       }}>
         <RNINavigatorRouteView
-          // @ts-ignore
-          style={[styles.navigatorRouteView, props.routeContainerStyle]}
+          style={styles.navigatorRouteView}
           ref={r => this._nativeRef = r}
           routeKey={props.routeKey}
           routeIndex={props.routeIndex}
@@ -329,13 +332,13 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
 const styles = StyleSheet.create({
   routeItem: {
     position: 'absolute',
+    backgroundColor: 'white',
   },
   navigatorRouteView: {
     // don't show on first mount
     position: 'absolute',
     width: 0,
     height: 0,
-    backgroundColor: 'white',
   },
   routeContentContainer: {
     // can't add `flex: 1` else it disappears

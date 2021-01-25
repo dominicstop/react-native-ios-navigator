@@ -30,8 +30,9 @@ RCT_EXPORT_VIEW_PROPERTY(onPressNavBarRightItem, RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(routeKey  , NSString);
 RCT_EXPORT_VIEW_PROPERTY(routeIndex, NSNumber);
 
+RCT_EXPORT_VIEW_PROPERTY(prompt, NSString);
 RCT_EXPORT_VIEW_PROPERTY(routeTitle, NSString);
-RCT_EXPORT_VIEW_PROPERTY(prompt    , NSString);
+RCT_EXPORT_VIEW_PROPERTY(largeTitleDisplayMode, NSString);
 
 // MARK: Navbar item config
 RCT_EXPORT_VIEW_PROPERTY(navBarButtonBackItemConfig  , NSArray);
