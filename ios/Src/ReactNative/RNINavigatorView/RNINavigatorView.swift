@@ -94,6 +94,14 @@ class RNINavigatorView: UIView {
     }
   };
   
+  @objc var navBarPrefersLargeTitles: Bool = true {
+    willSet {
+      if #available(iOS 11.0, *) {
+        self.navigationBar.prefersLargeTitles = newValue;
+      };
+    }
+  };
+  
   // ---------------------
   // MARK:- Init/Lifecycle
   // ---------------------
@@ -202,6 +210,12 @@ fileprivate extension RNINavigatorView {
     // add vc's view as subview
     self.addSubview(navigationVC.view);
     navigationVC.view.frame = self.bounds;
+    
+    // set with initial value for `navBarPrefersLargeTitles` prop
+    if #available(iOS 11.0, *) {
+      navigationVC.navigationBar.prefersLargeTitles =
+        self.navBarPrefersLargeTitles
+    };
     
     // enable autolayout
     navigationVC.view.translatesAutoresizingMaskIntoConstraints = false;

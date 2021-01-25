@@ -97,6 +97,7 @@ export default function App() {
       <NavigatorView
         ref={r => this.navRef = r}
         initialRouteKey={RouteKeys.Home}
+        navBarPrefersLargeTitles={true}
         routes={[{
           routeKey: RouteKeys.Home,
           initialRouteOptions: {

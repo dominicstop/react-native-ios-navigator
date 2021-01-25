@@ -82,6 +82,7 @@ type NavigatorViewProps = {
   navBarTintColor?: string;
   navBarIsTranslucent?: boolean;
   navBarTitleTextStyle?: TextStyle & TextStyleIOS;
+  navBarPrefersLargeTitles?: boolean;
   // global/shared nav bar items
   renderNavBarLeftItem ?: RenderNavBarItem;
   renderNavBarRightItem?: RenderNavBarItem;
@@ -417,6 +418,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         navBarTintColor={processColor(props.navBarTintColor)}
         navBarIsTranslucent={props.navBarIsTranslucent ?? true}
         navBarTitleTextStyle={props.navBarTitleTextStyle}
+        navBarPrefersLargeTitles={props.navBarPrefersLargeTitles ?? true}
         // event handlers
         onNavRouteWillPop={this._handleOnNavRouteWillPop}
         onNavRouteDidPop={this._handleOnNavRouteDidPop}

@@ -30,6 +30,7 @@ type RNINavigatorViewProps = {
   navBarTintColor?: number;
   navBarIsTranslucent: boolean;
   navBarTitleTextStyle?: TextStyle & TextStyleIOS;
+  navBarPrefersLargeTitles: boolean;
   // Native Events
   onNavRouteViewAdded?: (events: onNavRouteViewAddedPayload) => void;
   onNavRouteWillPop  ?: (events: onNavRouteWillPopPayload  ) => void;
