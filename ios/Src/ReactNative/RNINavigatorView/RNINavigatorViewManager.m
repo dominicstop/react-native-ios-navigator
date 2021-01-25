@@ -26,6 +26,6 @@ RCT_EXPORT_VIEW_PROPERTY(navBarStyle, NSString);
 RCT_EXPORT_VIEW_PROPERTY(navBarIsTranslucent, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(navBarTintColor, NSNumber);
 RCT_EXPORT_VIEW_PROPERTY(navBarTitleTextStyle, NSDictionary);
-
+RCT_EXPORT_VIEW_PROPERTY(navBarPrefersLargeTitles, BOOL);
 
 @end
