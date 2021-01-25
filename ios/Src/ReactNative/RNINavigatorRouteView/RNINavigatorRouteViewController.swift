@@ -50,7 +50,7 @@ class RNINavigatorRouteViewController: UIViewController {
   /// via the parent nav.
   var isToBeRemoved = false;
   
-  
+  /// A ref. to the `ScrollView` subview of the `reactRouteContent`
   var reactScrollView: RCTScrollView?;
 
   
@@ -63,7 +63,6 @@ class RNINavigatorRouteViewController: UIViewController {
     
     let reactRouteContent = self.routeView!.reactRouteContent!;
     
-    
     // is content a scrollview
     if #available(iOS 11.0, *),
        let contentView     = reactRouteContent.subviews.first,
@@ -72,19 +71,6 @@ class RNINavigatorRouteViewController: UIViewController {
       self.view = reactRouteContent;
       self.reactScrollView = reactScrollView;
       
-    } else if #available(iOS 11.0, *) {
-      let safeArea = self.view.safeAreaLayoutGuide;
-      self.view = reactRouteContent;
-      
-     //reactRouteContent.translatesAutoresizingMaskIntoConstraints = false;
-     //NSLayoutConstraint.activate([
-     //  // pin content to parent edges w/o the arrow
-     //   reactRouteContent.topAnchor     .constraint(equalTo: safeArea.topAnchor     ),
-     //   reactRouteContent.bottomAnchor  .constraint(equalTo: safeArea.bottomAnchor  ),
-     //   reactRouteContent.leadingAnchor .constraint(equalTo: safeArea.leadingAnchor ),
-     //   reactRouteContent.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
-     //]);
-      
     } else {
       self.view = reactRouteContent;
     };
@@ -92,7 +78,10 @@ class RNINavigatorRouteViewController: UIViewController {
   
   override func viewWillLayoutSubviews() {
     super.viewWillLayoutSubviews();
-  }
+    
+    /// update `routeView`'s size
+    self.routeView?.notifyForBoundsChange(self.view.bounds);
+  };
   
   override func viewDidLayoutSubviews() {
     super.viewWillLayoutSubviews();
@@ -100,37 +89,7 @@ class RNINavigatorRouteViewController: UIViewController {
     if let reactScrollView = self.reactScrollView {
       // Update scrollview insets
       reactScrollView.refreshContentInset();
-      
-      /// update `routeView`'s size
-      self.routeView?.notifyForBoundsChange(self.view.bounds);
-      
-    } else if #available(iOS 11.0, *),
-              let routeView = self.routeView?.reactRouteContent {
-      
-      let safeArea = self.view.safeAreaLayoutGuide;
-      
-      print("DEBUG -*")
-      
-      // update view insets
-      //routeView.layoutMargins = self.view.safeAreaInsets;
-      //routeView.layoutMarginsDidChange();
-      //routeView.reactPaddingInsets = self.view.safeAreaInsets;
-      /// update `routeView`'s size
-      self.routeView?.notifyForBoundsChange(self.view.bounds);
     };
-    
-    
-  };
-  
-  override func viewWillAppear(_ animated: Bool) {
-    #if DEBUG
-    // when RN app reloads
-    NotificationCenter.default.addObserver(self,
-      selector: #selector(self.onReactRefresh),
-      name: NSNotification.Name(rawValue: "RCTBridgeFastRefreshNotification"),
-      object: nil
-    );
-    #endif
   };
   
   override func willMove(toParent parent: UIViewController?){
@@ -206,21 +165,6 @@ class RNINavigatorRouteViewController: UIViewController {
       // TODO: View controller was moved, possibly due replacing a route?
     };
   };
-  
-  #if DEBUG
-  deinit {
-    NotificationCenter.default.removeObserver(self,
-      name: NSNotification.Name(rawValue: "RCTBridgeWillReloadNotification"),
-      object: nil
-    );
-    
-    print("LOG - deinit - VC, RNINavigatorRouteViewController"
-      + " - for routeKey: \(self.routeView?.routeKey ?? "N/A")"
-      + " - routeIndex: \(self.routeView?.routeIndex ?? -1)"
-      + " - isUserInitiated: \(!self.isToBeRemoved)"
-    );
-  };
-  #endif
   
   // ------------------------
   // MARK:- Private Functions

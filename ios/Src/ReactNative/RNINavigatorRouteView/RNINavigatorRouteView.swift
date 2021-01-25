@@ -347,13 +347,6 @@ class RNINavigatorRouteView: UIView {
     fatalError("init(coder:) has not been implemented");
   };
   
-  @available(iOS 11.0, *)
-  override func safeAreaInsetsDidChange() {
-    super.safeAreaInsetsDidChange();
-    
-    print("contentView, safeAreaInsetsDidChange: \(self.safeAreaInsets)");
-  };
-  
   // -------------------
   // MARK:- RN Lifecycle
   // -------------------

@@ -1,17 +1,18 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, ScrollView, Text, TouchableOpacity } from 'react-native';
 
-import { RouteViewPortal, NavigatorView, NavRouteEvents, RouteContentProps, useNavRouteEvents } from 'react-native-ios-navigator';
+import { RouteViewPortal, RouteContentProps } from 'react-native-ios-navigator';
 import * as Colors from '../constants/Colors';
 
 export function NavigatorTest02(props: RouteContentProps){
   const [index, setIndex] = React.useState(0);
 
   return (
-    <View style={styles.routeContainer}>
+    <ScrollView contentContainerStyle={styles.routeContainer}>
       <RouteViewPortal
         routeOptions={{
           routeTitle: `index: ${index}`,
+          largeTitleDisplayMode: 'always',
           navBarButtonLeftItemsConfig: [{
             type: 'TEXT',
             title: `index: ${index}`,
@@ -19,9 +20,11 @@ export function NavigatorTest02(props: RouteContentProps){
           }],
         }}
         renderNavBarRightItem={() => (
-          <Text>
-            {`Custom Right`}
-          </Text>
+          <TouchableOpacity>
+            <Text>
+              {`Custom Right`}
+            </Text>
+          </TouchableOpacity>
         )}
         renderNavBarTitleItem={() => (
           <View style={styles.navBarTitleContainer}>
@@ -40,12 +43,22 @@ export function NavigatorTest02(props: RouteContentProps){
           console.log(index);
           setIndex(prevIndex => prevIndex + 1);
           const navRef = props.getRefToNavigator();
-          navRef.forceUpdate();
+          //navRef.forceUpdate();
         }}
       >
         {'The nav bar title should increment every time you touch this text'}
       </Text>
-    </View>
+      <TouchableOpacity style={styles.button}
+        onPress={() => {
+          const routeRef = props.getRefToRoute();
+          routeRef.setHidesBackButton(true, true);
+        }}
+      >
+        <Text style={styles.buttonText}>
+          {'Hide Back Button'}
+        </Text>
+      </TouchableOpacity>
+    </ScrollView>
   );
 };
 
@@ -57,7 +70,8 @@ const styles = StyleSheet.create({
   routeContainer: {
     flex: 1,
     alignItems: 'center',
-    padding: 20,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
   },
   textTitle: {
     fontSize: 22,
@@ -66,21 +80,25 @@ const styles = StyleSheet.create({
   textSubtitle: {
     fontSize: 16,
   },
-  buttonContainer: {
-    backgroundColor: 'rgba(255,255,255,0.75)',
+  button: {
+    backgroundColor: Colors.PURPLE.A700,
     paddingHorizontal: 12,
     paddingVertical: 7,
     marginTop: 12,
     borderRadius: 12,
   },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
   navBarTitleContainer: {
     paddingHorizontal: 10,
     paddingVertical: 5,
-    backgroundColor: Colors.PURPLE.A700,
     borderRadius: 10,
   },
   navBarTitle: {
     color: 'white',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
 });

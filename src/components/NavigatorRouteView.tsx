@@ -332,6 +332,8 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
 const styles = StyleSheet.create({
   routeItem: {
     position: 'absolute',
+    width: 0,
+    height: 0,
     backgroundColor: 'white',
   },
   navigatorRouteView: {

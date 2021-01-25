@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, SafeAreaView, TouchableOpacity } from 'react-native';
 
 import { NavigatorView, RouteContentProps } from 'react-native-ios-navigator';
 
@@ -35,7 +35,7 @@ function ExampleRoute(props: ExampleRouteProps){
   const routeContainerStyle = { backgroundColor: bgColor };
 
   return (
-    <View style={[styles.routeContainer, routeContainerStyle]}>
+    <SafeAreaView style={[styles.routeContainer, routeContainerStyle]}>
       <Text style={styles.textRoute}>
         {`Debug: ${props.routeKey} - ${props.routeIndex}`}
       </Text>
@@ -63,13 +63,13 @@ function ExampleRoute(props: ExampleRouteProps){
           {'Push: RouteB'}
         </Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 };
 
 export function NavigatorExample01() {
   return(
-    <View style={styles.rootContainer}>
+    <SafeAreaView style={styles.rootContainer}>
       <NavigatorView
         ref={r => this.navRef = r}
         initialRouteKey={'routeA'}
@@ -91,7 +91,7 @@ export function NavigatorExample01() {
           ),
         }]}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -103,7 +103,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'red',
   },
   textRoute: {
     fontSize: 32,
