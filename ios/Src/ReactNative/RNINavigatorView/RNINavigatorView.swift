@@ -306,13 +306,13 @@ extension RNINavigatorView {
     #endif
     
     // notify js `RNINavigatorRouteView` that it's about to be pushed
-    routeView.onNavRouteWillPush?([:]);
+    routeView.notifyOnNavRouteWillPush(isAnimated: true);
     
     self.navigationVC.pushViewController(routeViewVC, animated: true){
       completion();
       
       // notify js `RNINavigatorRouteView` that it's been pushed
-      routeView.onNavRouteDidPush?([:]);
+      routeView.notifyOnNavRouteDidPush(isAnimated: true);
     };
   };
   

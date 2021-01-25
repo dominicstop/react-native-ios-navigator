@@ -404,58 +404,14 @@ class RNINavigatorRouteView: UIView {
     };
   };
   
-  // -----------------------
-  // MARK:- Public Functions
-  // -----------------------
-  
-  func notifyForBoundsChange(_ newBounds: CGRect){
-    guard let bridge    = self.bridge,
-          let reactView = self.reactRouteContent
-    else { return };
-    
-    // update react view's size
-    bridge.uiManager.setSize(newBounds.size, for: reactView);
-  };
-  
-  /// Once we're done w/ this "route view" (e.g. it has been popped or removed),
-  /// then we need to cleanup to prevent this instance from leaking.
-  func cleanup(){
-    let viewsToRemove = [
-      self.reactRouteContent   ,
-      self.reactNavBarBackItem ,
-      self.reactNavBarLeftItem ,
-      self.reactNavBarRightItem,
-      self.reactNavBarTitleItem,
-      self
-    ];
-    
-    for case let view? in viewsToRemove {
-      // cleanup: manually remove route from view registry
-      RNIUtilities.recursivelyRemoveFromViewRegistry(
-        bridge   : self.bridge,
-        reactView: view
-      );
-    };
-    
-    // detatch RCTTouchandler instances from the react views
-    self.detachTouchHandlers();
-    
-    // remove references to the react views
-    self.reactRouteContent    = nil;
-    self.reactNavBarBackItem  = nil;
-    self.reactNavBarLeftItem  = nil;
-    self.reactNavBarRightItem = nil;
-    self.reactNavBarTitleItem = nil;
-  };
-  
   // ------------------------
   // MARK:- Private Functions
   // ------------------------
   
-  /// the `routeVC` has been assigned to this "route view" for the first time,
-  /// so we need to init. and prepare it.
+  /// The `routeVC` has been assigned to this "route view" for the first time.
   /// Because the "route view" is created first, by the time the "route vc" is
-  /// created and added as a delegate, it has already missed a few events.
+  /// created (and added as a delegate), it has already missed a few events, so
+  /// we need to send the initial values.
   private func setupRouteVC(){
     
     // set the vc's title for the 1st time
@@ -496,11 +452,32 @@ class RNINavigatorRouteView: UIView {
     
     // init `navigationItem` property from `hidesBackButton` prop
     delegate?.didReceiveHidesBackButton(self.hidesBackButton);
-    
   };
   
+  /// This creates a "base" dictionary that we can pass to "event props"
+  private func createEventPayload() -> Dictionary<String, Any> {
+    var dict: Dictionary<String, Any> = [:];
+    
+    if let reactTag = self.reactTag {
+      dict["reactTag"] = reactTag;
+    };
+    
+    if let routeKey = self.routeKey {
+      dict["routeKey"] = routeKey;
+    };
+    
+    if let routeIndex = self.routeIndex {
+      dict["routeIndex"] = routeIndex;
+    };
+    
+    return dict;
+  };
+  
+  /// Cleanup: Remove the views attached to the `RCTTouchandler` instances.
   private func detachTouchHandlers(){
-    self.touchHandlerRouteContent.detach(from: self.reactRouteContent);
+    if let routeContent = self.reactRouteContent {
+      self.touchHandlerRouteContent.detach(from: routeContent);
+    };
     
     if let titleBarItem = self.reactNavBarTitleItem {
       self.touchHandlerNavBarTitleItem.detach(from: titleBarItem);
@@ -518,4 +495,83 @@ class RNINavigatorRouteView: UIView {
       self.touchHandlerNavBarRightItem.detach(from: rightBarItem);
     };
   };
+  
+  // -----------------------
+  // MARK:- Public Functions
+  // -----------------------
+  
+  func notifyForBoundsChange(_ newBounds: CGRect){
+    guard let bridge    = self.bridge,
+          let reactView = self.reactRouteContent
+    else { return };
+    
+    // update react view's size
+    bridge.uiManager.setSize(newBounds.size, for: reactView);
+  };
+  
+  /// notify js `RNINavigatorRouteView` that it's about to be pushed
+  func notifyOnNavRouteWillPush(isAnimated: Bool){
+    var dict = self.createEventPayload();
+    dict["isAnimated"] = isAnimated;
+    
+    self.onNavRouteWillPush?(dict);
+  };
+  
+  /// notify js `RNINavigatorRouteView` that it's been pushed
+  func notifyOnNavRouteDidPush(isAnimated: Bool){
+    var dict = self.createEventPayload();
+    dict["isAnimated"] = isAnimated;
+
+    self.onNavRouteDidPush?(dict);
+  };
+  
+  /// notify js `RNINavigatorRouteView` that it's about to be popped
+  func notifyOnNavRouteWillPop(isUserInitiated: Bool){
+    var dict = self.createEventPayload();
+    dict["isUserInitiated"] = isUserInitiated;
+    
+    self.onNavRouteWillPop?(dict);
+  };
+  
+  /// notify js `RNINavigatorRouteView` that it's has been popped
+  func notifyOnNavRouteDidPop(isUserInitiated: Bool){
+    var dict = self.createEventPayload();
+    dict["isUserInitiated"] = isUserInitiated;
+    
+    self.onNavRouteDidPop?(dict);
+  };
+  
+  /// Once we're done w/ this "route view" (e.g. it has been popped or removed),
+  /// then we need to cleanup to prevent this instance from leaking.
+  func cleanup(){
+    
+    let viewsToRemove = [
+      self.reactRouteContent   ,
+      self.reactNavBarBackItem ,
+      self.reactNavBarLeftItem ,
+      self.reactNavBarRightItem,
+      self.reactNavBarTitleItem,
+      self
+    ];
+    
+    // detatch RCTTouchandler instances from the react views
+    self.detachTouchHandlers();
+    
+    // cleanup: manually remove routes from view registry
+    for case let view? in viewsToRemove {
+      RNIUtilities.recursivelyRemoveFromViewRegistry(
+        bridge   : self.bridge,
+        reactView: view
+      );
+    };
+    
+    // remove references to the react views
+    self.reactRouteContent    = nil;
+    self.reactNavBarBackItem  = nil;
+    self.reactNavBarLeftItem  = nil;
+    self.reactNavBarRightItem = nil;
+    self.reactNavBarTitleItem = nil;
+  };
 };
+  
+  

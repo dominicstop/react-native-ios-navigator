@@ -94,14 +94,13 @@ class RNINavigatorRouteViewController: UIViewController {
   override func willMove(toParent parent: UIViewController?){
     super.willMove(toParent: parent);
     
-    guard let delegate   = self.delegate,
-          let routeView  = self.routeView,
+    guard let routeView  = self.routeView,
           let routeKey   = routeView.routeKey,
           let routeIndex = routeView.routeIndex
     else { return };
     
-    // this vc 'will' be popped
     if parent == nil {
+      // this vc 'will' be popped
       #if DEBUG
       print("LOG - VC, RNINavigatorRouteViewController: willMove"
         + " - toParent: nil - VC will be removed"
@@ -111,16 +110,18 @@ class RNINavigatorRouteViewController: UIViewController {
       );
       #endif
       
+      // note: if `isToBeRemoved` is false, then "pop"/back is user initiated.
+      let isUserInitiated = !self.isToBeRemoved;
+      
       // send event: notify js nav. route view that it's going to be popped.
-      self.routeView?.onNavRouteWillPop?([:]);
+      self.routeView?.notifyOnNavRouteWillPop(isUserInitiated: isUserInitiated);
       
       // notify parent (i.e. `RNINavigatorView`) that this vc will be "popped".
-      delegate.onNavRouteWillPop(
-        reactTag  : routeView.reactTag,
-        routeKey  : routeKey  ,
-        routeIndex: routeIndex,
-        // note: if `isToBeRemoved` is false, then "pop"/back is user initiated.
-        isUserInitiated: !self.isToBeRemoved
+      self.delegate?.onNavRouteWillPop(
+        reactTag       : routeView.reactTag,
+        routeKey       : routeKey,
+        routeIndex     : routeIndex,
+        isUserInitiated: isUserInitiated
       );
       
     } else {
@@ -131,14 +132,13 @@ class RNINavigatorRouteViewController: UIViewController {
   override func didMove(toParent parent: UIViewController?) {
     super.didMove(toParent: parent);
     
-    guard let delegate   = self.delegate,
-          let routeView  = self.routeView,
+    guard let routeView  = self.routeView,
           let routeKey   = routeView.routeKey,
           let routeIndex = routeView.routeIndex
     else { return };
     
-    // this vc 'will' be popped
     if parent == nil {
+      // this vc 'will' be popped
       #if DEBUG
       print("LOG - VC, RNINavigatorRouteViewController: didMove"
         + " - toParent: nil - VC will be removed"
@@ -148,27 +148,24 @@ class RNINavigatorRouteViewController: UIViewController {
       );
       #endif
       
+      // note: if `isToBeRemoved` is false, then "pop"/back is user initiated.
+      let isUserInitiated = !self.isToBeRemoved;
+      
       // send event: notify js nav. route view that it's been popped.
-      self.routeView?.onNavRouteDidPop?([:]);
+      self.routeView?.notifyOnNavRouteDidPop(isUserInitiated: isUserInitiated);
       
       // notify parent (i.e. `RNINavigatorView`) that this vc has been "popped".
-      delegate.onNavRouteDidPop(
-        reactTag  : routeView.reactTag,
-        routeKey  : routeKey  ,
-        routeIndex: routeIndex,
-        // note: if `isToBeRemoved` is false, then "pop"/back is user initiated.
-        isUserInitiated: !self.isToBeRemoved
+      self.delegate?.onNavRouteDidPop(
+        reactTag       : routeView.reactTag,
+        routeKey       : routeKey,
+        routeIndex     : routeIndex,
+        isUserInitiated: isUserInitiated
       );
       
     } else {
       // TODO: View controller was moved, possibly due replacing a route?
     };
   };
-  
-  // ------------------------
-  // MARK:- Private Functions
-  // ------------------------
-
 };
 
 // -----------------------------------------------
