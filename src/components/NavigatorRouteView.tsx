@@ -6,7 +6,7 @@ import type { NavigatorView, RouteOptions } from './NavigatorView';
 
 import { NavBarItemsWrapper } from './NavBarBackItemsWrapper';
 
-import { RNINavigatorRouteView, RNINavigatorRouteViewProps } from '../native_components/RNINavigatorRouteView';
+import { RNINavigatorRouteView, RNINavigatorRouteViewProps, onPressNavBarItem } from '../native_components/RNINavigatorRouteView';
 import { RNINavigatorRouteViewModule } from '../native_modules/RNINavigatorRouteViewModule';
 
 import * as Helpers from '../functions/Helpers';
@@ -17,11 +17,17 @@ import { NativeIDKeys } from '../constants/LibraryConstants';
 
 
 //#region - Type Definitions
+/** Event emitter keys for `NavigatorRouteView` */
 export enum NavRouteEvents {
+  // Navigator push/pop events
   onNavRouteWillPush = "onNavRouteWillPush",
   onNavRouteDidPush  = "onNavRouteDidPush" ,
   onNavRouteWillPop  = "onNavRouteWillPop" ,
   onNavRouteDidPop   = "onNavRouteDidPop"  ,
+  // Navbar item `onPress` events
+  onPressNavBarBackItem  = "onPressNavBarBackItem" ,
+  onPressNavBarLeftItem  = "onPressNavBarLeftItem" ,
+  onPressNavBarRightItem = "onPressNavBarRightItem",
 };
 
 export interface RouteContentProps {
@@ -210,9 +216,9 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
       throw new Error("`NavigatorRouteView` failed to do: `setHidesBackButton`");
     };
   };
-  //#endregion
+  // #endregion
 
-  //#region - Handlers
+  // #region - Handlers
   private _handleGetRefToRoute = () => {
     return this;
   };
@@ -220,27 +226,44 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
   private _handleGetRefToNavRouteEmitter = () => {
     return this._emitter;
   };
-  //#endregion
+  // #endregion
 
-  //#region - Native Event Handlers
-  /** Handler for `RNINavigatorRouteView` native event: `onNavRouteWillPop` */
+  // #region - Native Event Handlers
+  // Native Event Handlers for `RNINavigatorRouteView`
+
+  /** Handle event: `onNavRouteWillPop` */
   private _handleOnNavRouteWillPop = () => {
     this._emitter.emit(NavRouteEvents.onNavRouteWillPop, null);
   };
 
-  /** Handler for `RNINavigatorRouteView` native event: `onNavRouteDidPop` */
+  /** Handle event: `onNavRouteDidPop` */
   private _handleOnNavRouteDidPop = () => {
     this._emitter.emit(NavRouteEvents.onNavRouteDidPop, null);
   };
 
-  /** Handler for `RNINavigatorRouteView` native event: `onNavRouteWillPus` */
+  /** Handle event: `onNavRouteWillPush` */
   private _handleOnNavRouteWillPush = () => {
     this._emitter.emit(NavRouteEvents.onNavRouteWillPush, null);
   };
 
-  /** Handler for `RNINavigatorRouteView` native event: `onNavRouteDidPush` */
+  /** Handle event: `onNavRouteDidPush` */
   private _handleOnNavRouteDidPush = () => {
     this._emitter.emit(NavRouteEvents.onNavRouteDidPush, null);
+  };
+
+  /** Handle event: `onPressNavBarBackItem` */
+  private _handleOnPressNavBarBackItem: onPressNavBarItem = (event) => {
+    this._emitter.emit(NavRouteEvents.onPressNavBarBackItem, event);
+  };
+
+  /** Handle event: `onPressNavBarLeftItem` */
+  private _handleOnPressNavBarLeftItem: onPressNavBarItem = (event) => {
+    this._emitter.emit(NavRouteEvents.onPressNavBarLeftItem, event);
+  };
+
+  /** Handle event: `onPressNavBarRightItem` */
+  private _handleOnPressNavBarRightItem: onPressNavBarItem = (event) => {
+    this._emitter.emit(NavRouteEvents.onPressNavBarRightItem, event);
   };
   //#endregion
   
@@ -293,14 +316,19 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
         <RNINavigatorRouteView
           style={styles.navigatorRouteView}
           ref={r => this._nativeRef = r}
+          // route config
           routeKey={props.routeKey}
           routeIndex={props.routeIndex}
           routeTitle={routeOptions.routeTitle}
-          // nav route events
+          // nav route events: push/pop
           onNavRouteWillPop={this._handleOnNavRouteWillPop}
           onNavRouteDidPop={this._handleOnNavRouteDidPop}
           onNavRouteWillPush={this._handleOnNavRouteWillPush}
           onNavRouteDidPush={this._handleOnNavRouteDidPush}
+          // nav route events: navbar item `onPress`
+          onPressNavBarBackItem={this._handleOnPressNavBarBackItem}
+          onPressNavBarLeftItem={this._handleOnPressNavBarLeftItem}
+          onPressNavBarRightItem={this._handleOnPressNavBarRightItem}
           // pass down: navbar item config + back button item config
           {...routeOptions}
         >
