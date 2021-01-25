@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, SafeAreaView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, SafeAreaView, TouchableOpacity } from 'react-native';
 
-import { NavigatorView, RouteContentProps } from 'react-native-ios-navigator';
+import { NavigatorView, RouteContentProps, RouteViewPortal } from 'react-native-ios-navigator';
 
 import * as Colors  from '../constants/Colors';
 import * as Helpers from '../functions/Helpers';
@@ -70,12 +70,18 @@ function ExampleRoute(props: ExampleRouteProps){
 export function NavigatorExample01() {
   return(
     <SafeAreaView style={styles.rootContainer}>
+      <RouteViewPortal
+        routeOptions={{
+          //largeTitleDisplayMode: 'never',
+        }}
+      />
       <NavigatorView
         ref={r => this.navRef = r}
         initialRouteKey={'routeA'}
+        navBarPrefersLargeTitles={false}
         routes={[{
           routeKey: 'routeA',
-          initialRouteOptions: {
+          defaultRouteOptions: {
             routeTitle: "Route A",
           },
           renderRoute: () => (
@@ -83,7 +89,7 @@ export function NavigatorExample01() {
           ),
         }, {
           routeKey: 'routeB',
-          initialRouteOptions: {
+          defaultRouteOptions: {
             routeTitle: "Route B",
           },
           renderRoute: () => (

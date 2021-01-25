@@ -108,6 +108,9 @@ export default function App() {
           ),
         }, {
           routeKey: RouteKeys.NavigatorExample01,
+          defaultRouteOptions: {
+            largeTitleDisplayMode: 'never'
+          },
           renderRoute: () => (
             <NavigatorExample01/>
           ),
