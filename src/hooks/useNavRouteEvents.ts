@@ -1,10 +1,27 @@
 import { useContext, useEffect, useRef } from 'react';
+import type { onPressNavBarItem } from 'src/native_components/RNINavigatorRouteView';
 
 import type { NavRouteEvents } from '../components/NavigatorRouteView';
 import { NavRouteViewContext } from '../context/NavRouteViewContext';
 
+/** Route push/pop events */
+type NavRouteLifeCycleEvents = 
+  | (NavRouteEvents.onNavRouteWillPush | 'onNavRouteWillPush')
+  | (NavRouteEvents.onNavRouteDidPush  | 'onNavRouteDidPush' )
+  | (NavRouteEvents.onNavRouteWillPop  | 'onNavRouteWillPop' )
+  | (NavRouteEvents.onNavRouteDidPop   | 'onNavRouteDidPop'  )
 
-export function useNavRouteEvents(eventName: NavRouteEvents, once: boolean, handler: () => void){
+/** Route navigation bar item events */
+type NavBarItemEvents = 
+  | (NavRouteEvents.onPressNavBarBackItem  | 'onPressNavBarBackItem' )
+  | (NavRouteEvents.onPressNavBarLeftItem  | 'onPressNavBarLeftItem' )
+  | (NavRouteEvents.onPressNavBarRightItem | 'onPressNavBarRightItem')
+
+export function useNavRouteEvents(
+  eventName: NavRouteEvents, 
+  once: boolean, 
+  handler: Function
+){
   const { getEmitterRef } = useContext(NavRouteViewContext);
   
   // Create a ref that stores handler
@@ -39,4 +56,22 @@ export function useNavRouteEvents(eventName: NavRouteEvents, once: boolean, hand
       };
     };
   });
+};
+
+export function useNavRouteLifeCycle(
+  eventName: NavRouteLifeCycleEvents, 
+  once: boolean, 
+  handler: () => void
+){
+  // @ts-ignore
+  useNavRouteEvents(eventName, once, handler);
+};
+
+export function useNavBarItemEvents(
+  eventName: NavBarItemEvents, 
+  once: boolean, 
+  handler: onPressNavBarItem
+){
+  // @ts-ignore
+  useNavRouteEvents(eventName, once, handler);
 };
