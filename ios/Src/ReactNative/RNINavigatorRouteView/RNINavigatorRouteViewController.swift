@@ -168,12 +168,7 @@ class RNINavigatorRouteViewController: UIViewController {
   // ------------------------
   // MARK:- Private Functions
   // ------------------------
-  
-  @objc private func onReactRefresh(){
-    print("onReactRefresh");
-    self.updateViewConstraints();
-    self.reactScrollView?.setNeedsLayout();
-  };
+
 };
 
 // -----------------------------------------------
@@ -199,7 +194,6 @@ extension RNINavigatorRouteViewController: RNINavigatorRouteViewDelegate {
   func didReceiveLargeTitleDisplayMode(_ displayMode: UINavigationItem.LargeTitleDisplayMode) {
     if #available(iOS 11.0, *) {
       self.navigationItem.largeTitleDisplayMode = displayMode;
-      print("DEBUG -* didReceiveLargeTitleDisplayMode: \(displayMode)");
     };
   };
   

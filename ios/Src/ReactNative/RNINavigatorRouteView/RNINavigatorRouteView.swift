@@ -70,11 +70,7 @@ class RNINavigatorRouteView: UIView {
   // MARK: Touch handlers for custom navigation bar items...
   private lazy var touchHandlerNavBarBackItem  = RCTTouchHandler(bridge: self.bridge)!;
   private lazy var touchHandlerNavBarLeftItem  = RCTTouchHandler(bridge: self.bridge)!;
-  private lazy var touchHandlerNavBarRightItem = RCTTouchHandler(bridge: self.bridge)! {
-    didSet {
-      print("DEBUG -* touchHandlerNavBarRightItem did set");
-    }
-  };
+  private lazy var touchHandlerNavBarRightItem = RCTTouchHandler(bridge: self.bridge)!;
   private lazy var touchHandlerNavBarTitleItem = RCTTouchHandler(bridge: self.bridge)!;
   
   // ------------------------------
@@ -151,14 +147,10 @@ class RNINavigatorRouteView: UIView {
       let displayMode: UINavigationItem.LargeTitleDisplayMode = {
         guard let string = self.largeTitleDisplayMode as String?,
               let mode = UINavigationItem.LargeTitleDisplayMode(string: string)
-        else { print("DEBUG -* largeTitleDisplayMode didSet: auto"); return .automatic };
-        
-        print("DEBUG -* largeTitleDisplayMode didSet: \(string)");
+        else { return .automatic };
+
         return mode;
       }();
-      
-      print("DEBUG -* largeTitleDisplayMode didSet: \(largeTitleDisplayMode)");
-      
       self._largeTitleDisplayMode = displayMode;
       self.delegate?.didReceiveLargeTitleDisplayMode(displayMode);
     }
