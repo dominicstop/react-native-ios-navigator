@@ -52,6 +52,7 @@ class RNINavigatorRouteView: UIView {
   
   /// content to show in the navigator
   var reactRouteContent: UIView?;
+  var touchHandlerRouteContent: RCTTouchHandler!;
   
   /// ref. to the parent route vc
   weak var routeVC: RNINavigatorRouteViewController? {
@@ -59,18 +60,22 @@ class RNINavigatorRouteView: UIView {
       self.setupRouteVC();
     }
   };
-
   
   // MARK: Custom navigation bar items...
-  
-  // custom right bar item was set, but no config was given, so we
-  // implicitly/automatically show the custom bar item...
-  
   var reactNavBarBackItem : UIView?;
   var reactNavBarLeftItem : UIView?;
   var reactNavBarRightItem: UIView?;
   var reactNavBarTitleItem: UIView?;
   
+  // MARK: Touch handlers for custom navigation bar items...
+  private lazy var touchHandlerNavBarBackItem  = RCTTouchHandler(bridge: self.bridge)!;
+  private lazy var touchHandlerNavBarLeftItem  = RCTTouchHandler(bridge: self.bridge)!;
+  private lazy var touchHandlerNavBarRightItem = RCTTouchHandler(bridge: self.bridge)! {
+    didSet {
+      print("DEBUG -* touchHandlerNavBarRightItem did set");
+    }
+  };
+  private lazy var touchHandlerNavBarTitleItem = RCTTouchHandler(bridge: self.bridge)!;
   
   // ------------------------------
   // MARK:- RN Exported Event Props
@@ -91,8 +96,8 @@ class RNINavigatorRouteView: UIView {
   @objc var onNavRouteDidPop: RCTBubblingEventBlock?;
   
   /// Fired when the nav bar's back item is pressed and is a custom nav bar item.
-  @objc var onPressNavBarBackItem: RCTBubblingEventBlock?;
-  @objc var onPressNavBarLeftItem: RCTBubblingEventBlock?;
+  @objc var onPressNavBarBackItem : RCTBubblingEventBlock?;
+  @objc var onPressNavBarLeftItem : RCTBubblingEventBlock?;
   @objc var onPressNavBarRightItem: RCTBubblingEventBlock?;
   
   // ------------------------
@@ -326,6 +331,7 @@ class RNINavigatorRouteView: UIView {
     super.init(frame: CGRect());
     
     self.bridge = bridge;
+    self.touchHandlerRouteContent = RCTTouchHandler(bridge: bridge);
   };
   
   #if DEBUG
@@ -339,6 +345,13 @@ class RNINavigatorRouteView: UIView {
   
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented");
+  };
+  
+  @available(iOS 11.0, *)
+  override func safeAreaInsetsDidChange() {
+    super.safeAreaInsetsDidChange();
+    
+    print("contentView, safeAreaInsetsDidChange: \(self.safeAreaInsets)");
   };
   
   // -------------------
@@ -367,19 +380,24 @@ class RNINavigatorRouteView: UIView {
     switch nativeID {
       case NativeIDKeys.RouteContent:
         self.reactRouteContent = subview;
+        self.touchHandlerRouteContent.attach(to: subview);
         
       case NativeIDKeys.NavBarBackItem:
         self.reactNavBarBackItem = subview;
+        self.touchHandlerNavBarBackItem.attach(to: subview);
         delegate?.didReceiveNavBarButtonTitleView(subview);
         
       case NativeIDKeys.NavBarLeftItem:
         self.reactNavBarLeftItem = subview;
+        self.touchHandlerNavBarLeftItem.attach(to: subview);
         
       case NativeIDKeys.NavBarRightItem:
         self.reactNavBarRightItem = subview;
+        self.touchHandlerNavBarRightItem.attach(to: subview);
         
       case NativeIDKeys.NavBarTitleItem:
         self.reactNavBarTitleItem = subview;
+        self.touchHandlerNavBarTitleItem.attach(to: subview);
         
       default: break;
     };
@@ -417,6 +435,9 @@ class RNINavigatorRouteView: UIView {
         reactView: view
       );
     };
+    
+    // detatch RCTTouchandler instances from the react views
+    self.detachTouchHandlers();
     
     // remove references to the react views
     self.reactRouteContent    = nil;
@@ -479,5 +500,25 @@ class RNINavigatorRouteView: UIView {
     // init `navigationItem` property from `hidesBackButton` prop
     delegate?.didReceiveHidesBackButton(self.hidesBackButton);
     
+  };
+  
+  private func detachTouchHandlers(){
+    self.touchHandlerRouteContent.detach(from: self.reactRouteContent);
+    
+    if let titleBarItem = self.reactNavBarTitleItem {
+      self.touchHandlerNavBarTitleItem.detach(from: titleBarItem);
+    };
+    
+    if let backBarItem = self.reactNavBarBackItem {
+      self.touchHandlerNavBarBackItem.detach(from: backBarItem);
+    };
+    
+    if let leftBarItem = self.reactNavBarLeftItem {
+      self.touchHandlerNavBarLeftItem.detach(from: leftBarItem);
+    };
+    
+    if let rightBarItem = self.reactNavBarRightItem {
+      self.touchHandlerNavBarRightItem.detach(from: rightBarItem);
+    };
   };
 };
