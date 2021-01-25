@@ -1,11 +1,15 @@
 import * as React from 'react';
 import { StyleSheet, View, ScrollView, Text, TouchableOpacity } from 'react-native';
 
-import { RouteViewPortal, RouteContentProps } from 'react-native-ios-navigator';
+import { RouteViewPortal, RouteContentProps, useNavBarItemEvents } from 'react-native-ios-navigator';
 import * as Colors from '../constants/Colors';
 
 export function NavigatorTest02(props: RouteContentProps){
   const [index, setIndex] = React.useState(0);
+
+  useNavBarItemEvents('onPressNavBarLeftItem', false, ({nativeEvent}) => {
+    alert(`onPressNavBarLeftItem, key: ${nativeEvent.key}`);
+  });
 
   return (
     <ScrollView contentContainerStyle={styles.routeContainer}>
