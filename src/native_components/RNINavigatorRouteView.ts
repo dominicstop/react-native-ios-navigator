@@ -28,8 +28,8 @@ export type RNINavigatorRouteViewProps = {
   routeIndex: number;
 
   // Navbar Config
-  routeTitle?: string;
   prompt?: String;
+  routeTitle?: string;
   largeTitleDisplayMode?: LargeTitleDisplayMode;
 
   // Navbar Item Config
@@ -38,10 +38,10 @@ export type RNINavigatorRouteViewProps = {
   navBarButtonRightItemsConfig?: NavBarItemsConfig;
 
   // Navbar back button item config
-  leftItemsSupplementBackButton?: boolean;
+  hidesBackButton?: boolean;
   backButtonTitle?: string;
   backButtonDisplayMode?: BackButtonDisplayMode;
-  hidesBackButton?: boolean;
+  leftItemsSupplementBackButton?: boolean;
 
   // Native Events: Push
   onNavRouteWillPush?: () => void;
