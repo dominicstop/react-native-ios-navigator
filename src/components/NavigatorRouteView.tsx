@@ -37,7 +37,7 @@ type NavigatorRouteViewProps = {
   routeKey: string;
   routeIndex: number;
   routeProps: object;
-  initialRouteOptions: RouteOptions;
+  defaultRouteOptions: RouteOptions;
   routeContainerStyle?: ViewStyle,
   getRefToNavigator: () => NavigatorView,
   renderRouteContent: () => ReactElement<RouteContentProps>
@@ -106,7 +106,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     const props = this.props;
     const portalProps = this._routeViewPortalRef?.props;
 
-    const { initialRouteOptions: defaultRouteOptions } = this.props;
+    const { defaultRouteOptions: defaultRouteOptions } = this.props;
     const { routeOptions } = this.state;
 
     // check if portal has custom nav bar items

@@ -64,7 +64,7 @@ type RenderNavBarItem = (routeItem: NavRouteStateItem) => ReactElement;
 export type NavRouteConfigItem = {
   routeKey: string;
   initialRouteProps?: object;
-  initialRouteOptions?: RouteOptions;
+  defaultRouteOptions?: RouteOptions;
   renderRoute: (routeItem: NavRouteItem) => ReactElement<RouteContentProps>;
   // render nav bar items
   renderNavBarLeftItem ?: RenderNavBarItem;
@@ -382,9 +382,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
             route      .routeProps ??
             routeConfig.initialRouteProps
           )}
-          initialRouteOptions={(
+          defaultRouteOptions={(
             route      .routeOptions ??
-            routeConfig.initialRouteOptions
+            routeConfig.defaultRouteOptions
           )}
           getRefToNavigator={this._handleGetRefToNavigator}
           renderRouteContent={() => (

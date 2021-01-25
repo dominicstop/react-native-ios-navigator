@@ -100,7 +100,7 @@ export default function App() {
         navBarPrefersLargeTitles={true}
         routes={[{
           routeKey: RouteKeys.Home,
-          initialRouteOptions: {
+          defaultRouteOptions: {
             routeTitle: "Initial Route Title",
           },
           renderRoute: () => (
