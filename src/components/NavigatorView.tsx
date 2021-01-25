@@ -253,9 +253,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       // add new route, and wait for it be added
       await this.addRoute({
-        routeKey    : routeItem.routeKey,
-        routeProps  : routeItem.routeProps   ?? {},
-        routeOptions: routeItem.routeOptions ?? {},
+        routeKey    : routeItem.routeKey    ,
+        routeProps  : routeItem.routeProps  ,
+        routeOptions: routeItem.routeOptions,
       });
 
       // forward "push" request to native module
