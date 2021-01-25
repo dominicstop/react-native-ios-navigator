@@ -7,10 +7,14 @@
 #endif
 
 #import <React/RCTBridge.h>
-#import <React/RCTView.h>
-#import <React/RCTTouchHandler.h>
 #import <React/RCTUIManager.h>
 #import "React/RCTEventEmitter.h"
+
+#import <React/RCTView.h>
+#import <React/RCTScrollView.h>
+#import <React/RCTAutoInsetsProtocol.h>
+
+#import <React/RCTTouchHandler.h>
 
 #import <React/RCTConvert.h>
 #import <React/RCTTextAttributes.h>
