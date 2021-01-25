@@ -139,7 +139,7 @@ class RNINavigatorRouteView: UIView {
     }
   };
   
-  private var _largeTitleDisplayMode: UINavigationItem.LargeTitleDisplayMode?;
+  private var _largeTitleDisplayMode: UINavigationItem.LargeTitleDisplayMode = .automatic;
   @objc var largeTitleDisplayMode: NSString? {
     didSet {
       guard self.largeTitleDisplayMode != oldValue else { return };
@@ -151,6 +151,7 @@ class RNINavigatorRouteView: UIView {
 
         return mode;
       }();
+      
       self._largeTitleDisplayMode = displayMode;
       self.delegate?.didReceiveLargeTitleDisplayMode(displayMode);
     }
@@ -159,13 +160,15 @@ class RNINavigatorRouteView: UIView {
   private var _navBarButtonBackItemConfig: RNINavBarItemConfig?;
   @objc var navBarButtonBackItemConfig: NSDictionary? {
     didSet {
-      guard self.navBarButtonBackItemConfig != oldValue,
-            let dict       = self.navBarButtonBackItemConfig,
-            let configItem = RNINavBarItemConfig(dictionary: dict)
-      else { return };
+      guard self.navBarButtonBackItemConfig != oldValue else { return };
       
-      if configItem.type == .CUSTOM {
-        configItem.customView = self.reactNavBarBackItem;
+      let configItem: RNINavBarItemConfig? = {
+        guard let dict = self.navBarButtonBackItemConfig else { return nil };
+        return RNINavBarItemConfig(dictionary: dict);
+      }();
+      
+      if configItem?.type == .CUSTOM {
+        configItem?.customView = self.reactNavBarBackItem;
       };
       
       self._navBarButtonBackItemConfig = configItem;
@@ -176,16 +179,19 @@ class RNINavigatorRouteView: UIView {
   private var _navBarButtonLeftItemsConfig: [RNINavBarItemConfig]?;
   @objc var navBarButtonLeftItemsConfig: NSArray? {
     didSet {
-      guard self.navBarButtonLeftItemsConfig != oldValue,
-            let arrayAny = self.navBarButtonLeftItemsConfig,
-            let array    = arrayAny as? [NSDictionary]
-      else { return };
+      guard self.navBarButtonLeftItemsConfig != oldValue else { return };
+
+      let configItems: [RNINavBarItemConfig]? = {
+        guard let arrayAny = self.navBarButtonLeftItemsConfig,
+              let array    = arrayAny as? [NSDictionary]
+        else { return nil };
+        
+        return array.compactMap {
+          RNINavBarItemConfig(dictionary: $0);
+        };
+      }();
       
-      let configItems = array.compactMap {
-        RNINavBarItemConfig(dictionary: $0);
-      };
-      
-      if let configItem = configItems.first, configItem.type == .CUSTOM {
+      if let configItem = configItems?.first, configItem.type == .CUSTOM {
         // set custom view for `navBarButtonLeftItemsConfig`
         configItem.customView = self.reactNavBarLeftItem;
       };
@@ -198,16 +204,19 @@ class RNINavigatorRouteView: UIView {
   private var _navBarButtonRightItemsConfig: [RNINavBarItemConfig]?;
   @objc var navBarButtonRightItemsConfig: NSArray? {
     didSet {
-      guard self.navBarButtonRightItemsConfig != oldValue,
-            let arrayAny = self.navBarButtonRightItemsConfig,
-            let array    = arrayAny as? [NSDictionary]
-      else { return };
+      guard self.navBarButtonRightItemsConfig != oldValue else { return };
+  
+      let configItems: [RNINavBarItemConfig]? = {
+        guard let arrayAny = self.navBarButtonRightItemsConfig,
+              let array    = arrayAny as? [NSDictionary]
+        else { return nil };
+        
+        return array.compactMap {
+          RNINavBarItemConfig(dictionary: $0);
+        };
+      }();
       
-      let configItems = array.compactMap {
-        RNINavBarItemConfig(dictionary: $0);
-      };
-      
-      if let configItem = configItems.first, configItem.type == .CUSTOM {
+      if let configItem = configItems?.first, configItem.type == .CUSTOM {
         // set custom view for `navBarButtonRightItemsConfig`
         configItem.customView = self.reactNavBarRightItem;
       };
@@ -235,13 +244,18 @@ class RNINavigatorRouteView: UIView {
     }
   };
   
-  private var _backButtonDisplayMode: UINavigationItem.BackButtonDisplayMode?;
+  private var _backButtonDisplayMode: UINavigationItem.BackButtonDisplayMode = .default;
   @objc var backButtonDisplayMode: NSString? {
     didSet {
-      guard self.backButtonDisplayMode != oldValue,
-            let string      = self.backButtonDisplayMode as String?,
-            let displayMode = UINavigationItem.BackButtonDisplayMode(string: string)
-      else { return };
+      guard self.backButtonDisplayMode != oldValue else { return };
+      
+      let displayMode: UINavigationItem.BackButtonDisplayMode = {
+        guard let string      = self.backButtonDisplayMode as String?,
+              let displayMode = UINavigationItem.BackButtonDisplayMode(string: string)
+        else { return .default };
+        
+        return displayMode;
+      }();
       
       self._backButtonDisplayMode = displayMode;
       delegate?.didReceiveBackButtonDisplayMode(displayMode);
@@ -254,7 +268,6 @@ class RNINavigatorRouteView: UIView {
       delegate?.didReceiveHidesBackButton(self.hidesBackButton);
     }
   };
-  
   
   // ------------------------------------
   // MARK:- Convenience Property Wrappers
@@ -454,9 +467,7 @@ class RNINavigatorRouteView: UIView {
     delegate?.didReceivePrompt(self.prompt as String?);
     
     // set nav bar large title display mode
-    if let titleDisplayMode = self._largeTitleDisplayMode {
-      self.delegate?.didReceiveLargeTitleDisplayMode(titleDisplayMode);
-    };
+    self.delegate?.didReceiveLargeTitleDisplayMode(self._largeTitleDisplayMode);
     
     // set nav bar back item
     delegate?.didReceiveNavBarButtonBackItem(self.backBarButtonItem);
@@ -481,9 +492,7 @@ class RNINavigatorRouteView: UIView {
     delegate?.didReceiveBackButtonTitle(self.backButtonTitle as String?);
     
     // init `navigationItem` property from `backButtonDisplayMode` prop
-    if let displayMode = self._backButtonDisplayMode {
-      delegate?.didReceiveBackButtonDisplayMode(displayMode);
-    };
+    delegate?.didReceiveBackButtonDisplayMode(self._backButtonDisplayMode);
     
     // init `navigationItem` property from `hidesBackButton` prop
     delegate?.didReceiveHidesBackButton(self.hidesBackButton);
