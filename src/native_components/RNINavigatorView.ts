@@ -22,11 +22,14 @@ export type onNavRouteDidPopPayload = { nativeEvent: {
 }};
 //#endregion
 
+/** `UIBarStyle`: Defines the stylistic appearance of different types of views */
+export type BarStyle = 'default' | 'black';
+
 /** `RNINavigatorView` native comp. props */
 type RNINavigatorViewProps = {
   style: ViewStyle;
 
-  navBarStyle?: string;
+  navBarStyle?: BarStyle;
   navBarTintColor?: number;
   navBarIsTranslucent: boolean;
   navBarTitleTextStyle?: TextStyle & TextStyleIOS;

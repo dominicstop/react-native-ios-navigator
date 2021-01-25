@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import { StyleSheet, findNodeHandle, processColor, TextStyle, TextStyleIOS, ViewStyle } from 'react-native';
 
-import { RNINavigatorView } from '../native_components/RNINavigatorView';
+import { BarStyle, RNINavigatorView } from '../native_components/RNINavigatorView';
 import { RNINavigatorViewModule } from '../native_modules/RNINavigatorViewModule';
 
 import { NavigatorRouteView } from './NavigatorRouteView';
@@ -78,7 +78,7 @@ type NavigatorViewProps = {
   initialRouteKey: string;
   routeContainerStyle?: ViewStyle;
   // navigation bar props
-  navBarStyle?: string;
+  navBarStyle?: BarStyle;
   navBarTintColor?: string;
   navBarIsTranslucent?: boolean;
   navBarTitleTextStyle?: TextStyle & TextStyleIOS;
