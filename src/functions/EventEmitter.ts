@@ -14,7 +14,7 @@ export class EventEmitter<EventsT extends keyof Enum> {
     this.events = {};
   };
 
-  addListener(eventKey: EventsT, listener: EventListener) {
+  addListener(eventKey: EventsT | string, listener: EventListener) {
     const hasEvents = this.events[eventKey] != null;
     
     if (!hasEvents) {
@@ -26,7 +26,7 @@ export class EventEmitter<EventsT extends keyof Enum> {
     this.events[eventKey].push(listener);
   };
 
-  removeListener(eventKey: EventsT, listenerToRemove: EventListener) {
+  removeListener(eventKey: EventsT | string, listenerToRemove: EventListener) {
     const hasEvents = this.events[eventKey] != null;
 
     // event does not exist (maybe: throw an error?)
@@ -37,7 +37,7 @@ export class EventEmitter<EventsT extends keyof Enum> {
     ));
   };
 
-  once(eventKey: EventsT, listener: EventListener){
+  once(eventKey: EventsT | string, listener: EventListener){
     const tempListener: EventListener = (data) => {
       listener(data);
       this.removeListener(eventKey, tempListener);
@@ -50,7 +50,7 @@ export class EventEmitter<EventsT extends keyof Enum> {
     this.events = {};
   };
 
-  emit(eventKey: EventsT, data: any) {
+  emit(eventKey: EventsT | string, data: any) {
     const hasEvents = this.events[eventKey] != null;
 
     // event does not exist

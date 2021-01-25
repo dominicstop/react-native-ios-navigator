@@ -6,7 +6,7 @@ import type { NavigatorView, RouteOptions } from './NavigatorView';
 
 import { NavBarItemsWrapper } from './NavBarBackItemsWrapper';
 
-import { RNINavigatorRouteView, RNINavigatorRouteViewProps, onPressNavBarItem } from '../native_components/RNINavigatorRouteView';
+import { RNINavigatorRouteView, RNINavigatorRouteViewProps, onPressNavBarItem, onRoutePushEvent, onRoutePopEvent } from '../native_components/RNINavigatorRouteView';
 import { RNINavigatorRouteViewModule } from '../native_modules/RNINavigatorRouteViewModule';
 
 import * as Helpers from '../functions/Helpers';
@@ -232,23 +232,23 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
   // Native Event Handlers for `RNINavigatorRouteView`
 
   /** Handle event: `onNavRouteWillPop` */
-  private _handleOnNavRouteWillPop = () => {
-    this._emitter.emit(NavRouteEvents.onNavRouteWillPop, null);
+  private _handleOnNavRouteWillPop: onRoutePopEvent = (event) => {
+    this._emitter.emit(NavRouteEvents.onNavRouteWillPop, event);
   };
 
   /** Handle event: `onNavRouteDidPop` */
-  private _handleOnNavRouteDidPop = () => {
-    this._emitter.emit(NavRouteEvents.onNavRouteDidPop, null);
+  private _handleOnNavRouteDidPop: onRoutePopEvent = (event) => {
+    this._emitter.emit(NavRouteEvents.onNavRouteDidPop, event);
   };
 
   /** Handle event: `onNavRouteWillPush` */
-  private _handleOnNavRouteWillPush = () => {
-    this._emitter.emit(NavRouteEvents.onNavRouteWillPush, null);
+  private _handleOnNavRouteWillPush: onRoutePushEvent = (event) => {
+    this._emitter.emit(NavRouteEvents.onNavRouteWillPush, event);
   };
 
   /** Handle event: `onNavRouteDidPush` */
-  private _handleOnNavRouteDidPush = () => {
-    this._emitter.emit(NavRouteEvents.onNavRouteDidPush, null);
+  private _handleOnNavRouteDidPush: onRoutePushEvent = (event) => {
+    this._emitter.emit(NavRouteEvents.onNavRouteDidPush, event);
   };
 
   /** Handle event: `onPressNavBarBackItem` */

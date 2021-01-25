@@ -419,7 +419,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         navBarIsTranslucent={props.navBarIsTranslucent ?? true}
         navBarTitleTextStyle={props.navBarTitleTextStyle}
         navBarPrefersLargeTitles={props.navBarPrefersLargeTitles ?? true}
-        // event handlers
+        // event handlers: push/pop
         onNavRouteWillPop={this._handleOnNavRouteWillPop}
         onNavRouteDidPop={this._handleOnNavRouteDidPop}
         onNavRouteViewAdded={this._handleOnNavRouteViewAdded}

@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef } from 'react';
-import type { onPressNavBarItem } from 'src/native_components/RNINavigatorRouteView';
+import type { onPressNavBarItem, onRoutePopEvent, onRoutePushEvent } from 'src/native_components/RNINavigatorRouteView';
 
 import type { NavRouteEvents } from '../components/NavigatorRouteView';
 import { NavRouteViewContext } from '../context/NavRouteViewContext';
@@ -17,8 +17,8 @@ type NavBarItemEvents =
   | (NavRouteEvents.onPressNavBarLeftItem  | 'onPressNavBarLeftItem' )
   | (NavRouteEvents.onPressNavBarRightItem | 'onPressNavBarRightItem')
 
-export function useNavRouteEvents(
-  eventName: NavRouteEvents, 
+function useNavRouteEvents(
+  eventName: NavRouteLifeCycleEvents | NavBarItemEvents,
   once: boolean, 
   handler: Function
 ){
@@ -61,9 +61,8 @@ export function useNavRouteEvents(
 export function useNavRouteLifeCycle(
   eventName: NavRouteLifeCycleEvents, 
   once: boolean, 
-  handler: () => void
+  handler: onRoutePushEvent | onRoutePopEvent
 ){
-  // @ts-ignore
   useNavRouteEvents(eventName, once, handler);
 };
 
@@ -72,6 +71,5 @@ export function useNavBarItemEvents(
   once: boolean, 
   handler: onPressNavBarItem
 ){
-  // @ts-ignore
   useNavRouteEvents(eventName, once, handler);
 };

@@ -2,6 +2,22 @@ import { requireNativeComponent, ViewStyle } from 'react-native';
 import type { NavBarBackItemConfig, NavBarItemsConfig } from '../types/NavBarItemConfig';
 
 
+export type onRoutePushEvent = (event: {
+  nativeEvent: { 
+    routeKey: string,
+    routeIndex: number,
+    isAnimated: boolean
+  }
+}) => void;
+
+export type onRoutePopEvent = (event: {
+  nativeEvent: { 
+    routeKey: string,
+    routeIndex: number,
+    isUserInitiated: boolean
+  }
+}) => void;
+
 export type onPressNavBarItem = (event: {
   nativeEvent: { key: string, type: string }
 }) => void;
@@ -44,12 +60,12 @@ export type RNINavigatorRouteViewProps = {
   leftItemsSupplementBackButton?: boolean;
 
   // Native Events: Push
-  onNavRouteWillPush?: () => void;
-  onNavRouteDidPush ?: () => void;
+  onNavRouteWillPush?: onRoutePushEvent;
+  onNavRouteDidPush ?: onRoutePushEvent;
 
   // Native Events: Pop
-  onNavRouteWillPop?: () => void;
-  onNavRouteDidPop ?: () => void;
+  onNavRouteWillPop?: onRoutePopEvent;
+  onNavRouteDidPop ?: onRoutePopEvent;
 
   // Native Events: Navbar Item `onPress`
   onPressNavBarBackItem ?: onPressNavBarItem;
