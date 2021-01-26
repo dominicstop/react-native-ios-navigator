@@ -176,9 +176,9 @@ class RNINavigatorRouteViewController: UIViewController {
 /// This delegate is used to receive "props" from `RNINavigatorRouteView`.
 extension RNINavigatorRouteViewController: RNINavigatorRouteViewDelegate {
   
-  // ---------------------------------
-  // MARK: Receive Props: navbar items
-  // ---------------------------------
+  // ----------------------------------
+  // MARK: Receive Props: Navbar Config
+  // ----------------------------------
   
   func didReceiveRouteTitle(_ title: String) {
     self.navigationItem.title = title;
@@ -193,6 +193,10 @@ extension RNINavigatorRouteViewController: RNINavigatorRouteViewDelegate {
       self.navigationItem.largeTitleDisplayMode = displayMode;
     };
   };
+  
+  // ---------------------------------
+  // MARK: Receive Props: Navbar Items
+  // ---------------------------------
   
   func didReceiveNavBarButtonTitleView(_ titleView: UIView) {
     self.navigationItem.titleView = titleView;
@@ -210,9 +214,9 @@ extension RNINavigatorRouteViewController: RNINavigatorRouteViewDelegate {
     self.navigationItem.rightBarButtonItems = items;
   };
   
-  // ---------------------------------------------------
-  // MARK: Receive Props: navbar back button item config
-  // ---------------------------------------------------
+  // ----------------------------------------------
+  // MARK: Receive Props: Navbar Back Button Config
+  // ----------------------------------------------
   
   func didReceiveLeftItemsSupplementBackButton(_ bool: Bool) {
     self.navigationItem.leftItemsSupplementBackButton = bool;

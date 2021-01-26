@@ -75,6 +75,21 @@ class RNINavigatorRouteView: UIView {
   // MARK:- RN Exported Props
   // ------------------------
   
+  /// Note: Some of the exported props can be set to nil, which means that:
+  /// * No values has been provided to the prop yet, so we avoid setting the
+  ///   corresponding properties.
+  ///
+  /// * The properties that the props sets can themselves be set to nil, so a
+  ///   `nil` value for a prop is valid, and should be allowed so that the opt.
+  ///   properties can be set back to `nil` value.
+  ///
+  /// * The properties that the props sets needs to provide a default value so
+  ///   that the properties can be set back to their default value.
+  ///
+  /// * TODO: However there are props where a `nil` is invalid (i.e. a value of
+  ///   `nil` must never occur), so we need to mark the property as an
+  ///   "explicitly unwrapped" property so that the app crashes.
+    
   @objc var routeKey: NSString? {
     didSet {
       guard let routeKey = self.routeKey else { return };
@@ -98,6 +113,11 @@ class RNINavigatorRouteView: UIView {
     }
   };
   
+  //  MARK: Props - Navbar Config
+  /// * General/Misc. Navbar-related props for config. the VC's `navigationItem`
+  ///   properties that are navbar-related.
+  /// -------------------------------------------------------------------------
+  
   @objc var routeTitle: NSString? {
     didSet {
       guard let routeTitle = self.routeTitle as String?
@@ -113,6 +133,11 @@ class RNINavigatorRouteView: UIView {
       self.delegate?.didReceivePrompt(self.prompt as String?);
     }
   };
+  
+  //  MARK: Props - Navbar Item Config
+  /// * Specific props for config. the VC's `navigationItem` proerties that are
+  ///   related to setting the various "navbar button item(s)" properties.
+  /// -------------------------------------------------------------------------
   
   private var _largeTitleDisplayMode: UINavigationItem.LargeTitleDisplayMode = .automatic;
   @objc var largeTitleDisplayMode: NSString? {
@@ -201,6 +226,11 @@ class RNINavigatorRouteView: UIView {
     }
   };
   
+  //  MARK: Props - Navbar Back Button Config
+  /// * Navbar back button specific props for config. the VC's `navigationItem`
+  ///   navbar "back button item" related properties.
+  /// -------------------------------------------------------------------------
+
   @objc var leftItemsSupplementBackButton: Bool = true {
     didSet {
       guard self.leftItemsSupplementBackButton != oldValue
