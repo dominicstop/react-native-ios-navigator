@@ -8,31 +8,6 @@
 import UIKit;
 
 
-protocol RNINavigatorRouteViewDelegate: AnyObject {
-  
-  func didReceiveRouteTitle(_ title: String);
-  
-  func didReceivePrompt(_ title: String?);
-  
-  func didReceiveLargeTitleDisplayMode(_ displayMode: UINavigationItem.LargeTitleDisplayMode);
-  
-  func didReceiveNavBarButtonTitleView(_ titleView: UIView);
-  
-  func didReceiveNavBarButtonBackItem(_ item: UIBarButtonItem?);
-  
-  func didReceiveNavBarButtonLeftItems(_ items: [UIBarButtonItem]?);
-  
-  func didReceiveNavBarButtonRightItems(_ items: [UIBarButtonItem]?);
-  
-  func didReceiveLeftItemsSupplementBackButton(_ bool: Bool);
-  
-  func didReceiveBackButtonTitle(_ title: String?);
-  
-  func didReceiveBackButtonDisplayMode(_ displayMode: UINavigationItem.BackButtonDisplayMode);
-  
-  func didReceiveHidesBackButton(_ hidesBackButton: Bool);  
-};
-
 class RNINavigatorRouteView: UIView {
   
   struct NativeIDKeys {
