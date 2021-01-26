@@ -5,7 +5,17 @@
 //  Created by Dominic Go on 1/9/21.
 //
 
-import Foundation
+import Foundation;
+
+/// Refs to the shared/singleton instances.
+///
+/// Note: Getting a ref. to a particular `RCTModule` requires having a ref.
+/// to `RCTBridge`. So you either have to pass `RCTBridge` or the `RCTModule`
+/// around if you want to use it, which is a bit inconvenient, so we save a ref.
+/// to module.
+class RNISharedInstances {
+  static weak var imageLoader: RCTImageLoader?;
+};
 
 class RNIUtilities {
   
@@ -61,6 +71,31 @@ class RNIUtilities {
     DispatchQueue.main.async {
       // start recursively removing views...
       removeView(reactView);
+    };
+  };
+  
+  /// Get a ref. to the shared/singleton `RCTImageLoader` module instance.
+  static func getImageLoader(bridge: RCTBridge) -> RCTImageLoader {
+    
+    if RNISharedInstances.imageLoader == nil,
+       let module      = bridge.module(for: RCTImageLoader.self),
+       let imageLoader = module as? RCTImageLoader {
+      
+      // init. `SharedInstance` for the first time
+      RNISharedInstances.imageLoader = imageLoader;
+      return imageLoader;
+    };
+    
+    return RNISharedInstances.imageLoader!;
+  };
+  
+  static func loadImage(dict: NSDictionary, completion: @escaping RCTImageLoaderCompletionBlock){
+    guard let imageLoader = RNISharedInstances.imageLoader,
+          let imageSource = RCTConvert.rctImageSource(dict)
+    else { return };
+  
+    DispatchQueue.global(qos: .default).async {
+      imageLoader.loadImage(with: imageSource.request, callback: completion);
     };
   };
 };
