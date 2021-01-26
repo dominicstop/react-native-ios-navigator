@@ -21,7 +21,6 @@ class RNINavBarItemConfig {
     case SYSTEM_ITEM;
     case IMAGE_ASSET;
     case IMAGE_SYSTEM;
-    case IMAGE_REQUIRE;
     case CUSTOM;
   };
   
@@ -48,7 +47,7 @@ class RNINavBarItemConfig {
   // used for type: "SYSTEM_ITEM"
   private(set) var systemItem: UIBarButtonItem.SystemItem?;
   
-  // used for type: "IMAGE_ASSET", "IMAGE_SYSTEM", IMAGE_REQUIRE
+  // used for type: "IMAGE_ASSET", "IMAGE_SYSTEM"
   private var _imageValue: Any?;
   
   // used for type: "IMAGE_ASSET"
@@ -72,11 +71,6 @@ class RNINavBarItemConfig {
       return nil;
     };
   };
-  
-  // used for type: "IMAGE_REQUIRE"
-  var imageRequire: UIImage?;
-  var isImageRequireLoaded = false;
-  var onImageRequireDidLoad: ((_ image: UIImage) -> ())?;
   
   // used for type: "CUSTOM"
   weak var customView: UIView?;
@@ -134,14 +128,9 @@ class RNINavBarItemConfig {
       self.systemItem = systemItem;
     };
     
-    // set properites for type: "IMAGE_ASSET", "IMAGE_SYSTEM", "IMAGE_REQUIRE"
+    // set properites for type: "IMAGE_ASSET", "IMAGE_SYSTEM"
     if let imageValue = dictionary["imageValue"] {
       self._imageValue = imageValue;
-      
-      // load "IMAGE_REQUIRE" image...
-      if itemType == .IMAGE_REQUIRE {
-        self.loadImageRequire(imageValue);
-      };
     };
   };
   
@@ -164,23 +153,7 @@ class RNINavBarItemConfig {
   @objc private func onNavBarItemPressed(_ sender: UIBarButtonItem){
     self.action?(self);
   };
-  
-  private func loadImageRequire(_ imageValue: Any){
-    guard let dict = imageValue as? NSDictionary else { return };
     
-    RNIUtilities.loadImage(dict: dict){ error, image in
-      print("DEBUG -* Image loaded...");
-      
-      self.imageRequire = image?.withRenderingMode(.alwaysOriginal);
-      self.isImageRequireLoaded = true;
-      
-      if let image = image {
-        self.onImageRequireDidLoad?(image);
-        self.onImageRequireDidLoad = nil;
-      };
-    };
-  };
-  
   func createUIBarButtonItem(action: NavBarItemAction?) -> UIBarButtonItem? {
     self.action = action;
     
@@ -220,14 +193,6 @@ class RNINavBarItemConfig {
             action: #selector(onNavBarItemPressed(_:))
           );
           
-        case .IMAGE_REQUIRE:
-          return UIBarButtonItem(
-            image: self.imageRequire,
-            style: self.barButtonItemStyle,
-            target: self,
-            action: #selector(onNavBarItemPressed(_:))
-          );
-          
         default: return nil;
       };
     }();
@@ -249,43 +214,5 @@ class RNINavBarItemConfig {
       "key" : self.key ?? "",
       "type": self.type.rawValue
     ];
-  };
-};
-
-extension RNINavBarItemConfig {
-  
-  /// may contain "IMAGE_REQUIRE" items
-  static func createImageRequireItems(
-    configItems: [RNINavBarItemConfig],
-    action     : @escaping NavBarItemAction,
-    completion : @escaping ([UIBarButtonItem]) -> ()
-  ){
- 
-    var navBarItems: [UIBarButtonItem?] = [];
-    
-    for configItem in configItems {
-      let isImageRequire = configItem.type == .IMAGE_REQUIRE;
-      
-      if configItem.isImageRequireLoaded || !isImageRequire {
-        // item is not "IMAGE_REQUIRE", or the "require image" has already been
-        // loaded, so create the nav bar item...
-        let navBarItem = configItem.createUIBarButtonItem(action: action);
-        // and append to start to preserve order
-        navBarItems.insert(navBarItem, at: 0);
-        
-      } else {
-        configItem.onImageRequireDidLoad = { _ in
-          // "require image" has been loaded, create the nav bar item...
-          let navBarItem = configItem.createUIBarButtonItem(action: action);
-          // and append to start to preserve order
-          navBarItems.insert(navBarItem, at: 0);
-          
-          // all the nav bar items have been created...
-          if navBarItems.count == configItems.count {
-            completion(navBarItems.compactMap {$0});
-          };
-        };
-      };
-    };
   };
 };

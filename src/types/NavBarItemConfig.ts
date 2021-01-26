@@ -1,10 +1,3 @@
-type ImageResolvedAssetSource = {
-  height: number;
-  width: number;
-  scale: number;
-  uri: string;
-};
-
 //#region - BarButtonItemSystemItem
 type BarButtonItemSystemItem =
   /** The system Done button, localized. */
@@ -72,9 +65,6 @@ type NavBarItemConfigBase = {
   type: "IMAGE_SYSTEM";
   /** The key/name of the SF Symbols system icon */
   imageValue: string;
-} | {
-  type: "IMAGE_REQUIRE",
-  imageValue: ImageResolvedAssetSource,
 };
 
 type NavBarItemConfigCustomBase = {
