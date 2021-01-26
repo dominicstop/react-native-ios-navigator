@@ -22,6 +22,7 @@ class RNINavigatorRouteView: UIView {
   // MARK:- Properties
   // -----------------
   
+  /// ref to the shared `RCTBridge` instance
   weak var bridge: RCTBridge!;
   weak var delegate: RNINavigatorRouteViewDelegate?;
   

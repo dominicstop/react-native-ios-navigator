@@ -16,7 +16,7 @@ class RNINavigatorView: UIView {
   // MARK:- Properties
   // -----------------
   
-  /// ref to the RN view manager singleton's bridge instance
+  /// ref to the shared `RCTBridge` instance
   weak var bridge: RCTBridge!;
   
   /// The`activeRoute` items, i.e.the routes added/to be added to the nav. stack.
@@ -66,8 +66,8 @@ class RNINavigatorView: UIView {
   //  MARK: Props - Navigation Bar: Legacy Customizations
   /// * These are props that let's you customize the navigation bar using the
   ///   pre-iOS 13 way.
-  /// * TODO: If on iOS 13+, the legacy styles are automatically vended to a
-  ///   `standardAppearance: UINavigationBarAppearance` instance to the navbar.
+  /// * TODO: If on iOS 13+, the legacy styles are automatically vended to all
+  ///   the `UINavigationBarAppearance` available appearances to the navbar.
   /// * TODO: However, there should be explict props for each appearance, e.g.:
   ///   `standardAppearance`, `compactAppearance`, and `scrollEdgeAppearance`.
   /// -------------------------------------------------------------------------
