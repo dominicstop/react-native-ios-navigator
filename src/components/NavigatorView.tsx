@@ -74,16 +74,22 @@ export type NavRouteConfigItem = {
 
 /** `NavigatorView` comp. props */
 type NavigatorViewProps = {
+  // Nav. Route Config
   routes: Array<NavRouteConfigItem>;
   initialRouteKey: string;
   routeContainerStyle?: ViewStyle;
-  // navigation bar props
+  
+  // `RNINavigatorView` - Navbar: General/Misc. Config
+  navBarPrefersLargeTitles?: boolean;
+
+  // `RNINavigatorView` - Navbar: Legacy Customizations
   navBarStyle?: BarStyle;
   navBarTintColor?: string;
   navBarIsTranslucent?: boolean;
   navBarTitleTextStyle?: TextStyle & TextStyleIOS;
-  navBarPrefersLargeTitles?: boolean;
-  // global/shared nav bar items
+  navBarLargeTitleTextAttributes?: TextStyle & TextStyleIOS;
+
+  // `RNINavigatorView` - Global/Default Navbar items
   renderNavBarLeftItem ?: RenderNavBarItem;
   renderNavBarRightItem?: RenderNavBarItem;
   renderNavBarTitleItem?: RenderNavBarItem;
@@ -414,10 +420,12 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       <RNINavigatorView 
         ref={r => this.nativeRef = r}
         style={styles.navigatorView}
+        // Navigation Bar: Legacy Customizations
         navBarStyle={props.navBarStyle}
         navBarTintColor={processColor(props.navBarTintColor)}
         navBarIsTranslucent={props.navBarIsTranslucent ?? true}
         navBarTitleTextStyle={props.navBarTitleTextStyle}
+        navBarLargeTitleTextAttributes={props.navBarLargeTitleTextAttributes}
         navBarPrefersLargeTitles={props.navBarPrefersLargeTitles ?? true}
         // event handlers: push/pop
         onNavRouteWillPop={this._handleOnNavRouteWillPop}

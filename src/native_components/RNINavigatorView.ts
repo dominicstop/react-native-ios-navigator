@@ -28,7 +28,8 @@ export type BarStyle = 'default' | 'black';
 /** `RNINavigatorView` native comp. props */
 type RNINavigatorViewProps = {
   style: ViewStyle;
-
+  
+  // Navigation Bar: General/Misc. Config
   navBarPrefersLargeTitles: boolean;
 
   // Navigation Bar: Legacy Customizations
