@@ -51,9 +51,26 @@ class RNINavigatorView: UIView {
   /// gesture), or due to it being "popped" programmatically via the nav.
   @objc var onNavRouteDidPop: RCTBubblingEventBlock?;
   
-  // -------------------------
-  // MARK:- RN Exported  Props
-  // -------------------------
+  // ------------------------
+  // MARK:- RN Exported Props
+  // ------------------------
+  
+  @objc var navBarPrefersLargeTitles: Bool = true {
+    willSet {
+      if #available(iOS 11.0, *) {
+        self.navigationBar.prefersLargeTitles = newValue;
+      };
+    }
+  };
+  
+  //  MARK: Props - Navigation Bar: Legacy Customizations
+  /// * These are props that let's you customize the navigation bar using the
+  ///   pre-iOS 13 way.
+  /// * TODO: If on iOS 13+, the legacy styles are automatically vended to a
+  ///   `standardAppearance: UINavigationBarAppearance` instance to the navbar.
+  /// * TODO: However, there should be explict props for each appearance, e.g.:
+  ///   `standardAppearance`, `compactAppearance`, and `scrollEdgeAppearance`.
+  /// -------------------------------------------------------------------------
   
   @objc var navBarStyle: NSString? {
     didSet {
@@ -101,11 +118,20 @@ class RNINavigatorView: UIView {
     }
   };
   
-  @objc var navBarPrefersLargeTitles: Bool = true {
-    willSet {
-      if #available(iOS 11.0, *) {
-        self.navigationBar.prefersLargeTitles = newValue;
-      };
+  private var _navBarLargeTitleTextAttributes = RCTTextAttributes();
+  @objc var navBarLargeTitleTextAttributes: NSDictionary? {
+    didSet {
+      guard #available(iOS 11.0, *),
+            self.navBarLargeTitleTextAttributes != oldValue
+      else { return };
+      
+      self.navigationBar.largeTitleTextAttributes = {
+        guard let dict = self.navBarLargeTitleTextAttributes, dict.count > 0
+        else { return nil };
+        
+        self._navBarLargeTitleTextAttributes.apply(RCTTextAttributes(dict: dict));
+        return self._navBarLargeTitleTextAttributes.effectiveTextAttributes();
+      }();
     }
   };
   

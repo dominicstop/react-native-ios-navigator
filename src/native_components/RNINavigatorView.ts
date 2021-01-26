@@ -29,11 +29,15 @@ export type BarStyle = 'default' | 'black';
 type RNINavigatorViewProps = {
   style: ViewStyle;
 
+  navBarPrefersLargeTitles: boolean;
+
+  // Navigation Bar: Legacy Customizations
   navBarStyle?: BarStyle;
   navBarTintColor?: number;
   navBarIsTranslucent: boolean;
   navBarTitleTextStyle?: TextStyle & TextStyleIOS;
-  navBarPrefersLargeTitles: boolean;
+  navBarLargeTitleTextAttributes?: TextStyle & TextStyleIOS;
+
   // Native Events
   onNavRouteViewAdded?: (events: onNavRouteViewAddedPayload) => void;
   onNavRouteWillPop  ?: (events: onNavRouteWillPopPayload  ) => void;
