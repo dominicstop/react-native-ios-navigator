@@ -24,9 +24,6 @@ class RNINavigatorRouteView: UIView {
   
   /// ref to the shared `RCTBridge` instance
   weak var bridge: RCTBridge!;
-  /// ref to the RN `RCTImageLoader` module instance
-  weak var imageLoader: RCTImageLoader!;
-  
   weak var delegate: RNINavigatorRouteViewDelegate?;
   
   /// content to show in the navigator
@@ -201,7 +198,7 @@ class RNINavigatorRouteView: UIView {
       };
       
       self._navBarButtonLeftItemsConfig = configItems;
-      self.didReceiveNavBarButtonLeftItems();
+      delegate?.didReceiveNavBarButtonLeftItems(self.leftBarButtonItems);
     }
   };
   
@@ -282,43 +279,6 @@ class RNINavigatorRouteView: UIView {
   // MARK:- Convenience Property Wrappers
   // ------------------------------------
   
-  
-  //private func notifyDelegateDidReceive
-  
-  private func didReceiveNavBarButtonLeftItems(){
-    guard let configItems = self._navBarButtonLeftItemsConfig else {
-      self.delegate?.didReceiveNavBarButtonLeftItems(nil);
-      return;
-    };
-    
-    let hasImageRequireItem = configItems.contains {
-      $0.type == .IMAGE_REQUIRE
-    };
-    
-    if hasImageRequireItem {
-      RNINavBarItemConfig.createImageRequireItems(
-        configItems: configItems,
-        action: { [unowned self] config in
-          self.onPressNavBarLeftItem?(
-            config.makeNavBarItemEventParams()
-          );
-        },
-        completion: { [unowned self] navBarItems in
-          self.delegate?.didReceiveNavBarButtonLeftItems(navBarItems);
-        }
-      );
-      
-    } else {
-      self.delegate?.didReceiveNavBarButtonLeftItems( configItems.compactMap {
-        $0.createUIBarButtonItem { [unowned self] config in
-          self.onPressNavBarLeftItem?(
-            config.makeNavBarItemEventParams()
-          );
-        };
-      });
-    };
-  };
-  
   /// Creates a back nav bar button item based on `navBarButtonBackItemConfig`
   var backBarButtonItem: UIBarButtonItem? {
     guard let backConfigItem = self._navBarButtonBackItemConfig
@@ -385,7 +345,6 @@ class RNINavigatorRouteView: UIView {
     super.init(frame: CGRect());
     
     self.bridge = bridge;
-    self.imageLoader = RNIUtilities.getImageLoader(bridge: bridge);
     self.touchHandlerRouteContent = RCTTouchHandler(bridge: bridge);
   };
   
@@ -476,7 +435,7 @@ class RNINavigatorRouteView: UIView {
     delegate?.didReceiveNavBarButtonBackItem(self.backBarButtonItem);
     
     // set nav bar left item
-    //delegate?.didReceiveNavBarButtonLeftItems(self.leftBarButtonItems);
+    delegate?.didReceiveNavBarButtonLeftItems(self.leftBarButtonItems);
     
     // set nav bar right item
     delegate?.didReceiveNavBarButtonRightItems(self.rightBarButtonItems);
