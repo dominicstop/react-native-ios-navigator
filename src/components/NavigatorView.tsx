@@ -10,7 +10,7 @@ import type { RouteContentProps } from '../components/NavigatorRouteView';
 import type { NavBarBackItemConfig, NavBarItemsConfig } from '../types/NavBarItemConfig';
 
 import type { onNavRouteDidPopPayload, onNavRouteViewAddedPayload, onNavRouteWillPopPayload } from '../native_components/RNINavigatorView';
-import type { BackButtonDisplayMode, LargeTitleDisplayMode } from '../native_components/RNINavigatorRouteView';
+import type { BackButtonDisplayMode, LargeTitleDisplayMode, RouteTransitionPopConfig, RouteTransitionPushConfig } from '../native_components/RNINavigatorRouteView';
 
 import * as Helpers from '../functions/Helpers';
 import { EventEmitter } from '../functions/EventEmitter';
@@ -31,6 +31,11 @@ enum NavEvents {
 };
 
 export type RouteOptions = {
+  // Transition Config
+  transitionConfigPush?: RouteTransitionPushConfig;
+  transitionConfigPop ?: RouteTransitionPopConfig;
+  
+  // Navbar Config
   routeTitle?: string;
   prompt?: string;
   largeTitleDisplayMode?: LargeTitleDisplayMode;

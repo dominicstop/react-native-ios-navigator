@@ -125,7 +125,19 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
       // `{...defaultRouteOptions, ...routeOptions}`
       // but it's less clear/explicit, idk refactor this later.
       // ------------------------------------------------------
-      // Navbar item config
+      // #region - Transition Config |
+      // ----------------------------*
+      transitionConfigPush: (
+        routeOptions       ?.transitionConfigPush ??
+        defaultRouteOptions?.transitionConfigPush
+      ),
+      transitionConfigPop: (
+        routeOptions       ?.transitionConfigPop ??
+        defaultRouteOptions?.transitionConfigPop
+      ),
+      // #endregion -------------*
+      // #region - Navbar Config |
+      // ------------------------*
       routeTitle: (
         routeOptions       ?.routeTitle ??
         defaultRouteOptions?.routeTitle ?? props.routeKey
@@ -138,6 +150,9 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
         routeOptions       ?.largeTitleDisplayMode ??
         defaultRouteOptions?.largeTitleDisplayMode 
       ),
+      // #endregion ------------------*
+      // #region - Navbar Item Config |
+      // -----------------------------*
       navBarButtonBackItemConfig: (
         routeOptions       ?.navBarButtonBackItemConfig ??
         defaultRouteOptions?.navBarButtonBackItemConfig ??
@@ -159,11 +174,13 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
         // create a `type: CUSTOM` nav bar item config...
         (hasNavBarRightItem? [{ type: 'CUSTOM' }] : null)
       ),
+      // #endregion ------------------------------*
+      // #region - Navbar back button item config |
+      // -----------------------------------------*
       leftItemsSupplementBackButton: (
         routeOptions       ?.leftItemsSupplementBackButton ??
         defaultRouteOptions?.leftItemsSupplementBackButton
       ),
-      // Navbar back button item config
       backButtonTitle: (
         routeOptions       ?.backButtonTitle ??
         defaultRouteOptions?.backButtonTitle
@@ -176,6 +193,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
         routeOptions       ?.hidesBackButton ??
         defaultRouteOptions?.hidesBackButton
       ),
+      // #endregion
     };
   };
   
@@ -217,7 +235,6 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     };
   };
   // #endregion
-
   // #region - Handlers
   private _handleGetRefToRoute = () => {
     return this;
