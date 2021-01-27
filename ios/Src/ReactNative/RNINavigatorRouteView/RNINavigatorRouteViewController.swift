@@ -53,6 +53,12 @@ class RNINavigatorRouteViewController: UIViewController {
   /// A ref. to the `ScrollView` subview of the `reactRouteContent`
   var reactScrollView: RCTScrollView?;
   
+  // used for the custom transitions
+  var interactionController: LeftEdgeInteractionController?;
+  
+  var transitionTypePush = RNINavTransitionConfig(type: .DefaultPush);
+  var transitionTypePop  = RNINavTransitionConfig(type: .DefaultPop );
+  
   // --------------------------------
   // MARK:- View Controller Lifecycle
   // --------------------------------
@@ -75,11 +81,21 @@ class RNINavigatorRouteViewController: UIViewController {
     };
   };
   
+  override func viewDidLoad() {
+    self.interactionController =
+      LeftEdgeInteractionController(viewController: self);
+  };
+  
   override func viewWillLayoutSubviews() {
     super.viewWillLayoutSubviews();
     
     /// update `routeView`'s size
     self.routeView?.notifyForBoundsChange(self.view.bounds);
+  };
+  
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated);
+    self.navigationController?.delegate = self;
   };
   
   override func viewDidLayoutSubviews() {
@@ -176,6 +192,18 @@ class RNINavigatorRouteViewController: UIViewController {
 /// This delegate is used to receive "props" from `RNINavigatorRouteView`.
 extension RNINavigatorRouteViewController: RNINavigatorRouteViewDelegate {
   
+  // --------------------------------------
+  // MARK: Receive Props: Transition Config
+  // --------------------------------------
+  
+  func didReceiveTransitionConfigPush(_ config: RNINavTransitionConfig){
+    self.transitionTypePush = config;
+  };
+  
+  func didReceiveTransitionConfigPop(_ config: RNINavTransitionConfig){
+    self.transitionTypePop = config;
+  };
+  
   // ----------------------------------
   // MARK: Receive Props: Navbar Config
   // ----------------------------------
@@ -236,5 +264,44 @@ extension RNINavigatorRouteViewController: RNINavigatorRouteViewDelegate {
   
   func didReceiveHidesBackButton(_ hidesBackButton: Bool){
     self.navigationItem.hidesBackButton = hidesBackButton;
+  };
+};
+
+// ------------------------------------------------
+// MARK:- Extension: UINavigationControllerDelegate
+// ------------------------------------------------
+
+extension RNINavigatorRouteViewController: UINavigationControllerDelegate {
+  func navigationController(
+    _           navigationController: UINavigationController,
+    animationControllerFor operation: UINavigationController.Operation,
+    from fromVC: UIViewController,
+    to   toVC  : UIViewController
+
+  ) -> UIViewControllerAnimatedTransitioning? {
+    
+    switch operation {
+      case .push: return self.transitionTypePush.makeAnimator();
+        
+      case .pop : return self.transitionTypePop.makeAnimator(
+        interactionController: self.interactionController
+      );
+      
+      default:  return nil;
+    };
+  };
+  
+  func navigationController(
+    _ navigationController: UINavigationController,
+    interactionControllerFor animationController: UIViewControllerAnimatedTransitioning
+
+  ) -> UIViewControllerInteractiveTransitioning? {
+    
+    guard let animator = animationController as? CustomAnimator,
+          let interactionController = animator.interactionController as? LeftEdgeInteractionController,
+          interactionController.inProgress
+    else { return nil };
+    
+    return interactionController;
   };
 };

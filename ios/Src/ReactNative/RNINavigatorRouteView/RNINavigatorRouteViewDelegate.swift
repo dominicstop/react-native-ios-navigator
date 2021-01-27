@@ -14,6 +14,14 @@ import Foundation
 /// instance when they are set/updated from JS/RN.
 protocol RNINavigatorRouteViewDelegate: AnyObject {
   
+  // --------------------------------------
+  // MARK: Receive Props: Transition Config
+  // --------------------------------------
+  
+  func didReceiveTransitionConfigPush(_ config: RNINavTransitionConfig);
+  
+  func didReceiveTransitionConfigPop(_ config: RNINavTransitionConfig);
+  
   // ----------------------------------
   // MARK: Receive Props: Navbar Config
   // ----------------------------------

@@ -80,15 +80,15 @@ class RNINavigatorRouteView: UIView {
   /// * No value has been provided to the prop yet, so we should avoid setting
   ///   the corresponding properties.
   ///
-  /// * The properties that the props sets can themselves be set to nil, so a
-  ///   `nil` value for a prop is valid, and should be allowed, so that the opt.
+  /// * The properties that the props sets can themselves be set to `nil`, so a
+  ///   `nil` value for a prop is valid and should be allowed, so that the opt.
   ///   properties can be set back to a `nil` value.
   ///
-  /// * The properties that the props sets needs to provide a default value so
-  ///   that the properties can be set back to their default value.
+  /// * The properties that the props sets needs to provide a default value
+  ///   because it can't be set to `nil`.
   ///
   /// * TODO: However there are props where a `nil` is invalid (i.e. a value of
-  ///   `nil` must **never** occur), so we need to mark the property as an
+  ///   `nil` must **never** occur), so we need to mark the property as
   ///   "explicitly unwrapped" so that the app crashes because it's a fatal error.
     
   @objc var routeKey: NSString? {
@@ -111,6 +111,46 @@ class RNINavigatorRouteView: UIView {
         + " - didSet, routeIndex: \(routeIndex)"
       );
       #endif
+    }
+  };
+  
+  //  MARK: Props - Transition Config
+  /// Props for setting the transition to use when the nav. is pushing/popping
+  /// -------------------------------------------------------------------------
+  
+  private var _transitionConfigPush: RNINavTransitionConfig?;
+  @objc var transitionConfigPush: NSDictionary? {
+    didSet {
+      guard self.transitionConfigPush != oldValue else { return };
+      
+      let config: RNINavTransitionConfig = {
+        guard let dict = self.transitionConfigPush,
+              let config = RNINavTransitionConfig(dictionary: dict)
+        else { return .init(type: .DefaultPush) };
+        
+        return config;
+      }();
+      
+      self._transitionConfigPush = config;
+      self.delegate?.didReceiveTransitionConfigPop(config);
+    }
+  };
+  
+  private var _transitionConfigPop: RNINavTransitionConfig?;
+  @objc var transitionConfigPop: NSDictionary? {
+    didSet {
+      guard self.transitionConfigPop != oldValue else { return };
+      
+      let config: RNINavTransitionConfig = {
+        guard let dict = self.transitionConfigPop,
+              let config = RNINavTransitionConfig(dictionary: dict)
+        else { return .init(type: .DefaultPop) };
+        
+        return config;
+      }();
+      
+      self._transitionConfigPop = config;
+      self.delegate?.didReceiveTransitionConfigPop(config);
     }
   };
   
@@ -420,6 +460,16 @@ class RNINavigatorRouteView: UIView {
   /// we need to send the initial values.
   private func setupRouteVC(){
     
+    // set push transition config
+    if let pushConfig = self._transitionConfigPush {
+      self.delegate?.didReceiveTransitionConfigPush(pushConfig);
+    };
+    
+    // set pop transition config
+    if let popConfig = self._transitionConfigPop {
+      self.delegate?.didReceiveTransitionConfigPush(popConfig);
+    };
+    
     // set the vc's title for the 1st time
     if let routeTitle = self.routeTitle {
       delegate?.didReceiveRouteTitle(routeTitle as String);
@@ -579,5 +629,3 @@ class RNINavigatorRouteView: UIView {
     self.reactNavBarTitleItem = nil;
   };
 };
-  
-  

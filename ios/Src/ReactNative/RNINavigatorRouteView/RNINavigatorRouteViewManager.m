@@ -30,16 +30,21 @@ RCT_EXPORT_VIEW_PROPERTY(onPressNavBarRightItem, RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(routeKey  , NSString);
 RCT_EXPORT_VIEW_PROPERTY(routeIndex, NSNumber);
 
+// MARK: Props - Transition Config
+RCT_EXPORT_VIEW_PROPERTY(transitionConfigPush, NSDictionary);
+RCT_EXPORT_VIEW_PROPERTY(transitionConfigPop, NSDictionary);
+
+// MARK: Props - Navbar Config
 RCT_EXPORT_VIEW_PROPERTY(prompt, NSString);
 RCT_EXPORT_VIEW_PROPERTY(routeTitle, NSString);
 RCT_EXPORT_VIEW_PROPERTY(largeTitleDisplayMode, NSString);
 
-// MARK: Navbar item config
-RCT_EXPORT_VIEW_PROPERTY(navBarButtonBackItemConfig  , NSArray);
+// MARK: Props - Navbar item config
+RCT_EXPORT_VIEW_PROPERTY(navBarButtonBackItemConfig  , NSArray); // why array?
 RCT_EXPORT_VIEW_PROPERTY(navBarButtonLeftItemsConfig , NSArray);
 RCT_EXPORT_VIEW_PROPERTY(navBarButtonRightItemsConfig, NSArray);
 
-// MARK: Navbar back button item config
+// MARK: Props - Navbar back button item config
 RCT_EXPORT_VIEW_PROPERTY(leftItemsSupplementBackButton, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(backButtonTitle, NSString);
 RCT_EXPORT_VIEW_PROPERTY(backButtonDisplayMode, NSString);

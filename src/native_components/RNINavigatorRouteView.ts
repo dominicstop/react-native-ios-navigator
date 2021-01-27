@@ -1,6 +1,23 @@
 import { requireNativeComponent, ViewStyle } from 'react-native';
 import type { NavBarBackItemConfig, NavBarItemsConfig } from '../types/NavBarItemConfig';
 
+type RouteTransitionPushTypes = 
+  "DefaultPush" | "FadePush";
+
+type RouteTransitionPopTypes = 
+  "DefaultPop" | "FadePop";
+
+type RouteTransitionConfigBase = {
+  duration?: number
+};
+
+export type RouteTransitionPushConfig = RouteTransitionConfigBase & {
+  type: RouteTransitionPushTypes
+};
+
+export type RouteTransitionPopConfig = RouteTransitionConfigBase & {
+  type: RouteTransitionPopTypes
+};
 
 export type onRoutePushEvent = (event: {
   nativeEvent: { 
@@ -42,6 +59,10 @@ export type RNINavigatorRouteViewProps = {
   style: ViewStyle;
   routeKey: string;
   routeIndex: number;
+
+  // Transition Config
+  transitionConfigPush?: RouteTransitionPushConfig;
+  transitionConfigPop ?: RouteTransitionPopConfig;
 
   // Navbar Config
   prompt?: String;
