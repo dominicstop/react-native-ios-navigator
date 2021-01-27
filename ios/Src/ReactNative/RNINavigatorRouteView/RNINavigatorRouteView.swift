@@ -77,19 +77,19 @@ class RNINavigatorRouteView: UIView {
   // ------------------------
   
   /// Note: Some of the exported props can be set to nil, which means that:
-  /// * No values has been provided to the prop yet, so we avoid setting the
-  ///   corresponding properties.
+  /// * No value has been provided to the prop yet, so we should avoid setting
+  ///   the corresponding properties.
   ///
   /// * The properties that the props sets can themselves be set to nil, so a
-  ///   `nil` value for a prop is valid, and should be allowed so that the opt.
-  ///   properties can be set back to `nil` value.
+  ///   `nil` value for a prop is valid, and should be allowed, so that the opt.
+  ///   properties can be set back to a `nil` value.
   ///
   /// * The properties that the props sets needs to provide a default value so
   ///   that the properties can be set back to their default value.
   ///
   /// * TODO: However there are props where a `nil` is invalid (i.e. a value of
-  ///   `nil` must never occur), so we need to mark the property as an
-  ///   "explicitly unwrapped" property so that the app crashes.
+  ///   `nil` must **never** occur), so we need to mark the property as an
+  ///   "explicitly unwrapped" so that the app crashes because it's a fatal error.
     
   @objc var routeKey: NSString? {
     didSet {
@@ -515,7 +515,7 @@ class RNINavigatorRouteView: UIView {
     bridge.uiManager.setSize(newBounds.size, for: reactView);
   };
   
-  /// notify js `RNINavigatorRouteView` that it's about to be pushed
+  /// notify js `RNINavigatorRouteView` that its about to be pushed
   func notifyOnNavRouteWillPush(isAnimated: Bool){
     var dict = self.createEventPayload();
     dict["isAnimated"] = isAnimated;
@@ -523,7 +523,7 @@ class RNINavigatorRouteView: UIView {
     self.onNavRouteWillPush?(dict);
   };
   
-  /// notify js `RNINavigatorRouteView` that it's been pushed
+  /// notify js `RNINavigatorRouteView` that its been pushed
   func notifyOnNavRouteDidPush(isAnimated: Bool){
     var dict = self.createEventPayload();
     dict["isAnimated"] = isAnimated;
@@ -531,7 +531,7 @@ class RNINavigatorRouteView: UIView {
     self.onNavRouteDidPush?(dict);
   };
   
-  /// notify js `RNINavigatorRouteView` that it's about to be popped
+  /// notify js `RNINavigatorRouteView` that its about to be popped
   func notifyOnNavRouteWillPop(isUserInitiated: Bool){
     var dict = self.createEventPayload();
     dict["isUserInitiated"] = isUserInitiated;
@@ -539,7 +539,7 @@ class RNINavigatorRouteView: UIView {
     self.onNavRouteWillPop?(dict);
   };
   
-  /// notify js `RNINavigatorRouteView` that it's has been popped
+  /// notify js `RNINavigatorRouteView` that it has been popped
   func notifyOnNavRouteDidPop(isUserInitiated: Bool){
     var dict = self.createEventPayload();
     dict["isUserInitiated"] = isUserInitiated;
@@ -550,7 +550,7 @@ class RNINavigatorRouteView: UIView {
   /// Once we're done w/ this "route view" (e.g. it has been popped or removed),
   /// then we need to cleanup to prevent this instance from leaking.
   func cleanup(){
-    
+    // "react views" to be removed
     let viewsToRemove = [
       self.reactRouteContent   ,
       self.reactNavBarBackItem ,

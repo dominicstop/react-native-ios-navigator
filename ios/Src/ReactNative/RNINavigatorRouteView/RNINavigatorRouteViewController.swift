@@ -52,7 +52,7 @@ class RNINavigatorRouteViewController: UIViewController {
   
   /// A ref. to the `ScrollView` subview of the `reactRouteContent`
   var reactScrollView: RCTScrollView?;
-
+  
   // --------------------------------
   // MARK:- View Controller Lifecycle
   // --------------------------------
