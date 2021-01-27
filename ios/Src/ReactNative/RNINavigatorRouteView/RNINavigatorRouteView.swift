@@ -467,7 +467,7 @@ class RNINavigatorRouteView: UIView {
     
     // set pop transition config
     if let popConfig = self._transitionConfigPop {
-      self.delegate?.didReceiveTransitionConfigPush(popConfig);
+      self.delegate?.didReceiveTransitionConfigPop(popConfig);
     };
     
     // set the vc's title for the 1st time
