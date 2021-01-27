@@ -29,6 +29,7 @@ class RNINavigatorViewModule: NSObject {
   @objc func push(
     _ node  : NSNumber,
     routeKey: NSString,
+    options : NSDictionary,
     resolve : @escaping RCTPromiseResolveBlock,
     reject  : @escaping RCTPromiseRejectBlock
   ){
@@ -62,7 +63,7 @@ class RNINavigatorViewModule: NSObject {
       #endif
       
       // forward push command to navigator
-      navigatorView.push(routeKey: routeKey){
+      navigatorView.push(routeKey, options){
         // resolve promise after "push" is complete
         resolve([:]);
       };
@@ -72,6 +73,7 @@ class RNINavigatorViewModule: NSObject {
   // TODO: Add options param
   @objc func pop(
     _ node  : NSNumber,
+    options : NSDictionary,
     resolve : @escaping RCTPromiseResolveBlock,
     reject  : @escaping RCTPromiseRejectBlock
   ){
@@ -104,7 +106,7 @@ class RNINavigatorViewModule: NSObject {
       #endif
       
       // forward "pop" command to navigator
-      navigatorView.pop(){
+      navigatorView.pop(options){
         // resolve promise after "pop" is complete
         resolve([
           "routeKey"  : $0,

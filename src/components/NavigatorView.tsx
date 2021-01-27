@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import { StyleSheet, findNodeHandle, processColor, TextStyle, TextStyleIOS, ViewStyle } from 'react-native';
 
 import { BarStyle, RNINavigatorView } from '../native_components/RNINavigatorView';
-import { RNINavigatorViewModule } from '../native_modules/RNINavigatorViewModule';
+import { RNINavigatorViewModule, PushPopOptions } from '../native_modules/RNINavigatorViewModule';
 
 import { NavigatorRouteView } from './NavigatorRouteView';
 
@@ -244,7 +244,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   //#endregion
 
   //#region - Public Functions
-  public push = async (routeItem: NavRouteItem) => {
+  public push = async (routeItem: NavRouteItem, options?: PushPopOptions) => {
     const routeConfig = this.getMatchingRoute(routeItem);
 
     if(!routeConfig){
@@ -269,7 +269,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       await Helpers.promiseWithTimeout(1000,
         RNINavigatorViewModule.push(
           findNodeHandle(this.nativeRef),
-          routeItem.routeKey
+          routeItem.routeKey, {
+            isAnimated: options?.isAnimated ?? true
+          }
         )
       );
       
@@ -288,7 +290,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
   };
 
-  public pop = async () => {
+  public pop = async (options?: PushPopOptions) => {
     // TEMP, replace with queue - skip if nav. is busy
     if(NavigatorViewUtils.isNavStateBusy(this.navStatus)) return;
 
@@ -299,7 +301,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       // forward "pop" request to native module
       const result = await Helpers.promiseWithTimeout(1000,
         RNINavigatorViewModule.pop(
-          findNodeHandle(this.nativeRef)
+          findNodeHandle(this.nativeRef), {
+            isAnimated: options?.isAnimated ?? true,
+          }
         )
       );
 

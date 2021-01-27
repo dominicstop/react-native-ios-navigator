@@ -313,7 +313,7 @@ fileprivate extension RNINavigatorView {
 
 extension RNINavigatorView {
   
-  func push(routeKey: NSString, completion: @escaping Completion){
+  func push(_ routeKey: NSString, _ options: NSDictionary, completion: @escaping Completion){
     /// get the `routeView` to be pushed in the nav stack
     guard let routeViewVC = self.routeVCs.last,
           let routeView   = routeViewVC.routeView,
@@ -337,18 +337,20 @@ extension RNINavigatorView {
     );
     #endif
     
-    // notify js `RNINavigatorRouteView` that it's about to be pushed
-    routeView.notifyOnNavRouteWillPush(isAnimated: true);
+    let isAnimated = options["isAnimated"] as? Bool ?? true;
     
-    self.navigationVC.pushViewController(routeViewVC, animated: true){
+    // notify js `RNINavigatorRouteView` that it's about to be pushed
+    routeView.notifyOnNavRouteWillPush(isAnimated: isAnimated);
+    
+    self.navigationVC.pushViewController(routeViewVC, animated: isAnimated){
       completion();
       
       // notify js `RNINavigatorRouteView` that it's been pushed
-      routeView.notifyOnNavRouteDidPush(isAnimated: true);
+      routeView.notifyOnNavRouteDidPush(isAnimated: isAnimated);
     };
   };
   
-  func pop(completion: @escaping (_ routeKey: NSString, _ routeIndex: NSNumber) -> Void){
+  func pop(_ options: NSDictionary, completion: @escaping (_ routeKey: NSString, _ routeIndex: NSNumber) -> Void){
     guard self.routeVCs.count > 1,
           /// get the last routes
           let lastNavVC   = self.navigationVC.viewControllers.last as? RNINavigatorRouteViewController,
@@ -371,7 +373,9 @@ extension RNINavigatorView {
       return;
     };
     
-    self.navigationVC.popViewController(animated: true){
+    let isAnimated = options["isAnimated"] as? Bool ?? true;
+    
+    self.navigationVC.popViewController(animated: isAnimated){
       completion(lastRouteKey, lastRouteIndex);
     };
   };

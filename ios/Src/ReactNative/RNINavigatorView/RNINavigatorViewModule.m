@@ -10,19 +10,17 @@
 
 @interface RCT_EXTERN_MODULE(RNINavigatorViewModule, NSObject)
 
-RCT_EXTERN_METHOD(setNode: (nonnull NSNumber)node
-                  // promise blocks ----------------------
-                  resolve: (RCTPromiseResolveBlock)resolve
-                  reject : (RCTPromiseRejectBlock )reject);
 
-RCT_EXTERN_METHOD(push    : (nonnull NSNumber)node
-                  routeKey: (nonnull NSString *)routeKey
+RCT_EXTERN_METHOD(push    : (nonnull NSNumber      )node
+                  routeKey: (nonnull NSString     *)routeKey
+                  options : (nonnull NSDictionary *)options
                   // promise blocks -----------------------
                   resolve: (RCTPromiseResolveBlock)resolve
                   reject : (RCTPromiseRejectBlock )reject);
 
 
-RCT_EXTERN_METHOD(pop: (nonnull NSNumber)node
+RCT_EXTERN_METHOD(pop    : (nonnull NSNumber      )node
+                  options: (nonnull NSDictionary *)options
                   // promise blocks -----------------------
                   resolve: (RCTPromiseResolveBlock)resolve
                   reject : (RCTPromiseRejectBlock )reject);
