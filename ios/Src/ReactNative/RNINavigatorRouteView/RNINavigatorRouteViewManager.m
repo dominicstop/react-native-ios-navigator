@@ -40,7 +40,7 @@ RCT_EXPORT_VIEW_PROPERTY(routeTitle, NSString);
 RCT_EXPORT_VIEW_PROPERTY(largeTitleDisplayMode, NSString);
 
 // MARK: Props - Navbar item config
-RCT_EXPORT_VIEW_PROPERTY(navBarButtonBackItemConfig  , NSArray); // why array?
+RCT_EXPORT_VIEW_PROPERTY(navBarButtonBackItemConfig  , NSDictionary);
 RCT_EXPORT_VIEW_PROPERTY(navBarButtonLeftItemsConfig , NSArray);
 RCT_EXPORT_VIEW_PROPERTY(navBarButtonRightItemsConfig, NSArray);
 
