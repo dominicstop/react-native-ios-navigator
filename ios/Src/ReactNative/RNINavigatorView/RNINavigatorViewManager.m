@@ -22,6 +22,8 @@ RCT_EXPORT_VIEW_PROPERTY(onNavRouteDidPop , RCTBubblingEventBlock);
 // MARK:- Export Props - Values
 // ----------------------------
 
+RCT_EXPORT_VIEW_PROPERTY(isInteractivePopGestureEnabled, BOOL);
+
 // MARK: Navigation Bar: General/Misc. Config
 RCT_EXPORT_VIEW_PROPERTY(navBarPrefersLargeTitles, BOOL);
 

@@ -9,8 +9,9 @@ import Foundation
 
 
 /// This is a delegate for `RNINavigatorRouteView`.
-/// This delegate allows you to receive props from `RNINavigatorRouteView` when
-/// they are set/updated.
+///
+/// This delegate allows you to receive props from a `RNINavigatorRouteView`
+/// instance when they are set/updated from JS/RN.
 protocol RNINavigatorRouteViewDelegate: AnyObject {
   
   // ----------------------------------

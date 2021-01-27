@@ -29,6 +29,8 @@ export type BarStyle = 'default' | 'black';
 type RNINavigatorViewProps = {
   style: ViewStyle;
   
+  isInteractivePopGestureEnabled: boolean;
+
   // Navigation Bar: General/Misc. Config
   navBarPrefersLargeTitles: boolean;
 

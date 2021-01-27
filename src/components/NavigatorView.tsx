@@ -80,6 +80,7 @@ type NavigatorViewProps = {
   routeContainerStyle?: ViewStyle;
   
   // `RNINavigatorView` - Navbar: General/Misc. Config
+  isInteractivePopGestureEnabled?: boolean;
   navBarPrefersLargeTitles?: boolean;
 
   // `RNINavigatorView` - Navbar: Legacy Customizations
@@ -420,13 +421,14 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       <RNINavigatorView 
         ref={r => this.nativeRef = r}
         style={styles.navigatorView}
+        isInteractivePopGestureEnabled={props.isInteractivePopGestureEnabled ?? true}
+        navBarPrefersLargeTitles={props.navBarPrefersLargeTitles ?? true}
         // Navigation Bar: Legacy Customizations
         navBarStyle={props.navBarStyle}
         navBarTintColor={processColor(props.navBarTintColor)}
         navBarIsTranslucent={props.navBarIsTranslucent ?? true}
         navBarTitleTextStyle={props.navBarTitleTextStyle}
         navBarLargeTitleTextAttributes={props.navBarLargeTitleTextAttributes}
-        navBarPrefersLargeTitles={props.navBarPrefersLargeTitles ?? true}
         // event handlers: push/pop
         onNavRouteWillPop={this._handleOnNavRouteWillPop}
         onNavRouteDidPop={this._handleOnNavRouteDidPop}

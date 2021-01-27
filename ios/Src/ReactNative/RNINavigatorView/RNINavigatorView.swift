@@ -55,6 +55,12 @@ class RNINavigatorView: UIView {
   // MARK:- RN Exported Props
   // ------------------------
   
+  @objc var isInteractivePopGestureEnabled: Bool = true {
+    willSet {
+      self.navigationVC.interactivePopGestureRecognizer?.isEnabled = newValue;
+    }
+  };
+  
   @objc var navBarPrefersLargeTitles: Bool = true {
     willSet {
       if #available(iOS 11.0, *) {
