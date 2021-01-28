@@ -43,7 +43,9 @@ function ExampleRoute(props: ExampleRouteProps){
         style={styles.buttonContainer}
         onPress={() => {
           const navRef = props.getRefToNavigator();
-          navRef.push({routeKey: 'routeA'});
+          navRef.push({routeKey: 'routeA'}, {
+            transitionConfig: { type: 'SlidePush', duration: 0.3 }
+          });
         }}
       >
         <Text style={styles.buttonText}>
@@ -81,7 +83,7 @@ export function NavigatorExample01() {
         navBarPrefersLargeTitles={false}
         routes={[{
           routeKey: 'routeA',
-          defaultRouteOptions: {
+          routeOptionsDefault: {
             routeTitle: "Route A",
           },
           renderRoute: () => (
@@ -89,7 +91,7 @@ export function NavigatorExample01() {
           ),
         }, {
           routeKey: 'routeB',
-          defaultRouteOptions: {
+          routeOptionsDefault: {
             routeTitle: "Route B",
           },
           renderRoute: () => (

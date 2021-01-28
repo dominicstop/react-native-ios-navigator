@@ -97,10 +97,16 @@ export default function App() {
       <NavigatorView
         ref={r => this.navRef = r}
         initialRouteKey={RouteKeys.Home}
+        isInteractivePopGestureEnabled={false}
         navBarPrefersLargeTitles={true}
+        navBarLargeTitleTextAttributes={{
+          color: 'red',
+          fontSize: 32,
+        }}
+        
         routes={[{
           routeKey: RouteKeys.Home,
-          defaultRouteOptions: {
+          routeOptionsDefault: {
             routeTitle: "Initial Route Title",
           },
           renderRoute: () => (
@@ -108,7 +114,7 @@ export default function App() {
           ),
         }, {
           routeKey: RouteKeys.NavigatorExample01,
-          defaultRouteOptions: {
+          routeOptionsDefault: {
             largeTitleDisplayMode: 'never'
           },
           renderRoute: () => (
