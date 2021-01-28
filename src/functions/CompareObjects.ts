@@ -1,16 +1,28 @@
 import type { NavBarItemConfig, NavBarItemsConfig, NavBarBackItemConfig } from "../types/NavBarItemConfig";
 import type { RouteOptions } from "../components/NavigatorView";
+import type { RouteTransitionPushConfig, RouteTransitionPopConfig } from "src/native_components/RNINavigatorRouteView";
+
+// Note: These functions are used to compare objects and decide whether or not to
+// to trigger an update or re-render, so it has to be fast.
+// Of course, we can use `deepCompare` and `JSON.stringify` to compare two objects,
+// but using `&&` ("short-circuit" eval.) will return early once a comparison is false,
+// which is a lot faster than serializing an entire object into a string and then 
+// comparing them (it also doesn't preserve order, meaning that the comparisons for
+// deeply nested objects might be wrong sometimes).
+// This is a ugly brute force approach, and there might be other ways to do this, but
+// it'll do for now.
 
 class HelperUtilities {
-  static compareObjectSimple(itemA: object, itemB: object){
-    return (
-      ((itemA == null) == (itemB == null)) &&
-      ((itemA && Object.keys(itemA).length) == (itemB && Object.keys(itemB)?.length))
-    );
+  /** if one value is null, and the other isn't, then they aren't the same. */
+  static compareObjectsNull(itemA: object, itemB: object){
+    return ((itemA == null) === (itemB == null));
   };
 
   static compareArraySimple(itemA: Array<any>, itemB: Array<any>){
-    return ((itemA == null) == (itemB == null)) && (itemA?.length == itemB?.length);
+    return (
+      HelperUtilities.compareObjectsNull(itemA, itemB) && 
+      (itemA?.length == itemB?.length)
+    );
   };
 
   static compareNavBarItemConfigBase(itemA: NavBarItemConfig, itemB: NavBarItemConfig){
@@ -32,9 +44,21 @@ class HelperUtilities {
   };
 };
 
+export function compareTransitionConfig(
+  itemA: RouteTransitionPushConfig | RouteTransitionPopConfig, 
+  itemB: RouteTransitionPushConfig | RouteTransitionPopConfig
+){
+  if(!HelperUtilities.compareObjectsNull(itemA, itemB)) return false;
+
+  return (
+    (itemA?.type     === itemB?.type    ) &&
+    (itemA?.duration === itemB?.duration)
+  );
+};
+
 export function compareNavBarItemConfig(itemA: NavBarItemConfig, itemB: NavBarItemConfig){
   return (
-    (HelperUtilities.compareObjectSimple          (itemA, itemB)) &&
+    (HelperUtilities.compareObjectsNull           (itemA, itemB)) &&
     (HelperUtilities.compareNavBarItemConfigBase  (itemA, itemB)) &&
     (HelperUtilities.compareNavBarItemConfigShared(itemA, itemB))
   );
@@ -52,23 +76,31 @@ export function compareNavBarItemsConfig(itemA: NavBarItemsConfig, itemB: NavBar
 
 export function compareNavBarButtonBackItemConfig(itemA: NavBarBackItemConfig, itemB: NavBarBackItemConfig){
   return (
-    (HelperUtilities.compareObjectSimple          (itemA, itemB)) && // @ts-ignore
+    (HelperUtilities.compareObjectsNull           (itemA, itemB)) && // @ts-ignore
     (HelperUtilities.compareNavBarItemConfigBase  (itemA, itemB)) && // @ts-ignore
     (HelperUtilities.compareNavBarItemConfigShared(itemA, itemB))
   );
 };
 
 export function compareRouteOptions(itemA: RouteOptions, itemB: RouteOptions){
-  if(!HelperUtilities.compareObjectSimple(itemA, itemB)){
+  if(!HelperUtilities.compareObjectsNull(itemA, itemB)){
     return false;
   };
 
   return (
-    (itemA.routeTitle                    === itemB.routeTitle                   ) &&
+    // Compare: Navbar Config --------------------------------------
+    (itemA.routeTitle            === itemB.routeTitle           ) &&
+    (itemA.prompt                === itemB.prompt               ) &&
+    (itemA.largeTitleDisplayMode === itemB.largeTitleDisplayMode) &&
+    // Compare: Navbar back button item config -------------------------------------
     (itemA.hidesBackButton               === itemB.hidesBackButton              ) &&
     (itemA.backButtonTitle               === itemB.backButtonTitle              ) &&
     (itemA.backButtonDisplayMode         === itemB.backButtonDisplayMode        ) &&
     (itemA.leftItemsSupplementBackButton === itemB.leftItemsSupplementBackButton) &&
+    // Transition Config -------------------------------------------------------------
+    compareTransitionConfig(itemA.transitionConfigPush, itemB.transitionConfigPush) &&
+    compareTransitionConfig(itemA.transitionConfigPop , itemB.transitionConfigPop ) &&
+    // Compare: Navbar item config -----------------------------------------------------------------------------
     compareNavBarItemsConfig         (itemA.navBarButtonLeftItemsConfig , itemB.navBarButtonLeftItemsConfig ) &&
     compareNavBarItemsConfig         (itemA.navBarButtonRightItemsConfig, itemB.navBarButtonRightItemsConfig) &&
     compareNavBarButtonBackItemConfig(itemA.navBarButtonBackItemConfig  , itemB.navBarButtonBackItemConfig  )
