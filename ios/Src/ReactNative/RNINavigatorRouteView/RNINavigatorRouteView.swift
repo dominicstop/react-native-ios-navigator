@@ -132,7 +132,7 @@ class RNINavigatorRouteView: UIView {
       }();
       
       self._transitionConfigPush = config;
-      self.delegate?.didReceiveTransitionConfigPop(config);
+      self.delegate?.didReceiveTransitionConfigPush(config);
     }
   };
   
