@@ -276,6 +276,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       this.navStatus = NavStatus.NAV_PUSHING;
 
       const hasTransition = (options?.transitionConfig != null);
+      // the amount of time to wait for "push" to resolve before rejecting.
+      const timeout = (options?.transitionConfig?.duration ?? 0) + 1000;
+
       if(hasTransition){
         // temporarily override the last route's "push" transition
         await Helpers.setStateAsync<Partial<NavigatorViewState>>(this, {
@@ -291,7 +294,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       });
 
       // forward "push" request to native module
-      await Helpers.promiseWithTimeout(1000,
+      await Helpers.promiseWithTimeout(timeout,
         RNINavigatorViewModule.push(
           findNodeHandle(this.nativeRef),
           routeItem.routeKey, {
@@ -303,8 +306,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       if(hasTransition){
         // reset transition override
         await Helpers.setStateAsync<Partial<NavigatorViewState>>(this, {
-           transitionConfigPushOverride: null,
-         });
+          transitionConfigPushOverride: null,
+        });
       };
       
       // update nav status to idle
@@ -331,6 +334,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       this.navStatus = NavStatus.NAV_POPPING;
 
       const hasTransition = (options?.transitionConfig != null);
+      // the amount of time to wait for "pop" to resolve before rejecting.
+      const timeout = (options?.transitionConfig?.duration ?? 0) + 1000;
+
       if(hasTransition){
         // temporarily change the last route's "pop" transition
         await Helpers.setStateAsync<Partial<NavigatorViewState>>(this, {
@@ -339,7 +345,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       };
 
       // forward "pop" request to native module
-      const result = await Helpers.promiseWithTimeout(1000,
+      const result = await Helpers.promiseWithTimeout(timeout,
         RNINavigatorViewModule.pop(
           findNodeHandle(this.nativeRef), {
             isAnimated: options?.isAnimated ?? true,
