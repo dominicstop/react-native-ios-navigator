@@ -7,6 +7,8 @@
 
 import UIKit;
 
+// Add `isPresenting` so that push and pop can be combined together
+
 class CustomAnimator: NSObject, UIViewControllerAnimatedTransitioning {
 
   let duration: TimeInterval;
@@ -156,6 +158,10 @@ class SlidePushAnimator: CustomAnimator {
     transitionContext.containerView.addSubview(toView);
     let duration = self.transitionDuration(using: transitionContext);
     
+    // `AnimationOptions` -> `KeyframeAnimationOptions`
+    let options: UIView.KeyframeAnimationOptions =
+      .init(animationOptions: .curveEaseInOut);
+    
     // animation - start values
     toView.alpha = 0.5;
     fromView.alpha = 1;
@@ -173,7 +179,7 @@ class SlidePushAnimator: CustomAnimator {
     
     // animation - end values
     let animationBlock = {
-      UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
+      UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.75) {
         toView.alpha = 1;
         fromView.alpha = 0.75;
       };
@@ -192,7 +198,7 @@ class SlidePushAnimator: CustomAnimator {
     
     UIView.animateKeyframes(withDuration: duration,
       delay: 0,
-      options: .calculationModeCubic,
+      options: options,
       animations: animationBlock,
       completion: { _ in
         // reset alpha
@@ -223,6 +229,10 @@ class SlidePopAnimator: CustomAnimator {
     let fromView = fromViewController.view!;
     
     let toViewFrame = toView.frame;
+    
+    // `AnimationOptions` -> `KeyframeAnimationOptions`
+    let options: UIView.KeyframeAnimationOptions =
+      .init(animationOptions: .curveEaseInOut);
   
     transitionContext.containerView.insertSubview(toView, belowSubview: toView);
     let duration = self.transitionDuration(using: transitionContext);
@@ -263,7 +273,7 @@ class SlidePopAnimator: CustomAnimator {
     
     UIView.animateKeyframes(withDuration: duration,
       delay: 0,
-      options: .calculationModeCubic,
+      options: options,
       animations: animationBlock,
       completion: { _ in
         // reset alpha
