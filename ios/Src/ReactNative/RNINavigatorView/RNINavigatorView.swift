@@ -25,7 +25,7 @@ class RNINavigatorView: UIView {
   /// so that they will be "released".
   private var routeVCs: [RNINavigatorRouteViewController] = [];
   
-  var navigationVC: ScrollingNavigationController!;
+  var navigationVC: UINavigationController!;
   
   // ----------------------------------
   // MARK: Convenient Property Wrappers
@@ -242,15 +242,13 @@ fileprivate extension RNINavigatorView {
   /// setup - create nav. and add it as a subview
   func embedNavigationVC(){
     // create nav controller
-    let navigationVC = ScrollingNavigationController();
+    let navigationVC = UINavigationController();
     // save a ref to this instance
     self.navigationVC = navigationVC;
     
     // add vc's view as subview
     self.addSubview(navigationVC.view);
     navigationVC.view.frame = self.bounds;
-    //navigationVC.hidesBarsOnTap = true;
-    //navigationVC.hidesBarsOnSwipe = true;
     
     // set with initial value for `navBarPrefersLargeTitles` prop
     if #available(iOS 11.0, *) {

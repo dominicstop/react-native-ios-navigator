@@ -26,7 +26,7 @@ protocol RNINavigatorRouteViewControllerDelegate: AnyObject {
   );
 };
 
-class RNINavigatorRouteViewController: ScrollingNavigationViewController, ScrollingNavigationControllerDelegate {
+class RNINavigatorRouteViewController: UIViewController {
   
   // -----------------
   // MARK:- Properties
@@ -95,16 +95,7 @@ class RNINavigatorRouteViewController: ScrollingNavigationViewController, Scroll
   
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated);
-    //self.navigationController?.delegate = self;
-    
-    if let reactScrollView = self.reactScrollView,
-       let navigationController = self.navigationController as? ScrollingNavigationController {
-      
-      navigationController.followScrollView(reactScrollView.scrollView, delay: 0.0, scrollSpeedFactor: 2);
-      navigationController.scrollingNavbarDelegate = self;
-      navigationController.expandOnActive = false;
-      print("DEBUG -* viewDidAppear");
-    };
+    self.navigationController?.delegate = self;
   };
   
   override func viewDidLayoutSubviews() {
@@ -280,7 +271,7 @@ extension RNINavigatorRouteViewController: RNINavigatorRouteViewDelegate {
 // MARK:- Extension: UINavigationControllerDelegate
 // ------------------------------------------------
 
-extension RNINavigatorRouteViewController {
+extension RNINavigatorRouteViewController: UINavigationControllerDelegate {
   func navigationController(
     _           navigationController: UINavigationController,
     animationControllerFor operation: UINavigationController.Operation,
