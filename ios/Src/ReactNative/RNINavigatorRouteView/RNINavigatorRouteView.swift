@@ -54,18 +54,28 @@ class RNINavigatorRouteView: UIView {
   // ------------------------------
   
   /// Fired when a route is *about to be* "pushed"
-  @objc var onNavRouteWillPush: RCTBubblingEventBlock?;
+  @objc var onRouteWillPush: RCTBubblingEventBlock?;
   /// Fired when a route *has been* "pushed"
-  @objc var onNavRouteDidPush: RCTBubblingEventBlock?;
+  @objc var onRouteDidPush: RCTBubblingEventBlock?;
   
   /// Fired when a route is *about to be* "popped", either due to a "user intiated"
   /// pop (because the "back" button was pressed or it was swiped back via a
   /// gesture), or due to it being "popped" programmatically via the nav.
-  @objc var onNavRouteWillPop: RCTBubblingEventBlock?;
+  @objc var onRouteWillPop: RCTBubblingEventBlock?;
   /// Fired when a route *has been* "popped", either due to a "user intiated"
   /// pop (because the "back" button was pressed or it was swiped back via a
   /// gesture), or due to it being "popped" programmatically via the nav.
-  @objc var onNavRouteDidPop: RCTBubblingEventBlock?;
+  @objc var onRouteDidPop: RCTBubblingEventBlock?;
+  
+  /** Fired when the route is about to appear */
+  @objc var onRouteWillFocus: RCTBubblingEventBlock?;
+  /** Fired when the route appears */
+  @objc var onRouteDidFocus : RCTBubblingEventBlock?;
+  
+  /** Fired when the route is about to dissapear */
+  @objc var onRouteWillBlur: RCTBubblingEventBlock?;
+  /** Fired when the route dissapear */
+  @objc var onRouteDidBlur : RCTBubblingEventBlock?;
   
   /// Fired when the nav bar's back item is pressed and is a custom nav bar item.
   @objc var onPressNavBarBackItem : RCTBubblingEventBlock?;
@@ -565,38 +575,40 @@ class RNINavigatorRouteView: UIView {
     bridge.uiManager.setSize(newBounds.size, for: reactView);
   };
   
-  /// notify js `RNINavigatorRouteView` that its about to be pushed
-  func notifyOnNavRouteWillPush(isAnimated: Bool){
+  /// notify js `RNINavigatorRouteView` that its about to be/has been pushed
+  func notifyOnRoutePush(isDone: Bool, isAnimated: Bool){
     var dict = self.createEventPayload();
     dict["isAnimated"] = isAnimated;
     
-    self.onNavRouteWillPush?(dict);
-  };
-  
-  /// notify js `RNINavigatorRouteView` that its been pushed
-  func notifyOnNavRouteDidPush(isAnimated: Bool){
-    var dict = self.createEventPayload();
-    dict["isAnimated"] = isAnimated;
-
-    self.onNavRouteDidPush?(dict);
+    // send event
+    (isDone ? self.onRouteDidPush : self.onRouteWillPush)?(dict);
   };
   
   /// notify js `RNINavigatorRouteView` that its about to be popped
-  func notifyOnNavRouteWillPop(isUserInitiated: Bool){
+  func notifyOnRoutePop(isDone: Bool, isUserInitiated: Bool){
     var dict = self.createEventPayload();
     dict["isUserInitiated"] = isUserInitiated;
     
-    self.onNavRouteWillPop?(dict);
+    // send event
+    (isDone ? self.onRouteDidPop : self.onRouteWillPop)?(dict);
   };
   
-  /// notify js `RNINavigatorRouteView` that it has been popped
-  func notifyOnNavRouteDidPop(isUserInitiated: Bool){
+  func notifyOnRouteFocus(isDone: Bool, isAnimated: Bool){
     var dict = self.createEventPayload();
-    dict["isUserInitiated"] = isUserInitiated;
+    dict["isAnimated"] = isAnimated;
     
-    self.onNavRouteDidPop?(dict);
+    // send event
+    (isDone ? self.onRouteDidFocus : self.onRouteWillFocus)?(dict);
   };
   
+  func notifyOnRouteBlur(isDone: Bool, isAnimated: Bool){
+    var dict = self.createEventPayload();
+    dict["isAnimated"] = isAnimated;
+    
+    // send event
+    (isDone ? self.onRouteDidBlur : self.onRouteWillBlur)?(dict);
+  };
+    
   /// Once we're done w/ this "route view" (e.g. it has been popped or removed),
   /// then we need to cleanup to prevent this instance from leaking.
   func cleanup(){

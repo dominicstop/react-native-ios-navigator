@@ -93,9 +93,39 @@ class RNINavigatorRouteViewController: UIViewController {
     self.routeView?.notifyForBoundsChange(self.view.bounds);
   };
   
+  override func viewWillAppear(_ animated: Bool) {
+    // send event: notify js nav. route is about to appear
+    self.routeView?.notifyOnRouteFocus(
+      isDone: false,
+      isAnimated: animated
+    );
+  };
+  
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated);
-    self.navigationController?.delegate = self;
+    self.navigationController?.delegate = self; //TODO: fix
+    
+    // send event: notify js nav. route has appeared
+    self.routeView?.notifyOnRouteFocus(
+      isDone: true,
+      isAnimated: animated
+    );
+  };
+  
+  override func viewWillDisappear(_ animated: Bool) {
+    // send event: notify js nav. route is about to disappear
+    self.routeView?.notifyOnRouteFocus(
+      isDone: false,
+      isAnimated: animated
+    );
+  };
+  
+  override func viewDidDisappear(_ animated: Bool) {
+    // send event: notify js nav. route has disappeared
+    self.routeView?.notifyOnRouteFocus(
+      isDone: true,
+      isAnimated: animated
+    );
   };
   
   override func viewDidLayoutSubviews() {
@@ -130,7 +160,10 @@ class RNINavigatorRouteViewController: UIViewController {
       let isUserInitiated = !self.isToBeRemoved;
       
       // send event: notify js nav. route view that it's going to be popped.
-      self.routeView?.notifyOnNavRouteWillPop(isUserInitiated: isUserInitiated);
+      self.routeView?.notifyOnRoutePop(
+        isDone: false,
+        isUserInitiated: isUserInitiated
+      );
       
       // notify parent (i.e. `RNINavigatorView`) that this vc will be "popped".
       self.delegate?.onNavRouteWillPop(
@@ -168,7 +201,10 @@ class RNINavigatorRouteViewController: UIViewController {
       let isUserInitiated = !self.isToBeRemoved;
       
       // send event: notify js nav. route view that it's been popped.
-      self.routeView?.notifyOnNavRouteDidPop(isUserInitiated: isUserInitiated);
+      self.routeView?.notifyOnRoutePop(
+        isDone: true,
+        isUserInitiated: isUserInitiated
+      );
       
       // notify parent (i.e. `RNINavigatorView`) that this vc has been "popped".
       self.delegate?.onNavRouteDidPop(

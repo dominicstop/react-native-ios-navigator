@@ -340,13 +340,19 @@ extension RNINavigatorView {
     let isAnimated = options["isAnimated"] as? Bool ?? true;
     
     // notify js `RNINavigatorRouteView` that it's about to be pushed
-    routeView.notifyOnNavRouteWillPush(isAnimated: isAnimated);
+    routeView.notifyOnRoutePush(
+      isDone: false,
+      isAnimated: isAnimated
+    );
     
     self.navigationVC.pushViewController(routeViewVC, animated: isAnimated){
       completion();
       
       // notify js `RNINavigatorRouteView` that it's been pushed
-      routeView.notifyOnNavRouteDidPush(isAnimated: isAnimated);
+      routeView.notifyOnRoutePush(
+        isDone: true,
+        isAnimated: isAnimated
+      );
     };
   };
   

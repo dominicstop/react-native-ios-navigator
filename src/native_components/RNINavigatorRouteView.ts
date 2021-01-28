@@ -27,6 +27,14 @@ export type onRoutePushEvent = (event: {
   }
 }) => void;
 
+export type onRouteFocusBlurEvent = (event: {
+  nativeEvent: { 
+    routeKey: string,
+    routeIndex: number,
+    isAnimated: boolean
+  }
+}) => void;
+
 export type onRoutePopEvent = (event: {
   nativeEvent: { 
     routeKey: string,
@@ -81,12 +89,20 @@ export type RNINavigatorRouteViewProps = {
   leftItemsSupplementBackButton?: boolean;
 
   // Native Events: Push
-  onNavRouteWillPush?: onRoutePushEvent;
-  onNavRouteDidPush ?: onRoutePushEvent;
+  onRouteWillPush?: onRoutePushEvent;
+  onRouteDidPush ?: onRoutePushEvent;
 
   // Native Events: Pop
-  onNavRouteWillPop?: onRoutePopEvent;
-  onNavRouteDidPop ?: onRoutePopEvent;
+  onRouteWillPop?: onRoutePopEvent;
+  onRouteDidPop ?: onRoutePopEvent;
+
+  // Native Events: Focus
+  onRouteWillFocus?: onRouteFocusBlurEvent;
+  onRouteDidFocus ?: onRouteFocusBlurEvent;
+
+  // Native Events: Blur
+  onRouteWillBlur?: onRouteFocusBlurEvent;
+  onRouteDidBlur ?: onRouteFocusBlurEvent;
 
   // Native Events: Navbar Item `onPress`
   onPressNavBarBackItem ?: onPressNavBarItem;

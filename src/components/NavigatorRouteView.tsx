@@ -6,7 +6,7 @@ import type { NavigatorView, RouteOptions } from './NavigatorView';
 
 import { NavBarItemsWrapper } from './NavBarBackItemsWrapper';
 
-import { RNINavigatorRouteView, RNINavigatorRouteViewProps, onPressNavBarItem, onRoutePushEvent, onRoutePopEvent, RouteTransitionPopConfig, RouteTransitionPushConfig } from '../native_components/RNINavigatorRouteView';
+import { RNINavigatorRouteView, RNINavigatorRouteViewProps, onPressNavBarItem, onRoutePushEvent, onRoutePopEvent, RouteTransitionPopConfig, RouteTransitionPushConfig, onRouteFocusBlurEvent } from '../native_components/RNINavigatorRouteView';
 import { RNINavigatorRouteViewModule } from '../native_modules/RNINavigatorRouteViewModule';
 
 import * as Helpers from '../functions/Helpers';
@@ -20,10 +20,15 @@ import { NativeIDKeys } from '../constants/LibraryConstants';
 /** Event emitter keys for `NavigatorRouteView` */
 export enum NavRouteEvents {
   // Navigator push/pop events
-  onNavRouteWillPush = "onNavRouteWillPush",
-  onNavRouteDidPush  = "onNavRouteDidPush" ,
-  onNavRouteWillPop  = "onNavRouteWillPop" ,
-  onNavRouteDidPop   = "onNavRouteDidPop"  ,
+  onRouteWillPush = "onRouteWillPush",
+  onRouteDidPush  = "onRouteDidPush" ,
+  onRouteWillPop  = "onRouteWillPop" ,
+  onRouteDidPop   = "onRouteDidPop"  ,
+  // Navigator focus/blur events
+  onRouteWillFocus = "onRouteWillFocus",
+  onRouteDidFocus  = "onRouteDidFocus" ,
+  onRouteWillBlur  = "onRouteWillBlur" ,
+  onRouteDidBlur   = "onRouteDidBlur"  ,
   // Navbar item `onPress` events
   onPressNavBarBackItem  = "onPressNavBarBackItem" ,
   onPressNavBarLeftItem  = "onPressNavBarLeftItem" ,
@@ -254,24 +259,24 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
   // #region - Native Event Handlers
   // Native Event Handlers for `RNINavigatorRouteView`
 
-  /** Handle event: `onNavRouteWillPop` */
+  /** Handle event: `onRouteWillPop` */
   private _handleOnNavRouteWillPop: onRoutePopEvent = (event) => {
-    this._emitter.emit(NavRouteEvents.onNavRouteWillPop, event);
+    this._emitter.emit(NavRouteEvents.onRouteWillPop, event);
   };
 
-  /** Handle event: `onNavRouteDidPop` */
+  /** Handle event: `onRouteDidPop` */
   private _handleOnNavRouteDidPop: onRoutePopEvent = (event) => {
-    this._emitter.emit(NavRouteEvents.onNavRouteDidPop, event);
+    this._emitter.emit(NavRouteEvents.onRouteDidPop, event);
   };
 
-  /** Handle event: `onNavRouteWillPush` */
+  /** Handle event: `onRouteWillPush` */
   private _handleOnNavRouteWillPush: onRoutePushEvent = (event) => {
-    this._emitter.emit(NavRouteEvents.onNavRouteWillPush, event);
+    this._emitter.emit(NavRouteEvents.onRouteWillPush, event);
   };
 
-  /** Handle event: `onNavRouteDidPush` */
+  /** Handle event: `onRouteDidPush` */
   private _handleOnNavRouteDidPush: onRoutePushEvent = (event) => {
-    this._emitter.emit(NavRouteEvents.onNavRouteDidPush, event);
+    this._emitter.emit(NavRouteEvents.onRouteDidPush, event);
   };
 
   /** Handle event: `onPressNavBarBackItem` */
@@ -288,6 +293,27 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
   private _handleOnPressNavBarRightItem: onPressNavBarItem = (event) => {
     this._emitter.emit(NavRouteEvents.onPressNavBarRightItem, event);
   };
+
+  /** Handle event: `onRouteWillFocus` */
+  private _handleOnRouteWillFocus: onRouteFocusBlurEvent = (event)  => {
+    this._emitter.emit(NavRouteEvents.onRouteWillFocus, event);
+  };
+
+  /** Handle event: `onRouteDidFocus` */
+  private _handleOnRouteDidFocus: onRouteFocusBlurEvent = (event)  => {
+    this._emitter.emit(NavRouteEvents.onRouteDidFocus, event);
+  };
+
+  /** Handle event: `onRouteWillBlur` */
+  private _handleOnRouteWillBlur: onRouteFocusBlurEvent = (event)  => {
+    this._emitter.emit(NavRouteEvents.onRouteWillBlur, event);
+  };
+
+  /** Handle event: `onRouteDidBlur` */
+  private _handleOnRouteDidBlur: onRouteFocusBlurEvent = (event)  => {
+    this._emitter.emit(NavRouteEvents.onRouteDidBlur, event);
+  };
+
   //#endregion
   
   _renderRouteContents = () => {
@@ -344,10 +370,15 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
           routeIndex={props.routeIndex}
           routeTitle={routeOptions.routeTitle}
           // nav route events: push/pop
-          onNavRouteWillPop={this._handleOnNavRouteWillPop}
-          onNavRouteDidPop={this._handleOnNavRouteDidPop}
-          onNavRouteWillPush={this._handleOnNavRouteWillPush}
-          onNavRouteDidPush={this._handleOnNavRouteDidPush}
+          onRouteWillPop={this._handleOnNavRouteWillPop}
+          onRouteDidPop={this._handleOnNavRouteDidPop}
+          onRouteWillPush={this._handleOnNavRouteWillPush}
+          onRouteDidPush={this._handleOnNavRouteDidPush}
+          //
+          onRouteWillFocus={this._handleOnRouteWillFocus}
+          onRouteDidFocus={this._handleOnRouteDidFocus}
+          onRouteWillBlur={this._handleOnRouteWillBlur}
+          onRouteDidBlur={this._handleOnRouteDidBlur}
           // nav route events: navbar item `onPress`
           onPressNavBarBackItem={this._handleOnPressNavBarBackItem}
           onPressNavBarLeftItem={this._handleOnPressNavBarLeftItem}

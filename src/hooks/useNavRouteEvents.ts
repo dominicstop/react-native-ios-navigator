@@ -6,10 +6,14 @@ import { NavRouteViewContext } from '../context/NavRouteViewContext';
 
 /** Route push/pop events */
 type NavRouteLifeCycleEvents = 
-  | (NavRouteEvents.onNavRouteWillPush | 'onNavRouteWillPush')
-  | (NavRouteEvents.onNavRouteDidPush  | 'onNavRouteDidPush' )
-  | (NavRouteEvents.onNavRouteWillPop  | 'onNavRouteWillPop' )
-  | (NavRouteEvents.onNavRouteDidPop   | 'onNavRouteDidPop'  )
+  | (NavRouteEvents.onRouteWillPush  | 'onRouteWillPush' )
+  | (NavRouteEvents.onRouteDidPush   | 'onRouteDidPush'  )
+  | (NavRouteEvents.onRouteWillPop   | 'onRouteWillPop'  )
+  | (NavRouteEvents.onRouteDidPop    | 'onRouteDidPop'   )
+  | (NavRouteEvents.onRouteWillFocus | 'onRouteWillFocus')
+  | (NavRouteEvents.onRouteDidFocus  | 'onRouteDidFocus' )
+  | (NavRouteEvents.onRouteWillBlur  | 'onRouteWillBlur' )
+  | (NavRouteEvents.onRouteDidBlur   | 'onRouteDidBlur'  )
 
 /** Route navigation bar item events */
 type NavBarItemEvents = 

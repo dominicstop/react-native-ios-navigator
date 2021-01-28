@@ -13,11 +13,17 @@
 // MARK:- Export Props - Events
 // ----------------------------
 
-RCT_EXPORT_VIEW_PROPERTY(onNavRouteWillPush, RCTBubblingEventBlock);
-RCT_EXPORT_VIEW_PROPERTY(onNavRouteDidPush , RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onRouteWillPush, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onRouteDidPush , RCTBubblingEventBlock);
 
-RCT_EXPORT_VIEW_PROPERTY(onNavRouteWillPop, RCTBubblingEventBlock);
-RCT_EXPORT_VIEW_PROPERTY(onNavRouteDidPop , RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onRouteWillPop, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onRouteDidPop , RCTBubblingEventBlock);
+
+RCT_EXPORT_VIEW_PROPERTY(onRouteWillFocus, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onRouteDidFocus , RCTBubblingEventBlock);
+
+RCT_EXPORT_VIEW_PROPERTY(onRouteWillBlur, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onRouteDidBlur , RCTBubblingEventBlock);
 
 RCT_EXPORT_VIEW_PROPERTY(onPressNavBarBackItem , RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onPressNavBarLeftItem , RCTBubblingEventBlock);
