@@ -6,7 +6,7 @@ import type { NavigatorView, RouteOptions } from './NavigatorView';
 
 import { NavBarItemsWrapper } from './NavBarBackItemsWrapper';
 
-import { RNINavigatorRouteView, RNINavigatorRouteViewProps, onPressNavBarItem, onRoutePushEvent, onRoutePopEvent } from '../native_components/RNINavigatorRouteView';
+import { RNINavigatorRouteView, RNINavigatorRouteViewProps, onPressNavBarItem, onRoutePushEvent, onRoutePopEvent, RouteTransitionPopConfig, RouteTransitionPushConfig } from '../native_components/RNINavigatorRouteView';
 import { RNINavigatorRouteViewModule } from '../native_modules/RNINavigatorRouteViewModule';
 
 import * as Helpers from '../functions/Helpers';
@@ -44,7 +44,9 @@ type NavigatorRouteViewProps = {
   routeIndex: number;
   routeProps: object;
   defaultRouteOptions: RouteOptions;
-  routeContainerStyle?: ViewStyle,
+  routeContainerStyle: ViewStyle,
+  transitionConfigPushOverride: RouteTransitionPushConfig;
+  transitionConfigPopOverride: RouteTransitionPopConfig;
   getRefToNavigator: () => NavigatorView,
   renderRouteContent: () => ReactElement<RouteContentProps>
   // render nav bar items
@@ -109,10 +111,11 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
   };
 
   public getRouteOptions: (() => RouteOptions) = () => {
-    const { defaultRouteOptions, ...props } = this.props;
-    const { routeOptions } = this.state;
-
+    const props = this.props;
     const portalProps = this._routeViewPortalRef?.props;
+
+    const { defaultRouteOptions } = this.props;
+    const { routeOptions } = this.state;
 
     // check if portal has custom nav bar items
     const hasNavBarBackItem  = (portalProps?.renderNavBarBackItem  != null);
@@ -122,16 +125,18 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     return {
       // ------------------------------------------------------
       // Technically, this whole thing could be done like this:
-      // `{...defaultRouteOptions, ...routeOptions}`
+      // `{...routeOptionsOverride, ...defaultRouteOptions, ...routeOptions}`
       // but it's less clear/explicit, idk refactor this later.
       // ------------------------------------------------------
       // #region - Transition Config |
       // ----------------------------*
       transitionConfigPush: (
+        props.transitionConfigPushOverride        ??
         routeOptions       ?.transitionConfigPush ??
         defaultRouteOptions?.transitionConfigPush
       ),
       transitionConfigPop: (
+        props.transitionConfigPopOverride        ??
         routeOptions       ?.transitionConfigPop ??
         defaultRouteOptions?.transitionConfigPop
       ),
@@ -235,6 +240,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     };
   };
   // #endregion
+  
   // #region - Handlers
   private _handleGetRefToRoute = () => {
     return this;

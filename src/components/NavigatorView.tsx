@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import { StyleSheet, findNodeHandle, processColor, TextStyle, TextStyleIOS, ViewStyle } from 'react-native';
 
 import { BarStyle, RNINavigatorView } from '../native_components/RNINavigatorView';
-import { RNINavigatorViewModule, PushPopOptions } from '../native_modules/RNINavigatorViewModule';
+import { RNINavigatorViewModule, NativePushPopOptions } from '../native_modules/RNINavigatorViewModule';
 
 import { NavigatorRouteView } from './NavigatorRouteView';
 
@@ -28,6 +28,14 @@ enum NavStatus {
 
 enum NavEvents {
   onNavRouteViewAdded = "onNavRouteViewAdded"
+};
+
+type PushOptions = NativePushPopOptions & {
+  transitionConfig?: RouteTransitionPushConfig;
+};
+
+type PopOptions = NativePushPopOptions & {
+  transitionConfig?: RouteTransitionPopConfig;
 };
 
 export type RouteOptions = {
@@ -103,7 +111,9 @@ type NavigatorViewProps = {
 
 /** `NavigatorView` comp. state */
 type NavigatorViewState = {
-  activeRoutes: Array<NavRouteStateItem>,
+  activeRoutes: Array<NavRouteStateItem>;
+  transitionConfigPushOverride?: RouteTransitionPushConfig;
+  transitionConfigPopOverride ?: RouteTransitionPopConfig;
 };
 //#endregion
 
@@ -134,6 +144,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
     this.state = {
       activeRoutes: [{...initialRoute, routeIndex: 0}],
+      transitionConfigPushOverride: null,
+      transitionConfigPopOverride: null,
     };
   };
 
@@ -249,7 +261,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   //#endregion
 
   //#region - Public Functions
-  public push = async (routeItem: NavRouteItem, options?: PushPopOptions) => {
+  public push = async (routeItem: NavRouteItem, options?: PushOptions) => {
     const routeConfig = this.getMatchingRoute(routeItem);
 
     if(!routeConfig){
@@ -263,6 +275,14 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       // update nav status to busy
       this.navStatus = NavStatus.NAV_PUSHING;
 
+      const hasTransition = (options?.transitionConfig != null);
+      if(hasTransition){
+        // temporarily override the last route's "push" transition
+        await Helpers.setStateAsync<Partial<NavigatorViewState>>(this, {
+          transitionConfigPushOverride: options.transitionConfig
+        });
+      };
+
       // add new route, and wait for it be added
       await this.addRoute({
         routeKey    : routeItem.routeKey    ,
@@ -275,10 +295,17 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         RNINavigatorViewModule.push(
           findNodeHandle(this.nativeRef),
           routeItem.routeKey, {
-            isAnimated: options?.isAnimated ?? true
+            isAnimated: (options?.isAnimated ?? true)
           }
         )
       );
+
+      if(hasTransition){
+        // reset transition override
+        await Helpers.setStateAsync<Partial<NavigatorViewState>>(this, {
+           transitionConfigPushOverride: null,
+         });
+      };
       
       // update nav status to idle
       this.navStatus = NavStatus.IDLE;
@@ -286,7 +313,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     } catch(error){
       //#region - 🐞 DEBUG 🐛
       LIB_GLOBAL.debugLog && console.log(
-          `LOG/JS - NavigatorView, push - error message: ${error}`
+        `LOG/JS - NavigatorView, push - error message: ${error}`
       );
       //#endregion
 
@@ -295,13 +322,21 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
   };
 
-  public pop = async (options?: PushPopOptions) => {
+  public pop = async (options?: PopOptions) => {
     // TEMP, replace with queue - skip if nav. is busy
     if(NavigatorViewUtils.isNavStateBusy(this.navStatus)) return;
 
     try {
       // update nav status to busy
       this.navStatus = NavStatus.NAV_POPPING;
+
+      const hasTransition = (options?.transitionConfig != null);
+      if(hasTransition){
+        // temporarily change the last route's "pop" transition
+        await Helpers.setStateAsync<Partial<NavigatorViewState>>(this, {
+          transitionConfigPopOverride: options.transitionConfig
+        });
+      };
 
       // forward "pop" request to native module
       const result = await Helpers.promiseWithTimeout(1000,
@@ -314,6 +349,13 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       // remove popped route from `activeRoutes`
       await this.removeRoute(result);
+
+      if(hasTransition){
+        // reset transition override
+        await Helpers.setStateAsync<Partial<NavigatorViewState>>(this, {
+           transitionConfigPopOverride: null,
+         });
+      };
 
       // update nav status to idle
       this.navStatus = NavStatus.IDLE;
@@ -383,10 +425,15 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
   _renderRoutes(){
     const props = this.props;
-    const { activeRoutes } = this.state;
+    const { activeRoutes, ...state } = this.state;
 
-    return activeRoutes.map(route => {
+    const activeRoutesCount = activeRoutes.length;
+
+    return activeRoutes.map((route, index) => {
       const routeConfig = this.getMatchingRoute(route);
+
+      const isLast         = (activeRoutesCount - 1) == index;
+      const isSecondToLast = (activeRoutesCount - 2) == index;
 
       return (
         <NavigatorRouteView
@@ -401,6 +448,14 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
           defaultRouteOptions={(
             route      .routeOptions ??
             routeConfig.defaultRouteOptions
+          )}
+          transitionConfigPushOverride={(isSecondToLast
+            ? state.transitionConfigPushOverride
+            : null
+          )}
+          transitionConfigPopOverride ={(isLast
+            ? state.transitionConfigPopOverride
+            : null
           )}
           getRefToNavigator={this._handleGetRefToNavigator}
           renderRouteContent={() => (
