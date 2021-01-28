@@ -141,3 +141,139 @@ class FadePopAnimator: CustomAnimator {
     );
   };
 };
+
+class SlidePushAnimator: CustomAnimator {
+  override func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+    guard let fromViewController = transitionContext.viewController(forKey: .from),
+          let toViewController   = transitionContext.viewController(forKey: .to)
+    else { return };
+    
+    let toView   = toViewController  .view!;
+    let fromView = fromViewController.view!;
+    
+    let toViewFrame = toView.frame;
+  
+    transitionContext.containerView.addSubview(toView);
+    let duration = self.transitionDuration(using: transitionContext);
+    
+    // animation - start values
+    toView.alpha = 0.5;
+    fromView.alpha = 1;
+    
+    toView.frame = CGRect(
+      origin: CGPoint(
+        x: toView.frame.width,
+        y: toView.frame.origin.y
+      ),
+      size: CGSize(
+        width : toView.frame.width,
+        height: toView.frame.height
+      )
+    );
+    
+    // animation - end values
+    let animationBlock = {
+      UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
+        toView.alpha = 1;
+        fromView.alpha = 0.75;
+      };
+      
+      UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1) {
+        toView.frame = toViewFrame
+        fromView.frame = CGRect(
+          origin: CGPoint(
+            x: -toView.frame.width,
+            y: toView.frame.origin.y
+          ),
+          size: toView.frame.size
+        );
+      };
+    };
+    
+    UIView.animateKeyframes(withDuration: duration,
+      delay: 0,
+      options: .calculationModeCubic,
+      animations: animationBlock,
+      completion: { _ in
+        // reset alpha
+        fromView.alpha = 1;
+        
+        // finish animation
+        transitionContext.completeTransition(
+          !transitionContext.transitionWasCancelled
+        );
+      }
+    );
+  };
+};
+
+class SlidePopAnimator: CustomAnimator {
+  
+  init(duration: TimeInterval = 0.25, interactionController: UIPercentDrivenInteractiveTransition? = nil){
+    super.init(duration: duration);
+    self.interactionController = interactionController;
+  };
+  
+  override func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+    guard let fromViewController = transitionContext.viewController(forKey: .from),
+          let toViewController   = transitionContext.viewController(forKey: .to)
+    else { return };
+    
+    let toView   = toViewController  .view!;
+    let fromView = fromViewController.view!;
+    
+    let toViewFrame = toView.frame;
+  
+    transitionContext.containerView.insertSubview(toView, belowSubview: toView);
+    let duration = self.transitionDuration(using: transitionContext);
+    
+    // animation - start values
+    toView.alpha = 0.8;
+    fromView.alpha = 1;
+    
+    toView.frame = CGRect(
+      origin: CGPoint(
+        x: -toView.frame.width,
+        y: toView.frame.origin.y
+      ),
+      size: CGSize(
+        width : toView.frame.width,
+        height: toView.frame.height
+      )
+    );
+    
+    // animation - end values
+    let animationBlock = {
+      UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
+        toView.alpha = 1;
+        fromView.alpha = 0.8;
+      };
+      
+      UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1) {
+        toView.frame = toViewFrame
+        fromView.frame = CGRect(
+          origin: CGPoint(
+            x: toView.frame.width,
+            y: toView.frame.origin.y
+          ),
+          size: toView.frame.size
+        );
+      };
+    };
+    
+    UIView.animateKeyframes(withDuration: duration,
+      delay: 0,
+      options: .calculationModeCubic,
+      animations: animationBlock,
+      completion: { _ in
+        // reset alpha
+        fromView.alpha = 1;
+        
+        // finish animation
+        transitionContext.completeTransition(
+          !transitionContext.transitionWasCancelled
+        );
+      }
+    );
+  };
+};

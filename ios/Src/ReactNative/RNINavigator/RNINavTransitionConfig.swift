@@ -12,12 +12,16 @@ class RNINavTransitionConfig {
   enum TransitionTypes: String {
     case DefaultPush;
     case DefaultPop;
+    
     case FadePush;
     case FadePop;
+    
+    case SlidePush;
+    case SlidePop;
   };
   
   let transitionType: TransitionTypes;
-  var duration: TimeInterval = 0.25;
+  var duration: TimeInterval = 0.5;
   
   init?(dictionary: NSDictionary) {
     guard let typeString = dictionary["type"] as? String,
@@ -47,6 +51,12 @@ class RNINavTransitionConfig {
       
       case .FadePush: return FadePushAnimator(duration: duration);
       case .FadePop : return FadePopAnimator (
+        duration: self.duration,
+        interactionController: interactionController
+      );
+      
+      case .SlidePush: return SlidePushAnimator(duration: duration);
+      case .SlidePop: return SlidePopAnimator(
         duration: self.duration,
         interactionController: interactionController
       );

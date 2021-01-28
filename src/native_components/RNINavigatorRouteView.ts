@@ -2,10 +2,10 @@ import { requireNativeComponent, ViewStyle } from 'react-native';
 import type { NavBarBackItemConfig, NavBarItemsConfig } from '../types/NavBarItemConfig';
 
 type RouteTransitionPushTypes = 
-  "DefaultPush" | "FadePush";
+  "DefaultPush" | "FadePush" | "SlidePush";
 
 type RouteTransitionPopTypes = 
-  "DefaultPop" | "FadePop";
+  "DefaultPop" | "FadePop" | "SlidePop";
 
 type RouteTransitionConfigBase = {
   duration?: number

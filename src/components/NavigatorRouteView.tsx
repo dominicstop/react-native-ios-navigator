@@ -125,7 +125,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     return {
       // ------------------------------------------------------
       // Technically, this whole thing could be done like this:
-      // `{...routeOptionsOverride, ...defaultRouteOptions, ...routeOptions}`
+      // `{...defaultRouteOptions, ...routeOptions}`
       // but it's less clear/explicit, idk refactor this later.
       // ------------------------------------------------------
       // #region - Transition Config |
