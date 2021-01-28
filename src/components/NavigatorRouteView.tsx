@@ -43,7 +43,7 @@ type NavigatorRouteViewProps = {
   routeKey: string;
   routeIndex: number;
   routeProps: object;
-  defaultRouteOptions: RouteOptions;
+  routeOptionsDefault: RouteOptions;
   routeContainerStyle: ViewStyle,
   transitionConfigPushOverride: RouteTransitionPushConfig;
   transitionConfigPopOverride: RouteTransitionPopConfig;
@@ -114,7 +114,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     const props = this.props;
     const portalProps = this._routeViewPortalRef?.props;
 
-    const { defaultRouteOptions } = this.props;
+    const { routeOptionsDefault } = this.props;
     const { routeOptions } = this.state;
 
     // check if portal has custom nav bar items
@@ -125,7 +125,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     return {
       // ------------------------------------------------------
       // Technically, this whole thing could be done like this:
-      // `{...defaultRouteOptions, ...routeOptions}`
+      // `{...routeOptionsDefault, ...routeOptions}`
       // but it's less clear/explicit, idk refactor this later.
       // ------------------------------------------------------
       // #region - Transition Config |
@@ -133,48 +133,48 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
       transitionConfigPush: (
         props.transitionConfigPushOverride        ??
         routeOptions       ?.transitionConfigPush ??
-        defaultRouteOptions?.transitionConfigPush
+        routeOptionsDefault?.transitionConfigPush
       ),
       transitionConfigPop: (
         props.transitionConfigPopOverride        ??
         routeOptions       ?.transitionConfigPop ??
-        defaultRouteOptions?.transitionConfigPop
+        routeOptionsDefault?.transitionConfigPop
       ),
       // #endregion -------------*
       // #region - Navbar Config |
       // ------------------------*
       routeTitle: (
         routeOptions       ?.routeTitle ??
-        defaultRouteOptions?.routeTitle ?? props.routeKey
+        routeOptionsDefault?.routeTitle ?? props.routeKey
       ),
       prompt: (
         routeOptions       ?.prompt ??
-        defaultRouteOptions?.prompt 
+        routeOptionsDefault?.prompt 
       ),
       largeTitleDisplayMode: (
         routeOptions       ?.largeTitleDisplayMode ??
-        defaultRouteOptions?.largeTitleDisplayMode 
+        routeOptionsDefault?.largeTitleDisplayMode 
       ),
       // #endregion ------------------*
       // #region - Navbar Item Config |
       // -----------------------------*
       navBarButtonBackItemConfig: (
         routeOptions       ?.navBarButtonBackItemConfig ??
-        defaultRouteOptions?.navBarButtonBackItemConfig ??
+        routeOptionsDefault?.navBarButtonBackItemConfig ??
         // custom back bar item was set, so we implicitly/automatically
         // create a `type: CUSTOM` nav bar item config...
         (hasNavBarBackItem? { type: 'CUSTOM' } : null)
       ),
       navBarButtonLeftItemsConfig: (
         routeOptions       ?.navBarButtonLeftItemsConfig ??
-        defaultRouteOptions?.navBarButtonLeftItemsConfig ??
+        routeOptionsDefault?.navBarButtonLeftItemsConfig ??
         // custom left bar item was set, so we implicitly/automatically
         // create a `type: CUSTOM` nav bar item config...
         (hasNavBarLeftItem? [{ type: 'CUSTOM' }] : null)
       ),
       navBarButtonRightItemsConfig: (
         routeOptions       ?.navBarButtonRightItemsConfig ??
-        defaultRouteOptions?.navBarButtonRightItemsConfig ??
+        routeOptionsDefault?.navBarButtonRightItemsConfig ??
         // custom right bar item was set, so we implicitly/automatically
         // create a `type: CUSTOM` nav bar item config...
         (hasNavBarRightItem? [{ type: 'CUSTOM' }] : null)
@@ -184,19 +184,19 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
       // -----------------------------------------*
       leftItemsSupplementBackButton: (
         routeOptions       ?.leftItemsSupplementBackButton ??
-        defaultRouteOptions?.leftItemsSupplementBackButton
+        routeOptionsDefault?.leftItemsSupplementBackButton
       ),
       backButtonTitle: (
         routeOptions       ?.backButtonTitle ??
-        defaultRouteOptions?.backButtonTitle
+        routeOptionsDefault?.backButtonTitle
       ),
       backButtonDisplayMode: (
         routeOptions       ?.backButtonDisplayMode ??
-        defaultRouteOptions?.backButtonDisplayMode
+        routeOptionsDefault?.backButtonDisplayMode
       ),
       hidesBackButton: (
         routeOptions       ?.hidesBackButton ??
-        defaultRouteOptions?.hidesBackButton
+        routeOptionsDefault?.hidesBackButton
       ),
       // #endregion
     };
