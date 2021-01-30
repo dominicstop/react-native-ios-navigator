@@ -22,16 +22,12 @@ RCT_EXPORT_VIEW_PROPERTY(onNavRouteDidPop , RCTBubblingEventBlock);
 // MARK:- Export Props - Values
 // ----------------------------
 
+// MARK: General/Misc. Config
+RCT_EXPORT_VIEW_PROPERTY(isNavBarTranslucent, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(navBarPrefersLargeTitles, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(isInteractivePopGestureEnabled, BOOL);
 
-// MARK: Navigation Bar: General/Misc. Config
-RCT_EXPORT_VIEW_PROPERTY(navBarPrefersLargeTitles, BOOL);
-
-// MARK: Navigation Bar: Legacy Customizations
-RCT_EXPORT_VIEW_PROPERTY(navBarStyle, NSString);
-RCT_EXPORT_VIEW_PROPERTY(navBarIsTranslucent, BOOL);
-RCT_EXPORT_VIEW_PROPERTY(navBarTintColor, NSNumber);
-RCT_EXPORT_VIEW_PROPERTY(navBarTitleTextStyle, NSDictionary);
-RCT_EXPORT_VIEW_PROPERTY(navBarLargeTitleTextAttributes, NSDictionary);
+// MARK: Navigation Bar: Customization
+RCT_EXPORT_VIEW_PROPERTY(navBarAppearance, NSDictionary);
 
 @end

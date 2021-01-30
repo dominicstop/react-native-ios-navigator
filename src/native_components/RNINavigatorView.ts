@@ -1,4 +1,5 @@
 import { ViewStyle, TextStyle, TextStyleIOS, requireNativeComponent } from 'react-native';
+import type { NavBarAppearanceConfig } from 'src/types/NavBarAppearanceConfig';
 
 //#region - `RNINavigatorView` Event Payloads
 export type onNavRouteViewAddedPayload = { nativeEvent: {
@@ -22,25 +23,18 @@ export type onNavRouteDidPopPayload = { nativeEvent: {
 }};
 //#endregion
 
-/** `UIBarStyle`: Defines the stylistic appearance of different types of views */
-export type BarStyle = 'default' | 'black';
-
 /** `RNINavigatorView` native comp. props */
 type RNINavigatorViewProps = {
   style: ViewStyle;
   
-  isInteractivePopGestureEnabled: boolean;
-
-  // Navigation Bar: General/Misc. Config
+  // General/Misc. Config
   navBarPrefersLargeTitles: boolean;
-
-  // Navigation Bar: Legacy Customizations
-  navBarStyle?: BarStyle;
-  navBarTintColor?: number;
-  navBarIsTranslucent: boolean;
-  navBarTitleTextStyle?: TextStyle & TextStyleIOS;
-  navBarLargeTitleTextAttributes?: TextStyle & TextStyleIOS;
-
+  isInteractivePopGestureEnabled: boolean;
+  isNavBarTranslucent: boolean;
+  
+  // Customize the Bar's Appearance
+  navBarAppearance: NavBarAppearanceConfig;
+  
   // Native Events
   onNavRouteViewAdded?: (events: onNavRouteViewAddedPayload) => void;
   onNavRouteWillPop  ?: (events: onNavRouteWillPopPayload  ) => void;

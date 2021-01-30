@@ -374,7 +374,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
           onRouteDidPop={this._handleOnNavRouteDidPop}
           onRouteWillPush={this._handleOnNavRouteWillPush}
           onRouteDidPush={this._handleOnNavRouteDidPush}
-          //
+          // nav route events: focus/blur
           onRouteWillFocus={this._handleOnRouteWillFocus}
           onRouteDidFocus={this._handleOnRouteDidFocus}
           onRouteWillBlur={this._handleOnRouteWillBlur}

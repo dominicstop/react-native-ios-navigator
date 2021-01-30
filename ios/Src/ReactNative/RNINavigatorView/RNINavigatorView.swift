@@ -69,75 +69,25 @@ class RNINavigatorView: UIView {
     }
   };
   
-  //  MARK: Props - Navigation Bar: Legacy Customizations
-  /// * These are props that let's you customize the navigation bar using the
-  ///   pre-iOS 13 way.
-  /// * TODO: If on iOS 13+, the legacy styles are automatically vended to all
-  ///   the `UINavigationBarAppearance` available appearances to the navbar.
-  /// * TODO: However, there should be explict props for each appearance, e.g.:
-  ///   `standardAppearance`, `compactAppearance`, and `scrollEdgeAppearance`.
-  /// -------------------------------------------------------------------------
-  
-  @objc var navBarStyle: NSString? {
-    didSet {
-      guard self.navBarStyle != oldValue else { return };
-      
-      self.navigationBar.barStyle = {
-        guard let string = self.navBarStyle as String?,
-              let barStyle = UIBarStyle(string: string)
-        else { return .default };
-        
-        return barStyle;
-      }();
-    }
-  };
-  
-  @objc var navBarIsTranslucent: Bool = true {
+  @objc var isNavBarTranslucent: Bool = true {
     willSet {
       self.navigationBar.isTranslucent = newValue;
     }
   };
   
-  @objc var navBarTintColor: NSNumber? {
+  private var _navBarAppearance: RNINavBarAppearance?;
+  @objc var navBarAppearance: NSDictionary? {
     didSet {
-      guard self.navBarTintColor != oldValue else { return };
-     
-      self.navigationBar.barTintColor = {
-        guard let number  = self.navBarTintColor else { return nil };
-        return RCTConvert.uiColor(number);
-      }();
-    }
-  };
-  
-  private var _navBarTitleTextStyle = RCTTextAttributes();
-  @objc var navBarTitleTextStyle: NSDictionary? {
-    didSet {
-      guard self.navBarTitleTextStyle != oldValue else { return };
+      guard self.navBarAppearance != oldValue else { return };
       
-      self.navigationBar.titleTextAttributes = {
-        guard let dict = self.navBarTitleTextStyle, dict.count > 0
-        else { return nil };
+      if let appearance = self._navBarAppearance {
+        appearance.updateNavBarAppearance(self.navigationBar);
         
-        self._navBarTitleTextStyle.apply(RCTTextAttributes(dict: dict));
-        return self._navBarTitleTextStyle.effectiveTextAttributes();
-      }();
-    }
-  };
-  
-  private var _navBarLargeTitleTextAttributes = RCTTextAttributes();
-  @objc var navBarLargeTitleTextAttributes: NSDictionary? {
-    didSet {
-      guard #available(iOS 11.0, *),
-            self.navBarLargeTitleTextAttributes != oldValue
-      else { return };
-      
-      self.navigationBar.largeTitleTextAttributes = {
-        guard let dict = self.navBarLargeTitleTextAttributes, dict.count > 0
-        else { return nil };
+      } else if let dict = self.navBarAppearance,
+                let appearance = RNINavBarAppearance(dict: dict) {
         
-        self._navBarLargeTitleTextAttributes.apply(RCTTextAttributes(dict: dict));
-        return self._navBarLargeTitleTextAttributes.effectiveTextAttributes();
-      }();
+        appearance.updateNavBarAppearance(self.navigationBar);
+      };
     }
   };
   

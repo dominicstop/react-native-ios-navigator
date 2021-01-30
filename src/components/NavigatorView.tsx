@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import { StyleSheet, findNodeHandle, processColor, TextStyle, TextStyleIOS, ViewStyle } from 'react-native';
 
-import { BarStyle, RNINavigatorView } from '../native_components/RNINavigatorView';
+import { RNINavigatorView } from '../native_components/RNINavigatorView';
 import { RNINavigatorViewModule, NativePushPopOptions } from '../native_modules/RNINavigatorViewModule';
 
 import { NavigatorRouteView } from './NavigatorRouteView';
@@ -14,6 +14,7 @@ import type { BackButtonDisplayMode, LargeTitleDisplayMode, RouteTransitionPopCo
 
 import * as Helpers from '../functions/Helpers';
 import { EventEmitter } from '../functions/EventEmitter';
+import type { NavBarAppearanceConfig } from 'src/types/NavBarAppearanceConfig';
 
 
 //#region - Type Definitions
@@ -92,16 +93,13 @@ type NavigatorViewProps = {
   initialRouteKey: string;
   routeContainerStyle?: ViewStyle;
   
-  // `RNINavigatorView` - Navbar: General/Misc. Config
+  // `RNINavigatorView` - General/Misc. Config
   isInteractivePopGestureEnabled?: boolean;
-  navBarPrefersLargeTitles?: boolean;
 
-  // `RNINavigatorView` - Navbar: Legacy Customizations
-  navBarStyle?: BarStyle;
-  navBarTintColor?: string;
+  // `RNINavigatorView` - Navbar Customization
+  navBarPrefersLargeTitles?: boolean;
   navBarIsTranslucent?: boolean;
-  navBarTitleTextStyle?: TextStyle & TextStyleIOS;
-  navBarLargeTitleTextAttributes?: TextStyle & TextStyleIOS;
+  navBarAppearance?: NavBarAppearanceConfig;
 
   // `RNINavigatorView` - Global/Default Navbar items
   renderNavBarLeftItem ?: RenderNavBarItem;
@@ -510,14 +508,12 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       <RNINavigatorView 
         ref={r => this.nativeRef = r}
         style={styles.navigatorView}
+        // General config
         isInteractivePopGestureEnabled={props.isInteractivePopGestureEnabled ?? true}
+        // Navigation Bar customization
+        isNavBarTranslucent={props.navBarIsTranslucent ?? true}
         navBarPrefersLargeTitles={props.navBarPrefersLargeTitles ?? true}
-        // Navigation Bar: Legacy Customizations
-        navBarStyle={props.navBarStyle}
-        navBarTintColor={processColor(props.navBarTintColor)}
-        navBarIsTranslucent={props.navBarIsTranslucent ?? true}
-        navBarTitleTextStyle={props.navBarTitleTextStyle}
-        navBarLargeTitleTextAttributes={props.navBarLargeTitleTextAttributes}
+        navBarAppearance={props.navBarAppearance}
         // event handlers: push/pop
         onNavRouteWillPop={this._handleOnNavRouteWillPop}
         onNavRouteDidPop={this._handleOnNavRouteDidPop}
