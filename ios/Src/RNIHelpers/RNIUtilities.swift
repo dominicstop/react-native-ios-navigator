@@ -89,6 +89,8 @@ class RNIUtilities {
     return RNISharedInstances.imageLoader!;
   };
   
+  // Note: Before using this, make sure you have `getImageLoader` in your
+  // component/module's init.
   static func loadImage(dict: NSDictionary, completion: @escaping RCTImageLoaderCompletionBlock){
     guard let imageLoader = RNISharedInstances.imageLoader,
           let imageSource = RCTConvert.rctImageSource(dict)

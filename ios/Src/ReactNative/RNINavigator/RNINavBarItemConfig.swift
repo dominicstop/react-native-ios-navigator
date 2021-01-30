@@ -48,29 +48,7 @@ class RNINavBarItemConfig {
   private(set) var systemItem: UIBarButtonItem.SystemItem?;
   
   // used for type: "IMAGE_ASSET", "IMAGE_SYSTEM"
-  private var _imageValue: Any?;
-  
-  // used for type: "IMAGE_ASSET"
-  var imageAsset: UIImage? {
-    if let string = self._imageValue as? String {
-      return UIImage(named: string);
-      
-    } else {
-      return nil;
-    };
-  };
-  
-  // used for type: "IMAGE_SYSTEM"
-  var imageSystem: UIImage? {
-    if #available(iOS 13.0, *),
-       let string = self._imageValue as? String {
-      
-      return UIImage(systemName: string);
-      
-    } else {
-      return nil;
-    };
-  };
+  private var imageItem: RNIImageItem?;
   
   // used for type: "CUSTOM"
   weak var customView: UIView?;
@@ -129,8 +107,11 @@ class RNINavBarItemConfig {
     };
     
     // set properites for type: "IMAGE_ASSET", "IMAGE_SYSTEM"
-    if let imageValue = dictionary["imageValue"] {
-      self._imageValue = imageValue;
+    if let imageValue = dictionary["imageValue"],
+       let imageType  = RNIImageItem.ImageType(rawValue: type),
+       let imageItem  = RNIImageItem(type: imageType, imageValue: imageValue) {
+      
+      self.imageItem = imageItem;
     };
   };
   
@@ -179,7 +160,7 @@ class RNINavBarItemConfig {
           
         case .IMAGE_ASSET:
           return UIBarButtonItem(
-            image: self.imageAsset,
+            image: self.imageItem?.image,
             style: self.barButtonItemStyle,
             target: self,
             action: #selector(onNavBarItemPressed(_:))
@@ -187,7 +168,7 @@ class RNINavBarItemConfig {
           
         case .IMAGE_SYSTEM:
           return UIBarButtonItem(
-            image: self.imageSystem,
+            image: self.imageItem?.image,
             style: self.barButtonItemStyle,
             target: self,
             action: #selector(onNavBarItemPressed(_:))
