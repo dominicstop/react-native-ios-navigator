@@ -39,13 +39,13 @@ type NavBarAppearance = BarAppearance & {
 
   // Title Config
   /** String attributes to apply to the text of a standard-size title. */
-  titleTextAttributes: TextStyle & TextStyleIOS;
+  titleTextAttributes?: TextStyle & TextStyleIOS;
   
   /** String attributes to apply to the text of a large-size title. */
-  largeTitleTextAttributes: TextStyle & TextStyleIOS;
+  largeTitleTextAttributes?: TextStyle & TextStyleIOS;
   
   /** The distance, in points, by which to offset the title horizontally and vertically. */
-  titlePositionAdjustment: Offset;
+  titlePositionAdjustment?: Offset;
 };
 
 /**Legacy Customizations - Customize appearance information directly on the navigation bar object. */
@@ -69,7 +69,7 @@ type NavBarAppearanceLegacy = {
 };
 
 export type NavBarAppearanceConfig = NavBarAppearanceLegacy | {
-  type: 'appearance';
+  mode: 'appearance';
 
   /** The appearance settings for a standard-height navigation bar. */
   standardAppearance: NavBarAppearance;

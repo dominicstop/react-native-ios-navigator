@@ -75,19 +75,21 @@ class RNINavigatorView: UIView {
     }
   };
   
-  private var _navBarAppearance: RNINavBarAppearance?;
+  private var _navBarAppearance = RNINavBarAppearance(dict: nil);
   @objc var navBarAppearance: NSDictionary? {
     didSet {
       guard self.navBarAppearance != oldValue else { return };
       
-      if let appearance = self._navBarAppearance {
-        appearance.updateNavBarAppearance(self.navigationBar);
+      if let dict = self.navBarAppearance {
+        self._navBarAppearance.updateValues(dict: dict);
         
-      } else if let dict = self.navBarAppearance,
-                let appearance = RNINavBarAppearance(dict: dict) {
-        
-        appearance.updateNavBarAppearance(self.navigationBar);
+      } else {
+        // reset appearance config
+        self._navBarAppearance = RNINavBarAppearance(dict: nil);
       };
+      
+      // update nav bar appearance
+      self._navBarAppearance.updateNavBarAppearance(self.navigationBar);
     }
   };
   
