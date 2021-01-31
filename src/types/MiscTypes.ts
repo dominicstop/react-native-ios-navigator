@@ -19,6 +19,29 @@ export type Offset = {
   horizontal?: Number;
 };
 
+export enum ImageTypes {
+  IMAGE_ASSET   = 'IMAGE_ASSET'  ,
+  IMAGE_SYSTEM  = 'IMAGE_SYSTEM' ,
+  IMAGE_REQUIRE = 'IMAGE_REQUIRE',
+  IMAGE_EMPTY   = 'IMAGE_EMPTY'  ,
+};
+
+export type ImageItemConfig = {
+  type: ImageTypes.IMAGE_ASSET | "IMAGE_ASSET";
+  /** The corresponding key of asset item in the asset catalog */
+  imageValue: string;
+} | {
+  type: ImageTypes.IMAGE_SYSTEM | "IMAGE_SYSTEM";
+  /** The key/name of the SF Symbols system icon */
+  imageValue: string;
+} | {
+  type: ImageTypes.IMAGE_REQUIRE | "IMAGE_REQUIRE";
+  /** Object returned by `Image.resolveAssetSource()` */
+  imageValue: ImageResolvedAssetSource;
+} | {
+  type: ImageTypes.IMAGE_EMPTY | "IMAGE_EMPTY";
+};
+
 /** Blur styles available for blur effect objects. */
 export type BlurEffectStyle =
   // -----------------*

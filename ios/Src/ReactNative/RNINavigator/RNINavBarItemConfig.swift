@@ -19,9 +19,12 @@ class RNINavBarItemConfig {
   enum ItemType: String {
     case TEXT;
     case SYSTEM_ITEM;
+    case CUSTOM;
+    
+    // Supported `ImageType`'s
     case IMAGE_ASSET;
     case IMAGE_SYSTEM;
-    case CUSTOM;
+    case IMAGE_EMPTY;
   };
   
   // -----------------
@@ -31,7 +34,8 @@ class RNINavBarItemConfig {
   // inidcates what "type" of nav bar item to create
   let type: ItemType!;
   
-  // the anon. func to invoke when a nav bar item is tapped
+  // invoked when a nav bar item is tapped.
+  // note: stored anon. closure, be sure to use weak/unowned self
   private var action: NavBarItemAction?;
     
   // shared/general properties for all the types
@@ -47,7 +51,7 @@ class RNINavBarItemConfig {
   // used for type: "SYSTEM_ITEM"
   private(set) var systemItem: UIBarButtonItem.SystemItem?;
   
-  // used for type: "IMAGE_ASSET", "IMAGE_SYSTEM"
+  // used for type: "IMAGE_ASSET", "IMAGE_SYSTEM", etc.
   private var imageItem: RNIImageItem?;
   
   // used for type: "CUSTOM"
@@ -157,16 +161,13 @@ class RNINavBarItemConfig {
       
         case .CUSTOM:
           return UIBarButtonItem(customView: self.customView!);
-          
-        case .IMAGE_ASSET:
-          return UIBarButtonItem(
-            image: self.imageItem?.image,
-            style: self.barButtonItemStyle,
-            target: self,
-            action: #selector(onNavBarItemPressed(_:))
-          );
-          
+        
+        // `RNIImageItem.ImageType` Items
+        // Note: Creation of image handled by `RNIImageItem`
+        case .IMAGE_ASSET : fallthrough;
+        case .IMAGE_EMPTY : fallthrough;
         case .IMAGE_SYSTEM:
+          
           return UIBarButtonItem(
             image: self.imageItem?.image,
             style: self.barButtonItemStyle,

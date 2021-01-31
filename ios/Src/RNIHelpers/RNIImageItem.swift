@@ -13,6 +13,7 @@ class RNIImageItem {
     case IMAGE_ASSET;
     case IMAGE_SYSTEM;
     case IMAGE_REQUIRE;
+    case IMAGE_EMPTY;
   };
   
   let type: ImageType;
@@ -45,6 +46,8 @@ class RNIImageItem {
         else { return nil };
         return image;
       
+      case .IMAGE_EMPTY:
+        return UIImage();
     };
   };
   

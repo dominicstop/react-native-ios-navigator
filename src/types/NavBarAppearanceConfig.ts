@@ -17,7 +17,6 @@ type BarButtonItemAppearanceConfig = {
 
 };
 
-
 /** A UIBarAppearance object contains the common traits shared by navigation bars, tab bars, and toolbars. */
 type BarAppearance = {
   /** Sets which default values to use fot setting the Navbar appearance properties  */
@@ -36,7 +35,6 @@ type BarAppearance = {
 
 /** `UINavigationBarAppearance` - An object for customizing the appearance of a navigation bar. */
 type NavBarAppearance = BarAppearance & {
-
   // Title Config
   /** String attributes to apply to the text of a standard-size title. */
   titleTextAttributes?: TextStyle & TextStyleIOS;

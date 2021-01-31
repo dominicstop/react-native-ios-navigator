@@ -1,4 +1,4 @@
-import type { DynamicColor } from "./MiscTypes";
+import type { DynamicColor, ImageItemConfig } from "./MiscTypes";
 
 //#region - BarButtonItemSystemItem
 type BarButtonItemSystemItem =
@@ -52,21 +52,13 @@ type BarButtonItemSystemItem =
   | "close"
 //#endregion
 
-type NavBarItemConfigBase = {
+type NavBarItemConfigBase = ImageItemConfig | {
   type: "TEXT";
   title: string;
 } | {
   type: "SYSTEM_ITEM";
   /** Defines system-supplied images for bar button items. */
   systemItem: BarButtonItemSystemItem;
-} | {
-  type: "IMAGE_ASSET";
-  /** The corresponding key of asset item in the asset catalog */
-  imageValue: string;
-} | {
-  type: "IMAGE_SYSTEM";
-  /** The key/name of the SF Symbols system icon */
-  imageValue: string;
 };
 
 type NavBarItemConfigCustomBase = {
