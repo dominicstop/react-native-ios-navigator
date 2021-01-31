@@ -32,7 +32,7 @@ class RNINavBarAppearance {
     var baseConfig: BaseConfigType;
     
     // MARK: Configuring the Title
-    var titleTextStyle: RCTTextAttributes?;
+    var titleTextAttributes: RCTTextAttributes?;
     var largeTitleTextAttributes: RCTTextAttributes?;
     var titlePositionAdjustment: UIOffset?;
     
@@ -60,7 +60,7 @@ class RNINavBarAppearance {
       // Section: Title Config
       // ---------------------
       
-      if let textStyle = self.titleTextStyle {
+      if let textStyle = self.titleTextAttributes {
         appearance.titleTextAttributes = textStyle.effectiveTextAttributes();
       };
       
@@ -110,9 +110,9 @@ class RNINavBarAppearance {
       // Section: Title Config
       // ---------------------
       
-      /// set/init: `titleTextStyle`
-      self.titleTextStyle = {
-        guard let styleDict = dict["titleTextStyle"] as? NSDictionary
+      /// set/init: `titleTextAttributes`
+      self.titleTextAttributes = {
+        guard let styleDict = dict["titleTextAttributes"] as? NSDictionary
         else { return nil };
         
         return RCTTextAttributes(dict: styleDict);
@@ -169,7 +169,7 @@ class RNINavBarAppearance {
   class NavBarAppearanceLegacyConfig {
     
     // MARK: Title Config
-    var titleTextStyle: RCTTextAttributes?;
+    var titleTextAttributes: RCTTextAttributes?;
     var largeTitleTextAttributes: RCTTextAttributes?;
     
     // MARK: Navbar Style
@@ -190,9 +190,9 @@ class RNINavBarAppearance {
       // Section: Title Config
       // ---------------------
       
-      /// set/init: `titleTextStyle`
-      self.titleTextStyle = {
-        guard let styleDict = dict["titleTextStyle"] as? NSDictionary
+      /// set/init: `titleTextAttributes`
+      self.titleTextAttributes = {
+        guard let styleDict = dict["titleTextAttributes"] as? NSDictionary
         else { return nil };
         
         return RCTTextAttributes(dict: styleDict);
@@ -238,9 +238,9 @@ class RNINavBarAppearance {
       // Section: Title Config
       // ---------------------
       
-      /// set/init: `titleTextStyle`
+      /// set/init: `titleTextAttributes`
       navBar.titleTextAttributes =
-        self.titleTextStyle?.effectiveTextAttributes();
+        self.titleTextAttributes?.effectiveTextAttributes();
       
       /// set/init: `largeTitleTextAttributes`
       if #available(iOS 11.0, *) {
