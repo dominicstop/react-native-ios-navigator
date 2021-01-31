@@ -148,8 +148,8 @@ class RNINavBarAppearance {
       
       /// set/init: `backgroundColor`
       self.backgroundColor = {
-        guard let number = dict["backgroundColor"] as? NSNumber,
-              let color  = RCTConvert.uiColor(number)
+        guard let value = dict["backgroundColor"],
+              let color = UIColor(reactNativeColor: value)
         else { return nil };
         
         return color;
@@ -157,8 +157,8 @@ class RNINavBarAppearance {
       
       /// set/init: `shadowColor`
       self.shadowColor = {
-        guard let number = dict["shadowColor"] as? NSNumber,
-              let color  = RCTConvert.uiColor(number)
+        guard let value = dict["shadowColor"],
+              let color = UIColor(reactNativeColor: value)
         else { return nil };
         
         return color;
@@ -217,8 +217,8 @@ class RNINavBarAppearance {
       
       /// set/init: `tintColor`
       self.tintColor = {
-        guard let number = dict["tintColor"] as? NSNumber,
-              let color  = RCTConvert.uiColor(number)
+        guard let value = dict["tintColor"],
+              let color = UIColor(reactNativeColor: value)
         else { return nil };
         
         return color;
@@ -226,8 +226,8 @@ class RNINavBarAppearance {
 
       /// set/init: `barTintColor`
       self.barTintColor = {
-        guard let number = dict["barTintColor"] as? NSNumber,
-              let color  = RCTConvert.uiColor(number)
+        guard let value = dict["barTintColor"],
+              let color = UIColor(reactNativeColor: value)
         else { return nil };
         
         return color;

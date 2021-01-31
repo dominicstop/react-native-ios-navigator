@@ -1,3 +1,5 @@
+import type { DynamicColor } from "./MiscTypes";
+
 //#region - BarButtonItemSystemItem
 type BarButtonItemSystemItem =
   /** The system Done button, localized. */
@@ -75,7 +77,7 @@ type NavBarItemConfigShared = {
   /** Used for `onPressBarButtonItem` to distinguish item triggered the event */
   key?: String;
   /** The tint color to apply to the button item. */
-  tintColor?: string;
+  tintColor?: string | DynamicColor;
   /** Specifies the style of an item. Default is 'plain'. */
   barButtonItemStyle?: 'plain' | 'done';
   /** The set of possible titles to display on the bar button. */

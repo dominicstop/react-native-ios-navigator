@@ -1,5 +1,5 @@
 import type { TextStyle, TextStyleIOS } from "react-native";
-import type { BlurEffectStyle, Offset } from "./MiscTypes";
+import type { BlurEffectStyle, DynamicColor, Offset } from "./MiscTypes";
 
 
 /** `UIBarStyle`: Defines the stylistic appearance of different types of views */
@@ -27,11 +27,11 @@ type BarAppearance = {
   /** The blur effect to apply to the bar's background. The blur effect provides the base layer for the bar's appearance, and it determines how much of the underlying content is visible. UIKit applies the `backgroundColor` and `backgroundImage` on top of this effect. */
   backgroundEffect?: BlurEffectStyle;
   /** The background color of the bar. */
-  backgroundColor?: String;
+  backgroundColor?: string | DynamicColor;
 
   // Shadow Appearance
   /** The color to apply to the bar's custom or default shadow. */
-  shadowColor?: String;
+  shadowColor?: string | DynamicColor;
 };
 
 /** `UINavigationBarAppearance` - An object for customizing the appearance of a navigation bar. */
@@ -49,7 +49,7 @@ type NavBarAppearance = BarAppearance & {
 };
 
 /**Legacy Customizations - Customize appearance information directly on the navigation bar object. */
-type NavBarAppearanceLegacy = {
+export type NavBarAppearanceLegacyConfig = {
   mode: 'legacy';
 
   /** The navigation bar style that specifies its appearance. */
@@ -62,13 +62,13 @@ type NavBarAppearanceLegacy = {
   largeTitleTextAttributes?: TextStyle & TextStyleIOS;
 
   /** The tint color to apply to the navigation items and bar button items. */
-  tintColor?: number;
+  tintColor?: string | DynamicColor;
 
   /** The tint color to apply to the navigation bar background. */
-  barTintColor?: string;
+  barTintColor?: string | DynamicColor;
 };
 
-export type NavBarAppearanceConfig = NavBarAppearanceLegacy | {
+export type NavBarAppearanceConfig = {
   mode: 'appearance';
 
   /** The appearance settings for a standard-height navigation bar. */
