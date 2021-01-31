@@ -56,8 +56,35 @@ class RNINavigatorRouteViewController: UIViewController {
   // used for the custom transitions
   var interactionController: LeftEdgeInteractionController?;
   
-  var transitionTypePush = RNINavTransitionConfig(type: .DefaultPush);
-  var transitionTypePop  = RNINavTransitionConfig(type: .DefaultPop );
+  var transitionTypePush = RNINavTransitionConfig(type: .DefaultPush) {
+    willSet {
+      // don't set the delegate when using the default push/pop transition
+      // to not disable the interactive swipe gesture.
+      if newValue.transitionType == .DefaultPush,
+         self.transitionTypePop.transitionType == .DefaultPop {
+        
+        self.navigationController?.delegate = nil;
+        
+      } else {
+        self.navigationController?.delegate = self;
+      };
+    }
+  };
+  var transitionTypePop = RNINavTransitionConfig(type: .DefaultPop) {
+    willSet {
+      // don't set the delegate when using the default push/pop transition
+      // to not disable the interactive swipe gesture.
+      // This can be fixed by re-impl. the default pop transition.
+      if newValue.transitionType == .DefaultPop,
+         self.transitionTypePush.transitionType == .DefaultPush {
+        
+        self.navigationController?.delegate = nil;
+        
+      } else {
+        self.navigationController?.delegate = self;
+      };
+    }
+  };
   
   // --------------------------------
   // MARK:- View Controller Lifecycle
@@ -103,7 +130,6 @@ class RNINavigatorRouteViewController: UIViewController {
   
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated);
-    self.navigationController?.delegate = self; //TODO: fix
     
     // send event: notify js nav. route has appeared
     self.routeView?.notifyOnRouteFocus(
