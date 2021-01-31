@@ -15,14 +15,14 @@ extension RCTTextAttributes {
     // MARK: Color
     // set style: color
     if let value   = dict["color"],
-       let uiColor = UIColor(reactNativeColor: value) {
+       let uiColor = UIColor.parseColor(value: value) {
       
       self.foregroundColor = uiColor;
     };
     
     // set style: backgroundColor
     if let value = dict["backgroundColor"],
-       let color = UIColor(reactNativeColor: value) {
+       let color = UIColor.parseColor(value: value) {
       
       self.backgroundColor = color;
     };
@@ -79,7 +79,7 @@ extension RCTTextAttributes {
     // MARK: Decoration
     // set style: textDecorationColor
     if let value = dict["textDecorationColor"],
-       let color = UIColor(reactNativeColor: value) {
+       let color = UIColor.parseColor(value: value) {
       
       self.textDecorationColor = color;
     };
@@ -114,7 +114,7 @@ extension RCTTextAttributes {
     
     // set style: textShadowColor
     if let value = dict["textShadowColor"],
-       let color = UIColor(reactNativeColor: value) {
+       let color = UIColor.parseColor(value: value) {
       
       self.textShadowColor = color;
     };

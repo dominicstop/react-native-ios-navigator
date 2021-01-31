@@ -195,73 +195,6 @@ fileprivate class UIColorHelpers {
     
     return hexString;
   };
-  
-  @available(iOS 13.0, *)
-  static let stringToElement: [String: UIColor] = [
-    // Label Colors
-    "label": .label,
-    "secondaryLabel": .secondaryLabel,
-    "tertiaryLabel": .tertiaryLabel,
-    "quaternaryLabel": .quaternaryLabel,
-
-    // Fill Colors
-    "systemFill": .systemFill,
-    "secondarySystemFill": .secondarySystemFill,
-    "tertiarySystemFill": .tertiarySystemFill,
-    "quaternarySystemFill": .quaternarySystemFill,
-
-    // Text Colors
-    "placeholderText": .placeholderText,
-
-    // Standard Content Background Colors
-    "systemBackground": .systemBackground,
-    "secondarySystemBackground": .secondarySystemBackground,
-    "tertiarySystemBackground": .tertiarySystemBackground,
-
-    // Grouped Content Background Colors
-    "systemGroupedBackground": .systemGroupedBackground,
-    "secondarySystemGroupedBackground": .secondarySystemGroupedBackground,
-    "tertiarySystemGroupedBackground": .tertiarySystemGroupedBackground,
-
-    // Separator Colors
-    "separator": .separator,
-    "opaqueSeparator": .opaqueSeparator,
-
-    // Link Color
-    "link": .link,
-
-    // Nonadaptable Colors
-    "darkText": .darkText,
-    "lightText": .lightText,
-  ];
-  
-  static let stringToSystem: [String: UIColor] = {
-    var colors: [String: UIColor] = [
-      // Adaptable Colors
-      "systemBlue": .systemBlue,
-      "systemGreen": .systemGreen,
-      "systemOrange": .systemOrange,
-      "systemPink": .systemPink,
-      "systemPurple": .systemPurple,
-      "systemRed": .systemRed,
-      "systemTeal": .systemTeal,
-      "systemYellow": .systemYellow,
-    ];
-    
-    if #available(iOS 13.0, *) {
-      colors["systemIndigo" ] = .systemIndigo;
-      
-      //Adaptable Gray Colors
-      colors["systemGray" ] = .systemGray;
-      colors["systemGray2"] = .systemGray2;
-      colors["systemGray3"] = .systemGray3;
-      colors["systemGray4"] = .systemGray4;
-      colors["systemGray5"] = .systemGray5;
-      colors["systemGray6"] = .systemGray6;
-    };
-    
-    return colors;
-  }();
 };
 
 extension UIColor {
@@ -274,6 +207,83 @@ extension UIColor {
     
     getRed(&red, green: &green, blue: &blue, alpha: &alpha);
     return (red, green, blue, alpha);
+  };
+  
+  @available(iOS 13.0, *)
+  static func elementColorFromString(_ string: String) -> UIColor? {
+    switch string {
+      // Label Colors
+      case "label": return .label;
+      case "secondaryLabel": return .secondaryLabel;
+      case "tertiaryLabel": return .tertiaryLabel;
+      case "quaternaryLabel": return .quaternaryLabel;
+
+      // Fill Colors
+      case "systemFill": return .systemFill;
+      case "secondarySystemFill": return .secondarySystemFill;
+      case "tertiarySystemFill": return .tertiarySystemFill;
+      case "quaternarySystemFill": return .quaternarySystemFill;
+
+      // Text Colors
+      case "placeholderText": return .placeholderText;
+
+      // Standard Content Background Colors
+      case "systemBackground": return .systemBackground;
+      case "secondarySystemBackground": return .secondarySystemBackground;
+      case "tertiarySystemBackground": return .tertiarySystemBackground;
+
+      // Grouped Content Background Colors
+      case "systemGroupedBackground": return .systemGroupedBackground;
+      case "secondarySystemGroupedBackground": return .secondarySystemGroupedBackground;
+      case "tertiarySystemGroupedBackground": return .tertiarySystemGroupedBackground;
+
+      // Separator Colors
+      case "separator": return .separator;
+      case "opaqueSeparator": return .opaqueSeparator;
+
+      // Link Color
+      case "link": return .link;
+
+      // Nonadaptable Colors
+      case "darkText": return .darkText;
+      case "lightText": return .lightText;
+      
+      default: return nil;
+    };
+  };
+  
+  static func systemColorFromString(_ string: String) -> UIColor? {
+    switch string {
+      // Adaptable Colors
+      case "systemBlue"  : return .systemBlue;
+      case "systemGreen" : return .systemGreen;
+      case "systemOrange": return .systemOrange;
+      case "systemPink"  : return .systemPink;
+      case "systemPurple": return .systemPurple;
+      case "systemRed"   : return .systemRed;
+      case "systemTeal"  : return .systemTeal;
+      case "systemYellow": return .systemYellow;
+      
+      default: break;
+    };
+    
+    if #available(iOS 13.0, *) {
+      switch string {
+        case "systemIndigo" : return .systemIndigo;
+        
+        //Adaptable Gray Colors
+        case "systemGray" : return .systemGray;
+        case "systemGray2": return .systemGray2;
+        case "systemGray3": return .systemGray3;
+        case "systemGray4": return .systemGray4;
+        case "systemGray5": return .systemGray5;
+        case "systemGray6": return .systemGray6;
+          
+        default: break;
+      };
+    };
+    
+    return nil;
   };
   
   /// create color from css color code string
@@ -380,26 +390,6 @@ extension UIColor {
     };
   };
   
-  /// Create color from "UI Element Color" string
-  convenience init?(elementColor: String){
-    guard #available(iOS 13.0, *),
-          let color = UIColorHelpers.stringToElement[elementColor]
-    else { return nil };
-    
-    let rgba = color.rgba;
-    self.init(red: rgba.r, green: rgba.g, blue: rgba.b, alpha: rgba.a);
-  };
-  
-  /// Create color from "Standard Color" string
-  convenience init?(standardColor: String){
-    guard #available(iOS 13.0, *),
-          let color = UIColorHelpers.stringToSystem[standardColor]
-    else { return nil };
-    
-    let rgba = color.rgba;
-    self.init(red: rgba.r, green: rgba.g, blue: rgba.b, alpha: rgba.a);
-  };
-  
   /// create color from `DynamicColorIOS` dictionary
   @available(iOS 13.0, *)
   convenience init?(dynamicDict: NSDictionary){
@@ -423,30 +413,25 @@ extension UIColor {
     });
   };
   
-  convenience init?(reactNativeColor: Any){
-    if let string = reactNativeColor as? String {
+  /// Parse "react native" color to `UIColor`
+  static func parseColor(value: Any) -> UIColor? {
+    if let string = value as? String {
       if #available(iOS 13.0, *),
-         let color = UIColorHelpers.stringToElement[string] {
+         let color = Self.elementColorFromString(string) {
         
-        let rgba = color.rgba;
-        self.init(red: rgba.r, green: rgba.g, blue: rgba.b, alpha: rgba.a);
-        return;
+        return color;
         
-      } else if let color = UIColorHelpers.stringToSystem[string] {
-        let rgba = color.rgba;
-        self.init(red: rgba.r, green: rgba.g, blue: rgba.b, alpha: rgba.a);
-        return;
+      } else if let color = Self.systemColorFromString(string) {
+        return color;
         
       } else {
-        self.init(cssColor: string);
-        return;
+        return UIColor(cssColor: string);
       };
       
     } else if #available(iOS 13.0, *),
-              let dict = reactNativeColor as? NSDictionary {
+              let dict = value as? NSDictionary {
       
-      self.init(dynamicDict: dict);
-      return;
+      return UIColor(dynamicDict: dict);
     };
     
     return nil;
