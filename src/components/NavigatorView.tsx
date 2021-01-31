@@ -14,7 +14,7 @@ import type { BackButtonDisplayMode, LargeTitleDisplayMode, RouteTransitionPopCo
 
 import * as Helpers from '../functions/Helpers';
 import { EventEmitter } from '../functions/EventEmitter';
-import type { NavBarAppearanceConfig } from 'src/types/NavBarAppearanceConfig';
+import type { NavBarAppearanceConfig, NavBarAppearanceLegacyConfig } from 'src/types/NavBarAppearanceConfig';
 
 
 //#region - Type Definitions
@@ -88,6 +88,8 @@ export type NavRouteConfigItem = {
 
 /** `NavigatorView` comp. props */
 type NavigatorViewProps = {
+  style?: ViewStyle;
+
   // Nav. Route Config
   routes: Array<NavRouteConfigItem>;
   initialRouteKey: string;
@@ -99,7 +101,7 @@ type NavigatorViewProps = {
   // `RNINavigatorView` - Navbar Customization
   navBarPrefersLargeTitles?: boolean;
   navBarIsTranslucent?: boolean;
-  navBarAppearance?: NavBarAppearanceConfig;
+  navBarAppearance?: NavBarAppearanceConfig | NavBarAppearanceLegacyConfig;
 
   // `RNINavigatorView` - Global/Default Navbar items
   renderNavBarLeftItem ?: RenderNavBarItem;
@@ -169,7 +171,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       : routeConfig.transitionConfigPop ?.duration
     );
   };
-
+  
   /** Add route to `state.activeRoutes` and wait for it to be added in
     * the native side as a subview (i.e. `RNINavigatorView`) */
   private addRoute = (routeItem: NavRouteItem) => {
@@ -507,7 +509,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     return (
       <RNINavigatorView 
         ref={r => this.nativeRef = r}
-        style={styles.navigatorView}
+        style={[styles.navigatorView, props.style]}
         // General config
         isInteractivePopGestureEnabled={props.isInteractivePopGestureEnabled ?? true}
         // Navigation Bar customization

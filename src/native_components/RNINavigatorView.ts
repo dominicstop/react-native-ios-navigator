@@ -1,5 +1,5 @@
 import { ViewStyle, TextStyle, TextStyleIOS, requireNativeComponent } from 'react-native';
-import type { NavBarAppearanceConfig } from 'src/types/NavBarAppearanceConfig';
+import type { NavBarAppearanceConfig, NavBarAppearanceLegacyConfig } from 'src/types/NavBarAppearanceConfig';
 
 //#region - `RNINavigatorView` Event Payloads
 export type onNavRouteViewAddedPayload = { nativeEvent: {
@@ -25,7 +25,7 @@ export type onNavRouteDidPopPayload = { nativeEvent: {
 
 /** `RNINavigatorView` native comp. props */
 type RNINavigatorViewProps = {
-  style: ViewStyle;
+  style: ViewStyle | Array<ViewStyle>;
   
   // General/Misc. Config
   navBarPrefersLargeTitles: boolean;
@@ -33,7 +33,7 @@ type RNINavigatorViewProps = {
   isNavBarTranslucent: boolean;
   
   // Customize the Bar's Appearance
-  navBarAppearance: NavBarAppearanceConfig;
+  navBarAppearance: NavBarAppearanceConfig | NavBarAppearanceLegacyConfig;
   
   // Native Events
   onNavRouteViewAdded?: (events: onNavRouteViewAddedPayload) => void;
