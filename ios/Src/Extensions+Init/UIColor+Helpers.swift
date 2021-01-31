@@ -301,5 +301,42 @@ extension UIColor {
       return nil;
     };
   };
+  
+  /// create color from `DynamicColorIOS` dictionary
+  @available(iOS 13.0, *)
+  public convenience init?(dynamicDict: NSDictionary){
+    guard let dict = dynamicDict["dynamic"] as? NSDictionary,
+          
+          let stringDark  = dict["dark" ] as? String,
+          let stringLight = dict["light"] as? String,
+          
+          let colorDark   = UIColor(cssColor: stringLight),
+          let colorLight  = UIColor(cssColor: stringDark )
+    else { return nil };
+    
+    self.init(dynamicProvider: { traitCollection in
+      switch traitCollection.userInterfaceStyle {
+        case .dark : return colorDark;
+        case .light: return colorLight;
+          
+        case .unspecified: fallthrough;
+        @unknown default : return .clear;
+      };
+    });
+  };
+  
+  public convenience init?(reactNativeColor: Any){
+    if let string = reactNativeColor as? String {
+      self.init(cssColor: string);
+      return;
+      
+    } else if #available(iOS 13.0, *),
+              let dict = reactNativeColor as? NSDictionary {
+      
+      self.init(dynamicDict: dict);
+      return;
+    };
+    
+    return nil;
+  };
 };
-
