@@ -6,6 +6,13 @@ export type ImageResolvedAssetSource = {
   uri: string;
 };
 
+export type DynamicColor = {
+  dynamic: {
+    dark: string;
+    light: string;
+  };
+};
+
 /** `UIOffset: A structure that specifies an amount to offset a position. */
 export type Offset = {
   vertical  ?: Number;
