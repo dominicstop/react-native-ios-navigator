@@ -2,9 +2,11 @@ import React, { ReactElement } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import type { RouteViewPortal } from './RouteViewPortal';
-import type { NavigatorView, RouteOptions } from './NavigatorView';
+import type { NavigatorView } from './NavigatorView';
 import type { NavigatorRouteView, NavRouteEvents } from './NavigatorRouteView';
+
 import type { EventEmitter } from '../functions/EventEmitter';
+import type { RouteOptions } from '../types/NavTypes';
 
 import { NativeIDKeys } from '../constants/LibraryConstants';
 

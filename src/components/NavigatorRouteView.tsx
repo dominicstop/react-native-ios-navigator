@@ -1,8 +1,9 @@
 import React, { ReactElement } from 'react';
 import { StyleSheet, View, ViewStyle, findNodeHandle } from 'react-native';
 
+import type { RouteOptions } from '../types/NavTypes';
+import type { NavigatorView } from './NavigatorView';
 import type { RouteViewPortal } from './RouteViewPortal';
-import type { NavigatorView, RouteOptions } from './NavigatorView';
 
 import { NavBarItemsWrapper } from './NavBarBackItemsWrapper';
 
@@ -14,6 +15,7 @@ import { EventEmitter } from '../functions/EventEmitter';
 
 import { NavRouteViewContext } from '../context/NavRouteViewContext';
 import { NativeIDKeys } from '../constants/LibraryConstants';
+
 
 
 //#region - Type Definitions

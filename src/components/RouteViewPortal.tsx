@@ -1,9 +1,11 @@
 
 import React, { ReactElement } from 'react';
 
-import type { NavigatorView, RouteOptions } from './NavigatorView';
+import type { NavigatorView } from './NavigatorView';
 import type { NavigatorRouteView, NavRouteEvents } from '../components/NavigatorRouteView';
+
 import type { EventEmitter } from '../functions/EventEmitter';
+import type { RouteOptions } from '../types/NavTypes';
 
 import { compareRouteOptions } from '../functions/CompareObjects';
 import { NavRouteViewContext, NavRouteViewContextProps } from '../context/NavRouteViewContext';

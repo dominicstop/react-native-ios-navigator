@@ -1,5 +1,5 @@
 import type { NavBarItemConfig, NavBarItemsConfig, NavBarBackItemConfig } from "../types/NavBarItemConfig";
-import type { RouteOptions } from "../components/NavigatorView";
+import type { RouteOptions } from "../types/NavTypes";
 import type { RouteTransitionPushConfig, RouteTransitionPopConfig } from "src/native_components/RNINavigatorRouteView";
 
 // Note: These functions are used to compare objects and decide whether or not to
