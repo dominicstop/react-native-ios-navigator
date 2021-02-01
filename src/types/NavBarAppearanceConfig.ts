@@ -11,8 +11,11 @@ type NavBarAppearanceBaseConfig =
   /** Configures the bar appearance object with a set of opaque colors that are appropriate for the current theme. */
   | 'opaqueBackground'
   /** Configures the bar appearance object with a transparent background and no shadow. */
-  | 'transparentBackground'
+  | 'transparentBackground';
 
+export type NavBarMode = 'default' | 'noShadow' | 'clearBackground';
+
+// TODO
 type BarButtonItemAppearanceConfig = {
 
 };
@@ -46,8 +49,13 @@ type NavBarAppearance = BarAppearance & {
   titlePositionAdjustment?: Offset;
 };
 
+type NavBarAppearanceConfigBase = {
+  /** Preset configs for setting the appearance of the navigation bar */
+  navBarMode?: NavBarMode;
+};
+
 /**Legacy Customizations - Customize appearance information directly on the navigation bar object. */
-export type NavBarAppearanceLegacyConfig = {
+export type NavBarAppearanceLegacyConfig = NavBarAppearanceConfigBase & {
   mode: 'legacy';
 
   /** The navigation bar style that specifies its appearance. */
@@ -66,11 +74,11 @@ export type NavBarAppearanceLegacyConfig = {
   barTintColor?: string | DynamicColor;
 };
 
-export type NavBarAppearanceConfig = {
+export type NavBarAppearanceConfig = NavBarAppearanceConfigBase & {
   mode: 'appearance';
 
   /** The appearance settings for a standard-height navigation bar. */
-  standardAppearance: NavBarAppearance;
+  standardAppearance?: NavBarAppearance;
   /** The appearance settings for a compact-height navigation bar. */
   compactAppearance?: NavBarAppearance;
   /** The appearance settings to use when the edge of any scroll-able content reaches the matching edge of the navigation bar. */

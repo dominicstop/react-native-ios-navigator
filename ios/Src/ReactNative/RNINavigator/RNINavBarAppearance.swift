@@ -13,6 +13,14 @@ class RNINavBarAppearance {
   // MARK:- Embedded Types
   // ---------------------
   
+  /// Defines what parts of navigation bar should be customizable, i.e controls
+  /// the preset "look" of the navigation bar.
+  enum NavBarMode: String {
+    case Default;
+    case NoShadow;
+    case ClearBackground;
+  };
+  
   /// Defines whether or not to use the legacy or appearance API
   enum AppearanceMode: String {
     case legacy;
@@ -30,6 +38,7 @@ class RNINavBarAppearance {
   class NavBarAppearanceConfig {
     
     var baseConfig: BaseConfigType;
+    var navBarMode: NavBarMode = .Default;
     
     // MARK: Configuring the Title
     var titleTextAttributes: RCTTextAttributes?;
@@ -45,6 +54,11 @@ class RNINavBarAppearance {
     @available(iOS 13.0, *)
     var appearance: UINavigationBarAppearance {
       let appearance = UINavigationBarAppearance();
+
+      //
+      let shouldSetShadow     = self.navBarMode != .NoShadow;
+      let shouldSetBackground = self.navBarMode != .ClearBackground;
+      
       
       switch self.baseConfig {
         case .defaultBackground:
@@ -166,7 +180,11 @@ class RNINavBarAppearance {
     };
   };
   
+  /// Holds the "raw" values for customizing the navigatiob bar via the "legacy"
+  /// appearance API's.
   class NavBarAppearanceLegacyConfig {
+    
+    var navBarMode: NavBarMode = .Default;
     
     // MARK: Title Config
     var titleTextAttributes: RCTTextAttributes?;
@@ -176,7 +194,6 @@ class RNINavBarAppearance {
     var barStyle: UIBarStyle?;
     var tintColor: UIColor?;
     var barTintColor: UIColor?;
-    
     
     // MARK: Init + Conifg
     // -------------------
@@ -235,6 +252,8 @@ class RNINavBarAppearance {
     };
     
     func updateNavBarAppearance(_ navBar: UINavigationBar){
+      let shouldSetBG = self.navBarMode != .ClearBackground;
+      
       // Section: Title Config
       // ---------------------
       
@@ -258,7 +277,9 @@ class RNINavBarAppearance {
       navBar.tintColor = self.tintColor;
       
       /// set/init: `barTintColor`
-      navBar.barTintColor = self.barTintColor;
+      if shouldSetBG {
+        navBar.barTintColor = self.barTintColor;
+      };
     };
   };
   
@@ -286,7 +307,17 @@ class RNINavBarAppearance {
     };
   };
   
+  // Tells us which API to use to change the navbar appearance.
   var mode: AppearanceMode?;
+  
+  // Tells us whether or not we should allow changes to certain "appearance"-related
+  // properties of the navigation bar (e.g. "shadowColor", etc).
+  var navBarMode: NavBarMode = .Default {
+    willSet {
+      // keep `navBarMode` values in sync between configs (just in case...)
+      self.updateNavBarMode(newValue);
+    }
+  };
   
   var appearanceLegacy: NavBarAppearanceLegacyConfig?;
   
@@ -308,6 +339,12 @@ class RNINavBarAppearance {
     };
     
     self.mode = mode;
+    
+    if let string = dict["navBarMode"] as? String,
+       let navBarMode = NavBarMode(rawValue: string.capitalized)  {
+      
+      self.navBarMode = navBarMode;
+    };
     
     switch mode {
       case .appearance:
@@ -342,6 +379,8 @@ class RNINavBarAppearance {
     guard let mode = mode else {
       // no config set, reset nav bar to default style
       Self.resetNavBarAppearance(navBar);
+      // update nav bar appearance based on current `NavBarMode`
+      self.updateNavBarAppearanceFromNavBarMode(navBar);
       return;
     };
     
@@ -349,22 +388,58 @@ class RNINavBarAppearance {
       case .appearance:
         guard #available(iOS 13.0, *),
               let standardConfig = self.appearanceConfigStandard
-        else { return };
+        else {
+          // no config for standard appearance provided...
+          // at the very least, update nav bar appearance from `navBarMode`
+          self.updateNavBarAppearanceFromNavBarMode(navBar);
+          return;
+        };
         
+        // update the appearance config's `navBarMode`
+        self.updateNavBarMode(self.navBarMode);
+        
+        // create standard appearance object from config
         navBar.standardAppearance = standardConfig.appearance;
         
+        // create compact appearance object from config
         navBar.compactAppearance =
-          self.appearanceConfigCompact?.appearance ??
-          standardConfig.appearance;
+          self.appearanceConfigCompact?.appearance;
         
+        // create "scroll edge" appearance object from config
         navBar.scrollEdgeAppearance =
-          self.appearanceConfigScrollEdge?.appearance ??
-          standardConfig.appearance;
+          self.appearanceConfigScrollEdge?.appearance;
         
+        // update appearance based on `navBarMode` first before refreshing.
+        self.updateNavBarAppearanceFromNavBarMode(navBar);
+        
+        // refresh the navbar appearance
         navBar.setNeedsLayout();
 
       case .legacy:
-        self.appearanceLegacy?.updateNavBarAppearance(navBar)
+        // update the legacy appearance config's `navBarMode`
+        self.updateNavBarMode(self.navBarMode);
+        
+        self.appearanceLegacy?.updateNavBarAppearance(navBar);
+        self.updateNavBarAppearanceFromNavBarMode(navBar);
     };
+  };
+  
+  func updateNavBarAppearanceFromNavBarMode(_ navBar: UINavigationBar){
+    // should set shadow
+    if self.navBarMode != .Default {
+      navBar.setShadowHidden(true, newShadowColor: nil);
+    };
+    
+    // should set background
+    if self.navBarMode != .ClearBackground {
+      navBar.removeBackground();
+    };
+  };
+  
+  private func updateNavBarMode(_ mode: NavBarMode){
+    self.appearanceConfigScrollEdge?.navBarMode = mode;
+    self.appearanceLegacy?.navBarMode = mode;
+    self.appearanceConfigStandard?.navBarMode = mode;
+    self.appearanceConfigCompact?.navBarMode = mode;
   };
 };
