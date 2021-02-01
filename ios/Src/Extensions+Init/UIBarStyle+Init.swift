@@ -1,5 +1,5 @@
 //
-//  UIBarStyle+Helpers.swift
+//  UIBarStyle+Init.swift
 //  IosNavigatorExample
 //
 //  Created by Dominic Go on 1/17/21.

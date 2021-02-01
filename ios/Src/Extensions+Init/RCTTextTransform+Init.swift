@@ -1,5 +1,5 @@
 //
-//  RCTTextTransform+Helpers.swift
+//  RCTTextTransform+Init.swift
 //  IosNavigatorExample
 //
 //  Created by Dominic Go on 1/18/21.

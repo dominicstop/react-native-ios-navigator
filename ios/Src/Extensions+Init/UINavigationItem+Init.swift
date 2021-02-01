@@ -1,5 +1,5 @@
 //
-//  UINavigationItemBackButtonDisplayMode+Helpers.swift
+//  UINavigationItem+Init.swift
 //  IosNavigatorExample
 //
 //  Created by Dominic Go on 1/23/21.
@@ -18,3 +18,16 @@ extension UINavigationItem.BackButtonDisplayMode {
     }
   };
 };
+
+extension UINavigationItem.LargeTitleDisplayMode {
+  init?(string: String) {
+    switch string {
+      case "always"   : self = .always;
+      case "automatic": self = .automatic;
+      case "never"    : self = .never;
+      
+      default: return nil;
+    }
+  };
+};
+

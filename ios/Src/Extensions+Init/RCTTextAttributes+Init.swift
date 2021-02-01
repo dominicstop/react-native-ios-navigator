@@ -1,5 +1,5 @@
 //
-//  RCTTextAttributes+Helpers.swift
+//  RCTTextAttributes+Init.swift
 //  IosNavigatorExample
 //
 //  Created by Dominic Go on 1/18/21.

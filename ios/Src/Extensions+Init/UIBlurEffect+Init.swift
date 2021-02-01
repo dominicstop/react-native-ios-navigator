@@ -1,5 +1,5 @@
 //
-//  UIBlurEffect+Helpers.swift
+//  UIBlurEffect+Init.swift
 //  IosNavigatorExample
 //
 //  Created by Dominic Go on 1/30/21.
