@@ -1,6 +1,7 @@
 import React, { ReactElement } from 'react';
-import { StyleSheet, findNodeHandle, processColor, TextStyle, TextStyleIOS, ViewStyle } from 'react-native';
+import { StyleSheet, findNodeHandle, ViewStyle, View, Text } from 'react-native';
 
+import { RNIWrapperView } from '../native_components/RNIWrapperViewManager';
 import { RNINavigatorView } from '../native_components/RNINavigatorView';
 import { RNINavigatorViewModule, NativePushPopOptions } from '../native_modules/RNINavigatorViewModule';
 
@@ -8,13 +9,15 @@ import { NavigatorRouteView } from './NavigatorRouteView';
 
 import type { RouteContentProps } from '../components/NavigatorRouteView';
 import type { NavBarBackItemConfig, NavBarItemsConfig } from '../types/NavBarItemConfig';
+import type { NavBarAppearanceConfig, NavBarAppearanceLegacyConfig } from '../types/NavBarAppearanceConfig';
 
 import type { onNavRouteDidPopPayload, onNavRouteViewAddedPayload, onNavRouteWillPopPayload } from '../native_components/RNINavigatorView';
 import type { BackButtonDisplayMode, LargeTitleDisplayMode, RouteTransitionPopConfig, RouteTransitionPushConfig } from '../native_components/RNINavigatorRouteView';
 
 import * as Helpers from '../functions/Helpers';
 import { EventEmitter } from '../functions/EventEmitter';
-import type { NavBarAppearanceConfig, NavBarAppearanceLegacyConfig } from 'src/types/NavBarAppearanceConfig';
+
+import { NativeIDKeys } from '../constants/LibraryConstants';
 
 
 //#region - Type Definitions
@@ -107,6 +110,9 @@ type NavigatorViewProps = {
   renderNavBarLeftItem ?: RenderNavBarItem;
   renderNavBarRightItem?: RenderNavBarItem;
   renderNavBarTitleItem?: RenderNavBarItem;
+
+  //
+  renderNavBarBackground?: () => ReactElement;
 };
 
 /** `NavigatorView` comp. state */
@@ -522,6 +528,14 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         onNavRouteViewAdded={this._handleOnNavRouteViewAdded}
       >
         {this._renderRoutes()}
+        {props.renderNavBarBackground && (
+          <RNIWrapperView
+            style={styles.navBarBackgroundContainer} 
+            nativeID={NativeIDKeys.NavBarBackground}
+          >
+            {props.renderNavBarBackground()}
+          </RNIWrapperView>
+        )}
       </RNINavigatorView>
     );
   };
@@ -545,5 +559,8 @@ class NavigatorViewUtils {
 const styles = StyleSheet.create({
   navigatorView: {
     flex: 1,
+  },
+  navBarBackgroundContainer: {
+    position: 'absolute',
   },
 });

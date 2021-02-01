@@ -9,8 +9,12 @@ import UIKit;
 
 typealias Completion = () -> Void;
 
-
 class RNINavigatorView: UIView {
+  
+  struct NativeIDKeys {
+    static let NavRouteItem     = "NavRouteItem";
+    static let NavBarBackground = "NavBarBackground";
+  };
   
   // -----------------
   // MARK:- Properties
@@ -24,6 +28,8 @@ class RNINavigatorView: UIView {
   /// retained. Once the routes are "popped", they should be removed from here
   /// so that they will be "released".
   private var routeVCs: [RNINavigatorRouteViewController] = [];
+  
+  private var navBarBackground: UIView?;
   
   var navigationVC: UINavigationController!;
   
@@ -109,8 +115,8 @@ class RNINavigatorView: UIView {
   };
   
   override func didMoveToWindow() {
-    // this view has been unmounted...
     if self.window == nil {
+      // this view has been "unmounted"...
       // remove this view from the view registry
       RNIUtilities.recursivelyRemoveFromViewRegistry(
         bridge   : self.bridge,
@@ -121,6 +127,11 @@ class RNINavigatorView: UIView {
       self.routeVCs.forEach {
         $0.routeView.cleanup();
       };
+      
+    } else {
+      // this view has been "mounted"...
+      // add the custom RN navbar bg if any
+      self.embedCustomNavBarBackground();
     };
   };
   
@@ -131,56 +142,63 @@ class RNINavigatorView: UIView {
   override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
     super.insertSubview(subview, at: atIndex);
     
-    /// note: all of the `RNINavigatorView` children is a
-    /// `RNINavigatorRouteView` instance.
-    guard let routeView = subview as? RNINavigatorRouteView
-    else { return };
-    
     /// do not show as subview, i.e. remove from view hieaarchy.
     /// note: once removed, `removeReactSubview` will not be called if that
     /// subview/child is removed from `render()` in the js side.
-    routeView.removeFromSuperview();
+    subview.removeFromSuperview();
     
-    let routeVC: RNINavigatorRouteViewController = {
-      /// create the wrapper vc that holds the `routeView`
-      let vc = RNINavigatorRouteViewController();
-      
-      // listen for route navigator-related events
-      vc.delegate = self;
-      
-      // set the "react view" to show in the route vc
-      vc.routeView = routeView;
-      
-      // note: this will trigger the "setup" function so that the
-      // `routeView` can prepare `routeVC` for the 1st time...
-      routeView.routeVC = vc;
-      return vc;
-    }();
-    
-    /// save a ref to `routeView`'s vc instance
-    self.routeVCs.append(routeVC);
-    
-    if let routeKey   = routeView.routeKey,
-       let routeIndex = routeView.routeIndex {
-      
-      // send event: notify js navigator that a new route view was added
-      self.onNavRouteViewAdded?([
-        "routeKey"  : routeKey,
-        "routeIndex": routeIndex
-      ]);
-    };
-    
-    #if DEBUG
-    print("LOG - NativeView, RNINavigatorView: insertReactSubview"
-      + " - atIndex: \(atIndex)"
-      + " - routeView.routeKey: \(routeView.routeKey ?? "N/A")"
-      + " - routeView.routeIndex: \(routeView.routeIndex ?? -1)"
-    );
-    #endif
-    
-    if atIndex == 0 {
-      // the first item will become navController's root vc
-      self.navigationVC.setViewControllers([routeVC], animated: false);
+    switch subview.nativeID {
+      case NativeIDKeys.NavRouteItem:
+        // This subview is a route item
+        guard let routeView = subview as? RNINavigatorRouteView
+        else { return };
+        
+        let routeVC: RNINavigatorRouteViewController = {
+          /// create the wrapper vc that holds the `routeView`
+          let vc = RNINavigatorRouteViewController();
+          
+          // listen for route navigator-related events
+          vc.delegate = self;
+          
+          // set the "react view" to show in the route vc
+          vc.routeView = routeView;
+          
+          // note: this will trigger the "setup" function so that the
+          // `routeView` can prepare `routeVC` for the 1st time...
+          routeView.routeVC = vc;
+          return vc;
+        }();
+        
+        /// save a ref to `routeView`'s vc instance
+        self.routeVCs.append(routeVC);
+        
+        if let routeKey   = routeView.routeKey,
+           let routeIndex = routeView.routeIndex {
+          
+          // send event: notify js navigator that a new route view was added
+          self.onNavRouteViewAdded?([
+            "routeKey"  : routeKey,
+            "routeIndex": routeIndex
+          ]);
+        };
+        
+        #if DEBUG
+        print("LOG - NativeView, RNINavigatorView: insertReactSubview"
+          + " - atIndex: \(atIndex)"
+          + " - routeView.routeKey: \(routeView.routeKey ?? "N/A")"
+          + " - routeView.routeIndex: \(routeView.routeIndex ?? -1)"
+        );
+        #endif
+        
+        if atIndex == 0 {
+          // the first item will become navController's root vc
+          self.navigationVC.setViewControllers([routeVC], animated: false);
+        };
+        
+      case NativeIDKeys.NavBarBackground:
+        self.navBarBackground = subview;
+        
+      default: break;
     };
   };
 };
@@ -205,7 +223,7 @@ fileprivate extension RNINavigatorView {
     // set with initial value for `navBarPrefersLargeTitles` prop
     if #available(iOS 11.0, *) {
       navigationVC.navigationBar.prefersLargeTitles =
-        self.navBarPrefersLargeTitles
+        self.navBarPrefersLargeTitles;
     };
     
     // enable autolayout
@@ -216,6 +234,30 @@ fileprivate extension RNINavigatorView {
       navigationVC.view.bottomAnchor  .constraint(equalTo: self.bottomAnchor  ),
       navigationVC.view.leadingAnchor .constraint(equalTo: self.leadingAnchor ),
       navigationVC.view.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+    ]);
+  };
+  
+  /// setup - "mount" custom react navbar bg view
+  func embedCustomNavBarBackground(){
+    let navBar = self.navigationVC.navigationBar;
+    
+    guard let customNavBarBG = self.navBarBackground,
+          navBar.subviews.count > 0
+    else { return };
+    
+    let navBarBGLayer = navBar.subviews[0];
+    navBarBGLayer.insertSubview(customNavBarBG, at: 0);
+    
+    // TODO: move
+    //navigationVC.navigationBar.setShadowHidden(true, newShadowColor: nil);
+    //self.navigationVC.navigationBar.removeBackground();
+          
+    // enable autolayout
+    customNavBarBG.translatesAutoresizingMaskIntoConstraints = false;
+    // stretch vc to fit/fill this view, ignore safe area
+    NSLayoutConstraint.activate([
+      customNavBarBG.heightAnchor.constraint(equalTo: navBarBGLayer.heightAnchor),
+      customNavBarBG.widthAnchor .constraint(equalTo: navBarBGLayer.widthAnchor ),
     ]);
   };
   

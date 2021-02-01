@@ -67,6 +67,7 @@ export type RNINavigatorRouteViewProps = {
   style: ViewStyle;
   routeKey: string;
   routeIndex: number;
+  nativeID: String;
 
   // Transition Config
   transitionConfigPush?: RouteTransitionPushConfig;

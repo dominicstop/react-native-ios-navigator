@@ -7,6 +7,7 @@
 
 import UIKit;
 
+// TODO: Move to own file
 protocol RNINavigatorRouteViewControllerDelegate: AnyObject {
   
   /// Fired when a route is *about to be* "popped", either due to a "user intiated"
@@ -96,8 +97,7 @@ class RNINavigatorRouteViewController: UIViewController {
     let reactRouteContent = self.routeView!.reactRouteContent!;
     
     // is content a scrollview
-    if #available(iOS 11.0, *),
-       let contentView     = reactRouteContent.subviews.first,
+    if let contentView     = reactRouteContent.subviews.first,
        let reactScrollView = contentView as? RCTScrollView {
          
       self.view = reactRouteContent;

@@ -365,6 +365,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
         <RNINavigatorRouteView
           style={styles.navigatorRouteView}
           ref={r => this._nativeRef = r}
+          nativeID={NativeIDKeys.NavRouteItem}
           // route config
           routeKey={props.routeKey}
           routeIndex={props.routeIndex}

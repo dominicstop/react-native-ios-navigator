@@ -7,8 +7,12 @@
 
 import UIKit;
 
-
+// TODO: Creaate seperate extensions for Private/Public func
 class RNINavigatorRouteView: UIView {
+  
+  // ---------------------
+  // MARK:- Embedded Types
+  // ---------------------
   
   struct NativeIDKeys {
     static let RouteContent    = "RouteContent";

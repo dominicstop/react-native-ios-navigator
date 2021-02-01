@@ -1,8 +1,13 @@
 
 export enum NativeIDKeys {
-  'RouteContent'    = 'RouteContent'   ,
-  'NavBarBackItem'  = 'NavBarBackItem' ,
-  'NavBarLeftItem'  = 'NavBarLeftItem' ,
-  'NavBarRightItem' = 'NavBarRightItem',
-  'NavBarTitleItem' = 'NavBarTitleItem',
+  // `NavigatorRouteView` Keys
+  'RouteContent'     = 'RouteContent'   ,
+  'NavBarBackItem'   = 'NavBarBackItem' ,
+  'NavBarLeftItem'   = 'NavBarLeftItem' ,
+  'NavBarRightItem'  = 'NavBarRightItem',
+  'NavBarTitleItem'  = 'NavBarTitleItem',
+
+  // `NavigatorView` Keys
+  'NavRouteItem'     = 'NavRouteItem'    ,
+  'NavBarBackground' = 'NavBarBackground',
 };
