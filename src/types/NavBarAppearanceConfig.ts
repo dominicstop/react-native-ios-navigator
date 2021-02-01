@@ -13,11 +13,10 @@ type NavBarAppearanceBaseConfig =
   /** Configures the bar appearance object with a transparent background and no shadow. */
   | 'transparentBackground';
 
-export type NavBarMode = 'default' | 'noShadow' | 'clearBackground';
+export type NavBarPreset = 'default' | 'noShadow' | 'clearBackground';
 
 // TODO
 type BarButtonItemAppearanceConfig = {
-
 };
 
 /** A UIBarAppearance object contains the common traits shared by navigation bars, tab bars, and toolbars. */
@@ -51,7 +50,7 @@ type NavBarAppearance = BarAppearance & {
 
 type NavBarAppearanceConfigBase = {
   /** Preset configs for setting the appearance of the navigation bar */
-  navBarMode?: NavBarMode;
+  navBarPreset?: NavBarPreset;
 };
 
 /**Legacy Customizations - Customize appearance information directly on the navigation bar object. */

@@ -14,8 +14,8 @@ class RNINavBarAppearance {
   // ---------------------
   
   /// Defines what parts of navigation bar should be customizable, i.e controls
-  /// the preset "look" of the navigation bar.
-  enum NavBarMode: String {
+  /// the preset base "look" of the navigation bar.
+  enum NavBarPreset: String {
     case Default;
     case NoShadow;
     case ClearBackground;
@@ -38,7 +38,7 @@ class RNINavBarAppearance {
   class NavBarAppearanceConfig {
     
     var baseConfig: BaseConfigType;
-    var navBarMode: NavBarMode = .Default;
+    var navBarPreset: NavBarPreset = .Default;
     
     // MARK: Configuring the Title
     var titleTextAttributes: RCTTextAttributes?;
@@ -56,8 +56,8 @@ class RNINavBarAppearance {
       let appearance = UINavigationBarAppearance();
 
       //
-      let shouldSetShadow     = self.navBarMode != .NoShadow;
-      let shouldSetBackground = self.navBarMode != .ClearBackground;
+      let shouldSetShadow     = self.navBarPreset != .NoShadow;
+      let shouldSetBackground = self.navBarPreset != .ClearBackground;
       
       
       switch self.baseConfig {
@@ -89,15 +89,21 @@ class RNINavBarAppearance {
       // Section: `BarAppearance`-related
       // --------------------------------
       
-      if let effect = self.backgroundEffect {
+      if shouldSetBackground,
+         let effect = self.backgroundEffect {
+        
         appearance.backgroundEffect = effect;
       };
       
-      if let color = self.backgroundColor {
+      if shouldSetBackground,
+         let color = self.backgroundColor {
+        
         appearance.backgroundColor = color;
       };
       
-      if let color = self.shadowColor {
+      if shouldSetShadow,
+         let color = self.shadowColor {
+        
         appearance.shadowColor = color;
       };
       
@@ -184,7 +190,7 @@ class RNINavBarAppearance {
   /// appearance API's.
   class NavBarAppearanceLegacyConfig {
     
-    var navBarMode: NavBarMode = .Default;
+    var navBarPreset: NavBarPreset = .Default;
     
     // MARK: Title Config
     var titleTextAttributes: RCTTextAttributes?;
@@ -252,7 +258,7 @@ class RNINavBarAppearance {
     };
     
     func updateNavBarAppearance(_ navBar: UINavigationBar){
-      let shouldSetBG = self.navBarMode != .ClearBackground;
+      let shouldSetBG = self.navBarPreset != .ClearBackground;
       
       // Section: Title Config
       // ---------------------
@@ -312,10 +318,10 @@ class RNINavBarAppearance {
   
   // Tells us whether or not we should allow changes to certain "appearance"-related
   // properties of the navigation bar (e.g. "shadowColor", etc).
-  var navBarMode: NavBarMode = .Default {
+  var navBarPreset: NavBarPreset = .Default {
     willSet {
-      // keep `navBarMode` values in sync between configs (just in case...)
-      self.updateNavBarMode(newValue);
+      // keep `navBarPreset` values in sync between configs (just in case...)
+      self.updateNavBarPreset(newValue);
     }
   };
   
@@ -340,10 +346,10 @@ class RNINavBarAppearance {
     
     self.mode = mode;
     
-    if let string = dict["navBarMode"] as? String,
-       let navBarMode = NavBarMode(rawValue: string.capitalized)  {
+    if let string = dict["navBarPreset"] as? String,
+       let navBarPreset = NavBarPreset(rawValue: string.capitalized)  {
       
-      self.navBarMode = navBarMode;
+      self.navBarPreset = navBarPreset;
     };
     
     switch mode {
@@ -379,8 +385,8 @@ class RNINavBarAppearance {
     guard let mode = mode else {
       // no config set, reset nav bar to default style
       Self.resetNavBarAppearance(navBar);
-      // update nav bar appearance based on current `NavBarMode`
-      self.updateNavBarAppearanceFromNavBarMode(navBar);
+      // update nav bar appearance based on current `NavBarPreset`
+      self.updateNavBarAppearanceFromNavBarPreset(navBar);
       return;
     };
     
@@ -390,13 +396,13 @@ class RNINavBarAppearance {
               let standardConfig = self.appearanceConfigStandard
         else {
           // no config for standard appearance provided...
-          // at the very least, update nav bar appearance from `navBarMode`
-          self.updateNavBarAppearanceFromNavBarMode(navBar);
+          // at the very least, update nav bar appearance from `navBarPreset`
+          self.updateNavBarAppearanceFromNavBarPreset(navBar);
           return;
         };
         
-        // update the appearance config's `navBarMode`
-        self.updateNavBarMode(self.navBarMode);
+        // update the appearance config's `navBarPreset`
+        self.updateNavBarPreset(self.navBarPreset);
         
         // create standard appearance object from config
         navBar.standardAppearance = standardConfig.appearance;
@@ -409,37 +415,37 @@ class RNINavBarAppearance {
         navBar.scrollEdgeAppearance =
           self.appearanceConfigScrollEdge?.appearance;
         
-        // update appearance based on `navBarMode` first before refreshing.
-        self.updateNavBarAppearanceFromNavBarMode(navBar);
+        // update appearance based on `navBarPreset` first before refreshing.
+        self.updateNavBarAppearanceFromNavBarPreset(navBar);
         
         // refresh the navbar appearance
         navBar.setNeedsLayout();
 
       case .legacy:
-        // update the legacy appearance config's `navBarMode`
-        self.updateNavBarMode(self.navBarMode);
+        // update the legacy appearance config's `navBarPreset`
+        self.updateNavBarPreset(self.navBarPreset);
         
         self.appearanceLegacy?.updateNavBarAppearance(navBar);
-        self.updateNavBarAppearanceFromNavBarMode(navBar);
+        self.updateNavBarAppearanceFromNavBarPreset(navBar);
     };
   };
   
-  func updateNavBarAppearanceFromNavBarMode(_ navBar: UINavigationBar){
+  func updateNavBarAppearanceFromNavBarPreset(_ navBar: UINavigationBar){
     // should set shadow
-    if self.navBarMode != .Default {
+    if self.navBarPreset != .Default {
       navBar.setShadowHidden(true, newShadowColor: nil);
     };
     
     // should set background
-    if self.navBarMode != .ClearBackground {
+    if self.navBarPreset != .ClearBackground {
       navBar.removeBackground();
     };
   };
   
-  private func updateNavBarMode(_ mode: NavBarMode){
-    self.appearanceConfigScrollEdge?.navBarMode = mode;
-    self.appearanceLegacy?.navBarMode = mode;
-    self.appearanceConfigStandard?.navBarMode = mode;
-    self.appearanceConfigCompact?.navBarMode = mode;
+  private func updateNavBarPreset(_ mode: NavBarPreset){
+    self.appearanceConfigScrollEdge?.navBarPreset = mode;
+    self.appearanceLegacy?.navBarPreset = mode;
+    self.appearanceConfigStandard?.navBarPreset = mode;
+    self.appearanceConfigCompact?.navBarPreset = mode;
   };
 };
