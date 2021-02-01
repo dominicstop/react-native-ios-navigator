@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import { StyleSheet, View, ViewStyle, findNodeHandle } from 'react-native';
 
-import type { RouteOptions } from '../types/NavTypes';
+import type { NavigationObject, RouteOptions } from '../types/NavTypes';
 import type { NavigatorView } from './NavigatorView';
 import type { RouteViewPortal } from './RouteViewPortal';
 
@@ -38,12 +38,7 @@ export enum NavRouteEvents {
 };
 
 export interface RouteContentProps {
-  routeKey  ?: string;
-  routeIndex?: number;
-  // get ref functions
-  getRefToRoute          ?: () => NavigatorRouteView;
-  getRefToNavigator      ?: () => NavigatorView;
-  getRefToNavRouteEmitter?: () => EventEmitter<NavRouteEvents>;
+  navigation?: NavigationObject;
 };
 
 type NavigatorRouteViewProps = {
@@ -79,15 +74,17 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
   // references
   private _emitter              : EventEmitter<NavRouteEvents>;
   private _nativeRef            : React.Component<RNINavigatorRouteViewProps>;
+  private _navigatorRef         : NavigatorView;
   private _routeContentRef      : ReactElement;
   private _routeViewPortalRef   : RouteViewPortal;
-  private _navBarItemsWrapperRef: NavBarItemsWrapper
+  private _navBarItemsWrapperRef: NavBarItemsWrapper;
   //#endregion
 
   constructor(props: NavigatorRouteViewProps){
     super(props);
 
     this._emitter = new EventEmitter<NavRouteEvents>();
+    this._navigatorRef = props.getRefToNavigator();
 
     this.state = {
       isMounted: true,
@@ -322,24 +319,26 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     const props = this.props;
     const routeContent = props.renderRouteContent();
 
-    // @ts-ignore
-    const routeContentWithProps = React.cloneElement<RouteContentProps>(
-      routeContent, {
+    const routeContentWithProps = React.cloneElement<RouteContentProps>(routeContent, {
+      navigation: {
         // pass down route props
-        ...props.routeProps,
+        routeProps: props.routeProps,
         // pass down route details
         routeKey: props.routeKey,
         routeIndex: props.routeIndex,
+        // pass down navigator commands
+        push: this._navigatorRef.push,
+        pop: this._navigatorRef.pop,
         // pass down 'get ref' functions
         getRefToRoute: this._handleGetRefToRoute,
         getRefToNavigator: props.getRefToNavigator,
         getRefToNavRouteEmitter: this._handleGetRefToNavRouteEmitter,
-        // store a ref to this element
-        ...(Helpers.isClassComponent(routeContent) && {
-          ref: node => { this._routeContentRef = node }
-        }),
-      }
-    );
+      },
+      // store a ref to this element
+      ...(Helpers.isClassComponent(routeContent) && {
+        ref: node => { this._routeContentRef = node }
+      }),
+    });
 
     return(
       <View

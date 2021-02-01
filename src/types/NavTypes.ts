@@ -1,5 +1,12 @@
+import type { NavigatorView } from "../components/NavigatorView";
+import type { NavigatorRouteView, NavRouteEvents } from "../components/NavigatorRouteView";
+
 import type { BackButtonDisplayMode, LargeTitleDisplayMode, RouteTransitionPopConfig, RouteTransitionPushConfig } from "../native_components/RNINavigatorRouteView";
+
+import type { EventEmitter } from "../functions/EventEmitter";
 import type { NavBarBackItemConfig, NavBarItemsConfig } from "./NavBarItemConfig";
+import type { NavCommandPop, NavCommandPush } from "./NavSharedTypes";
+
 
 export type RouteOptions = {
   // Transition Config
@@ -21,4 +28,17 @@ export type RouteOptions = {
   backButtonTitle?: string;
   backButtonDisplayMode?: BackButtonDisplayMode;
   hidesBackButton?: boolean;
+};
+
+export type NavigationObject = {
+  routeKey  ?: string;
+  routeIndex?: number;
+  routeProps?: object;
+  // navigator commands
+  push?: NavCommandPush;
+  pop?: NavCommandPop;
+  // get ref functions
+  getRefToRoute          ?: () => NavigatorRouteView;
+  getRefToNavigator      ?: () => NavigatorView;
+  getRefToNavRouteEmitter?: () => EventEmitter<NavRouteEvents>;
 };

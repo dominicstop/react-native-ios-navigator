@@ -3,13 +3,15 @@ import { StyleSheet, findNodeHandle, ViewStyle, View, Text } from 'react-native'
 
 import { RNIWrapperView } from '../native_components/RNIWrapperViewManager';
 import { RNINavigatorView } from '../native_components/RNINavigatorView';
-import { RNINavigatorViewModule, NativePushPopOptions } from '../native_modules/RNINavigatorViewModule';
+import { RNINavigatorViewModule } from '../native_modules/RNINavigatorViewModule';
 
 import { NavigatorRouteView } from './NavigatorRouteView';
-import type { RouteContentProps } from '../components/NavigatorRouteView';
 
 import type { RouteOptions } from '../types/NavTypes';
+import type { NavCommandPush, NavCommandPop, NavRouteItem } from '../types/NavSharedTypes';
 import type { NavBarAppearanceConfig, NavBarAppearanceLegacyConfig } from '../types/NavBarAppearanceConfig';
+
+import type { RouteContentProps } from '../components/NavigatorRouteView';
 
 import type { onNavRouteDidPopPayload, onNavRouteViewAddedPayload, onNavRouteWillPopPayload } from '../native_components/RNINavigatorView';
 import type { RouteTransitionPopConfig, RouteTransitionPushConfig } from '../native_components/RNINavigatorRouteView';
@@ -33,21 +35,6 @@ enum NavStatus {
 
 enum NavEvents {
   onNavRouteViewAdded = "onNavRouteViewAdded"
-};
-
-type PushOptions = NativePushPopOptions & {
-  transitionConfig?: RouteTransitionPushConfig;
-};
-
-type PopOptions = NativePushPopOptions & {
-  transitionConfig?: RouteTransitionPopConfig;
-};
-
-/** Represents a route in the navigation stack. */
-type NavRouteItem = {
-  routeKey     : string;
-  routeProps  ?: object;
-  routeOptions?: RouteOptions;
 };
 
 /** Represents a route in the nav. `state.activeRoutes` */
@@ -256,7 +243,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   //#endregion
 
   //#region - Public Functions
-  public push = async (routeItem: NavRouteItem, options?: PushOptions) => {
+  public push: NavCommandPush = async (routeItem, options) => {
     const routeConfig = this.getMatchingRoute(routeItem);
 
     if(!routeConfig){
@@ -327,7 +314,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
   };
 
-  public pop = async (options?: PopOptions) => {
+  public pop: NavCommandPop = async (options) => {
     // TEMP, replace with queue - skip if nav. is busy
     if(NavigatorViewUtils.isNavStateBusy(this.navStatus)) return;
 
@@ -415,6 +402,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
    * Handler for native event: `onNavRouteWillPop` 
    * a route is about to be removed either through a tap on the "back" button,
    * or through a swipe back gesture. */
+  // @ts-ignore
   private _handleOnNavRouteWillPop = ({nativeEvent}: onNavRouteWillPopPayload) => {
     if(this.navStatus == NavStatus.NAV_PUSHING){
       this.navStatus = NavStatus.NAV_PUSH_ABORT;
