@@ -7,25 +7,6 @@
 
 import UIKit;
 
-// TODO: Move to own file
-protocol RNINavigatorRouteViewControllerDelegate: AnyObject {
-  
-  /// Fired when a route is *about to be* "popped", either due to a "user intiated"
-  /// pop (i.e. a route's "back button" was pressed, or was swiped back via a
-  /// gesture), or due to it being "popped" programmatically via the nav.
-  func onNavRouteWillPop(
-    reactTag  : NSNumber, routeKey       : NSString,
-    routeIndex: NSNumber, isUserInitiated: Bool
-  );
-  
-  /// Fired when a route *has been* "popped", either due to a "user intiated"
-  /// pop (i.e. a route's "back button" was pressed, or was swiped back via a
-  /// gesture), or due to it being "popped" programmatically via the nav.
-  func onNavRouteDidPop(
-    reactTag  : NSNumber, routeKey       : NSString,
-    routeIndex: NSNumber, isUserInitiated: Bool
-  );
-};
 
 class RNINavigatorRouteViewController: UIViewController {
   
@@ -71,11 +52,12 @@ class RNINavigatorRouteViewController: UIViewController {
       };
     }
   };
+  
   var transitionTypePop = RNINavTransitionConfig(type: .DefaultPop) {
     willSet {
       // don't set the delegate when using the default push/pop transition
       // to not disable the interactive swipe gesture.
-      // This can be fixed by re-impl. the default pop transition.
+      // TODO: This can be fixed by re-impl. the default pop transition.
       if newValue.transitionType == .DefaultPop,
          self.transitionTypePush.transitionType == .DefaultPush {
         

@@ -7,7 +7,7 @@
 
 import UIKit;
 
-// TODO: Creaate seperate extensions for Private/Public func
+
 class RNINavigatorRouteView: UIView {
   
   // ---------------------
@@ -329,68 +329,6 @@ class RNINavigatorRouteView: UIView {
     }
   };
   
-  // ------------------------------------
-  // MARK:- Convenience Property Wrappers
-  // ------------------------------------
-  
-  /// Creates a back nav bar button item based on `navBarButtonBackItemConfig`
-  var backBarButtonItem: UIBarButtonItem? {
-    guard let backConfigItem = self._navBarButtonBackItemConfig
-    else { return nil };
-    
-    return backConfigItem.createUIBarButtonItem { [unowned self] config in
-      #if DEBUG
-      print("LOG - NativeView, RNINavigatorRouteView"
-        + " - onPress: `backBarButtonItem`"
-      );
-      #endif
-      
-      self.onPressNavBarBackItem?(
-        config.makeNavBarItemEventParams()
-      );
-    };
-  };
-  
-  /// Creates a left nav bar button item based on `navBarButtonLeftItemsConfig`
-  var leftBarButtonItems: [UIBarButtonItem]? {
-    guard let leftConfigItems = self._navBarButtonLeftItemsConfig
-    else { return nil };
-    
-    return leftConfigItems.compactMap {
-      $0.createUIBarButtonItem { [unowned self] config in
-        #if DEBUG
-        print("LOG - NativeView, RNINavigatorRouteView"
-          + " - onPress: `leftBarButtonItem`"
-        );
-        #endif
-        
-        self.onPressNavBarLeftItem?(
-          config.makeNavBarItemEventParams()
-        );
-      };
-    };
-  };
-  
-  /// Creates a right nav bar button item based on `navBarButtonRightItemsConfig`
-  var rightBarButtonItems: [UIBarButtonItem]? {
-    guard let rightConfigItems = self._navBarButtonRightItemsConfig
-    else { return nil };
-    
-    return rightConfigItems.compactMap {
-      $0.createUIBarButtonItem { [unowned self] config in
-        #if DEBUG
-        print("LOG - NativeView, RNINavigatorRouteView"
-          + " - onPress: `rightBarButtonItem`"
-        );
-        #endif
-        
-        self.onPressNavBarRightItem?(
-          config.makeNavBarItemEventParams()
-        );
-      };
-    };
-  };
-  
   // ---------------------
   // MARK:- Init/Lifecycle
   // ---------------------
@@ -463,16 +401,83 @@ class RNINavigatorRouteView: UIView {
       default: break;
     };
   };
+};
+
+// ------------------------------------
+// MARK:- Convenience Property Wrappers
+// ------------------------------------
+
+extension RNINavigatorRouteView {
+  /// Creates a back nav bar button item based on `navBarButtonBackItemConfig`
+  var backBarButtonItem: UIBarButtonItem? {
+    guard let backConfigItem = self._navBarButtonBackItemConfig
+    else { return nil };
+    
+    return backConfigItem.createUIBarButtonItem { [unowned self] config in
+      #if DEBUG
+      print("LOG - NativeView, RNINavigatorRouteView"
+        + " - onPress: `backBarButtonItem`"
+      );
+      #endif
+      
+      self.onPressNavBarBackItem?(
+        config.makeNavBarItemEventParams()
+      );
+    };
+  };
   
-  // ------------------------
-  // MARK:- Private Functions
-  // ------------------------
+  /// Creates a left nav bar button item based on `navBarButtonLeftItemsConfig`
+  var leftBarButtonItems: [UIBarButtonItem]? {
+    guard let leftConfigItems = self._navBarButtonLeftItemsConfig
+    else { return nil };
+    
+    return leftConfigItems.compactMap {
+      $0.createUIBarButtonItem { [unowned self] config in
+        #if DEBUG
+        print("LOG - NativeView, RNINavigatorRouteView"
+          + " - onPress: `leftBarButtonItem`"
+        );
+        #endif
+        
+        self.onPressNavBarLeftItem?(
+          config.makeNavBarItemEventParams()
+        );
+      };
+    };
+  };
+  
+  /// Creates a right nav bar button item based on `navBarButtonRightItemsConfig`
+  var rightBarButtonItems: [UIBarButtonItem]? {
+    guard let rightConfigItems = self._navBarButtonRightItemsConfig
+    else { return nil };
+    
+    return rightConfigItems.compactMap {
+      $0.createUIBarButtonItem { [unowned self] config in
+        #if DEBUG
+        print("LOG - NativeView, RNINavigatorRouteView"
+          + " - onPress: `rightBarButtonItem`"
+        );
+        #endif
+        
+        self.onPressNavBarRightItem?(
+          config.makeNavBarItemEventParams()
+        );
+      };
+    };
+  };
+};
+
+// ------------------------
+// MARK:- Private Functions
+// ------------------------
+
+private extension RNINavigatorRouteView {
   
   /// The `routeVC` has been assigned to this "route view" for the first time.
   /// Because the "route view" is created first, by the time the "route vc" is
   /// created (and added as a delegate), it has already missed a few events, so
   /// we need to send the initial values.
-  private func setupRouteVC(){
+  func setupRouteVC(){
     
     // set push transition config
     if let pushConfig = self._transitionConfigPush {
@@ -525,7 +530,7 @@ class RNINavigatorRouteView: UIView {
   };
   
   /// This creates a "base" dictionary that we can pass to "event props"
-  private func createEventPayload() -> Dictionary<String, Any> {
+  func createEventPayload() -> Dictionary<String, Any> {
     var dict: Dictionary<String, Any> = [:];
     
     if let reactTag = self.reactTag {
@@ -544,7 +549,7 @@ class RNINavigatorRouteView: UIView {
   };
   
   /// Cleanup: Remove the views attached to the `RCTTouchandler` instances.
-  private func detachTouchHandlers(){
+  func detachTouchHandlers(){
     if let routeContent = self.reactRouteContent {
       self.touchHandlerRouteContent.detach(from: routeContent);
     };
@@ -565,10 +570,13 @@ class RNINavigatorRouteView: UIView {
       self.touchHandlerNavBarRightItem.detach(from: rightBarItem);
     };
   };
-  
-  // -----------------------
-  // MARK:- Public Functions
-  // -----------------------
+};
+
+// -----------------------
+// MARK:- Public Functions
+// -----------------------
+
+extension RNINavigatorRouteView {
   
   func notifyForBoundsChange(_ newBounds: CGRect){
     guard let bridge    = self.bridge,

@@ -29,7 +29,8 @@ class RNINavigatorView: UIView {
   /// so that they will be "released".
   private var routeVCs: [RNINavigatorRouteViewController] = [];
   
-  private var navBarBackground: UIView?;
+  /// The react view to show behind the navigation bar
+  private var reactNavBarBackground: UIView?;
   
   var navigationVC: UINavigationController!;
   
@@ -117,16 +118,7 @@ class RNINavigatorView: UIView {
   override func didMoveToWindow() {
     if self.window == nil {
       // this view has been "unmounted"...
-      // remove this view from the view registry
-      RNIUtilities.recursivelyRemoveFromViewRegistry(
-        bridge   : self.bridge,
-        reactView: self
-      );
-      
-      // remove routes from view registry
-      self.routeVCs.forEach {
-        $0.routeView.cleanup();
-      };
+      self.cleanup();
       
     } else {
       // this view has been "mounted"...
@@ -196,7 +188,7 @@ class RNINavigatorView: UIView {
         };
         
       case NativeIDKeys.NavBarBackground:
-        self.navBarBackground = subview;
+        self.reactNavBarBackground = subview;
         
       default: break;
     };
@@ -241,17 +233,15 @@ fileprivate extension RNINavigatorView {
   func embedCustomNavBarBackground(){
     let navBar = self.navigationVC.navigationBar;
     
-    guard let customNavBarBG = self.navBarBackground,
+    guard let customNavBarBG = self.reactNavBarBackground,
           navBar.subviews.count > 0
     else { return };
     
+    // Warning: The ff. code relies on the internal view hierarchy of the navbar,
+    // so this might change in the future and break.
     let navBarBGLayer = navBar.subviews[0];
     navBarBGLayer.insertSubview(customNavBarBG, at: 0);
     
-    // TODO: move
-    //navigationVC.navigationBar.setShadowHidden(true, newShadowColor: nil);
-    //self.navigationVC.navigationBar.removeBackground();
-          
     // enable autolayout
     customNavBarBG.translatesAutoresizingMaskIntoConstraints = false;
     // stretch vc to fit/fill this view, ignore safe area
@@ -298,6 +288,27 @@ fileprivate extension RNINavigatorView {
       + " - routeVCs removed count: \(prevCountRouteVCs - nextCountRouteVCs)"
     );
     #endif
+  };
+  
+  /// remove this view (+ related-views) from the RN view registry
+  func cleanup(){
+    if let backgroundView = self.reactNavBarBackground {
+      RNIUtilities.recursivelyRemoveFromViewRegistry(
+        bridge   : self.bridge,
+        reactView: backgroundView
+      );
+    };
+    
+    // remove this view from registry
+    RNIUtilities.recursivelyRemoveFromViewRegistry(
+      bridge   : self.bridge,
+      reactView: self
+    );
+    
+    // remove routes from view registry
+    self.routeVCs.forEach {
+      $0.routeView.cleanup();
+    };
   };
 };
 

@@ -25,7 +25,6 @@ class RNINavigatorViewModule: NSObject {
   // MARK:- Module Commands
   // ----------------------
   
-  // TODO: Add options param
   @objc func push(
     _ node  : NSNumber,
     routeKey: NSString,
@@ -70,7 +69,6 @@ class RNINavigatorViewModule: NSObject {
     };
   };
   
-  // TODO: Add options param
   @objc func pop(
     _ node  : NSNumber,
     options : NSDictionary,
