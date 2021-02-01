@@ -13,7 +13,7 @@ type NavBarAppearanceBaseConfig =
   /** Configures the bar appearance object with a transparent background and no shadow. */
   | 'transparentBackground';
 
-export type NavBarPreset = 'default' | 'noShadow' | 'clearBackground';
+export type NavBarPreset = 'none' | 'noShadow' | 'clearBackground';
 
 // TODO
 type BarButtonItemAppearanceConfig = {

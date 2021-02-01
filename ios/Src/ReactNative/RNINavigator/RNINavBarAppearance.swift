@@ -16,9 +16,9 @@ class RNINavBarAppearance {
   /// Defines what parts of navigation bar should be customizable, i.e controls
   /// the preset base "look" of the navigation bar.
   enum NavBarPreset: String {
-    case Default;
-    case NoShadow;
-    case ClearBackground;
+    case none;
+    case noShadow;
+    case clearBackground;
   };
   
   /// Defines whether or not to use the legacy or appearance API
@@ -38,7 +38,7 @@ class RNINavBarAppearance {
   class NavBarAppearanceConfig {
     
     var baseConfig: BaseConfigType;
-    var navBarPreset: NavBarPreset = .Default;
+    var navBarPreset: NavBarPreset = .none;
     
     // MARK: Configuring the Title
     var titleTextAttributes: RCTTextAttributes?;
@@ -56,8 +56,8 @@ class RNINavBarAppearance {
       let appearance = UINavigationBarAppearance();
 
       //
-      let shouldSetShadow     = self.navBarPreset != .NoShadow;
-      let shouldSetBackground = self.navBarPreset != .ClearBackground;
+      let shouldSetShadow     = self.navBarPreset != .noShadow;
+      let shouldSetBackground = self.navBarPreset != .clearBackground;
       
       
       switch self.baseConfig {
@@ -190,7 +190,7 @@ class RNINavBarAppearance {
   /// appearance API's.
   class NavBarAppearanceLegacyConfig {
     
-    var navBarPreset: NavBarPreset = .Default;
+    var navBarPreset: NavBarPreset = .none;
     
     // MARK: Title Config
     var titleTextAttributes: RCTTextAttributes?;
@@ -258,7 +258,7 @@ class RNINavBarAppearance {
     };
     
     func updateNavBarAppearance(_ navBar: UINavigationBar){
-      let shouldSetBG = self.navBarPreset != .ClearBackground;
+      let shouldSetBG = self.navBarPreset != .clearBackground;
       
       // Section: Title Config
       // ---------------------
@@ -318,7 +318,7 @@ class RNINavBarAppearance {
   
   // Tells us whether or not we should allow changes to certain "appearance"-related
   // properties of the navigation bar (e.g. "shadowColor", etc).
-  var navBarPreset: NavBarPreset = .Default {
+  var navBarPreset: NavBarPreset = .none {
     willSet {
       // keep `navBarPreset` values in sync between configs (just in case...)
       self.updateNavBarPreset(newValue);
@@ -345,9 +345,9 @@ class RNINavBarAppearance {
     };
     
     self.mode = mode;
-    
+
     if let string = dict["navBarPreset"] as? String,
-       let navBarPreset = NavBarPreset(rawValue: string.capitalized)  {
+       let navBarPreset = NavBarPreset(rawValue: string)  {
       
       self.navBarPreset = navBarPreset;
     };
@@ -431,14 +431,14 @@ class RNINavBarAppearance {
   };
   
   func updateNavBarAppearanceFromNavBarPreset(_ navBar: UINavigationBar){
-    // should set shadow
-    if self.navBarPreset != .Default {
-      navBar.setShadowHidden(true, newShadowColor: nil);
-    };
-    
-    // should set background
-    if self.navBarPreset != .ClearBackground {
-      navBar.removeBackground();
+    switch self.navBarPreset {
+      case .none: break;
+        
+      case .noShadow:
+        navBar.setShadowHidden(true, newShadowColor: nil);
+        
+      case .clearBackground:
+        navBar.removeBackground();
     };
   };
   
