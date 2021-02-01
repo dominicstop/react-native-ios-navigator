@@ -23,11 +23,12 @@ import { NativeIDKeys } from '../constants/LibraryConstants';
 //#region - Type Definitions
 /** Represents the current status of the navigator */
 enum NavStatus {
-  IDLE        = "IDLE"       , // nav. is idle, not busy
-  IDLE_INIT   = "IDLE_INIT"  , // nav. just finished init.
-  IDLE_ERROR  = "IDLE_ERROR" , // nav. is idle due to error
-  NAV_PUSHING = "NAV_PUSHING", // nav. is busy pushing
-  NAV_POPPING = "NAV_POPPING", // nav. is busy popping
+  IDLE           = "IDLE"          , // nav. is idle, not busy
+  IDLE_INIT      = "IDLE_INIT"     , // nav. just finished init.
+  IDLE_ERROR     = "IDLE_ERROR"    , // nav. is idle due to error
+  NAV_PUSHING    = "NAV_PUSHING"   , // nav. is busy pushing
+  NAV_POPPING    = "NAV_POPPING"   , // nav. is busy popping
+  NAV_PUSH_ABORT = "NAV_PUSH_ABORT", // nav. push was cancelled
 };
 
 enum NavEvents {
@@ -337,11 +338,14 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       //#region - 🐞 DEBUG 🐛
       LIB_GLOBAL.debugLog && console.log(
         `LOG/JS - NavigatorView, push - error message: ${error}`
+        + ` - NavStatus: ${this.navStatus}`
       );
       //#endregion
 
-      this.navStatus = NavStatus.IDLE_ERROR;
-      throw new Error("`NavigatorView` failed to do: `push`");
+      if(this.navStatus != NavStatus.NAV_PUSH_ABORT) {
+        this.navStatus = NavStatus.IDLE_ERROR;
+        throw new Error("`NavigatorView` failed to do: `push`");
+      };
     };
   };
 
@@ -429,12 +433,13 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     });
   };
 
-  /** Handler for native event: `onNavRouteWillPop` */
+  /** 
+   * Handler for native event: `onNavRouteWillPop` 
+   * a route is about to be removed either through a tap on the "back" button,
+   * or through a swipe back gesture. */
   private _handleOnNavRouteWillPop = ({nativeEvent}: onNavRouteWillPopPayload) => {
-    // a route is about to be removed either through a tap on the "back" button,
-    // or through a swipe back gesture.
-    if(nativeEvent.isUserInitiated){
-      
+    if(this.navStatus == NavStatus.NAV_PUSHING){
+      this.navStatus = NavStatus.NAV_PUSH_ABORT;
     };
   };
 
@@ -545,9 +550,10 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 class NavigatorViewUtils {
   static isNavStateIdle(navStatus: NavStatus){
     return (
-      navStatus == NavStatus.IDLE       ||
-      navStatus == NavStatus.IDLE_INIT  ||
-      navStatus == NavStatus.IDLE_ERROR
+      navStatus == NavStatus.IDLE           ||
+      navStatus == NavStatus.IDLE_INIT      ||
+      navStatus == NavStatus.IDLE_ERROR     ||
+      navStatus == NavStatus.NAV_PUSH_ABORT
     );
   };
 
