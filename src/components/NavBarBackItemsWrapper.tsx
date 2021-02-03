@@ -22,7 +22,6 @@ type NavBarBackItemsWrapperProps = {
   getRouterRef     : () => NavigatorRouteView;
   getPortalRef     : () => RouteViewPortal;
   // render nav bar items
-  renderNavBarBackItem : () => ReactElement;
   renderNavBarLeftItem : () => ReactElement;
   renderNavBarRightItem: () => ReactElement;
   renderNavBarTitleItem: () => ReactElement;
@@ -65,11 +64,6 @@ export class NavBarItemsWrapper extends React.Component<NavBarBackItemsWrapperPr
       routeOptions: props.routeOptions,
     };
 
-    const navBarBackItem = (
-      portalProps?.renderNavBarBackItem?.(sharedParams) ??
-      props.renderNavBarBackItem?.()
-    );
-
     const navBarLeftItem = (
       portalProps?.renderNavBarLeftItem?.(sharedParams) ??
       props.renderNavBarLeftItem?.()
@@ -87,14 +81,6 @@ export class NavBarItemsWrapper extends React.Component<NavBarBackItemsWrapperPr
 
     return(
       <React.Fragment>
-        {navBarBackItem && (
-          <View 
-            style={styles.navBarItemContainer}
-            nativeID={NativeIDKeys.NavBarBackItem}
-          >
-            {navBarBackItem}
-          </View>
-        )}
         {navBarLeftItem && (
           <View 
             style={styles.navBarItemContainer}

@@ -106,7 +106,6 @@ export type RNINavigatorRouteViewProps = {
   onRouteDidBlur ?: onRouteFocusBlurEvent;
 
   // Native Events: Navbar Item `onPress`
-  onPressNavBarBackItem ?: onPressNavBarItem;
   onPressNavBarLeftItem ?: onPressNavBarItem;
   onPressNavBarRightItem?: onPressNavBarItem;
 };

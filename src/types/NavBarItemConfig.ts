@@ -81,8 +81,7 @@ type NavBarItemConfigShared = {
 type ArrayWithOneElement<T> = { 0: T } & Array<T>;
 
 export type NavBarBackItemConfig = 
-  (NavBarItemConfigBase | NavBarItemConfigCustomBase) &
-  NavBarItemConfigShared
+  NavBarItemConfigBase & NavBarItemConfigShared
 
 export type NavBarItemConfig = 
   (NavBarItemConfigBase | NavBarItemConfigCustomBase) & 

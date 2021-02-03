@@ -25,7 +25,6 @@ type RouteViewPortalRender = (params: {
 type RouteViewPortalProps = {
   routeOptions?: RouteOptions;
   // render props
-  renderNavBarBackItem ?: RouteViewPortalRender;
   renderNavBarLeftItem ?: RouteViewPortalRender;
   renderNavBarRightItem?: RouteViewPortalRender;
   renderNavBarTitleItem?: RouteViewPortalRender;

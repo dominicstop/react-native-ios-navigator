@@ -32,7 +32,6 @@ export enum NavRouteEvents {
   onRouteWillBlur  = "onRouteWillBlur" ,
   onRouteDidBlur   = "onRouteDidBlur"  ,
   // Navbar item `onPress` events
-  onPressNavBarBackItem  = "onPressNavBarBackItem" ,
   onPressNavBarLeftItem  = "onPressNavBarLeftItem" ,
   onPressNavBarRightItem = "onPressNavBarRightItem",
 };
@@ -52,7 +51,6 @@ type NavigatorRouteViewProps = {
   getRefToNavigator: () => NavigatorView,
   renderRouteContent: () => ReactElement<RouteContentProps>
   // render nav bar items
-  renderNavBarBackItem ?: () => ReactElement;
   renderNavBarLeftItem ?: () => ReactElement;
   renderNavBarRightItem?: () => ReactElement;
   renderNavBarTitleItem?: () => ReactElement;
@@ -122,7 +120,6 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     const { routeOptions } = this.state;
 
     // check if portal has custom nav bar items
-    const hasNavBarBackItem  = (portalProps?.renderNavBarBackItem  != null);
     const hasNavBarLeftItem  = (portalProps?.renderNavBarLeftItem  != null);
     const hasNavBarRightItem = (portalProps?.renderNavBarRightItem != null);
 
@@ -164,10 +161,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
       // -----------------------------*
       navBarButtonBackItemConfig: (
         routeOptions       ?.navBarButtonBackItemConfig ??
-        routeOptionsDefault?.navBarButtonBackItemConfig ??
-        // custom back bar item was set, so we implicitly/automatically
-        // create a `type: CUSTOM` nav bar item config...
-        (hasNavBarBackItem? { type: 'CUSTOM' } : null)
+        routeOptionsDefault?.navBarButtonBackItemConfig
       ),
       navBarButtonLeftItemsConfig: (
         routeOptions       ?.navBarButtonLeftItemsConfig ??
@@ -278,11 +272,6 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     this._emitter.emit(NavRouteEvents.onRouteDidPush, event);
   };
 
-  /** Handle event: `onPressNavBarBackItem` */
-  private _handleOnPressNavBarBackItem: onPressNavBarItem = (event) => {
-    this._emitter.emit(NavRouteEvents.onPressNavBarBackItem, event);
-  };
-
   /** Handle event: `onPressNavBarLeftItem` */
   private _handleOnPressNavBarLeftItem: onPressNavBarItem = (event) => {
     this._emitter.emit(NavRouteEvents.onPressNavBarLeftItem, event);
@@ -382,7 +371,6 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
           onRouteWillBlur={this._handleOnRouteWillBlur}
           onRouteDidBlur={this._handleOnRouteDidBlur}
           // nav route events: navbar item `onPress`
-          onPressNavBarBackItem={this._handleOnPressNavBarBackItem}
           onPressNavBarLeftItem={this._handleOnPressNavBarLeftItem}
           onPressNavBarRightItem={this._handleOnPressNavBarRightItem}
           // pass down: navbar item config + back button item config
@@ -401,7 +389,6 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
             getRouterRef={this.getRouterRef}
             getPortalRef={this.getPortalRef}
             // render nav bar items
-            renderNavBarBackItem={props.renderNavBarBackItem}
             renderNavBarLeftItem={props.renderNavBarLeftItem}
             renderNavBarRightItem={props.renderNavBarRightItem}
             renderNavBarTitleItem={props.renderNavBarTitleItem}

@@ -16,7 +16,6 @@ class RNINavigatorRouteView: UIView {
   
   struct NativeIDKeys {
     static let RouteContent    = "RouteContent";
-    static let NavBarBackItem  = "NavBarBackItem";
     static let NavBarLeftItem  = "NavBarLeftItem";
     static let NavBarRightItem = "NavBarRightItem";
     static let NavBarTitleItem = "NavBarTitleItem";
@@ -42,13 +41,11 @@ class RNINavigatorRouteView: UIView {
   };
   
   // MARK: Custom navigation bar items...
-  var reactNavBarBackItem : UIView?;
   var reactNavBarLeftItem : UIView?;
   var reactNavBarRightItem: UIView?;
   var reactNavBarTitleItem: UIView?;
   
   // MARK: Touch handlers for custom navigation bar items...
-  private lazy var touchHandlerNavBarBackItem  = RCTTouchHandler(bridge: self.bridge)!;
   private lazy var touchHandlerNavBarLeftItem  = RCTTouchHandler(bridge: self.bridge)!;
   private lazy var touchHandlerNavBarRightItem = RCTTouchHandler(bridge: self.bridge)!;
   private lazy var touchHandlerNavBarTitleItem = RCTTouchHandler(bridge: self.bridge)!;
@@ -82,7 +79,6 @@ class RNINavigatorRouteView: UIView {
   @objc var onRouteDidBlur : RCTBubblingEventBlock?;
   
   /// Fired when the nav bar's back item is pressed and is a custom nav bar item.
-  @objc var onPressNavBarBackItem : RCTBubblingEventBlock?;
   @objc var onPressNavBarLeftItem : RCTBubblingEventBlock?;
   @objc var onPressNavBarRightItem: RCTBubblingEventBlock?;
   
@@ -221,10 +217,6 @@ class RNINavigatorRouteView: UIView {
         guard let dict = self.navBarButtonBackItemConfig else { return nil };
         return RNINavBarItemConfig(dictionary: dict);
       }();
-      
-      if configItem?.type == .CUSTOM {
-        configItem?.customView = self.reactNavBarBackItem;
-      };
       
       self._navBarButtonBackItemConfig = configItem;
       delegate?.didReceiveNavBarButtonBackItem(self.backBarButtonItem);
@@ -381,10 +373,6 @@ class RNINavigatorRouteView: UIView {
         self.reactRouteContent = subview;
         self.touchHandlerRouteContent.attach(to: subview);
         
-      case NativeIDKeys.NavBarBackItem:
-        self.reactNavBarBackItem = subview;
-        self.touchHandlerNavBarBackItem.attach(to: subview);
-        
       case NativeIDKeys.NavBarLeftItem:
         self.reactNavBarLeftItem = subview;
         self.touchHandlerNavBarLeftItem.attach(to: subview);
@@ -412,17 +400,7 @@ extension RNINavigatorRouteView {
     guard let backConfigItem = self._navBarButtonBackItemConfig
     else { return nil };
     
-    return backConfigItem.createUIBarButtonItem { [unowned self] config in
-      #if DEBUG
-      print("LOG - NativeView, RNINavigatorRouteView"
-        + " - onPress: `backBarButtonItem`"
-      );
-      #endif
-      
-      self.onPressNavBarBackItem?(
-        config.makeNavBarItemEventParams()
-      );
-    };
+    return backConfigItem.createUIBarButtonItem(action: nil);
   };
   
   /// Creates a left nav bar button item based on `navBarButtonLeftItemsConfig`
@@ -557,10 +535,6 @@ private extension RNINavigatorRouteView {
       self.touchHandlerNavBarTitleItem.detach(from: titleBarItem);
     };
     
-    if let backBarItem = self.reactNavBarBackItem {
-      self.touchHandlerNavBarBackItem.detach(from: backBarItem);
-    };
-    
     if let leftBarItem = self.reactNavBarLeftItem {
       self.touchHandlerNavBarLeftItem.detach(from: leftBarItem);
     };
@@ -626,7 +600,6 @@ extension RNINavigatorRouteView {
     // "react views" to be removed
     let viewsToRemove = [
       self.reactRouteContent   ,
-      self.reactNavBarBackItem ,
       self.reactNavBarLeftItem ,
       self.reactNavBarRightItem,
       self.reactNavBarTitleItem,
@@ -646,7 +619,6 @@ extension RNINavigatorRouteView {
     
     // remove references to the react views
     self.reactRouteContent    = nil;
-    self.reactNavBarBackItem  = nil;
     self.reactNavBarLeftItem  = nil;
     self.reactNavBarRightItem = nil;
     self.reactNavBarTitleItem = nil;

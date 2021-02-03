@@ -17,7 +17,6 @@ type NavRouteLifeCycleEvents =
 
 /** Route navigation bar item events */
 type NavBarItemEvents = 
-  | (NavRouteEvents.onPressNavBarBackItem  | 'onPressNavBarBackItem' )
   | (NavRouteEvents.onPressNavBarLeftItem  | 'onPressNavBarLeftItem' )
   | (NavRouteEvents.onPressNavBarRightItem | 'onPressNavBarRightItem')
 

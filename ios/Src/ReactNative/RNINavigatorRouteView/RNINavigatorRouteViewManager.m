@@ -25,7 +25,6 @@ RCT_EXPORT_VIEW_PROPERTY(onRouteDidFocus , RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onRouteWillBlur, RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onRouteDidBlur , RCTBubblingEventBlock);
 
-RCT_EXPORT_VIEW_PROPERTY(onPressNavBarBackItem , RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onPressNavBarLeftItem , RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onPressNavBarRightItem, RCTBubblingEventBlock);
 

@@ -167,7 +167,6 @@ class RNINavBarItemConfig {
         case .IMAGE_ASSET : fallthrough;
         case .IMAGE_EMPTY : fallthrough;
         case .IMAGE_SYSTEM:
-          
           return UIBarButtonItem(
             image: self.imageItem?.image,
             style: self.barButtonItemStyle,
