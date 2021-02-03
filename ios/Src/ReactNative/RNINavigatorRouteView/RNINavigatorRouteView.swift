@@ -384,7 +384,6 @@ class RNINavigatorRouteView: UIView {
       case NativeIDKeys.NavBarBackItem:
         self.reactNavBarBackItem = subview;
         self.touchHandlerNavBarBackItem.attach(to: subview);
-        delegate?.didReceiveNavBarButtonTitleView(subview);
         
       case NativeIDKeys.NavBarLeftItem:
         self.reactNavBarLeftItem = subview;

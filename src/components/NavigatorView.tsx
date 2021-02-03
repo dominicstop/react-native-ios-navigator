@@ -50,6 +50,7 @@ export type NavRouteConfigItem = {
   routeOptionsDefault?: RouteOptions;
   renderRoute: (routeItem: NavRouteItem) => ReactElement<RouteContentProps>;
   // render nav bar items
+  renderNavBarBackItem ?: RenderNavBarItem;
   renderNavBarLeftItem ?: RenderNavBarItem;
   renderNavBarRightItem?: RenderNavBarItem;
   renderNavBarTitleItem?: RenderNavBarItem;
@@ -73,6 +74,7 @@ type NavigatorViewProps = {
   navBarAppearance?: NavBarAppearanceConfig | NavBarAppearanceLegacyConfig;
 
   // `RNINavigatorView` - Global/Default Navbar items
+  renderNavBarBackItem ?: RenderNavBarItem;
   renderNavBarLeftItem ?: RenderNavBarItem;
   renderNavBarRightItem?: RenderNavBarItem;
   renderNavBarTitleItem?: RenderNavBarItem;
@@ -462,6 +464,10 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
           getRefToNavigator={this._handleGetRefToNavigator}
           renderRouteContent={() => (
             routeConfig.renderRoute(route)
+          )}
+          renderNavBarBackItem={() => (
+            routeConfig.renderNavBarBackItem?.(route) ??
+            props      .renderNavBarBackItem?.(route)
           )}
           renderNavBarLeftItem={() => (
             routeConfig.renderNavBarLeftItem?.(route) ??
