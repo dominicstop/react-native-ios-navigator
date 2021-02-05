@@ -46,13 +46,13 @@ class HomeRoute extends React.PureComponent<RouteContentProps> {
   });
 
   _handleOnPressItem = async ({item, index}) => {
-    const navRef = this.props.getRefToNavigator();
+    const navigation = this.props.navigation;
 
     if(item.routeKey != RouteKeys.NavigatorTest02){
       //await navRef.setNavigationBarHidden(true, true);
     };
 
-    await navRef.push({routeKey: item.routeKey});
+    await navigation.push({routeKey: item.routeKey});
   };
 
   _renderItem = ({item, index}) => {
@@ -93,46 +93,37 @@ class HomeRoute extends React.PureComponent<RouteContentProps> {
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <NavigatorView
-        ref={r => this.navRef = r}
-        initialRouteKey={RouteKeys.Home}
-        isInteractivePopGestureEnabled={false}
-        navBarPrefersLargeTitles={true}
-        navBarLargeTitleTextAttributes={{
-          color: 'red',
-          fontSize: 32,
-        }}
-        
-        routes={[{
-          routeKey: RouteKeys.Home,
-          routeOptionsDefault: {
-            routeTitle: "Initial Route Title",
-          },
-          renderRoute: () => (
-            <HomeRoute/>
-          ),
-        }, {
-          routeKey: RouteKeys.NavigatorExample01,
-          routeOptionsDefault: {
-            largeTitleDisplayMode: 'never'
-          },
-          renderRoute: () => (
-            <NavigatorExample01/>
-          ),
-        }, {
-          routeKey: RouteKeys.NavigatorTest01,
-          renderRoute: () => (
-            <NavigatorTest01/>
-          ),
-        }, {
-          routeKey: RouteKeys.NavigatorTest02,
-          renderRoute: () => (
-            <NavigatorTest02/>
-          ),
-        }]}
-      />
-    </View>
+    <NavigatorView
+      ref={r => this.navRef = r}
+      style={styles.container}
+      initialRouteKey={RouteKeys.Home}
+      isInteractivePopGestureEnabled={false}
+      navBarPrefersLargeTitles={true}
+      routes={[{
+        routeKey: RouteKeys.Home,
+        routeOptionsDefault: {
+          routeTitle: "Home",
+        },
+        renderRoute: () => (
+          <HomeRoute/>
+        ),
+      }, {
+        routeKey: RouteKeys.NavigatorExample01,
+        renderRoute: () => (
+          <NavigatorExample01/>
+        ),
+      }, {
+        routeKey: RouteKeys.NavigatorTest01,
+        renderRoute: () => (
+          <NavigatorTest01/>
+        ),
+      }, {
+        routeKey: RouteKeys.NavigatorTest02,
+        renderRoute: () => (
+          <NavigatorTest02/>
+        ),
+      }]}
+    />
   );
 }
 

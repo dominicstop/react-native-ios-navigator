@@ -8,6 +8,7 @@ export function NavigatorTest02(props: RouteContentProps){
   const [index, setIndex] = React.useState(0);
 
   useNavBarItemEvents('onPressNavBarLeftItem', false, ({nativeEvent}) => {
+    // @ts-ignore
     alert(`onPressNavBarLeftItem, key: ${nativeEvent.key}`);
   });
 
@@ -46,15 +47,13 @@ export function NavigatorTest02(props: RouteContentProps){
         onPress={() => {
           console.log(index);
           setIndex(prevIndex => prevIndex + 1);
-          const navRef = props.getRefToNavigator();
-          //navRef.forceUpdate();
         }}
       >
         {'The nav bar title should increment every time you touch this text'}
       </Text>
       <TouchableOpacity style={styles.button}
         onPress={() => {
-          const routeRef = props.getRefToRoute();
+          const routeRef = props.navigation.getRefToRoute();
           routeRef.setHidesBackButton(true, true);
         }}
       >
