@@ -280,7 +280,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       });
 
       // forward "push" request to native module
-      await Helpers.promiseWithTimeout((minTimeout + 750),
+      await Helpers.promiseWithTimeout((minTimeout + 1000),
         RNINavigatorViewModule.push(
           findNodeHandle(this.nativeRef),
           routeItem.routeKey, {
@@ -338,7 +338,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       };
 
       // forward "pop" request to native module
-      const result = await Helpers.promiseWithTimeout((minTimeout + 750),
+      const result = await Helpers.promiseWithTimeout((minTimeout + 1000),
         RNINavigatorViewModule.pop(
           findNodeHandle(this.nativeRef), {
             isAnimated: options?.isAnimated ?? true,

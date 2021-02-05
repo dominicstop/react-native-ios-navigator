@@ -64,7 +64,13 @@ export class RouteViewPortal extends React.Component<RouteViewPortalProps> {
     const didRouteOptionsChange = 
       !compareRouteOptions(prevProps.routeOptions, nextProps.routeOptions);
 
-    if(didRouteOptionsChange){
+    const didChangeCustomNavBarItems = (
+      ((prevProps.renderNavBarLeftItem  == null) != (nextProps.renderNavBarLeftItem  == null)) ||
+      ((prevProps.renderNavBarRightItem == null) != (nextProps.renderNavBarRightItem == null)) ||
+      ((prevProps.renderNavBarTitleItem == null) != (nextProps.renderNavBarTitleItem == null))
+    );
+
+    if(didRouteOptionsChange || didChangeCustomNavBarItems){
       this.routerRef.setRouteOptions(nextProps.routeOptions);
     };
   };
