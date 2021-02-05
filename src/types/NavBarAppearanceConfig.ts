@@ -61,7 +61,7 @@ export type NavBarAppearanceLegacyConfig = NavBarAppearanceConfigBase & {
   barStyle?: BarStyle;
 
   /** Display attributes for the bar’s title text. */
-  titleTextStyle?: TextStyle & TextStyleIOS;
+  titleTextAttributes?: TextStyle & TextStyleIOS;
 
   /** Display attributes for the bar's large title text. */
   largeTitleTextAttributes?: TextStyle & TextStyleIOS;
