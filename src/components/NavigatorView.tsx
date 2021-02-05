@@ -179,7 +179,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   };
 
   /** Remove route to `state.activeRoutes` */
-  private removeRoute = async (params?: { routeKey: string, routeIndex: number }) => { 
+  private removeRouteBatched = async (params?: { routeKey: string, routeIndex: number }) => { 
     if(params){
       // To prevent too many state updates, the routes to be removed
       // are queued/grouped, and are removed in batches...
@@ -199,7 +199,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     if(shouldRemove){
       //#region - 🐞 DEBUG 🐛
       LIB_GLOBAL.debugLog && console.log(
-          `LOG/JS - NavigatorView, removeRoute`
+          `LOG/JS - NavigatorView, removeRouteBatched`
         + ` - with routeKey: ${params.routeKey}`
         + ` - routeIndex: ${params.routeIndex}`
         + ` - navStatus: ${this.navStatus}`
@@ -229,12 +229,33 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       // recursively remove routes from `routesToRemove`
       if(this.routesToRemove.length > 0){
-        this.removeRoute();
+        this.removeRouteBatched();
 
       } else {
         this.navStatus = NavStatus.IDLE;
       };
     };
+  };
+
+  /** Remove route to `state.activeRoutes` */
+  private removeRoute = (params: { routeKey: string, routeIndex: number }) => {
+    //#region - 🐞 DEBUG 🐛
+    LIB_GLOBAL.debugLog && console.log(
+        `LOG/JS - NavigatorView, removeRoute`
+      + ` - with routeKey: ${params.routeKey}`
+      + ` - routeIndex: ${params.routeIndex}`
+      + ` - current activeRoutes: ${this.state.activeRoutes.length}`
+    );
+    //#endregion
+
+    // Remove route from `activeRoutes`.
+    // The route will be "removed" from `RNINavigatorView`'s subviews.
+    return Helpers.setStateAsync<NavigatorViewState>(this, (prevState) => ({
+      activeRoutes: prevState.activeRoutes.filter((route) => !(
+        (route.routeIndex == params.routeIndex) &&
+        (route.routeKey   == params.routeKey  )
+      ))
+    }));
   };
 
   private _handleGetRefToNavigator = (): NavigatorView => {
@@ -415,7 +436,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     //    button, or through a swipe back gesture.
     if(nativeEvent.isUserInitiated){
       // A1: Remove route
-      this.removeRoute({
+      this.removeRouteBatched({
         routeKey  : nativeEvent.routeKey,
         routeIndex: nativeEvent.routeIndex
       });
