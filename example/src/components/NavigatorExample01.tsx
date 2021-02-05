@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, Text, SafeAreaView, TouchableOpacity } from 'react-native';
 
-import { NavigatorView, RouteContentProps, RouteViewPortal } from 'react-native-ios-navigator';
+import { NavigatorView, RouteContentProps, RouteViewPortal, useNavRouteLifeCycle } from 'react-native-ios-navigator';
 
 import * as Colors  from '../constants/Colors';
 import * as Helpers from '../functions/Helpers';
@@ -34,16 +34,25 @@ function ExampleRoute(props: ExampleRouteProps){
 
   const routeContainerStyle = { backgroundColor: bgColor };
 
+  useNavRouteLifeCycle('onRouteWillPush' , false, () => console.log('onRouteWillPush' ));
+  useNavRouteLifeCycle('onRouteDidPush'  , false, () => console.log('onRouteDidPush'  ));
+  useNavRouteLifeCycle('onRouteWillPop'  , false, () => console.log('onRouteWillPop'  ));
+  useNavRouteLifeCycle('onRouteDidPop'   , false, () => console.log('onRouteDidPop'   ));
+  useNavRouteLifeCycle('onRouteWillFocus', false, () => console.log('onRouteWillFocus'));
+  useNavRouteLifeCycle('onRouteDidFocus' , false, () => console.log('onRouteDidFocus' ));
+  useNavRouteLifeCycle('onRouteWillBlur' , false, () => console.log('onRouteWillBlur' ));
+  useNavRouteLifeCycle('onRouteDidBlur'  , false, () => console.log('onRouteDidBlur'  ));
+
   return (
     <SafeAreaView style={[styles.routeContainer, routeContainerStyle]}>
       <Text style={styles.textRoute}>
-        {`Debug: ${props.routeKey} - ${props.routeIndex}`}
+        {`Debug: ${props.navigation.routeKey} - ${props.navigation.routeIndex}`}
       </Text>
       <TouchableOpacity
         style={styles.buttonContainer}
         onPress={() => {
-          const navRef = props.getRefToNavigator();
-          navRef.push({routeKey: 'routeA'}, {
+          const nav = props.navigation;
+          nav.push({routeKey: 'routeA'}, {
             transitionConfig: { type: 'SlidePush', duration: 0.3 }
           });
         }}
@@ -55,9 +64,9 @@ function ExampleRoute(props: ExampleRouteProps){
       <TouchableOpacity
         style={styles.buttonContainer}
         onPress={() => {
-          const navRef = props.getRefToNavigator();
-          navRef.push({routeKey: 'routeB', routeOptions: {
-            routeTitle: `Route B${props.routeIndex + 1}`
+          const nav = props.navigation;
+          nav.push({routeKey: 'routeB', routeOptions: {
+            routeTitle: `Route B${nav.routeIndex + 1}`
           }});
         }}
       >
@@ -85,6 +94,10 @@ export function NavigatorExample01() {
           routeKey: 'routeA',
           routeOptionsDefault: {
             routeTitle: "Route A",
+            navBarButtonBackItemConfig: {
+              type: 'IMAGE_SYSTEM',
+              imageValue: 'trash'
+            }
           },
           renderRoute: () => (
             <ExampleRoute/>

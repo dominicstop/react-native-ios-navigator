@@ -381,16 +381,16 @@ function ObjectPropertyDisplay(props: {
       backgroundColor: Colors.INDIGO[100],
       borderRadius: 10,
     }}>
-      {objectKeys.map(objKey => (
+      {objectKeys.map((objKey, index) => (
         <View 
-          key={`container-${objKey}`}
+          key={`container-${objKey}-${index}`}
           style={{
             flexDirection: 'row',
             alignItems: 'center',
           }}
         >
           <Text 
-            key={`label-${objKey}`}
+            key={`label-${objKey}-${index}`}
             style={{
               flex: 1,
               fontSize: 16,
@@ -402,7 +402,7 @@ function ObjectPropertyDisplay(props: {
             {`${objKey}: `}
           </Text>
           <Text 
-            key={`value-${objKey}`}
+            key={`value-${objKey}-${index}`}
               style={{
               fontSize: 16,
               fontWeight: '500',
@@ -578,13 +578,12 @@ function NavBarBackItemsConfig(props){
 
   const backButtonTitleRef = React.useRef();
 
-
   return (
     <ItemContainer>
       <ItemTitle
         title={'Set'}
         titleCode={'navBarButtonBackItemsConfig'}
-        subtitle={`Note: This will configure the next route's back item. Current config for the navbar back item: ${currentConfig.description}`}
+        subtitle={`Note: This will configure the next route's back item. Current config for the navbar back item: ${currentConfig?.description ?? 'N/A'}`}
       />
       <ObjectPropertyDisplay
         object={currentConfig.config}
@@ -695,10 +694,11 @@ function NavBarRightItemsConfig(props){
       <ItemTitle
         title={'Set'}
         titleCode={'navBarButtonRightItemsConfig'}
-        subtitle={`Current config for the nav bar right item: ${currentConfig.description}`}
+        subtitle={`Current config for the nav bar right item: ${currentConfig?.description ?? 'N/A'}`}
       />
-      {currentConfig.config.map(config =>
+      {currentConfig.config.map((config, index) =>
         <ObjectPropertyDisplay
+          key={`config-${index}`}
           object={config}
         />
       )}
@@ -729,10 +729,11 @@ function NavBarLeftItemsConfig(props){
       <ItemTitle
         title={'Set'}
         titleCode={'navBarButtonLeftItemsConfig'}
-        subtitle={`Current config for the nav bar left item: ${currentConfig.description}`}
+        subtitle={`Current config for the nav bar left item: ${currentConfig?.description ?? 'N/A'}`}
       />
-      {currentConfig.config.map(config =>
+      {currentConfig.config.map((config, index) =>
         <ObjectPropertyDisplay
+          key={`config-${index}`}
           object={config}
         />
       )}
