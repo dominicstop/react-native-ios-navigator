@@ -7,6 +7,7 @@ import { NavigatorExample01 } from './components/NavigatorExample01';
 import { NavigatorTest01 } from './components/NavigatorTest01';
 import { NavigatorTest02 } from './components/NavigatorTest02';
 import { NavigatorDemo01 } from './components/NavigatorDemo01';
+import { NavigatorDemo02 } from './components/NavigatorDemo02';
 
 import * as Colors from './constants/Colors';
 
@@ -16,6 +17,7 @@ const RouteKeys = {
   NavigatorTest01: 'NavigatorTest01',
   NavigatorTest02: 'NavigatorTest02',
   NavigatorDemo01: 'NavigatorDemo01',
+  NavigatorDemo02: 'NavigatorDemo02',
 };
 
 const RouteItems = [{ 
@@ -26,6 +28,8 @@ const RouteItems = [{
   routeKey: RouteKeys.NavigatorTest02,
 }, { 
   routeKey: RouteKeys.NavigatorDemo01,
+}, { 
+  routeKey: RouteKeys.NavigatorDemo02,
 },];
 
 
@@ -133,6 +137,14 @@ export default function App() {
         },
         renderRoute: () => (
           <NavigatorDemo01/>
+        ),
+      }, {
+        routeKey: RouteKeys.NavigatorDemo02,
+        routeOptionsDefault: {
+          largeTitleDisplayMode: 'never',
+        },
+        renderRoute: () => (
+          <NavigatorDemo02/>
         ),
       }]}
     />
