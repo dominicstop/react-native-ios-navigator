@@ -91,7 +91,7 @@ class NestTestA2 extends React.PureComponent<{
 
   async componentDidMount(){
     const props = this.props;
-    await Helpers.timeout(500);
+    await Helpers.timeout(750);
 
     await this.pushAndPop(4);
 
@@ -176,7 +176,7 @@ class NestTestA1 extends React.PureComponent<{
 
   async componentDidMount(){
     const props = this.props;
-    await Helpers.timeout(500);
+    await Helpers.timeout(750);
 
     await this.pushAndPop(2);
 
@@ -303,7 +303,7 @@ export class NavigatorDemo01 extends React.Component {
   };
 
   async componentDidMount(){
-    await Helpers.timeout(1000);
+    await Helpers.timeout(750);
 
     await this.pushAndPopBlank(1);
 
