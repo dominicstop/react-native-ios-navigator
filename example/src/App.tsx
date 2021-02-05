@@ -6,6 +6,7 @@ import { NavigatorView, RouteContentProps } from 'react-native-ios-navigator';
 import { NavigatorExample01 } from './components/NavigatorExample01';
 import { NavigatorTest01 } from './components/NavigatorTest01';
 import { NavigatorTest02 } from './components/NavigatorTest02';
+import { NavigatorDemo01 } from './components/NavigatorDemo01';
 
 import * as Colors from './constants/Colors';
 
@@ -14,6 +15,7 @@ const RouteKeys = {
   NavigatorExample01: 'NavigatorExample01',
   NavigatorTest01: 'NavigatorTest01',
   NavigatorTest02: 'NavigatorTest02',
+  NavigatorDemo01: 'NavigatorDemo01',
 };
 
 const RouteItems = [{ 
@@ -22,7 +24,9 @@ const RouteItems = [{
   routeKey: RouteKeys.NavigatorTest01,
 }, {
   routeKey: RouteKeys.NavigatorTest02,
-}];
+}, { 
+  routeKey: RouteKeys.NavigatorDemo01,
+},];
 
 
 class HomeRoute extends React.PureComponent<RouteContentProps> {
@@ -121,6 +125,14 @@ export default function App() {
         routeKey: RouteKeys.NavigatorTest02,
         renderRoute: () => (
           <NavigatorTest02/>
+        ),
+      }, {
+        routeKey: RouteKeys.NavigatorDemo01,
+        routeOptionsDefault: {
+          largeTitleDisplayMode: 'never',
+        },
+        renderRoute: () => (
+          <NavigatorDemo01/>
         ),
       }]}
     />
