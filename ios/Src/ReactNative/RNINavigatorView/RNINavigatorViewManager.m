@@ -22,6 +22,9 @@ RCT_EXPORT_VIEW_PROPERTY(onNavRouteDidPop , RCTBubblingEventBlock);
 // MARK:- Export Props - Values
 // ----------------------------
 
+RCT_EXPORT_VIEW_PROPERTY(navigatorID, NSNumber);
+
+
 // MARK: General/Misc. Config
 RCT_EXPORT_VIEW_PROPERTY(isNavBarTranslucent, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(navBarPrefersLargeTitles, BOOL);

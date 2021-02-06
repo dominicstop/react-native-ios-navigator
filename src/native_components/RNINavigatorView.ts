@@ -3,29 +3,34 @@ import type { NavBarAppearanceConfig, NavBarAppearanceLegacyConfig } from 'src/t
 
 //#region - `RNINavigatorView` Event Payloads
 export type onNavRouteViewAddedPayload = { nativeEvent: {
-  target    : number,
-  routeKey  : string,
-  routeIndex: number
+  target     : number,
+  routeKey   : string,
+  routeIndex : number,
+  navigatorID: number,
 }};
 
 export type onNavRouteWillPopPayload = { nativeEvent: {
-  target         : number,
-  routeKey       : string,
-  routeIndex     : number,
-  isUserInitiated: boolean
+  target         : number ,
+  routeKey       : string ,
+  routeIndex     : number ,
+  navigatorID    : number ,
+  isUserInitiated: boolean,
 }};
 
 export type onNavRouteDidPopPayload = { nativeEvent: {
-  target         : number,
-  routeKey       : string,
-  routeIndex     : number,
-  isUserInitiated: boolean
+  target         : number ,
+  routeKey       : string ,
+  routeIndex     : number ,
+  navigatorID    : number ,
+  isUserInitiated: boolean,
 }};
 //#endregion
 
 /** `RNINavigatorView` native comp. props */
 type RNINavigatorViewProps = {
   style: ViewStyle | Array<ViewStyle>;
+
+  navigatorID: number;
   
   // General/Misc. Config
   navBarPrefersLargeTitles: boolean;

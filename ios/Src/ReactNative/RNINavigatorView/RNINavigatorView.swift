@@ -62,6 +62,8 @@ class RNINavigatorView: UIView {
   // MARK:- RN Exported Props
   // ------------------------
   
+  @objc var navigatorID: NSNumber!;
+  
   @objc var isInteractivePopGestureEnabled: Bool = true {
     willSet {
       self.navigationVC.interactivePopGestureRecognizer?.isEnabled = newValue;
@@ -169,8 +171,9 @@ class RNINavigatorView: UIView {
           
           // send event: notify js navigator that a new route view was added
           self.onNavRouteViewAdded?([
-            "routeKey"  : routeKey,
-            "routeIndex": routeIndex
+            "routeKey"   : routeKey,
+            "routeIndex" : routeIndex,
+            "navigatorID": self.navigatorID!,
           ]);
         };
         
@@ -416,6 +419,7 @@ extension RNINavigatorView: RNINavigatorRouteViewControllerDelegate {
       "routeKey"       : routeKey,
       "routeIndex"     : routeIndex,
       "isUserInitiated": isUserInitiated,
+      "navigatorID"    : self.navigatorID!,
     ]);
   };
   
@@ -436,6 +440,7 @@ extension RNINavigatorView: RNINavigatorRouteViewControllerDelegate {
       "routeKey"       : routeKey,
       "routeIndex"     : routeIndex,
       "isUserInitiated": isUserInitiated,
+      "navigatorID"    : self.navigatorID!,
     ]);
     
     // remove route from `navRoutes`

@@ -89,6 +89,7 @@ type NavigatorViewState = {
 };
 //#endregion
 
+let NAVIGATOR_ID_COUNTER = 0;
 
 export class NavigatorView extends React.PureComponent<NavigatorViewProps, NavigatorViewState> {
   //#region - Property Declarations
@@ -96,6 +97,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
   /** A ref to the `RNINavigatorView` native component. */
   nativeRef: React.Component;
+
+  /** Unique identifier for this navigator */
+  private navigatorID: number;
   
   private navStatus: NavStatus;
   private emitter: EventEmitter<NavEvents>;
@@ -110,6 +114,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     this.navStatus = NavStatus.IDLE_INIT;
     this.emitter = new EventEmitter<NavEvents>();
     this.routesToRemove = [];
+
+    this.navigatorID = NAVIGATOR_ID_COUNTER++;
 
     const initialRoute = props.routes.find(item => (
       item.routeKey == props.initialRouteKey
@@ -411,6 +417,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   //#region - Native Event Handlers
   /** Handler for native event: `onNavRouteViewAdded` */
   private _handleOnNavRouteViewAdded = ({nativeEvent}: onNavRouteViewAddedPayload) => {
+    if(this.navigatorID != nativeEvent.navigatorID) return;
+
     // emit event: nav. route was added to `RNINavigatorView`'s subviews
     this.emitter.emit(NavEvents.onNavRouteViewAdded, {
       target    : nativeEvent.target,
@@ -425,6 +433,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
    * or through a swipe back gesture. */
   // @ts-ignore
   private _handleOnNavRouteWillPop = ({nativeEvent}: onNavRouteWillPopPayload) => {
+    if(this.navigatorID != nativeEvent.navigatorID) return;
+
     if(this.navStatus == NavStatus.NAV_PUSHING){
       this.navStatus = NavStatus.NAV_PUSH_ABORT;
     };
@@ -432,6 +442,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
   /** Handler for native event: `onNavRouteDidPop` */
   private _handleOnNavRouteDidPop = ({nativeEvent}: onNavRouteDidPopPayload) => {
+    if(this.navigatorID != nativeEvent.navigatorID) return;
+
     // A: A route has been removed either through a tap on the "back" 
     //    button, or through a swipe back gesture.
     if(nativeEvent.isUserInitiated){
@@ -440,7 +452,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         routeKey  : nativeEvent.routeKey,
         routeIndex: nativeEvent.routeIndex
       });
-      
     };
   };
   //#endregion
@@ -508,6 +519,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       <RNINavigatorView 
         ref={r => this.nativeRef = r}
         style={[styles.navigatorView, props.style]}
+        navigatorID={this.navigatorID}
         // General config
         isInteractivePopGestureEnabled={props.isInteractivePopGestureEnabled ?? true}
         // Navigation Bar customization
