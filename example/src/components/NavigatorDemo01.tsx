@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, View, Text, SafeAreaView } from 'react-native';
-import { NavigatorView, NavRouteEvents, RouteContentProps } from 'react-native-ios-navigator';
+import { NavigatorView, NavRouteEvents, RouteContentProps, RouteViewEvents } from 'react-native-ios-navigator';
 
 import * as Colors  from '../constants/Colors';
 import * as Helpers from '../functions/Helpers';
@@ -46,14 +46,14 @@ function BlankRoute(props: RouteContentProps & {
 };
 
 //#region - Nest Test A
-class NestTestA2 extends React.PureComponent<{
+class NestTestA2 extends React.PureComponent<RouteContentProps & {
   offsetB?: number;
   onDidFinish?: () => void;
 }> {
   navRefA: NavigatorView;
   navRefB: NavigatorView;
 
-  async pushAndPop(total: number){
+  pushAndPop = async (total: number) => {
     const props = this.props;
 
     const offset = props.offsetB ?? 0;
@@ -89,9 +89,8 @@ class NestTestA2 extends React.PureComponent<{
     };
   };
 
-  async componentDidMount(){
+  _handleOnRouteDidPush = async () => {
     const props = this.props;
-    await Helpers.timeout(750);
 
     await this.pushAndPop(4);
 
@@ -101,47 +100,51 @@ class NestTestA2 extends React.PureComponent<{
     ]);
 
     await this.pushAndPop(1);
-
     props.onDidFinish?.();
   };
 
   render(){
     const props = this.props;
     return(
-      <SafeAreaView style={styles.rowContainer}>
-        <NavigatorView
-          ref={r => this.navRefA = r}
-          initialRouteKey={'BlankRoute'}
-          routes={[{
-            routeKey: 'BlankRoute',
-            routeOptionsDefault: {
-              routeTitle: "Left",
-            },
-            renderRoute: () => (
-              <BlankRoute
-                offsetA={0}
-                offsetB={props.offsetB}
-              />
-            ),
-          }]}
+      <React.Fragment>
+        <RouteViewEvents
+          onRouteDidPush={this._handleOnRouteDidPush}
         />
-        <NavigatorView
-          ref={r => this.navRefB = r}
-          initialRouteKey={'BlankRoute'}
-          routes={[{
-            routeKey: 'BlankRoute',
-            routeOptionsDefault: {
-              routeTitle: "Right",
-            },
-            renderRoute: () => (
-              <BlankRoute
-                offsetA={1}
-                offsetB={props.offsetB}
-              />
-            ),
-          }]}
-        />
-      </SafeAreaView>
+        <SafeAreaView style={styles.rowContainer}>
+          <NavigatorView
+            ref={r => this.navRefA = r}
+            initialRouteKey={'BlankRoute'}
+            routes={[{
+              routeKey: 'BlankRoute',
+              routeOptionsDefault: {
+                routeTitle: "Left",
+              },
+              renderRoute: () => (
+                <BlankRoute
+                  offsetA={0}
+                  offsetB={props.offsetB}
+                />
+              ),
+            }]}
+          />
+          <NavigatorView
+            ref={r => this.navRefB = r}
+            initialRouteKey={'BlankRoute'}
+            routes={[{
+              routeKey: 'BlankRoute',
+              routeOptionsDefault: {
+                routeTitle: "Right",
+              },
+              renderRoute: () => (
+                <BlankRoute
+                  offsetA={1}
+                  offsetB={props.offsetB}
+                />
+              ),
+            }]}
+          />
+        </SafeAreaView>
+      </React.Fragment>
     );
   };
 };
@@ -154,7 +157,7 @@ class NestTestA1 extends React.PureComponent<{
 
   callback: () => void;
 
-  async pushAndPop(total: number){
+  pushAndPop = async (total: number) => {
     for (let i = 0; i < total; i++) {
       await Promise.all([
         this.navRefA.push({routeKey: 'BlankRoute', routeOptions: {
@@ -174,9 +177,8 @@ class NestTestA1 extends React.PureComponent<{
     };
   };
 
-  async componentDidMount(){
+  _handleOnRouteDidPush = async () => {
     const props = this.props;
-    await Helpers.timeout(750);
 
     await this.pushAndPop(2);
 
@@ -217,64 +219,69 @@ class NestTestA1 extends React.PureComponent<{
 
   render(){
     return(
-      <SafeAreaView style={styles.rootContainer}>
-        <NavigatorView
-          ref={r => this.navRefA = r}
-          initialRouteKey={'BlankRoute'}
-          routes={[{
-            routeKey: 'BlankRoute',
-            routeOptionsDefault: {
-              routeTitle: "Top",
-            },
-            renderRoute: () => (
-              <BlankRoute
-                offsetA={0}
-              />
-            ),
-          }, {
-            routeKey: 'NestTestA2',
-            routeOptionsDefault: {
-              routeTitle: "A2",
-            },
-            renderRoute: () => (
-              <NestTestA2
-                offsetB={0}
-                onDidFinish={() => {
-                  this.callback?.();
-                }}
-              />
-            ),
-          }]}
+      <React.Fragment>
+        <RouteViewEvents
+          onRouteDidPush={this._handleOnRouteDidPush}
         />
-        <NavigatorView
-          ref={r => this.navRefB = r}
-          initialRouteKey={'BlankRoute'}
-          routes={[{
-            routeKey: 'BlankRoute',
-            routeOptionsDefault: {
-              routeTitle: "Bottom",
-            },
-            renderRoute: () => (
-              <BlankRoute
-                offsetA={1}
-              />
-            ),
-          }, {
-            routeKey: 'NestTestA2',
-            routeOptionsDefault: {
-              routeTitle: "A2",
-            },
-            renderRoute: () => (
-              <NestTestA2
-                offsetB={2}
-                onDidFinish={() => {
-                  this.callback?.();
-                }}
-              />
-            ),
-          }]}
-        />
-      </SafeAreaView>
+        <SafeAreaView style={styles.rootContainer}>
+          <NavigatorView
+            ref={r => this.navRefA = r}
+            initialRouteKey={'BlankRoute'}
+            routes={[{
+              routeKey: 'BlankRoute',
+              routeOptionsDefault: {
+                routeTitle: "Top",
+              },
+              renderRoute: () => (
+                <BlankRoute
+                  offsetA={0}
+                />
+              ),
+            }, {
+              routeKey: 'NestTestA2',
+              routeOptionsDefault: {
+                routeTitle: "A2",
+              },
+              renderRoute: () => (
+                <NestTestA2
+                  offsetB={0}
+                  onDidFinish={() => {
+                    this.callback?.();
+                  }}
+                />
+              ),
+            }]}
+          />
+          <NavigatorView
+            ref={r => this.navRefB = r}
+            initialRouteKey={'BlankRoute'}
+            routes={[{
+              routeKey: 'BlankRoute',
+              routeOptionsDefault: {
+                routeTitle: "Bottom",
+              },
+              renderRoute: () => (
+                <BlankRoute
+                  offsetA={1}
+                />
+              ),
+            }, {
+              routeKey: 'NestTestA2',
+              routeOptionsDefault: {
+                routeTitle: "A2",
+              },
+              renderRoute: () => (
+                <NestTestA2
+                  offsetB={2}
+                  onDidFinish={() => {
+                    this.callback?.();
+                  }}
+                />
+              ),
+            }]}
+          />
+        </SafeAreaView>
+      </React.Fragment>
     );
   };
 };
@@ -288,7 +295,7 @@ export class NavigatorDemo01 extends React.Component {
   navRef: NavigatorView;
   callbackA1: () => void;
 
-  async pushAndPopBlank(total: number){
+  pushAndPopBlank = async (total: number) => {
     for (let i = 0; i < total; i++) {
       await Promise.all([
         this.navRef.push({routeKey: 'BlankRoute', routeOptions: {
@@ -302,7 +309,7 @@ export class NavigatorDemo01 extends React.Component {
     };
   };
 
-  async componentDidMount(){
+  _handleOnRouteDidPush = async () => {
     await Helpers.timeout(750);
 
     await this.pushAndPopBlank(1);
@@ -327,33 +334,38 @@ export class NavigatorDemo01 extends React.Component {
 
   render(){
     return(
-      <SafeAreaView style={styles.rootContainer}>
-        <NavigatorView
-          ref={r => this.navRef = r}
-          initialRouteKey={'BlankRoute'}
-          routes={[{
-            routeKey: 'BlankRoute',
-            routeOptionsDefault: {
-              routeTitle: "Start",
-            },
-            renderRoute: () => (
-              <BlankRoute/>
-            ),
-          }, {
-            routeKey: 'NestTestA1',
-            routeOptionsDefault: {
-              routeTitle: "A",
-            },
-            renderRoute: () => (
-              <NestTestA1
-                onDidFinish={() => {
-                  this.callbackA1?.();
-                }}
-              />
-            ),
-          }]}
+      <React.Fragment>
+        <RouteViewEvents
+          onRouteDidPush={this._handleOnRouteDidPush}
         />
-      </SafeAreaView>
+        <SafeAreaView style={styles.rootContainer}>
+          <NavigatorView
+            ref={r => this.navRef = r}
+            initialRouteKey={'BlankRoute'}
+            routes={[{
+              routeKey: 'BlankRoute',
+              routeOptionsDefault: {
+                routeTitle: "Start",
+              },
+              renderRoute: () => (
+                <BlankRoute/>
+              ),
+            }, {
+              routeKey: 'NestTestA1',
+              routeOptionsDefault: {
+                routeTitle: "A",
+              },
+              renderRoute: () => (
+                <NestTestA1
+                  onDidFinish={() => {
+                    this.callbackA1?.();
+                  }}
+                />
+              ),
+            }]}
+          />
+        </SafeAreaView>
+      </React.Fragment>
     );
   };
 };

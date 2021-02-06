@@ -31,10 +31,10 @@ export function NavigatorTest02(props: RouteContentProps){
             </Text>
           </TouchableOpacity>
         )}
-        renderNavBarTitleItem={() => (
+        renderNavBarTitleItem={({routeOptions}) => (
           <View style={styles.navBarTitleContainer}>
             <Text style={styles.navBarTitle}>
-              {`Title: ${index}`}
+              {routeOptions.routeTitle ?? 'N/A'}
             </Text>
           </View>
         )}
@@ -99,6 +99,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 10,
+    backgroundColor: Colors.PURPLE.A700
   },
   navBarTitle: {
     color: 'white',
