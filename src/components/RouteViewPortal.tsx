@@ -1,4 +1,3 @@
-
 import React, { ReactElement } from 'react';
 
 import type { NavigatorView } from './NavigatorView';
@@ -24,6 +23,7 @@ type RouteViewPortalRender = (params: {
 
 type RouteViewPortalProps = {
   routeOptions?: RouteOptions;
+  
   // render props
   renderNavBarLeftItem ?: RouteViewPortalRender;
   renderNavBarRightItem?: RouteViewPortalRender;
@@ -54,8 +54,14 @@ export class RouteViewPortal extends React.Component<RouteViewPortalProps> {
   context: NavRouteViewContextProps;
   routerRef: NavigatorRouteView;
   
-  constructor(props: RouteViewPortalProps){
+  constructor(props: RouteViewPortalProps, context: NavRouteViewContextProps){
     super(props);
+
+    const routerRef = context.getRouterRef();
+    this.routerRef = routerRef;
+
+    routerRef.setRouteViewPortalRef(this);
+    routerRef.setRouteOptions(props.routeOptions);
   };
 
   componentDidUpdate(prevProps: RouteViewPortalProps){
@@ -73,17 +79,6 @@ export class RouteViewPortal extends React.Component<RouteViewPortalProps> {
     if(didRouteOptionsChange || didChangeCustomNavBarItems){
       this.routerRef.setRouteOptions(nextProps.routeOptions);
     };
-  };
-
-  async componentDidMount(){
-    const props = this.props;
-    const context = this.context;
-
-    const routerRef = context.getRouterRef();
-    routerRef.setRouteViewPortalRef(this);
-    routerRef.setRouteOptions(props.routeOptions);
-
-    this.routerRef = routerRef;
   };
 
   render(){
