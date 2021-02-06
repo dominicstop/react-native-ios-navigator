@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import { StyleSheet, findNodeHandle, ViewStyle, View, Text } from 'react-native';
 
-import { RNIWrapperView } from '../native_components/RNIWrapperViewManager';
+import { RNIWrapperView } from '../native_components/RNIWrapperView';
 import { RNINavigatorView } from '../native_components/RNINavigatorView';
 import { RNINavigatorViewModule } from '../native_modules/RNINavigatorViewModule';
 
