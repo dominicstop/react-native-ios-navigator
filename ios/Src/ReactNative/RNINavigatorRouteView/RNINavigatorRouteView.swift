@@ -50,6 +50,8 @@ class RNINavigatorRouteView: UIView {
   private lazy var touchHandlerNavBarRightItem = RCTTouchHandler(bridge: self.bridge)!;
   private lazy var touchHandlerNavBarTitleItem = RCTTouchHandler(bridge: self.bridge)!;
   
+  private var didTriggerCleanup = false;
+  
   // ------------------------------
   // MARK:- RN Exported Event Props
   // ------------------------------
@@ -598,6 +600,9 @@ extension RNINavigatorRouteView {
   /// Once we're done w/ this "route view" (e.g. it has been popped or removed),
   /// then we need to cleanup to prevent this instance from leaking.
   func cleanup(){
+    guard !self.didTriggerCleanup else { return };
+    self.didTriggerCleanup = true;
+    
     // "react views" to be removed
     let viewsToRemove = [
       self.reactRouteContent   ,

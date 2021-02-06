@@ -45,6 +45,8 @@ class RNIUtilities {
     func removeView(_ v: UIView){
       /// if this really is a "react view" then it should have a `reactTag`
       if let reactTag = v.reactTag {
+        v.removeFromSuperview();
+        
         /// remove this "react view" from `_viewRegistry`
         viewRegistry.removeObject(forKey: reactTag);
         
