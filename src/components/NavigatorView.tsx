@@ -277,8 +277,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       throw new Error("`NavigatorView` failed to do: `push`: Invalid `routeKey`");
     };
     
-    // TEMP, replace with queue - skip if nav. is busy
-    if(NavigatorViewUtils.isNavStateBusy(this.navStatus)) return;
+    // TODO: Impl. queue if nav. is busy
 
     try {
       // update nav status to busy
@@ -342,8 +341,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   };
 
   public pop: NavCommandPop = async (options) => {
-    // TEMP, replace with queue - skip if nav. is busy
-    if(NavigatorViewUtils.isNavStateBusy(this.navStatus)) return;
+    // TODO: Impl. queue if nav. is busy
 
     try {
       // update nav status to busy
@@ -387,6 +385,13 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       this.navStatus = NavStatus.IDLE;
 
     } catch(error){
+      //#region - 🐞 DEBUG 🐛
+      LIB_GLOBAL.debugLog && console.log(
+        `LOG/JS - NavigatorView, pop - error message: ${error}`
+        + ` - NavStatus: ${this.navStatus}`
+      );
+      //#endregion
+
       this.navStatus = NavStatus.IDLE_ERROR;
       throw new Error("`NavigatorView` failed to do: `pop`");
     };
