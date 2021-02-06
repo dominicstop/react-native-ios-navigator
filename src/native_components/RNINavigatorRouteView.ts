@@ -21,30 +21,37 @@ export type RouteTransitionPopConfig = RouteTransitionConfigBase & {
 
 export type onRoutePushEvent = (event: {
   nativeEvent: { 
-    routeKey: string,
-    routeIndex: number,
-    isAnimated: boolean
+    routeID   : number ,
+    routeKey  : string ,
+    routeIndex: number ,
+    isAnimated: boolean,
   }
 }) => void;
 
 export type onRouteFocusBlurEvent = (event: {
   nativeEvent: { 
-    routeKey: string,
-    routeIndex: number,
-    isAnimated: boolean
+    routeID   : number ,
+    routeKey  : string ,
+    routeIndex: number ,
+    isAnimated: boolean,
   }
 }) => void;
 
 export type onRoutePopEvent = (event: {
   nativeEvent: { 
-    routeKey: string,
-    routeIndex: number,
-    isUserInitiated: boolean
+    routeID        : number ,
+    routeKey       : string ,
+    routeIndex     : number ,
+    isUserInitiated: boolean,
   }
 }) => void;
 
 export type onPressNavBarItem = (event: {
-  nativeEvent: { key: string, type: string }
+  nativeEvent: { 
+    routeID: number,
+    key    : string, 
+    type   : string, 
+  }
 }) => void;
 
 export type BackButtonDisplayMode =
@@ -65,9 +72,11 @@ export type LargeTitleDisplayMode =
 
 export type RNINavigatorRouteViewProps = {
   style: ViewStyle;
+
+  routeID: number;
+  nativeID: string;
   routeKey: string;
   routeIndex: number;
-  nativeID: String;
 
   // Transition Config
   transitionConfigPush?: RouteTransitionPushConfig;

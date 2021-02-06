@@ -32,6 +32,7 @@ RCT_EXPORT_VIEW_PROPERTY(onPressNavBarRightItem, RCTBubblingEventBlock);
 // MARK:- Export Props - Values
 // ----------------------------
 
+RCT_EXPORT_VIEW_PROPERTY(routeID   , NSNumber);
 RCT_EXPORT_VIEW_PROPERTY(routeKey  , NSString);
 RCT_EXPORT_VIEW_PROPERTY(routeIndex, NSNumber);
 

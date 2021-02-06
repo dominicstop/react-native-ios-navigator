@@ -62,11 +62,16 @@ type NavigatorRouteViewState = {
 };
 //#endregion
 
+let ROUTE_ID_COUNTER = 0;
 
 export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewProps, NavigatorRouteViewState> {
   //#region - Property Declarations
   state: NavigatorRouteViewState;
   routeContentRef: React.Component<RouteContentProps>;
+
+  /** Unique identifier for this navigator */
+  private routeID: number;
+  
   // references
   private _emitter              : EventEmitter<NavRouteEvents>;
   private _nativeRef            : React.Component<RNINavigatorRouteViewProps>;
@@ -78,6 +83,8 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
 
   constructor(props: NavigatorRouteViewProps){
     super(props);
+
+    this.routeID = ROUTE_ID_COUNTER++;
 
     this._emitter = new EventEmitter<NavRouteEvents>();
     this._navigatorRef = props.getRefToNavigator();
@@ -251,51 +258,61 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
 
   /** Handle event: `onRouteWillPop` */
   private _handleOnNavRouteWillPop: onRoutePopEvent = (event) => {
+    if(this.routeID != event.nativeEvent.routeID) return;
     this._emitter.emit(NavRouteEvents.onRouteWillPop, event);
   };
 
   /** Handle event: `onRouteDidPop` */
   private _handleOnNavRouteDidPop: onRoutePopEvent = (event) => {
+    if(this.routeID != event.nativeEvent.routeID) return;
     this._emitter.emit(NavRouteEvents.onRouteDidPop, event);
   };
 
   /** Handle event: `onRouteWillPush` */
   private _handleOnNavRouteWillPush: onRoutePushEvent = (event) => {
+    if(this.routeID != event.nativeEvent.routeID) return;
     this._emitter.emit(NavRouteEvents.onRouteWillPush, event);
   };
 
   /** Handle event: `onRouteDidPush` */
   private _handleOnNavRouteDidPush: onRoutePushEvent = (event) => {
+    if(this.routeID != event.nativeEvent.routeID) return;
     this._emitter.emit(NavRouteEvents.onRouteDidPush, event);
   };
 
   /** Handle event: `onPressNavBarLeftItem` */
   private _handleOnPressNavBarLeftItem: onPressNavBarItem = (event) => {
+    if(this.routeID != event.nativeEvent.routeID) return;
     this._emitter.emit(NavRouteEvents.onPressNavBarLeftItem, event);
   };
 
   /** Handle event: `onPressNavBarRightItem` */
   private _handleOnPressNavBarRightItem: onPressNavBarItem = (event) => {
+    if(this.routeID != event.nativeEvent.routeID) return;
     this._emitter.emit(NavRouteEvents.onPressNavBarRightItem, event);
   };
 
   /** Handle event: `onRouteWillFocus` */
   private _handleOnRouteWillFocus: onRouteFocusBlurEvent = (event)  => {
+    if(this.routeID != event.nativeEvent.routeID) return;
     this._emitter.emit(NavRouteEvents.onRouteWillFocus, event);
   };
 
   /** Handle event: `onRouteDidFocus` */
   private _handleOnRouteDidFocus: onRouteFocusBlurEvent = (event)  => {
+    if(this.routeID != event.nativeEvent.routeID) return;
     this._emitter.emit(NavRouteEvents.onRouteDidFocus, event);
   };
 
   /** Handle event: `onRouteWillBlur` */
   private _handleOnRouteWillBlur: onRouteFocusBlurEvent = (event)  => {
+    if(this.routeID != event.nativeEvent.routeID) return;
     this._emitter.emit(NavRouteEvents.onRouteWillBlur, event);
   };
 
   /** Handle event: `onRouteDidBlur` */
   private _handleOnRouteDidBlur: onRouteFocusBlurEvent = (event)  => {
+    if(this.routeID != event.nativeEvent.routeID) return;
     this._emitter.emit(NavRouteEvents.onRouteDidBlur, event);
   };
 
@@ -351,6 +368,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
         <RNINavigatorRouteView
           style={styles.navigatorRouteView}
           ref={r => this._nativeRef = r}
+          routeID={this.routeID}
           nativeID={NativeIDKeys.NavRouteItem}
           // route config
           routeKey={props.routeKey}

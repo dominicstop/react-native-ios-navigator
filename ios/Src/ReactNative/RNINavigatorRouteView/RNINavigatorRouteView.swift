@@ -100,7 +100,9 @@ class RNINavigatorRouteView: UIView {
   /// * TODO: However there are props where a `nil` is invalid (i.e. a value of
   ///   `nil` must **never** occur), so we need to mark the property as
   ///   "explicitly unwrapped" so that the app crashes because it's a fatal error.
-    
+  
+  @objc var routeID: NSNumber!;
+  
   @objc var routeKey: NSString? {
     didSet {
       guard let routeKey = self.routeKey else { return };
@@ -417,9 +419,10 @@ extension RNINavigatorRouteView {
         );
         #endif
         
-        self.onPressNavBarLeftItem?(
-          config.makeNavBarItemEventParams()
-        );
+        var params = config.makeNavBarItemEventParams();
+        params["routeID"] = self.routeID!;
+        
+        self.onPressNavBarLeftItem?(params);
       };
     };
   };
@@ -437,9 +440,10 @@ extension RNINavigatorRouteView {
         );
         #endif
         
-        self.onPressNavBarRightItem?(
-          config.makeNavBarItemEventParams()
-        );
+        var params = config.makeNavBarItemEventParams();
+        params["routeID"] = self.routeID!;
+        
+        self.onPressNavBarRightItem?(params);
       };
     };
   };
@@ -509,20 +513,16 @@ private extension RNINavigatorRouteView {
   
   /// This creates a "base" dictionary that we can pass to "event props"
   func createEventPayload() -> Dictionary<String, Any> {
-    var dict: Dictionary<String, Any> = [:];
+    var dict: Dictionary<String, Any> = [
+      "routeID"   : self.routeID!,
+      "routeKey"  : self.routeKey!,
+      "routeIndex": self.routeIndex!,
+    ];
     
     if let reactTag = self.reactTag {
       dict["reactTag"] = reactTag;
     };
-    
-    if let routeKey = self.routeKey {
-      dict["routeKey"] = routeKey;
-    };
-    
-    if let routeIndex = self.routeIndex {
-      dict["routeIndex"] = routeIndex;
-    };
-    
+
     return dict;
   };
   
