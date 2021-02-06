@@ -383,6 +383,7 @@ class RNINavigatorRouteView: UIView {
         
       case NativeIDKeys.NavBarTitleItem:
         self.reactNavBarTitleItem = subview;
+        self.delegate?.didReceiveNavBarButtonTitleView(subview);
         self.touchHandlerNavBarTitleItem.attach(to: subview);
         
       default: break;

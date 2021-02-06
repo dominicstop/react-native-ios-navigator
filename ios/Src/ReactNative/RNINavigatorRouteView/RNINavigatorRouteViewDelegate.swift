@@ -36,7 +36,7 @@ protocol RNINavigatorRouteViewDelegate: AnyObject {
   // MARK: Receive Props: Navbar Items
   // ---------------------------------
   
-  func didReceiveNavBarButtonTitleView(_ titleView: UIView);
+  func didReceiveNavBarButtonTitleView(_ titleView: UIView?);
   
   func didReceiveNavBarButtonBackItem(_ item: UIBarButtonItem?);
   

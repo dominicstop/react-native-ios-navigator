@@ -271,7 +271,7 @@ extension RNINavigatorRouteViewController: RNINavigatorRouteViewDelegate {
   // MARK: Receive Props: Navbar Items
   // ---------------------------------
   
-  func didReceiveNavBarButtonTitleView(_ titleView: UIView) {
+  func didReceiveNavBarButtonTitleView(_ titleView: UIView?) {
     self.navigationItem.titleView = titleView;
   };
   
