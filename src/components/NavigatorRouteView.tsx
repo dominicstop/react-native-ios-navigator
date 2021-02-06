@@ -17,7 +17,6 @@ import { NavRouteViewContext } from '../context/NavRouteViewContext';
 import { NativeIDKeys } from '../constants/LibraryConstants';
 
 
-
 //#region - Type Definitions
 /** Event emitter keys for `NavigatorRouteView` */
 export enum NavRouteEvents {
@@ -58,7 +57,6 @@ type NavigatorRouteViewProps = {
 
 /** `NavigatorView` comp. state */
 type NavigatorRouteViewState = {
-  isMounted: boolean;
   routeOptions: RouteOptions;
   hasRoutePortal: boolean;
 };
@@ -85,7 +83,6 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     this._navigatorRef = props.getRefToNavigator();
 
     this.state = {
-      isMounted: true,
       hasRoutePortal: false,
       routeOptions: {},
     };
@@ -343,7 +340,6 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     const props = this.props;
     const state = this.state;
 
-    if(!state.isMounted) return null;
     const routeOptions = this.getRouteOptions();
 
     return(
