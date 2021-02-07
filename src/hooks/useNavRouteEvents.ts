@@ -22,7 +22,6 @@ type NavBarItemEvents =
 
 function useNavRouteEvents(
   eventName: NavRouteLifeCycleEvents | NavBarItemEvents,
-  once: boolean, 
   handler: Function
 ){
   const { getEmitterRef } = useContext(NavRouteViewContext);
@@ -44,35 +43,26 @@ function useNavRouteEvents(
     // create event listener that calls handler function stored in ref
     const eventListener = (params) => savedHandler.current(params);
 
-    if(once){
-      emitterRef.once(eventName, eventListener);
-
-    } else {
-      // subscribe to events
-      emitterRef.addListener(eventName, eventListener);
-    };
+    // subscribe to events
+    emitterRef.addListener(eventName, eventListener);
 
     return () => {
-      if(!once){
-        // remove event listener on cleanup
-        emitterRef.removeListener(eventName, eventListener);
-      };
+      // remove event listener on cleanup
+      emitterRef.removeListener(eventName, eventListener);
     };
   });
 };
 
 export function useNavRouteLifeCycle(
   eventName: NavRouteLifeCycleEvents, 
-  once: boolean, 
   handler: onRoutePushEvent | onRoutePopEvent
 ){
-  useNavRouteEvents(eventName, once, handler);
+  useNavRouteEvents(eventName, handler);
 };
 
 export function useNavBarItemEvents(
   eventName: NavBarItemEvents, 
-  once: boolean, 
   handler: onPressNavBarItem
 ){
-  useNavRouteEvents(eventName, once, handler);
+  useNavRouteEvents(eventName, handler);
 };
