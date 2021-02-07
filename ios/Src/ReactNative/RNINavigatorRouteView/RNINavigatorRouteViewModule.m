@@ -15,7 +15,7 @@ RCT_EXTERN_METHOD(setHidesBackButton: (nonnull NSNumber)node
                   isHidden: (nonnull BOOL) isHidden
                   animated: (nonnull BOOL) animated
                   // promise blocks -----------------------
-                  resolve: (RCTPromiseResolveBlock)resolve
-                  reject : (RCTPromiseRejectBlock )reject);
+                  resolve: (RCTPromiseResolveBlock *)resolve
+                  reject : (RCTPromiseRejectBlock  *)reject);
 
 @end
