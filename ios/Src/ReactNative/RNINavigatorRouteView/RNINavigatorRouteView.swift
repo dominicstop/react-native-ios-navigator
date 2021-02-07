@@ -219,11 +219,11 @@ class RNINavigatorRouteView: UIView {
         return RNINavBarItemConfig(dictionary: dict);
       }();
       
-      // extract `applyToPrevConfig` from back item config,
+      // extract `applyToPrevBackConfig` from back item config,
       // note: this property only exist for `navBarButtonBackItemConfig`
-      let applyToPrevConfig: Bool = {
+      let applyToPrevBackConfig: Bool = {
         guard let dict = self.navBarButtonBackItemConfig,
-              let flag = dict["applyToPrevConfig"] as? Bool
+              let flag = dict["applyToPrevBackConfig"] as? Bool
         else { return false };
         
         self.applyToPrevBackConfig = flag;
@@ -231,7 +231,7 @@ class RNINavigatorRouteView: UIView {
       }();
       
       self._navBarButtonBackItemConfig = configItem;
-      delegate?.didReceiveNavBarButtonBackItem(self.backBarButtonItem, applyToPrevConfig);
+      delegate?.didReceiveNavBarButtonBackItem(self.backBarButtonItem, applyToPrevBackConfig);
     }
   };
   

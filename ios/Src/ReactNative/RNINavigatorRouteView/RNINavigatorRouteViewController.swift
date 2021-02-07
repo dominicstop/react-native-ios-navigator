@@ -282,8 +282,8 @@ extension RNINavigatorRouteViewController: RNINavigatorRouteViewDelegate {
     self.navigationItem.titleView = titleView;
   };
   
-  func didReceiveNavBarButtonBackItem(_ item: UIBarButtonItem?, _ applyToPrevConfig: Bool) {
-    if applyToPrevConfig {
+  func didReceiveNavBarButtonBackItem(_ item: UIBarButtonItem?, _ applyToPrevBackConfig: Bool) {
+    if applyToPrevBackConfig {
       guard let navBarItems = self.navigationController?.navigationBar.items,
             navBarItems.count > 1
       else { return };
