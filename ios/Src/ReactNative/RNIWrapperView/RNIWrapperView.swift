@@ -21,9 +21,12 @@ class RNIWrapperView: UIView {
   
   private(set) var didTriggerCleanup = false;
   
-  /// Determines whether or not `cleanup` is automatically called on JS comp.
-  /// unmount, or when this view is removed from the view hierarchy.
-  var autoCleanup = true;
+  /// Determines whether `cleanup` is auto called on JS comp. unmount
+  var autoCleanupOnJSUnmount = true;
+  
+  /// Determines whether `cleanup` is called when this view is removed from the
+  /// view hierarchy (i.e. the window ref. becomes nil).
+  var autoCleanupOnWindowNil = false;
   
   private var touchHandler: RCTTouchHandler!;
   
@@ -44,7 +47,7 @@ class RNIWrapperView: UIView {
   };
   
   override func didMoveToWindow() {
-    if self.window == nil && self.autoCleanup {
+    if self.window == nil && self.autoCleanupOnWindowNil {
       self.cleanup();
     };
   };
@@ -65,7 +68,7 @@ class RNIWrapperView: UIView {
   };
   
   func onJSComponentWillUnmount(isManuallyTriggered: Bool){
-    if self.window != nil && self.autoCleanup {
+    if self.window != nil && self.autoCleanupOnJSUnmount {
       self.cleanup();
     };
     
