@@ -39,6 +39,19 @@ export interface RouteContentProps {
   navigation?: NavigationObject;
 };
 
+enum RouteStatus {
+  INIT           = "INIT"          ,
+  ROUTE_PUSHING  = "ROUTE_PUSHING" ,
+  ROUTE_PUSHED   = "ROUTE_PUSHED"  ,
+  ROUTE_POPPING  = "ROUTE_POPPING" ,
+  ROUTE_POPPED   = "ROUTE_POPPED"  ,
+  ROUTE_BLURRING = "ROUTE_BLURRING",
+  ROUTE_BLURRED  = "ROUTE_BLURRED" ,
+  ROUTE_FOCUSING = "ROUTE_FOCUSING",
+  ROUTE_FOCUSED  = "ROUTE_FOCUSED" ,
+  UNMOUNTED      = "UNMOUNTED"     ,
+};
+
 type NavigatorRouteViewProps = {
   routeKey: string;
   routeIndex: number;
@@ -69,6 +82,8 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
   state: NavigatorRouteViewState;
   routeContentRef: React.Component<RouteContentProps>;
 
+  routeStatus: RouteStatus;
+
   /** Unique identifier for this navigator */
   private routeID: number;
   
@@ -85,6 +100,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     super(props);
 
     this.routeID = ROUTE_ID_COUNTER++;
+    this.routeStatus = RouteStatus.IDLE;
 
     this._emitter = new EventEmitter<NavRouteEvents>();
     this._navigatorRef = props.getRefToNavigator();
@@ -95,7 +111,11 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     };
   };
 
-  //#region - Public Functions
+  componentWillUnmount(){
+    this.routeStatus = RouteStatus.UNMOUNTED;
+  };
+
+  //#region - "get ref" Functions
   public getRefToNavigator = () => {
     return this.props.getRefToNavigator();
   };
@@ -115,7 +135,10 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
   public getNavBarItemsWrapperRef = () => {
     return this._navBarItemsWrapperRef;
   };
+  //#endregion
 
+  //#region - Public Functions
+  /** Combines all the route configs into one */
   public getRouteOptions: (() => RouteOptions) = () => {
     const props = this.props;
     const portalProps = this._routeViewPortalRef?.props;
@@ -222,6 +245,8 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
   };
 
   public setHidesBackButton = async (isHidden: boolean, animated: boolean) => {
+    if(!RouteViewUtils.isRouteReady(this.routeStatus)) return;
+
     try {
       await Helpers.promiseWithTimeout(1000,
         RNINavigatorRouteViewModule.setHidesBackButton(
@@ -238,7 +263,9 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
       );
       //#endregion
 
-      throw new Error("`NavigatorRouteView` failed to do: `setHidesBackButton`");
+      if(!RouteViewUtils.isRouteFocusingOrFocused(this.routeStatus)){
+        throw new Error(" `NavigatorRouteView` failed to do: `setHidesBackButton`");
+      };
     };
   };
   // #endregion
@@ -259,25 +286,33 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
   /** Handle event: `onRouteWillPop` */
   private _handleOnNavRouteWillPop: onRoutePopEvent = (event) => {
     if(this.routeID != event.nativeEvent.routeID) return;
+
     this._emitter.emit(NavRouteEvents.onRouteWillPop, event);
+    this.routeStatus = RouteStatus.ROUTE_POPPING;
   };
 
   /** Handle event: `onRouteDidPop` */
   private _handleOnNavRouteDidPop: onRoutePopEvent = (event) => {
     if(this.routeID != event.nativeEvent.routeID) return;
+
     this._emitter.emit(NavRouteEvents.onRouteDidPop, event);
+    this.routeStatus = RouteStatus.ROUTE_POPPED;
   };
 
   /** Handle event: `onRouteWillPush` */
   private _handleOnNavRouteWillPush: onRoutePushEvent = (event) => {
     if(this.routeID != event.nativeEvent.routeID) return;
+
     this._emitter.emit(NavRouteEvents.onRouteWillPush, event);
+    this.routeStatus = RouteStatus.ROUTE_PUSHING;
   };
 
   /** Handle event: `onRouteDidPush` */
   private _handleOnNavRouteDidPush: onRoutePushEvent = (event) => {
     if(this.routeID != event.nativeEvent.routeID) return;
+
     this._emitter.emit(NavRouteEvents.onRouteDidPush, event);
+    this.routeStatus = RouteStatus.ROUTE_PUSHED;
   };
 
   /** Handle event: `onPressNavBarLeftItem` */
@@ -295,25 +330,37 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
   /** Handle event: `onRouteWillFocus` */
   private _handleOnRouteWillFocus: onRouteFocusBlurEvent = (event)  => {
     if(this.routeID != event.nativeEvent.routeID) return;
+
     this._emitter.emit(NavRouteEvents.onRouteWillFocus, event);
+    if(this.routeStatus == RouteStatus.ROUTE_BLURRED){
+      this.routeStatus = RouteStatus.ROUTE_FOCUSING;
+    };
   };
 
   /** Handle event: `onRouteDidFocus` */
   private _handleOnRouteDidFocus: onRouteFocusBlurEvent = (event)  => {
     if(this.routeID != event.nativeEvent.routeID) return;
+
     this._emitter.emit(NavRouteEvents.onRouteDidFocus, event);
+    if(this.routeStatus == RouteStatus.ROUTE_BLURRED){
+      this.routeStatus = RouteStatus.ROUTE_FOCUSED;
+    };
   };
 
   /** Handle event: `onRouteWillBlur` */
   private _handleOnRouteWillBlur: onRouteFocusBlurEvent = (event)  => {
     if(this.routeID != event.nativeEvent.routeID) return;
+
     this._emitter.emit(NavRouteEvents.onRouteWillBlur, event);
+    this.routeStatus = RouteStatus.ROUTE_BLURRING;
   };
 
   /** Handle event: `onRouteDidBlur` */
   private _handleOnRouteDidBlur: onRouteFocusBlurEvent = (event)  => {
     if(this.routeID != event.nativeEvent.routeID) return;
+
     this._emitter.emit(NavRouteEvents.onRouteDidBlur, event);
+    this.routeStatus = RouteStatus.ROUTE_BLURRED;
   };
 
   //#endregion
@@ -409,6 +456,24 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
           />
         </RNINavigatorRouteView>
       </NavRouteViewContext.Provider>
+    );
+  };
+};
+
+class RouteViewUtils {
+  static isRouteReady(routeStatus: RouteStatus){
+    return (
+      routeStatus != RouteStatus.INIT &&
+      routeStatus != RouteStatus.UNMOUNTED
+    );
+  };
+
+  static isRouteFocusingOrFocused(routeStatus: RouteStatus){
+    return (
+      routeStatus == RouteStatus.ROUTE_PUSHING  ||
+      routeStatus == RouteStatus.ROUTE_PUSHED   ||
+      routeStatus == RouteStatus.ROUTE_FOCUSING ||
+      routeStatus == RouteStatus.ROUTE_FOCUSED    
     );
   };
 };
