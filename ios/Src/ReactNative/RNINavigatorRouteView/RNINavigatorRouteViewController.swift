@@ -69,6 +69,8 @@ class RNINavigatorRouteViewController: UIViewController {
     }
   };
   
+  var shouldResetNavBarBackConfig = false;
+  
   // --------------------------------
   // MARK:- View Controller Lifecycle
   // --------------------------------
@@ -109,10 +111,11 @@ class RNINavigatorRouteViewController: UIViewController {
       isDone: false,
       isAnimated: animated
     );
-    /// Just in case this route's `backBarButtonItem` was mutated, was mutated,
-    /// this will re-create another `backBarButtonItem` and re-apply it.
-    /// TODO: This is a bit wasteful, so refactor this in the future
-    self.navigationItem.backBarButtonItem = self.routeView.backBarButtonItem;
+    
+    if self.shouldResetNavBarBackConfig {
+      self.resetRouteNavBarBackConfig();
+      self.shouldResetNavBarBackConfig = false;
+    };
   };
   
   override func viewDidAppear(_ animated: Bool) {
@@ -242,6 +245,34 @@ class RNINavigatorRouteViewController: UIViewController {
     else { return nil };
     
     return navBarItems[navBarItems.count - 2];
+  };
+  
+  // ------------------------
+  // MARK:- Public  Functions
+  // ------------------------
+  
+  /// In cases  where a route's `backBarButtonItem` was mutated (e.g. via the
+  /// navbar back config's `applyToPrevBackConfig` option), this function needs
+  /// to be called to re-create another `backBarButtonItem` and re-apply it.
+  /// Note: this also resets `backButtonTitle` and `backButtonDisplayMode`.
+  func resetRouteNavBarBackConfig(){
+    guard let routeView = self.routeView else { return };
+    
+    self.navigationItem.backBarButtonItem = routeView.backBarButtonItem;
+    
+    if #available(iOS 11.0, *) {
+      self.navigationItem.backButtonTitle = routeView.backButtonTitle as String?;
+    };
+    
+    if #available(iOS 14.0, *) {
+      self.navigationItem.backButtonDisplayMode = {
+        guard let string = routeView.backButtonDisplayMode as String?,
+              let displayMode = UINavigationItem.BackButtonDisplayMode(string: string)
+        else { return .default };
+        
+        return displayMode;
+      }();
+    };
   };
 };
 

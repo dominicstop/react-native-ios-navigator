@@ -33,6 +33,9 @@ class RNINavigatorRouteView: UIView {
   var reactRouteContent: UIView?;
   var touchHandlerRouteContent: RCTTouchHandler!;
   
+  /// ref. to the parent nav. view
+  weak var navigatorView: RNINavigatorView?;
+  
   /// ref. to the parent route vc
   weak var routeVC: RNINavigatorRouteViewController? {
     didSet {
@@ -47,7 +50,21 @@ class RNINavigatorRouteView: UIView {
   
   private var didTriggerCleanup = false;
   
-  var applyToPrevBackConfig = false;
+  var applyToPrevBackConfig = false {
+    didSet {
+      guard self.applyToPrevBackConfig != oldValue,
+            let routeVC = self.navigatorView?.getSecondToLastRouteVC()
+      else { return };
+      
+      // was prev. set to true, and is now false
+      if !self.applyToPrevBackConfig && oldValue {
+        routeVC.resetRouteNavBarBackConfig();
+        
+      } else {
+        routeVC.shouldResetNavBarBackConfig = self.applyToPrevBackConfig;
+      };
+    }
+  };
   
   // ------------------------------
   // MARK:- RN Exported Event Props

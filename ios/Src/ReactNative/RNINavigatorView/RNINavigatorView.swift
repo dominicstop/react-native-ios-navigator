@@ -147,6 +147,9 @@ class RNINavigatorView: UIView {
         guard let routeView = subview as? RNINavigatorRouteView
         else { return };
         
+        // pass a ref to this nav view
+        routeView.navigatorView = self;
+        
         let routeVC: RNINavigatorRouteViewController = {
           /// create the wrapper vc that holds the `routeView`
           let vc = RNINavigatorRouteViewController();
@@ -195,6 +198,15 @@ class RNINavigatorView: UIView {
         
       default: break;
     };
+  };
+  
+  // -----------------------
+  // MARK:- Public Functions
+  // -----------------------
+  
+  func getSecondToLastRouteVC() -> RNINavigatorRouteViewController? {
+    guard self.routeVCs.count > 1 else { return nil };
+    return self.routeVCs[self.routeVCs.count - 2];
   };
 };
 
