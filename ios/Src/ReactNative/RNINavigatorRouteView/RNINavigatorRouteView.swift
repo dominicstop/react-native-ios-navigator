@@ -47,6 +47,8 @@ class RNINavigatorRouteView: UIView {
   
   private var didTriggerCleanup = false;
   
+  var applyToPrevBackConfig = false;
+  
   // ------------------------------
   // MARK:- RN Exported Event Props
   // ------------------------------
@@ -217,8 +219,19 @@ class RNINavigatorRouteView: UIView {
         return RNINavBarItemConfig(dictionary: dict);
       }();
       
+      // extract `applyToPrevConfig` from back item config,
+      // note: this property only exist for `navBarButtonBackItemConfig`
+      let applyToPrevConfig: Bool = {
+        guard let dict = self.navBarButtonBackItemConfig,
+              let flag = dict["applyToPrevConfig"] as? Bool
+        else { return false };
+        
+        self.applyToPrevBackConfig = flag;
+        return flag;
+      }();
+      
       self._navBarButtonBackItemConfig = configItem;
-      delegate?.didReceiveNavBarButtonBackItem(self.backBarButtonItem);
+      delegate?.didReceiveNavBarButtonBackItem(self.backBarButtonItem, applyToPrevConfig);
     }
   };
   
@@ -481,7 +494,10 @@ private extension RNINavigatorRouteView {
     self.delegate?.didReceiveLargeTitleDisplayMode(self._largeTitleDisplayMode);
     
     // set nav bar back item
-    delegate?.didReceiveNavBarButtonBackItem(self.backBarButtonItem);
+    delegate?.didReceiveNavBarButtonBackItem(
+      self.backBarButtonItem,
+      self.applyToPrevBackConfig
+    );
     
     // set nav bar left item
     delegate?.didReceiveNavBarButtonLeftItems(self.leftBarButtonItems);
@@ -536,6 +552,7 @@ private extension RNINavigatorRouteView {
 
 extension RNINavigatorRouteView {
   
+  /// Notify `RouteView`'s bounds had changed and resize
   func notifyForBoundsChange(_ newBounds: CGRect){
     guard let bridge    = self.bridge,
           let reactView = self.reactRouteContent

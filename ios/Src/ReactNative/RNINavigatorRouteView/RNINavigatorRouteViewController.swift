@@ -119,6 +119,13 @@ class RNINavigatorRouteViewController: UIViewController {
       isDone: true,
       isAnimated: animated
     );
+    
+    /// Just in case this route's `backBarButtonItem` was mutated, was mutated,
+    /// we will re-create another `backBarButtonItem` and re-apply it.
+    /// TODO: This is a bit wasteful, so refactor this in the future
+    if let backButtonItem = self.routeView.backBarButtonItem {
+      self.navigationItem.backBarButtonItem = backButtonItem;
+    };
   };
   
   override func viewWillDisappear(_ animated: Bool) {
@@ -275,8 +282,18 @@ extension RNINavigatorRouteViewController: RNINavigatorRouteViewDelegate {
     self.navigationItem.titleView = titleView;
   };
   
-  func didReceiveNavBarButtonBackItem(_ item: UIBarButtonItem?) {
-    self.navigationItem.backBarButtonItem = item;
+  func didReceiveNavBarButtonBackItem(_ item: UIBarButtonItem?, _ applyToPrevConfig: Bool) {
+    if applyToPrevConfig {
+      guard let navBarItems = self.navigationController?.navigationBar.items,
+            navBarItems.count > 1
+      else { return };
+      
+      // get second to last item
+      navBarItems[navBarItems.count - 2].backBarButtonItem = item;
+      
+    } else {
+      self.navigationItem.backBarButtonItem = item;
+    };
   };
   
   func didReceiveNavBarButtonLeftItems(_ items: [UIBarButtonItem]?) {

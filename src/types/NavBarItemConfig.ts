@@ -78,10 +78,22 @@ type NavBarItemConfigShared = {
   width?: number;
 };
 
+type NavBarBackItemConfigBase = {
+  /** 
+   * The `NavBarBackItemConfig` by default, is applied to the next route, as such setting
+   * the config will not affect the current route's back item.
+   * 
+   * This flag indicates whether or not this config will be applied to the prev. route's
+   * back item. */
+  applyToPrevConfig?: boolean;
+};
+
 type ArrayWithOneElement<T> = { 0: T } & Array<T>;
 
-export type NavBarBackItemConfig = 
-  NavBarItemConfigBase & NavBarItemConfigShared
+export type NavBarBackItemConfig =
+  NavBarBackItemConfigBase &
+  NavBarItemConfigBase     & 
+  NavBarItemConfigShared
 
 export type NavBarItemConfig = 
   (NavBarItemConfigBase | NavBarItemConfigCustomBase) & 

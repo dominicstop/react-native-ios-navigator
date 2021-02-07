@@ -38,7 +38,7 @@ protocol RNINavigatorRouteViewDelegate: AnyObject {
   
   func didReceiveNavBarButtonTitleView(_ titleView: UIView?);
   
-  func didReceiveNavBarButtonBackItem(_ item: UIBarButtonItem?);
+  func didReceiveNavBarButtonBackItem(_ item: UIBarButtonItem?, _ applyToPrevConfig: Bool);
   
   func didReceiveNavBarButtonLeftItems(_ items: [UIBarButtonItem]?);
   
