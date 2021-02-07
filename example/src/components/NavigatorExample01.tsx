@@ -34,14 +34,14 @@ function ExampleRoute(props: ExampleRouteProps){
 
   const routeContainerStyle = { backgroundColor: bgColor };
 
-  useNavRouteLifeCycle('onRouteWillPush' , false, () => console.log('onRouteWillPush' ));
-  useNavRouteLifeCycle('onRouteDidPush'  , false, () => console.log('onRouteDidPush'  ));
-  useNavRouteLifeCycle('onRouteWillPop'  , false, () => console.log('onRouteWillPop'  ));
-  useNavRouteLifeCycle('onRouteDidPop'   , false, () => console.log('onRouteDidPop'   ));
-  useNavRouteLifeCycle('onRouteWillFocus', false, () => console.log('onRouteWillFocus'));
-  useNavRouteLifeCycle('onRouteDidFocus' , false, () => console.log('onRouteDidFocus' ));
-  useNavRouteLifeCycle('onRouteWillBlur' , false, () => console.log('onRouteWillBlur' ));
-  useNavRouteLifeCycle('onRouteDidBlur'  , false, () => console.log('onRouteDidBlur'  ));
+  useNavRouteLifeCycle('onRouteWillPush' , () => console.log('onRouteWillPush' ));
+  useNavRouteLifeCycle('onRouteDidPush'  , () => console.log('onRouteDidPush'  ));
+  useNavRouteLifeCycle('onRouteWillPop'  , () => console.log('onRouteWillPop'  ));
+  useNavRouteLifeCycle('onRouteDidPop'   , () => console.log('onRouteDidPop'   ));
+  useNavRouteLifeCycle('onRouteWillFocus', () => console.log('onRouteWillFocus'));
+  useNavRouteLifeCycle('onRouteDidFocus' , () => console.log('onRouteDidFocus' ));
+  useNavRouteLifeCycle('onRouteWillBlur' , () => console.log('onRouteWillBlur' ));
+  useNavRouteLifeCycle('onRouteDidBlur'  , () => console.log('onRouteDidBlur'  ));
 
   return (
     <SafeAreaView style={[styles.routeContainer, routeContainerStyle]}>
