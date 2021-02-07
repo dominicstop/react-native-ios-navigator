@@ -9,6 +9,7 @@ import type { EventEmitter } from '../functions/EventEmitter';
 import type { RouteOptions } from '../types/NavTypes';
 
 import { NativeIDKeys } from '../constants/LibraryConstants';
+import { RNIWrapperView } from '../native_components/RNIWrapperView';
 
 
 type NavBarBackItemsWrapperProps = {
@@ -82,28 +83,28 @@ export class NavBarItemsWrapper extends React.Component<NavBarBackItemsWrapperPr
     return(
       <React.Fragment>
         {navBarLeftItem && (
-          <View 
+          <RNIWrapperView 
             style={styles.navBarItemContainer}
             nativeID={NativeIDKeys.NavBarLeftItem}
           >
             {navBarLeftItem}
-          </View>
+          </RNIWrapperView>
         )}
         {navBarRightItem && (
-          <View  
+          <RNIWrapperView  
             style={styles.navBarItemContainer}
             nativeID={NativeIDKeys.NavBarRightItem}
           >
             {navBarRightItem}
-          </View>
+          </RNIWrapperView>
         )}
         {navBarTitleItem && (
-          <View 
+          <RNIWrapperView 
             style={styles.navBarItemContainer}
             nativeID={NativeIDKeys.NavBarTitleItem}
           >
             {navBarTitleItem}
-          </View>
+          </RNIWrapperView>
         )}
       </React.Fragment>
     );

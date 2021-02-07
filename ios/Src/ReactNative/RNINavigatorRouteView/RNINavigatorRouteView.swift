@@ -41,14 +41,9 @@ class RNINavigatorRouteView: UIView {
   };
   
   // MARK: Custom navigation bar items...
-  var reactNavBarLeftItem : UIView?;
-  var reactNavBarRightItem: UIView?;
-  var reactNavBarTitleItem: UIView?;
-  
-  // MARK: Touch handlers for custom navigation bar items...
-  private lazy var touchHandlerNavBarLeftItem  = RCTTouchHandler(bridge: self.bridge)!;
-  private lazy var touchHandlerNavBarRightItem = RCTTouchHandler(bridge: self.bridge)!;
-  private lazy var touchHandlerNavBarTitleItem = RCTTouchHandler(bridge: self.bridge)!;
+  var reactNavBarLeftItem : RNIWrapperView?;
+  var reactNavBarRightItem: RNIWrapperView?;
+  var reactNavBarTitleItem: RNIWrapperView?;
   
   private var didTriggerCleanup = false;
   
@@ -370,6 +365,10 @@ class RNINavigatorRouteView: UIView {
       subview.removeFromSuperview();
     };
     
+    // TODO: use `RNIWrapperView` for `RouteContent` so we can clean this up
+    let wrapperView = subview as? RNIWrapperView;
+    wrapperView?.delegate = self;
+    
     /// receive child comps. from `RNINavigatorRouteView`.
     /// note: the child comp. can be identified based on their `nativeID`
     switch nativeID {
@@ -378,17 +377,14 @@ class RNINavigatorRouteView: UIView {
         self.touchHandlerRouteContent.attach(to: subview);
         
       case NativeIDKeys.NavBarLeftItem:
-        self.reactNavBarLeftItem = subview;
-        self.touchHandlerNavBarLeftItem.attach(to: subview);
+        self.reactNavBarLeftItem = wrapperView;
         
       case NativeIDKeys.NavBarRightItem:
-        self.reactNavBarRightItem = subview;
-        self.touchHandlerNavBarRightItem.attach(to: subview);
+        self.reactNavBarRightItem = wrapperView;
         
       case NativeIDKeys.NavBarTitleItem:
-        self.reactNavBarTitleItem = subview;
+        self.reactNavBarTitleItem = wrapperView;
         self.delegate?.didReceiveNavBarButtonTitleView(subview);
-        self.touchHandlerNavBarTitleItem.attach(to: subview);
         
       default: break;
     };
@@ -530,21 +526,7 @@ private extension RNINavigatorRouteView {
   
   /// Cleanup: Remove the views attached to the `RCTTouchandler` instances.
   func detachTouchHandlers(){
-    if let routeContent = self.reactRouteContent {
-      self.touchHandlerRouteContent.detach(from: routeContent);
-    };
     
-    if let titleBarItem = self.reactNavBarTitleItem {
-      self.touchHandlerNavBarTitleItem.detach(from: titleBarItem);
-    };
-    
-    if let leftBarItem = self.reactNavBarLeftItem {
-      self.touchHandlerNavBarLeftItem.detach(from: leftBarItem);
-    };
-    
-    if let rightBarItem = self.reactNavBarRightItem {
-      self.touchHandlerNavBarRightItem.detach(from: rightBarItem);
-    };
   };
 };
 
@@ -612,15 +594,23 @@ extension RNINavigatorRouteView {
       self
     ];
     
-    // detatch RCTTouchandler instances from the react views
-    self.detachTouchHandlers();
+    // detatch RCTTouchandler from react view
+    if let routeContent = self.reactRouteContent {
+      self.touchHandlerRouteContent.detach(from: routeContent);
+    };
     
     // cleanup: manually remove routes from view registry
     for case let view? in viewsToRemove {
-      RNIUtilities.recursivelyRemoveFromViewRegistry(
-        bridge   : self.bridge,
-        reactView: view
-      );
+      if let wrapperView = view as? RNIWrapperView {
+        // trigger wrapper view cleanup
+        wrapperView.cleanup();
+        
+      } else {
+        RNIUtilities.recursivelyRemoveFromViewRegistry(
+          bridge   : self.bridge,
+          reactView: view
+        );
+      };
     };
     
     // remove references to the react views
@@ -628,5 +618,29 @@ extension RNINavigatorRouteView {
     self.reactNavBarLeftItem  = nil;
     self.reactNavBarRightItem = nil;
     self.reactNavBarTitleItem = nil;
+  };
+};
+
+// -----------------------------
+// MARK:- RNIWrapperViewDelegate
+// -----------------------------
+
+/// Receive `RNIWrapperView` events
+extension RNINavigatorRouteView: RNIWrapperViewDelegate {
+  func onJSComponentWillUnmount(sender: RNIWrapperView, isManuallyTriggered: Bool) {
+    
+    switch sender.nativeID {
+      case NativeIDKeys.NavBarLeftItem:
+        self.reactNavBarLeftItem = nil;
+        
+      case NativeIDKeys.NavBarRightItem:
+        self.reactNavBarRightItem = nil;
+        
+      case NativeIDKeys.NavBarTitleItem:
+        self.reactNavBarTitleItem = nil;
+        self.delegate?.didReceiveNavBarButtonTitleView(nil);
+        
+      default: return;
+    };
   };
 };
