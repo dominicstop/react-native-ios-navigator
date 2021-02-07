@@ -105,11 +105,17 @@ class RNINavigatorViewModule: NSObject {
       
       // forward "pop" command to navigator
       navigatorView.pop(options){
-        // resolve promise after "pop" is complete
-        resolve([
-          "routeKey"  : $0,
-          "routeIndex": $1
-        ]);
+        if $0 {
+          // resolve promise after "pop" is complete
+          resolve([
+            "routeKey"  : $1,
+            "routeIndex": $2
+          ]);
+          
+        } else {
+          // reject promise w/: code, message, error
+          reject("LIB_ERROR", "Pop failed", nil);
+        };
       };
     };
   };

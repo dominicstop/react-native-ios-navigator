@@ -364,7 +364,10 @@ extension RNINavigatorView {
     };
   };
   
-  func pop(_ options: NSDictionary, completion: @escaping (_ routeKey: NSString, _ routeIndex: NSNumber) -> Void){
+  func pop(
+    _ options: NSDictionary,
+    completion: @escaping (_ success: Bool, _ routeKey: NSString?, _ routeIndex: NSNumber?) -> Void
+  ){
     guard self.routeVCs.count > 1,
           /// get the last routes
           let lastNavVC   = self.navigationVC.viewControllers.last as? RNINavigatorRouteViewController,
@@ -384,13 +387,15 @@ extension RNINavigatorView {
         + " - routeViews count: \(self.routeVCs.count)"
       );
       #endif
+      
+      completion(false, nil, nil);
       return;
     };
     
     let isAnimated = options["isAnimated"] as? Bool ?? true;
     
     self.navigationVC.popViewController(animated: isAnimated){
-      completion(lastRouteKey, lastRouteIndex);
+      completion(true, lastRouteKey, lastRouteIndex);
     };
   };
 };
