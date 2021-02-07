@@ -39,7 +39,7 @@ let nestIndex = 0;
 export function NavigatorDemo02(props: RouteContentProps){
   const navRef = React.useRef<NavigatorView>();
 
-  useNavRouteLifeCycle('onRouteDidPush', true, async () => {
+  useNavRouteLifeCycle('onRouteDidPush', async () => {
     if(nestIndex > 12) return;
     
     await Helpers.timeout(100);
