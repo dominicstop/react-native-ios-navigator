@@ -1,8 +1,8 @@
 import type { NavBarItemsConfig, NavBarBackItemConfig } from '../../../src/types/NavBarItemConfig';
 import * as React from 'react';
 
-import { StyleSheet, View, Text, ScrollView, TouchableOpacity, TextInput, Switch } from 'react-native';
-import { NavigatorView, NavRouteEvents, RouteContentProps, RouteViewPortal } from 'react-native-ios-navigator';
+import { StyleSheet, View, Text, ScrollView, TouchableOpacity, TextInput, Switch, Alert } from 'react-native';
+import { NavigatorView, NavRouteEvents, RouteContentProps, RouteViewEvents, RouteViewPortal } from 'react-native-ios-navigator';
 
 import * as Colors  from '../constants/Colors';
 import * as Helpers from '../functions/Helpers';
@@ -586,7 +586,7 @@ function NavBarBackItemsConfig(props){
         subtitle={`Note: This will configure the next route's back item. Current config for the navbar back item: ${currentConfig?.description ?? 'N/A'}`}
       />
       <ObjectPropertyDisplay
-        object={currentConfig.config}
+        object={currentConfig?.config}
       />
       <ButtonPrimary
         title={'Update config'}
@@ -614,6 +614,16 @@ function NavBarBackItemsConfig(props){
           const parentRef = props.getParentRef();
           parentRef.setState({
             leftItemsSupplementBackButton: value,
+          });
+        }}
+      />
+      <SwitchRow
+        title={`applyToPrevBackConfig`}
+        value={props.parentState.applyToPrevBackConfig}
+        onValueChange={value => {
+          const parentRef = props.getParentRef();
+          parentRef.setState({
+            applyToPrevBackConfig: value,
           });
         }}
       />
@@ -790,6 +800,7 @@ export class NavigatorTest01 extends React.Component {
     hidesBackButton: false,
     backButtonTitle: null,
     backButtonDisplayModeIndex: 0,
+    applyToPrevBackConfig: false,
 
     renderNavBarTitleItem: false,
   };
@@ -814,10 +825,15 @@ export class NavigatorTest01 extends React.Component {
               state.navBarButtonLeftItemsConfigIndex %
               navBarItemsConfigs.length
             ].config,
-            navBarButtonBackItemConfig: backButtonItemConfigs[
-              state.backButtonItemsConfigIndex %
-              backButtonItemConfigs.length
-            ].config,
+            navBarButtonBackItemConfig: {
+              applyToPrevBackConfig: state.applyToPrevBackConfig,
+              ...(
+                backButtonItemConfigs[
+                  state.backButtonItemsConfigIndex %
+                  backButtonItemConfigs.length
+                ].config
+              ),
+            },
             leftItemsSupplementBackButton: state.leftItemsSupplementBackButton,
             hidesBackButton: state.hidesBackButton,
             // @ts-ignore
@@ -874,6 +890,20 @@ export class NavigatorTest01 extends React.Component {
               </View>
             )
           }))}
+        />
+        <RouteViewEvents
+          onPressNavBarRightItem={({nativeEvent}) => {
+            Alert.alert(
+              'onPressNavBarRightItem', 
+              `key: ${nativeEvent.key}`
+            );
+          }}
+          onPressNavBarLeftItem={({nativeEvent}) => {
+            Alert.alert(
+              'onPressNavBarLeftItem', 
+              `key: ${nativeEvent.key}`
+            );
+          }}
         />
         <NavBarConfigGeneral
           getParentRef={() => this}
