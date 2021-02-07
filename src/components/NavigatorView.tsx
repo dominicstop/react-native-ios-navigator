@@ -30,7 +30,8 @@ enum NavStatus {
   IDLE_ERROR     = "IDLE_ERROR"    , // nav. is idle due to error
   NAV_PUSHING    = "NAV_PUSHING"   , // nav. is busy pushing
   NAV_POPPING    = "NAV_POPPING"   , // nav. is busy popping
-  NAV_PUSH_ABORT = "NAV_PUSH_ABORT", // nav. push was cancelled
+  UNMOUNTED      = "UNMOUNTED"     , // nav. comp. has been unmounted
+  NAV_ABORT_PUSH = "NAV_ABORT_PUSH", // nav. has been popped before push completed
 };
 
 enum NavEvents {
@@ -126,6 +127,10 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       transitionConfigPushOverride: null,
       transitionConfigPopOverride: null,
     };
+  };
+
+  componentWillUnmount(){
+    this.navStatus == NavStatus.UNMOUNTED;
   };
 
   //#region - Private Functions
@@ -274,6 +279,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     const routeConfig = this.getMatchingRoute(routeItem);
 
     if(!routeConfig){
+      // no matching route config found for `routeItem`
       throw new Error("`NavigatorView` failed to do: `push`: Invalid `routeKey`");
     };
     
@@ -333,7 +339,12 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       );
       //#endregion
 
-      if(this.navStatus != NavStatus.NAV_PUSH_ABORT) {
+      const wasAborted = (
+        this.navStatus == NavStatus.NAV_ABORT_PUSH ||
+        this.navStatus == NavStatus.UNMOUNTED 
+      );
+
+      if(wasAborted) {
         this.navStatus = NavStatus.IDLE_ERROR;
         throw new Error("`NavigatorView` failed to do: `push`");
       };
@@ -392,8 +403,10 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       );
       //#endregion
 
-      this.navStatus = NavStatus.IDLE_ERROR;
-      throw new Error("`NavigatorView` failed to do: `pop`");
+      if(this.navStatus == NavStatus.UNMOUNTED){
+        this.navStatus = NavStatus.IDLE_ERROR;
+        throw new Error("`NavigatorView` failed to do: `pop`");
+      };
     };
   };
 
@@ -441,7 +454,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     if(this.navigatorID != nativeEvent.navigatorID) return;
 
     if(this.navStatus == NavStatus.NAV_PUSHING){
-      this.navStatus = NavStatus.NAV_PUSH_ABORT;
+      this.navStatus = NavStatus.NAV_ABORT_PUSH;
     };
   };
 
@@ -557,7 +570,7 @@ class NavigatorViewUtils {
       navStatus == NavStatus.IDLE           ||
       navStatus == NavStatus.IDLE_INIT      ||
       navStatus == NavStatus.IDLE_ERROR     ||
-      navStatus == NavStatus.NAV_PUSH_ABORT
+      navStatus == NavStatus.NAV_ABORT_PUSH
     );
   };
 
