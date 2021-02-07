@@ -109,6 +109,10 @@ class RNINavigatorRouteViewController: UIViewController {
       isDone: false,
       isAnimated: animated
     );
+    /// Just in case this route's `backBarButtonItem` was mutated, was mutated,
+    /// this will re-create another `backBarButtonItem` and re-apply it.
+    /// TODO: This is a bit wasteful, so refactor this in the future
+    self.navigationItem.backBarButtonItem = self.routeView.backBarButtonItem;
   };
   
   override func viewDidAppear(_ animated: Bool) {
@@ -119,13 +123,6 @@ class RNINavigatorRouteViewController: UIViewController {
       isDone: true,
       isAnimated: animated
     );
-    
-    /// Just in case this route's `backBarButtonItem` was mutated, was mutated,
-    /// we will re-create another `backBarButtonItem` and re-apply it.
-    /// TODO: This is a bit wasteful, so refactor this in the future
-    if let backButtonItem = self.routeView.backBarButtonItem {
-      self.navigationItem.backBarButtonItem = backButtonItem;
-    };
   };
   
   override func viewWillDisappear(_ animated: Bool) {
@@ -234,6 +231,18 @@ class RNINavigatorRouteViewController: UIViewController {
       // TODO: View controller was moved, possibly due replacing a route?
     };
   };
+  
+  // ------------------------
+  // MARK:- Private Functions
+  // ------------------------
+  
+  private func getSecondToLastNavigationItem() -> UINavigationItem? {
+    guard let navBarItems = self.navigationController?.navigationBar.items,
+          navBarItems.count > 1
+    else { return nil };
+    
+    return navBarItems[navBarItems.count - 2];
+  };
 };
 
 // -----------------------------------------------
@@ -282,14 +291,13 @@ extension RNINavigatorRouteViewController: RNINavigatorRouteViewDelegate {
     self.navigationItem.titleView = titleView;
   };
   
-  func didReceiveNavBarButtonBackItem(_ item: UIBarButtonItem?, _ applyToPrevBackConfig: Bool) {
+  func didReceiveNavBarButtonBackItem(
+    _ item: UIBarButtonItem?,
+    _ applyToPrevBackConfig: Bool
+  ) {
     if applyToPrevBackConfig {
-      guard let navBarItems = self.navigationController?.navigationBar.items,
-            navBarItems.count > 1
-      else { return };
-      
-      // get second to last item
-      navBarItems[navBarItems.count - 2].backBarButtonItem = item;
+      guard let navItem = self.getSecondToLastNavigationItem() else { return };
+      navItem.backBarButtonItem = item;
       
     } else {
       self.navigationItem.backBarButtonItem = item;
@@ -312,14 +320,32 @@ extension RNINavigatorRouteViewController: RNINavigatorRouteViewDelegate {
     self.navigationItem.leftItemsSupplementBackButton = bool;
   };
   
-  func didReceiveBackButtonTitle(_ title: String?) {
-    if #available(iOS 11.0, *) {
+  func didReceiveBackButtonTitle(
+    _ title: String?,
+    _ applyToPrevBackConfig: Bool
+  ) {
+    guard #available(iOS 11.0, *) else { return };
+    
+    if applyToPrevBackConfig {
+      guard let navItem = self.getSecondToLastNavigationItem() else { return };
+      navItem.backButtonTitle = title;
+      
+    } else {
       self.navigationItem.backButtonTitle = title;
     };
   };
   
-  func didReceiveBackButtonDisplayMode(_ displayMode: UINavigationItem.BackButtonDisplayMode){
-    if #available(iOS 14.0, *) {
+  func didReceiveBackButtonDisplayMode(
+    _ displayMode: UINavigationItem.BackButtonDisplayMode,
+    _ applyToPrevBackConfig: Bool
+  ) {
+    guard #available(iOS 14.0, *) else { return };
+    
+    if applyToPrevBackConfig {
+      guard let navItem = self.getSecondToLastNavigationItem() else { return };
+      navItem.backButtonDisplayMode = displayMode;
+      
+    } else {
       self.navigationItem.backButtonDisplayMode = displayMode;
     };
   };

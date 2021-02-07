@@ -304,7 +304,10 @@ class RNINavigatorRouteView: UIView {
   @objc var backButtonTitle: NSString? {
     didSet {
       guard self.backButtonTitle != oldValue else { return };
-      delegate?.didReceiveBackButtonTitle(self.backButtonTitle as String?);
+      delegate?.didReceiveBackButtonTitle(
+        self.backButtonTitle as String?,
+        self.applyToPrevBackConfig
+      );
     }
   };
   
@@ -322,7 +325,10 @@ class RNINavigatorRouteView: UIView {
       }();
       
       self._backButtonDisplayMode = displayMode;
-      delegate?.didReceiveBackButtonDisplayMode(displayMode);
+      delegate?.didReceiveBackButtonDisplayMode(
+        displayMode,
+        self.applyToPrevBackConfig
+      );
     }
   };
   
@@ -516,10 +522,16 @@ private extension RNINavigatorRouteView {
     );
     
     // init `navigationItem` property from `backButtonTitle` prop
-    delegate?.didReceiveBackButtonTitle(self.backButtonTitle as String?);
+    delegate?.didReceiveBackButtonTitle(
+      self.backButtonTitle as String?,
+      self.applyToPrevBackConfig
+    );
     
     // init `navigationItem` property from `backButtonDisplayMode` prop
-    delegate?.didReceiveBackButtonDisplayMode(self._backButtonDisplayMode);
+    delegate?.didReceiveBackButtonDisplayMode(
+      self._backButtonDisplayMode,
+      self.applyToPrevBackConfig
+    );
     
     // init `navigationItem` property from `hidesBackButton` prop
     delegate?.didReceiveHidesBackButton(self.hidesBackButton);

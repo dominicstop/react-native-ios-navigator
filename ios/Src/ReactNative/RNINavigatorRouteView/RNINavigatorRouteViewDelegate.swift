@@ -38,7 +38,10 @@ protocol RNINavigatorRouteViewDelegate: AnyObject {
   
   func didReceiveNavBarButtonTitleView(_ titleView: UIView?);
   
-  func didReceiveNavBarButtonBackItem(_ item: UIBarButtonItem?, _ applyToPrevBackConfig: Bool);
+  func didReceiveNavBarButtonBackItem(
+    _ item: UIBarButtonItem?,
+    _ applyToPrevBackConfig: Bool
+  );
   
   func didReceiveNavBarButtonLeftItems(_ items: [UIBarButtonItem]?);
   
@@ -50,9 +53,15 @@ protocol RNINavigatorRouteViewDelegate: AnyObject {
   
   func didReceiveLeftItemsSupplementBackButton(_ bool: Bool);
   
-  func didReceiveBackButtonTitle(_ title: String?);
+  func didReceiveBackButtonTitle(
+    _ title: String?,
+    _ applyToPrevBackConfig: Bool
+  );
   
-  func didReceiveBackButtonDisplayMode(_ displayMode: UINavigationItem.BackButtonDisplayMode);
+  func didReceiveBackButtonDisplayMode(
+    _ displayMode: UINavigationItem.BackButtonDisplayMode,
+    _ applyToPrevBackConfig: Bool
+  );
   
   func didReceiveHidesBackButton(_ hidesBackButton: Bool);
 };
