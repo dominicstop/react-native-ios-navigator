@@ -66,6 +66,8 @@ export type NavBarAppearanceLegacyConfig = NavBarAppearanceConfigBase & {
   /** Display attributes for the bar's large title text. */
   largeTitleTextAttributes?: TextStyle & TextStyleIOS;
 
+  titleVerticalPositionAdjustment?: number;
+
   /** The tint color to apply to the navigation items and bar button items. */
   tintColor?: string | DynamicColor;
 

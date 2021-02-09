@@ -219,6 +219,7 @@ class RNINavBarAppearance {
     // MARK: Title Config
     var titleTextAttributes: RCTTextAttributes?;
     var largeTitleTextAttributes: RCTTextAttributes?;
+    var titleVerticalPositionAdjustment: CGFloat = 0;
     
     // MARK: Navbar Style
     var barStyle: UIBarStyle?;
@@ -263,6 +264,10 @@ class RNINavBarAppearance {
         return RCTTextAttributes(dict: styleDict);
       }();
       
+      /// set/init: `titleVerticalPositionAdjustment`
+      self.titleVerticalPositionAdjustment =
+        dict["titleVerticalPositionAdjustment"] as? CGFloat ?? 0;
+      
       // Section: Navbar Style
       // ---------------------
       
@@ -293,7 +298,6 @@ class RNINavBarAppearance {
       // Section: Misc. Images
       // ---------------------
       
-      /// set/init: `backIndicatorImage`
       self.backIndicatorImage = {
         guard let imageDict   = dict["backIndicatorImage"] as? NSDictionary,
               let imageItem = RNIImageItem(dict: imageDict)
@@ -317,6 +321,16 @@ class RNINavBarAppearance {
       if #available(iOS 11.0, *) {
         navBar.largeTitleTextAttributes =
           self.largeTitleTextAttributes?.effectiveTextAttributes();
+      };
+      
+      /// set/init: `titleVerticalPositionAdjustment`
+      if self.titleVerticalPositionAdjustment !=
+          navBar.titleVerticalPositionAdjustment(for: .default){
+        
+        navBar.setTitleVerticalPositionAdjustment(
+          self.titleVerticalPositionAdjustment,
+          for: .default
+        );
       };
       
       // Section: Navbar Style
