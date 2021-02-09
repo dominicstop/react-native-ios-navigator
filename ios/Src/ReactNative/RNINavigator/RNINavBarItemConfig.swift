@@ -110,12 +110,12 @@ class RNINavBarItemConfig {
       self.systemItem = systemItem;
     };
     
-    // set properites for type: "IMAGE_ASSET", "IMAGE_SYSTEM"
-    if let imageValue = dictionary["imageValue"],
-       let imageType  = RNIImageItem.ImageType(rawValue: type),
-       let imageItem  = RNIImageItem(type: imageType, imageValue: imageValue) {
-      
-      self.imageItem = imageItem;
+    // set properites for type: "IMAGE_ASSET", "IMAGE_SYSTEM", etc.
+    if let imageType = RNIImageItem.ImageType(rawValue: type) {
+      self.imageItem = RNIImageItem(
+        type: imageType,
+        imageValue: dictionary["imageValue"]
+      );
     };
   };
   

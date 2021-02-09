@@ -22,9 +22,9 @@ class RNIImageItem {
   
   var useImageCache = false;
   var isImageRequireLoaded = false;
-  var onImageRequireDidLoad: ((_ image: UIImage) -> ())?;
+  var onImageRequireDidLoad: ((_ image: UIImage?) -> ())?;
   
-  private let imageValue: Any;
+  private let imageValue: Any?;
   private var imageRequire: UIImage?;
   
   var image: UIImage? {
@@ -50,7 +50,7 @@ class RNIImageItem {
     };
   };
   
-  init?(type: ImageType, imageValue: Any){
+  init?(type: ImageType, imageValue: Any?){
     self.type = type;
     self.imageValue = imageValue;
     
@@ -58,6 +58,14 @@ class RNIImageItem {
     if type == .IMAGE_REQUIRE {
       self.loadImageRequire();
     };
+  };
+  
+  convenience init?(dict: NSDictionary){
+    guard let typeString = dict["type"] as? String,
+          let type       = ImageType(rawValue: typeString)
+    else { return nil };
+    
+    self.init(type: type, imageValue: dict["imageValue"]);
   };
   
   private func loadImageRequire(){
@@ -75,12 +83,12 @@ class RNIImageItem {
     } else {
       RNIUtilities.loadImage(dict: dict){ error, image in
         self.isImageRequireLoaded = true;
-        guard let image = image else { return };
+        let image = image?.withRenderingMode(.alwaysOriginal);
         
-        self.imageRequire = image.withRenderingMode(.alwaysOriginal);
+        self.imageRequire = image;
         self.onImageRequireDidLoad?(image);
         
-        if self.useImageCache {
+        if self.useImageCache, let image = image {
           // store loaded image in cache
           Self.imageCache[uri] = image;
         };
@@ -106,9 +114,9 @@ extension RNIImageItem {
         loadedImages.insert(item.image, at: 0);
       
       } else {
-        item.onImageRequireDidLoad = { _ in
+        item.onImageRequireDidLoad = { image in
           // "require image" has loaded...
-          loadedImages.insert(item.image, at: 0);
+          loadedImages.insert(image, at: 0);
             
           // all the image items have been loaded...
           if loadedImages.count == images.count {
