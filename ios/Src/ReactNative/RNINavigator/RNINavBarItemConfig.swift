@@ -38,13 +38,6 @@ class RNINavBarItemConfig {
   // note: stored anon. closure, be sure to use weak/unowned self
   private var action: NavBarItemAction?;
     
-  // shared/general properties for all the types
-  private(set) var key: String?;
-  private(set) var tintColor: UIColor?;
-  private(set) var barButtonItemStyle: UIBarButtonItem.Style = .plain;
-  private(set) var width: CGFloat?;
-  private(set) var possibleTitles: Set<String>?
-
   // used for type: "TEXT"
   private(set) var title: String?;
   
@@ -56,6 +49,13 @@ class RNINavBarItemConfig {
   
   // used for type: "CUSTOM"
   weak var customView: UIView?;
+  
+  // shared/general properties for all the types
+  private(set) var key: String?;
+  private(set) var tintColor: UIColor?;
+  private(set) var barButtonItemStyle: UIBarButtonItem.Style = .plain;
+  private(set) var width: CGFloat?;
+  private(set) var possibleTitles: Set<String>?
   
   // -----------
   // MARK:- Init
@@ -70,53 +70,57 @@ class RNINavBarItemConfig {
     self.type = itemType;
     
     // set general property: `key`
-    if let string = dictionary["key"] as? String {
-      self.key = string;
-    };
+    self.key = dictionary["key"] as? String;
     
     // set general property: `tintColor`
-    if let string = dictionary["tintColor"] as? String,
-       let color  = UIColor(cssColor: string) {
+    self.tintColor = {
+      guard let string = dictionary["tintColor"] as? String
+      else { return nil };
       
-      self.tintColor = color;
-    };
+      return UIColor(cssColor: string);
+    }();
     
     // set general property: `barButtonItemStyle`
-    if let string = dictionary["barButtonItemStyle"] as? String,
-       let style = UIBarButtonItem.Style(string: string) {
+    self.barButtonItemStyle = {
+      guard let string = dictionary["barButtonItemStyle"] as? String,
+            let style = UIBarButtonItem.Style(string: string)
+      else { return .plain };
       
-      self.barButtonItemStyle = style;
-    };
+      return style;
+    }();
     
     // set general property: `width`
-    if let width = dictionary["width"] as? CGFloat {
-      self.width = width;
-    };
+    self.width = dictionary["width"] as? CGFloat;
     
     // set general property: `possibleTitles`
-    if let array = dictionary["possibleTitles"] as? [String] {
-      self.possibleTitles = Set(array);
-    };
+    self.possibleTitles = {
+      guard let array = dictionary["possibleTitles"] as? [String]
+      else { return nil };
+      
+      return Set(array);
+    }();
     
     // set properites for type "TEXT"
-    if let string = dictionary["title"] as? String {
-      self.title = string;
-    };
+    self.title = dictionary["title"] as? String;
     
     // set properites for type: "SYSTEM_ITEM"
-    if let string = dictionary["systemItem"] as? String,
-       let systemItem = UIBarButtonItem.SystemItem(string: string) {
+    self.systemItem = {
+      guard let string = dictionary["systemItem"] as? String
+      else { return nil };
       
-      self.systemItem = systemItem;
-    };
+      return UIBarButtonItem.SystemItem(string: string);
+    }();
     
     // set properites for type: "IMAGE_ASSET", "IMAGE_SYSTEM", etc.
-    if let imageType = RNIImageItem.ImageType(rawValue: type) {
-      self.imageItem = RNIImageItem(
+    self.imageItem = {
+      guard let imageType = RNIImageItem.ImageType(rawValue: type)
+      else { return nil };
+      
+      return RNIImageItem(
         type: imageType,
         imageValue: dictionary["imageValue"]
       );
-    };
+    }();
   };
   
   /// Init. from a custom view
