@@ -90,15 +90,15 @@ class RNINavigatorView: UIView {
       guard self.navBarAppearance != oldValue else { return };
       
       if let dict = self.navBarAppearance {
+        // update nav bar appearance
         self._navBarAppearance.updateValues(dict: dict);
+        self._navBarAppearance.updateNavBarAppearance(self.navigationBar);
         
       } else {
         // reset appearance config
+        self._navBarAppearance.resetNavBarAppearance(self.navigationBar);
         self._navBarAppearance = RNINavBarAppearance(dict: nil);
       };
-      
-      // update nav bar appearance
-      self._navBarAppearance.updateNavBarAppearance(self.navigationBar);
     }
   };
   
