@@ -54,6 +54,9 @@ class RNINavBarAppearance {
     var backgroundColor: UIColor?;
     var shadowColor: UIColor?;
     
+    // MARK:
+    var backIndicatorImage: RNIImageItem?;
+    
     // MARK: Computed Properties
     @available(iOS 13.0, *)
     var appearance: UINavigationBarAppearance {
@@ -92,24 +95,25 @@ class RNINavBarAppearance {
       // Section: `BarAppearance`-related
       // --------------------------------
       
-      if shouldSetBackground,
-         let effect = self.backgroundEffect {
-        
-        appearance.backgroundEffect = effect;
+      if shouldSetBackground {
+        appearance.backgroundEffect = self.backgroundEffect;
       };
       
-      if shouldSetBackground,
-         let color = self.backgroundColor {
-        
-        appearance.backgroundColor = color;
+      if shouldSetBackground {
+        appearance.backgroundColor = self.backgroundColor;
       };
       
-      if shouldSetShadow,
-         let color = self.shadowColor {
-        
-        appearance.shadowColor = color;
+      if shouldSetShadow {
+        appearance.shadowColor = self.shadowColor;
       };
       
+      // Section:
+      // ---------------------
+      
+      let backImage = self.backIndicatorImage?.image;
+      /// NOTE: cannot hide indicator via setting this to `UIImage()` or `nil`
+      appearance.setBackIndicatorImage(backImage, transitionMaskImage: backImage);
+    
       // Section: NavBar Preset
       // ----------------------
       
@@ -206,6 +210,17 @@ class RNINavBarAppearance {
         else { return nil };
         
         return color;
+      }();
+      
+      // Section:
+      // ----------------------
+      
+      self.backIndicatorImage = {
+        guard let imageDict = dict["backIndicatorImage"] as? NSDictionary,
+              let imageItem = RNIImageItem(dict: imageDict)
+        else { return nil };
+        
+        return imageItem;
       }();
     };
   };
