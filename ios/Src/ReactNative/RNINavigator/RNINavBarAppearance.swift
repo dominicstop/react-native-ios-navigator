@@ -225,6 +225,9 @@ class RNINavBarAppearance {
     var tintColor: UIColor?;
     var barTintColor: UIColor?;
     
+    // MARK: Misc. Images
+    var backIndicatorImage: RNIImageItem?;
+    
     // MARK: Init + Conifg
     // -------------------
     
@@ -233,7 +236,6 @@ class RNINavBarAppearance {
     };
     
     func updateValues(dict: NSDictionary){
-      
       self.navBarPreset = {
         guard let string = dict["navBarPreset"] as? String,
               let navBarPreset = NavBarPreset(rawValue: string)
@@ -287,6 +289,18 @@ class RNINavBarAppearance {
         
         return color;
       }();
+      
+      // Section: Misc. Images
+      // ---------------------
+      
+      /// set/init: `backIndicatorImage`
+      self.backIndicatorImage = {
+        guard let imageDict   = dict["backIndicatorImage"] as? NSDictionary,
+              let imageItem = RNIImageItem(dict: imageDict)
+        else { return nil };
+        
+        return imageItem;
+      }();
     };
     
     func updateNavBarAppearance(_ navBar: UINavigationBar){
@@ -317,6 +331,15 @@ class RNINavBarAppearance {
       /// set/init: `barTintColor`, e.g. the bg color
       if shouldSetBG {
         navBar.barTintColor = self.barTintColor;
+      };
+      
+      // Section: Misc. Images
+      // ---------------------
+      
+      /// set/init: `backIndicatorImage`
+      if let backImage = self.backIndicatorImage?.image {
+        navBar.backIndicatorImage = backImage;
+        navBar.backIndicatorTransitionMaskImage = backImage;
       };
       
       // Section: NavBar Preset
@@ -427,9 +450,13 @@ class RNINavBarAppearance {
     guard let navBar = navBar else { return };
     
     guard let mode = mode else {
-      // no config set, reset nav bar to default style
-      self.resetNavBarAppearance(navBar);
+      // no config set, put prev. had a config, so reset navbar style
+      self.shouldResetNavBar = self.mode != nil;
       return;
+    };
+    
+    if self.shouldResetNavBar {
+      self.resetNavBarAppearance(navBar);
     };
     
     switch mode {
@@ -461,6 +488,8 @@ class RNINavBarAppearance {
   
   func resetNavBarAppearance(_ navBar: UINavigationBar?){
     guard let navBar = navBar else { return };
+    self.shouldResetNavBar = false;
+    
     let defaultAppearance = UINavigationBar.appearance();
     
     // reset navbar appearance

@@ -5,6 +5,7 @@ export type ImageResolvedAssetSource = {
   scale: number;
   uri: string;
 };
+
 /** Object return by `DynamicColorIOS` */
 export type DynamicColor = {
   dynamic: {

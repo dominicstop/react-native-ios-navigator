@@ -1,5 +1,5 @@
 import type { TextStyle, TextStyleIOS } from "react-native";
-import type { BlurEffectStyle, DynamicColor, Offset } from "./MiscTypes";
+import type { BlurEffectStyle, DynamicColor, ImageItemConfig, Offset } from "./MiscTypes";
 
 
 /** `UIBarStyle`: Defines the stylistic appearance of different types of views */
@@ -71,6 +71,9 @@ export type NavBarAppearanceLegacyConfig = NavBarAppearanceConfigBase & {
 
   /** The tint color to apply to the navigation bar background. */
   barTintColor?: string | DynamicColor;
+
+  /** The image shown beside the back button. */
+  backIndicatorImage?: ImageItemConfig;
 };
 
 export type NavBarAppearanceConfig = NavBarAppearanceConfigBase & {
