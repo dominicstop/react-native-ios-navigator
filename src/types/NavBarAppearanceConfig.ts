@@ -66,6 +66,7 @@ export type NavBarAppearanceLegacyConfig = NavBarAppearanceConfigBase & {
   /** Display attributes for the bar's large title text. */
   largeTitleTextAttributes?: TextStyle & TextStyleIOS;
 
+  /** Sets the title’s vertical position adjustment for `default` bar metrics. */
   titleVerticalPositionAdjustment?: number;
 
   /** The tint color to apply to the navigation items and bar button items. */
@@ -76,6 +77,9 @@ export type NavBarAppearanceLegacyConfig = NavBarAppearanceConfigBase & {
 
   /** The image shown beside the back button. */
   backIndicatorImage?: ImageItemConfig;
+
+  /** Sets the background image for the default metric. */
+  backgroundImage?: ImageItemConfig;
 };
 
 export type NavBarAppearanceConfig = NavBarAppearanceConfigBase & {

@@ -228,6 +228,7 @@ class RNINavBarAppearance {
     
     // MARK: Misc. Images
     var backIndicatorImage: RNIImageItem?;
+    var backgroundImage: RNIImageItem?;
     
     // MARK: Init + Conifg
     // -------------------
@@ -300,6 +301,9 @@ class RNINavBarAppearance {
       
       self.backIndicatorImage = {
         guard let imageDict   = dict["backIndicatorImage"] as? NSDictionary,
+      
+      self.backgroundImage = {
+        guard let imageDict = dict["backgroundImage"] as? NSDictionary,
               let imageItem = RNIImageItem(dict: imageDict)
         else { return nil };
         
@@ -354,6 +358,12 @@ class RNINavBarAppearance {
       if let backImage = self.backIndicatorImage?.image {
         navBar.backIndicatorImage = backImage;
         navBar.backIndicatorTransitionMaskImage = backImage;
+      };
+      
+      /// set/init: `backgroundImage`
+      let bgImage = self.backgroundImage?.image;
+      if bgImage != navBar.backgroundImage(for: .default) {
+        navBar.setBackgroundImage(bgImage, for: .any, barMetrics: .default);
       };
       
       // Section: NavBar Preset
