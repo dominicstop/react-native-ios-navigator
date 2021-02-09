@@ -80,6 +80,9 @@ export type NavBarAppearanceLegacyConfig = NavBarAppearanceConfigBase & {
 
   /** Sets the background image for the default metric. */
   backgroundImage?: ImageItemConfig;
+
+  /** The shadow image to be used for the navigation bar. */
+  shadowImage?: ImageItemConfig;
 };
 
 export type NavBarAppearanceConfig = NavBarAppearanceConfigBase & {

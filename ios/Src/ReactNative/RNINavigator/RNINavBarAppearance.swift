@@ -60,8 +60,8 @@ class RNINavBarAppearance {
       let appearance = UINavigationBarAppearance();
       
       // which appearance properties should be customizable?
-      let shouldSetShadow     = self.navBarPreset != .noShadow;
       let shouldSetBackground = self.navBarPreset != .clearBackground;
+      let shouldSetShadow     = self.navBarPreset != .noShadow && shouldSetBackground;
       
       switch self.baseConfig {
         case .defaultBackground:
@@ -229,6 +229,7 @@ class RNINavBarAppearance {
     // MARK: Misc. Images
     var backIndicatorImage: RNIImageItem?;
     var backgroundImage: RNIImageItem?;
+    var shadowImage: RNIImageItem?;
     
     // MARK: Init + Conifg
     // -------------------
@@ -314,10 +315,19 @@ class RNINavBarAppearance {
         
         return imageItem;
       }();
+      
+      self.shadowImage = {
+        guard let imageDict = dict["shadowImage"] as? NSDictionary,
+              let imageItem = RNIImageItem(dict: imageDict)
+        else { return nil };
+        
+        return imageItem;
+      }();
     };
     
     func updateNavBarAppearance(_ navBar: UINavigationBar){
-      let shouldSetBG = self.navBarPreset != .clearBackground;
+      let shouldSetBG     = self.navBarPreset != .clearBackground;
+      let shouldSetShadow = self.navBarPreset != .noShadow && shouldSetBG;
       
       // Section: Title Config
       // ---------------------
@@ -370,6 +380,10 @@ class RNINavBarAppearance {
       let bgImage = self.backgroundImage?.image;
       if bgImage != navBar.backgroundImage(for: .default) {
         navBar.setBackgroundImage(bgImage, for: .any, barMetrics: .default);
+      };
+      
+      if shouldSetShadow {
+        navBar.shadowImage = self.shadowImage?.image;
       };
       
       // Section: NavBar Preset
