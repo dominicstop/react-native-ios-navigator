@@ -102,3 +102,15 @@ export type BlurEffectStyle =
   | 'regular'
   /** A blur style for making content more prominent that adapts to the user interface style. */
   | 'prominent'
+
+/** Constants to specify metrics to use for appearance. */
+export type BarMetrics = (
+  /** Specifies default metrics for the device */
+  | 'default'
+  /** Specifies metrics when using the phone idiom */
+  | 'compact'
+  /** Specifies default metrics for the device for bars with the prompt property, such as UINavigationBar and UISearchBar. */
+  | 'defaultPrompt'
+  /** Specifies metrics for bars with the prompt property when using the phone idiom, such as UINavigationBar and UISearchBar. */
+  | 'compactPrompt'
+);

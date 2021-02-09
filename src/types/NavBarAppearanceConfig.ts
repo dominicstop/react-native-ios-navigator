@@ -1,21 +1,9 @@
 import type { TextStyle, TextStyleIOS } from "react-native";
-import type { BlurEffectStyle, DynamicColor, ImageItemConfig, Offset } from "./MiscTypes";
-
+import type { BlurEffectStyle, DynamicColor, ImageItemConfig, Offset, BarMetrics } from "./MiscTypes";
 
 /** `UIBarStyle`: Defines the stylistic appearance of different types of views */
 type BarStyle = 'default' | 'black';
 
-/** Constants to specify metrics to use for appearance. */
-type BarMetrics = (
-  /** Specifies default metrics for the device */
-  | 'default'
-  /** Specifies metrics when using the phone idiom */
-  | 'compact'
-  /** Specifies default metrics for the device for bars with the prompt property, such as UINavigationBar and UISearchBar. */
-  | 'defaultPrompt'
-  /** Specifies metrics for bars with the prompt property when using the phone idiom, such as UINavigationBar and UISearchBar. */
-  | 'compactPrompt'
-);
 
 type NavBarAppearanceBaseConfig = 
   /** Configures the bar appearance object with default background and shadow values. */
