@@ -300,7 +300,12 @@ class RNINavBarAppearance {
       // ---------------------
       
       self.backIndicatorImage = {
-        guard let imageDict   = dict["backIndicatorImage"] as? NSDictionary,
+        guard let imageDict = dict["backIndicatorImage"] as? NSDictionary,
+              let imageItem = RNIImageItem(dict: imageDict)
+        else { return nil };
+        
+        return imageItem;
+      }();
       
       self.backgroundImage = {
         guard let imageDict = dict["backgroundImage"] as? NSDictionary,
@@ -355,8 +360,9 @@ class RNINavBarAppearance {
       // ---------------------
       
       /// set/init: `backIndicatorImage`
-      if let backImage = self.backIndicatorImage?.image {
-        navBar.backIndicatorImage = backImage;
+      let backImage = self.backIndicatorImage?.image;
+      if backImage != navBar.backIndicatorImage {
+        navBar.backIndicatorImage               = backImage;
         navBar.backIndicatorTransitionMaskImage = backImage;
       };
       
