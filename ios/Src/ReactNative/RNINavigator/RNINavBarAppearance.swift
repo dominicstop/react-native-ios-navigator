@@ -219,7 +219,7 @@ class RNINavBarAppearance {
     // MARK: Title Config
     var titleTextAttributes: RCTTextAttributes?;
     var largeTitleTextAttributes: RCTTextAttributes?;
-    var titleVerticalPositionAdjustment: CGFloat = 0;
+    var titleVerticalPositionAdjustment: [(UIBarMetrics, CGFloat)]?;
     
     // MARK: Navbar Style
     var barStyle: UIBarStyle?;
@@ -228,7 +228,7 @@ class RNINavBarAppearance {
     
     // MARK: Misc. Images
     var backIndicatorImage: RNIImageItem?;
-    var backgroundImage: RNIImageItem?;
+    var backgroundImage: [(UIBarMetrics, RNIImageItem)]?;
     var shadowImage: RNIImageItem?;
     
     // MARK: Init + Conifg
@@ -267,8 +267,19 @@ class RNINavBarAppearance {
       }();
       
       /// set/init: `titleVerticalPositionAdjustment`
-      self.titleVerticalPositionAdjustment =
-        dict["titleVerticalPositionAdjustment"] as? CGFloat ?? 0;
+      self.titleVerticalPositionAdjustment = {
+        guard let dict = dict["titleVerticalPositionAdjustment"] as? NSDictionary,
+              let keys = dict.allKeys as? [String]
+        else { return nil };
+        
+        return keys.compactMap {
+          guard let metric = UIBarMetrics(string: $0),
+                let value  = dict[$0] as? CGFloat
+          else { return nil };
+          
+          return (metric, value);
+        };
+      }();
       
       // Section: Navbar Style
       // ---------------------
@@ -309,11 +320,18 @@ class RNINavBarAppearance {
       }();
       
       self.backgroundImage = {
-        guard let imageDict = dict["backgroundImage"] as? NSDictionary,
-              let imageItem = RNIImageItem(dict: imageDict)
+        guard let dict = dict["backgroundImage"] as? NSDictionary,
+              let keys = dict.allKeys as? [String]
         else { return nil };
         
-        return imageItem;
+        return keys.compactMap {
+          guard let metric    = UIBarMetrics(string: $0),
+                let imageDict = dict[$0] as? NSDictionary,
+                let imageItem = RNIImageItem(dict: imageDict)
+          else { return nil };
+          
+          return (metric, imageItem);
+        };
       }();
       
       self.shadowImage = {
@@ -343,13 +361,12 @@ class RNINavBarAppearance {
       };
       
       /// set/init: `titleVerticalPositionAdjustment`
-      if self.titleVerticalPositionAdjustment !=
-          navBar.titleVerticalPositionAdjustment(for: .default){
+      for (metric, number) in self.titleVerticalPositionAdjustment ?? [] {
+        // did change, else skip...
+        guard navBar.titleVerticalPositionAdjustment(for: metric) != number
+        else { continue };
         
-        navBar.setTitleVerticalPositionAdjustment(
-          self.titleVerticalPositionAdjustment,
-          for: .default
-        );
+        navBar.setTitleVerticalPositionAdjustment(number, for: metric);
       };
       
       // Section: Navbar Style
@@ -377,11 +394,16 @@ class RNINavBarAppearance {
       };
       
       /// set/init: `backgroundImage`
-      let bgImage = self.backgroundImage?.image;
-      if bgImage != navBar.backgroundImage(for: .default) {
-        navBar.setBackgroundImage(bgImage, for: .any, barMetrics: .default);
+      for (metric, imageItem) in self.backgroundImage ?? [] {
+        // allow set bg image, else stop
+        guard shouldSetBG else { break };
+        let bgImage = imageItem.image;
+        
+        // did change, else skip...
+        guard bgImage != navBar.backgroundImage(for: metric) else { continue };
+        navBar.setBackgroundImage(bgImage, for: .any, barMetrics: metric);
       };
-      
+            
       if shouldSetShadow {
         navBar.shadowImage = self.shadowImage?.image;
       };
@@ -555,15 +577,19 @@ class RNINavBarAppearance {
     navBar.backIndicatorTransitionMaskImage =
       defaultAppearance.backIndicatorTransitionMaskImage;
     
-    navBar.setTitleVerticalPositionAdjustment(
-      defaultAppearance.titleVerticalPositionAdjustment(for: .default),
-      for: .default
-    );
-    
-    navBar.setBackgroundImage(
-      defaultAppearance.backgroundImage(for: .default),
-      for: .default
-    );
+    for metric in UIBarMetrics.allCases {
+      /// reset `titleVerticalPositionAdjustment`
+      navBar.setTitleVerticalPositionAdjustment(
+        defaultAppearance.titleVerticalPositionAdjustment(for: metric),
+        for: metric
+      );
+      
+      /// reset `backgroundImage`
+      navBar.setBackgroundImage(
+        defaultAppearance.backgroundImage(for: metric),
+        for: metric
+      );
+    };
     
     if #available(iOS 11.0, *) {
       navBar.largeTitleTextAttributes = defaultAppearance.largeTitleTextAttributes;

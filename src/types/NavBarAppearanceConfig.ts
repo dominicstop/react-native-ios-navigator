@@ -5,6 +5,18 @@ import type { BlurEffectStyle, DynamicColor, ImageItemConfig, Offset } from "./M
 /** `UIBarStyle`: Defines the stylistic appearance of different types of views */
 type BarStyle = 'default' | 'black';
 
+/** Constants to specify metrics to use for appearance. */
+type BarMetrics = (
+  /** Specifies default metrics for the device */
+  | 'default'
+  /** Specifies metrics when using the phone idiom */
+  | 'compact'
+  /** Specifies default metrics for the device for bars with the prompt property, such as UINavigationBar and UISearchBar. */
+  | 'defaultPrompt'
+  /** Specifies metrics for bars with the prompt property when using the phone idiom, such as UINavigationBar and UISearchBar. */
+  | 'compactPrompt'
+);
+
 type NavBarAppearanceBaseConfig = 
   /** Configures the bar appearance object with default background and shadow values. */
   | 'defaultBackground'
@@ -66,8 +78,8 @@ export type NavBarAppearanceLegacyConfig = NavBarAppearanceConfigBase & {
   /** Display attributes for the bar's large title text. */
   largeTitleTextAttributes?: TextStyle & TextStyleIOS;
 
-  /** Sets the title’s vertical position adjustment for `default` bar metrics. */
-  titleVerticalPositionAdjustment?: number;
+  /** Sets the title’s vertical position adjustment for the given bar metrics. */
+  titleVerticalPositionAdjustment?: { [key in BarMetrics]?: number };
 
   /** The tint color to apply to the navigation items and bar button items. */
   tintColor?: string | DynamicColor;
@@ -78,8 +90,8 @@ export type NavBarAppearanceLegacyConfig = NavBarAppearanceConfigBase & {
   /** The image shown beside the back button. */
   backIndicatorImage?: ImageItemConfig;
 
-  /** Sets the background image for the default metric. */
-  backgroundImage?: ImageItemConfig;
+  /** Sets the background image for the given metric. */
+  backgroundImage?: { [key in BarMetrics]?: ImageItemConfig };
 
   /** The shadow image to be used for the navigation bar. */
   shadowImage?: ImageItemConfig;
