@@ -66,6 +66,42 @@ class RNINavBarItemConfig {
   private(set) var backgroundVerticalPositionAdjustment:
     [(UIBarMetrics, CGFloat)]?;
   
+  var barButtonItem: UIBarButtonItem? {
+    switch self.type {
+      case .TEXT:
+        return UIBarButtonItem(
+          title: self.title,
+          style: self.barButtonItemStyle,
+          target: self,
+          action: #selector(onNavBarItemPressed(_:))
+        );
+        
+      case .SYSTEM_ITEM:
+        return UIBarButtonItem(
+          barButtonSystemItem: self.systemItem!,
+          target: self,
+          action: #selector(onNavBarItemPressed(_:))
+        );
+    
+      case .CUSTOM:
+        return UIBarButtonItem(customView: self.customView!);
+      
+      // `RNIImageItem.ImageType` Items
+      // Note: Creation of image handled by `RNIImageItem`
+      case .IMAGE_ASSET : fallthrough;
+      case .IMAGE_EMPTY : fallthrough;
+      case .IMAGE_SYSTEM:
+        return UIBarButtonItem(
+          image: self.imageItem?.image,
+          style: self.barButtonItemStyle,
+          target: self,
+          action: #selector(onNavBarItemPressed(_:))
+        );
+        
+      default: return nil;
+    };
+  };
+
   // -----------
   // MARK:- Init
   // -----------
@@ -215,56 +251,21 @@ class RNINavBarItemConfig {
   };
     
   func createUIBarButtonItem(action: NavBarItemAction?) -> UIBarButtonItem? {
+    guard let barButtonItem = self.barButtonItem else { return nil };
     self.action = action;
     
-    let barButtonItem: UIBarButtonItem? = {
-      switch self.type {
-        case .TEXT:
-          return UIBarButtonItem(
-            title: self.title,
-            style: self.barButtonItemStyle,
-            target: self,
-            action: #selector(onNavBarItemPressed(_:))
-          );
-          
-        case .SYSTEM_ITEM:
-          return UIBarButtonItem(
-            barButtonSystemItem: self.systemItem!,
-            target: self,
-            action: #selector(onNavBarItemPressed(_:))
-          );
-      
-        case .CUSTOM:
-          return UIBarButtonItem(customView: self.customView!);
-        
-        // `RNIImageItem.ImageType` Items
-        // Note: Creation of image handled by `RNIImageItem`
-        case .IMAGE_ASSET : fallthrough;
-        case .IMAGE_EMPTY : fallthrough;
-        case .IMAGE_SYSTEM:
-          return UIBarButtonItem(
-            image: self.imageItem?.image,
-            style: self.barButtonItemStyle,
-            target: self,
-            action: #selector(onNavBarItemPressed(_:))
-          );
-          
-        default: return nil;
-      };
-    }();
-    
-    barButtonItem?.style          = self.barButtonItemStyle;
-    barButtonItem?.tintColor      = self.tintColor;
-    barButtonItem?.possibleTitles = self.possibleTitles;
+    barButtonItem.style          = self.barButtonItemStyle;
+    barButtonItem.tintColor      = self.tintColor;
+    barButtonItem.possibleTitles = self.possibleTitles;
     
     if let width = self.width {
-      barButtonItem?.width = width;
+      barButtonItem.width = width;
     };
     
     for (metric, imageItem, controlState, barButtonItemStyle) in self.backgroundImage ?? [] {
       let bgImage = imageItem.image;
       
-      let current = barButtonItem?.backgroundImage(
+      let current = barButtonItem.backgroundImage(
         for: controlState,
         barMetrics: metric
       );
@@ -272,7 +273,7 @@ class RNINavBarItemConfig {
       // did change, else skip...
       guard bgImage != current else { continue };
       if let barButtonItemStyle = barButtonItemStyle {
-        barButtonItem?.setBackgroundImage(
+        barButtonItem.setBackgroundImage(
           bgImage,
           for: controlState,
           style: barButtonItemStyle,
@@ -280,28 +281,28 @@ class RNINavBarItemConfig {
         );
       
       } else {
-        barButtonItem?.setBackgroundImage(
+        barButtonItem.setBackgroundImage(
           bgImage,
           for: controlState,
           barMetrics: metric
         );
       };
     };
-    
-    for (metric, adj) in self.backgroundVerticalPositionAdjustment ?? [] {
+        
+    self.backgroundVerticalPositionAdjustment?.forEach { (metric, adj) in
       // did change, else skip...
-      guard barButtonItem?.backgroundVerticalPositionAdjustment(for: metric) != adj
-      else { continue };
+      guard barButtonItem.backgroundVerticalPositionAdjustment(for: metric) != adj
+      else { return };
       
-      barButtonItem?.setBackgroundVerticalPositionAdjustment(adj, for: metric);
+      barButtonItem.setBackgroundVerticalPositionAdjustment(adj, for: metric);
     };
     
-    for (metric, offset) in self.titlePositionAdjustment ?? [] {
+    self.titlePositionAdjustment?.forEach { (metric, offset) in
       // did change, else skip...
-      guard barButtonItem?.titlePositionAdjustment(for: metric) != offset
-      else { continue };
+      guard barButtonItem.titlePositionAdjustment(for: metric) != offset
+      else { return };
       
-      barButtonItem?.setTitlePositionAdjustment(offset, for: metric);
+      barButtonItem.setTitlePositionAdjustment(offset, for: metric);
     };
     
     return barButtonItem;

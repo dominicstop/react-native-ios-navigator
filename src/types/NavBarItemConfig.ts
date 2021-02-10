@@ -116,9 +116,6 @@ type NavBarBackItemConfigBase = {
    * This flag indicates whether or not this config will be applied to the prev. route's
    * back item. */
   applyToPrevBackConfig?: boolean;
-
-  /** Sets the back button background image for a specified control state and bar metrics. */
-  
 };
 
 type ArrayWithOneElement<T> = { 0: T } & Array<T>;
