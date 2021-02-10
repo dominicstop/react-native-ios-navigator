@@ -1,4 +1,4 @@
-import type { DynamicColor, ImageItemConfig, BarMetrics, ControlState } from "./MiscTypes";
+import type { DynamicColor, ImageItemConfig, BarMetrics, ControlState, Offset } from "./MiscTypes";
 
 //#region - BarButtonItemSystemItem
 type BarButtonItemSystemItem =
@@ -94,8 +94,18 @@ type NavBarItemConfigShared = {
       imageItem: ImageItemConfig;
       controlState: ControlState;
       barButtonItemStyle?: BarButtonItemStyle;
-    }
+    };
   };
+
+  /** Sets the title offset for specified bar metrics. **/
+  titlePositionAdjustment?: {
+    [key in BarMetrics]?: Offset;
+  };
+
+  /** Sets the background vertical position offset for specified bar metrics. **/
+  // backgroundVerticalPositionAdjustment?: {
+  //   [key in BarMetrics]?: number
+  // };
 };
 
 type NavBarBackItemConfigBase = {

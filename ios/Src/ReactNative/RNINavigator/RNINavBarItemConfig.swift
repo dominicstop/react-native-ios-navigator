@@ -60,6 +60,12 @@ class RNINavBarItemConfig {
   private(set) var backgroundImage:
     [(UIBarMetrics, RNIImageItem, UIControl.State, UIBarButtonItem.Style?)]?;
   
+  private(set) var titlePositionAdjustment: [(UIBarMetrics, UIOffset)]?;
+  
+  /** Disabled */
+  private(set) var backgroundVerticalPositionAdjustment:
+    [(UIBarMetrics, CGFloat)]?;
+  
   // -----------
   // MARK:- Init
   // -----------
@@ -125,8 +131,37 @@ class RNINavBarItemConfig {
           return UIBarButtonItem.Style(string: string)
         }();
         
-        
         return (metric, imageItem, controlState, barButtonItemStyle);
+      };
+    }();
+    
+    self.backgroundVerticalPositionAdjustment = {
+      guard let dict = dictionary["backgroundVerticalPositionAdjustment"] as? NSDictionary,
+            let keys = dict.allKeys as? [String]
+      else { return nil };
+      
+      /// `{ metric: number }`
+      return keys.compactMap {
+        guard let metric = UIBarMetrics(string: $0),
+              let value  = dict[$0] as? CGFloat
+        else { return nil };
+        
+        return (metric, value);
+      };
+    }();
+    
+    self.titlePositionAdjustment = {
+      guard let dict = dictionary["titlePositionAdjustment"] as? NSDictionary,
+            let keys = dict.allKeys as? [String]
+      else { return nil };
+      
+      /// `{ metric: number }`
+      return keys.compactMap {
+        guard let metric     = UIBarMetrics(string: $0),
+              let offsetDict = dict[$0] as? NSDictionary
+        else { return nil };
+        
+        return (metric, UIOffset(dictionary: offsetDict));
       };
     }();
     
@@ -237,10 +272,36 @@ class RNINavBarItemConfig {
       // did change, else skip...
       guard bgImage != current else { continue };
       if let barButtonItemStyle = barButtonItemStyle {
-        barButtonItem?.setBackgroundImage(bgImage, for: controlState, barMetrics: metric);
+        barButtonItem?.setBackgroundImage(
+          bgImage,
+          for: controlState,
+          style: barButtonItemStyle,
+          barMetrics: metric
+        );
+      
       } else {
-        barButtonItem?.setBackgroundImage(bgImage, for: controlState, barMetrics: metric);
+        barButtonItem?.setBackgroundImage(
+          bgImage,
+          for: controlState,
+          barMetrics: metric
+        );
       };
+    };
+    
+    for (metric, adj) in self.backgroundVerticalPositionAdjustment ?? [] {
+      // did change, else skip...
+      guard barButtonItem?.backgroundVerticalPositionAdjustment(for: metric) != adj
+      else { continue };
+      
+      barButtonItem?.setBackgroundVerticalPositionAdjustment(adj, for: metric);
+    };
+    
+    for (metric, offset) in self.titlePositionAdjustment ?? [] {
+      // did change, else skip...
+      guard barButtonItem?.titlePositionAdjustment(for: metric) != offset
+      else { continue };
+      
+      barButtonItem?.setTitlePositionAdjustment(offset, for: metric);
     };
     
     return barButtonItem;
