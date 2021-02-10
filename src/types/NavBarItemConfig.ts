@@ -65,6 +65,13 @@ type NavBarItemConfigCustomBase = {
   type: "CUSTOM";
 };
 
+type BarButtonItemStyle = 
+  /** Glows when tapped. The default item style. */
+  | 'plain'
+  /** The style for a done button—for example, a button that completes some task and returns to the previous view. */
+  | 'done';
+
+/** Specifies the style of an item. */
 type NavBarItemConfigShared = {
   /** Used for `onPressBarButtonItem` to distinguish item triggered the event */
   key?: String;
@@ -73,7 +80,7 @@ type NavBarItemConfigShared = {
   tintColor?: string | DynamicColor;
 
   /** Specifies the style of an item. Default is 'plain'. */
-  barButtonItemStyle?: 'plain' | 'done';
+  barButtonItemStyle?: BarButtonItemStyle;
 
   /** The set of possible titles to display on the bar button. */
   possibleTitles?: Array<string>;
@@ -84,8 +91,9 @@ type NavBarItemConfigShared = {
   /** Sets the background image for a specified state and bar metrics. */
   backgroundImage?: { 
     [key in BarMetrics]?: {
-      imageItem: ImageItemConfig,
-      controlState: ControlState
+      imageItem: ImageItemConfig;
+      controlState: ControlState;
+      barButtonItemStyle?: BarButtonItemStyle;
     }
   };
 };

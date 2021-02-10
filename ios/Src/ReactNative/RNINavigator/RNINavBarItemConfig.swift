@@ -58,7 +58,7 @@ class RNINavBarItemConfig {
   private(set) var possibleTitles: Set<String>?;
   
   private(set) var backgroundImage:
-    [(UIBarMetrics, RNIImageItem, UIControl.State)]?;
+    [(UIBarMetrics, RNIImageItem, UIControl.State, UIBarButtonItem.Style?)]?;
   
   // -----------
   // MARK:- Init
@@ -118,11 +118,17 @@ class RNINavBarItemConfig {
               let controlState       = UIControl.State(string: controlStateString)
         else { return nil };
         
-        return (metric, imageItem, controlState);
+        let barButtonItemStyle: UIBarButtonItem.Style? = {
+          guard let string = configDict["barButtonItemStyle"] as? String
+          else { return nil };
+          
+          return UIBarButtonItem.Style(string: string)
+        }();
+        
+        
+        return (metric, imageItem, controlState, barButtonItemStyle);
       };
     }();
-    
-    print("DEBUG -* backgroundImage init \(self.backgroundImage)");
     
     // Section: Type "TEXT"
     // --------------------
@@ -220,7 +226,7 @@ class RNINavBarItemConfig {
       barButtonItem?.width = width;
     };
     
-    for (metric, imageItem, controlState) in self.backgroundImage ?? [] {
+    for (metric, imageItem, controlState, barButtonItemStyle) in self.backgroundImage ?? [] {
       let bgImage = imageItem.image;
       
       let current = barButtonItem?.backgroundImage(
@@ -230,9 +236,11 @@ class RNINavBarItemConfig {
       
       // did change, else skip...
       guard bgImage != current else { continue };
-      
-      barButtonItem?.setBackgroundImage(bgImage, for: controlState, barMetrics: metric);
-      print("DEBUG -* barButtonItem setBackgroundImage \(metric) \(imageItem) \(controlState)");
+      if let barButtonItemStyle = barButtonItemStyle {
+        barButtonItem?.setBackgroundImage(bgImage, for: controlState, barMetrics: metric);
+      } else {
+        barButtonItem?.setBackgroundImage(bgImage, for: controlState, barMetrics: metric);
+      };
     };
     
     return barButtonItem;
