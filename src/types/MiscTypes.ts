@@ -104,7 +104,7 @@ export type BlurEffectStyle =
   | 'prominent'
 
 /** Constants to specify metrics to use for appearance. */
-export type BarMetrics = (
+export type BarMetrics = 
   /** Specifies default metrics for the device */
   | 'default'
   /** Specifies metrics when using the phone idiom */
@@ -113,4 +113,15 @@ export type BarMetrics = (
   | 'defaultPrompt'
   /** Specifies metrics for bars with the prompt property when using the phone idiom, such as UINavigationBar and UISearchBar. */
   | 'compactPrompt'
-);
+
+export type ControlState = 
+  /* The normal, or default state of a control—that is, enabled but neither selected nor highlighted. */
+  | 'normal'
+  /* Highlighted state of a control. */
+  | 'highlighted'
+  /* Disabled state of a control. */
+  | 'disabled'
+  /* Selected state of a control. */
+  | 'selected'
+  /* Focused state of a control. */
+  | 'focused'

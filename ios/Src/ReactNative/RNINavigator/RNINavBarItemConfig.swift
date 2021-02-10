@@ -55,7 +55,10 @@ class RNINavBarItemConfig {
   private(set) var tintColor: UIColor?;
   private(set) var barButtonItemStyle: UIBarButtonItem.Style = .plain;
   private(set) var width: CGFloat?;
-  private(set) var possibleTitles: Set<String>?
+  private(set) var possibleTitles: Set<String>?;
+  
+  private(set) var backgroundImage:
+    [(UIBarMetrics, RNIImageItem, UIControl.State)]?;
   
   // -----------
   // MARK:- Init
@@ -69,10 +72,11 @@ class RNINavBarItemConfig {
     
     self.type = itemType;
     
-    // set general property: `key`
+    // Section: Gen. Properties
+    // ------------------------
+    
     self.key = dictionary["key"] as? String;
     
-    // set general property: `tintColor`
     self.tintColor = {
       guard let string = dictionary["tintColor"] as? String
       else { return nil };
@@ -80,7 +84,6 @@ class RNINavBarItemConfig {
       return UIColor(cssColor: string);
     }();
     
-    // set general property: `barButtonItemStyle`
     self.barButtonItemStyle = {
       guard let string = dictionary["barButtonItemStyle"] as? String,
             let style = UIBarButtonItem.Style(string: string)
@@ -88,11 +91,9 @@ class RNINavBarItemConfig {
       
       return style;
     }();
-    
-    // set general property: `width`
+
     self.width = dictionary["width"] as? CGFloat;
     
-    // set general property: `possibleTitles`
     self.possibleTitles = {
       guard let array = dictionary["possibleTitles"] as? [String]
       else { return nil };
@@ -100,10 +101,37 @@ class RNINavBarItemConfig {
       return Set(array);
     }();
     
-    // set properites for type "TEXT"
+    self.backgroundImage = {
+      guard let dict = dictionary["backgroundImage"] as? NSDictionary,
+            let keys = dict.allKeys as? [String]
+      else { return nil };
+      
+      /// `{metric: { imageItem, controlState }}`
+      return keys.compactMap {
+        guard let metric     = UIBarMetrics(string: $0),
+              let configDict = dict[$0] as? NSDictionary,
+              // get image item from config
+              let imageDict  = configDict["imageItem"] as? NSDictionary,
+              let imageItem  = RNIImageItem(dict: imageDict),
+              // get control state from config
+              let controlStateString = configDict["controlState"] as? String,
+              let controlState       = UIControl.State(string: controlStateString)
+        else { return nil };
+        
+        return (metric, imageItem, controlState);
+      };
+    }();
+    
+    print("DEBUG -* backgroundImage init \(self.backgroundImage)");
+    
+    // Section: Type "TEXT"
+    // --------------------
+    
     self.title = dictionary["title"] as? String;
     
-    // set properites for type: "SYSTEM_ITEM"
+    // Section: Type "SYSTEM_ITEM"
+    // ---------------------------
+    
     self.systemItem = {
       guard let string = dictionary["systemItem"] as? String
       else { return nil };
@@ -111,7 +139,9 @@ class RNINavBarItemConfig {
       return UIBarButtonItem.SystemItem(string: string);
     }();
     
-    // set properites for type: "IMAGE_ASSET", "IMAGE_SYSTEM", etc.
+    // Section: Image Types
+    // --------------------
+
     self.imageItem = {
       guard let imageType = RNIImageItem.ImageType(rawValue: type)
       else { return nil };
@@ -188,6 +218,21 @@ class RNINavBarItemConfig {
     
     if let width = self.width {
       barButtonItem?.width = width;
+    };
+    
+    for (metric, imageItem, controlState) in self.backgroundImage ?? [] {
+      let bgImage = imageItem.image;
+      
+      let current = barButtonItem?.backgroundImage(
+        for: controlState,
+        barMetrics: metric
+      );
+      
+      // did change, else skip...
+      guard bgImage != current else { continue };
+      
+      barButtonItem?.setBackgroundImage(bgImage, for: controlState, barMetrics: metric);
+      print("DEBUG -* barButtonItem setBackgroundImage \(metric) \(imageItem) \(controlState)");
     };
     
     return barButtonItem;

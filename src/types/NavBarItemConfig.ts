@@ -1,4 +1,4 @@
-import type { DynamicColor, ImageItemConfig } from "./MiscTypes";
+import type { DynamicColor, ImageItemConfig, BarMetrics, ControlState } from "./MiscTypes";
 
 //#region - BarButtonItemSystemItem
 type BarButtonItemSystemItem =
@@ -68,14 +68,26 @@ type NavBarItemConfigCustomBase = {
 type NavBarItemConfigShared = {
   /** Used for `onPressBarButtonItem` to distinguish item triggered the event */
   key?: String;
+
   /** The tint color to apply to the button item. */
   tintColor?: string | DynamicColor;
+
   /** Specifies the style of an item. Default is 'plain'. */
   barButtonItemStyle?: 'plain' | 'done';
+
   /** The set of possible titles to display on the bar button. */
   possibleTitles?: Array<string>;
+
   /** The width of the item. */
   width?: number;
+
+  /** Sets the background image for a specified state and bar metrics. */
+  backgroundImage?: { 
+    [key in BarMetrics]?: {
+      imageItem: ImageItemConfig,
+      controlState: ControlState
+    }
+  };
 };
 
 type NavBarBackItemConfigBase = {
@@ -86,6 +98,9 @@ type NavBarBackItemConfigBase = {
    * This flag indicates whether or not this config will be applied to the prev. route's
    * back item. */
   applyToPrevBackConfig?: boolean;
+
+  /** Sets the back button background image for a specified control state and bar metrics. */
+  
 };
 
 type ArrayWithOneElement<T> = { 0: T } & Array<T>;
