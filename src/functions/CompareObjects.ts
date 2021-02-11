@@ -78,7 +78,9 @@ export function compareNavBarButtonBackItemConfig(itemA: NavBarBackItemConfig, i
   return (
     (HelperUtilities.compareObjectsNull           (itemA, itemB)) && // @ts-ignore
     (HelperUtilities.compareNavBarItemConfigBase  (itemA, itemB)) && // @ts-ignore
-    (HelperUtilities.compareNavBarItemConfigShared(itemA, itemB))
+    (HelperUtilities.compareNavBarItemConfigShared(itemA, itemB)) &&
+    // compare back button config
+    (itemA?.applyToPrevBackConfig === itemB?.applyToPrevBackConfig)
   );
 };
 
