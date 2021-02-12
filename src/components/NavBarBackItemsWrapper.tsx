@@ -21,7 +21,7 @@ type NavBarBackItemsWrapperProps = {
   // get ref functions
   getRefToNavigator: () => NavigatorView;
   getEmitterRef    : () => EventEmitter<NavRouteEvents>;
-  getRouterRef     : () => NavigatorRouteView;
+  getRouteRef     : () => NavigatorRouteView;
   getPortalRef     : () => RouteViewPortal;
   // render nav bar items
   renderNavBarLeftItem : RenderNavBarItem;
@@ -56,7 +56,7 @@ export class NavBarItemsWrapper extends React.Component<NavBarBackItemsWrapperPr
 
     const sharedParams: RenderNavBarItemParams = {
       // pass "get ref" functions...
-      getRefToRoute          : props.getRouterRef     , // TODO: rename to `getRouteRef`
+      getRefToRoute          : props.getRouteRef      ,
       getRefToNavigator      : props.getRefToNavigator,
       getRefToNavRouteEmitter: props.getEmitterRef    ,
       // pass down route props...

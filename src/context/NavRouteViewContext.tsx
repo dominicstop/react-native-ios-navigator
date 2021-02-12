@@ -6,7 +6,7 @@ import type { EventEmitter } from '../functions/EventEmitter';
 
 export type NavRouteViewContextProps = {
   // func. to get refs
-  getRouterRef : () => NavigatorRouteView;
+  getRouteRef : () => NavigatorRouteView;
   getEmitterRef: () => EventEmitter<NavRouteEvents>;
 };
 

@@ -123,7 +123,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     return this.props.getRefToNavigator();
   };
 
-  public getRouterRef = () => {
+  public getRouteRef = () => {
     return this;
   };
 
@@ -412,7 +412,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     return(
       <NavRouteViewContext.Provider value={{
         // pass down function to get refs
-        getRouterRef: this.getRouterRef,
+        getRouteRef: this.getRouteRef,
         getEmitterRef: this.getEmitterRef,
       }}>
         <RNINavigatorRouteView
@@ -450,7 +450,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
             // get ref functions
             getRefToNavigator={props.getRefToNavigator}
             getEmitterRef={this.getEmitterRef}
-            getRouterRef={this.getRouterRef}
+            getRouteRef={this.getRouteRef}
             getPortalRef={this.getPortalRef}
             // render nav bar items
             renderNavBarLeftItem={props.renderNavBarLeftItem}
