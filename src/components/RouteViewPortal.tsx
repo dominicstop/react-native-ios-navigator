@@ -1,33 +1,21 @@
-import React, { ReactElement } from 'react';
+import React from 'react';
 
-import type { NavigatorView } from './NavigatorView';
-import type { NavigatorRouteView, NavRouteEvents } from '../components/NavigatorRouteView';
+import type { NavigatorRouteView } from '../components/NavigatorRouteView';
 
-import type { EventEmitter } from '../functions/EventEmitter';
 import type { RouteOptions } from '../types/NavTypes';
+import type { RenderNavBarItem } from '../types/NavSharedTypes';
+
 
 import { compareRouteOptions } from '../functions/CompareObjects';
 import { NavRouteViewContext, NavRouteViewContextProps } from '../context/NavRouteViewContext';
-
-
-type RouteViewPortalRender = (params: {
-  routeKey    : string;
-  routeIndex  : number;
-  routeProps  : object;
-  routeOptions: RouteOptions;
-  // "get ref" functions
-  getRefToNavigator: () => NavigatorView;
-  getRouterRef     : () => NavigatorRouteView;
-  getEmitterRef    : () => EventEmitter<NavRouteEvents>;
-}) => ReactElement;
 
 type RouteViewPortalProps = {
   routeOptions?: RouteOptions;
   
   // render props
-  renderNavBarLeftItem ?: RouteViewPortalRender;
-  renderNavBarRightItem?: RouteViewPortalRender;
-  renderNavBarTitleItem?: RouteViewPortalRender;
+  renderNavBarLeftItem ?: RenderNavBarItem;
+  renderNavBarRightItem?: RenderNavBarItem;
+  renderNavBarTitleItem?: RenderNavBarItem;
 };
 
 /** 

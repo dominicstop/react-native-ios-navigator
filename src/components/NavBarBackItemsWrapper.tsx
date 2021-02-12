@@ -1,5 +1,5 @@
-import React, { ReactElement } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React from 'react';
+import { StyleSheet } from 'react-native';
 
 import type { RouteViewPortal } from './RouteViewPortal';
 import type { NavigatorView } from './NavigatorView';
@@ -7,6 +7,7 @@ import type { NavigatorRouteView, NavRouteEvents } from './NavigatorRouteView';
 
 import type { EventEmitter } from '../functions/EventEmitter';
 import type { RouteOptions } from '../types/NavTypes';
+import type { RenderNavBarItem, RenderNavBarItemParams } from '../types/NavSharedTypes';
 
 import { NativeIDKeys } from '../constants/LibraryConstants';
 import { RNIWrapperView } from '../native_components/RNIWrapperView';
@@ -23,9 +24,9 @@ type NavBarBackItemsWrapperProps = {
   getRouterRef     : () => NavigatorRouteView;
   getPortalRef     : () => RouteViewPortal;
   // render nav bar items
-  renderNavBarLeftItem : () => ReactElement;
-  renderNavBarRightItem: () => ReactElement;
-  renderNavBarTitleItem: () => ReactElement;
+  renderNavBarLeftItem : RenderNavBarItem;
+  renderNavBarRightItem: RenderNavBarItem;
+  renderNavBarTitleItem: RenderNavBarItem;
 };
 
 /** 
@@ -53,11 +54,11 @@ export class NavBarItemsWrapper extends React.Component<NavBarBackItemsWrapperPr
     const props = this.props;
     const portalProps = this._routeViewPortalRef?.props;
 
-    const sharedParams = {
+    const sharedParams: RenderNavBarItemParams = {
       // pass "get ref" functions...
-      getRouterRef     : props.getRouterRef     ,
-      getEmitterRef    : props.getEmitterRef    ,
-      getRefToNavigator: props.getRefToNavigator,
+      getRefToRoute          : props.getRouterRef     , // TODO: rename to `getRouteRef`
+      getRefToNavigator      : props.getRefToNavigator,
+      getRefToNavRouteEmitter: props.getEmitterRef    ,
       // pass down route props...
       routeKey    : props.routeKey    ,
       routeIndex  : props.routeIndex  ,
@@ -67,17 +68,17 @@ export class NavBarItemsWrapper extends React.Component<NavBarBackItemsWrapperPr
 
     const navBarLeftItem = (
       portalProps?.renderNavBarLeftItem?.(sharedParams) ??
-      props.renderNavBarLeftItem?.()
+      props.renderNavBarLeftItem?.(sharedParams)
     );
 
     const navBarRightItem = (
       portalProps?.renderNavBarRightItem?.(sharedParams) ??
-      props.renderNavBarRightItem?.()
+      props.renderNavBarRightItem?.(sharedParams)
     );
 
     const navBarTitleItem = (
       portalProps?.renderNavBarTitleItem?.(sharedParams) ??
-      props.renderNavBarTitleItem?.()
+      props.renderNavBarTitleItem?.(sharedParams)
     );
 
     return(

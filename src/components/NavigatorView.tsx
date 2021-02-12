@@ -8,7 +8,7 @@ import { RNINavigatorViewModule } from '../native_modules/RNINavigatorViewModule
 import { NavigatorRouteView } from './NavigatorRouteView';
 
 import type { RouteOptions } from '../types/NavTypes';
-import type { NavCommandPush, NavCommandPop, NavRouteItem } from '../types/NavSharedTypes';
+import type { NavCommandPush, NavCommandPop, NavRouteItem, RenderNavBarItem } from '../types/NavSharedTypes';
 import type { NavBarAppearanceConfig, NavBarAppearanceLegacyConfig } from '../types/NavBarAppearanceConfig';
 
 import type { RouteContentProps } from '../components/NavigatorRouteView';
@@ -43,7 +43,6 @@ interface NavRouteStateItem extends NavRouteItem {
   routeIndex: number;
 };
 
-type RenderNavBarItem = (routeItem: NavRouteStateItem) => ReactElement;
 
 export type NavRouteConfigItem = {
   routeKey: string;
@@ -189,7 +188,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     ]);
   };
 
-  /** Remove route to `state.activeRoutes` */
+  /** Remove route from `state.activeRoutes` */
   private removeRouteBatched = async (params?: { routeKey: string, routeIndex: number }) => { 
     if(params){
       // To prevent too many state updates, the routes to be removed
@@ -248,7 +247,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
   };
 
-  /** Remove route to `state.activeRoutes` */
+  /** Remove route from `state.activeRoutes` */
   private removeRoute = (params: { routeKey: string, routeIndex: number }) => {
     //#region - 🐞 DEBUG 🐛
     LIB_GLOBAL.debugLog && console.log(
@@ -513,17 +512,17 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
           renderRouteContent={() => (
             routeConfig.renderRoute(route)
           )}
-          renderNavBarLeftItem={() => (
-            routeConfig.renderNavBarLeftItem?.(route) ??
-            props      .renderNavBarLeftItem?.(route)
+          renderNavBarLeftItem={(params) => (
+            routeConfig.renderNavBarLeftItem?.(params) ??
+            props      .renderNavBarLeftItem?.(params)
           )}
-          renderNavBarRightItem={() => (
-            routeConfig.renderNavBarRightItem?.(route) ??
-            props      .renderNavBarRightItem?.(route)
+          renderNavBarRightItem={(params) => (
+            routeConfig.renderNavBarRightItem?.(params) ??
+            props      .renderNavBarRightItem?.(params)
           )}
-          renderNavBarTitleItem={() => (
-            routeConfig.renderNavBarTitleItem?.(route) ??
-            props      .renderNavBarTitleItem?.(route)
+          renderNavBarTitleItem={(params) => (
+            routeConfig.renderNavBarTitleItem?.(params) ??
+            props      .renderNavBarTitleItem?.(params)
           )}
         />
       );

@@ -2,6 +2,8 @@ import React, { ReactElement } from 'react';
 import { StyleSheet, View, ViewStyle, findNodeHandle } from 'react-native';
 
 import type { NavigationObject, RouteOptions } from '../types/NavTypes';
+import type { RenderNavBarItem } from '../types/NavSharedTypes';
+
 import type { NavigatorView } from './NavigatorView';
 import type { RouteViewPortal } from './RouteViewPortal';
 
@@ -15,6 +17,7 @@ import { EventEmitter } from '../functions/EventEmitter';
 
 import { NavRouteViewContext } from '../context/NavRouteViewContext';
 import { NativeIDKeys } from '../constants/LibraryConstants';
+
 
 
 //#region - Type Definitions
@@ -63,9 +66,9 @@ type NavigatorRouteViewProps = {
   getRefToNavigator: () => NavigatorView,
   renderRouteContent: () => ReactElement<RouteContentProps>
   // render nav bar items
-  renderNavBarLeftItem ?: () => ReactElement;
-  renderNavBarRightItem?: () => ReactElement;
-  renderNavBarTitleItem?: () => ReactElement;
+  renderNavBarLeftItem ?: RenderNavBarItem;
+  renderNavBarRightItem?: RenderNavBarItem;
+  renderNavBarTitleItem?: RenderNavBarItem;
 };
 
 /** `NavigatorView` comp. state */
@@ -100,7 +103,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     super(props);
 
     this.routeID = ROUTE_ID_COUNTER++;
-    this.routeStatus = RouteStatus.IDLE;
+    this.routeStatus = RouteStatus.INIT;
 
     this._emitter = new EventEmitter<NavRouteEvents>();
     this._navigatorRef = props.getRefToNavigator();
