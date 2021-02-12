@@ -6,6 +6,13 @@ export type ImageResolvedAssetSource = {
   uri: string;
 };
 
+export type ImageRectConfig = {
+  width: number;
+  height: number;
+  fillColor: string;
+  borderRadius?: number;
+};
+
 /** Object return by `DynamicColorIOS` */
 export type DynamicColor = {
   dynamic: {
@@ -25,6 +32,7 @@ export enum ImageTypes {
   IMAGE_SYSTEM  = 'IMAGE_SYSTEM' ,
   IMAGE_REQUIRE = 'IMAGE_REQUIRE',
   IMAGE_EMPTY   = 'IMAGE_EMPTY'  ,
+  IMAGE_RECT    = 'IMAGE_RECT'   ,
 };
 
 export type ImageItemConfig = {
@@ -41,6 +49,9 @@ export type ImageItemConfig = {
   imageValue: ImageResolvedAssetSource;
 } | {
   type: ImageTypes.IMAGE_EMPTY | "IMAGE_EMPTY";
+} | {
+  type: ImageTypes.IMAGE_RECT | "IMAGE_RECT";
+  imageValue: ImageRectConfig;
 };
 
 /** Blur styles available for blur effect objects. */

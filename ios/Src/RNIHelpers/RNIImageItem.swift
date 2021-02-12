@@ -7,6 +7,45 @@
 
 import Foundation
 
+struct RNIImageMaker {
+
+  let size        : CGSize;
+  let fillColor   : UIColor;
+  let borderRadius: CGFloat;
+  
+  init?(dict: NSDictionary) {
+    guard let width  = dict["width" ] as? CGFloat,
+          let height = dict["height"] as? CGFloat
+    else { return nil };
+    
+    self.size = CGSize(width: width, height: height);
+    
+    guard let fillColorValue = dict["fillColor" ],
+          let fillColor      = UIColor.parseColor(value: fillColorValue)
+    else { return nil };
+    
+    self.fillColor = fillColor;
+    
+    self.borderRadius = dict["borderRadius"] as? CGFloat ?? 0;
+  };
+
+  func makeImage() -> UIImage {
+    return UIGraphicsImageRenderer(size: self.size).image { context in
+      let rect = CGRect(origin: .zero, size: self.size);
+      
+      let clipPath = UIBezierPath(
+        roundedRect : rect,
+        cornerRadius: self.borderRadius
+      );
+      
+      clipPath.addClip();
+      self.fillColor.setFill();
+      
+      context.fill(rect);
+    };
+  };
+};
+
 class RNIImageItem {
   
   static var imageCache: [String: UIImage] = [:];
@@ -16,6 +55,7 @@ class RNIImageItem {
     case IMAGE_SYSTEM;
     case IMAGE_REQUIRE;
     case IMAGE_EMPTY;
+    case IMAGE_RECT;
   };
   
   let type: ImageType;
@@ -47,6 +87,15 @@ class RNIImageItem {
       
       case .IMAGE_EMPTY:
         return UIImage();
+        
+      case .IMAGE_RECT:
+        guard let dict        = self.imageValue as? NSDictionary,
+              let imageConfig = RNIImageMaker(dict: dict)
+        else { return nil };
+        
+        print("DEBUG -* IMAGE_RECT");
+        
+        return imageConfig.makeImage();
     };
   };
   
