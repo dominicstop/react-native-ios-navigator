@@ -7,7 +7,7 @@ import type { RenderNavBarItem } from '../types/NavSharedTypes';
 import type { NavigatorView } from './NavigatorView';
 import type { RouteViewPortal } from './RouteViewPortal';
 
-import { NavBarItemsWrapper } from './NavBarBackItemsWrapper';
+import { NavBarItemsWrapper } from './NavBarItemsWrapper';
 
 import { RNINavigatorRouteView, RNINavigatorRouteViewProps, onPressNavBarItem, onRoutePushEvent, onRoutePopEvent, RouteTransitionPopConfig, RouteTransitionPushConfig, onRouteFocusBlurEvent } from '../native_components/RNINavigatorRouteView';
 import { RNINavigatorRouteViewModule } from '../native_modules/RNINavigatorRouteViewModule';
