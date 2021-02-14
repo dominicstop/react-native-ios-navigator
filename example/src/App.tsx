@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { StyleSheet, View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, FlatList, TouchableOpacity, Image } from 'react-native';
 import { NavigatorView, RouteContentProps } from 'react-native-ios-navigator';
 
 import { NavigatorExample01 } from './components/NavigatorExample01';
@@ -30,7 +30,7 @@ const RouteItems = [{
   routeKey: RouteKeys.NavigatorDemo01,
 }, { 
   routeKey: RouteKeys.NavigatorDemo02,
-},];
+}];
 
 
 class HomeRoute extends React.PureComponent<RouteContentProps> {
@@ -144,6 +144,7 @@ export default function App() {
           largeTitleDisplayMode: 'never',
         },
         renderRoute: () => (
+          // @ts-ignore
           <NavigatorDemo02/>
         ),
       }]}

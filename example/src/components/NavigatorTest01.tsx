@@ -1,8 +1,10 @@
-import type { NavBarItemsConfig, NavBarBackItemConfig } from '../../../src/types/NavBarItemConfig';
 import * as React from 'react';
 
-import { StyleSheet, View, Text, ScrollView, TouchableOpacity, TextInput, Switch, Alert } from 'react-native';
-import { NavigatorView, NavRouteEvents, RouteContentProps, RouteViewEvents, RouteViewPortal } from 'react-native-ios-navigator';
+import { StyleSheet, View, Text, ScrollView, TouchableOpacity, TextInput, Switch, Alert, ViewStyle } from 'react-native';
+import { RouteViewEvents, RouteViewPortal } from 'react-native-ios-navigator';
+
+import type { NavBarItemsConfig, NavBarBackItemConfig } from '../../../src/types/NavBarItemConfig';
+import type { NavBarAppearanceOverrideConfig } from '../../../src/types/NavBarAppearanceConfig';
 
 import * as Colors  from '../constants/Colors';
 import * as Helpers from '../functions/Helpers';
@@ -41,12 +43,17 @@ const navBarItemsConfigs: Array<{
     title: 'Item',
   }]
 }, {
-  description: "A nav bar item with `Type: TEXT` that's tinted red",
+  description: "A nav bar item with `Type: TEXT` that's tinted red + horizontal offset by 10",
   config: [{
     type: 'TEXT',
     key: 'A',
     title: 'Item',
-    tintColor: 'red'
+    tintColor: 'red',
+    titlePositionAdjustment: {
+      default: { 
+        horizontal: 10,
+      }
+    },
   }]
 }, {
   description: "2 nav bar item with `Type: TEXT` that's tinted red and the other blue",
@@ -78,6 +85,66 @@ const navBarItemsConfigs: Array<{
     key: 'C',
     title: 'Item C',
     tintColor: 'yellow'
+  }]
+}, {
+  description: "3 nav bar item with `Type: TEXT`",
+  config: [{
+    type: 'TEXT',
+    key: 'A',
+    title: 'Item A',
+    tintColor: 'white',
+    backgroundImage: {
+      default: {
+        controlState: 'normal',
+        imageItem: {
+          type: 'IMAGE_RECT',
+          imageValue: {
+            fillColor: 'rgba(255,0,0,0.5)',
+            height: 25,
+            width: 75,
+            borderRadius: 10
+          },
+        },
+      }
+    }
+  }, {
+    type: 'TEXT',
+    key: 'B',
+    title: 'Item B',
+    tintColor: 'white',
+    backgroundImage: {
+      default: {
+        controlState: 'normal',
+        imageItem: {
+          type: 'IMAGE_RECT',
+          imageValue: {
+            fillColor: 'rgba(0,255,0,0.5)',
+            height: 25,
+            width: 75,
+            borderRadius: 15
+          },
+        },
+      },
+    },
+  }, {
+    type: 'TEXT',
+    key: 'C',
+    title: 'Item C',
+    tintColor: 'white',
+    backgroundImage: {
+      default: {
+        controlState: 'normal',
+        imageItem: {
+          type: 'IMAGE_RECT',
+          imageValue: {
+            fillColor: 'rgba(0,0,255,0.5)',
+            height: 25,
+            width: 75,
+            borderRadius: 20
+          },
+        },
+      }
+    }
   }]
 }, {
   description: "A nav bar item with `Type: SYSTEM_ITEM` w/ `systemItem: 'close'`",
@@ -223,6 +290,74 @@ const backButtonItemConfigs: Array<{
   }
 }];
 
+const navBarAppearanceOverride: Array<{
+  config: NavBarAppearanceOverrideConfig,
+  description: string
+}> = [{
+  description: "N/A",
+  config: null,
+}, {
+  description: "",
+  config: {
+    standardAppearance: {
+      backgroundColor: Colors.RED.A700,
+      largeTitleTextAttributes: {
+        fontSize: 32,
+        color: 'white',
+        fontWeight: '500',
+      },
+      titleTextAttributes: {
+        color: 'white',
+        fontSize: 20,
+      },
+    }
+  }
+}, {
+  description: "",
+  config: {
+    standardAppearance: {
+      backgroundColor: 'rgba(0,0,255,0.25)',
+      backgroundEffect: 'light',
+      largeTitleTextAttributes: {
+        fontSize: 32,
+        color: 'white',
+        fontWeight: '800',
+      },
+      titleTextAttributes: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: '500',
+      },
+      backIndicatorImage: {
+        type: 'IMAGE_SYSTEM',
+        imageValue: 'trash'
+      },
+      shadowColor: 'rgba(0,0,0,0)'
+    }
+  }
+}, {
+  description: "",
+  config: {
+    standardAppearance: {
+      backgroundColor: 'rgba(0,255,0,0.25)',
+      backgroundEffect: 'systemUltraThinMaterial',
+      largeTitleTextAttributes: {
+        fontSize: 24,
+        color: 'black',
+        fontStyle: 'italic',
+      },
+      titleTextAttributes: {
+        color: 'black',
+        fontSize: 16,
+        fontStyle: 'italic',
+      },
+      backIndicatorImage: {
+        type: 'IMAGE_SYSTEM',
+        imageValue: 'arrow.left'
+      },
+    }
+  }
+}];
 
 function randomBGColor(){
   return Helpers.randomElement<string>(colors);
@@ -369,53 +504,103 @@ function RowLabelText(props){
 
 function ObjectPropertyDisplay(props: {
   object: object,
+  style?: ViewStyle,
 }){
-  if(props.object == null) return null;
-  const objectKeys = Object.keys(props.object);
-  
-  return(
-    <View style={{
-      marginTop: 12,
-      paddingHorizontal: 12,
-      paddingVertical: 5,
-      backgroundColor: Colors.INDIGO[100],
-      borderRadius: 10,
-    }}>
-      {objectKeys.map((objKey, index) => (
-        <View 
-          key={`container-${objKey}-${index}`}
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}
-        >
-          <Text 
-            key={`label-${objKey}-${index}`}
-            style={{
-              flex: 1,
-              fontSize: 16,
-              fontWeight: '500',
-              color: Colors.PURPLE[1100],
-              opacity: 0.75,
-            }}
-          >
-            {`${objKey}: `}
-          </Text>
-          <Text 
-            key={`value-${objKey}-${index}`}
+  if(props.object == null){
+    return (
+      <View style={{
+        marginTop: 12,
+        paddingHorizontal: 12,
+        paddingVertical: 10,
+        backgroundColor: Colors.INDIGO[100],
+        borderRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        ...(props.style ?? {}),
+      }}>
+        <Text style={{opacity: 0.75}}>
+          {'Nothing to show'}
+        </Text>
+      </View>
+    );
+    
+  } else {
+    const objectKeys = Object.keys(props.object);
+
+    return(
+      <View style={{
+        marginTop: 12,
+        paddingHorizontal: 12,
+        paddingVertical: 5,
+        backgroundColor: Colors.INDIGO[100],
+        borderRadius: 10,
+        ...(props.style ?? {}),
+      }}>
+        {objectKeys.map((objKey, index) => {
+          const value = props.object[objKey];
+          const isValueObj = (typeof value === 'object' && value !== null);
+
+          return isValueObj?(
+            <View key={`container-${objKey}-${index}`}>
+              <Text 
+                key={`label-${objKey}-${index}`}
+                style={{
+                  flex: 1,
+                  fontSize: 16,
+                  fontWeight: '500',
+                  color: Colors.PURPLE[1100],
+                  opacity: 0.75,
+                }}
+              >
+                {`${objKey}: `}
+              </Text>
+              <ObjectPropertyDisplay
+                key={`value-ObjectPropertyDisplay-${objKey}-${index}`}
+                object={value}
+                style={{
+                  marginTop: 0,
+                  paddingHorizontal: 7,
+                  paddingVertical: 5,
+                }}
+              />
+            </View>
+          ):(
+            <View 
+              key={`container-${objKey}-${index}`}
               style={{
-              fontSize: 16,
-              fontWeight: '500',
-              color: Colors.PURPLE[1100],
-              opacity: 0.4,
-            }}
-          >
-            {`'${props.object[objKey]}'`}
-          </Text>
-        </View>
-      ))}
-    </View>
-  );
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}
+            >
+              <Text 
+                key={`label-${objKey}-${index}`}
+                style={{
+                  flex: 1,
+                  fontSize: 16,
+                  fontWeight: '500',
+                  color: Colors.PURPLE[1100],
+                  opacity: 0.75,
+                }}
+              >
+                {`${objKey}: `}
+              </Text>
+              <Text 
+                key={`value-${objKey}-${index}`}
+                  style={{
+                  fontSize: 16,
+                  fontWeight: '500',
+                  color: Colors.PURPLE[1100],
+                  opacity: 0.4,
+                }}
+              >
+                {isValueObj? `...`: `'${props.object[objKey]}'`}
+              </Text>
+            </View>
+          );
+        })}
+      </View>
+    );
+  };
 };
 
 class StyledTextInput extends React.PureComponent<{
@@ -706,11 +891,18 @@ function NavBarRightItemsConfig(props){
         titleCode={'navBarButtonRightItemsConfig'}
         subtitle={`Current config for the nav bar right item: ${currentConfig?.description ?? 'N/A'}`}
       />
-      {currentConfig.config.map((config, index) =>
-        <ObjectPropertyDisplay
-          key={`config-${index}`}
-          object={config}
-        />
+      {(currentConfig.config.length == 0)?(
+         <ObjectPropertyDisplay
+            key={`config-NavBarRightItemsConfig`}
+            object={null}
+          />
+      ):(
+        currentConfig.config.map((config, index) =>
+          <ObjectPropertyDisplay
+            key={`config-${index}`}
+            object={config}
+          />
+        )
       )}
       <ButtonPrimary
         title={'Update config'}
@@ -741,11 +933,18 @@ function NavBarLeftItemsConfig(props){
         titleCode={'navBarButtonLeftItemsConfig'}
         subtitle={`Current config for the nav bar left item: ${currentConfig?.description ?? 'N/A'}`}
       />
-      {currentConfig.config.map((config, index) =>
-        <ObjectPropertyDisplay
-          key={`config-${index}`}
-          object={config}
-        />
+      {(currentConfig.config.length == 0)?(
+         <ObjectPropertyDisplay
+            key={`config-navBarButtonLeftItemsConfig`}
+            object={null}
+          />
+      ):(
+        currentConfig.config.map((config, index) =>
+          <ObjectPropertyDisplay
+            key={`config-${index}`}
+            object={config}
+          />
+        )
       )}
       <ButtonPrimary
         title={'Update config'}
@@ -785,6 +984,38 @@ function NavBarTitleItemConfig(props){
   );
 };
 
+function NavBarAppearanceOverrideItemConfig(props){
+  const currentConfig = navBarAppearanceOverride[
+    props.parentState.navBarAppearanceOverrideIndex %
+    navBarAppearanceOverride.length
+  ];
+
+  return(
+    <ItemContainer>
+      <ItemTitle
+        title={'Set '}
+        titleCode={'NavBarAppearanceOverrideConfig'}
+        subtitle={`Update 'navBarAppearanceOverride' - i.e. overriding the navigation bar's appearance settings. Requires iOS 13+`}
+      />
+      <ObjectPropertyDisplay
+        key={`config-NavBarAppearanceOverrideItemConfig`}
+        object={currentConfig.config}
+      />
+      <ButtonPrimary
+        title={'Update config'}
+        subtitle={`Cycle to the next preset config`}
+        onPress={() => {
+          const parentRef = props.getParentRef();
+          parentRef.setState(prevState => ({
+            // @ts-ignore
+            navBarAppearanceOverrideIndex: 
+              prevState.navBarAppearanceOverrideIndex + 1
+          }));
+        }}
+      />
+    </ItemContainer>
+  );
+};
 
 export class NavigatorTest01 extends React.Component {
   state = {
@@ -795,6 +1026,7 @@ export class NavigatorTest01 extends React.Component {
     navBarButtonRightItemsConfigIndex: 0,
     navBarButtonLeftItemsConfigIndex: 0,
     backButtonItemsConfigIndex: 0,
+    navBarAppearanceOverrideIndex: 0,
 
     leftItemsSupplementBackButton: false,
     hidesBackButton: false,
@@ -841,7 +1073,11 @@ export class NavigatorTest01 extends React.Component {
               state.backButtonDisplayModeIndex %
               backButtonDisplayModes.length
             ],
-            backButtonTitle: state.backButtonTitle
+            backButtonTitle: state.backButtonTitle,
+            navBarAppearanceOverride: navBarAppearanceOverride[
+              state.navBarAppearanceOverrideIndex %
+              navBarAppearanceOverride.length
+            ].config,
           }}
           renderNavBarLeftItem={() => (
             <View style={{
@@ -874,7 +1110,7 @@ export class NavigatorTest01 extends React.Component {
             </View>
           )}
           {...(state.renderNavBarTitleItem && ({
-            renderNavBarTitleItem: () => (
+            renderNavBarTitleItem: (params) => (
               <View style={{
                 paddingHorizontal: 10, 
                 paddingVertical: 5,
@@ -885,7 +1121,7 @@ export class NavigatorTest01 extends React.Component {
                   color: 'white',
                   fontWeight: 'bold'
                 }}>
-                  {'Custom Title'}
+                  {`Custom: ${params.routeOptions?.routeTitle}`}
                 </Text>
               </View>
             )
@@ -926,6 +1162,10 @@ export class NavigatorTest01 extends React.Component {
           parentProps={props}
         />
         <NavBarTitleItemConfig
+          getParentRef={() => this}
+          parentState={state}
+        />
+        <NavBarAppearanceOverrideItemConfig
           getParentRef={() => this}
           parentState={state}
         />

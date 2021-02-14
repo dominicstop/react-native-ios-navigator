@@ -7,7 +7,7 @@ import * as Colors from '../constants/Colors';
 export function NavigatorTest02(props: RouteContentProps){
   const [index, setIndex] = React.useState(0);
 
-  useNavBarItemEvents('onPressNavBarLeftItem', false, ({nativeEvent}) => {
+  useNavBarItemEvents('onPressNavBarLeftItem', ({nativeEvent}) => {
     // @ts-ignore
     alert(`onPressNavBarLeftItem, key: ${nativeEvent.key}`);
   });
