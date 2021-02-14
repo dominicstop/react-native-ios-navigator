@@ -387,8 +387,6 @@ class RNINavigatorRouteView: UIView {
         self._navBarAppearanceOverride?.compact ,
         self._navBarAppearanceOverride?.scrollEdge
       );
-      // TODO: Cleanup
-      print("DEBUG -* navBarAppearanceOverride - config: \(self._navBarAppearanceOverride)");
     }
   };
   
@@ -531,71 +529,74 @@ private extension RNINavigatorRouteView {
   /// created (and added as a delegate), it has already missed a few events, so
   /// we need to send the initial values.
   func setupRouteVC(){
+    guard let delegate = self.delegate else { return };
     
     // set push transition config
     if let pushConfig = self._transitionConfigPush {
-      self.delegate?.didReceiveTransitionConfigPush(pushConfig);
+      delegate.didReceiveTransitionConfigPush(pushConfig);
     };
     
     // set pop transition config
     if let popConfig = self._transitionConfigPop {
-      self.delegate?.didReceiveTransitionConfigPop(popConfig);
+      delegate.didReceiveTransitionConfigPop(popConfig);
     };
     
     // set the vc's title for the 1st time
     if let routeTitle = self.routeTitle {
-      delegate?.didReceiveRouteTitle(routeTitle as String);
+      delegate.didReceiveRouteTitle(routeTitle as String);
     };
     
     // set nav bar prompt
-    delegate?.didReceivePrompt(self.prompt as String?);
+    delegate.didReceivePrompt(self.prompt as String?);
     
     // set nav bar large title display mode
-    self.delegate?.didReceiveLargeTitleDisplayMode(self._largeTitleDisplayMode);
+    delegate.didReceiveLargeTitleDisplayMode(self._largeTitleDisplayMode);
     
     // set navbar appearance override
-    self.delegate?.didReceiveNavBarAppearanceOverride(
+    delegate.didReceiveNavBarAppearanceOverride(
       self._navBarAppearanceOverride?.standard,
       self._navBarAppearanceOverride?.compact,
       self._navBarAppearanceOverride?.scrollEdge
     );
     
     // set nav bar back item
-    delegate?.didReceiveNavBarButtonBackItem(
+    delegate.didReceiveNavBarButtonBackItem(
       self.backBarButtonItem,
       self.applyToPrevBackConfig
     );
     
     // set nav bar left item
-    delegate?.didReceiveNavBarButtonLeftItems(self.leftBarButtonItems);
+    delegate.didReceiveNavBarButtonLeftItems(self.leftBarButtonItems);
     
     // set nav bar right item
-    delegate?.didReceiveNavBarButtonRightItems(self.rightBarButtonItems);
+    delegate.didReceiveNavBarButtonRightItems(self.rightBarButtonItems);
     
     // set nav bar title item
     if let titleBarItem = self.reactNavBarTitleItem {
-      delegate?.didReceiveNavBarButtonTitleView(titleBarItem);
+      delegate.didReceiveNavBarButtonTitleView(titleBarItem);
     };
     
     // init `navigationItem` property from `leftItemsSupplementBackButton` prop
-    delegate?.didReceiveLeftItemsSupplementBackButton(
+    delegate.didReceiveLeftItemsSupplementBackButton(
       self.leftItemsSupplementBackButton
     );
     
     // init `navigationItem` property from `backButtonTitle` prop
-    delegate?.didReceiveBackButtonTitle(
+    delegate.didReceiveBackButtonTitle(
       self.backButtonTitle as String?,
       self.applyToPrevBackConfig
     );
     
     // init `navigationItem` property from `backButtonDisplayMode` prop
-    delegate?.didReceiveBackButtonDisplayMode(
+    delegate.didReceiveBackButtonDisplayMode(
       self._backButtonDisplayMode,
       self.applyToPrevBackConfig
     );
     
     // init `navigationItem` property from `hidesBackButton` prop
-    delegate?.didReceiveHidesBackButton(self.hidesBackButton);
+    delegate.didReceiveHidesBackButton(
+      self.hidesBackButton
+    );
   };
   
   /// This creates a "base" dictionary that we can pass to "event props"
@@ -611,11 +612,6 @@ private extension RNINavigatorRouteView {
     };
 
     return dict;
-  };
-  
-  /// Cleanup: Remove the views attached to the `RCTTouchandler` instances.
-  func detachTouchHandlers(){
-    
   };
 };
 
