@@ -322,6 +322,8 @@ extension RNINavigatorRouteViewController: RNINavigatorRouteViewDelegate {
     guard #available(iOS 13.0, *) else { return };
     let defaultAppearance = UINavigationBar.appearance();
     
+    print("DEBUG -* didReceiveNavBarAppearanceOverride");
+    
     self.navigationItem.standardAppearance = standard?.appearance
       ?? defaultAppearance.standardAppearance;
     

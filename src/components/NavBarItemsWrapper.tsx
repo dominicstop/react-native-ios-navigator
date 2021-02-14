@@ -21,7 +21,7 @@ type NavBarBackItemsWrapperProps = {
   // get ref functions
   getRefToNavigator: () => NavigatorView;
   getEmitterRef    : () => EventEmitter<NavRouteEvents>;
-  getRouteRef     : () => NavigatorRouteView;
+  getRouteRef      : () => NavigatorRouteView;
   getPortalRef     : () => RouteViewPortal;
   // render nav bar items
   renderNavBarLeftItem : RenderNavBarItem;
