@@ -28,6 +28,8 @@ class RNIWrapperView: UIView {
   /// view hierarchy (i.e. the window ref. becomes nil).
   var autoCleanupOnWindowNil = false;
   
+  var autoSetSizeOnLayout = true;
+  
   private var touchHandler: RCTTouchHandler!;
   
   init(bridge: RCTBridge) {
@@ -39,7 +41,10 @@ class RNIWrapperView: UIView {
   
   override func layoutSubviews() {
     super.layoutSubviews();
-    self.notifyForBoundsChange(self.bounds);
+    
+    if self.autoSetSizeOnLayout {
+      self.notifyForBoundsChange(self.bounds);
+    };
   };
   
   required init?(coder: NSCoder) {

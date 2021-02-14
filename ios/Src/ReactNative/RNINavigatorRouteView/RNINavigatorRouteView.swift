@@ -404,6 +404,7 @@ class RNINavigatorRouteView: UIView {
     // TODO: use `RNIWrapperView` for `RouteContent` so we can clean this up
     let wrapperView = subview as? RNIWrapperView;
     wrapperView?.delegate = self;
+    wrapperView?.autoSetSizeOnLayout = false;
     
     /// receive child comps. from `RNINavigatorRouteView`.
     /// note: the child comp. can be identified based on their `nativeID`

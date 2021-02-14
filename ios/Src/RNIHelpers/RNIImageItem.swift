@@ -93,8 +93,6 @@ class RNIImageItem {
               let imageConfig = RNIImageMaker(dict: dict)
         else { return nil };
         
-        print("DEBUG -* IMAGE_RECT");
-        
         return imageConfig.makeImage();
     };
   };
