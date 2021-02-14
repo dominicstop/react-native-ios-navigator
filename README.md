@@ -1,5 +1,5 @@
 # react-native-ios-navigator
-placeholder
+A native wrapper component around `UINavigationController` for react-native
 
 ## 🚧⚠️ **Library WIP** ⚠️🚧
 Currently in development... 😅
@@ -9,17 +9,53 @@ Currently in development... 😅
 ## Installation
 
 ```sh
+# install via npm
 npm install react-native-ios-navigator
+
+# install via yarn
+yarn add react-native-ios-navigator
+
+# then run pod install (uses auto-linking)
+cd ios && pod install
 ```
 
 ## Usage
 
 ```js
-import IosNavigator from "react-native-ios-navigator";
+import { NavigatorView } from 'react-native-ios-navigator';
 
-// ...
+function ExampleRoute(props){
+  return (
+    <SafeAreaView>
+      <Text> Hello World </Text>
+      <TouchableOpacity onPress={() => {
+        props.navigation.push({routeKey: 'routeA'});
+      }}>
+        <Text style={styles.buttonText}>
+          {'Push: RouteA'}
+        </Text>
+      </TouchableOpacity>
+    </SafeAreaView>
+  );
+};
 
-const result = await IosNavigator.multiply(3, 7);
+export function NavigatorExample01() {
+  return(
+    <NavigatorView
+      initialRouteKey={'routeA'}
+      routes={[{
+        routeKey: 'routeA',
+        routeOptionsDefault: {
+          routeTitle: "Route A",
+        },
+        renderRoute: () => (
+          <ExampleRoute/>
+        ),
+      }]}
+    />
+  );
+};
+
 ```
 
 ## Contributing
