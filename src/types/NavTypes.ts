@@ -4,8 +4,10 @@ import type { NavigatorRouteView, NavRouteEvents } from "../components/Navigator
 import type { BackButtonDisplayMode, LargeTitleDisplayMode, RouteTransitionPopConfig, RouteTransitionPushConfig } from "../native_components/RNINavigatorRouteView";
 
 import type { EventEmitter } from "../functions/EventEmitter";
+
 import type { NavBarBackItemConfig, NavBarItemsConfig } from "./NavBarItemConfig";
 import type { NavCommandPop, NavCommandPush } from "./NavSharedTypes";
+import type { NavBarAppearanceOverrideConfig } from "./NavBarAppearanceConfig";
 
 
 export type RouteOptions = {
@@ -28,6 +30,8 @@ export type RouteOptions = {
   backButtonTitle?: string;
   backButtonDisplayMode?: BackButtonDisplayMode;
   hidesBackButton?: boolean;
+
+  navBarAppearanceOverride?: NavBarAppearanceOverrideConfig;
 };
 
 export type NavigationObject = {

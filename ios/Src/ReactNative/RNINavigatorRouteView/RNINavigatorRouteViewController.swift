@@ -314,6 +314,29 @@ extension RNINavigatorRouteViewController: RNINavigatorRouteViewDelegate {
     };
   };
   
+  func didReceiveNavBarAppearanceOverride(
+    _ standard  : RNINavBarAppearance.NavBarAppearanceConfig?,
+    _ compact   : RNINavBarAppearance.NavBarAppearanceConfig?,
+    _ scrollEdge: RNINavBarAppearance.NavBarAppearanceConfig?
+  ) {
+    guard #available(iOS 13.0, *) else { return };
+    let defaultAppearance = UINavigationBar.appearance();
+    
+    self.navigationItem.standardAppearance = standard?.appearance
+      ?? defaultAppearance.standardAppearance;
+    
+    self.navigationItem.compactAppearance = compact?.appearance
+      ?? standard?.appearance
+      ?? defaultAppearance.compactAppearance;
+    
+    self.navigationItem.scrollEdgeAppearance = scrollEdge?.appearance
+      ?? standard?.appearance
+      ?? defaultAppearance.scrollEdgeAppearance;
+    
+    // refresh the navbar appearance
+    self.navigationController?.navigationBar.setNeedsLayout();
+  };
+  
   // ---------------------------------
   // MARK: Receive Props: Navbar Items
   // ---------------------------------

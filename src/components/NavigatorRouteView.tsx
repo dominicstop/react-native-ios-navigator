@@ -186,6 +186,10 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
         routeOptions       ?.largeTitleDisplayMode ??
         routeOptionsDefault?.largeTitleDisplayMode 
       ),
+      navBarAppearanceOverride: (
+        routeOptions       ?.navBarAppearanceOverride ??
+        routeOptionsDefault?.navBarAppearanceOverride 
+      ),
       // #endregion ------------------*
       // #region - Navbar Item Config |
       // -----------------------------*

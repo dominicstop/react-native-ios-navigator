@@ -48,7 +48,7 @@ type NavBarAppearance = BarAppearance & {
   titlePositionAdjustment?: Offset;
 
   /** The image to display on the leading edge of the back button. */
-  backIndicatorImage: ImageItemConfig;
+  backIndicatorImage?: ImageItemConfig;
 };
 
 type NavBarAppearanceConfigBase = {
@@ -91,6 +91,15 @@ export type NavBarAppearanceLegacyConfig = NavBarAppearanceConfigBase & {
 export type NavBarAppearanceConfig = NavBarAppearanceConfigBase & {
   mode: 'appearance';
 
+  /** The appearance settings for a standard-height navigation bar. */
+  standardAppearance?: NavBarAppearance;
+  /** The appearance settings for a compact-height navigation bar. */
+  compactAppearance?: NavBarAppearance;
+  /** The appearance settings to use when the edge of any scroll-able content reaches the matching edge of the navigation bar. */
+  scrollEdgeAppearance?: NavBarAppearance;
+};
+
+export type NavBarAppearanceOverrideConfig = {
   /** The appearance settings for a standard-height navigation bar. */
   standardAppearance?: NavBarAppearance;
   /** The appearance settings for a compact-height navigation bar. */

@@ -56,4 +56,7 @@ RCT_EXPORT_VIEW_PROPERTY(backButtonTitle, NSString);
 RCT_EXPORT_VIEW_PROPERTY(backButtonDisplayMode, NSString);
 RCT_EXPORT_VIEW_PROPERTY(hidesBackButton, BOOL);
 
+// MARK: Props - Overriding the NavBar Appearance
+RCT_EXPORT_VIEW_PROPERTY(navBarAppearanceOverride, NSDictionary);
+
 @end

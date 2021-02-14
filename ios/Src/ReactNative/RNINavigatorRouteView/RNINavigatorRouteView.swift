@@ -356,6 +356,42 @@ class RNINavigatorRouteView: UIView {
     }
   };
   
+  //  MARK: Props - Overriding the NavBar Appearance
+
+  private var _navBarAppearanceOverride: (
+    standard  : RNINavBarAppearance.NavBarAppearanceConfig?,
+    compact   : RNINavBarAppearance.NavBarAppearanceConfig?,
+    scrollEdge: RNINavBarAppearance.NavBarAppearanceConfig?
+  )?;
+  
+  @objc var navBarAppearanceOverride: NSDictionary? {
+    didSet {
+      guard self.navBarAppearanceOverride != oldValue else { return };
+      
+      func extractConfig(key: String) -> RNINavBarAppearance.NavBarAppearanceConfig? {
+        guard let dict       = self.navBarAppearanceOverride,
+              let configDict = dict[key] as? NSDictionary
+        else { return nil };
+        
+        return RNINavBarAppearance.NavBarAppearanceConfig(dict: configDict);
+      };
+
+      self._navBarAppearanceOverride = (
+        standard  : extractConfig(key: "standardAppearance"  ),
+        compact   : extractConfig(key: "compactAppearance"   ),
+        scrollEdge: extractConfig(key: "scrollEdgeAppearance")
+      );
+      
+      self.delegate?.didReceiveNavBarAppearanceOverride(
+        self._navBarAppearanceOverride?.standard,
+        self._navBarAppearanceOverride?.compact ,
+        self._navBarAppearanceOverride?.scrollEdge
+      );
+      // TODO: Cleanup
+      print("DEBUG -* navBarAppearanceOverride - config: \(self._navBarAppearanceOverride)");
+    }
+  };
+  
   // ---------------------
   // MARK:- Init/Lifecycle
   // ---------------------
@@ -516,6 +552,13 @@ private extension RNINavigatorRouteView {
     
     // set nav bar large title display mode
     self.delegate?.didReceiveLargeTitleDisplayMode(self._largeTitleDisplayMode);
+    
+    // set navbar appearance override
+    self.delegate?.didReceiveNavBarAppearanceOverride(
+      self._navBarAppearanceOverride?.standard,
+      self._navBarAppearanceOverride?.compact,
+      self._navBarAppearanceOverride?.scrollEdge
+    );
     
     // set nav bar back item
     delegate?.didReceiveNavBarButtonBackItem(
