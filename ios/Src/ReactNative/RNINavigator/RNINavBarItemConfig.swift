@@ -27,6 +27,18 @@ class RNINavBarItemConfig {
     case IMAGE_EMPTY;
   };
   
+  typealias BackgroundImageConfig = (
+    metric   : UIBarMetrics   ,
+    imageItem: RNIImageItem   ,
+    state    : UIControl.State,
+    style    : UIBarButtonItem.Style?
+  );
+  
+  typealias TitlePositionAdjustmentConfig = (
+    metric: UIBarMetrics,
+    offset: UIOffset
+  );
+  
   // -----------------
   // MARK:- Properties
   // -----------------
@@ -57,10 +69,9 @@ class RNINavBarItemConfig {
   private(set) var width: CGFloat?;
   private(set) var possibleTitles: Set<String>?;
   
-  private(set) var backgroundImage:
-    [(UIBarMetrics, RNIImageItem, UIControl.State, UIBarButtonItem.Style?)]?;
+  private(set) var backgroundImage: [BackgroundImageConfig]?;
   
-  private(set) var titlePositionAdjustment: [(UIBarMetrics, UIOffset)]?;
+  private(set) var titlePositionAdjustment: [TitlePositionAdjustmentConfig]?;
   
   /** Disabled */
   private(set) var backgroundVerticalPositionAdjustment:
@@ -262,29 +273,30 @@ class RNINavBarItemConfig {
       barButtonItem.width = width;
     };
     
-    for (metric, imageItem, controlState, barButtonItemStyle) in self.backgroundImage ?? [] {
-      let bgImage = imageItem.image;
+    self.backgroundImage?.forEach {
+      let bgImage = $0.imageItem.image;
       
       let current = barButtonItem.backgroundImage(
-        for: controlState,
-        barMetrics: metric
+        for       : $0.state,
+        barMetrics: $0.metric
       );
       
       // did change, else skip...
-      guard bgImage != current else { continue };
-      if let barButtonItemStyle = barButtonItemStyle {
+      guard bgImage != current else { return };
+      
+      if let barButtonItemStyle = $0.style {
         barButtonItem.setBackgroundImage(
           bgImage,
-          for: controlState,
-          style: barButtonItemStyle,
-          barMetrics: metric
+          for       : $0.state,
+          style     : barButtonItemStyle,
+          barMetrics: $0.metric
         );
       
       } else {
         barButtonItem.setBackgroundImage(
           bgImage,
-          for: controlState,
-          barMetrics: metric
+          for       : $0.state,
+          barMetrics: $0.metric
         );
       };
     };
@@ -297,12 +309,12 @@ class RNINavBarItemConfig {
       barButtonItem.setBackgroundVerticalPositionAdjustment(adj, for: metric);
     };
     
-    self.titlePositionAdjustment?.forEach { (metric, offset) in
+    self.titlePositionAdjustment?.forEach {
       // did change, else skip...
-      guard barButtonItem.titlePositionAdjustment(for: metric) != offset
+      guard barButtonItem.titlePositionAdjustment(for: $0.metric) != $0.offset
       else { return };
       
-      barButtonItem.setTitlePositionAdjustment(offset, for: metric);
+      barButtonItem.setTitlePositionAdjustment($0.offset, for: $0.metric);
     };
     
     return barButtonItem;
