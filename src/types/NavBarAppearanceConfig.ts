@@ -36,7 +36,7 @@ type BarAppearance = {
 };
 
 /** `UINavigationBarAppearance` - An object for customizing the appearance of a navigation bar. */
-type NavBarAppearance = BarAppearance & {
+export type NavBarAppearance = BarAppearance & {
 
   /** String attributes to apply to the text of a standard-size title. */
   titleTextAttributes?: TextStyle & TextStyleIOS;
