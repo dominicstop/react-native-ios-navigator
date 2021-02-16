@@ -4,18 +4,23 @@ import { StyleSheet, View, Text, FlatList, TouchableOpacity, Image } from 'react
 import { NavigatorView, RouteContentProps } from 'react-native-ios-navigator';
 
 import { NavigatorExample01 } from './components/NavigatorExample01';
+
 import { NavigatorTest01 } from './components/NavigatorTest01';
 import { NavigatorTest02 } from './components/NavigatorTest02';
+import { NavigatorTest03 } from './components/NavigatorTest03';
+
 import { NavigatorDemo01 } from './components/NavigatorDemo01';
 import { NavigatorDemo02 } from './components/NavigatorDemo02';
 
 import * as Colors from './constants/Colors';
+
 
 const RouteKeys = {
   Home: 'Home',
   NavigatorExample01: 'NavigatorExample01',
   NavigatorTest01: 'NavigatorTest01',
   NavigatorTest02: 'NavigatorTest02',
+  NavigatorTest03: 'NavigatorTest03',
   NavigatorDemo01: 'NavigatorDemo01',
   NavigatorDemo02: 'NavigatorDemo02',
 };
@@ -26,6 +31,8 @@ const RouteItems = [{
   routeKey: RouteKeys.NavigatorTest01,
 }, {
   routeKey: RouteKeys.NavigatorTest02,
+}, { 
+  routeKey: RouteKeys.NavigatorTest03,
 }, { 
   routeKey: RouteKeys.NavigatorDemo01,
 }, { 
@@ -129,6 +136,11 @@ export default function App() {
         routeKey: RouteKeys.NavigatorTest02,
         renderRoute: () => (
           <NavigatorTest02/>
+        ),
+      }, {
+        routeKey: RouteKeys.NavigatorTest03,
+        renderRoute: () => (
+          <NavigatorTest03/>
         ),
       }, {
         routeKey: RouteKeys.NavigatorDemo01,
