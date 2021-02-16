@@ -15,11 +15,11 @@ type RouteTransitionConfigBase = {
 };
 
 export type RouteTransitionPushConfig = RouteTransitionConfigBase & {
-  type: RouteTransitionPushTypes | string
+  type: RouteTransitionPushTypes
 };
 
 export type RouteTransitionPopConfig = RouteTransitionConfigBase & {
-  type: RouteTransitionPopTypes | string
+  type: RouteTransitionPopTypes
 };
 
 export type onRoutePushEvent = (event: {

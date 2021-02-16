@@ -61,9 +61,13 @@ class RNINavigatorRouteViewController: UIViewController {
       if newValue.transitionType == .DefaultPop,
          self.transitionTypePush.transitionType == .DefaultPush {
         
+        self.interactionController = nil;
         self.navigationController?.delegate = nil;
         
       } else {
+        self.interactionController =
+          LeftEdgeInteractionController(viewController: self);
+        
         self.navigationController?.delegate = self;
       };
     }
@@ -90,12 +94,6 @@ class RNINavigatorRouteViewController: UIViewController {
     } else {
       self.view = reactRouteContent;
     };
-  };
-  
-  override func viewDidLoad() {
-    // TODO
-    self.interactionController =
-      LeftEdgeInteractionController(viewController: self);
   };
   
   override func viewWillLayoutSubviews() {
@@ -321,8 +319,6 @@ extension RNINavigatorRouteViewController: RNINavigatorRouteViewDelegate {
   ) {
     guard #available(iOS 13.0, *) else { return };
     let defaultAppearance = UINavigationBar.appearance();
-    
-    print("DEBUG -* didReceiveNavBarAppearanceOverride");
     
     self.navigationItem.standardAppearance = standard?.appearance
       ?? defaultAppearance.standardAppearance;

@@ -5,9 +5,9 @@ import type { NavigatorRouteView } from '../components/NavigatorRouteView';
 import type { RouteOptions } from '../types/NavTypes';
 import type { RenderNavBarItem } from '../types/NavSharedTypes';
 
-
 import { compareRouteOptions } from '../functions/CompareObjects';
 import { NavRouteViewContext, NavRouteViewContextProps } from '../context/NavRouteViewContext';
+
 
 type RouteViewPortalProps = {
   routeOptions?: RouteOptions;
