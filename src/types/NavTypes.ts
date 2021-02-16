@@ -7,7 +7,7 @@ import type { EventEmitter } from "../functions/EventEmitter";
 
 import type { NavBarBackItemConfig, NavBarItemsConfig } from "./NavBarItemConfig";
 import type { NavCommandPop, NavCommandPush } from "./NavSharedTypes";
-import type { NavBarAppearanceOverrideConfig } from "./NavBarAppearanceConfig";
+import type { NavBarAppearanceConfig } from "./NavBarAppearanceConfig";
 
 
 export type RouteOptions = {
@@ -31,7 +31,7 @@ export type RouteOptions = {
   backButtonDisplayMode?: BackButtonDisplayMode;
   hidesBackButton?: boolean;
 
-  navBarAppearanceOverride?: NavBarAppearanceOverrideConfig;
+  navBarAppearanceOverride?: NavBarAppearanceConfig;
 };
 
 export type NavigationObject = {

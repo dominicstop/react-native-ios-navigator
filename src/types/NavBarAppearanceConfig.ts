@@ -58,7 +58,6 @@ type NavBarAppearanceConfigBase = {
 
 /** Legacy Customizations - Customize appearance information directly on the navigation bar object. */
 export type NavBarAppearanceLegacyConfig = NavBarAppearanceConfigBase & {
-  mode: 'legacy';
 
   /** The navigation bar style that specifies its appearance. */
   barStyle?: BarStyle;
@@ -89,21 +88,23 @@ export type NavBarAppearanceLegacyConfig = NavBarAppearanceConfigBase & {
 };
 
 export type NavBarAppearanceConfig = NavBarAppearanceConfigBase & {
-  mode: 'appearance';
 
   /** The appearance settings for a standard-height navigation bar. */
   standardAppearance?: NavBarAppearance;
+
   /** The appearance settings for a compact-height navigation bar. */
   compactAppearance?: NavBarAppearance;
+  
   /** The appearance settings to use when the edge of any scroll-able content reaches the matching edge of the navigation bar. */
   scrollEdgeAppearance?: NavBarAppearance;
 };
 
-export type NavBarAppearanceOverrideConfig = {
-  /** The appearance settings for a standard-height navigation bar. */
-  standardAppearance?: NavBarAppearance;
-  /** The appearance settings for a compact-height navigation bar. */
-  compactAppearance?: NavBarAppearance;
-  /** The appearance settings to use when the edge of any scroll-able content reaches the matching edge of the navigation bar. */
-  scrollEdgeAppearance?: NavBarAppearance;
-};
+export type NavBarAppearanceCombinedConfig = ((
+  NavBarAppearanceConfig & {
+    mode: 'appearance';
+  }
+) | (
+  NavBarAppearanceLegacyConfig & {
+    mode: 'legacy';
+  }
+));

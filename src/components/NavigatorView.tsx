@@ -9,7 +9,7 @@ import { NavigatorRouteView } from './NavigatorRouteView';
 
 import type { RouteOptions } from '../types/NavTypes';
 import type { NavCommandPush, NavCommandPop, NavRouteItem, RenderNavBarItem } from '../types/NavSharedTypes';
-import type { NavBarAppearanceConfig, NavBarAppearanceLegacyConfig } from '../types/NavBarAppearanceConfig';
+import type { NavBarAppearanceCombinedConfig } from '../types/NavBarAppearanceConfig';
 
 import type { RouteContentProps } from '../components/NavigatorRouteView';
 
@@ -70,7 +70,7 @@ type NavigatorViewProps = {
   // `RNINavigatorView` - Navbar Customization
   navBarPrefersLargeTitles?: boolean;
   navBarIsTranslucent?: boolean;
-  navBarAppearance?: NavBarAppearanceConfig | NavBarAppearanceLegacyConfig;
+  navBarAppearance?: NavBarAppearanceCombinedConfig;
 
   // `RNINavigatorView` - Global/Default Navbar items
   renderNavBarLeftItem ?: RenderNavBarItem;

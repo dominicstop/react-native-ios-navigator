@@ -121,14 +121,14 @@ type NavBarBackItemConfigBase = {
 type ArrayWithOneElement<T> = { 0: T } & Array<T>;
 
 export type NavBarBackItemConfig =
-  NavBarBackItemConfigBase &
-  NavBarItemConfigBase     & 
-  NavBarItemConfigShared
+  & NavBarBackItemConfigBase 
+  & NavBarItemConfigBase
+  & NavBarItemConfigShared
 
 export type NavBarItemConfig = 
-  (NavBarItemConfigBase | NavBarItemConfigCustomBase) & 
-  NavBarItemConfigShared;
+  & NavBarItemConfigBase  
+  & NavBarItemConfigShared;
 
 export type NavBarItemsConfig = 
- | Array<NavBarItemConfig>
- | ArrayWithOneElement<NavBarItemConfig>;
+  | Array<NavBarItemConfig>
+  | ArrayWithOneElement<NavBarItemConfigCustomBase>;

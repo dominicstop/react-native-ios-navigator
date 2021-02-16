@@ -112,7 +112,7 @@ export type BlurEffectStyle =
   /** A regular blur style that adapts to the user interface style. */
   | 'regular'
   /** A blur style for making content more prominent that adapts to the user interface style. */
-  | 'prominent'
+  | 'prominent';
 
 /** Constants to specify metrics to use for appearance. */
 export type BarMetrics = 
@@ -123,7 +123,7 @@ export type BarMetrics =
   /** Specifies default metrics for the device for bars with the prompt property, such as UINavigationBar and UISearchBar. */
   | 'defaultPrompt'
   /** Specifies metrics for bars with the prompt property when using the phone idiom, such as UINavigationBar and UISearchBar. */
-  | 'compactPrompt'
+  | 'compactPrompt';
 
 export type ControlState = 
   /* The normal, or default state of a control—that is, enabled but neither selected nor highlighted. */
@@ -135,4 +135,4 @@ export type ControlState =
   /* Selected state of a control. */
   | 'selected'
   /* Focused state of a control. */
-  | 'focused'
+  | 'focused';

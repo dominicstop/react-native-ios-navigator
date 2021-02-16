@@ -4,7 +4,7 @@ import { StyleSheet, View, Text, ScrollView, TouchableOpacity, TextInput, Switch
 import { RouteViewEvents, RouteViewPortal, RouteContentProps } from 'react-native-ios-navigator';
 
 import type { NavBarItemsConfig, NavBarBackItemConfig } from '../../../src/types/NavBarItemConfig';
-import type { NavBarAppearanceOverrideConfig } from '../../../src/types/NavBarAppearanceConfig';
+import type { NavBarAppearanceConfig } from '../../../src/types/NavBarAppearanceConfig';
 
 import * as Colors  from '../constants/Colors';
 import * as Helpers from '../functions/Helpers';
@@ -291,7 +291,7 @@ const backButtonItemConfigs: Array<{
 }];
 
 const navBarAppearanceOverride: Array<{
-  config: NavBarAppearanceOverrideConfig,
+  config: NavBarAppearanceConfig,
   description: string
 }> = [{
   description: "N/A",
@@ -994,7 +994,7 @@ function NavBarAppearanceOverrideItemConfig(props){
     <ItemContainer>
       <ItemTitle
         title={'Set '}
-        titleCode={'NavBarAppearanceOverrideConfig'}
+        titleCode={'NavBarAppearanceConfig'}
         subtitle={`Update 'navBarAppearanceOverride' - i.e. overriding the navigation bar's appearance settings. Requires iOS 13+`}
       />
       <ObjectPropertyDisplay

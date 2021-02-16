@@ -1,7 +1,7 @@
 import type { RouteTransitionPushConfig, RouteTransitionPopConfig } from "src/native_components/RNINavigatorRouteView";
 
 import type { NavBarItemConfig, NavBarItemsConfig, NavBarBackItemConfig } from "../types/NavBarItemConfig";
-import type { NavBarAppearanceOverrideConfig, NavBarAppearance } from '../types/NavBarAppearanceConfig';
+import type { NavBarAppearanceConfig, NavBarAppearance } from '../types/NavBarAppearanceConfig';
 import type { RouteOptions } from "../types/NavTypes";
 
 
@@ -146,7 +146,7 @@ export function compareNavBarButtonBackItemConfig(itemA: NavBarBackItemConfig, i
   );
 };
 
-export function compareNavBarAppearanceOverride(itemA: NavBarAppearanceOverrideConfig, itemB: NavBarAppearanceOverrideConfig){
+export function compareNavBarAppearanceOverride(itemA: NavBarAppearanceConfig, itemB: NavBarAppearanceConfig){
   if(HelperUtilities.isBothNull(itemA, itemB)) return true;
   
   return (

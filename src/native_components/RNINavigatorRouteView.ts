@@ -1,7 +1,7 @@
 import { requireNativeComponent, ViewStyle } from 'react-native';
 
 import type { NavBarBackItemConfig, NavBarItemsConfig } from '../types/NavBarItemConfig';
-import type { NavBarAppearanceOverrideConfig } from '../types/NavBarAppearanceConfig';
+import type { NavBarAppearanceConfig } from '../types/NavBarAppearanceConfig';
 
 
 type RouteTransitionPushTypes = 
@@ -102,7 +102,7 @@ export type RNINavigatorRouteViewProps = {
   leftItemsSupplementBackButton?: boolean;
 
   // Overriding the NavBar Appearance
-  navBarAppearanceOverride?: NavBarAppearanceOverrideConfig;
+  navBarAppearanceOverride?: NavBarAppearanceConfig;
 
   // Native Events: Push
   onRouteWillPush?: onRoutePushEvent;
