@@ -65,7 +65,6 @@ export function NavigatorTest02(props: RouteContentProps){
   );
 };
 
-
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,

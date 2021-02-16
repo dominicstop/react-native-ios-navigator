@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Text, ScrollView, TouchableOpacity, TextInput, Switch, Alert, ViewStyle } from 'react-native';
-import { RouteViewEvents, RouteViewPortal } from 'react-native-ios-navigator';
+import { RouteViewEvents, RouteViewPortal, RouteContentProps } from 'react-native-ios-navigator';
 
 import type { NavBarItemsConfig, NavBarBackItemConfig } from '../../../src/types/NavBarItemConfig';
 import type { NavBarAppearanceOverrideConfig } from '../../../src/types/NavBarAppearanceConfig';
@@ -1017,7 +1017,43 @@ function NavBarAppearanceOverrideItemConfig(props){
   );
 };
 
-export class NavigatorTest01 extends React.Component {
+function NavigationCommandsConfig(props: RouteContentProps){
+
+  return(
+    <ItemContainer>
+      <ItemTitle
+        title={'Navigation Commands'}
+        subtitle={`Test out the navigation commands`}
+      />
+      <ButtonPrimary
+        title={'Push `NavigatorTest03`'}
+        subtitle={'Push a new route with fade animation'}
+        onPress={() => {
+          props.navigation.push({
+            routeKey: 'NavigatorTest03',
+          }, {
+            transitionConfig: {
+              type: 'FadePush'
+            }
+          });
+        }}
+      />
+      <ButtonPrimary
+        title={'Pop Current'}
+        subtitle={'Pop the current route with fade animation'}
+        onPress={() => {
+          props.navigation.pop({
+            transitionConfig: {
+              type: 'FadePop'
+            }
+          });
+        }}
+      />
+    </ItemContainer>
+  );
+};
+
+export class NavigatorTest01 extends React.Component<RouteContentProps> {
   state = {
     routeTitle: null,
     routePrompt: null,
@@ -1168,6 +1204,9 @@ export class NavigatorTest01 extends React.Component {
         <NavBarAppearanceOverrideItemConfig
           getParentRef={() => this}
           parentState={state}
+        />
+        <NavigationCommandsConfig
+          navigation={this.props.navigation}
         />
         <Spacer space={100}/>
       </ScrollView>
