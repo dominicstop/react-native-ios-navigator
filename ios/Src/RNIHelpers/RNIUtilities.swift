@@ -63,10 +63,8 @@ class RNIUtilities {
       };
       
       /// remove other react subviews...
-      if let reactView = v.reactSubviews() {
-        for subview in reactView {
-          removeView(subview);
-        };
+      v.reactSubviews()?.forEach {
+        removeView($0);
       };
     };
     

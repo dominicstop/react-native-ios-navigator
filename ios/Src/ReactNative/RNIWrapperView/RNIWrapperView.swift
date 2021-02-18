@@ -84,14 +84,14 @@ class RNIWrapperView: UIView {
   };
   
   func cleanup(){
-    if !self.didTriggerCleanup {
-      self.didTriggerCleanup = true;
-      self.touchHandler.detach(from: self.reactContent);
-      
-      RNIUtilities.recursivelyRemoveFromViewRegistry(
-        bridge: self.bridge,
-        reactView: self
-      );
-    };
+    guard !self.didTriggerCleanup else { return };
+    self.didTriggerCleanup = true;
+    
+    self.touchHandler.detach(from: self.reactContent);
+    
+    RNIUtilities.recursivelyRemoveFromViewRegistry(
+      bridge: self.bridge,
+      reactView: self
+    );
   };
 };
