@@ -112,7 +112,7 @@ export default function App() {
       ref={r => this.navRef = r}
       style={styles.container}
       initialRouteKey={RouteKeys.Home}
-      isInteractivePopGestureEnabled={false}
+      isInteractivePopGestureEnabled={true}
       navBarPrefersLargeTitles={true}
       routes={[{
         routeKey: RouteKeys.Home,
