@@ -42,6 +42,12 @@ class RNINavigatorView: UIView {
     self.navigationVC.navigationBar;
   };
   
+  var navRouteViewControllers: [RNINavigatorRouteViewController] {
+    self.navigationVC.viewControllers.compactMap {
+      $0 as? RNINavigatorRouteViewController
+    };
+  };
+  
   // -----------------------------
   // MARK: RN Exported Event Props
   // -----------------------------
@@ -267,10 +273,7 @@ fileprivate extension RNINavigatorView {
   };
   
   /// remove route from `navRoutes`
-  func removeRoute(
-    reactTag  : NSNumber, routeKey: NSString,
-    routeIndex: NSNumber
-  ){
+  func removeRoute(routeVC: RNINavigatorRouteViewController){
     
     #if DEBUG
     let prevCountRouteVCs = self.routeVCs.count;
@@ -278,12 +281,8 @@ fileprivate extension RNINavigatorView {
 
     // remove "popped" route from `navRoutes`
     self.routeVCs.removeAll {
-      let isMatch = (
-        ($0.routeView?.reactTag   == reactTag  ) &&
-        ($0.routeView?.routeKey   == routeKey  ) &&
-        ($0.routeView?.routeIndex == routeIndex)
-      );
-      
+      let isMatch = $0 == routeVC;
+        
       if isMatch {
         // unregister views from view registry
         $0.routeView.cleanup();
@@ -295,8 +294,8 @@ fileprivate extension RNINavigatorView {
     #if DEBUG
     let nextCountRouteVCs = self.routeVCs.count;
     print("LOG - NativeView, RNINavigatorView: removeRoute"
-      + " - with routeKey: \(routeKey)"
-      + " - with routeIndex: \(routeIndex)"
+      + " - with routeKey: \(routeVC.routeView.routeKey ?? "N/A")"
+      + " - with routeIndex: \(routeVC.routeView.routeIndex ?? -1)"
       + " - removing popped route from `routeVCs`"
       + " - prevCountRouteVCs: \(prevCountRouteVCs)"
       + " - nextCountRouteVCs: \(nextCountRouteVCs)"
@@ -381,16 +380,20 @@ extension RNINavigatorView {
     completion: @escaping (_ success: Bool, _ routeKey: NSString?, _ routeIndex: NSNumber?) -> Void
   ){
     guard self.routeVCs.count > 1,
-          /// get the last routes
-          let lastNavVC   = self.navigationVC.viewControllers.last as? RNINavigatorRouteViewController,
-          let lastRouteVC = self.routeVCs.last,
-          /// get the `lastRouteVC`'s `routeKey` and `routeIndex`
-          let lastRouteKey   = lastRouteVC.routeView.routeKey,
-          let lastRouteIndex = lastRouteVC.routeView.routeIndex,
+          /// get the last routeVC from the navigator
+          let lastNavRouteVC = self.navRouteViewControllers.last,
+          
+          // get the last routeVC
+          let lastRouteVC   = self.routeVCs.last,
+          let lastRouteView = lastRouteVC.routeView,
+          
+          /// get the `lastRouteView`'s `routeKey` and `routeIndex`
+          let lastRouteKey   = lastRouteView.routeKey,
+          let lastRouteIndex = lastRouteView.routeIndex,
+          
           /// make sure that the vc that we will be "popping" is the same as the
           /// last route in `routeVCs`
-          lastNavVC.routeView.routeKey   == lastRouteKey,
-          lastNavVC.routeView.routeIndex == lastRouteIndex
+          lastRouteVC == lastNavRouteVC
     else {
       #if DEBUG
       print("LOG - NativeView, RNINavigatorView: pop error"
@@ -443,8 +446,7 @@ extension RNINavigatorView: RNINavigatorRouteViewControllerDelegate {
   };
   
   func onRouteDidPop(sender: RNINavigatorRouteView, isUserInitiated: Bool){
-    guard let reactTag   = sender.reactTag,
-          let routeKey   = sender.routeKey,
+    guard let routeKey   = sender.routeKey,
           let routeIndex = sender.routeIndex
     else { return };
     
@@ -456,17 +458,14 @@ extension RNINavigatorView: RNINavigatorRouteViewControllerDelegate {
     );
     #endif
     
-    // remove route from `navRoutes`
-    self.removeRoute(
-      reactTag  : reactTag,
-      routeKey  : routeKey,
-      routeIndex: routeIndex
-    );
     self.onNavRouteDidPop?([
       "routeKey"       : routeKey,
       "routeIndex"     : routeIndex,
       "isUserInitiated": isUserInitiated,
       "navigatorID"    : self.navigatorID!,
     ]);
+    
+    // route popped, remove route from `navRoutes`
+    self.removeRoute(routeVC: sender.routeVC!);
   };
 };
