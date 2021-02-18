@@ -419,10 +419,12 @@ extension RNINavigatorView {
 /// receive events from route vc's
 extension RNINavigatorView: RNINavigatorRouteViewControllerDelegate {
   
-  func onNavRouteWillPop(
-    reactTag  : NSNumber, routeKey       : NSString,
-    routeIndex: NSNumber, isUserInitiated: Bool
-  ) {
+  func onRouteWillPop(sender: RNINavigatorRouteView, isUserInitiated: Bool){
+    guard let routeKey   = sender.routeKey,
+          let routeIndex = sender.routeIndex
+    else { return };
+    
+    
     #if DEBUG
     print("LOG - NativeView, RNINavigatorView"
       + " - RNINavigatorRouteViewDelegate, onNavRouteWillPop"
@@ -440,10 +442,12 @@ extension RNINavigatorView: RNINavigatorRouteViewControllerDelegate {
     ]);
   };
   
-  func onNavRouteDidPop(
-    reactTag  : NSNumber, routeKey       : NSString,
-    routeIndex: NSNumber, isUserInitiated: Bool
-  ) {
+  func onRouteDidPop(sender: RNINavigatorRouteView, isUserInitiated: Bool){
+    guard let reactTag   = sender.reactTag,
+          let routeKey   = sender.routeKey,
+          let routeIndex = sender.routeIndex
+    else { return };
+    
     #if DEBUG
     print("LOG - NativeView, RNINavigatorView"
       + " - RNINavigatorRouteViewDelegate, onNavRouteDidPop"
@@ -451,14 +455,6 @@ extension RNINavigatorView: RNINavigatorRouteViewControllerDelegate {
       + " - with routeIndex: \(routeIndex)"
     );
     #endif
-    
-    // send event: notify js navigator that a route has been "popped"
-    self.onNavRouteDidPop?([
-      "routeKey"       : routeKey,
-      "routeIndex"     : routeIndex,
-      "isUserInitiated": isUserInitiated,
-      "navigatorID"    : self.navigatorID!,
-    ]);
     
     // remove route from `navRoutes`
     self.removeRoute(

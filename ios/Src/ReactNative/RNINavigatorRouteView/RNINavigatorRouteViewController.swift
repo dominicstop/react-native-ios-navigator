@@ -180,10 +180,8 @@ class RNINavigatorRouteViewController: UIViewController {
       );
       
       // notify parent (i.e. `RNINavigatorView`) that this vc will be "popped".
-      self.delegate?.onNavRouteWillPop(
-        reactTag       : routeView.reactTag,
-        routeKey       : routeKey,
-        routeIndex     : routeIndex,
+      self.delegate?.onRouteWillPop(
+        sender: self.routeView!,
         isUserInitiated: isUserInitiated
       );
       
@@ -221,10 +219,8 @@ class RNINavigatorRouteViewController: UIViewController {
       );
       
       // notify parent (i.e. `RNINavigatorView`) that this vc has been "popped".
-      self.delegate?.onNavRouteDidPop(
-        reactTag       : routeView.reactTag,
-        routeKey       : routeKey,
-        routeIndex     : routeIndex,
+      self.delegate?.onRouteDidPop(
+        sender: self.routeView!,
         isUserInitiated: isUserInitiated
       );
       
