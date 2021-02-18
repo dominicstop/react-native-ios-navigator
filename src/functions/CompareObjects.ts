@@ -1,7 +1,7 @@
 import type { RouteTransitionPushConfig, RouteTransitionPopConfig } from "src/native_components/RNINavigatorRouteView";
 
 import type { NavBarItemConfig, NavBarItemsConfig, NavBarBackItemConfig } from "../types/NavBarItemConfig";
-import type { NavBarAppearanceConfig, NavBarAppearance } from '../types/NavBarAppearanceConfig';
+import type { NavBarAppearance, NavBarAppearanceConfig } from '../types/NavBarAppearanceConfig';
 import type { RouteOptions } from "../types/NavTypes";
 
 
@@ -126,6 +126,7 @@ export function compareNavBarItemsConfig(itemA: NavBarItemsConfig, itemB: NavBar
   if(HelperUtilities.isBothNull(itemA, itemB)) return true;
 
   for (let i = 0; i < itemA?.length ?? 0; i++) {
+    // @ts-ignore
     if(!compareNavBarItemConfig(itemA[i], itemB[i])) return false;
   };
 
@@ -151,8 +152,8 @@ export function compareNavBarAppearanceOverride(itemA: NavBarAppearanceConfig, i
   
   return (
     HelperUtilities.compareObjectsNull(itemA, itemB) &&
-    compareAppearanceConfig(itemA.standardAppearance  , itemB.standardAppearance  ) &&
-    compareAppearanceConfig(itemA.compactAppearance   , itemB.compactAppearance   ) &&
+    compareAppearanceConfig(itemA.standardAppearance  , itemB.standardAppearance) &&
+    compareAppearanceConfig(itemA.compactAppearance   , itemB.compactAppearance ) &&
     compareAppearanceConfig(itemA.scrollEdgeAppearance, itemB.scrollEdgeAppearance)
   );
 };
