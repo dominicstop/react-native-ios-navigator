@@ -27,26 +27,25 @@ import { NavigatorView } from 'react-native-ios-navigator';
 function ExampleRoute(props){
   return (
     <SafeAreaView>
-      <Text> Hello World </Text>
       <TouchableOpacity onPress={() => {
-        props.navigation.push({routeKey: 'routeA'});
+        props.navigation.push({
+          routeKey: 'routeA'
+        });
       }}>
-        <Text style={styles.buttonText}>
-          {'Push: RouteA'}
-        </Text>
+        <Text> Push: 'RouteA' </Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
 };
 
-export function NavigatorExample01() {
+export function HelloWorld() {
   return(
     <NavigatorView
       initialRouteKey={'routeA'}
       routes={[{
         routeKey: 'routeA',
         routeOptionsDefault: {
-          routeTitle: "Route A",
+          routeTitle: 'Route A',
         },
         renderRoute: () => (
           <ExampleRoute/>
