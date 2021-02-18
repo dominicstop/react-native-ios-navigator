@@ -462,5 +462,11 @@ extension RNINavigatorView: RNINavigatorRouteViewControllerDelegate {
       routeKey  : routeKey,
       routeIndex: routeIndex
     );
+    self.onNavRouteDidPop?([
+      "routeKey"       : routeKey,
+      "routeIndex"     : routeIndex,
+      "isUserInitiated": isUserInitiated,
+      "navigatorID"    : self.navigatorID!,
+    ]);
   };
 };
