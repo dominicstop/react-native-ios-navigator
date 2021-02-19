@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { StyleSheet, findNodeHandle, ViewStyle, View, Text } from 'react-native';
+import { StyleSheet, findNodeHandle, ViewStyle } from 'react-native';
 
 import { RNIWrapperView } from '../native_components/RNIWrapperView';
 import { RNINavigatorView } from '../native_components/RNINavigatorView';
@@ -8,7 +8,7 @@ import { RNINavigatorViewModule } from '../native_modules/RNINavigatorViewModule
 import { NavigatorRouteView } from './NavigatorRouteView';
 
 import type { RouteOptions } from '../types/NavTypes';
-import type { NavCommandPush, NavCommandPop, NavRouteItem, RenderNavBarItem } from '../types/NavSharedTypes';
+import type { NavCommandPush, NavCommandPop, NavCommandPopToRoot, NavRouteItem, RenderNavBarItem } from '../types/NavSharedTypes';
 import type { NavBarAppearanceCombinedConfig } from '../types/NavBarAppearanceConfig';
 
 import type { RouteContentProps } from '../components/NavigatorRouteView';
@@ -405,6 +405,46 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       if(this.navStatus == NavStatus.UNMOUNTED){
         this.navStatus = NavStatus.IDLE_ERROR;
         throw new Error("`NavigatorView` failed to do: `pop`");
+      };
+    };
+  };
+
+  public popToRoot: NavCommandPopToRoot = async (options) => {
+    // TODO: Impl. queue if nav. is busy
+    
+    try {
+      // update nav status to busy
+      this.navStatus = NavStatus.NAV_POPPING;
+
+      // forward `popToRoot` request to native module
+      await Helpers.promiseWithTimeout(1000,
+        RNINavigatorViewModule.popToRoot(
+          findNodeHandle(this.nativeRef), {
+            isAnimated: options?.isAnimated ?? true,
+          }
+        )
+      );
+
+      // remove popped route from `activeRoutes`
+      await Helpers.setStateAsync<NavigatorViewState>(this, (prevState) => ({
+        ...prevState,
+        activeRoutes: [prevState.activeRoutes[0]]
+      }));
+
+      // update nav status to idle
+      this.navStatus = NavStatus.IDLE;
+
+    } catch(error){
+      //#region - 🐞 DEBUG 🐛
+      LIB_GLOBAL.debugLog && console.log(
+        `LOG/JS - NavigatorView, popToRoot - error message: ${error}`
+        + ` - NavStatus: ${this.navStatus}`
+      );
+      //#endregion
+
+      if(this.navStatus == NavStatus.UNMOUNTED){
+        this.navStatus = NavStatus.IDLE_ERROR;
+        throw new Error("`NavigatorView` failed to do: `popToRoot`");
       };
     };
   };

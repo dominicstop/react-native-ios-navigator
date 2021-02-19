@@ -7,7 +7,7 @@
 
 extension UINavigationController {
   
-  public func pushViewController(
+  func pushViewController(
     _ viewController: UIViewController,
     animated        : Bool,
     completion      : @escaping () -> Void
@@ -48,7 +48,7 @@ extension UINavigationController {
     };
   };
   
-  public func setNavigationBarHidden(
+  func setNavigationBarHidden(
     _ hidden  : Bool,
     animated  : Bool,
     completion: @escaping () -> Void
@@ -62,6 +62,25 @@ extension UINavigationController {
       
     } else {
       self.setNavigationBarHidden(hidden, animated: animated);
+      completion();
+    };
+  };
+  
+  func popToRootViewController(
+    animated  : Bool,
+    completion: @escaping () -> Void
+  ){
+    self.popToRootViewController(animated: animated);
+    
+    // get the transition coordinator
+    guard animated, let coordinator = transitionCoordinator else {
+      // vc not animated, call completion
+      DispatchQueue.main.async { completion() };
+      return;
+    };
+
+    coordinator.animate(alongsideTransition: nil) { _ in
+      // when the transition is finished, call completion
       completion();
     };
   };

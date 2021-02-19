@@ -413,6 +413,21 @@ extension RNINavigatorView {
       completion(true, lastRouteKey, lastRouteIndex);
     };
   };
+  
+  func popToRoot(
+    _ options: NSDictionary,
+    completion: @escaping (_ success: Bool) -> Void
+  ){
+    guard self.routeVCs.count > 1 else {
+      completion(false);
+      return;
+    };
+    
+    let isAnimated = options["isAnimated"] as? Bool ?? true;
+    self.navigationVC.popToRootViewController(animated: isAnimated) {
+      completion(true);
+    };
+  };
 };
 
 // -----------------------------------------------

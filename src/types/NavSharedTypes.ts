@@ -31,7 +31,9 @@ type NavCommandPopOptions = NativePushPopOptions & {
 
 export type NavCommandPush = (routeItem: NavRouteItem, options?: NavCommandPushOptions) => Promise<void>;
 
-export type NavCommandPop =  (options?: NavCommandPopOptions) => Promise<void>;
+export type NavCommandPop = (options?: NavCommandPopOptions) => Promise<void>;
+
+export type NavCommandPopToRoot = (options?: NativePushPopOptions) => Promise<void>;
 
 //#endregion
 
