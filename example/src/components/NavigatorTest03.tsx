@@ -61,6 +61,13 @@ export function NavigatorTest03(props: RouteContentProps){
           props.navigation.pop();
         }}
       />
+      <ButtonWithSubtitle
+        title={'Pop to Root'}
+        subtitle={'Go back to the first route.'}
+        onPress={() => {
+          props.navigation.popToRoot();
+        }}
+      />
       <RouteViewPortal
         routeOptions={{
           largeTitleDisplayMode: 'never',
