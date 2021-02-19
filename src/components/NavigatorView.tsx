@@ -189,7 +189,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   };
 
   /** Remove route from `state.activeRoutes` */
-  private removeRouteBatched = async (params?: { routeKey: string, routeIndex: number }) => { 
+  private removeRouteBatchedFromState = async (params?: { routeKey: string, routeIndex: number }) => { 
     if(params){
       // To prevent too many state updates, the routes to be removed
       // are queued/grouped, and are removed in batches...
@@ -209,7 +209,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     if(shouldRemove){
       //#region - 🐞 DEBUG 🐛
       LIB_GLOBAL.debugLog && console.log(
-          `LOG/JS - NavigatorView, removeRouteBatched`
+          `LOG/JS - NavigatorView, removeRouteBatchedFromState`
         + ` - with routeKey: ${params.routeKey}`
         + ` - routeIndex: ${params.routeIndex}`
         + ` - navStatus: ${this.navStatus}`
@@ -239,7 +239,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       // recursively remove routes from `routesToRemove`
       if(this.routesToRemove.length > 0){
-        this.removeRouteBatched();
+        this.removeRouteBatchedFromState();
 
       } else {
         this.navStatus = NavStatus.IDLE;
@@ -248,10 +248,10 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   };
 
   /** Remove route from `state.activeRoutes` */
-  private removeRoute = (params: { routeKey: string, routeIndex: number }) => {
+  private removeRouteFromState = (params: { routeKey: string, routeIndex: number }) => {
     //#region - 🐞 DEBUG 🐛
     LIB_GLOBAL.debugLog && console.log(
-        `LOG/JS - NavigatorView, removeRoute`
+        `LOG/JS - NavigatorView, removeRouteFromState`
       + ` - with routeKey: ${params.routeKey}`
       + ` - routeIndex: ${params.routeIndex}`
       + ` - current activeRoutes: ${this.state.activeRoutes.length}`
@@ -382,7 +382,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       );
 
       // remove popped route from `activeRoutes`
-      await this.removeRoute(result);
+      await this.removeRouteFromState(result);
 
       if(hasTransition){
         // reset transition override
@@ -505,7 +505,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     //    button, or through a swipe back gesture.
     if(nativeEvent.isUserInitiated){
       // A1: Remove route
-      this.removeRouteBatched({
+      this.removeRouteBatchedFromState({
         routeKey  : nativeEvent.routeKey,
         routeIndex: nativeEvent.routeIndex
       });
