@@ -332,31 +332,44 @@ fileprivate extension RNINavigatorView {
 
 extension RNINavigatorView {
   
-  func push(_ routeKey: NSString, _ options: NSDictionary, completion: @escaping Completion){
+  func push(
+    _ routeKey: NSString,
+    _ options : NSDictionary,
+    completion: @escaping Completion
+  ) throws {
+    
+    let isAnimated = options["isAnimated"] as? Bool ?? true;
+    
     /// get the `routeView` to be pushed in the nav stack
     guard let routeViewVC = self.routeVCs.last,
           let routeView   = routeViewVC.routeView,
-          // make sure this is the correct route to be "popped"
+          // make sure this is the correct route to be "pushed"
           routeViewVC.routeView?.routeKey == routeKey
     else {
-      #if DEBUG
-      print("LOG - NativeView, RNINavigatorView: push error"
-        + " - with params - routeKey: \(routeKey)"
-        + " - Error: guard check failed"
-        + " - last item's routeKey: \(self.routeVCs.last?.routeView?.routeKey ?? "N/A")"
-        + " - routeViews allObjects count: \(self.routeVCs.count)"
+      throw RNIError.commandFailed(
+        source : "RNINavigatorView.push",
+        message:
+            "Unable to push due to mismatch, the last item in `self.routeVCs` "
+          + "does not match the `routeKey` to be pushed. "
+          + "This could mean that the wrong `RNINavigatorRouteView` was added "
+          + "or the `routeKey` is wrong.",
+        debug:
+            " - with params - routeKey: \(routeKey)"
+          + " - isAnimated: \(isAnimated)"
+          + " - Error: guard check failed"
+          + " - last item's routeKey: \(self.routeVCs.last?.routeView?.routeKey ?? "N/A")"
+          + " - current routeViews count: \(self.routeVCs.count)"
       );
-      #endif
-      return;
     };
     
     #if DEBUG
     print("LOG - NativeView, RNINavigatorView: push"
       + " - with params - routeKey: \(routeKey)"
+      + " - isAnimated: \(isAnimated)"
+      + " - current routeVC count: \(self.routeVCs.count)"
+      + " - current nav vc count: \(self.navigationVC.viewControllers.count)"
     );
     #endif
-    
-    let isAnimated = options["isAnimated"] as? Bool ?? true;
     
     // notify js `RNINavigatorRouteView` that it's about to be pushed
     routeView.notifyOnRoutePush(
@@ -377,8 +390,11 @@ extension RNINavigatorView {
   
   func pop(
     _ options: NSDictionary,
-    completion: @escaping (_ success: Bool, _ routeKey: NSString?, _ routeIndex: NSNumber?) -> Void
-  ){
+    completion: @escaping (_ routeKey: NSString?, _ routeIndex: NSNumber?) -> Void
+  ) throws {
+    
+    let isAnimated = options["isAnimated"] as? Bool ?? true;
+    
     guard self.routeVCs.count > 1,
           /// get the last routeVC from the navigator
           let lastNavRouteVC = self.navRouteViewControllers.last,
@@ -395,37 +411,53 @@ extension RNINavigatorView {
           /// last route in `routeVCs`
           lastRouteVC == lastNavRouteVC
     else {
-      #if DEBUG
-      print("LOG - NativeView, RNINavigatorView: pop error"
-        + " - Error: guard check failed"
-        + " - last routeVCs's routeKey: \(self.routeVCs.last?.routeView?.routeKey ?? "N/A")"
-        + " - routeViews count: \(self.routeVCs.count)"
+      throw RNIError.commandFailed(
+        source : "RNINavigatorView.pop",
+        message:
+            "Unable to pop due to mismatch, the last item in the navigation "
+          + "controller does not match the last item in `self.routeVCs` ",
+        debug:
+            " - with params - isAnimated: \(isAnimated)"
+          + " - Error: guard check failed"
+          + " - last item's routeKey: \(self.routeVCs.last?.routeView?.routeKey ?? "N/A")"
+          + " - current routeViews count: \(self.routeVCs.count)"
       );
-      #endif
-      
-      completion(false, nil, nil);
-      return;
     };
     
-    let isAnimated = options["isAnimated"] as? Bool ?? true;
+    #if DEBUG
+    print("LOG - NativeView, RNINavigatorView: pop"
+      + " - with params - isAnimated: \(isAnimated)"
+      + " - current routeVC count: \(self.routeVCs.count)"
+      + " - current nav vc count: \(self.navigationVC.viewControllers.count)"
+    );
+    #endif
     
     self.navigationVC.popViewController(animated: isAnimated){
-      completion(true, lastRouteKey, lastRouteIndex);
+      completion(lastRouteKey, lastRouteIndex);
     };
   };
   
   func popToRoot(
-    _ options: NSDictionary,
-    completion: @escaping (_ success: Bool) -> Void
-  ){
-    guard self.routeVCs.count > 1 else {
-      completion(false);
-      return;
-    };
+    _ options : NSDictionary,
+    completion: @escaping Completion
+  ) throws {
     
     let isAnimated = options["isAnimated"] as? Bool ?? true;
+    
+    guard self.routeVCs.count > 1 else {
+      throw RNIError.commandFailed(
+        source : "RNINavigatorView.popToRoot",
+        message: "Unable to `popToRoot` because the route count is currently <= 1",
+        debug  :
+            " - with params - isAnimated: \(isAnimated)"
+          + " - Error: guard check failed"
+          + " - last item's routeKey: \(self.routeVCs.last?.routeView?.routeKey ?? "N/A")"
+          + " - current routeViews count: \(self.routeVCs.count)"
+      );
+    };
+    
     self.navigationVC.popToRootViewController(animated: isAnimated) {
-      completion(true);
+      completion();
     };
   };
 };

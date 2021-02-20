@@ -34,37 +34,34 @@ class RNINavigatorViewModule: NSObject {
   ){
     
     DispatchQueue.main.async {
-      // get `RNINavigatorView` instance that matches node/reactTag
-      guard let navigatorView = Self.getNavigatorView(node) else {
-        // construct error message for promise
-        let errorMessage = (
-            "NativeModule, RNINavigatorViewModule: push"
-          + " - for node: \(node)"
-          + " - with params - routeKey: \(routeKey)"
-          + " - Error: guard check failed"
-          + " - no corresponding view found for node"
-        );
+      do {
+        // get `RNINavigatorView` instance that matches node/reactTag
+        guard let navigatorView = Self.getNavigatorView(node) else {
+          throw RNIError.commandFailed(
+            source : "RNINavigatorViewModule.push",
+            message:
+                "Unable to `push` because no corresponding `RNINavigatorView` "
+              + "instance found for the given node",
+            debug:
+                "for node: \(node)"
+              + " - with params, routeKey: \(routeKey)"
+          );
+        };
+      
+        // forward push command to navigator
+        try navigatorView.push(routeKey, options){
+          // resolve promise after "push" is complete
+          resolve([:]);
+        };
+      } catch {
+        let message = RNIError.constructErrorMessage(error);
         
         #if DEBUG
-        print("LOG - \(errorMessage)");
+        print("ERROR - \(message)");
         #endif
         
         // reject promise w/: code, message, error
-        reject("LIB_ERROR", errorMessage, nil);
-        return;
-      };
-      
-      #if DEBUG
-      print("LOG - NativeModule, RNINavigatorViewModule: push"
-        + " - for node: \(node)"
-        + " - with params - routeKey: \(routeKey)"
-      );
-      #endif
-      
-      // forward push command to navigator
-      navigatorView.push(routeKey, options){
-        // resolve promise after "push" is complete
-        resolve([:]);
+        reject("LIB_ERROR", message, nil);
       };
     };
   };
@@ -77,44 +74,36 @@ class RNINavigatorViewModule: NSObject {
   ){
     
     DispatchQueue.main.async {
-      // get `RNINavigatorView` instance that matches node/reactTag
-      guard let navigatorView = Self.getNavigatorView(node) else {
-        // construct error message for promise
-        let errorMessage = (
-            "NativeModule, RNINavigatorViewModule: pop"
-          + " - for node: \(node)"
-          + " - Error: guard check failed"
-          + " - no corresponding view found for node"
-        );
+      do {
+        // get `RNINavigatorView` instance that matches node/reactTag
+        guard let navigatorView = Self.getNavigatorView(node) else {
+          throw RNIError.commandFailed(
+            source : "RNINavigatorViewModule.pop",
+            message:
+                "Unable to `pop` because no corresponding `RNINavigatorView` "
+              + "instance found for the given node",
+            debug: "for node: \(node)"
+          );
+        };
+
+        // forward "pop" command to navigator
+        try navigatorView.pop(options){
+          // resolve promise after "pop" is complete
+          resolve([
+            "routeKey"  : $0,
+            "routeIndex": $1
+          ]);
+        };
+        
+      } catch {
+        let message = RNIError.constructErrorMessage(error);
         
         #if DEBUG
-        print("LOG - \(errorMessage)");
+        print("ERROR - \(message)");
         #endif
         
         // reject promise w/: code, message, error
-        reject("LIB_ERROR", errorMessage, nil);
-        return;
-      };
-      
-      #if DEBUG
-      print("LOG - NativeModule, RNINavigatorViewModule: pop"
-        + " - for node: \(node)"
-      );
-      #endif
-      
-      // forward "pop" command to navigator
-      navigatorView.pop(options){
-        if $0 {
-          // resolve promise after "pop" is complete
-          resolve([
-            "routeKey"  : $1,
-            "routeIndex": $2
-          ]);
-          
-        } else {
-          // reject promise w/: code, message, error
-          reject("LIB_ERROR", "Pop failed", nil);
-        };
+        reject("LIB_ERROR", message, nil);
       };
     };
   };
@@ -150,6 +139,8 @@ class RNINavigatorViewModule: NSObject {
       #if DEBUG
       print("LOG - NativeModule, RNINavigatorViewModule: setNavigationBarHidden"
         + " - for node: \(node)"
+        + " - with args - isHidden: \(isHidden)"
+        + " - animated: \(animated)"
       );
       #endif
       
@@ -167,42 +158,33 @@ class RNINavigatorViewModule: NSObject {
   ){
     
     DispatchQueue.main.async {
-      // get `RNINavigatorView` instance that matches node/reactTag
-      guard let navigatorView = Self.getNavigatorView(node) else {
-        // construct error message for promise
-        let errorMessage = (
-            "NativeModule, RNINavigatorViewModule: popToRoot"
-          + " - for node: \(node)"
-          + " - Error: guard check failed"
-          + " - no corresponding view found for node"
-        );
-        
-        #if DEBUG
-        print("LOG - \(errorMessage)");
-        #endif
-        
-        // reject promise w/: code, message, error
-        reject("LIB_ERROR", errorMessage, nil);
-        return;
-      };
-      
-      #if DEBUG
-      print("LOG - NativeModule, RNINavigatorViewModule: popToRoot"
-        + " - for node: \(node)"
-      );
-      #endif
-      
-      // forward "popToRoot" command to navigator
-      navigatorView.popToRoot(options){
-        if $0 {
-          // resolve promise after "pop" is complete
-          resolve([:]);
-          
-        } else {
-          // reject promise w/: code, message, error
-          reject("LIB_ERROR", "Pop failed", nil);
+      do {
+        // get `RNINavigatorView` instance that matches node/reactTag
+        guard let navigatorView = Self.getNavigatorView(node) else {
+          throw RNIError.commandFailed(
+            source : "RNINavigatorViewModule.popToRoot",
+            message:
+                "Unable to `popToRoot` because no corresponding `RNINavigatorView` "
+              + "instance found for the given node",
+            debug: "for node: \(node)"
+          );
         };
-      };
+              
+        // forward "popToRoot" command to navigator
+        try navigatorView.popToRoot(options){
+          resolve([:]);
+        };
+        
+      } catch {
+         let message = RNIError.constructErrorMessage(error);
+         
+         #if DEBUG
+         print("ERROR - \(message)");
+         #endif
+         
+         // reject promise w/: code, message, error
+         reject("LIB_ERROR", message, nil);
+       };
     };
   };
 };
