@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, SafeAreaView } from 'react-native';
+import { StyleSheet, View, Text, SafeAreaView, Alert } from 'react-native';
 import { NavigatorView, NavRouteEvents, RouteContentProps, useNavRouteLifeCycle } from 'react-native-ios-navigator';
 
 import * as Colors  from '../constants/Colors';
@@ -33,26 +33,25 @@ function BlankRoute(props: RouteContentProps){
   );
 };
 
-
-let nestIndex = 0;
-
-export function NavigatorDemo02(props: RouteContentProps){
+export function NavigatorDemo02(props: RouteContentProps & {
+  triggerPop: () => void;
+}){
   const navRef = React.useRef<NavigatorView>();
-
-  useNavRouteLifeCycle('onRouteDidPush', async () => {
-    if(nestIndex > 12) return;
-    
-    await Helpers.timeout(100);
-    await navRef.current.push({
-      routeKey: 'NestedNavigatorRoute',
-      routeProps: { index: (nestIndex + 1)},
-    });
-
-    nestIndex++;
-  });
 
   // @ts-ignore
   const currentIndex = (props.navigation?.routeProps?.index ?? 0);
+
+  useNavRouteLifeCycle('onRouteDidPush', async () => {
+    if(currentIndex < 12) {
+      await navRef.current.push({
+        routeKey: 'NestedNavigatorRoute',
+        routeProps: { index: (currentIndex + 1)},
+      });
+
+    } else {
+      props.triggerPop();
+    };
+  });
 
   const currentColor = (DemoUtils.colors[
     currentIndex % DemoUtils.colors.length
@@ -102,7 +101,16 @@ export function NavigatorDemo02(props: RouteContentProps){
             }]
           },
           renderRoute: () => (
-            <NavigatorDemo02/>
+            <NavigatorDemo02
+              triggerPop={async () => {
+                if (props.triggerPop){
+                  await navRef.current.pop();
+                  props.triggerPop();
+                } else {
+                  await navRef.current.pop();
+                };
+              }}
+            />
           ),
           renderNavBarTitleItem: () => (
             <View style={{
