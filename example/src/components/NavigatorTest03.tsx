@@ -68,6 +68,13 @@ export function NavigatorTest03(props: RouteContentProps){
           props.navigation.popToRoot();
         }}
       />
+      <ButtonWithSubtitle
+        title={'Remove Route: 01'}
+        subtitle={'Remove route with `routeIndex: 1`'}
+        onPress={() => {
+          props.navigation.removeRoute(1);
+        }}
+      />
       <RouteViewPortal
         routeOptions={{
           largeTitleDisplayMode: 'never',
