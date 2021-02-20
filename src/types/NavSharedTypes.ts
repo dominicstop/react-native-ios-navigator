@@ -35,6 +35,8 @@ export type NavCommandPop = (options?: NavCommandPopOptions) => Promise<void>;
 
 export type NavCommandPopToRoot = (options?: NativePushPopOptions) => Promise<void>;
 
+export type NavCommandRemoveRoute = (routeIndex: number, animated?: boolean) => Promise<void>;
+
 //#endregion
 
 export type RenderNavBarItemParams = {

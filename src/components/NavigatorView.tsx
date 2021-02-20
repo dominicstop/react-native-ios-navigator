@@ -8,7 +8,7 @@ import { RNINavigatorViewModule } from '../native_modules/RNINavigatorViewModule
 import { NavigatorRouteView } from './NavigatorRouteView';
 
 import type { RouteOptions } from '../types/NavTypes';
-import type { NavCommandPush, NavCommandPop, NavCommandPopToRoot, NavRouteItem, RenderNavBarItem } from '../types/NavSharedTypes';
+import type { NavCommandPush, NavCommandPop, NavCommandPopToRoot, NavCommandRemoveRoute, NavRouteItem, RenderNavBarItem } from '../types/NavSharedTypes';
 import type { NavBarAppearanceCombinedConfig } from '../types/NavBarAppearanceConfig';
 
 import type { RouteContentProps } from '../components/NavigatorRouteView';
@@ -274,6 +274,10 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   //#endregion
 
   //#region - Public Functions
+  public getActiveRoutes = () => {
+    return this.state.activeRoutes;
+  };
+
   public push: NavCommandPush = async (routeItem, options) => {
     const routeConfig = this.getMatchingRoute(routeItem);
 
@@ -446,6 +450,44 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         this.navStatus = NavStatus.IDLE_ERROR;
         throw new Error("`NavigatorView` failed to do: `popToRoot`");
       };
+    };
+  };
+
+  public removeRoute: NavCommandRemoveRoute = async (routeIndex, animated = false) => {
+    const { activeRoutes } = this.state;
+    const routeToBeRemoved = activeRoutes[routeIndex];
+
+    if(routeToBeRemoved == null){
+      throw new Error(`\`removeRoute\` failed, invalid index: ${routeIndex}`);
+    };
+
+    try {
+      await Helpers.promiseWithTimeout(750,
+        RNINavigatorViewModule.removeRoute(
+          findNodeHandle(this.nativeRef),
+          routeToBeRemoved.routeKey,
+          routeToBeRemoved.routeIndex,
+          animated
+        )
+      );
+
+      await Helpers.setStateAsync<NavigatorViewState>(this, (prevState) => ({
+        ...prevState,
+        activeRoutes: prevState.activeRoutes
+          // remove route from `activeRoutes`
+          .filter((route, index) => (
+            routeIndex != index &&
+            routeToBeRemoved.routeKey != route.routeKey
+          ))
+          // update the route indexes
+          .map((route, index) => ({
+            ...route,
+            routeIndex: index,
+          }))
+      }));
+
+    } catch(error){
+      throw new Error(`\`removeRoute\` failed with error: ${error}`);
     };
   };
 

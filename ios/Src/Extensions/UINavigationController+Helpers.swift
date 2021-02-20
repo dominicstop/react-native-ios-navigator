@@ -68,5 +68,13 @@ extension UINavigationController {
     self.popToRootViewController(animated: animated);
     self.addCompletion(animated, completion);
   };
+  
+  func setViewControllers(
+    _ viewControllers: [UIViewController],
+    animated         : Bool,
+    completion       : @escaping () -> Void
+  ){
+    self.setViewControllers(viewControllers, animated: animated);
+    self.addCompletion(animated, completion);
   };
 };

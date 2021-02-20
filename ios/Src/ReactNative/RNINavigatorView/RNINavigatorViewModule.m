@@ -38,4 +38,12 @@ RCT_EXTERN_METHOD(popToRoot: (nonnull NSNumber      )node
                   resolve: (RCTPromiseResolveBlock)resolve
                   reject : (RCTPromiseRejectBlock )reject);
 
+RCT_EXTERN_METHOD(removeRoute: (nonnull NSNumber  )node
+                  routeKey   : (nonnull NSString *)routeKey
+                  routeIndex : (nonnull NSNumber  )routeIndex
+                  animated   : (nonnull BOOL      )animated
+                  // promise blocks -----------------------
+                  resolve: (RCTPromiseResolveBlock)resolve
+                  reject : (RCTPromiseRejectBlock )reject);
+
 @end

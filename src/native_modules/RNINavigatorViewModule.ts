@@ -4,7 +4,6 @@ export type NativePushPopOptions = {
   isAnimated?: boolean;
 };
 
-
 interface RNINavigatorViewModule {
   push(
     node: number, 
@@ -28,6 +27,12 @@ interface RNINavigatorViewModule {
     options: NativePushPopOptions
   ): Promise<void>;
   
+  removeRoute(
+    node: number, 
+    routeKey: string,
+    routeIndex: number,
+    animated: boolean,
+  ): Promise<void>;
 };
 
 // Import native component

@@ -9,6 +9,7 @@ import UIKit;
 
 typealias Completion = () -> Void;
 
+
 class RNINavigatorView: UIView {
   
   struct NativeIDKeys {
@@ -395,9 +396,18 @@ extension RNINavigatorView {
     
     let isAnimated = options["isAnimated"] as? Bool ?? true;
     
-    guard self.routeVCs.count > 1,
-          /// get the last routeVC from the navigator
-          let lastNavRouteVC = self.navRouteViewControllers.last,
+    guard self.routeVCs.count > 1 else {
+      throw RNIError.commandFailed(
+        source : "RNINavigatorView.pop",
+        message: "Unable to `pop` because there are <= 1 active routes.",
+        debug:
+            " - with params - isAnimated: \(isAnimated)"
+          + " - Error: guard check failed"
+          + " - current routeViews count: \(self.routeVCs.count)"
+      );
+    };
+    
+    guard let lastNavRouteVC = self.navRouteViewControllers.last,
           
           // get the last routeVC
           let lastRouteVC   = self.routeVCs.last,
@@ -457,6 +467,47 @@ extension RNINavigatorView {
     };
     
     self.navigationVC.popToRootViewController(animated: isAnimated) {
+      completion();
+    };
+  };
+  
+  func removeRoute(
+    routeKey: String,
+    routeIndex: Int,
+    isAnimated: Bool,
+    completion: @escaping Completion
+  ) throws {
+    
+    var vc = self.navRouteViewControllers;
+    
+    guard routeIndex < vc.count else {
+      throw RNIError.commandFailed(
+        source : "RNINavigatorView.removeRoute",
+        message: "Unable to `removeRoute` because `routeIndex` > the total active routes"
+      );
+    };
+    
+    let routeToRemove = vc[routeIndex];
+    
+    guard routeKey == routeToRemove.routeView.routeKey as String? else {
+      throw RNIError.commandFailed(
+        source : "RNINavigatorView.removeRoute",
+        message:
+            "Unable to `removeRoute` due to mismatch, the route that is to be "
+          + "removed does not match the given `routeKey`.",
+        debug:
+            " - with args, routeKey: \(routeKey)"
+          + " - routeIndex: \(routeIndex)"
+          + " - isAnimated: \(isAnimated)"
+          + " - Error: guard check failed"
+          + " - last item's routeKey: \(self.routeVCs.last?.routeView?.routeKey ?? "N/A")"
+          + " - current routeViews count: \(self.routeVCs.count)"
+      );
+    };
+    
+    vc.remove(at: routeIndex);
+    
+    self.navigationVC.setViewControllers(vc, animated: isAnimated) {
       completion();
     };
   };

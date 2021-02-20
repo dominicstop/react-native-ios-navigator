@@ -187,4 +187,48 @@ class RNINavigatorViewModule: NSObject {
        };
     };
   };
+  
+  @objc func removeRoute(
+    _ node    : NSNumber,
+    routeKey  : NSString,
+    routeIndex: NSNumber,
+    animated  : Bool,
+    resolve   : @escaping RCTPromiseResolveBlock,
+    reject    : @escaping RCTPromiseRejectBlock
+  ){
+    
+    DispatchQueue.main.async {
+      do {
+        // get `RNINavigatorView` instance that matches node/reactTag
+        guard let navigatorView = Self.getNavigatorView(node) else {
+          throw RNIError.commandFailed(
+            source : "RNINavigatorViewModule.removeRoute",
+            message:
+                "Unable to `popToRoot` because no corresponding `RNINavigatorView` "
+              + "instance found for the given node",
+            debug: "for node: \(node)"
+          );
+        };
+    
+        // forward "popToRoot" command to navigator
+        try navigatorView.removeRoute(
+          routeKey  : routeKey as String,
+          routeIndex: routeIndex.intValue,
+          isAnimated: animated
+        ) {
+          resolve([:]);
+        };
+        
+      } catch {
+         let message = RNIError.constructErrorMessage(error);
+         
+         #if DEBUG
+         print("ERROR - \(message)");
+         #endif
+         
+         // reject promise w/: code, message, error
+         reject("LIB_ERROR", message, nil);
+       };
+    };
+  };
 };
