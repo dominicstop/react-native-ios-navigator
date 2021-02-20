@@ -273,7 +273,7 @@ fileprivate extension RNINavigatorView {
   };
   
   /// remove route from `navRoutes`
-  func removeRoute(routeVC: RNINavigatorRouteViewController){
+  func removeRouteVC(routeVC: RNINavigatorRouteViewController){
     
     #if DEBUG
     let prevCountRouteVCs = self.routeVCs.count;
@@ -481,6 +481,6 @@ extension RNINavigatorView: RNINavigatorRouteViewControllerDelegate {
     ]);
     
     // route popped, remove route from `navRoutes`
-    self.removeRoute(routeVC: sender.routeVC!);
+    self.removeRouteVC(routeVC: sender.routeVC!);
   };
 };
