@@ -7,34 +7,10 @@
 
 extension UINavigationController {
   
-  func pushViewController(
-    _ viewController: UIViewController,
-    animated        : Bool,
-    completion      : @escaping () -> Void
+  fileprivate func addCompletion(
+    _ animated: Bool,
+    _ completion: @escaping () -> Void
   ) {
-
-    self.pushViewController(viewController, animated: animated);
-    
-    // get the transition coordinator
-    guard animated, let coordinator = self.transitionCoordinator else {
-      // vc not animated
-      DispatchQueue.main.async { completion() };
-      return;
-    };
-    
-    coordinator.animate(alongsideTransition: nil) { _ in
-      // when the transition is finished, call completion
-      completion();
-    };
-  };
-
-  func popViewController(
-    animated  : Bool,
-    completion: @escaping () -> Void
-  ) {
-
-    self.popViewController(animated: animated);
-    
     // get the transition coordinator
     guard animated, let coordinator = transitionCoordinator else {
       // vc not animated, call completion
@@ -46,6 +22,25 @@ extension UINavigationController {
       // when the transition is finished, call completion
       completion();
     };
+  };
+  
+  func pushViewController(
+    _ viewController: UIViewController,
+    animated        : Bool,
+    completion      : @escaping () -> Void
+  ) {
+
+    self.pushViewController(viewController, animated: animated);
+    self.addCompletion(animated, completion);
+  };
+
+  func popViewController(
+    animated  : Bool,
+    completion: @escaping () -> Void
+  ) {
+
+    self.popViewController(animated: animated);
+    self.addCompletion(animated, completion);
   };
   
   func setNavigationBarHidden(
@@ -71,17 +66,7 @@ extension UINavigationController {
     completion: @escaping () -> Void
   ){
     self.popToRootViewController(animated: animated);
-    
-    // get the transition coordinator
-    guard animated, let coordinator = transitionCoordinator else {
-      // vc not animated, call completion
-      DispatchQueue.main.async { completion() };
-      return;
-    };
-
-    coordinator.animate(alongsideTransition: nil) { _ in
-      // when the transition is finished, call completion
-      completion();
-    };
+    self.addCompletion(animated, completion);
+  };
   };
 };
