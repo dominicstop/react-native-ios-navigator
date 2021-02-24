@@ -18,6 +18,8 @@ import type { RouteTransitionPopConfig, RouteTransitionPushConfig } from '../nat
 
 import * as Helpers from '../functions/Helpers';
 import { EventEmitter } from '../functions/EventEmitter';
+import { SimpleQueue } from '../functions/SimpleQueue';
+
 
 import { NativeIDKeys } from '../constants/LibraryConstants';
 
@@ -106,8 +108,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   private navStatus: NavStatus;
   private emitter: EventEmitter<NavEvents>;
   private routesToRemove: Array<{routeKey: string, routeIndex: number}>;
-  private lastRouteRef: NavigatorRouteView;
+  private queue: SimpleQueue;
 
+  private lastRouteRef: NavigatorRouteView;
   //#endregion
 
   constructor(props: NavigatorViewProps){
@@ -116,6 +119,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     this.navStatus = NavStatus.IDLE_INIT;
     this.emitter = new EventEmitter<NavEvents>();
     this.routesToRemove = [];
+    this.queue = new SimpleQueue();
 
     this.navigatorID = NAVIGATOR_ID_COUNTER++;
 
@@ -132,6 +136,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
   componentWillUnmount(){
     this.navStatus == NavStatus.UNMOUNTED;
+    this.queue.clear();
   };
 
   //#region - Private Functions
@@ -203,9 +208,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       // - A the route to be removed has a valid `routeKey`
       (this.isValidRouteKey(params.routeKey)) &&
       // - B. there are queued items to remove and...
-      (this.routesToRemove.length > 0) &&
-      // - C. navigator isn't busy, or remove is triggered by recursive call.
-      (NavigatorViewUtils.isNavStateIdle(this.navStatus) || false)
+      (this.routesToRemove.length > 0)
     );
 
     if(shouldRemove){
@@ -288,9 +291,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       throw new Error("`NavigatorView` failed to do: `push`: Invalid `routeKey`");
     };
     
-    // TODO: Impl. queue if nav. is busy
-
     try {
+      // if busy, wait for prev. to finish
+      await this.queue.schedule();
       this.navStatus = NavStatus.NAV_PUSHING;
 
       const hasTransition = (options?.transitionConfig != null);
@@ -333,8 +336,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         });
       };
       
-      // update nav status to idle
+      // finished, start next item
       this.navStatus = NavStatus.IDLE;
+      this.queue.dequeue();
 
     } catch(error){
       const wasAborted = (
@@ -342,20 +346,23 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         this.navStatus == NavStatus.UNMOUNTED 
       );
 
-      if(wasAborted) {
+      if(!wasAborted) {
         this.navStatus = NavStatus.IDLE_ERROR;
+        this.queue.dequeue();
+
         throw new Error("`NavigatorView` failed to do: `push`");
       };
     };
   };
 
   public pop: NavCommandPop = async (options) => {
-    // TODO: Impl. queue if nav. is busy
-
     try {
+      // if busy, wait for prev. to finish
+      await this.queue.schedule();
       this.navStatus = NavStatus.NAV_POPPING;
 
       const hasTransition = (options?.transitionConfig != null);
+
       // the amount of time to wait for "pop" to resolve before rejecting.
       // note: convert seconds -> ms
       const minTimeout = (1000 * (
@@ -389,21 +396,24 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
          });
       };
 
-      // update nav status to idle
       this.navStatus = NavStatus.IDLE;
+      this.queue.dequeue();
 
     } catch(error){
       if(this.navStatus != NavStatus.UNMOUNTED){
         this.navStatus = NavStatus.IDLE_ERROR;
+        this.queue.dequeue();
+
         throw new Error("`NavigatorView` failed to do: `pop`");
       };
     };
   };
 
   public popToRoot: NavCommandPopToRoot = async (options) => {
-    // TODO: Impl. queue if nav. is busy
-    
+    // TODO: Add error guards
     try {
+      // if busy, wait for prev. to finish
+      await this.queue.schedule();
       this.navStatus = NavStatus.NAV_POPPING;
 
       // forward `popToRoot` request to native module
@@ -422,10 +432,13 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       }));
 
       this.navStatus = NavStatus.IDLE;
+      this.queue.dequeue();
 
     } catch(error){
       if(this.navStatus != NavStatus.UNMOUNTED){
         this.navStatus = NavStatus.IDLE_ERROR;
+        this.queue.dequeue();
+
         throw new Error("`NavigatorView` failed to do: `popToRoot`");
       };
     };
@@ -440,6 +453,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
 
     try {
+      // if busy, wait for prev. to finish
+      await this.queue.schedule();
       this.navStatus = NavStatus.NAV_REMOVING;
 
       await Helpers.promiseWithTimeout(750,
@@ -467,10 +482,13 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       }));
 
       this.navStatus = NavStatus.IDLE;
+      this.queue.dequeue();
 
     } catch(error){
       if(this.navStatus != NavStatus.UNMOUNTED){
         this.navStatus = NavStatus.IDLE_ERROR;
+        this.queue.dequeue();
+
         throw new Error(`\`removeRoute\` failed with error: ${error}`);
       };
     };
@@ -491,6 +509,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
 
     try {
+      // if busy, wait for prev. to finish
+      await this.queue.schedule();
       this.navStatus = NavStatus.NAV_REPLACING;
 
       await Promise.all([
@@ -522,10 +542,13 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       );
 
       this.navStatus = NavStatus.IDLE;
+      this.queue.dequeue();
 
     } catch(error){
       if(this.navStatus != NavStatus.UNMOUNTED){
         this.navStatus = NavStatus.IDLE_ERROR;
+        this.queue.dequeue();
+
         throw new Error(`\`replaceRoute\` failed with error: ${error}`);
       };
     };
