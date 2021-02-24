@@ -293,8 +293,10 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         //    within 500 ms (i.e. if it takes to long for the promise to be fulfilled).
         // ----------------------------------------------------------------------------
         Helpers.promiseWithTimeout(500, new Promise<void>(resolve => {
-          this.emitter.once(NavEvents.onNavRouteViewAdded, () => {
-            resolve();
+          this.emitter.once(NavEvents.onNavRouteViewAdded, ({nativeEvent}: onNavRouteViewAddedPayload) => {
+            if(routeItem.routeKey == nativeEvent.routeKey){
+              resolve();
+            };
           })
         })),
         // --------------------------------------
@@ -578,15 +580,11 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
   //#region - Native Event Handlers
   /** Handler for native event: `onNavRouteViewAdded` */
-  private _handleOnNavRouteViewAdded = ({nativeEvent}: onNavRouteViewAddedPayload) => {
-    if(this.navigatorID != nativeEvent.navigatorID) return;
+  private _handleOnNavRouteViewAdded = (event: onNavRouteViewAddedPayload) => {
+    if(this.navigatorID != event.nativeEvent.navigatorID) return;
 
     // emit event: nav. route was added to `RNINavigatorView`'s subviews
-    this.emitter.emit(NavEvents.onNavRouteViewAdded, {
-      target    : nativeEvent.target,
-      routeKey  : nativeEvent.routeKey,
-      routeIndex: nativeEvent.routeIndex,
-    });
+    this.emitter.emit(NavEvents.onNavRouteViewAdded, event);
   };
 
   /** 
