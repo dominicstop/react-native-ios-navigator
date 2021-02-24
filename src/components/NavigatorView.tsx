@@ -339,12 +339,18 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         this.navStatus = NavStatus.IDLE_ERROR;
         this.queue.dequeue();
 
-        throw new Error("`NavigatorView` failed to do: `push`");
+        throw new Error("`NavigatorView` failed to do: `push` with error " + error);
       };
     };
   };
 
   public pop: NavCommandPop = async (options) => {
+    const { activeRoutes } = this.state;
+
+    if(activeRoutes.length < 1){
+      throw new Error(`\`pop\` failed, route count must be > 1`);
+    };
+
     try {
       // if busy, wait for prev. to finish
       await this.queue.schedule();
@@ -393,13 +399,18 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         this.navStatus = NavStatus.IDLE_ERROR;
         this.queue.dequeue();
 
-        throw new Error("`NavigatorView` failed to do: `pop`");
+        throw new Error("`NavigatorView` failed to do: `pop` with error " + error);
       };
     };
   };
 
   public popToRoot: NavCommandPopToRoot = async (options) => {
-    // TODO: Add error guards
+    const { activeRoutes } = this.state;
+
+    if(activeRoutes.length < 1){
+      throw new Error(`\`popToRoot\` failed, route count must be > 1`);
+    };
+
     try {
       // if busy, wait for prev. to finish
       await this.queue.schedule();
@@ -428,7 +439,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         this.navStatus = NavStatus.IDLE_ERROR;
         this.queue.dequeue();
 
-        throw new Error("`NavigatorView` failed to do: `popToRoot`");
+        throw new Error("`NavigatorView` failed to do: `popToRoot` with error " + error);
       };
     };
   };
@@ -436,6 +447,10 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   public removeRoute: NavCommandRemoveRoute = async (routeIndex, animated = false) => {
     const { activeRoutes } = this.state;
     const routeToBeRemoved = activeRoutes[routeIndex];
+
+    if(activeRoutes.length < 1){
+      throw new Error(`\`removeRoute\` failed, route count must be > 1`);
+    };
 
     if(routeToBeRemoved == null){
       throw new Error(`\`removeRoute\` failed, invalid index: ${routeIndex}`);
