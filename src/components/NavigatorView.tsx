@@ -30,6 +30,7 @@ enum NavStatus {
   IDLE_ERROR     = "IDLE_ERROR"    , // nav. is idle due to error
   NAV_PUSHING    = "NAV_PUSHING"   , // nav. is busy pushing
   NAV_POPPING    = "NAV_POPPING"   , // nav. is busy popping
+  NAV_REMOVING   = "NAV_REMOVING"  , // nav. is busy removing a route
   NAV_REPLACING  = "NAV_REPLACING" , // nav. is busy replacing a route
   UNMOUNTED      = "UNMOUNTED"     , // nav. comp. has been unmounted
   NAV_ABORT_PUSH = "NAV_ABORT_PUSH", // nav. has been popped before push completed
@@ -336,13 +337,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       this.navStatus = NavStatus.IDLE;
 
     } catch(error){
-      //#region - 🐞 DEBUG 🐛
-      LIB_GLOBAL.debugLog && console.log(
-        `LOG/JS - NavigatorView, push - error message: ${error}`
-        + ` - NavStatus: ${this.navStatus}`
-      );
-      //#endregion
-
       const wasAborted = (
         this.navStatus == NavStatus.NAV_ABORT_PUSH ||
         this.navStatus == NavStatus.UNMOUNTED 
@@ -359,7 +353,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     // TODO: Impl. queue if nav. is busy
 
     try {
-      // update nav status to busy
       this.navStatus = NavStatus.NAV_POPPING;
 
       const hasTransition = (options?.transitionConfig != null);
@@ -400,13 +393,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       this.navStatus = NavStatus.IDLE;
 
     } catch(error){
-      //#region - 🐞 DEBUG 🐛
-      LIB_GLOBAL.debugLog && console.log(
-        `LOG/JS - NavigatorView, pop - error message: ${error}`
-        + ` - NavStatus: ${this.navStatus}`
-      );
-      //#endregion
-
       if(this.navStatus != NavStatus.UNMOUNTED){
         this.navStatus = NavStatus.IDLE_ERROR;
         throw new Error("`NavigatorView` failed to do: `pop`");
@@ -418,7 +404,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     // TODO: Impl. queue if nav. is busy
     
     try {
-      // update nav status to busy
       this.navStatus = NavStatus.NAV_POPPING;
 
       // forward `popToRoot` request to native module
@@ -436,18 +421,10 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         activeRoutes: [prevState.activeRoutes[0]]
       }));
 
-      // update nav status to idle
       this.navStatus = NavStatus.IDLE;
 
     } catch(error){
-      //#region - 🐞 DEBUG 🐛
-      LIB_GLOBAL.debugLog && console.log(
-        `LOG/JS - NavigatorView, popToRoot - error message: ${error}`
-        + ` - NavStatus: ${this.navStatus}`
-      );
-      //#endregion
-
-      if(this.navStatus == NavStatus.UNMOUNTED){
+      if(this.navStatus != NavStatus.UNMOUNTED){
         this.navStatus = NavStatus.IDLE_ERROR;
         throw new Error("`NavigatorView` failed to do: `popToRoot`");
       };
@@ -463,6 +440,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
 
     try {
+      this.navStatus = NavStatus.NAV_REMOVING;
+
       await Helpers.promiseWithTimeout(750,
         RNINavigatorViewModule.removeRoute(
           findNodeHandle(this.nativeRef),
@@ -487,8 +466,13 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
           }))
       }));
 
+      this.navStatus = NavStatus.IDLE;
+
     } catch(error){
-      throw new Error(`\`removeRoute\` failed with error: ${error}`);
+      if(this.navStatus != NavStatus.UNMOUNTED){
+        this.navStatus = NavStatus.IDLE_ERROR;
+        throw new Error(`\`removeRoute\` failed with error: ${error}`);
+      };
     };
   };
 
@@ -507,6 +491,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
 
     try {
+      this.navStatus = NavStatus.NAV_REPLACING;
+
       await Promise.all([
         // 1. wait for replacement route to be added
         Helpers.promiseWithTimeout(500, new Promise<void>(resolve => {
@@ -534,8 +520,14 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
           animated
         )
       );
+
+      this.navStatus = NavStatus.IDLE;
+
     } catch(error){
-      throw new Error(`\`replaceRoute\` failed with error: ${error}`);
+      if(this.navStatus != NavStatus.UNMOUNTED){
+        this.navStatus = NavStatus.IDLE_ERROR;
+        throw new Error(`\`replaceRoute\` failed with error: ${error}`);
+      };
     };
   };
 
@@ -549,14 +541,10 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       );
 
     } catch(error){
-      //#region - 🐞 DEBUG 🐛
-      LIB_GLOBAL.debugLog && console.log(
-          `LOG/JS - NavigatorView, setNavigationBarHidden`
-        + ` - error message: ${error}`
-      );
-      //#endregion
-
-      throw new Error("`NavigatorView` failed to do: `setNavigationBarHidden`");
+      if(this.navStatus != NavStatus.UNMOUNTED){
+        this.navStatus = NavStatus.IDLE_ERROR;
+        throw new Error(`\`setNavigationBarHidden\` failed with error: ${error}`);
+      };
     };
   };
   //#endregion
