@@ -29,8 +29,9 @@ class RNINavigatorViewModule: NSObject {
     _ node  : NSNumber,
     routeKey: NSString,
     options : NSDictionary,
-    resolve : @escaping RCTPromiseResolveBlock,
-    reject  : @escaping RCTPromiseRejectBlock
+    // promise blocks ------------------------
+    resolve: @escaping RCTPromiseResolveBlock,
+    reject : @escaping RCTPromiseRejectBlock
   ){
     
     DispatchQueue.main.async {
@@ -69,8 +70,9 @@ class RNINavigatorViewModule: NSObject {
   @objc func pop(
     _ node  : NSNumber,
     options : NSDictionary,
-    resolve : @escaping RCTPromiseResolveBlock,
-    reject  : @escaping RCTPromiseRejectBlock
+    // promise blocks ------------------------
+    resolve: @escaping RCTPromiseResolveBlock,
+    reject : @escaping RCTPromiseRejectBlock
   ){
     
     DispatchQueue.main.async {
@@ -112,10 +114,11 @@ class RNINavigatorViewModule: NSObject {
     _ node  : NSNumber,
     isHidden: Bool,
     animated: Bool,
-    resolve : @escaping RCTPromiseResolveBlock,
-    reject  : @escaping RCTPromiseRejectBlock
+    // promise blocks ------------------------
+    resolve: @escaping RCTPromiseResolveBlock,
+    reject : @escaping RCTPromiseRejectBlock
   ){
-    
+
     DispatchQueue.main.async {
       // get `RNINavigatorView` instance that matches node/reactTag
       guard let navigatorView = Self.getNavigatorView(node) else {
@@ -153,8 +156,9 @@ class RNINavigatorViewModule: NSObject {
   @objc func popToRoot(
     _ node  : NSNumber,
     options : NSDictionary,
-    resolve : @escaping RCTPromiseResolveBlock,
-    reject  : @escaping RCTPromiseRejectBlock
+    // promise blocks ------------------------
+    resolve: @escaping RCTPromiseResolveBlock,
+    reject : @escaping RCTPromiseRejectBlock
   ){
     
     DispatchQueue.main.async {
@@ -220,15 +224,62 @@ class RNINavigatorViewModule: NSObject {
         };
         
       } catch {
-         let message = RNIError.constructErrorMessage(error);
-         
-         #if DEBUG
-         print("ERROR - \(message)");
-         #endif
-         
-         // reject promise w/: code, message, error
-         reject("LIB_ERROR", message, nil);
-       };
+        let message = RNIError.constructErrorMessage(error);
+
+        #if DEBUG
+        print("ERROR - \(message)");
+        #endif
+
+        // reject promise w/: code, message, error
+        reject("LIB_ERROR", message, nil);
+      };
+    };
+  };
+  
+  @objc func replaceRoute(
+    _ node        : NSNumber,
+    prevRouteIndex: NSNumber,
+    prevRouteKey  : NSString,
+    nextRouteKey  : NSString,
+    animated      : Bool,
+    // promise blocks ------------------------
+    resolve: @escaping RCTPromiseResolveBlock,
+    reject : @escaping RCTPromiseRejectBlock
+  ){
+    
+    DispatchQueue.main.async {
+      do {
+        // get `RNINavigatorView` instance that matches node/reactTag
+        guard let navigatorView = Self.getNavigatorView(node) else {
+          throw RNIError.commandFailed(
+            source : "RNINavigatorViewModule.replaceRoute",
+            message:
+                "Unable to `replaceRoute` because no corresponding `RNINavigatorView` "
+              + "instance found for the given node",
+            debug: "for node: \(node)"
+          );
+        };
+    
+        // forward "popToRoot" command to navigator
+        try navigatorView.replaceRoute(
+          prevRouteIndex: prevRouteIndex.intValue,
+          prevRouteKey  : prevRouteKey as String ,
+          nextRouteKey  : nextRouteKey as String ,
+          isAnimated    : animated
+        ) {
+          resolve([:]);
+        };
+        
+      } catch {
+        let message = RNIError.constructErrorMessage(error);
+
+        #if DEBUG
+        print("ERROR - \(message)");
+        #endif
+
+        // reject promise w/: code, message, error
+        reject("LIB_ERROR", message, nil);
+      };
     };
   };
 };

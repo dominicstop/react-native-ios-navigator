@@ -8,7 +8,7 @@ import { RNINavigatorViewModule } from '../native_modules/RNINavigatorViewModule
 import { NavigatorRouteView } from './NavigatorRouteView';
 
 import type { RouteOptions } from '../types/NavTypes';
-import type { NavCommandPush, NavCommandPop, NavCommandPopToRoot, NavCommandRemoveRoute, NavRouteItem, RenderNavBarItem } from '../types/NavSharedTypes';
+import type { NavCommandPush, NavCommandPop, NavCommandPopToRoot, NavCommandRemoveRoute, NavCommandReplaceRoute, NavRouteItem, RenderNavBarItem } from '../types/NavSharedTypes';
 import type { NavBarAppearanceCombinedConfig } from '../types/NavBarAppearanceConfig';
 
 import type { RouteContentProps } from '../components/NavigatorRouteView';
@@ -30,6 +30,7 @@ enum NavStatus {
   IDLE_ERROR     = "IDLE_ERROR"    , // nav. is idle due to error
   NAV_PUSHING    = "NAV_PUSHING"   , // nav. is busy pushing
   NAV_POPPING    = "NAV_POPPING"   , // nav. is busy popping
+  NAV_REPLACING  = "NAV_REPLACING" , // nav. is busy replacing a route
   UNMOUNTED      = "UNMOUNTED"     , // nav. comp. has been unmounted
   NAV_ABORT_PUSH = "NAV_ABORT_PUSH", // nav. has been popped before push completed
 };
@@ -139,9 +140,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     ));
   };
 
-  private getMatchingRoute = (routeItem: NavRouteItem) => {
+  private getMatchingRoute = (routeKey: string) => {
     return this.props.routes.find(item => (
-      item.routeKey == routeItem.routeKey
+      item.routeKey == routeKey
     ));
   };
 
@@ -164,7 +165,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       + ` - current activeRoutes: ${this.state.activeRoutes.length}`
     );
     //#endregion
-
+    
     return Promise.all([
       // -----------------------------------------------------
       // 1. Wait for the new route to be added in native side.
@@ -279,7 +280,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   };
 
   public push: NavCommandPush = async (routeItem, options) => {
-    const routeConfig = this.getMatchingRoute(routeItem);
+    const routeConfig = this.getMatchingRoute(routeItem.routeKey);
 
     if(!routeConfig){
       // no matching route config found for `routeItem`
@@ -289,7 +290,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     // TODO: Impl. queue if nav. is busy
 
     try {
-      // update nav status to busy
       this.navStatus = NavStatus.NAV_PUSHING;
 
       const hasTransition = (options?.transitionConfig != null);
@@ -308,6 +308,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       };
 
       // add new route, and wait for it be added
+      // TODO: inline this function...
       await this.addRoute({
         routeKey    : routeItem.routeKey    ,
         routeProps  : routeItem.routeProps  ,
@@ -406,7 +407,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       );
       //#endregion
 
-      if(this.navStatus == NavStatus.UNMOUNTED){
+      if(this.navStatus != NavStatus.UNMOUNTED){
         this.navStatus = NavStatus.IDLE_ERROR;
         throw new Error("`NavigatorView` failed to do: `pop`");
       };
@@ -491,6 +492,53 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
   };
 
+  public replaceRoute: NavCommandReplaceRoute = async (prevRouteIndex, nextRouteKey, animated = false) => {
+    const { activeRoutes } = this.state;
+
+    const routeToReplace   = activeRoutes[prevRouteIndex];
+    const replacementRoute = this.getMatchingRoute(nextRouteKey);
+
+    if(routeToReplace == null){
+      throw new Error(`\`replaceRoute\` failed, no route found for the given \`routeIndex\`: ${prevRouteIndex}`);
+    };
+
+    if(replacementRoute == null){
+      throw new Error(`\`replaceRoute\` failed, no route found for the given \`routeKey\`: ${nextRouteKey}`);
+    };
+
+    try {
+      await Promise.all([
+        // 1. wait for replacement route to be added
+        Helpers.promiseWithTimeout(500, new Promise<void>(resolve => {
+          this.emitter.once(NavEvents.onNavRouteViewAdded, () => {
+            resolve();
+          })
+        })),
+        // 2. replace route in state
+        Helpers.setStateAsync<NavigatorViewState>(this, (prevState) => ({
+          ...prevState,
+          activeRoutes: prevState.activeRoutes.map((route, index) => (
+            (index == prevRouteIndex)
+              ? { routeIndex: index, ...replacementRoute } 
+              : { routeIndex: index, ...route }
+          ))
+        })),
+      ]);
+
+      await Helpers.promiseWithTimeout(750,
+        RNINavigatorViewModule.replaceRoute(
+          findNodeHandle(this.nativeRef),
+          prevRouteIndex,
+          routeToReplace.routeKey,
+          replacementRoute.routeKey,
+          animated
+        )
+      );
+    } catch(error){
+      throw new Error(`\`replaceRoute\` failed with error: ${error}`);
+    };
+  };
+
   public setNavigationBarHidden = async (isHidden: boolean, animated: boolean) => {
     try {
       await Helpers.promiseWithTimeout(1000,
@@ -530,7 +578,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
    * Handler for native event: `onNavRouteWillPop` 
    * a route is about to be removed either through a tap on the "back" button,
    * or through a swipe back gesture. */
-  // @ts-ignore
   private _handleOnNavRouteWillPop = ({nativeEvent}: onNavRouteWillPopPayload) => {
     if(this.navigatorID != nativeEvent.navigatorID) return;
 
@@ -562,7 +609,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     const activeRoutesCount = activeRoutes.length;
 
     return activeRoutes.map((route, index) => {
-      const routeConfig = this.getMatchingRoute(route);
+      const routeConfig = this.getMatchingRoute(route.routeKey);
 
       const isLast         = (activeRoutesCount - 1) == index;
       const isSecondToLast = (activeRoutesCount - 2) == index;

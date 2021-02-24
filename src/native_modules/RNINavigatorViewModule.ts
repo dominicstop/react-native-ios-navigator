@@ -33,6 +33,14 @@ interface RNINavigatorViewModule {
     routeIndex: number,
     animated: boolean,
   ): Promise<void>;
+
+  replaceRoute(
+    node: number,
+    prevRouteIndex: number,
+    prevRouteKey: string,
+    nextRouteKey: string,
+    isAnimated: boolean,
+  ): Promise<void>;
 };
 
 // Import native component
