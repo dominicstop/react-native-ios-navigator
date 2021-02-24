@@ -34,6 +34,7 @@ class RNINavigatorRouteViewController: UIViewController {
   
   /// A ref. to the `ScrollView` subview of the `reactRouteContent`
   var reactScrollView: RCTScrollView?;
+  var reactSafeAreaView: RCTSafeAreaView?;
   
   // used for the custom transitions
   var interactionController: LeftEdgeInteractionController?;
@@ -83,16 +84,19 @@ class RNINavigatorRouteViewController: UIViewController {
     super.loadView();
     
     let reactRouteContent = self.routeView!.reactRouteContent!;
+    self.view = reactRouteContent;
     
     // is content a scrollview
     if let contentView     = reactRouteContent.subviews.first,
        let reactScrollView = contentView as? RCTScrollView {
-         
-      self.view = reactRouteContent;
+  
       self.reactScrollView = reactScrollView;
       
-    } else {
-      self.view = reactRouteContent;
+    } else if let contentView     = reactRouteContent.subviews.first,
+              let reactSafeAreaView = contentView as? RCTSafeAreaView {
+      
+      self.reactSafeAreaView = reactSafeAreaView;
+      print("DEBUG -* reactSafeAreaView");
     };
   };
   
@@ -145,10 +149,7 @@ class RNINavigatorRouteViewController: UIViewController {
   override func viewDidLayoutSubviews() {
     super.viewWillLayoutSubviews();
 
-    if let reactScrollView = self.reactScrollView {
-      // Update scrollview insets
-      reactScrollView.refreshContentInset();
-    };
+    self.reactScrollView?.refreshContentInset();
   };
   
   override func willMove(toParent parent: UIViewController?){
