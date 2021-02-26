@@ -27,7 +27,7 @@ class RNINavigatorRouteViewController: UIViewController {
   
   /// A flag that indicates that the nav. controller responsible for this vc is
   /// about to remove it from the nav. stack. This is used to differentiate if
-  /// the "remove command" was user intiated (i.e. invoked via tapping the
+  /// the "remove command" was user initiated (i.e. invoked via tapping the
   /// "back" button, or a swipe gesture), or if it was invoked programmtically
   /// via the parent nav.
   var isToBeRemoved = false;
