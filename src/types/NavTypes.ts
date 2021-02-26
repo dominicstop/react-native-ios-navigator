@@ -6,7 +6,7 @@ import type { BackButtonDisplayMode, LargeTitleDisplayMode, RouteTransitionPopCo
 import type { EventEmitter } from "../functions/EventEmitter";
 
 import type { NavBarBackItemConfig, NavBarItemsConfig } from "./NavBarItemConfig";
-import type { NavCommandPop, NavCommandPopToRoot, NavCommandPush, NavCommandRemoveRoute, NavCommandReplaceRoute, NavCommandSetNavigationBarHidden } from "./NavSharedTypes";
+import type { NavCommandPop, NavCommandPopToRoot, NavCommandPush, NavCommandRemoveRoute, NavCommandReplaceRoute, NavCommandInsertRoute, NavCommandSetNavigationBarHidden } from "./NavSharedTypes";
 import type { NavBarAppearanceConfig } from "./NavBarAppearanceConfig";
 
 
@@ -44,6 +44,7 @@ export type NavigationObject = {
   popToRoot?: NavCommandPopToRoot;
   removeRoute?: NavCommandRemoveRoute;
   replaceRoute?: NavCommandReplaceRoute;
+  insertRoute?: NavCommandInsertRoute;
   setNavigationBarHidden?: NavCommandSetNavigationBarHidden;
   // get ref functions
   getRefToRoute          ?: () => NavigatorRouteView;

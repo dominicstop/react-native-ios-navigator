@@ -1,10 +1,12 @@
+// TODO: Add `cancel` method, create `queueKey`, cancel via `queueKey`
+// * schedule will return a tuple: `queueKey` and promise object
+// * this.queue: [{queueKey, resolve, reject}]
 export class SimpleQueue {
 
   private _isBusy = false;
   private queue: Array<{resolve: Function, reject: Function}> = [];
 
   schedule = (): Promise<void> => {
-
     return new Promise((resolve, reject) => {
       if(this.queue.length == 0 && !this._isBusy){
         this._isBusy = true;

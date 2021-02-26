@@ -389,6 +389,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
         popToRoot: this._navigatorRef.popToRoot,
         removeRoute: this._navigatorRef.removeRoute,
         replaceRoute: this._navigatorRef.replaceRoute,
+        insertRoute: this._navigatorRef.insertRoute,
         setNavigationBarHidden: this._navigatorRef.setNavigationBarHidden,
         // pass down 'get ref' functions
         getRefToRoute: this._handleGetRefToRoute,

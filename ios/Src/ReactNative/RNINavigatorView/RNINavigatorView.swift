@@ -591,6 +591,73 @@ extension RNINavigatorView {
       completion();
     };
   };
+  
+  func insertRoute(
+    nextRouteKey: String,
+    atIndex     : Int   ,
+    isAnimated  : Bool  ,
+    completion  : @escaping Completion
+  ) throws {
+    
+    var vc = self.navRouteViewControllers;
+    
+    #if DEBUG
+    let debug =
+        "with args, nextRouteKey: \(nextRouteKey)"
+      + " - atIndex: \(atIndex)"
+      + " - isAnimated: \(isAnimated)"
+      + " - current routeVC count: \(self.routeVCs.count)"
+      + " - current nav vc count: \(self.navigationVC.viewControllers.count)"
+    #else
+    let debug: String? = nil;
+    #endif
+    
+    guard atIndex < vc.count else {
+      throw RNIError.commandFailed(
+        source : "RNINavigatorView.insertRoute",
+        message:
+            "Unable to `insertRoute` because `atIndex` is invalid,"
+          + " because it's value is > the total active routes (out of bounds).",
+        debug: debug
+      );
+    };
+    
+    guard self.routeVCs.count > vc.count,
+          let routeToBeInserted = self.routeVCs.popLast()
+    else {
+      throw RNIError.commandFailed(
+        source : "RNINavigatorView.insertRoute",
+        message:
+            "Unable to `insertRoute` because the total `routeVCs` < the"
+          + " total vc count in the navigator. This could mean that the route to"
+          + " inserted hasn't been received here yet (or it wasn't sent at all)."
+          + " TLDR: `routeToBeInserted` could not be retrieved (out of bounds?).",
+        debug: debug
+      );
+    };
+    
+    guard routeToBeInserted.routeView.routeKey as String? == nextRouteKey
+    else {
+      throw RNIError.commandFailed(
+        source : "RNINavigatorView.insertRoute",
+        message:
+            "Unable to `insertRoute` due to `routeKey` mismatch, the route to be"
+          + " inserted does not match the provided `nextRouteKey`",
+        debug: debug
+      );
+    };
+    
+    #if DEBUG
+    print("LOG - NativeView, RNINavigatorView: insertRoute - \(debug)");
+    #endif
+    
+    vc.insert(routeToBeInserted, at: atIndex);
+    self.routeVCs = vc;
+    
+    self.navigationVC.setViewControllers(vc, animated: isAnimated) {
+      completion();
+    };
+  };
 };
 
 // -----------------------------------------------

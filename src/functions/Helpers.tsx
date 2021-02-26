@@ -47,3 +47,14 @@ export function lastElement<T>(array: Array<T>): T | undefined {
   if(!array) return undefined;
   return array[array.length - 1];
 };
+
+export function arrayInsert<T>(array: Array<T>, index: number, newItem: T){
+  return [
+    // part of the array before the specified index
+    ...array.slice(0, index),
+    // inserted item
+    newItem,
+    // part of the array after the specified index
+    ...array.slice(index)
+  ];
+};

@@ -39,7 +39,14 @@ interface RNINavigatorViewModule {
     prevRouteIndex: number,
     prevRouteKey: string,
     nextRouteKey: string,
-    isAnimated: boolean,
+    animated: boolean,
+  ): Promise<void>;
+
+  insertRoute(
+    node: number,
+    nextRouteKey: string,
+    atIndex: number,
+    animated: boolean,
   ): Promise<void>;
 };
 

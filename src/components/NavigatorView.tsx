@@ -8,7 +8,7 @@ import { RNINavigatorViewModule } from '../native_modules/RNINavigatorViewModule
 import { NavigatorRouteView } from './NavigatorRouteView';
 
 import type { RouteOptions } from '../types/NavTypes';
-import type { NavCommandPush, NavCommandPop, NavCommandPopToRoot, NavCommandRemoveRoute, NavCommandReplaceRoute, NavRouteItem, RenderNavBarItem } from '../types/NavSharedTypes';
+import type { NavCommandPush, NavCommandPop, NavCommandPopToRoot, NavCommandRemoveRoute, NavCommandReplaceRoute, NavCommandInsertRoute, NavRouteItem, RenderNavBarItem } from '../types/NavSharedTypes';
 import type { NavBarAppearanceCombinedConfig } from '../types/NavBarAppearanceConfig';
 
 import type { RouteContentProps } from '../components/NavigatorRouteView';
@@ -34,6 +34,7 @@ enum NavStatus {
   NAV_POPPING    = "NAV_POPPING"   , // nav. is busy popping
   NAV_REMOVING   = "NAV_REMOVING"  , // nav. is busy removing a route
   NAV_REPLACING  = "NAV_REPLACING" , // nav. is busy replacing a route
+  NAV_INSERTING  = "NAV_INSERTING" , // nav. is busy inserting a route
   UNMOUNTED      = "UNMOUNTED"     , // nav. comp. has been unmounted
   NAV_ABORT_PUSH = "NAV_ABORT_PUSH", // nav. has been popped before push completed
 };
@@ -556,6 +557,81 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         this.queue.dequeue();
 
         throw new Error(`\`replaceRoute\` failed with error: ${error}`);
+      };
+    };
+  };
+
+  public insertRoute: NavCommandInsertRoute = async (routeItem, atIndex, animated = false) => {
+    const state = this.state;
+    const routeConfig = this.getMatchingRoute(routeItem.routeKey);
+
+    if(!routeConfig){
+      // no matching route config found for `routeItem`
+      throw new Error("`NavigatorView` failed to do: `insertRoute`: Invalid `routeKey`");
+    };
+
+    if(atIndex > state.activeRoutes.length){
+      throw new Error("`NavigatorView` failed to do: `insertRoute`: Invalid `atIndex` (out of bounds)");
+    };
+    
+    try {
+      // if busy, wait for prev. to finish
+      await this.queue.schedule();
+      this.navStatus = NavStatus.NAV_INSERTING;
+
+      //#region - 🐞 DEBUG 🐛
+      LIB_GLOBAL.debugLog && console.log(
+          `LOG/JS - NavigatorView, insertRoute: add route`
+        + ` - with routeKey: ${routeItem.routeKey}`
+        + ` - current activeRoutes: ${this.state.activeRoutes.length}`
+      );
+      //#endregion
+
+      // summary: add new route, and wait for it be added
+      await Promise.all([
+        // ----------------------------------------------------------------------
+        // 1. Wait for the new route to be added as a subview in the native side.
+        //    note: This promise will reject if `onNavRouteViewAdded` fails to fire
+        //    within 500 ms (i.e. if it takes to long for the promise to be fulfilled).
+        // ----------------------------------------------------------------------------
+        Helpers.promiseWithTimeout(500, new Promise<void>(resolve => {
+          this.emitter.once(NavEvents.onNavRouteViewAdded, ({nativeEvent}: onNavRouteViewAddedPayload) => {
+            if(routeItem.routeKey == nativeEvent.routeKey){
+              resolve();
+            };
+          })
+        })),
+        // -----------------------------------
+        // 2. add new route to `activeRoutes`.
+        //    The new route will be "received" from `RNINavigatorView`.
+        // ------------------------------------------------------------
+        Helpers.setStateAsync<NavigatorViewState>(this, ({activeRoutes: prevRoutes}) => ({
+          activeRoutes: Helpers
+            .arrayInsert(prevRoutes, atIndex, {...routeItem, routeIndex: atIndex})
+            .map((route, index) => ({...route, routeIndex: index}))
+        }))
+      ]);
+
+      // forward command to native module
+      await Helpers.promiseWithTimeout((750),
+        RNINavigatorViewModule.insertRoute(
+          findNodeHandle(this.nativeRef),
+          routeItem.routeKey,
+          atIndex,
+          animated
+        )
+      );
+      
+      // finished, start next item
+      this.navStatus = NavStatus.IDLE;
+      this.queue.dequeue();
+
+    } catch(error){
+      if(this.navStatus != NavStatus.UNMOUNTED) {
+        this.navStatus = NavStatus.IDLE_ERROR;
+        this.queue.dequeue();
+
+        throw new Error("`NavigatorView` failed to do: `insertRoute` with error: " + error);
       };
     };
   };
