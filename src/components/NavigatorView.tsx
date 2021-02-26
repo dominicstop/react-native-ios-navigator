@@ -272,7 +272,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     
     try {
       // if busy, wait for prev. to finish
-      await this.queue.schedule();
+      const queue = this.queue.schedule();
+      await queue.promise;
+
       this.navStatus = NavStatus.NAV_PUSHING;
 
       const hasTransition = (options?.transitionConfig != null);
@@ -370,7 +372,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
     try {
       // if busy, wait for prev. to finish
-      await this.queue.schedule();
+      const queue = this.queue.schedule();
+      await queue.promise;
+
       this.navStatus = NavStatus.NAV_POPPING;
 
       const hasTransition = (options?.transitionConfig != null);
@@ -430,7 +434,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
     try {
       // if busy, wait for prev. to finish
-      await this.queue.schedule();
+      const queue = this.queue.schedule();
+      await queue.promise;
+
       this.navStatus = NavStatus.NAV_POPPING;
 
       // forward `popToRoot` request to native module
@@ -475,7 +481,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
     try {
       // if busy, wait for prev. to finish
-      await this.queue.schedule();
+      const queue = this.queue.schedule();
+      await queue.promise;
+
       this.navStatus = NavStatus.NAV_REMOVING;
 
       await Helpers.promiseWithTimeout(750,
@@ -537,7 +545,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
     try {
       // if busy, wait for prev. to finish
-      await this.queue.schedule();
+      const queue = this.queue.schedule();
+      await queue.promise;
+
       this.navStatus = NavStatus.NAV_REPLACING;
 
       await Promise.all([
@@ -603,7 +613,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     
     try {
       // if busy, wait for prev. to finish
-      await this.queue.schedule();
+      const queue = this.queue.schedule();
+      await queue.promise;
+      
       this.navStatus = NavStatus.NAV_INSERTING;
 
       //#region - 🐞 DEBUG 🐛

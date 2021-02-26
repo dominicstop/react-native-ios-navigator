@@ -1,21 +1,41 @@
-// TODO: Add `cancel` method, create `queueKey`, cancel via `queueKey`
-// * schedule will return a tuple: `queueKey` and promise object
-// * this.queue: [{queueKey, resolve, reject}]
 export class SimpleQueue {
 
   private _isBusy = false;
-  private queue: Array<{resolve: Function, reject: Function}> = [];
+  private queue: Array<{queueKey: number, resolve: Function, reject: Function}> = [];
 
-  schedule = (): Promise<void> => {
-    return new Promise((resolve, reject) => {
+  private queueKey = 0;
+
+  schedule = (): {queueKey: number, promise: Promise<void>, cancel: Function} => {
+    const queueKey = this.queueKey++;
+
+    const promise = new Promise<void>((resolve, reject) => {
       if(this.queue.length == 0 && !this._isBusy){
         this._isBusy = true;
         resolve();
 
       } else {
-        this.queue.push({resolve, reject});
+        this.queue.push({queueKey, resolve, reject});
       };
     });
+
+    const cancel = () => {
+      this.cancel(queueKey);
+    };
+
+    return {queueKey, promise, cancel};
+  };
+
+  cancel(queueKey: number){
+    const queueItem = this.queue.find(item => 
+      item.queueKey == queueKey
+    );
+
+    if(queueItem){
+      queueItem.reject();
+
+    } else {
+      throw new Error("Invalid queueKey");
+    };
   };
 
   dequeue(){
