@@ -29,20 +29,40 @@ type NavCommandPopOptions = NativePushPopOptions & {
   transitionConfig?: RouteTransitionPopConfig;
 };
 
-//TODO: add new line to each param
-export type NavCommandPush = (routeItem: NavRouteItem, options?: NavCommandPushOptions) => Promise<void>;
+export type NavCommandPush = (
+  routeItem: NavRouteItem, 
+  options?: NavCommandPushOptions
+) => Promise<void>;
 
-export type NavCommandPop = (options?: NavCommandPopOptions) => Promise<void>;
+export type NavCommandPop = (
+  options?: NavCommandPopOptions
+) => Promise<void>;
 
-export type NavCommandPopToRoot = (options?: NativePushPopOptions) => Promise<void>;
+export type NavCommandPopToRoot = (
+  options?: NativePushPopOptions
+) => Promise<void>;
 
-export type NavCommandRemoveRoute = (routeIndex: number, animated?: boolean) => Promise<void>;
+export type NavCommandRemoveRoute = (
+  routeIndex: number, 
+  animated?: boolean
+) => Promise<void>;
 
-export type NavCommandReplaceRoute = (prevRouteIndex: number, nextRouteKey: string, animated?: boolean) => Promise<void>;
+export type NavCommandReplaceRoute = (
+  prevRouteIndex: number, 
+  nextRouteKey: string, 
+  animated?: boolean
+) => Promise<void>;
 
-export type NavCommandInsertRoute = (routeItem: NavRouteItem, atIndex: number, animated?: boolean) => Promise<void>;
+export type NavCommandInsertRoute = (
+  routeItem: NavRouteItem, 
+  atIndex: number, 
+  animated?: boolean
+) => Promise<void>;
 
-export type NavCommandSetNavigationBarHidden = (isHidden: boolean, animated: boolean) => Promise<void>;
+export type NavCommandSetNavigationBarHidden = (
+  isHidden: boolean, 
+  animated: boolean
+) => Promise<void>;
 
 //#endregion
 

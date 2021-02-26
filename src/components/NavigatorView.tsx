@@ -487,8 +487,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         )
       );
 
-      console.log(`before state.activeRoutes count: ${this.state.activeRoutes.length}`);
-
       await Helpers.setStateAsync<NavigatorViewState>(this, (prevState) => ({
         ...prevState,
         activeRoutes: prevState.activeRoutes
@@ -503,8 +501,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
             routeIndex: index,
           }))
       }));
-
-      console.log(`after state.activeRoutes count: ${this.state.activeRoutes.length}`);
 
       this.navStatus = NavStatus.IDLE;
       this.queue.dequeue();
@@ -562,6 +558,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         })),
       ]);
 
+      // forward command to native module
       await Helpers.promiseWithTimeout(750,
         RNINavigatorViewModule.replaceRoute(
           findNodeHandle(this.nativeRef),
