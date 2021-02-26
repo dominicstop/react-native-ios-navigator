@@ -407,7 +407,7 @@ extension RNINavigatorView {
     };
     
     guard let lastNavRouteVC = self.navRouteViewControllers.last,
-          
+  
           // get the last routeVC
           let lastRouteVC   = self.routeVCs.last,
           let lastRouteView = lastRouteVC.routeView,
@@ -441,6 +441,8 @@ extension RNINavigatorView {
     );
     #endif
     
+    lastRouteVC.isToBeRemoved = true;
+    
     self.navigationVC.popViewController(animated: isAnimated){
       completion(lastRouteKey, lastRouteIndex);
     };
@@ -462,6 +464,10 @@ extension RNINavigatorView {
           + " - last item's routeKey: \(self.routeVCs.last?.routeView?.routeKey ?? "N/A")"
           + " - current routeViews count: \(self.routeVCs.count)"
       );
+    };
+    
+    for route in self.routeVCs {
+      route.isToBeRemoved = true;
     };
     
     self.navigationVC.popToRootViewController(animated: isAnimated) {
@@ -514,6 +520,7 @@ extension RNINavigatorView {
     #endif
     
     vc.remove(at: routeIndex);
+    routeToRemove.isToBeRemoved = true;
     
     self.navigationVC.setViewControllers(vc, animated: isAnimated) {
       completion();
@@ -583,6 +590,8 @@ extension RNINavigatorView {
     #if DEBUG
     print("LOG - NativeView, RNINavigatorView: replaceRoute - \(debug)");
     #endif
+    
+    routeToReplace.isToBeRemoved = true;
     
     vc[prevRouteIndex] = replacementRoute;
     self.routeVCs = vc;
