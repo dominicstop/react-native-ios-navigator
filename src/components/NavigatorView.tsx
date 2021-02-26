@@ -183,14 +183,20 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
 
     // trigger remove if:
-    const shouldRemove = (
+    const shouldRemove = () => (
       // - A the route to be removed has a valid `routeKey`
-      (this.isValidRouteKey(params.routeKey)) &&
-      // - B. there are queued items to remove and...
+      this.isValidRouteKey(params.routeKey) &&
+      // - B. there are queued items to remove
       (this.routesToRemove.length > 0)
     );
 
-    if(shouldRemove){
+    // if busy, wait for prev. to finish
+    const queue = this.queue.schedule();
+    await queue.promise;
+
+    this.navStatus = NavStatus.NAV_POPPING;
+
+    while(shouldRemove()){
       //#region - 🐞 DEBUG 🐛
       LIB_GLOBAL.debugLog && console.log(
           `LOG/JS - NavigatorView, removeRouteBatchedFromState`
@@ -203,9 +209,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       );
       //#endregion
       
-      this.navStatus = NavStatus.NAV_POPPING;
       // delay, so `routesToRemove` queue gets filled first
-      await Helpers.timeout(300);
+      await Helpers.timeout(200);
 
       // make a copy of `routesToRemove` and then clear original
       const toBeRemoved = [...this.routesToRemove];
@@ -220,15 +225,10 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
           ))
         ))
       }));
-
-      // recursively remove routes from `routesToRemove`
-      if(this.routesToRemove.length > 0){
-        this.removeRouteBatchedFromState();
-
-      } else {
-        this.navStatus = NavStatus.IDLE;
-      };
     };
+
+    this.navStatus = NavStatus.IDLE;
+    this.queue.dequeue();
   };
 
   /** Remove route from `state.activeRoutes` */
