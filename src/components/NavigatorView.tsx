@@ -46,6 +46,7 @@ enum NavEvents {
 /** Represents a route in the nav. `state.activeRoutes` */
 interface NavRouteStateItem extends NavRouteItem {
   routeIndex: number;
+  routeID: number;
 };
 
 
@@ -95,6 +96,7 @@ type NavigatorViewState = {
 //#endregion
 
 let NAVIGATOR_ID_COUNTER = 0;
+let ROUTE_ID_COUNTER     = 0;
 
 export class NavigatorView extends React.PureComponent<NavigatorViewProps, NavigatorViewState> {
   //#region - Property Declarations
@@ -117,19 +119,29 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   constructor(props: NavigatorViewProps){
     super(props);
 
-    this.navStatus = NavStatus.IDLE_INIT;
-    this.emitter = new EventEmitter<NavEvents>();
-    this.routesToRemove = [];
-    this.queue = new SimpleQueue();
-
     this.navigatorID = NAVIGATOR_ID_COUNTER++;
 
-    const initialRoute = props.routes.find(item => (
-      item.routeKey == props.initialRouteKey
-    ));
+    this.navStatus = NavStatus.IDLE_INIT;
+    this.routesToRemove = [];
+
+    this.emitter = new EventEmitter<NavEvents>();
+    this.queue = new SimpleQueue();
+
+    const initialRoute = this.getMatchingRoute(props.initialRouteKey);
+    if(!initialRoute){
+      // no matching route config found for `initialRouteKey`
+      throw new Error("`NavigatorView` error: invalid value for `initialRouteKey` prop"
+        + ` - no matching route found for \`initialRouteKey\`: ${props.initialRouteKey}`
+      );
+    };
 
     this.state = {
-      activeRoutes: [{...initialRoute, routeIndex: 0}],
+      activeRoutes: [{
+        // create initial route item
+        routeKey: initialRoute.routeKey,
+        routeIndex: 0, 
+        routeID: ROUTE_ID_COUNTER++
+      }],
       transitionConfigPushOverride: null,
       transitionConfigPopOverride: null,
     };
@@ -305,7 +317,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         //    The new route will be "received" from `RNINavigatorView`.
         // ------------------------------------------------------------
         Helpers.setStateAsync<NavigatorViewState>(this, ({activeRoutes: prevRoutes}) => ({
-          activeRoutes: [...prevRoutes, {...routeItem,
+          activeRoutes: [...prevRoutes, {
+            ...routeItem,
+            routeID: ROUTE_ID_COUNTER++,
             routeIndex: ((Helpers.lastElement(prevRoutes)?.routeIndex ?? 0) + 1)
           }]
         }))
@@ -473,6 +487,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         )
       );
 
+      console.log(`before state.activeRoutes count: ${this.state.activeRoutes.length}`);
+
       await Helpers.setStateAsync<NavigatorViewState>(this, (prevState) => ({
         ...prevState,
         activeRoutes: prevState.activeRoutes
@@ -487,6 +503,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
             routeIndex: index,
           }))
       }));
+
+      console.log(`after state.activeRoutes count: ${this.state.activeRoutes.length}`);
 
       this.navStatus = NavStatus.IDLE;
       this.queue.dequeue();
@@ -504,15 +522,21 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   public replaceRoute: NavCommandReplaceRoute = async (prevRouteIndex, nextRouteKey, animated = false) => {
     const { activeRoutes } = this.state;
 
-    const routeToReplace   = activeRoutes[prevRouteIndex];
-    const replacementRoute = this.getMatchingRoute(nextRouteKey);
+    const routeToReplace         = activeRoutes[prevRouteIndex];
+    const replacementRouteConfig = this.getMatchingRoute(nextRouteKey);
 
     if(routeToReplace == null){
       throw new Error(`\`replaceRoute\` failed, no route found for the given \`routeIndex\`: ${prevRouteIndex}`);
     };
 
-    if(replacementRoute == null){
+    if(replacementRouteConfig == null){
       throw new Error(`\`replaceRoute\` failed, no route found for the given \`routeKey\`: ${nextRouteKey}`);
+    };
+
+    const replacementRoute: NavRouteStateItem = {
+      ...replacementRouteConfig,
+      routeID: ROUTE_ID_COUNTER++,
+      routeIndex: prevRouteIndex,
     };
 
     try {
@@ -573,6 +597,12 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     if(atIndex > state.activeRoutes.length){
       throw new Error("`NavigatorView` failed to do: `insertRoute`: Invalid `atIndex` (out of bounds)");
     };
+
+    const nextRoute: NavRouteStateItem = {
+      ...routeItem,
+      routeID: ROUTE_ID_COUNTER++,
+      routeIndex: atIndex,
+    };
     
     try {
       // if busy, wait for prev. to finish
@@ -582,7 +612,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       //#region - 🐞 DEBUG 🐛
       LIB_GLOBAL.debugLog && console.log(
           `LOG/JS - NavigatorView, insertRoute: add route`
-        + ` - with routeKey: ${routeItem.routeKey}`
+        + ` - with routeKey: ${nextRoute.routeKey}`
         + ` - current activeRoutes: ${this.state.activeRoutes.length}`
       );
       //#endregion
@@ -607,7 +637,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         // ------------------------------------------------------------
         Helpers.setStateAsync<NavigatorViewState>(this, ({activeRoutes: prevRoutes}) => ({
           activeRoutes: Helpers
-            .arrayInsert(prevRoutes, atIndex, {...routeItem, routeIndex: atIndex})
+            .arrayInsert(prevRoutes, atIndex, nextRoute)
             .map((route, index) => ({...route, routeIndex: index}))
         }))
       ]);
@@ -616,7 +646,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       await Helpers.promiseWithTimeout((750),
         RNINavigatorViewModule.insertRoute(
           findNodeHandle(this.nativeRef),
-          routeItem.routeKey,
+          nextRoute.routeKey,
           atIndex,
           animated
         )
@@ -705,10 +735,11 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       return (
         <NavigatorRouteView
-          key={`${route.routeKey}-${route.routeIndex}`}
+          key={`${route.routeKey}-${route.routeID}`}
           {...(isLast && {ref: r => this.lastRouteRef = r})}
-          routeContainerStyle={props.routeContainerStyle}
+          routeID={route.routeID}
           routeIndex={route.routeIndex}
+          routeContainerStyle={props.routeContainerStyle}
           routeKey={route.routeKey}
           routeProps={(
             route      .routeProps ??

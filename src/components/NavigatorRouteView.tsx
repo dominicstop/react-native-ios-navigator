@@ -56,6 +56,9 @@ enum RouteStatus {
 };
 
 type NavigatorRouteViewProps = {
+  /** Unique identifier for this navigator */
+  routeID: number; 
+
   routeKey: string;
   routeIndex: number;
   routeProps: object;
@@ -78,7 +81,7 @@ type NavigatorRouteViewState = {
 };
 //#endregion
 
-let ROUTE_ID_COUNTER = 0;
+
 
 export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewProps, NavigatorRouteViewState> {
   //#region - Property Declarations
@@ -87,9 +90,6 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
 
   routeStatus: RouteStatus;
 
-  /** Unique identifier for this navigator */
-  private routeID: number;
-  
   // references
   private _emitter              : EventEmitter<NavRouteEvents>;
   private _nativeRef            : React.Component<RNINavigatorRouteViewProps>;
@@ -102,7 +102,6 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
   constructor(props: NavigatorRouteViewProps){
     super(props);
 
-    this.routeID = ROUTE_ID_COUNTER++;
     this.routeStatus = RouteStatus.INIT;
 
     this._emitter = new EventEmitter<NavRouteEvents>();
@@ -292,7 +291,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
 
   /** Handle event: `onRouteWillPop` */
   private _handleOnNavRouteWillPop: onRoutePopEvent = (event) => {
-    if(this.routeID != event.nativeEvent.routeID) return;
+    if(this.props.routeID != event.nativeEvent.routeID) return;
 
     this._emitter.emit(NavRouteEvents.onRouteWillPop, event);
     this.routeStatus = RouteStatus.ROUTE_POPPING;
@@ -300,7 +299,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
 
   /** Handle event: `onRouteDidPop` */
   private _handleOnNavRouteDidPop: onRoutePopEvent = (event) => {
-    if(this.routeID != event.nativeEvent.routeID) return;
+    if(this.props.routeID != event.nativeEvent.routeID) return;
 
     this._emitter.emit(NavRouteEvents.onRouteDidPop, event);
     this.routeStatus = RouteStatus.ROUTE_POPPED;
@@ -308,7 +307,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
 
   /** Handle event: `onRouteWillPush` */
   private _handleOnNavRouteWillPush: onRoutePushEvent = (event) => {
-    if(this.routeID != event.nativeEvent.routeID) return;
+    if(this.props.routeID != event.nativeEvent.routeID) return;
 
     this._emitter.emit(NavRouteEvents.onRouteWillPush, event);
     this.routeStatus = RouteStatus.ROUTE_PUSHING;
@@ -316,7 +315,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
 
   /** Handle event: `onRouteDidPush` */
   private _handleOnNavRouteDidPush: onRoutePushEvent = (event) => {
-    if(this.routeID != event.nativeEvent.routeID) return;
+    if(this.props.routeID != event.nativeEvent.routeID) return;
 
     this._emitter.emit(NavRouteEvents.onRouteDidPush, event);
     this.routeStatus = RouteStatus.ROUTE_PUSHED;
@@ -324,19 +323,19 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
 
   /** Handle event: `onPressNavBarLeftItem` */
   private _handleOnPressNavBarLeftItem: onPressNavBarItem = (event) => {
-    if(this.routeID != event.nativeEvent.routeID) return;
+    if(this.props.routeID != event.nativeEvent.routeID) return;
     this._emitter.emit(NavRouteEvents.onPressNavBarLeftItem, event);
   };
 
   /** Handle event: `onPressNavBarRightItem` */
   private _handleOnPressNavBarRightItem: onPressNavBarItem = (event) => {
-    if(this.routeID != event.nativeEvent.routeID) return;
+    if(this.props.routeID != event.nativeEvent.routeID) return;
     this._emitter.emit(NavRouteEvents.onPressNavBarRightItem, event);
   };
 
   /** Handle event: `onRouteWillFocus` */
   private _handleOnRouteWillFocus: onRouteFocusBlurEvent = (event)  => {
-    if(this.routeID != event.nativeEvent.routeID) return;
+    if(this.props.routeID != event.nativeEvent.routeID) return;
 
     this._emitter.emit(NavRouteEvents.onRouteWillFocus, event);
     if(this.routeStatus == RouteStatus.ROUTE_BLURRED){
@@ -346,7 +345,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
 
   /** Handle event: `onRouteDidFocus` */
   private _handleOnRouteDidFocus: onRouteFocusBlurEvent = (event)  => {
-    if(this.routeID != event.nativeEvent.routeID) return;
+    if(this.props.routeID != event.nativeEvent.routeID) return;
 
     this._emitter.emit(NavRouteEvents.onRouteDidFocus, event);
     if(this.routeStatus == RouteStatus.ROUTE_BLURRED){
@@ -356,7 +355,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
 
   /** Handle event: `onRouteWillBlur` */
   private _handleOnRouteWillBlur: onRouteFocusBlurEvent = (event)  => {
-    if(this.routeID != event.nativeEvent.routeID) return;
+    if(this.props.routeID != event.nativeEvent.routeID) return;
 
     this._emitter.emit(NavRouteEvents.onRouteWillBlur, event);
     this.routeStatus = RouteStatus.ROUTE_BLURRING;
@@ -364,12 +363,11 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
 
   /** Handle event: `onRouteDidBlur` */
   private _handleOnRouteDidBlur: onRouteFocusBlurEvent = (event)  => {
-    if(this.routeID != event.nativeEvent.routeID) return;
+    if(this.props.routeID != event.nativeEvent.routeID) return;
 
     this._emitter.emit(NavRouteEvents.onRouteDidBlur, event);
     this.routeStatus = RouteStatus.ROUTE_BLURRED;
   };
-
   //#endregion
   
   _renderRouteContents = () => {
@@ -414,8 +412,6 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
 
   render(){
     const props = this.props;
-    const state = this.state;
-
     const routeOptions = this.getRouteOptions();
 
     return(
@@ -427,7 +423,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
         <RNINavigatorRouteView
           style={styles.navigatorRouteView}
           ref={r => this._nativeRef = r}
-          routeID={this.routeID}
+          routeID={props.routeID}
           nativeID={NativeIDKeys.NavRouteItem}
           // route config
           routeKey={props.routeKey}
