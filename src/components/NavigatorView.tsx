@@ -110,7 +110,11 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   
   private navStatus: NavStatus;
   private emitter: EventEmitter<NavEvents>;
+
+  /** Used for `removeRouteBatchedFromState`*/
   private routesToRemove: Array<{routeKey: string, routeIndex: number}>;
+
+  /** Queue for nav. commands: only 1 command is called at a time */
   private queue: SimpleQueue;
 
   private lastRouteRef: NavigatorRouteView;
@@ -278,12 +282,21 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       this.navStatus = NavStatus.NAV_PUSHING;
 
       const hasTransition = (options?.transitionConfig != null);
-      // the amount of time to wait for "push" to resolve before rejecting.
+
       // note: convert seconds -> ms
-      const minTimeout = (1000 * (
+      const transitionDuration = (1000 * (
         options?.transitionConfig?.duration       ??
         this.getLastRouteTransitionDuration(true) ?? 0
       ));
+
+      if(transitionDuration > 10000){
+        throw new Error("`NavigatorView` failed to do: `push`: transition duration too big"
+          + " - reminder: specify duration in seconds (ex: 0.5), not in ms (ex: 500)"
+        );
+      };
+
+      // the amount of time to wait for "push" to resolve before rejecting.
+      const timeout = Math.max((transitionDuration + 100), 750);
 
       if(hasTransition){
         // temporarily override the last route's "push" transition
@@ -328,7 +341,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       ]);
 
       // forward "push" request to native module
-      await Helpers.promiseWithTimeout((minTimeout + 1000),
+      await Helpers.promiseWithTimeout(timeout,
         RNINavigatorViewModule.push(
           findNodeHandle(this.nativeRef),
           routeItem.routeKey, {
@@ -379,12 +392,20 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       const hasTransition = (options?.transitionConfig != null);
 
-      // the amount of time to wait for "pop" to resolve before rejecting.
       // note: convert seconds -> ms
-      const minTimeout = (1000 * (
+      const transitionDuration = (1000 * (
         options?.transitionConfig?.duration        ??
         this.getLastRouteTransitionDuration(false) ?? 0
       ));
+
+      if(transitionDuration > 10000){
+        throw new Error("`NavigatorView` failed to do: `pop`: transition duration too big"
+          + " - reminder: specify duration in seconds (ex: 0.5), not in ms (ex: 500)"
+        );
+      };
+
+      // the amount of time to wait for "pop" to resolve before rejecting.
+      const timeout = Math.max((transitionDuration + 100), 750);
 
       if(hasTransition){
         // temporarily change the last route's "pop" transition
@@ -394,7 +415,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       };
 
       // forward "pop" request to native module
-      const result = await Helpers.promiseWithTimeout((minTimeout + 1000),
+      const result = await Helpers.promiseWithTimeout(timeout,
         RNINavigatorViewModule.pop(
           findNodeHandle(this.nativeRef), {
             isAnimated: options?.isAnimated ?? true,
