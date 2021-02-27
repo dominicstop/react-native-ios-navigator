@@ -39,7 +39,7 @@ export type NavCommandPop = (
 ) => Promise<void>;
 
 export type NavCommandPopToRoot = (
-  options?: NativePushPopOptions
+  options?: NavCommandPopOptions
 ) => Promise<void>;
 
 export type NavCommandRemoveRoute = (

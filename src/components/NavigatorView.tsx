@@ -367,7 +367,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     const { activeRoutes } = this.state;
 
     if(activeRoutes.length < 1){
-      throw new Error(`\`pop\` failed, route count must be > 1`);
+      throw new Error(`\`pop\` failed, active route count must be > 1`);
     };
 
     try {
@@ -439,8 +439,32 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       this.navStatus = NavStatus.NAV_POPPING;
 
+      const hasTransition = (options?.transitionConfig != null);
+
+      // note: convert seconds -> ms
+      const transitionDuration = (1000 * (
+        options?.transitionConfig?.duration        ??
+        this.getLastRouteTransitionDuration(false) ?? 0
+      ));
+
+      // the amount of time to wait for "popToRoot" to resolve before rejecting.
+      const timeout = Math.max((transitionDuration + 100), 750);
+
+      if(transitionDuration > 10000){
+        throw new Error("`NavigatorView` failed to do: `pop`: transition duration too big"
+          + " - reminder: specify duration in seconds (ex: 0.5), not in ms (ex: 500)"
+        );
+      };
+
+      if(hasTransition){
+        // temporarily change the last route's "pop" transition
+        await Helpers.setStateAsync<Partial<NavigatorViewState>>(this, {
+          transitionConfigPopOverride: options.transitionConfig
+        });
+      };
+
       // forward `popToRoot` request to native module
-      await Helpers.promiseWithTimeout(1000,
+      await Helpers.promiseWithTimeout(timeout,
         RNINavigatorViewModule.popToRoot(
           findNodeHandle(this.nativeRef), {
             isAnimated: options?.isAnimated ?? true,
@@ -453,6 +477,13 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         ...prevState,
         activeRoutes: [prevState.activeRoutes[0]]
       }));
+
+      if(hasTransition){
+        // reset transition override
+        await Helpers.setStateAsync<Partial<NavigatorViewState>>(this, {
+           transitionConfigPopOverride: null,
+         });
+      };
 
       this.navStatus = NavStatus.IDLE;
       this.queue.dequeue();
