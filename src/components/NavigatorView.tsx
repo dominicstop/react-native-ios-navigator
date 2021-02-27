@@ -605,8 +605,10 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       await Promise.all([
         // 1. wait for replacement route to be added
         Helpers.promiseWithTimeout(500, new Promise<void>(resolve => {
-          this.emitter.once(NavEvents.onNavRouteViewAdded, () => {
-            resolve();
+          this.emitter.once(NavEvents.onNavRouteViewAdded, ({nativeEvent}: onNavRouteViewAddedPayload) => {
+            if(nativeEvent.routeKey == routeItem.routeKey){
+              resolve();
+            };
           })
         })),
         // 2. replace route in state
