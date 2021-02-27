@@ -49,7 +49,7 @@ export type NavCommandRemoveRoute = (
 
 export type NavCommandReplaceRoute = (
   prevRouteIndex: number, 
-  nextRouteKey: string, 
+  routeItem: NavRouteItem, 
   animated?: boolean
 ) => Promise<void>;
 

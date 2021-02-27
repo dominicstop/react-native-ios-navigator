@@ -575,22 +575,22 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
   };
 
-  public replaceRoute: NavCommandReplaceRoute = async (prevRouteIndex, nextRouteKey, animated = false) => {
+  public replaceRoute: NavCommandReplaceRoute = async (prevRouteIndex, routeItem, animated = false) => {
     const { activeRoutes } = this.state;
 
     const routeToReplace         = activeRoutes[prevRouteIndex];
-    const replacementRouteConfig = this.getMatchingRoute(nextRouteKey);
+    const replacementRouteConfig = this.getMatchingRoute(routeItem.routeKey);
 
     if(routeToReplace == null){
       throw new Error(`\`replaceRoute\` failed, no route found for the given \`routeIndex\`: ${prevRouteIndex}`);
     };
 
     if(replacementRouteConfig == null){
-      throw new Error(`\`replaceRoute\` failed, no route found for the given \`routeKey\`: ${nextRouteKey}`);
+      throw new Error(`\`replaceRoute\` failed, no route found for the given \`routeKey\`: ${routeItem?.routeKey}`);
     };
 
     const replacementRoute: NavRouteStateItem = {
-      ...replacementRouteConfig,
+      ...routeItem,
       routeID: ROUTE_ID_COUNTER++,
       routeIndex: prevRouteIndex,
     };
