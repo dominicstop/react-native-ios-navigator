@@ -66,17 +66,19 @@ class NestTestA2 extends React.PureComponent<RouteContentProps & {
         }
       };
 
+      
       await Promise.all([
-        // @ts-ignore
         this.navRefA.push({
           routeKey: 'BlankRoute', 
           routeOptions: { routeTitle: `A2-${i + 1 + offset}`},
           routeProps: { offsetB: 0 },
+          // @ts-ignore
         }, options),
         this.navRefB.push({
           routeKey: 'BlankRoute', 
           routeOptions: { routeTitle: `A2-${i + 2 + offset}`},
           routeProps: { offsetB: 1 },
+          // @ts-ignore
         }, options),
       ]);
     };

@@ -45,6 +45,8 @@ function ButtonWithSubtitle(props: {
 };
 
 export function NavigatorTest03(props: RouteContentProps){
+  const [isNavBarHidden, setIsNavBarHidden] = React.useState(false);
+
   return (
     <SafeAreaView style={styles.testContainer}>
       <ButtonWithSubtitle
@@ -73,6 +75,28 @@ export function NavigatorTest03(props: RouteContentProps){
         subtitle={'Remove route with `routeIndex: 1`'}
         onPress={() => {
           props.navigation.removeRoute(1);
+        }}
+      />
+      <ButtonWithSubtitle
+        title={'Toggle `isNavBarHidden`'}
+        subtitle={`Toggle the navigation bar visibility`}
+        onPress={() => {
+          props.navigation.setNavigationBarHidden(!isNavBarHidden, true);
+          setIsNavBarHidden(!isNavBarHidden);
+        }}
+      />
+      <ButtonWithSubtitle
+        title={'Replace Route: 01'}
+        subtitle={'Replace route with `routeIndex: 1` w/ `routeKey: Home`'}
+        onPress={() => {
+          props.navigation.replaceRoute(1, {routeKey: 'Home'});
+        }}
+      />
+      <ButtonWithSubtitle
+        title={'Insert Route: 01'}
+        subtitle={'Insert route at `routeIndex: 1` w/ `routeKey: NavigatorTest03`'}
+        onPress={() => {
+          props.navigation.insertRoute({routeKey: 'NavigatorTest03'}, 1);
         }}
       />
       <RouteViewPortal
