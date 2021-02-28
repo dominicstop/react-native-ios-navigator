@@ -48,7 +48,12 @@ export function NavigatorTest03(props: RouteContentProps){
   const [isNavBarHidden, setIsNavBarHidden] = React.useState(false);
 
   return (
-    <SafeAreaView style={styles.testContainer}>
+    <ScrollView contentContainerStyle={styles.testContainer}>
+      <RouteViewPortal
+        routeOptions={{
+          largeTitleDisplayMode: 'never',
+        }}
+      />
       <ButtonWithSubtitle
         title={'Push `NavigatorTest03`'}
         subtitle={'Push a new route'}
@@ -78,6 +83,13 @@ export function NavigatorTest03(props: RouteContentProps){
         }}
       />
       <ButtonWithSubtitle
+        title={'Remove Route: 01, 02'}
+        subtitle={'Remove route with `routeIndex: 1...2`'}
+        onPress={() => {
+          props.navigation.removeRoutes([1,2]);
+        }}
+      />
+      <ButtonWithSubtitle
         title={'Toggle `isNavBarHidden`'}
         subtitle={`Toggle the navigation bar visibility`}
         onPress={() => {
@@ -94,23 +106,69 @@ export function NavigatorTest03(props: RouteContentProps){
       />
       <ButtonWithSubtitle
         title={'Insert Route: 01'}
-        subtitle={'Insert route at `routeIndex: 1` w/ `routeKey: NavigatorTest03`'}
+        subtitle={'Insert route at `routeIndex: 1` w/ `routeKey: NavigatorTest01`'}
         onPress={() => {
-          props.navigation.insertRoute({routeKey: 'NavigatorTest03'}, 1);
+          props.navigation.insertRoute({routeKey: 'NavigatorTest01'}, 1);
         }}
       />
-      <RouteViewPortal
-        routeOptions={{
-          largeTitleDisplayMode: 'never',
+      <View style={{marginTop: 30}}/>
+      <ButtonWithSubtitle
+        title={'Replace Route: 0'}
+        subtitle={'Replace the 1st route w/ `routeKey: NavigatorTest01`'}
+        onPress={() => {
+          props.navigation.replaceRoute(0,{routeKey: 'NavigatorTest01'});
         }}
       />
-    </SafeAreaView>
+      <ButtonWithSubtitle
+        title={'Remove Route: 0'}
+        subtitle={'Remove the first route'}
+        onPress={() => {
+          props.navigation.removeRoute(0);
+        }}
+      />
+      <ButtonWithSubtitle
+        title={'Remove Route: 01'}
+        subtitle={'Remove route with `routeIndex: 1`'}
+        onPress={() => {
+          props.navigation.removeRoute(1);
+        }}
+      />
+      <View style={{marginTop: 30}}/>
+      <ButtonWithSubtitle
+        title={'Remove Prev. Route'}
+        subtitle={'Remove prev. route'}
+        onPress={() => {
+          props.navigation.removePreviousRoute();
+        }}
+      />
+      <ButtonWithSubtitle
+        title={'Remove All Prev. Routes'}
+        subtitle={'Remove all the prev. routes'}
+        onPress={() => {
+          props.navigation.removeAllPrevRoutes();
+        }}
+      />
+      <ButtonWithSubtitle
+        title={'Replace Current Route'}
+        subtitle={'Replace current route w/ `routeKey: NavigatorTest01`'}
+        onPress={() => {
+          props.navigation.replaceCurrentRoute({routeKey: 'NavigatorTest01'});
+        }}
+      />
+      <ButtonWithSubtitle
+        title={'Replace Prev. Route'}
+        subtitle={'Replace prev. route w/ `routeKey: NavigatorTest01`'}
+        onPress={() => {
+          props.navigation.replacePreviousRoute({routeKey: 'NavigatorTest01'});
+        }}
+      />
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   testContainer: {
-    flex: 1,
-    justifyContent: 'center',
+    paddingTop: 25,
+    paddingBottom: 100,
   },
 });
