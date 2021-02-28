@@ -8,7 +8,7 @@ import { RNINavigatorViewModule } from '../native_modules/RNINavigatorViewModule
 import { NavigatorRouteView } from './NavigatorRouteView';
 
 import type { RouteOptions } from '../types/NavTypes';
-import type { NavCommandPush, NavCommandPop, NavCommandPopToRoot, NavCommandRemoveRoute, NavCommandReplaceRoute, NavCommandInsertRoute, NavRouteItem, RenderNavBarItem } from '../types/NavSharedTypes';
+import type { NavCommandPush, NavCommandPop, NavCommandPopToRoot, NavCommandRemoveRoute, NavCommandReplaceRoute, NavCommandInsertRoute, NavCommandReplaceRoutePreset, NavCommandRemoveRoutePreset, NavRouteItem, RenderNavBarItem } from '../types/NavSharedTypes';
 import type { NavBarAppearanceCombinedConfig } from '../types/NavBarAppearanceConfig';
 
 import type { RouteContentProps } from '../components/NavigatorRouteView';
@@ -265,6 +265,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   public getActiveRoutes = () => {
     return this.state.activeRoutes;
   };
+
+  // Navigation Commands
+  // -------------------
 
   public push: NavCommandPush = async (routeItem, options) => {
     const routeConfig = this.getMatchingRoute(routeItem.routeKey);
@@ -763,6 +766,31 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       };
     };
   };
+
+  // Convenience Navigation Commands
+  // -------------------------------
+
+  public replacePreviousRoute: NavCommandReplaceRoutePreset = async (routeItem, animated = false) => {
+    const { activeRoutes } = this.state;
+    const lastRouteIndex = activeRoutes.length - 1;
+
+    await this.replaceRoute(lastRouteIndex - 1, routeItem, animated);
+  };
+
+  public replaceCurrentRoute: NavCommandReplaceRoutePreset = async (routeItem, animated = false) => {
+    const { activeRoutes } = this.state;
+    const lastRouteIndex = activeRoutes.length - 1;
+
+    await this.replaceRoute(lastRouteIndex, routeItem, animated);
+  };
+
+  public removePreviousRoute: NavCommandRemoveRoutePreset = async (animated = false) => {
+    const { activeRoutes } = this.state;
+    const lastRouteIndex = activeRoutes.length - 1;
+
+    await this.removeRoute(lastRouteIndex - 1, animated);
+  };
+
   //#endregion
 
   //#region - Native Event Handlers
@@ -789,6 +817,14 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   /** Handler for native event: `onNavRouteDidPop` */
   private _handleOnNavRouteDidPop = ({nativeEvent}: onNavRouteDidPopPayload) => {
     if(this.navigatorID != nativeEvent.navigatorID) return;
+
+    //#region - 🐞 DEBUG 🐛
+      LIB_GLOBAL.debugLog && console.log(
+          `LOG/JS - NavigatorView, onNavRouteDidPop`
+        + ` - with args, routeKey: ${nativeEvent.routeKey}`
+        + ` - routeIndex: ${nativeEvent.routeIndex}`
+      );
+      //#endregion
 
     // A: A route has been removed either through a tap on the "back" 
     //    button, or through a swipe back gesture.
@@ -866,8 +902,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       <RNINavigatorView 
         ref={r => this.nativeRef = r}
         style={[styles.navigatorView, props.style]}
-        navigatorID={this.navigatorID}
         // General config
+        navigatorID={this.navigatorID}
         isInteractivePopGestureEnabled={props.isInteractivePopGestureEnabled ?? true}
         // Navigation Bar customization
         isNavBarTranslucent={props.navBarIsTranslucent ?? true}

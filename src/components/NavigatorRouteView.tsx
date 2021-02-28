@@ -113,6 +113,15 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
   };
 
   componentWillUnmount(){
+    //#region - 🐞 DEBUG 🐛
+    LIB_GLOBAL.debugLog && console.log(
+        `LOG/JS - NavigatorRouteView, componentWillUnmount`
+      + ` - routeID: ${this.props.routeID}`
+      + ` - routeIndex: ${this.props.routeIndex}`
+      + ` - routeKey: ${this.props.routeKey}`
+    );
+    //#endregion
+
     this.routeStatus = RouteStatus.UNMOUNTED;
   };
 
@@ -381,13 +390,17 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
         routeKey: props.routeKey,
         routeIndex: props.routeIndex,
         // pass down navigator commands
-        push: this._navigatorRef.push,
-        pop: this._navigatorRef.pop,
-        popToRoot: this._navigatorRef.popToRoot,
-        removeRoute: this._navigatorRef.removeRoute,
+        push        : this._navigatorRef.push,
+        pop         : this._navigatorRef.pop,
+        popToRoot   : this._navigatorRef.popToRoot,
+        removeRoute : this._navigatorRef.removeRoute,
         replaceRoute: this._navigatorRef.replaceRoute,
-        insertRoute: this._navigatorRef.insertRoute,
+        insertRoute : this._navigatorRef.insertRoute,
         setNavigationBarHidden: this._navigatorRef.setNavigationBarHidden,
+        // pass down convenience navigator commands
+        replacePreviousRoute: this._navigatorRef.replacePreviousRoute,
+        replaceCurrentRoute : this._navigatorRef.replaceCurrentRoute,
+        removePreviousRoute : this._navigatorRef.removePreviousRoute,
         // pass down 'get ref' functions
         getRefToRoute: this._handleGetRefToRoute,
         getRefToNavigator: props.getRefToNavigator,

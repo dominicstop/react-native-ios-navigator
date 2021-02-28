@@ -1,3 +1,4 @@
+
 import type { NavigatorView } from "../components/NavigatorView";
 import type { NavigatorRouteView, NavRouteEvents } from "../components/NavigatorRouteView";
 
@@ -6,7 +7,7 @@ import type { BackButtonDisplayMode, LargeTitleDisplayMode, RouteTransitionPopCo
 import type { EventEmitter } from "../functions/EventEmitter";
 
 import type { NavBarBackItemConfig, NavBarItemsConfig } from "./NavBarItemConfig";
-import type { NavCommandPop, NavCommandPopToRoot, NavCommandPush, NavCommandRemoveRoute, NavCommandReplaceRoute, NavCommandInsertRoute, NavCommandSetNavigationBarHidden } from "./NavSharedTypes";
+import type { NavCommandPop, NavCommandPopToRoot, NavCommandPush, NavCommandRemoveRoute, NavCommandReplaceRoute, NavCommandInsertRoute, NavCommandSetNavigationBarHidden, NavCommandReplaceRoutePreset, NavCommandRemoveRoutePreset } from "./NavSharedTypes";
 import type { NavBarAppearanceConfig } from "./NavBarAppearanceConfig";
 
 
@@ -17,7 +18,7 @@ export type RouteOptions = {
   
   // Navbar Config
   routeTitle?: string;
-  prompt?: string;
+  prompt    ?: string;
   largeTitleDisplayMode?: LargeTitleDisplayMode;
 
   // Navbar item config
@@ -26,26 +27,34 @@ export type RouteOptions = {
   navBarButtonRightItemsConfig?: NavBarItemsConfig;
 
   // Navbar back button item config
-  leftItemsSupplementBackButton?: boolean;
-  backButtonTitle?: string;
+  backButtonTitle      ?: string;
+  hidesBackButton      ?: boolean;
   backButtonDisplayMode?: BackButtonDisplayMode;
-  hidesBackButton?: boolean;
 
   navBarAppearanceOverride?: NavBarAppearanceConfig;
+  leftItemsSupplementBackButton?: boolean;
 };
 
 export type NavigationObject = {
   routeKey  ?: string;
   routeIndex?: number;
   routeProps?: object;
+
   // navigator commands
-  push?: NavCommandPush;
-  pop?: NavCommandPop;
-  popToRoot?: NavCommandPopToRoot;
-  removeRoute?: NavCommandRemoveRoute;
+  push        ?: NavCommandPush;
+  pop         ?: NavCommandPop;
+  popToRoot   ?: NavCommandPopToRoot;
+  removeRoute ?: NavCommandRemoveRoute;
   replaceRoute?: NavCommandReplaceRoute;
-  insertRoute?: NavCommandInsertRoute;
+  insertRoute ?: NavCommandInsertRoute;
+
   setNavigationBarHidden?: NavCommandSetNavigationBarHidden;
+
+  // convenience navigator commands
+  replacePreviousRoute?: NavCommandReplaceRoutePreset;
+  replaceCurrentRoute ?: NavCommandReplaceRoutePreset;
+  removePreviousRoute ?: NavCommandRemoveRoutePreset;
+
   // get ref functions
   getRefToRoute          ?: () => NavigatorRouteView;
   getRefToNavigator      ?: () => NavigatorView;

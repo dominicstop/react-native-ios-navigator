@@ -64,6 +64,16 @@ export type NavCommandSetNavigationBarHidden = (
   animated: boolean
 ) => Promise<void>;
 
+export type NavCommandReplaceRoutePreset = (
+  routeItem: NavRouteItem, 
+  animated?: boolean
+) => Promise<void>;
+
+export type NavCommandRemoveRoutePreset = (
+  animated?: boolean
+) => Promise<void>;
+
+
 //#endregion
 
 export type RenderNavBarItemParams = {
