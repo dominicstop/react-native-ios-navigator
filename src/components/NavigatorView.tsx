@@ -595,46 +595,64 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       routeIndex: prevRouteIndex,
     };
 
+    // `replaceRoute` Bugfix/Workaround:
+    // * When replacing the first route, changing the `state.activeRoutes[0]`
+    //   causes all the other routes to disappear.
+    // * Specifically, it triggers `componentWillUnmount` for all the other 
+    //   active routes (even though there aren't any changes to their props).
+    // * This then triggers `vc.didMove(toParent: nil`) in the native side,
+    //   which then triggers the cleanup/remove process.
+    const isReplacingFirstRoute = 
+      (prevRouteIndex == 0 ) && (activeRoutes.length > 0);
+
     try {
-      // if busy, wait for prev. to finish
-      const queue = this.queue.schedule();
-      await queue.promise;
+      if(isReplacingFirstRoute){
+        // A. use alt. method
+        await this.insertRoute(routeItem, 1);
+        await this.removeRoute(0, animated);
+        
+      } else {
+        // B. use normal method
+        // if busy, wait for prev. to finish
+        const queue = this.queue.schedule();
+        await queue.promise;
 
-      this.navStatus = NavStatus.NAV_REPLACING;
+        this.navStatus = NavStatus.NAV_REPLACING;
 
-      await Promise.all([
-        // 1. wait for replacement route to be added
-        Helpers.promiseWithTimeout(500, new Promise<void>(resolve => {
-          this.emitter.once(NavEvents.onNavRouteViewAdded, ({nativeEvent}: onNavRouteViewAddedPayload) => {
-            if(nativeEvent.routeKey == routeItem.routeKey){
-              resolve();
-            };
-          })
-        })),
-        // 2. replace route in state
-        Helpers.setStateAsync<NavigatorViewState>(this, (prevState) => ({
-          ...prevState,
-          activeRoutes: prevState.activeRoutes.map((route, index) => (
-            (index == prevRouteIndex)
-              ? { routeIndex: index, ...replacementRoute } 
-              : { routeIndex: index, ...route }
-          ))
-        })),
-      ]);
+        await Promise.all([
+          // 1. wait for replacement route to be added
+          Helpers.promiseWithTimeout(500, new Promise<void>(resolve => {
+            this.emitter.once(NavEvents.onNavRouteViewAdded, ({nativeEvent}: onNavRouteViewAddedPayload) => {
+              if(nativeEvent.routeKey == routeItem.routeKey){
+                resolve();
+              };
+            })
+          })),
+          // 2. replace route in state
+          Helpers.setStateAsync<NavigatorViewState>(this, (prevState) => ({
+            ...prevState,
+            activeRoutes: prevState.activeRoutes.map((route, index) => (
+              (prevRouteIndex == index && routeToReplace.routeKey == route.routeKey)
+                ? { routeIndex: index, ...replacementRoute } 
+                : { routeIndex: index, ...route }
+            ))
+          })),
+        ]);
 
-      // forward command to native module
-      await Helpers.promiseWithTimeout(750,
-        RNINavigatorViewModule.replaceRoute(
-          findNodeHandle(this.nativeRef),
-          prevRouteIndex,
-          routeToReplace.routeKey,
-          replacementRoute.routeKey,
-          animated
-        )
-      );
+        // forward command to native module
+        await Helpers.promiseWithTimeout(750,
+          RNINavigatorViewModule.replaceRoute(
+            findNodeHandle(this.nativeRef),
+            prevRouteIndex,
+            routeToReplace.routeKey,
+            replacementRoute.routeKey,
+            animated
+          )
+        );
 
-      this.navStatus = NavStatus.IDLE;
-      this.queue.dequeue();
+        this.navStatus = NavStatus.IDLE;
+        this.queue.dequeue();
+      };
 
     } catch(error){
       if(this.navStatus != NavStatus.UNMOUNTED){
@@ -798,7 +816,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       return (
         <NavigatorRouteView
-          key={`${route.routeKey}-${route.routeID}`}
+          key={`routeID-${route.routeID}`}
           {...(isLast && {ref: r => this.lastRouteRef = r})}
           routeID={route.routeID}
           routeIndex={route.routeIndex}
