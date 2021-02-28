@@ -403,6 +403,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
         replacePreviousRoute: this._navigatorRef.replacePreviousRoute,
         replaceCurrentRoute : this._navigatorRef.replaceCurrentRoute,
         removePreviousRoute : this._navigatorRef.removePreviousRoute,
+        removeAllPrevRoutes : this._navigatorRef.removeAllPrevRoutes,
         // pass down 'get ref' functions
         getRefToRoute: this._handleGetRefToRoute,
         getRefToNavigator: props.getRefToNavigator,

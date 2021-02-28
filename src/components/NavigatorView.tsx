@@ -8,7 +8,7 @@ import { RNINavigatorViewModule } from '../native_modules/RNINavigatorViewModule
 import { NavigatorRouteView } from './NavigatorRouteView';
 
 import type { RouteOptions } from '../types/NavTypes';
-import type { NavCommandPush, NavCommandPop, NavCommandPopToRoot, NavCommandRemoveRoute, NavCommandReplaceRoute, NavCommandInsertRoute, NavCommandReplaceRoutePreset, NavCommandRemoveRoutePreset, NavRouteItem, RenderNavBarItem, NavCommandRemoveRoutes } from '../types/NavSharedTypes';
+import type { NavCommandPush, NavCommandPop, NavCommandPopToRoot, NavCommandRemoveRoute, NavCommandReplaceRoute, NavCommandInsertRoute, NavCommandReplaceRoutePreset, NavCommandRemoveRoutePreset, NavRouteItem, RenderNavBarItem, NavCommandRemoveRoutes, NavCommandRemoveRoutesPreset } from '../types/NavSharedTypes';
 import type { NavBarAppearanceCombinedConfig } from '../types/NavBarAppearanceConfig';
 
 import type { RouteContentProps } from '../components/NavigatorRouteView';
@@ -581,6 +581,10 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   public removeRoutes: NavCommandRemoveRoutes = async (routeIndexes, animated = false) => {
     const { activeRoutes } = this.state;
 
+    if(routeIndexes.length == 0){
+      throw new Error(`\`removeRoutes\` failed, \`routeIndexes\` is empty`);
+    };
+
     // check if `routeIndexes` are valid
     for (const routeIndex of routeIndexes) {
       const item = activeRoutes[routeIndex];
@@ -630,7 +634,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       };
     };
   };
-
 
   public replaceRoute: NavCommandReplaceRoute = async (prevRouteIndex, routeItem, animated = false) => {
     const { activeRoutes } = this.state;
@@ -843,6 +846,17 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     const lastRouteIndex = activeRoutes.length - 1;
 
     await this.removeRoute(lastRouteIndex - 1, animated);
+  };
+
+  public removeAllPrevRoutes: NavCommandRemoveRoutesPreset = async (animated = false) => {
+    const { activeRoutes } = this.state;
+    const lastRouteIndex = activeRoutes.length - 1;
+
+    const routesToRemove = activeRoutes
+      .slice(0, lastRouteIndex)
+      .map((_, index) => index);
+
+    await this.removeRoutes(routesToRemove, animated);
   };
   //#endregion
 
