@@ -383,6 +383,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     const routeContent = props.renderRouteContent();
 
     const routeContentWithProps = React.cloneElement<RouteContentProps>(routeContent, {
+      // TODO: extract to func - `getNavigationObject`
       navigation: {
         // pass down route props
         routeProps: props.routeProps,
@@ -394,6 +395,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
         pop         : this._navigatorRef.pop,
         popToRoot   : this._navigatorRef.popToRoot,
         removeRoute : this._navigatorRef.removeRoute,
+        removeRoutes: this._navigatorRef.removeRoutes,
         replaceRoute: this._navigatorRef.replaceRoute,
         insertRoute : this._navigatorRef.insertRoute,
         setNavigationBarHidden: this._navigatorRef.setNavigationBarHidden,

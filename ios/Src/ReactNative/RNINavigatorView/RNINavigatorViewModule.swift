@@ -197,8 +197,9 @@ class RNINavigatorViewModule: NSObject {
     routeKey  : NSString,
     routeIndex: NSNumber,
     animated  : Bool,
-    resolve   : @escaping RCTPromiseResolveBlock,
-    reject    : @escaping RCTPromiseRejectBlock
+    // promise blocks ------------------------
+    resolve: @escaping RCTPromiseResolveBlock,
+    reject : @escaping RCTPromiseRejectBlock
   ){
     
     DispatchQueue.main.async {
@@ -214,7 +215,7 @@ class RNINavigatorViewModule: NSObject {
           );
         };
     
-        // forward "popToRoot" command to navigator
+        // forward command to navigator
         try navigatorView.removeRoute(
           routeKey  : routeKey as String,
           routeIndex: routeIndex.intValue,
@@ -266,6 +267,56 @@ class RNINavigatorViewModule: NSObject {
           prevRouteKey  : prevRouteKey as String ,
           nextRouteKey  : nextRouteKey as String ,
           isAnimated    : animated
+        ) {
+          resolve([:]);
+        };
+        
+      } catch {
+        let message = RNIError.constructErrorMessage(error);
+
+        #if DEBUG
+        print("ERROR - \(message)");
+        #endif
+
+        // reject promise w/: code, message, error
+        reject("LIB_ERROR", message, nil);
+      };
+    };
+  };
+  
+  @objc func removeRoutes(
+    _ node       : NSNumber,
+    itemsToRemove: NSArray,
+    animated     : Bool,
+    // promise blocks ------------------------
+    resolve: @escaping RCTPromiseResolveBlock,
+    reject : @escaping RCTPromiseRejectBlock
+  ){
+    
+    DispatchQueue.main.async {
+      do {
+        // get `RNINavigatorView` instance that matches node/reactTag
+        guard let navigatorView = Self.getNavigatorView(node) else {
+          throw RNIError.commandFailed(
+            source : "RNINavigatorViewModule.removeRoutes",
+            message:
+                "Unable to `popToRoot` because no corresponding `RNINavigatorView` "
+              + "instance found for the given node",
+            debug: "for node: \(node)"
+          );
+        };
+    
+        // forward command to navigator
+        try navigatorView.removeRoutes(
+          itemsToRemove: itemsToRemove.compactMap {
+            guard let dict       = $0 as? NSDictionary,
+                  let routeKey   = dict["routeKey"] as? String,
+                  let routeIndex = dict["routeIndex"] as? Int
+            else { return nil };
+            
+            return (routeKey: routeKey, routeIndex: routeIndex);
+          },
+          isAnimated: animated
         ) {
           resolve([:]);
         };

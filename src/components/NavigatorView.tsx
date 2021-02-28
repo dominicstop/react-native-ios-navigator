@@ -8,7 +8,7 @@ import { RNINavigatorViewModule } from '../native_modules/RNINavigatorViewModule
 import { NavigatorRouteView } from './NavigatorRouteView';
 
 import type { RouteOptions } from '../types/NavTypes';
-import type { NavCommandPush, NavCommandPop, NavCommandPopToRoot, NavCommandRemoveRoute, NavCommandReplaceRoute, NavCommandInsertRoute, NavCommandReplaceRoutePreset, NavCommandRemoveRoutePreset, NavRouteItem, RenderNavBarItem } from '../types/NavSharedTypes';
+import type { NavCommandPush, NavCommandPop, NavCommandPopToRoot, NavCommandRemoveRoute, NavCommandReplaceRoute, NavCommandInsertRoute, NavCommandReplaceRoutePreset, NavCommandRemoveRoutePreset, NavRouteItem, RenderNavBarItem, NavCommandRemoveRoutes } from '../types/NavSharedTypes';
 import type { NavBarAppearanceCombinedConfig } from '../types/NavBarAppearanceConfig';
 
 import type { RouteContentProps } from '../components/NavigatorRouteView';
@@ -578,6 +578,60 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
   };
 
+  public removeRoutes: NavCommandRemoveRoutes = async (routeIndexes, animated = false) => {
+    const { activeRoutes } = this.state;
+
+    // check if `routeIndexes` are valid
+    for (const routeIndex of routeIndexes) {
+      const item = activeRoutes[routeIndex];
+
+      if(item == null){
+        throw new Error(`\`removeRoutes\` failed, invalid index: ${routeIndex}`);
+      };
+    };
+    
+    try {
+      // if busy, wait for prev. to finish
+      const queue = this.queue.schedule();
+      await queue.promise;
+
+      this.navStatus = NavStatus.NAV_REMOVING;
+
+      await Helpers.promiseWithTimeout(750,
+        RNINavigatorViewModule.removeRoutes(
+          findNodeHandle(this.nativeRef),
+          // routes to remove,
+          routeIndexes.map(routeIndex => ({
+            routeIndex,
+            routeKey: activeRoutes[routeIndex].routeKey,
+          })),
+          animated
+        )
+      );
+
+      await Helpers.setStateAsync<NavigatorViewState>(this, (prevState) => ({
+        ...prevState,
+        activeRoutes: prevState.activeRoutes
+          // remove routes from `activeRoutes`
+          .filter((_, index) => !routeIndexes.some(routeIndex => routeIndex == index))
+          // update the route indexes
+          .map((route, index) => ({...route, routeIndex: index}))
+      }));
+
+      this.navStatus = NavStatus.IDLE;
+      this.queue.dequeue();
+
+    } catch(error){
+      if(this.navStatus != NavStatus.UNMOUNTED){
+        this.navStatus = NavStatus.IDLE_ERROR;
+        this.queue.dequeue();
+
+        throw new Error(`\`removeRoute\` failed with error: ${error}`);
+      };
+    };
+  };
+
+
   public replaceRoute: NavCommandReplaceRoute = async (prevRouteIndex, routeItem, animated = false) => {
     const { activeRoutes } = this.state;
 
@@ -790,7 +844,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
     await this.removeRoute(lastRouteIndex - 1, animated);
   };
-
   //#endregion
 
   //#region - Native Event Handlers

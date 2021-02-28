@@ -527,6 +527,71 @@ extension RNINavigatorView {
     };
   };
   
+  func removeRoutes(
+    itemsToRemove: [(routeKey: String, routeIndex: Int)],
+    isAnimated   : Bool,
+    completion   : @escaping Completion
+  ) throws {
+    
+    let vc = self.navRouteViewControllers;
+    
+    // check if items to remove are valid
+    for item in itemsToRemove {
+      guard item.routeIndex < vc.count else {
+        throw RNIError.commandFailed(
+          source : "RNINavigatorView.removeRoute",
+          message: "Unable to `removeRoute` because `routeIndex` > the total active routes"
+        );
+      };
+      
+      let routeToRemove = vc[item.routeIndex];
+      guard item.routeKey == routeToRemove.routeView.routeKey as String? else {
+        throw RNIError.commandFailed(
+          source : "RNINavigatorView.removeRoute",
+          message:
+              "Unable to `removeRoute` due to mismatch, the route that is to be "
+            + "removed does not match the given `routeKey`.",
+          debug:
+              " - at routeIndex: \(item.routeIndex)"
+            + " - provided routeKey: \(item.routeKey)"
+            + " - vc routeKey: \(routeToRemove.routeView.routeKey ?? "N/A")"
+            + " - isAnimated: \(isAnimated)"
+            + " - Error: guard check failed"
+            + " - last item's routeKey: \(self.routeVCs.last?.routeView?.routeKey ?? "N/A")"
+            + " - current routeViews count: \(self.routeVCs.count)"
+        );
+      };
+    };
+    
+    // filter out `itemsToRemove` items
+    let filteredRoutes = vc.filter {
+      guard let routeView  = $0.routeView,
+            let routeKey   = routeView.routeKey as String?,
+            let routeIndex = routeView.routeIndex?.intValue
+      else { return true };
+      
+      let shouldRemove = itemsToRemove.contains {
+        $0.routeKey   == routeKey   &&
+        $0.routeIndex == routeIndex
+      };
+      
+      $0.isToBeRemoved = shouldRemove;
+      return !shouldRemove;
+    };
+    
+    #if DEBUG
+    print("LOG - NativeView, RNINavigatorView: removeRoutes"
+      + " - isAnimated: \(isAnimated)"
+      + " - current routeVC count: \(self.routeVCs.count)"
+      + " - current nav vc count: \(self.navigationVC.viewControllers.count)"
+    );
+    #endif
+    
+    self.navigationVC.setViewControllers(filteredRoutes, animated: isAnimated) {
+      completion();
+    };
+  };
+  
   func replaceRoute(
     prevRouteIndex: Int   ,
     prevRouteKey  : String,

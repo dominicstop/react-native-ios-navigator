@@ -34,6 +34,15 @@ interface RNINavigatorViewModule {
     animated: boolean,
   ): Promise<void>;
 
+  removeRoutes(
+    node: number, 
+    itemsToRemove: Array<{
+      routeKey: string;
+      routeIndex: number;
+    }>,
+    animated: boolean,
+  ): Promise<void>;
+
   replaceRoute(
     node: number,
     prevRouteIndex: number,

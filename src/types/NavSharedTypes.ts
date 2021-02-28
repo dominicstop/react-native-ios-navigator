@@ -47,6 +47,11 @@ export type NavCommandRemoveRoute = (
   animated?: boolean
 ) => Promise<void>;
 
+export type NavCommandRemoveRoutes = (
+  routeIndexes: Array<number>,
+  animated?: boolean
+) => Promise<void>;
+
 export type NavCommandReplaceRoute = (
   prevRouteIndex: number, 
   routeItem: NavRouteItem, 
@@ -72,8 +77,6 @@ export type NavCommandReplaceRoutePreset = (
 export type NavCommandRemoveRoutePreset = (
   animated?: boolean
 ) => Promise<void>;
-
-
 //#endregion
 
 export type RenderNavBarItemParams = {
