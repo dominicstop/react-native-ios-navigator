@@ -29,15 +29,14 @@ export type onNavRouteDidPopPayload = { nativeEvent: {
 /** `RNINavigatorView` native comp. props */
 type RNINavigatorViewProps = {
   style: ViewStyle | Array<ViewStyle>;
-
-  navigatorID: number;
   
   // General/Misc. Config
-  navBarPrefersLargeTitles: boolean;
+  navigatorID: number;
   isInteractivePopGestureEnabled: boolean;
-  isNavBarTranslucent: boolean;
   
   // Customize the Bar's Appearance
+  navBarPrefersLargeTitles: boolean;
+  isNavBarTranslucent: boolean;
   navBarAppearance: NavBarAppearanceCombinedConfig;
   
   // Native Events

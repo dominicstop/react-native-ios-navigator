@@ -160,17 +160,17 @@ class RNINavigatorRouteViewController: UIViewController {
           let routeIndex = routeView.routeIndex
     else { return };
     
+    #if DEBUG
+    print("LOG - VC, RNINavigatorRouteViewController: willMove"
+      + " - toParent: \(parent == nil ? "N/A" : "VC")"
+      + " - for routeKey: \(routeKey)"
+      + " - routeIndex: \(routeIndex)"
+      + " - isUserInitiated: \(!self.isToBeRemoved)"
+    );
+    #endif
+    
     if parent == nil {
       // this vc 'will' be popped
-      #if DEBUG
-      print("LOG - VC, RNINavigatorRouteViewController: willMove"
-        + " - toParent: nil - VC will be removed"
-        + " - for routeKey: \(routeKey)"
-        + " - routeIndex: \(routeIndex)"
-        + " - isUserInitiated: \(!self.isToBeRemoved)"
-      );
-      #endif
-      
       // note: if `isToBeRemoved` is false, then "pop"/back is user initiated.
       let isUserInitiated = !self.isToBeRemoved;
       
@@ -199,17 +199,17 @@ class RNINavigatorRouteViewController: UIViewController {
           let routeIndex = routeView.routeIndex
     else { return };
     
+    #if DEBUG
+    print("LOG - VC, RNINavigatorRouteViewController: didMove"
+      + " - toParent: \(parent == nil ? "N/A" : "VC")"
+      + " - for routeKey: \(routeKey)"
+      + " - routeIndex: \(routeIndex)"
+      + " - isUserInitiated: \(!self.isToBeRemoved)"
+    );
+    #endif
+    
     if parent == nil {
       // this vc 'will' be popped
-      #if DEBUG
-      print("LOG - VC, RNINavigatorRouteViewController: didMove"
-        + " - toParent: nil - VC will be removed"
-        + " - for routeKey: \(routeKey)"
-        + " - routeIndex: \(routeIndex)"
-        + " - isUserInitiated: \(!self.isToBeRemoved)"
-      );
-      #endif
-      
       // note: if `isToBeRemoved` is false, then "pop"/back is user initiated.
       let isUserInitiated = !self.isToBeRemoved;
       

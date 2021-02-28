@@ -60,7 +60,7 @@ class RNINavigatorView: UIView {
   /// pop (because the "back" button was pressed or it was swiped back via a
   /// gesture), or due to it being "popped" programmatically via the nav.
   @objc var onNavRouteWillPop: RCTBubblingEventBlock?;
-  /// Fired when a route *has abeen* "popped", either due to a "user intiated"
+  /// Fired when a route *has been* "popped", either due to a "user intiated"
   /// pop (because the "back" button was pressed or it was swiped back via a
   /// gesture), or due to it being "popped" programmatically via the nav.
   @objc var onNavRouteDidPop: RCTBubblingEventBlock?;
@@ -143,7 +143,7 @@ class RNINavigatorView: UIView {
   override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
     super.insertSubview(subview, at: atIndex);
     
-    /// do not show as subview, i.e. remove from view hieaarchy.
+    /// do not show as subview, i.e. remove from view hierarchy.
     /// note: once removed, `removeReactSubview` will not be called if that
     /// subview/child is removed from `render()` in the js side.
     subview.removeFromSuperview();
@@ -543,8 +543,7 @@ extension RNINavigatorView {
       + " - prevRouteKey: \(prevRouteKey)"
       + " - nextRouteKey: \(nextRouteKey)"
       + " - isAnimated: \(isAnimated)"
-      + " - prevRouteKey: \(prevRouteKey)"
-      + " - current routeVC count: \(self.routeVCs.count)"
+      + " - and, current routeVC count: \(self.routeVCs.count)"
       + " - current nav vc count: \(self.navigationVC.viewControllers.count)"
     #else
     let debug: String? = nil;
