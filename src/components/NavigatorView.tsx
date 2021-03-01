@@ -662,6 +662,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     //   active routes (even though there aren't any changes to their props).
     // * This then triggers `vc.didMove(toParent: nil`) in the native side,
     //   which then triggers the cleanup/remove process.
+    // * This has something to do with the re-ordering of components, causing a
+    //   it to be "recreated" from scratch.
     const isReplacingFirstRoute = 
       (prevRouteIndex == 0 ) && (activeRoutes.length > 0);
 
@@ -673,7 +675,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         
       } else {
         // B. use normal method
-        // if busy, wait for prev. to finish
+        // if busy, wait for prev. to finish first...
         const queue = this.queue.schedule();
         await queue.promise;
 
@@ -861,7 +863,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   //#endregion
 
   //#region - Native Event Handlers
-  /** Handler for native event: `onNavRouteViewAdded` */
   private _handleOnNavRouteViewAdded = (event: onNavRouteViewAddedPayload) => {
     if(this.navigatorID != event.nativeEvent.navigatorID) return;
 
@@ -869,10 +870,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     this.emitter.emit(NavEvents.onNavRouteViewAdded, event);
   };
 
-  /** 
-   * Handler for native event: `onNavRouteWillPop` 
-   * a route is about to be removed either through a tap on the "back" button,
-   * or through a swipe back gesture. */
   private _handleOnNavRouteWillPop = ({nativeEvent}: onNavRouteWillPopPayload) => {
     if(this.navigatorID != nativeEvent.navigatorID) return;
 
@@ -881,7 +878,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
   };
 
-  /** Handler for native event: `onNavRouteDidPop` */
   private _handleOnNavRouteDidPop = ({nativeEvent}: onNavRouteDidPopPayload) => {
     if(this.navigatorID != nativeEvent.navigatorID) return;
 
@@ -893,10 +889,10 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       );
       //#endregion
 
-    // A: A route has been removed either through a tap on the "back" 
-    //    button, or through a swipe back gesture.
+    // A route has been removed either through a tap on the "back" 
+    // button, or through a swipe back gesture.
     if(nativeEvent.isUserInitiated){
-      // A1: Remove route
+      // cleanup - remove route
       this.removeRouteBatchedFromState({
         routeKey  : nativeEvent.routeKey,
         routeIndex: nativeEvent.routeIndex

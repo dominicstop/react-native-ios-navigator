@@ -148,6 +148,36 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
   //#endregion
 
   //#region - Public Functions
+  public getRouteNavigationObject = (): NavigationObject => {
+    const props = this.props;
+
+    return {
+      // pass down route props
+      routeProps: props.routeProps,
+      // pass down route details
+      routeKey  : props.routeKey,
+      routeIndex: props.routeIndex,
+      // pass down navigator commands
+      push        : this._navigatorRef.push,
+      pop         : this._navigatorRef.pop,
+      popToRoot   : this._navigatorRef.popToRoot,
+      removeRoute : this._navigatorRef.removeRoute,
+      removeRoutes: this._navigatorRef.removeRoutes,
+      replaceRoute: this._navigatorRef.replaceRoute,
+      insertRoute : this._navigatorRef.insertRoute,
+      setNavigationBarHidden: this._navigatorRef.setNavigationBarHidden,
+      // pass down convenience navigator commands
+      replacePreviousRoute: this._navigatorRef.replacePreviousRoute,
+      replaceCurrentRoute : this._navigatorRef.replaceCurrentRoute,
+      removePreviousRoute : this._navigatorRef.removePreviousRoute,
+      removeAllPrevRoutes : this._navigatorRef.removeAllPrevRoutes,
+      // pass down 'get ref' functions
+      getRefToRoute          : this._handleGetRefToRoute,
+      getRefToNavigator      : props.getRefToNavigator,
+      getRefToNavRouteEmitter: this._handleGetRefToNavRouteEmitter,
+    };
+  };
+
   /** Combines all the route configs into one */
   public getRouteOptions: (() => RouteOptions) = () => {
     const props = this.props;
@@ -259,9 +289,11 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
   };
 
   public setHidesBackButton = async (isHidden: boolean, animated: boolean) => {
-    if(!RouteViewUtils.isRouteReady(this.routeStatus)) return;
-
     try {
+      if(!RouteViewUtils.isRouteReady(this.routeStatus)){
+        throw new Error("`NavigatorRouteView` is not mounted")
+      };
+
       await Helpers.promiseWithTimeout(1000,
         RNINavigatorRouteViewModule.setHidesBackButton(
           findNodeHandle(this._nativeRef),
@@ -277,9 +309,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
       );
       //#endregion
 
-      if(!RouteViewUtils.isRouteFocusingOrFocused(this.routeStatus)){
-        throw new Error(" `NavigatorRouteView` failed to do: `setHidesBackButton`");
-      };
+      throw new Error("`NavigatorRouteView` failed to do: `setHidesBackButton` - " + error);
     };
   };
   // #endregion
@@ -297,7 +327,6 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
   // #region - Native Event Handlers
   // Native Event Handlers for `RNINavigatorRouteView`
 
-  /** Handle event: `onRouteWillPop` */
   private _handleOnNavRouteWillPop: onRoutePopEvent = (event) => {
     if(this.props.routeID != event.nativeEvent.routeID) return;
 
@@ -305,7 +334,6 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     this.routeStatus = RouteStatus.ROUTE_POPPING;
   };
 
-  /** Handle event: `onRouteDidPop` */
   private _handleOnNavRouteDidPop: onRoutePopEvent = (event) => {
     if(this.props.routeID != event.nativeEvent.routeID) return;
 
@@ -313,7 +341,6 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     this.routeStatus = RouteStatus.ROUTE_POPPED;
   };
 
-  /** Handle event: `onRouteWillPush` */
   private _handleOnNavRouteWillPush: onRoutePushEvent = (event) => {
     if(this.props.routeID != event.nativeEvent.routeID) return;
 
@@ -321,7 +348,6 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     this.routeStatus = RouteStatus.ROUTE_PUSHING;
   };
 
-  /** Handle event: `onRouteDidPush` */
   private _handleOnNavRouteDidPush: onRoutePushEvent = (event) => {
     if(this.props.routeID != event.nativeEvent.routeID) return;
 
@@ -329,39 +355,30 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     this.routeStatus = RouteStatus.ROUTE_PUSHED;
   };
 
-  /** Handle event: `onPressNavBarLeftItem` */
   private _handleOnPressNavBarLeftItem: onPressNavBarItem = (event) => {
     if(this.props.routeID != event.nativeEvent.routeID) return;
     this._emitter.emit(NavRouteEvents.onPressNavBarLeftItem, event);
   };
 
-  /** Handle event: `onPressNavBarRightItem` */
   private _handleOnPressNavBarRightItem: onPressNavBarItem = (event) => {
     if(this.props.routeID != event.nativeEvent.routeID) return;
     this._emitter.emit(NavRouteEvents.onPressNavBarRightItem, event);
   };
 
-  /** Handle event: `onRouteWillFocus` */
   private _handleOnRouteWillFocus: onRouteFocusBlurEvent = (event)  => {
     if(this.props.routeID != event.nativeEvent.routeID) return;
 
     this._emitter.emit(NavRouteEvents.onRouteWillFocus, event);
-    if(this.routeStatus == RouteStatus.ROUTE_BLURRED){
-      this.routeStatus = RouteStatus.ROUTE_FOCUSING;
-    };
+    this.routeStatus = RouteStatus.ROUTE_FOCUSING;
   };
 
-  /** Handle event: `onRouteDidFocus` */
   private _handleOnRouteDidFocus: onRouteFocusBlurEvent = (event)  => {
     if(this.props.routeID != event.nativeEvent.routeID) return;
 
     this._emitter.emit(NavRouteEvents.onRouteDidFocus, event);
-    if(this.routeStatus == RouteStatus.ROUTE_BLURRED){
-      this.routeStatus = RouteStatus.ROUTE_FOCUSED;
-    };
+    this.routeStatus = RouteStatus.ROUTE_FOCUSED;
   };
 
-  /** Handle event: `onRouteWillBlur` */
   private _handleOnRouteWillBlur: onRouteFocusBlurEvent = (event)  => {
     if(this.props.routeID != event.nativeEvent.routeID) return;
 
@@ -369,7 +386,6 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     this.routeStatus = RouteStatus.ROUTE_BLURRING;
   };
 
-  /** Handle event: `onRouteDidBlur` */
   private _handleOnRouteDidBlur: onRouteFocusBlurEvent = (event)  => {
     if(this.props.routeID != event.nativeEvent.routeID) return;
 
@@ -383,32 +399,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     const routeContent = props.renderRouteContent();
 
     const routeContentWithProps = React.cloneElement<RouteContentProps>(routeContent, {
-      // TODO: extract to func - `getNavigationObject`
-      navigation: {
-        // pass down route props
-        routeProps: props.routeProps,
-        // pass down route details
-        routeKey: props.routeKey,
-        routeIndex: props.routeIndex,
-        // pass down navigator commands
-        push        : this._navigatorRef.push,
-        pop         : this._navigatorRef.pop,
-        popToRoot   : this._navigatorRef.popToRoot,
-        removeRoute : this._navigatorRef.removeRoute,
-        removeRoutes: this._navigatorRef.removeRoutes,
-        replaceRoute: this._navigatorRef.replaceRoute,
-        insertRoute : this._navigatorRef.insertRoute,
-        setNavigationBarHidden: this._navigatorRef.setNavigationBarHidden,
-        // pass down convenience navigator commands
-        replacePreviousRoute: this._navigatorRef.replacePreviousRoute,
-        replaceCurrentRoute : this._navigatorRef.replaceCurrentRoute,
-        removePreviousRoute : this._navigatorRef.removePreviousRoute,
-        removeAllPrevRoutes : this._navigatorRef.removeAllPrevRoutes,
-        // pass down 'get ref' functions
-        getRefToRoute: this._handleGetRefToRoute,
-        getRefToNavigator: props.getRefToNavigator,
-        getRefToNavRouteEmitter: this._handleGetRefToNavRouteEmitter,
-      },
+      navigation: this.getRouteNavigationObject(),
       // store a ref to this element
       ...(Helpers.isClassComponent(routeContent) && {
         ref: node => { this._routeContentRef = node }
