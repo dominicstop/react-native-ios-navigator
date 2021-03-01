@@ -83,6 +83,19 @@ export type NavCommandRemoveRoutesPreset = (
 ) => Promise<void>;
 //#endregion
 
+//#region - Route Commands
+export type RouteCommandGetRouteOptions = () => RouteOptions;
+
+export type RouteCommandSetRouteOptions = (
+  routeOptions: RouteOptions
+) => Promise<void>;
+
+export type RouteCommandSetHidesBackButton = (
+  isHidden: boolean,
+  animated: boolean
+) => Promise<void>;
+//#endregion
+
 export type RenderNavBarItemParams = {
   routeKey    ?: string;
   routeIndex  ?: number;

@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import { StyleSheet, View, ViewStyle, findNodeHandle } from 'react-native';
 
 import type { NavigationObject, RouteOptions } from '../types/NavTypes';
-import type { RenderNavBarItem } from '../types/NavSharedTypes';
+import type { RenderNavBarItem, RouteCommandGetRouteOptions, RouteCommandSetHidesBackButton, RouteCommandSetRouteOptions } from '../types/NavSharedTypes';
 
 import type { NavigatorView } from './NavigatorView';
 import type { RouteViewPortal } from './RouteViewPortal';
@@ -17,7 +17,6 @@ import { EventEmitter } from '../functions/EventEmitter';
 
 import { NavRouteViewContext } from '../context/NavRouteViewContext';
 import { NativeIDKeys } from '../constants/LibraryConstants';
-
 
 
 //#region - Type Definitions
@@ -171,6 +170,10 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
       replaceCurrentRoute : this._navigatorRef.replaceCurrentRoute,
       removePreviousRoute : this._navigatorRef.removePreviousRoute,
       removeAllPrevRoutes : this._navigatorRef.removeAllPrevRoutes,
+      // navigator route commands
+      getRouteOptions   : this.getRouteOptions,
+      setRouteOptions   : this.setRouteOptions,
+      setHidesBackButton: this.setHidesBackButton,
       // pass down 'get ref' functions
       getRefToRoute          : this._handleGetRefToRoute,
       getRefToNavigator      : props.getRefToNavigator,
@@ -179,7 +182,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
   };
 
   /** Combines all the route configs into one */
-  public getRouteOptions: (() => RouteOptions) = () => {
+  public getRouteOptions: RouteCommandGetRouteOptions = () => {
     const props = this.props;
     const portalProps = this._routeViewPortalRef?.props;
 
@@ -271,7 +274,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     };
   };
   
-  public setRouteOptions = async (routeOptions: RouteOptions) => {
+  public setRouteOptions: RouteCommandSetRouteOptions = async (routeOptions) => {
     await Helpers.setStateAsync<NavigatorRouteViewState>(this, (prevState) => ({
       ...prevState, 
       routeOptions: {
@@ -288,7 +291,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     this.setState({hasRoutePortal: true});
   };
 
-  public setHidesBackButton = async (isHidden: boolean, animated: boolean) => {
+  public setHidesBackButton: RouteCommandSetHidesBackButton = async (isHidden, animated) => {
     try {
       if(!RouteViewUtils.isRouteReady(this.routeStatus)){
         throw new Error("`NavigatorRouteView` is not mounted")

@@ -7,9 +7,11 @@ import type { BackButtonDisplayMode, LargeTitleDisplayMode, RouteTransitionPopCo
 import type { EventEmitter } from "../functions/EventEmitter";
 
 import type { NavBarBackItemConfig, NavBarItemsConfig } from "./NavBarItemConfig";
-import type { NavCommandPop, NavCommandPopToRoot, NavCommandPush, NavCommandRemoveRoute, NavCommandReplaceRoute, NavCommandInsertRoute, NavCommandSetNavigationBarHidden, NavCommandReplaceRoutePreset, NavCommandRemoveRoutePreset, NavCommandRemoveRoutes, NavCommandRemoveRoutesPreset } from "./NavSharedTypes";
+import type { NavCommandPop, NavCommandPopToRoot, NavCommandPush, NavCommandRemoveRoute, NavCommandReplaceRoute, NavCommandInsertRoute, NavCommandSetNavigationBarHidden, NavCommandReplaceRoutePreset, NavCommandRemoveRoutePreset, NavCommandRemoveRoutes, NavCommandRemoveRoutesPreset, RouteCommandGetRouteOptions, RouteCommandSetRouteOptions, RouteCommandSetHidesBackButton } from "./NavSharedTypes";
 import type { NavBarAppearanceConfig } from "./NavBarAppearanceConfig";
 
+// Nav-related types that are exported/public
+// ------------------------------------------
 
 export type RouteOptions = {
   // Transition Config
@@ -56,6 +58,11 @@ export type NavigationObject = {
   replaceCurrentRoute ?: NavCommandReplaceRoutePreset;
   removePreviousRoute ?: NavCommandRemoveRoutePreset;
   removeAllPrevRoutes ?: NavCommandRemoveRoutesPreset;
+
+  // route commands
+  getRouteOptions   ?: RouteCommandGetRouteOptions;
+  setRouteOptions   ?: RouteCommandSetRouteOptions;
+  setHidesBackButton?: RouteCommandSetHidesBackButton;
 
   // get ref functions
   getRefToRoute          ?: () => NavigatorRouteView;
