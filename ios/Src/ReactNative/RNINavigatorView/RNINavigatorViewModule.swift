@@ -50,7 +50,7 @@ class RNINavigatorViewModule: NSObject {
         };
       
         // forward push command to navigator
-        try navigatorView.push(routeKey, options){
+        try navigatorView.push(routeKey as String, options){
           // resolve promise after "push" is complete
           resolve([:]);
         };

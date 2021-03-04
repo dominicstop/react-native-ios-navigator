@@ -291,8 +291,8 @@ fileprivate extension RNINavigatorView {
     #if DEBUG
     let nextCountRouteVCs = self.routeVCs.count;
     print("LOG - NativeView, RNINavigatorView: removeRoute"
-      + " - with routeKey: \(routeVC.routeView.routeKey)"
-      + " - with routeIndex: \(routeVC.routeView.routeIndex)"
+      + " - with routeKey: \(routeVC.routeKey)"
+      + " - with routeIndex: \(routeVC.routeIndex)"
       + " - removing popped route from `routeVCs`"
       + " - prevCountRouteVCs: \(prevCountRouteVCs)"
       + " - nextCountRouteVCs: \(nextCountRouteVCs)"
@@ -330,7 +330,7 @@ fileprivate extension RNINavigatorView {
 extension RNINavigatorView {
   
   func push(
-    _ routeKey: NSString,
+    _ routeKey: String,
     _ options : NSDictionary,
     completion: @escaping Completion
   ) throws {
@@ -341,7 +341,7 @@ extension RNINavigatorView {
     guard let routeViewVC = self.routeVCs.last,
           let routeView   = routeViewVC.routeView,
           // make sure this is the correct route to be "pushed"
-          routeViewVC.routeView?.routeKey == routeKey
+          routeViewVC.routeKey == routeKey
     else {
       throw RNIError.commandFailed(
         source : "RNINavigatorView.push",
@@ -354,7 +354,7 @@ extension RNINavigatorView {
             "with args - routeKey: \(routeKey)"
           + " - isAnimated: \(isAnimated)"
           + " - Error: guard check failed"
-          + " - last item's routeKey: \(self.routeVCs.last?.routeView?.routeKey ?? "N/A")"
+          + " - last item's routeKey: \(self.routeVCs.last?.routeKey ?? "N/A")"
           + " - current routeViews count: \(self.routeVCs.count)"
       );
     };
@@ -387,7 +387,7 @@ extension RNINavigatorView {
   
   func pop(
     _ options: NSDictionary,
-    completion: @escaping (_ routeKey: NSString, _ routeIndex: NSNumber) -> Void
+    completion: @escaping (_ routeKey: String, _ routeIndex: Int) -> Void
   ) throws {
     
     let isAnimated = options["isAnimated"] as? Bool ?? true;
@@ -403,11 +403,7 @@ extension RNINavigatorView {
     };
     
     guard let lastNavRouteVC = self.navRouteViewControllers.last,
-  
-          // get the last routeVC
-          let lastRouteVC   = self.routeVCs.last,
-          let lastRouteView = lastRouteVC.routeView,
-          
+          let lastRouteVC    = self.routeVCs.last,
           /// make sure that the vc that we will be "popping" is the same as the
           /// last route in `routeVCs`
           lastRouteVC == lastNavRouteVC
@@ -420,7 +416,7 @@ extension RNINavigatorView {
         debug:
             "with args, isAnimated: \(isAnimated)"
           + " - Error: guard check failed"
-          + " - last item's routeKey: \(self.routeVCs.last?.routeView?.routeKey ?? "N/A")"
+          + " - last item's routeKey: \(self.routeVCs.last?.routeKey ?? "N/A")"
           + " - current routeViews count: \(self.routeVCs.count)"
       );
     };
@@ -437,8 +433,8 @@ extension RNINavigatorView {
     
     self.navigationVC.popViewController(animated: isAnimated){
       completion(
-        lastRouteView.routeKey,
-        lastRouteView.routeIndex
+        lastRouteVC.routeKey,
+        lastRouteVC.routeIndex
       );
     };
   };
@@ -456,7 +452,7 @@ extension RNINavigatorView {
         message: "Unable to `popToRoot` because the route count is currently <= 1",
         debug  : "with args - isAnimated: \(isAnimated)"
           + " - Error: guard check failed"
-          + " - last item's routeKey: \(self.routeVCs.last?.routeView?.routeKey ?? "N/A")"
+          + " - last item's routeKey: \(self.routeVCs.last?.routeKey ?? "N/A")"
           + " - current routeViews count: \(self.routeVCs.count)"
       );
     };
@@ -488,7 +484,7 @@ extension RNINavigatorView {
     
     let routeToRemove = vc[routeIndex];
     
-    guard routeKey == routeToRemove.routeView.routeKey as String? else {
+    guard routeKey == routeToRemove.routeKey as String? else {
       throw RNIError.commandFailed(
         source : "RNINavigatorView.removeRoute",
         message:
@@ -499,7 +495,7 @@ extension RNINavigatorView {
           + " - routeIndex: \(routeIndex)"
           + " - isAnimated: \(isAnimated)"
           + " - Error: guard check failed"
-          + " - last item's routeKey: \(self.routeVCs.last?.routeView?.routeKey ?? "N/A")"
+          + " - last item's routeKey: \(self.routeVCs.last?.routeKey ?? "N/A")"
           + " - current routeViews count: \(self.routeVCs.count)"
       );
     };
@@ -540,7 +536,7 @@ extension RNINavigatorView {
       };
       
       let routeToRemove = vc[item.routeIndex];
-      guard item.routeKey == routeToRemove.routeView.routeKey as String? else {
+      guard item.routeKey == routeToRemove.routeKey as String? else {
         throw RNIError.commandFailed(
           source : "RNINavigatorView.removeRoute",
           message:
@@ -549,25 +545,24 @@ extension RNINavigatorView {
           debug:
               " - at routeIndex: \(item.routeIndex)"
             + " - provided routeKey: \(item.routeKey)"
-            + " - vc routeKey: \(routeToRemove.routeView.routeKey)"
+            + " - vc routeKey: \(routeToRemove.routeKey)"
             + " - isAnimated: \(isAnimated)"
             + " - Error: guard check failed"
-            + " - last item's routeKey: \(self.routeVCs.last?.routeView?.routeKey ?? "N/A")"
+            + " - last item's routeKey: \(self.routeVCs.last?.routeKey ?? "N/A")"
             + " - current routeViews count: \(self.routeVCs.count)"
         );
       };
     };
     
     // filter out `itemsToRemove` items
-    let filteredRoutes = vc.filter {
-      guard let routeView = $0.routeView else { return true };
+    let filteredRoutes = vc.filter { routeVC in
       
       let shouldRemove = itemsToRemove.contains {
-        $0.routeKey   == routeView.routeKey as String &&
-        $0.routeIndex == routeView.routeIndex.intValue
+        $0.routeKey   == routeVC.routeKey &&
+        $0.routeIndex == routeVC.routeIndex
       };
       
-      $0.isToBeRemoved = shouldRemove;
+      routeVC.isToBeRemoved = shouldRemove;
       return !shouldRemove;
     };
     
@@ -632,7 +627,7 @@ extension RNINavigatorView {
       );
     };
     
-    guard routeToReplace.routeView.routeKey as String? == prevRouteKey
+    guard routeToReplace.routeKey == prevRouteKey
     else {
       throw RNIError.commandFailed(
         source : "RNINavigatorView.replaceRoute",
@@ -701,7 +696,7 @@ extension RNINavigatorView {
       );
     };
     
-    guard routeToBeInserted.routeView.routeKey as String? == nextRouteKey
+    guard routeToBeInserted.routeKey == nextRouteKey
     else {
       throw RNIError.commandFailed(
         source : "RNINavigatorView.insertRoute",

@@ -76,6 +76,18 @@ class RNINavigatorRouteViewController: UIViewController {
   
   var shouldResetNavBarBackConfig = false;
   
+  // -----------------------------------
+  // MARK:- Convenient Property Wrappers
+  // -----------------------------------
+  
+  var routeKey: String {
+    self.routeView.routeKey as String;
+  };
+  
+  var routeIndex: Int {
+    self.routeView.routeIndex.intValue;
+  };
+  
   // --------------------------------
   // MARK:- View Controller Lifecycle
   // --------------------------------
@@ -158,8 +170,8 @@ class RNINavigatorRouteViewController: UIViewController {
     #if DEBUG
     print("LOG - VC, RNINavigatorRouteViewController: willMove"
       + " - toParent: \(parent == nil ? "N/A" : "VC")"
-      + " - for routeKey: \(self.routeView.routeKey)"
-      + " - routeIndex: \(self.routeView.routeIndex)"
+      + " - for routeKey: \(self.routeKey)"
+      + " - routeIndex: \(self.routeIndex)"
       + " - isUserInitiated: \(!self.isToBeRemoved)"
     );
     #endif
@@ -194,8 +206,8 @@ class RNINavigatorRouteViewController: UIViewController {
     #if DEBUG
     print("LOG - VC, RNINavigatorRouteViewController: didMove"
       + " - toParent: \(parent == nil ? "N/A" : "VC")"
-      + " - for routeKey: \(routeView.routeKey)"
-      + " - routeIndex: \(routeView.routeIndex)"
+      + " - for routeKey: \(self.routeKey)"
+      + " - routeIndex: \(self.routeIndex)"
       + " - isUserInitiated: \(!self.isToBeRemoved)"
     );
     #endif
