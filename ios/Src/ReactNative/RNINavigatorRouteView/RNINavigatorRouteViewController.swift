@@ -80,6 +80,10 @@ class RNINavigatorRouteViewController: UIViewController {
   // MARK:- Convenient Property Wrappers
   // -----------------------------------
   
+  var routeID: Int {
+    self.routeView.routeID.intValue;
+  };
+  
   var routeKey: String {
     self.routeView.routeKey as String;
   };

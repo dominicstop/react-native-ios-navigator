@@ -25,10 +25,9 @@ class RNINavigatorView: UIView {
   weak var bridge: RCTBridge!;
   
   /// The`activeRoute` items, i.e.the routes added/to be added to the nav. stack.
-  /// Note: This has to have strong ref. to the routes so that they will be
-  /// retained. Once the routes are "popped", they should be removed from here
-  /// so that they will be "released".
-  private var routeVCs: [RNINavigatorRouteViewController] = [];
+  /// Note: The key is the `routeID`, also when removing an item, don't forget
+  /// to call `cleanup` on the `routeView`
+  private var routeItemsMap: Dictionary<Int, RNINavigatorRouteViewController> = [:];
   
   /// The react view to show behind the navigation bar
   private var reactNavBarBackground: UIView?;
@@ -47,6 +46,12 @@ class RNINavigatorView: UIView {
     self.navigationVC.viewControllers.compactMap {
       $0 as? RNINavigatorRouteViewController
     };
+  };
+  
+  var routeItems: [RNINavigatorRouteViewController] {
+    self.routeItemsMap.values
+      .map { $0 }
+      .sorted { $0.routeIndex < $1.routeIndex }
   };
   
   // -----------------------------
@@ -131,7 +136,7 @@ class RNINavigatorView: UIView {
       
     } else {
       // this view has been "mounted"...
-      // add the custom RN navbar bg if any
+      // add the custom RN navBar BG if any
       self.embedCustomNavBarBackground();
     };
   };
@@ -174,7 +179,7 @@ class RNINavigatorView: UIView {
         }();
         
         /// save a ref to `routeView`'s vc instance
-        self.routeVCs.append(routeVC);
+        self.routeItemsMap[routeVC.routeID] = routeVC;
         
         // send event: notify js navigator that a new route view was added
         self.onNavRouteViewAdded?([
@@ -208,8 +213,11 @@ class RNINavigatorView: UIView {
   // -----------------------
   
   func getSecondToLastRouteVC() -> RNINavigatorRouteViewController? {
-    guard self.routeVCs.count > 1 else { return nil };
-    return self.routeVCs[self.routeVCs.count - 2];
+    guard self.routeItemsMap.count > 1 else { return nil };
+    let routeItems = self.routeItems;
+    
+    let lastIndex = routeItems.count - 1;
+    return routeItems[lastIndex - 1];
   };
 };
 
@@ -247,7 +255,7 @@ fileprivate extension RNINavigatorView {
     ]);
   };
   
-  /// setup - "mount" custom react navbar bg view
+  /// setup - "mount" custom react navBar BG view
   func embedCustomNavBarBackground(){
     let navBar = self.navigationVC.navigationBar;
     
@@ -271,25 +279,17 @@ fileprivate extension RNINavigatorView {
   
   /// remove route from `navRoutes`
   func removeRouteVC(routeVC: RNINavigatorRouteViewController){
+    guard self.routeItemsMap[routeVC.routeID] != nil else { return };
     
     #if DEBUG
-    let prevCountRouteVCs = self.routeVCs.count;
+    let prevCountRouteVCs = self.routeItemsMap.count;
     #endif
-
-    // remove "popped" route from `navRoutes`
-    self.routeVCs.removeAll {
-      let isMatch = $0 == routeVC;
-        
-      if isMatch {
-        // unregister views from view registry
-        $0.routeView.cleanup();
-      };
-      
-      return isMatch;
-    };
+    
+    self.routeItemsMap.removeValue(forKey: routeVC.routeID);
+    routeVC.routeView.cleanup();
     
     #if DEBUG
-    let nextCountRouteVCs = self.routeVCs.count;
+    let nextCountRouteVCs = self.routeItemsMap.count;
     print("LOG - NativeView, RNINavigatorView: removeRoute"
       + " - with routeKey: \(routeVC.routeKey)"
       + " - with routeIndex: \(routeVC.routeIndex)"
@@ -310,16 +310,16 @@ fileprivate extension RNINavigatorView {
       );
     };
     
+    // remove routes from view registry
+    self.routeItemsMap.values.forEach {
+      $0.routeView.cleanup();
+    };
+    
     // remove this view from registry
     RNIUtilities.recursivelyRemoveFromViewRegistry(
       bridge   : self.bridge,
       reactView: self
     );
-    
-    // remove routes from view registry
-    self.routeVCs.forEach {
-      $0.routeView.cleanup();
-    };
   };
 };
 
@@ -335,10 +335,11 @@ extension RNINavigatorView {
     completion: @escaping Completion
   ) throws {
     
+    let routeItems = self.routeItems;
     let isAnimated = options["isAnimated"] as? Bool ?? true;
     
     /// get the `routeView` to be pushed in the nav stack
-    guard let routeViewVC = self.routeVCs.last,
+    guard let routeViewVC = routeItems.last,
           let routeView   = routeViewVC.routeView,
           // make sure this is the correct route to be "pushed"
           routeViewVC.routeKey == routeKey
@@ -354,8 +355,8 @@ extension RNINavigatorView {
             "with args - routeKey: \(routeKey)"
           + " - isAnimated: \(isAnimated)"
           + " - Error: guard check failed"
-          + " - last item's routeKey: \(self.routeVCs.last?.routeKey ?? "N/A")"
-          + " - current routeViews count: \(self.routeVCs.count)"
+          + " - last item's routeKey: \(routeItems.last?.routeKey ?? "N/A")"
+          + " - current routeItemsMap count: \(routeItems.count)"
       );
     };
     
@@ -363,7 +364,7 @@ extension RNINavigatorView {
     print("LOG - NativeView, RNINavigatorView: push"
       + " - with params - routeKey: \(routeKey)"
       + " - isAnimated: \(isAnimated)"
-      + " - current routeVC count: \(self.routeVCs.count)"
+      + " - current routeVC count: \(routeItems.count)"
       + " - current nav vc count: \(self.navigationVC.viewControllers.count)"
     );
     #endif
@@ -390,20 +391,21 @@ extension RNINavigatorView {
     completion: @escaping (_ routeKey: String, _ routeIndex: Int) -> Void
   ) throws {
     
+    let routeItems = self.routeItems;
     let isAnimated = options["isAnimated"] as? Bool ?? true;
     
-    guard self.routeVCs.count > 1 else {
+    guard routeItems.count > 1 else {
       throw RNIError.commandFailed(
         source : "RNINavigatorView.pop",
         message: "Unable to `pop` because there are <= 1 active routes.",
         debug  : "with args - isAnimated: \(isAnimated)"
           + " - Error: guard check failed"
-          + " - current routeViews count: \(self.routeVCs.count)"
+          + " - current routeViews count: \(routeItems.count)"
       );
     };
     
     guard let lastNavRouteVC = self.navRouteViewControllers.last,
-          let lastRouteVC    = self.routeVCs.last,
+          let lastRouteVC    = routeItems.last,
           /// make sure that the vc that we will be "popping" is the same as the
           /// last route in `routeVCs`
           lastRouteVC == lastNavRouteVC
@@ -416,15 +418,15 @@ extension RNINavigatorView {
         debug:
             "with args, isAnimated: \(isAnimated)"
           + " - Error: guard check failed"
-          + " - last item's routeKey: \(self.routeVCs.last?.routeKey ?? "N/A")"
-          + " - current routeViews count: \(self.routeVCs.count)"
+          + " - last item's routeKey: \(routeItems.last?.routeKey ?? "N/A")"
+          + " - current routeViews count: \(routeItems.count)"
       );
     };
     
     #if DEBUG
     print("LOG - NativeView, RNINavigatorView: pop"
       + " - with params - isAnimated: \(isAnimated)"
-      + " - current routeVC count: \(self.routeVCs.count)"
+      + " - current routeVC count: \(routeItems.count)"
       + " - current nav vc count: \(self.navigationVC.viewControllers.count)"
     );
     #endif
@@ -444,20 +446,21 @@ extension RNINavigatorView {
     completion: @escaping Completion
   ) throws {
     
+    let routeItems = self.routeItems;
     let isAnimated = options["isAnimated"] as? Bool ?? true;
     
-    guard self.routeVCs.count > 1 else {
+    guard routeItems.count > 1 else {
       throw RNIError.commandFailed(
         source : "RNINavigatorView.popToRoot",
         message: "Unable to `popToRoot` because the route count is currently <= 1",
         debug  : "with args - isAnimated: \(isAnimated)"
           + " - Error: guard check failed"
-          + " - last item's routeKey: \(self.routeVCs.last?.routeKey ?? "N/A")"
-          + " - current routeViews count: \(self.routeVCs.count)"
+          + " - last item's routeKey: \(routeItems.last?.routeKey ?? "N/A")"
+          + " - current routeViews count: \(routeItems.count)"
       );
     };
     
-    for route in self.routeVCs {
+    for route in routeItems {
       route.isToBeRemoved = true;
     };
     
@@ -473,6 +476,7 @@ extension RNINavigatorView {
     completion: @escaping Completion
   ) throws {
     
+    let routeItems = self.routeItems;
     var vc = self.navRouteViewControllers;
     
     guard routeIndex < vc.count else {
@@ -495,8 +499,8 @@ extension RNINavigatorView {
           + " - routeIndex: \(routeIndex)"
           + " - isAnimated: \(isAnimated)"
           + " - Error: guard check failed"
-          + " - last item's routeKey: \(self.routeVCs.last?.routeKey ?? "N/A")"
-          + " - current routeViews count: \(self.routeVCs.count)"
+          + " - last item's routeKey: \(routeItems.last?.routeKey ?? "N/A")"
+          + " - current routeItemsMap count: \(self.routeItemsMap.count)"
       );
     };
     
@@ -505,7 +509,7 @@ extension RNINavigatorView {
       + " - with args, routeKey: \(routeKey)"
       + " - routeIndex: \(routeIndex)"
       + " - isAnimated: \(isAnimated)"
-      + " - current routeVC count: \(self.routeVCs.count)"
+      + " - current routeVC count: \(routeItems.count)"
       + " - current nav vc count: \(self.navigationVC.viewControllers.count)"
     );
     #endif
@@ -524,6 +528,7 @@ extension RNINavigatorView {
     completion   : @escaping Completion
   ) throws {
     
+    let routeItems = self.routeItems;
     let vc = self.navRouteViewControllers;
     
     // check if items to remove are valid
@@ -548,8 +553,8 @@ extension RNINavigatorView {
             + " - vc routeKey: \(routeToRemove.routeKey)"
             + " - isAnimated: \(isAnimated)"
             + " - Error: guard check failed"
-            + " - last item's routeKey: \(self.routeVCs.last?.routeKey ?? "N/A")"
-            + " - current routeViews count: \(self.routeVCs.count)"
+            + " - last item's routeKey: \(routeItems.last?.routeKey ?? "N/A")"
+            + " - current routeViews count: \(routeItems.count)"
         );
       };
     };
@@ -569,7 +574,7 @@ extension RNINavigatorView {
     #if DEBUG
     print("LOG - NativeView, RNINavigatorView: removeRoutes"
       + " - isAnimated: \(isAnimated)"
-      + " - current routeVC count: \(self.routeVCs.count)"
+      + " - current routeVC count: \(routeItems.count)"
       + " - current nav vc count: \(self.navigationVC.viewControllers.count)"
     );
     #endif
@@ -587,6 +592,7 @@ extension RNINavigatorView {
     completion    : @escaping Completion
   ) throws {
     
+    let routeItems = self.routeItems;
     var vc = self.navRouteViewControllers;
     
     #if DEBUG
@@ -595,8 +601,10 @@ extension RNINavigatorView {
       + " - prevRouteKey: \(prevRouteKey)"
       + " - nextRouteKey: \(nextRouteKey)"
       + " - isAnimated: \(isAnimated)"
-      + " - and, current routeVC count: \(self.routeVCs.count)"
+      + " - and, current routeVC count: \(routeItems.count)"
       + " - current nav vc count: \(self.navigationVC.viewControllers.count)"
+      + " - last routeKey: \(routeItems.last?.routeKey ?? "N/A")"
+      + " - last routeIndex: \(routeItems.last?.routeIndex ?? -1)"
     #else
     let debug: String? = nil;
     #endif
@@ -613,13 +621,13 @@ extension RNINavigatorView {
     
     let routeToReplace = vc[prevRouteIndex];
     
-    guard self.routeVCs.count > vc.count,
-          let replacementRoute = self.routeVCs.popLast()
+    guard routeItems.count > vc.count,
+          let replacementRoute = routeItems.last
     else {
       throw RNIError.commandFailed(
         source : "RNINavigatorView.replaceRoute",
         message:
-            "Unable to `replaceRoute` because the total `routeVCs` < the"
+            "Unable to `replaceRoute` because the total route vc's < the"
           + " total vc count in the navigator. This could mean that the replacement"
           + " route vc hasn't been received here yet (or it wasn't sent at all)."
           + " TLDR: `replacementRoute` could not be retrieved (out of bounds?).",
@@ -627,8 +635,17 @@ extension RNINavigatorView {
       );
     };
     
-    guard routeToReplace.routeKey == prevRouteKey
-    else {
+    guard replacementRoute.routeKey == nextRouteKey else {
+      throw RNIError.commandFailed(
+        source : "RNINavigatorView.replaceRoute",
+        message:
+            "Unable to `replaceRoute` due to `routeKey` mismatch, the replacement"
+          + " route does not match the provided `nextRouteKey`",
+        debug: debug
+      );
+    };
+    
+    guard routeToReplace.routeKey == prevRouteKey else {
       throw RNIError.commandFailed(
         source : "RNINavigatorView.replaceRoute",
         message:
@@ -645,7 +662,7 @@ extension RNINavigatorView {
     routeToReplace.isToBeRemoved = true;
     
     vc[prevRouteIndex] = replacementRoute;
-    self.routeVCs = vc;
+    self.routeItemsMap.removeValue(forKey: routeToReplace.routeID);
     
     self.navigationVC.setViewControllers(vc, animated: isAnimated) {
       completion();
@@ -659,6 +676,7 @@ extension RNINavigatorView {
     completion  : @escaping Completion
   ) throws {
     
+    let routeItems = self.routeItems;
     var vc = self.navRouteViewControllers;
     
     #if DEBUG
@@ -666,8 +684,10 @@ extension RNINavigatorView {
         "with args, nextRouteKey: \(nextRouteKey)"
       + " - atIndex: \(atIndex)"
       + " - isAnimated: \(isAnimated)"
-      + " - current routeVC count: \(self.routeVCs.count)"
+      + " - current routeVC count: \(routeItems.count)"
       + " - current nav vc count: \(self.navigationVC.viewControllers.count)"
+      + " - last routeKey: \(routeItems.last?.routeKey ?? "N/A")"
+      + " - last routeIndex: \(routeItems.last?.routeIndex ?? -1)"
     #else
     let debug: String? = nil;
     #endif
@@ -682,8 +702,8 @@ extension RNINavigatorView {
       );
     };
     
-    guard self.routeVCs.count > vc.count,
-          let routeToBeInserted = self.routeVCs.popLast()
+    guard routeItems.count > vc.count,
+          let routeToBeInserted = self.routeItems.last
     else {
       throw RNIError.commandFailed(
         source : "RNINavigatorView.insertRoute",
@@ -712,7 +732,6 @@ extension RNINavigatorView {
     #endif
     
     vc.insert(routeToBeInserted, at: atIndex);
-    self.routeVCs = vc;
     
     self.navigationVC.setViewControllers(vc, animated: isAnimated) {
       completion();
