@@ -155,16 +155,11 @@ class RNINavigatorRouteViewController: UIViewController {
   override func willMove(toParent parent: UIViewController?){
     super.willMove(toParent: parent);
     
-    guard let routeView  = self.routeView,
-          let routeKey   = routeView.routeKey,
-          let routeIndex = routeView.routeIndex
-    else { return };
-    
     #if DEBUG
     print("LOG - VC, RNINavigatorRouteViewController: willMove"
       + " - toParent: \(parent == nil ? "N/A" : "VC")"
-      + " - for routeKey: \(routeKey)"
-      + " - routeIndex: \(routeIndex)"
+      + " - for routeKey: \(self.routeView.routeKey)"
+      + " - routeIndex: \(self.routeView.routeIndex)"
       + " - isUserInitiated: \(!self.isToBeRemoved)"
     );
     #endif
@@ -194,16 +189,13 @@ class RNINavigatorRouteViewController: UIViewController {
   override func didMove(toParent parent: UIViewController?) {
     super.didMove(toParent: parent);
     
-    guard let routeView  = self.routeView,
-          let routeKey   = routeView.routeKey,
-          let routeIndex = routeView.routeIndex
-    else { return };
+    guard let routeView = self.routeView else { return };
     
     #if DEBUG
     print("LOG - VC, RNINavigatorRouteViewController: didMove"
       + " - toParent: \(parent == nil ? "N/A" : "VC")"
-      + " - for routeKey: \(routeKey)"
-      + " - routeIndex: \(routeIndex)"
+      + " - for routeKey: \(routeView.routeKey)"
+      + " - routeIndex: \(routeView.routeIndex)"
       + " - isUserInitiated: \(!self.isToBeRemoved)"
     );
     #endif
@@ -221,7 +213,7 @@ class RNINavigatorRouteViewController: UIViewController {
       
       // notify parent (i.e. `RNINavigatorView`) that this vc has been "popped".
       self.delegate?.onRouteDidPop(
-        sender: self.routeView!,
+        sender: routeView,
         isUserInitiated: isUserInitiated
       );
       

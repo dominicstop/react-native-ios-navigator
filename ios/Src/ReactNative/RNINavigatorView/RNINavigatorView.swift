@@ -176,22 +176,18 @@ class RNINavigatorView: UIView {
         /// save a ref to `routeView`'s vc instance
         self.routeVCs.append(routeVC);
         
-        if let routeKey   = routeView.routeKey,
-           let routeIndex = routeView.routeIndex {
-          
-          // send event: notify js navigator that a new route view was added
-          self.onNavRouteViewAdded?([
-            "routeKey"   : routeKey,
-            "routeIndex" : routeIndex,
-            "navigatorID": self.navigatorID!,
-          ]);
-        };
+        // send event: notify js navigator that a new route view was added
+        self.onNavRouteViewAdded?([
+          "routeKey"   : routeView.routeKey,
+          "routeIndex" : routeView.routeIndex,
+          "navigatorID": self.navigatorID!,
+        ]);
         
         #if DEBUG
         print("LOG - NativeView, RNINavigatorView: insertReactSubview"
           + " - atIndex: \(atIndex)"
-          + " - routeView.routeKey: \(routeView.routeKey ?? "N/A")"
-          + " - routeView.routeIndex: \(routeView.routeIndex ?? -1)"
+          + " - routeView.routeKey: \(routeView.routeKey)"
+          + " - routeView.routeIndex: \(routeView.routeIndex)"
         );
         #endif
         
@@ -295,8 +291,8 @@ fileprivate extension RNINavigatorView {
     #if DEBUG
     let nextCountRouteVCs = self.routeVCs.count;
     print("LOG - NativeView, RNINavigatorView: removeRoute"
-      + " - with routeKey: \(routeVC.routeView.routeKey ?? "N/A")"
-      + " - with routeIndex: \(routeVC.routeView.routeIndex ?? -1)"
+      + " - with routeKey: \(routeVC.routeView.routeKey)"
+      + " - with routeIndex: \(routeVC.routeView.routeIndex)"
       + " - removing popped route from `routeVCs`"
       + " - prevCountRouteVCs: \(prevCountRouteVCs)"
       + " - nextCountRouteVCs: \(nextCountRouteVCs)"
@@ -391,7 +387,7 @@ extension RNINavigatorView {
   
   func pop(
     _ options: NSDictionary,
-    completion: @escaping (_ routeKey: NSString?, _ routeIndex: NSNumber?) -> Void
+    completion: @escaping (_ routeKey: NSString, _ routeIndex: NSNumber) -> Void
   ) throws {
     
     let isAnimated = options["isAnimated"] as? Bool ?? true;
@@ -411,10 +407,6 @@ extension RNINavigatorView {
           // get the last routeVC
           let lastRouteVC   = self.routeVCs.last,
           let lastRouteView = lastRouteVC.routeView,
-          
-          /// get the `lastRouteView`'s `routeKey` and `routeIndex`
-          let lastRouteKey   = lastRouteView.routeKey,
-          let lastRouteIndex = lastRouteView.routeIndex,
           
           /// make sure that the vc that we will be "popping" is the same as the
           /// last route in `routeVCs`
@@ -444,7 +436,10 @@ extension RNINavigatorView {
     lastRouteVC.isToBeRemoved = true;
     
     self.navigationVC.popViewController(animated: isAnimated){
-      completion(lastRouteKey, lastRouteIndex);
+      completion(
+        lastRouteView.routeKey,
+        lastRouteView.routeIndex
+      );
     };
   };
   
@@ -554,7 +549,7 @@ extension RNINavigatorView {
           debug:
               " - at routeIndex: \(item.routeIndex)"
             + " - provided routeKey: \(item.routeKey)"
-            + " - vc routeKey: \(routeToRemove.routeView.routeKey ?? "N/A")"
+            + " - vc routeKey: \(routeToRemove.routeView.routeKey)"
             + " - isAnimated: \(isAnimated)"
             + " - Error: guard check failed"
             + " - last item's routeKey: \(self.routeVCs.last?.routeView?.routeKey ?? "N/A")"
@@ -565,14 +560,11 @@ extension RNINavigatorView {
     
     // filter out `itemsToRemove` items
     let filteredRoutes = vc.filter {
-      guard let routeView  = $0.routeView,
-            let routeKey   = routeView.routeKey as String?,
-            let routeIndex = routeView.routeIndex?.intValue
-      else { return true };
+      guard let routeView = $0.routeView else { return true };
       
       let shouldRemove = itemsToRemove.contains {
-        $0.routeKey   == routeKey   &&
-        $0.routeIndex == routeIndex
+        $0.routeKey   == routeView.routeKey as String &&
+        $0.routeIndex == routeView.routeIndex.intValue
       };
       
       $0.isToBeRemoved = shouldRemove;
@@ -741,44 +733,35 @@ extension RNINavigatorView {
 extension RNINavigatorView: RNINavigatorRouteViewControllerDelegate {
   
   func onRouteWillPop(sender: RNINavigatorRouteView, isUserInitiated: Bool){
-    guard let routeKey   = sender.routeKey,
-          let routeIndex = sender.routeIndex
-    else { return };
-    
-    
     #if DEBUG
     print("LOG - NativeView, RNINavigatorView"
       + " - RNINavigatorRouteViewDelegate, onNavRouteWillPop"
-      + " - with routeKey: \(routeKey)"
-      + " - with routeIndex: \(routeIndex)"
+      + " - with routeKey: \(sender.routeKey)"
+      + " - with routeIndex: \(sender.routeIndex)"
     );
     #endif
     
     // send event: notify js navigator that a route is about to be "popped"
     self.onNavRouteWillPop?([
-      "routeKey"       : routeKey,
-      "routeIndex"     : routeIndex,
+      "routeKey"       : sender.routeKey,
+      "routeIndex"     : sender.routeIndex,
       "isUserInitiated": isUserInitiated,
       "navigatorID"    : self.navigatorID!,
     ]);
   };
   
   func onRouteDidPop(sender: RNINavigatorRouteView, isUserInitiated: Bool){
-    guard let routeKey   = sender.routeKey,
-          let routeIndex = sender.routeIndex
-    else { return };
-    
     #if DEBUG
     print("LOG - NativeView, RNINavigatorView"
       + " - RNINavigatorRouteViewDelegate, onNavRouteDidPop"
-      + " - with routeKey: \(routeKey)"
-      + " - with routeIndex: \(routeIndex)"
+      + " - with routeKey: \(sender.routeKey)"
+      + " - with routeIndex: \(sender.routeIndex)"
     );
     #endif
     
     self.onNavRouteDidPop?([
-      "routeKey"       : routeKey,
-      "routeIndex"     : routeIndex,
+      "routeKey"       : sender.routeKey,
+      "routeIndex"     : sender.routeIndex,
       "isUserInitiated": isUserInitiated,
       "navigatorID"    : self.navigatorID!,
     ]);

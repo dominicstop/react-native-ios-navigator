@@ -115,26 +115,23 @@ class RNINavigatorRouteView: UIView {
   /// * However there are props where a `nil` is invalid (i.e. a value of
   ///   `nil` must **never** occur)
   
-  @objc var routeID: NSNumber!;
+  @objc var routeID: NSNumber = -1;
   
-  @objc var routeKey: NSString? {
+  @objc var routeKey: NSString = "N/A" {
     didSet {
-      guard let routeKey = self.routeKey else { return };
-      
       #if DEBUG
       print("LOG - NativeView, RNINavigatorRouteView prop"
-        + " - didSet, routeKey: \(routeKey)"
+        + " - didSet, routeKey: \(self.routeKey)"
       );
       #endif
     }
   };
   
-  @objc var routeIndex: NSNumber? {
+  @objc var routeIndex: NSNumber = -1 {
     didSet {
-      guard let routeIndex = self.routeIndex else { return };
       #if DEBUG
       print("LOG - NativeView, RNINavigatorRouteView prop"
-        + " - didSet, routeIndex: \(routeIndex)"
+        + " - didSet, routeIndex: \(self.routeIndex)"
       );
       #endif
     }
@@ -402,8 +399,8 @@ class RNINavigatorRouteView: UIView {
   #if DEBUG
   deinit {
     print("LOG - deinit - NativeView, RNINavigatorRouteView"
-      + " - for routeKey: \(self.routeKey ?? "N/A")"
-      + " - routeIndex: \(self.routeIndex ?? -1)"
+      + " - for routeKey: \(self.routeKey)"
+      + " - routeIndex: \(self.routeIndex)"
     );
   };
   #endif
@@ -487,7 +484,7 @@ extension RNINavigatorRouteView {
         #endif
         
         var params = config.makeNavBarItemEventParams();
-        params["routeID"] = self.routeID!;
+        params["routeID"] = self.routeID;
         
         self.onPressNavBarLeftItem?(params);
       };
@@ -508,7 +505,7 @@ extension RNINavigatorRouteView {
         #endif
         
         var params = config.makeNavBarItemEventParams();
-        params["routeID"] = self.routeID!;
+        params["routeID"] = self.routeID;
         
         self.onPressNavBarRightItem?(params);
       };
@@ -600,9 +597,9 @@ private extension RNINavigatorRouteView {
   /// This creates a "base" dictionary that we can pass to "event props"
   func createEventPayload() -> Dictionary<String, Any> {
     var dict: Dictionary<String, Any> = [
-      "routeID"   : self.routeID!,
-      "routeKey"  : self.routeKey!,
-      "routeIndex": self.routeIndex!,
+      "routeID"   : self.routeID,
+      "routeKey"  : self.routeKey,
+      "routeIndex": self.routeIndex,
     ];
     
     if let reactTag = self.reactTag {
