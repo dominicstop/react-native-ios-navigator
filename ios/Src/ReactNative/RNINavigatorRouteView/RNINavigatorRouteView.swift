@@ -89,9 +89,9 @@ class RNINavigatorRouteView: UIView {
   /** Fired when the route appears */
   @objc var onRouteDidFocus : RCTBubblingEventBlock?;
   
-  /** Fired when the route is about to dissapear */
+  /** Fired when the route is about to disappear */
   @objc var onRouteWillBlur: RCTBubblingEventBlock?;
-  /** Fired when the route dissapear */
+  /** Fired when the route disappear */
   @objc var onRouteDidBlur : RCTBubblingEventBlock?;
   
   /// Fired when the nav bar's back item is pressed and is a custom nav bar item.
@@ -107,15 +107,13 @@ class RNINavigatorRouteView: UIView {
   ///   the corresponding properties.
   ///
   /// * The properties that the props sets can themselves be set to `nil`, so a
-  ///   `nil` value for a prop is valid and should be allowed, so that the opt.
-  ///   properties can be set back to a `nil` value.
+  ///   `nil` value for a prop is valid.
   ///
   /// * The properties that the props sets needs to provide a default value
   ///   because it can't be set to `nil`.
   ///
-  /// * TODO: However there are props where a `nil` is invalid (i.e. a value of
-  ///   `nil` must **never** occur), so we need to mark the property as
-  ///   "explicitly unwrapped" so that the app crashes because it's a fatal error.
+  /// * However there are props where a `nil` is invalid (i.e. a value of
+  ///   `nil` must **never** occur)
   
   @objc var routeID: NSNumber!;
   
