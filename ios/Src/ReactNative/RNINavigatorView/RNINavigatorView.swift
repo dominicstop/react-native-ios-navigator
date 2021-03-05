@@ -374,7 +374,10 @@ extension RNINavigatorView {
     };
     
     #if DEBUG
-    print("LOG - NativeView, RNINavigatorView: push - \(debug)");
+    print("LOG - NativeView, RNINavigatorView: push"
+      + " - pushing with routeKey: \(nextRouteVC.routeKey)"
+      + " - \(debug)"
+    );
     #endif
     
     // notify js `RNINavigatorRouteView` that it's about to be pushed
@@ -402,13 +405,22 @@ extension RNINavigatorView {
     let routeItems = self.routeItems;
     let isAnimated = options["isAnimated"] as? Bool ?? true;
     
+    #if DEBUG
+    let debug =
+        "with args - isAnimated: \(isAnimated)"
+      + " - and with, current routeVC count: \(routeItems.count)"
+      + " - current nav vc count: \(self.navigationVC.viewControllers.count)"
+      + " - last routeKey: \(routeItems.last?.routeKey ?? "N/A")"
+      + " - last routeIndex: \(routeItems.last?.routeIndex ?? -1)"
+    #else
+    let debug: String? = nil;
+    #endif
+    
     guard routeItems.count > 1 else {
       throw RNIError.commandFailed(
         source : "RNINavigatorView.pop",
         message: "Unable to `pop` because there are <= 1 active routes.",
-        debug  : "with args - isAnimated: \(isAnimated)"
-          + " - Error: guard check failed"
-          + " - current routeViews count: \(routeItems.count)"
+        debug  : debug
       );
     };
     
@@ -423,19 +435,15 @@ extension RNINavigatorView {
         message:
             "Unable to pop due to mismatch, the last item in the navigation "
           + "controller does not match the last item in `self.routeVCs` ",
-        debug:
-            "with args, isAnimated: \(isAnimated)"
-          + " - Error: guard check failed"
-          + " - last item's routeKey: \(routeItems.last?.routeKey ?? "N/A")"
-          + " - current routeViews count: \(routeItems.count)"
+        debug: debug
       );
     };
     
     #if DEBUG
     print("LOG - NativeView, RNINavigatorView: pop"
-      + " - with params - isAnimated: \(isAnimated)"
-      + " - current routeVC count: \(routeItems.count)"
-      + " - current nav vc count: \(self.navigationVC.viewControllers.count)"
+      + " - for routeKey: \(lastRouteVC.routeKey)"
+      + " - routeIndex: \(lastRouteVC.routeIndex)"
+      + " - current routeVC count: \(debug)"
     );
     #endif
     

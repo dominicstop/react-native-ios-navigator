@@ -113,7 +113,8 @@ class RNINavigatorRouteView: UIView {
   ///   because it can't be set to `nil`.
   ///
   /// * However there are props where a `nil` is invalid (i.e. a value of
-  ///   `nil` must **never** occur)
+  ///   `nil` must **never** occur) so this would crash the RN comp. sends
+  ///   over a property with a `null/undefined` js value.
   
   @objc var routeID: NSNumber = -1;
   
