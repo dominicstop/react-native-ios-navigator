@@ -321,6 +321,18 @@ fileprivate extension RNINavigatorView {
       reactView: self
     );
   };
+  
+  #if DEBUG
+  func debug() -> String {
+    let routeItems = self.routeItems;
+    return(
+        "current routeVC count: \(routeItems.count)"
+      + " - current nav vc count: \(self.navigationVC.viewControllers.count)"
+      + " - last routeKey: \(routeItems.last?.routeKey ?? "N/A")"
+      + " - last routeIndex: \(routeItems.last?.routeIndex ?? -1)"
+    );
+  };
+  #endif
 };
 
 // ---------------------------
@@ -342,10 +354,7 @@ extension RNINavigatorView {
     let debug =
         "with args - routeID: \(routeID)"
       + " - isAnimated: \(isAnimated)"
-      + " - and, current routeVC count: \(routeItems.count)"
-      + " - current nav vc count: \(self.navigationVC.viewControllers.count)"
-      + " - last routeKey: \(routeItems.last?.routeKey ?? "N/A")"
-      + " - last routeIndex: \(routeItems.last?.routeIndex ?? -1)"
+      + " - and, \(self.debug())"
     #else
     let debug: String? = nil;
     #endif
@@ -406,12 +415,7 @@ extension RNINavigatorView {
     let isAnimated = options["isAnimated"] as? Bool ?? true;
     
     #if DEBUG
-    let debug =
-        "with args - isAnimated: \(isAnimated)"
-      + " - and with, current routeVC count: \(routeItems.count)"
-      + " - current nav vc count: \(self.navigationVC.viewControllers.count)"
-      + " - last routeKey: \(routeItems.last?.routeKey ?? "N/A")"
-      + " - last routeIndex: \(routeItems.last?.routeIndex ?? -1)"
+    let debug = "with args - isAnimated: \(isAnimated) - and, \(self.debug())";
     #else
     let debug: String? = nil;
     #endif
@@ -465,16 +469,23 @@ extension RNINavigatorView {
     let routeItems = self.routeItems;
     let isAnimated = options["isAnimated"] as? Bool ?? true;
     
+    #if DEBUG
+    let debug = "with args, isAnimated: \(isAnimated) - and,\(self.debug())";
+    #else
+    let debug: String? = nil;
+    #endif
+    
     guard routeItems.count > 1 else {
       throw RNIError.commandFailed(
         source : "RNINavigatorView.popToRoot",
         message: "Unable to `popToRoot` because the route count is currently <= 1",
-        debug  : "with args - isAnimated: \(isAnimated)"
-          + " - Error: guard check failed"
-          + " - last item's routeKey: \(routeItems.last?.routeKey ?? "N/A")"
-          + " - current routeViews count: \(routeItems.count)"
+        debug  : debug
       );
     };
+    
+    #if DEBUG
+    print("LOG - NativeView, RNINavigatorView: popToRoot - \(debug)");
+    #endif
     
     for route in routeItems {
       route.isToBeRemoved = true;
