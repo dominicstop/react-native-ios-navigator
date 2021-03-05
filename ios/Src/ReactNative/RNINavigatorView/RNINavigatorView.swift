@@ -330,56 +330,64 @@ fileprivate extension RNINavigatorView {
 extension RNINavigatorView {
   
   func push(
-    _ routeKey: String,
-    _ options : NSDictionary,
+    _ routeID: Int,
+    _ options: NSDictionary,
     completion: @escaping Completion
   ) throws {
     
     let routeItems = self.routeItems;
     let isAnimated = options["isAnimated"] as? Bool ?? true;
     
+    #if DEBUG
+    let debug =
+        "with args - routeID: \(routeID)"
+      + " - isAnimated: \(isAnimated)"
+      + " - and, current routeVC count: \(routeItems.count)"
+      + " - current nav vc count: \(self.navigationVC.viewControllers.count)"
+      + " - last routeKey: \(routeItems.last?.routeKey ?? "N/A")"
+      + " - last routeIndex: \(routeItems.last?.routeIndex ?? -1)"
+    #else
+    let debug: String? = nil;
+    #endif
+    
     /// get the `routeView` to be pushed in the nav stack
-    guard let routeViewVC = routeItems.last,
-          let routeView   = routeViewVC.routeView,
-          // make sure this is the correct route to be "pushed"
-          routeViewVC.routeKey == routeKey
+    guard let nextRouteVC   = self.routeItemsMap[routeID],
+          let nextRouteView = nextRouteVC.routeView
     else {
       throw RNIError.commandFailed(
         source : "RNINavigatorView.push",
         message:
-            "Unable to push due to mismatch, the last item in `self.routeVCs` "
-          + "does not match the `routeKey` to be pushed. "
-          + "This could mean that the wrong `RNINavigatorRouteView` was added "
-          + "or the `routeKey` is wrong.",
-        debug:
-            "with args - routeKey: \(routeKey)"
-          + " - isAnimated: \(isAnimated)"
-          + " - Error: guard check failed"
-          + " - last item's routeKey: \(routeItems.last?.routeKey ?? "N/A")"
-          + " - current routeItemsMap count: \(routeItems.count)"
+            "Unable to push due to invalid routeID, no corresponding route found` "
+          + "for the given routeID.",
+        debug: debug
+      );
+    };
+    
+    guard routeItems.last?.routeID == routeID else {
+      throw RNIError.commandFailed(
+        source : "RNINavigatorView.push",
+        message:
+            "Unable to push due to mismatch, the last routeID does not match "
+          + "the given routeID.",
+        debug: debug
       );
     };
     
     #if DEBUG
-    print("LOG - NativeView, RNINavigatorView: push"
-      + " - with params - routeKey: \(routeKey)"
-      + " - isAnimated: \(isAnimated)"
-      + " - current routeVC count: \(routeItems.count)"
-      + " - current nav vc count: \(self.navigationVC.viewControllers.count)"
-    );
+    print("LOG - NativeView, RNINavigatorView: push - \(debug)");
     #endif
     
     // notify js `RNINavigatorRouteView` that it's about to be pushed
-    routeView.notifyOnRoutePush(
+    nextRouteView.notifyOnRoutePush(
       isDone: false,
       isAnimated: isAnimated
     );
     
-    self.navigationVC.pushViewController(routeViewVC, animated: isAnimated){
+    self.navigationVC.pushViewController(nextRouteVC, animated: isAnimated){
       completion();
       
       // notify js `RNINavigatorRouteView` that it's been pushed
-      routeView.notifyOnRoutePush(
+      nextRouteView.notifyOnRoutePush(
         isDone: true,
         isAnimated: isAnimated
       );

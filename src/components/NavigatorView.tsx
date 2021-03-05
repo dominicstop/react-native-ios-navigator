@@ -316,6 +316,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       );
       //#endregion
 
+      const nextRouteID = ROUTE_ID_COUNTER++;
+
       // summary: add new route, and wait for it be added
       await Promise.all([
         // ----------------------------------------------------------------------
@@ -337,7 +339,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         Helpers.setStateAsync<NavigatorViewState>(this, ({activeRoutes: prevRoutes}) => ({
           activeRoutes: [...prevRoutes, {
             ...routeItem,
-            routeID: ROUTE_ID_COUNTER++,
+            routeID: nextRouteID,
             routeIndex: ((Helpers.lastElement(prevRoutes)?.routeIndex ?? 0) + 1)
           }]
         }))
@@ -347,7 +349,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       await Helpers.promiseWithTimeout(timeout,
         RNINavigatorViewModule.push(
           findNodeHandle(this.nativeRef),
-          routeItem.routeKey, {
+          nextRouteID, {
             isAnimated: (options?.isAnimated ?? true)
           }
         )

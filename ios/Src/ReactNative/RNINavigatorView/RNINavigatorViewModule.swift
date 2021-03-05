@@ -26,9 +26,9 @@ class RNINavigatorViewModule: NSObject {
   // ----------------------
   
   @objc func push(
-    _ node  : NSNumber,
-    routeKey: NSString,
-    options : NSDictionary,
+    _ node : NSNumber,
+    routeID: NSNumber,
+    options: NSDictionary,
     // promise blocks ------------------------
     resolve: @escaping RCTPromiseResolveBlock,
     reject : @escaping RCTPromiseRejectBlock
@@ -45,12 +45,12 @@ class RNINavigatorViewModule: NSObject {
               + "instance found for the given node",
             debug:
                 "for node: \(node)"
-              + " - with params, routeKey: \(routeKey)"
+              + " - with params, routeID: \(routeID)"
           );
         };
       
         // forward push command to navigator
-        try navigatorView.push(routeKey as String, options){
+        try navigatorView.push(routeID.intValue, options){
           // resolve promise after "push" is complete
           resolve([:]);
         };

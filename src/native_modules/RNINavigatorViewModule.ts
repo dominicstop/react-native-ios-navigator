@@ -7,7 +7,7 @@ export type NativePushPopOptions = {
 interface RNINavigatorViewModule {
   push(
     node: number, 
-    routeKey: string,
+    routeID: number,
     options: NativePushPopOptions
   ): Promise<void>;
 
