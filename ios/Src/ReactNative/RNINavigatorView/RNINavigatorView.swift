@@ -497,54 +497,61 @@ extension RNINavigatorView {
   };
   
   func removeRoute(
-    routeKey  : String,
-    routeIndex: Int   ,
-    isAnimated: Bool  ,
+    routeID   : Int ,
+    routeIndex: Int ,
+    isAnimated: Bool,
     completion: @escaping Completion
   ) throws {
     
-    let routeItems = self.routeItems;
-    var vc = self.navRouteViewControllers;
+    var routeItems = self.routeItems;
     
-    guard routeIndex < vc.count else {
+    #if DEBUG
+    let debug =
+        "with args - routeID: \(routeID)"
+      + " - isAnimated: \(isAnimated)"
+      + " - and, current routeVC count: \(routeItems.count)"
+      + " - current nav vc count: \(self.navigationVC.viewControllers.count)"
+      + " - last routeKey: \(routeItems.last?.routeKey ?? "N/A")"
+      + " - last routeIndex: \(routeItems.last?.routeIndex ?? -1)"
+    #else
+    let debug: String? = nil;
+    #endif
+    
+    guard routeIndex < self.navRouteViewControllers.count else {
       throw RNIError.commandFailed(
         source : "RNINavigatorView.removeRoute",
         message: "Unable to `removeRoute` because `routeIndex` > the total active routes"
       );
     };
     
-    let routeToRemove = vc[routeIndex];
-    
-    guard routeKey == routeToRemove.routeKey as String? else {
+    guard let routeToRemove = self.routeItemsMap[routeID] else {
       throw RNIError.commandFailed(
         source : "RNINavigatorView.removeRoute",
         message:
-            "Unable to `removeRoute` due to mismatch, the route that is to be "
-          + "removed does not match the given `routeKey`.",
-        debug:
-            "with args, routeKey: \(routeKey)"
-          + " - routeIndex: \(routeIndex)"
-          + " - isAnimated: \(isAnimated)"
-          + " - Error: guard check failed"
-          + " - last item's routeKey: \(routeItems.last?.routeKey ?? "N/A")"
-          + " - current routeItemsMap count: \(self.routeItemsMap.count)"
+            "Unable to `removeRoute` due to invalid routeID, no corresponding "
+          + "route could be found for the given `routeKey`.",
+        debug: debug
+      );
+    };
+    
+    guard routeItems[routeIndex].routeID == routeID else {
+      throw RNIError.commandFailed(
+        source : "RNINavigatorView.removeRoute",
+        message:
+            "Unable to `removeRoute` due to mismatch, the route for the given "
+          + "`routeIndex` does not match the route for the given `routeKey`.",
+        debug: debug
       );
     };
     
     #if DEBUG
-    print("LOG - NativeView, RNINavigatorView: removeRoute"
-      + " - with args, routeKey: \(routeKey)"
-      + " - routeIndex: \(routeIndex)"
-      + " - isAnimated: \(isAnimated)"
-      + " - current routeVC count: \(routeItems.count)"
-      + " - current nav vc count: \(self.navigationVC.viewControllers.count)"
-    );
+    print("LOG - NativeView, RNINavigatorView: removeRoute - \(debug)");
     #endif
     
-    vc.remove(at: routeIndex);
+    routeItems.remove(at: routeIndex);
     routeToRemove.isToBeRemoved = true;
     
-    self.navigationVC.setViewControllers(vc, animated: isAnimated) {
+    self.navigationVC.setViewControllers(routeItems, animated: isAnimated) {
       completion();
     };
   };

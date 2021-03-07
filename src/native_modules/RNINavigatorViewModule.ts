@@ -29,7 +29,7 @@ interface RNINavigatorViewModule {
   
   removeRoute(
     node: number, 
-    routeKey: string,
+    routeID: number,
     routeIndex: number,
     animated: boolean,
   ): Promise<void>;

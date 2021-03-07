@@ -194,7 +194,7 @@ class RNINavigatorViewModule: NSObject {
   
   @objc func removeRoute(
     _ node    : NSNumber,
-    routeKey  : NSString,
+    routeID   : NSNumber,
     routeIndex: NSNumber,
     animated  : Bool,
     // promise blocks ------------------------
@@ -217,7 +217,7 @@ class RNINavigatorViewModule: NSObject {
     
         // forward command to navigator
         try navigatorView.removeRoute(
-          routeKey  : routeKey as String,
+          routeID   : routeID.intValue,
           routeIndex: routeIndex.intValue,
           isAnimated: animated
         ) {

@@ -546,7 +546,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       await Helpers.promiseWithTimeout(750,
         RNINavigatorViewModule.removeRoute(
           findNodeHandle(this.nativeRef),
-          routeToBeRemoved.routeKey,
+          routeToBeRemoved.routeID,
           routeToBeRemoved.routeIndex,
           animated
         )
