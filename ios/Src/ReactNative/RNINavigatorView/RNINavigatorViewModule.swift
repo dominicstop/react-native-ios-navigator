@@ -310,11 +310,11 @@ class RNINavigatorViewModule: NSObject {
         try navigatorView.removeRoutes(
           itemsToRemove: itemsToRemove.compactMap {
             guard let dict       = $0 as? NSDictionary,
-                  let routeKey   = dict["routeKey"] as? String,
+                  let routeID    = dict["routeID"] as? Int,
                   let routeIndex = dict["routeIndex"] as? Int
             else { return nil };
             
-            return (routeKey: routeKey, routeIndex: routeIndex);
+            return (routeID: routeID, routeIndex: routeIndex);
           },
           isAnimated: animated
         ) {

@@ -37,7 +37,7 @@ interface RNINavigatorViewModule {
   removeRoutes(
     node: number, 
     itemsToRemove: Array<{
-      routeKey: string;
+      routeID: number;
       routeIndex: number;
     }>,
     animated: boolean,

@@ -509,10 +509,7 @@ extension RNINavigatorView {
     let debug =
         "with args - routeID: \(routeID)"
       + " - isAnimated: \(isAnimated)"
-      + " - and, current routeVC count: \(routeItems.count)"
-      + " - current nav vc count: \(self.navigationVC.viewControllers.count)"
-      + " - last routeKey: \(routeItems.last?.routeKey ?? "N/A")"
-      + " - last routeIndex: \(routeItems.last?.routeIndex ?? -1)"
+      + " - and,\(self.debug())"
     #else
     let debug: String? = nil;
     #endif
@@ -557,13 +554,21 @@ extension RNINavigatorView {
   };
   
   func removeRoutes(
-    itemsToRemove: [(routeKey: String, routeIndex: Int)],
+    itemsToRemove: [(routeID: Int, routeIndex: Int)],
     isAnimated   : Bool,
     completion   : @escaping Completion
   ) throws {
     
     let routeItems = self.routeItems;
     let vc = self.navRouteViewControllers;
+    
+    #if DEBUG
+    let debug =
+        "with args - isAnimated: \(isAnimated)"
+      + " - and, \(self.debug())"
+    #else
+    let debug: String? = nil;
+    #endif
     
     // check if items to remove are valid
     for item in itemsToRemove {
@@ -575,20 +580,14 @@ extension RNINavigatorView {
       };
       
       let routeToRemove = vc[item.routeIndex];
-      guard item.routeKey == routeToRemove.routeKey as String? else {
+      
+      guard item.routeID == routeToRemove.routeID else {
         throw RNIError.commandFailed(
           source : "RNINavigatorView.removeRoute",
           message:
               "Unable to `removeRoute` due to mismatch, the route that is to be "
             + "removed does not match the given `routeKey`.",
-          debug:
-              " - at routeIndex: \(item.routeIndex)"
-            + " - provided routeKey: \(item.routeKey)"
-            + " - vc routeKey: \(routeToRemove.routeKey)"
-            + " - isAnimated: \(isAnimated)"
-            + " - Error: guard check failed"
-            + " - last item's routeKey: \(routeItems.last?.routeKey ?? "N/A")"
-            + " - current routeViews count: \(routeItems.count)"
+          debug: debug
         );
       };
     };
@@ -597,7 +596,7 @@ extension RNINavigatorView {
     let filteredRoutes = vc.filter { routeVC in
       
       let shouldRemove = itemsToRemove.contains {
-        $0.routeKey   == routeVC.routeKey &&
+        $0.routeID    == routeVC.routeID &&
         $0.routeIndex == routeVC.routeIndex
       };
       

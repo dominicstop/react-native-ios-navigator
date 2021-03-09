@@ -609,7 +609,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
           // routes to remove,
           routeIndexes.map(routeIndex => ({
             routeIndex,
-            routeKey: activeRoutes[routeIndex].routeKey,
+            routeID: activeRoutes[routeIndex].routeID,
           })),
           animated
         )
