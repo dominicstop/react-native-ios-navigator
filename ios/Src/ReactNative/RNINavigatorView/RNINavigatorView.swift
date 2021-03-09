@@ -42,7 +42,7 @@ class RNINavigatorView: UIView {
     self.navigationVC.navigationBar;
   };
   
-  var navRouteViewControllers: [RNINavigatorRouteViewController] {
+  var activeRoutes: [RNINavigatorRouteViewController] {
     self.navigationVC.viewControllers.compactMap {
       $0 as? RNINavigatorRouteViewController
     };
@@ -61,11 +61,12 @@ class RNINavigatorView: UIView {
   /// A `RNINavigatorRouteView` instance was added as a subview.
   @objc var onNavRouteViewAdded: RCTBubblingEventBlock?;  
   
-  /// Fired when a route is *about to be* "popped", either due to a "user intiated"
+  /// Fired when a route is *about to be* "popped", either due to a "user initiated"
   /// pop (because the "back" button was pressed or it was swiped back via a
   /// gesture), or due to it being "popped" programmatically via the nav.
   @objc var onNavRouteWillPop: RCTBubblingEventBlock?;
-  /// Fired when a route *has been* "popped", either due to a "user intiated"
+  
+  /// Fired when a route *has been* "popped", either due to a "user initiated"
   /// pop (because the "back" button was pressed or it was swiped back via a
   /// gesture), or due to it being "popped" programmatically via the nav.
   @objc var onNavRouteDidPop: RCTBubblingEventBlock?;
@@ -428,7 +429,7 @@ extension RNINavigatorView {
       );
     };
     
-    guard let lastNavRouteVC = self.navRouteViewControllers.last,
+    guard let lastNavRouteVC = self.activeRoutes.last,
           let lastRouteVC    = routeItems.last,
           /// make sure that the vc that we will be "popping" is the same as the
           /// last route in `routeVCs`
@@ -514,7 +515,7 @@ extension RNINavigatorView {
     let debug: String? = nil;
     #endif
     
-    guard routeIndex < self.navRouteViewControllers.count else {
+    guard routeIndex < self.activeRoutes.count else {
       throw RNIError.commandFailed(
         source : "RNINavigatorView.removeRoute",
         message: "Unable to `removeRoute` because `routeIndex` > the total active routes"
@@ -526,7 +527,7 @@ extension RNINavigatorView {
         source : "RNINavigatorView.removeRoute",
         message:
             "Unable to `removeRoute` due to invalid routeID, no corresponding "
-          + "route could be found for the given `routeKey`.",
+          + "route could be found for the given `routeID`.",
         debug: debug
       );
     };
@@ -536,7 +537,7 @@ extension RNINavigatorView {
         source : "RNINavigatorView.removeRoute",
         message:
             "Unable to `removeRoute` due to mismatch, the route for the given "
-          + "`routeIndex` does not match the route for the given `routeKey`.",
+          + "`routeIndex` does not match the route for the given `routeID`.",
         debug: debug
       );
     };
@@ -560,7 +561,7 @@ extension RNINavigatorView {
   ) throws {
     
     let routeItems = self.routeItems;
-    let vc = self.navRouteViewControllers;
+    let vc = self.activeRoutes;
     
     #if DEBUG
     let debug =
@@ -586,7 +587,7 @@ extension RNINavigatorView {
           source : "RNINavigatorView.removeRoute",
           message:
               "Unable to `removeRoute` due to mismatch, the route that is to be "
-            + "removed does not match the given `routeKey`.",
+            + "removed does not match the given `routeID`.",
           debug: debug
         );
       };
@@ -618,31 +619,25 @@ extension RNINavigatorView {
   };
   
   func replaceRoute(
-    prevRouteIndex: Int   ,
-    prevRouteKey  : String,
-    nextRouteKey  : String,
-    isAnimated    : Bool  ,
+    prevRouteIndex: Int,
+    prevRouteID   : Int,
+    nextRouteID   : Int,
+    isAnimated    : Bool,
     completion    : @escaping Completion
   ) throws {
-    
-    let routeItems = self.routeItems;
-    var vc = self.navRouteViewControllers;
     
     #if DEBUG
     let debug =
         "with args, prevRouteIndex: \(prevRouteIndex)"
-      + " - prevRouteKey: \(prevRouteKey)"
-      + " - nextRouteKey: \(nextRouteKey)"
+      + " - prevRouteID: \(prevRouteID)"
+      + " - nextRouteID: \(nextRouteID)"
       + " - isAnimated: \(isAnimated)"
-      + " - and, current routeVC count: \(routeItems.count)"
-      + " - current nav vc count: \(self.navigationVC.viewControllers.count)"
-      + " - last routeKey: \(routeItems.last?.routeKey ?? "N/A")"
-      + " - last routeIndex: \(routeItems.last?.routeIndex ?? -1)"
+      + " - and, \(self.debug())"
     #else
     let debug: String? = nil;
     #endif
     
-    guard prevRouteIndex < vc.count else {
+    guard prevRouteIndex < self.activeRoutes.count else {
       throw RNIError.commandFailed(
         source : "RNINavigatorView.replaceRoute",
         message:
@@ -652,38 +647,36 @@ extension RNINavigatorView {
       );
     };
     
-    let routeToReplace = vc[prevRouteIndex];
+    guard let routeToReplace = self.routeItemsMap[prevRouteID] else {
+      throw RNIError.commandFailed(
+        source : "RNINavigatorView.replaceRoute",
+        message:
+            "Unable to `replaceRoute` because no matching route could be found "
+          + "for the given prevRouteID",
+        debug: debug
+      );
+    };
     
-    guard routeItems.count > vc.count,
-          let replacementRoute = routeItems.last
+    guard let replacementRoute = self.routeItemsMap[nextRouteID] else {
+      throw RNIError.commandFailed(
+        source : "RNINavigatorView.replaceRoute",
+        message:
+            "Unable to `replaceRoute` because no matching route could be found "
+          + "for the given nextRouteID",
+        debug: debug
+      );
+    };
+    
+    guard routeToReplace  .routeIndex == prevRouteIndex,
+          replacementRoute.routeIndex == prevRouteIndex
     else {
       throw RNIError.commandFailed(
         source : "RNINavigatorView.replaceRoute",
         message:
-            "Unable to `replaceRoute` because the total route vc's < the"
-          + " total vc count in the navigator. This could mean that the replacement"
-          + " route vc hasn't been received here yet (or it wasn't sent at all)."
-          + " TLDR: `replacementRoute` could not be retrieved (out of bounds?).",
-        debug: debug
-      );
-    };
-    
-    guard replacementRoute.routeKey == nextRouteKey else {
-      throw RNIError.commandFailed(
-        source : "RNINavigatorView.replaceRoute",
-        message:
-            "Unable to `replaceRoute` due to `routeKey` mismatch, the replacement"
-          + " route does not match the provided `nextRouteKey`",
-        debug: debug
-      );
-    };
-    
-    guard routeToReplace.routeKey == prevRouteKey else {
-      throw RNIError.commandFailed(
-        source : "RNINavigatorView.replaceRoute",
-        message:
-            "Unable to `replaceRoute` due to `routeKey` mismatch, the route to be"
-          + " replaced does not match the provided `prevRouteKey`",
+            "Unable to `replaceRoute` due to mismatch, the given prevRouteIndex "
+          + " is invalid because it does not match the routeIndex of the matching "
+          + "'replacement' route (i.e. the route for the given nextRouteID), and/or "
+          + "the 'to be replaced' route (i.e. the route for the given prevRouteID)",
         debug: debug
       );
     };
@@ -692,12 +685,13 @@ extension RNINavigatorView {
     print("LOG - NativeView, RNINavigatorView: replaceRoute - \(debug)");
     #endif
     
-    routeToReplace.isToBeRemoved = true;
     
-    vc[prevRouteIndex] = replacementRoute;
+    routeToReplace.isToBeRemoved = true;
     self.routeItemsMap.removeValue(forKey: routeToReplace.routeID);
     
-    self.navigationVC.setViewControllers(vc, animated: isAnimated) {
+    let nextRoutes = self.routeItems;
+    
+    self.navigationVC.setViewControllers(nextRoutes, animated: isAnimated) {
       completion();
     };
   };
@@ -710,7 +704,7 @@ extension RNINavigatorView {
   ) throws {
     
     let routeItems = self.routeItems;
-    var vc = self.navRouteViewControllers;
+    var vc = self.activeRoutes;
     
     #if DEBUG
     let debug =

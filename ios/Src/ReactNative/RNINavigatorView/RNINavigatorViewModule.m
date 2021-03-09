@@ -53,11 +53,11 @@ RCT_EXTERN_METHOD(removeRoutes : (nonnull NSNumber )node
                   resolve: (RCTPromiseResolveBlock)resolve
                   reject : (RCTPromiseRejectBlock )reject);
 
-RCT_EXTERN_METHOD(replaceRoute  : (nonnull NSNumber  )node
-                  prevRouteIndex: (nonnull NSNumber  )prevRouteIndex
-                  prevRouteKey  : (nonnull NSString *)prevRouteKey
-                  nextRouteKey  : (nonnull NSString *)nextRouteKey
-                  animated      : (nonnull BOOL      )animated
+RCT_EXTERN_METHOD(replaceRoute  : (nonnull NSNumber)node
+                  prevRouteIndex: (nonnull NSNumber)prevRouteIndex
+                  prevRouteID   : (nonnull NSNumber)prevRouteID
+                  nextRouteID   : (nonnull NSNumber)nextRouteID
+                  animated      : (nonnull BOOL    )animated
                   // promise blocks -----------------------
                   resolve: (RCTPromiseResolveBlock)resolve
                   reject : (RCTPromiseRejectBlock )reject);

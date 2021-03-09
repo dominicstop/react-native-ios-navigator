@@ -240,8 +240,8 @@ class RNINavigatorViewModule: NSObject {
   @objc func replaceRoute(
     _ node        : NSNumber,
     prevRouteIndex: NSNumber,
-    prevRouteKey  : NSString,
-    nextRouteKey  : NSString,
+    prevRouteID   : NSNumber,
+    nextRouteID   : NSNumber,
     animated      : Bool,
     // promise blocks ------------------------
     resolve: @escaping RCTPromiseResolveBlock,
@@ -264,8 +264,8 @@ class RNINavigatorViewModule: NSObject {
         // forward "popToRoot" command to navigator
         try navigatorView.replaceRoute(
           prevRouteIndex: prevRouteIndex.intValue,
-          prevRouteKey  : prevRouteKey as String ,
-          nextRouteKey  : nextRouteKey as String ,
+          prevRouteID   : prevRouteID.intValue,
+          nextRouteID   : nextRouteID.intValue,
           isAnimated    : animated
         ) {
           resolve([:]);

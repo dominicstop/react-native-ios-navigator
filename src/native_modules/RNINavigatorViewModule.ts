@@ -46,8 +46,8 @@ interface RNINavigatorViewModule {
   replaceRoute(
     node: number,
     prevRouteIndex: number,
-    prevRouteKey: string,
-    nextRouteKey: string,
+    prevRouteID: number,
+    nextRouteID: number,
     animated: boolean,
   ): Promise<void>;
 

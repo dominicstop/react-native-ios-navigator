@@ -708,8 +708,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
           RNINavigatorViewModule.replaceRoute(
             findNodeHandle(this.nativeRef),
             prevRouteIndex,
-            routeToReplace.routeKey,
-            replacementRoute.routeKey,
+            routeToReplace.routeID,
+            replacementRoute.routeID,
             animated
           )
         );
