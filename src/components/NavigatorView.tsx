@@ -556,15 +556,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         ...prevState,
         activeRoutes: prevState.activeRoutes
           // remove route from `activeRoutes`
-          .filter((route, index) => (
-            routeIndex != index &&
-            routeToBeRemoved.routeKey != route.routeKey
-          ))
+          .filter(route => (route.routeID != routeToBeRemoved.routeID))
           // update the route indexes
-          .map((route, index) => ({
-            ...route,
-            routeIndex: index,
-          }))
+          .map((route, index) => ({...route, routeIndex: index}))
       }));
 
       this.navStatus = NavStatus.IDLE;
