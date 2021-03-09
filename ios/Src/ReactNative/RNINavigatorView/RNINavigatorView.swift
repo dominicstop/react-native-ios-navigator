@@ -697,29 +697,23 @@ extension RNINavigatorView {
   };
   
   func insertRoute(
-    nextRouteKey: String,
-    atIndex     : Int   ,
-    isAnimated  : Bool  ,
-    completion  : @escaping Completion
+    nextRouteID: Int ,
+    atIndex    : Int ,
+    isAnimated : Bool,
+    completion : @escaping Completion
   ) throws {
-    
-    let routeItems = self.routeItems;
-    var vc = self.activeRoutes;
     
     #if DEBUG
     let debug =
-        "with args, nextRouteKey: \(nextRouteKey)"
+        "with args, nextRouteKey: \(nextRouteID)"
       + " - atIndex: \(atIndex)"
       + " - isAnimated: \(isAnimated)"
-      + " - current routeVC count: \(routeItems.count)"
-      + " - current nav vc count: \(self.navigationVC.viewControllers.count)"
-      + " - last routeKey: \(routeItems.last?.routeKey ?? "N/A")"
-      + " - last routeIndex: \(routeItems.last?.routeIndex ?? -1)"
+      + " - and, : \(self.debug())"
     #else
     let debug: String? = nil;
     #endif
     
-    guard atIndex < vc.count else {
+    guard atIndex < self.activeRoutes.count else {
       throw RNIError.commandFailed(
         source : "RNINavigatorView.insertRoute",
         message:
@@ -729,27 +723,33 @@ extension RNINavigatorView {
       );
     };
     
-    guard routeItems.count > vc.count,
-          let routeToBeInserted = self.routeItems.last
-    else {
+    guard self.routeItemsMap.count > self.activeRoutes.count else {
       throw RNIError.commandFailed(
         source : "RNINavigatorView.insertRoute",
         message:
-            "Unable to `insertRoute` because the total `routeVCs` < the"
-          + " total vc count in the navigator. This could mean that the route to"
-          + " inserted hasn't been received here yet (or it wasn't sent at all)."
-          + " TLDR: `routeToBeInserted` could not be retrieved (out of bounds?).",
+            "Unable to `insertRoute` because the total `routeItemsMap` < the"
+          + " total active routes. This could mean that the route to be inserted"
+          + " hasn't been received in the native side yet (or it wasn't sent at all)",
         debug: debug
       );
     };
     
-    guard routeToBeInserted.routeKey == nextRouteKey
-    else {
+    guard let routeToBeInserted = self.routeItemsMap[nextRouteID] else {
       throw RNIError.commandFailed(
         source : "RNINavigatorView.insertRoute",
         message:
-            "Unable to `insertRoute` due to `routeKey` mismatch, the route to be"
-          + " inserted does not match the provided `nextRouteKey`",
+            "Unable to `insertRoute` because no route could be found for the"
+          + " given route `nextRouteID`",
+        debug: debug
+      );
+    };
+    
+    guard routeToBeInserted.routeID == nextRouteID else {
+      throw RNIError.commandFailed(
+        source : "RNINavigatorView.insertRoute",
+        message:
+            "Unable to `insertRoute` due to `nextRouteID` mismatch, the 'route to be"
+          + " inserted' does not match the provided `nextRouteKey`",
         debug: debug
       );
     };
@@ -758,9 +758,10 @@ extension RNINavigatorView {
     print("LOG - NativeView, RNINavigatorView: insertRoute - \(debug)");
     #endif
     
-    vc.insert(routeToBeInserted, at: atIndex);
+    var nextRoutes = self.activeRoutes;
+    nextRoutes.insert(routeToBeInserted, at: atIndex);
     
-    self.navigationVC.setViewControllers(vc, animated: isAnimated) {
+    self.navigationVC.setViewControllers(nextRoutes, animated: isAnimated) {
       completion();
     };
   };

@@ -791,7 +791,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       await Helpers.promiseWithTimeout((750),
         RNINavigatorViewModule.insertRoute(
           findNodeHandle(this.nativeRef),
-          nextRoute.routeKey,
+          nextRoute.routeID,
           atIndex,
           animated
         )

@@ -335,10 +335,10 @@ class RNINavigatorViewModule: NSObject {
   };
   
   @objc func insertRoute(
-    _ node      : NSNumber,
-    nextRouteKey: NSString,
-    atIndex     : NSNumber,
-    animated    : Bool,
+    _ node     : NSNumber,
+    nextRouteID: NSNumber,
+    atIndex    : NSNumber,
+    animated   : Bool,
     // promise blocks ------------------------
     resolve: @escaping RCTPromiseResolveBlock,
     reject : @escaping RCTPromiseRejectBlock
@@ -359,9 +359,9 @@ class RNINavigatorViewModule: NSObject {
     
         // forward "insertRoute" command to navigator
         try navigatorView.insertRoute(
-          nextRouteKey: nextRouteKey as String,
-          atIndex     : atIndex.intValue,
-          isAnimated  : animated
+          nextRouteID: nextRouteID.intValue,
+          atIndex    : atIndex.intValue,
+          isAnimated : animated
         ) {
           resolve([:]);
         };

@@ -53,7 +53,7 @@ interface RNINavigatorViewModule {
 
   insertRoute(
     node: number,
-    nextRouteKey: string,
+    nextRouteID: number,
     atIndex: number,
     animated: boolean,
   ): Promise<void>;

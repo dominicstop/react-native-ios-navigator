@@ -62,10 +62,10 @@ RCT_EXTERN_METHOD(replaceRoute  : (nonnull NSNumber)node
                   resolve: (RCTPromiseResolveBlock)resolve
                   reject : (RCTPromiseRejectBlock )reject);
 
-RCT_EXTERN_METHOD(insertRoute : (nonnull NSNumber  )node
-                  nextRouteKey: (nonnull NSString *)nextRouteKey
-                  atIndex     : (nonnull NSNumber  )atIndex
-                  animated    : (nonnull BOOL      )animated
+RCT_EXTERN_METHOD(insertRoute: (nonnull NSNumber)node
+                  nextRouteID: (nonnull NSNumber)nextRouteID
+                  atIndex    : (nonnull NSNumber)atIndex
+                  animated   : (nonnull BOOL    )animated
                   // promise blocks -----------------------
                   resolve: (RCTPromiseResolveBlock)resolve
                   reject : (RCTPromiseRejectBlock )reject);
