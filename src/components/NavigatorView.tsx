@@ -163,6 +163,12 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     ));
   };
 
+  private getActiveRoutesSorted(){
+    return this.state.activeRoutes.sort((a, b) => 
+      (a.routeID - b.routeID)
+    );
+  };
+
   private getMatchingRoute = (routeKey: string) => {
     return this.props.routes.find(item => (
       item.routeKey == routeKey
@@ -651,66 +657,46 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       routeIndex: prevRouteIndex,
     };
 
-    // `replaceRoute` Bugfix/Workaround:
-    // * When replacing the first route, changing the `state.activeRoutes[0]`
-    //   causes all the other routes to disappear.
-    // * Specifically, it triggers `componentWillUnmount` for all the other 
-    //   active routes (even though there aren't any changes to their props).
-    // * This then triggers `vc.didMove(toParent: nil`) in the native side,
-    //   which then triggers the cleanup/remove process.
-    // * This has something to do with the re-ordering of components, causing a
-    //   it to be "recreated" from scratch.
-    const isReplacingFirstRoute = 
-      (prevRouteIndex == 0 ) && (activeRoutes.length > 0);
-
     try {
-      if(isReplacingFirstRoute){
-        // A. use alt. method
-        await this.insertRoute(routeItem, 1);
-        await this.removeRoute(0, animated);
-        
-      } else {
-        // B. use normal method
-        // if busy, wait for prev. to finish first...
-        const queue = this.queue.schedule();
-        await queue.promise;
+      // if busy, wait for prev. to finish first...
+      const queue = this.queue.schedule();
+      await queue.promise;
 
-        this.navStatus = NavStatus.NAV_REPLACING;
+      this.navStatus = NavStatus.NAV_REPLACING;
 
-        await Promise.all([
-          // 1. wait for replacement route to be added
-          Helpers.promiseWithTimeout(500, new Promise<void>(resolve => {
-            this.emitter.once(NavEvents.onNavRouteViewAdded, ({nativeEvent}: onNavRouteViewAddedPayload) => {
-              if(nativeEvent.routeKey == routeItem.routeKey){
-                resolve();
-              };
-            })
-          })),
-          // 2. replace route in state
-          Helpers.setStateAsync<NavigatorViewState>(this, (prevState) => ({
-            ...prevState,
-            activeRoutes: prevState.activeRoutes.map((route, index) => (
-              (prevRouteIndex == index && routeToReplace.routeKey == route.routeKey)
-                ? { routeIndex: index, ...replacementRoute } 
-                : { routeIndex: index, ...route }
-            ))
-          })),
-        ]);
+      await Promise.all([
+        // 1. wait for replacement route to be added
+        Helpers.promiseWithTimeout(500, new Promise<void>(resolve => {
+          this.emitter.once(NavEvents.onNavRouteViewAdded, ({nativeEvent}: onNavRouteViewAddedPayload) => {
+            if(nativeEvent.routeKey == routeItem.routeKey){
+              resolve();
+            };
+          })
+        })),
+        // 2. replace route in state
+        Helpers.setStateAsync<NavigatorViewState>(this, (prevState) => ({
+          ...prevState,
+          activeRoutes: prevState.activeRoutes.map((route, index) => (
+            (prevRouteIndex == index && routeToReplace.routeKey == route.routeKey)
+              ? { routeIndex: index, ...replacementRoute } 
+              : { routeIndex: index, ...route }
+          ))
+        })),
+      ]);
 
-        // forward command to native module
-        await Helpers.promiseWithTimeout(750,
-          RNINavigatorViewModule.replaceRoute(
-            findNodeHandle(this.nativeRef),
-            prevRouteIndex,
-            routeToReplace.routeID,
-            replacementRoute.routeID,
-            animated
-          )
-        );
+      // forward command to native module
+      await Helpers.promiseWithTimeout(750,
+        RNINavigatorViewModule.replaceRoute(
+          findNodeHandle(this.nativeRef),
+          prevRouteIndex,
+          routeToReplace.routeID,
+          replacementRoute.routeID,
+          animated
+        )
+      );
 
-        this.navStatus = NavStatus.IDLE;
-        this.queue.dequeue();
-      };
+      this.navStatus = NavStatus.IDLE;
+      this.queue.dequeue();
 
     } catch(error){
       if(this.navStatus != NavStatus.UNMOUNTED){
@@ -899,15 +885,30 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
   _renderRoutes(){
     const props = this.props;
-    const { activeRoutes, ...state } = this.state;
+    const state = this.state;
 
+    // * Get the `state.activeRoutes` sorted by their `routeID`, such that the
+    //   routes are ordered from oldest to newest.
+    // * Supposedly, when reordering comps, as long as the key of a comp. does
+    //   not change, the comps. should be "preserved", but When replacing the 1st 
+    //   route (i.e. replacing `state.activeRoutes[0]`), it causes all the other 
+    //   routes to disappear.
+    // * Specifically, it triggers `componentWillUnmount` for all the other 
+    //   active routes (even though there aren't any changes to their props/keys).
+    // * This then triggers `vc.didMove(toParent: nil`) in the native side,
+    //   which then triggers the cleanup/remove process.
+    // * This bug has something to do with the re-ordering of components, causing
+    //   the comps. to be "recreated" from scratch.
+    // * So this is a temp. workaround to prevent the unnecessary reordering of the
+    //   comps., the downside is that the routes need to be sorted on every render...
+    const activeRoutes = this.getActiveRoutesSorted();
     const activeRoutesCount = activeRoutes.length;
 
-    return activeRoutes.map((route, index) => {
+    return activeRoutes.map(route => {
       const routeConfig = this.getMatchingRoute(route.routeKey);
 
-      const isLast         = (activeRoutesCount - 1) == index;
-      const isSecondToLast = (activeRoutesCount - 2) == index;
+      const isLast         = (activeRoutesCount - 1) == route.routeIndex;
+      const isSecondToLast = (activeRoutesCount - 2) == route.routeIndex;
 
       return (
         <NavigatorRouteView
