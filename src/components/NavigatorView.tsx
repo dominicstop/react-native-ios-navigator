@@ -49,7 +49,6 @@ interface NavRouteStateItem extends NavRouteItem {
   routeID: number;
 };
 
-
 export type NavRouteConfigItem = {
   routeKey: string;
   initialRouteProps?: object;
@@ -120,7 +119,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   /** Queue for nav. commands: only 1 command is called at a time */
   private queue: SimpleQueue;
 
-  private lastRouteRef: NavigatorRouteView;
+  // note: the key should be the routeID
+  private routeRefMap: {[key: number]: NavigatorRouteView} = {};
   //#endregion
 
   constructor(props: NavigatorViewProps){
@@ -179,11 +179,17 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   };
 
   private getLastRouteTransitionDuration = (isPushing: boolean) => {
-    const routeConfig = this.lastRouteRef.getRouteOptions();
+    const { activeRoutes } = this.state;
+
+    const lastIndex = activeRoutes.length - 1;
+    const lastRoute = activeRoutes[lastIndex];
+
+    const lastRouteRef = this.routeRefMap[lastRoute.routeID];
+    const routeConfig = lastRouteRef.getRouteOptions();
 
     return (isPushing
-      ? routeConfig.transitionConfigPush?.duration
-      : routeConfig.transitionConfigPop ?.duration
+      ? routeConfig?.transitionConfigPush?.duration ?? 0
+      : routeConfig?.transitionConfigPop ?.duration ?? 0
     );
   };
 
@@ -916,7 +922,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       return (
         <NavigatorRouteView
           key={`routeID-${route.routeID}`}
-          {...(isLast && {ref: r => this.lastRouteRef = r})}
+          ref={r => this.routeRefMap[route.routeID] = r}
           routeID={route.routeID}
           routeIndex={route.routeIndex}
           routeContainerStyle={props.routeContainerStyle}
