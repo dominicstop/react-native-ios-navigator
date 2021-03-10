@@ -95,6 +95,9 @@ type NavigatorViewState = {
 };
 //#endregion
 
+const TIMEOUT_MOUNT   = 750;
+const TIMEOUT_COMMAND = 1000;
+
 let NAVIGATOR_ID_COUNTER = 0;
 let ROUTE_ID_COUNTER     = 0;
 
@@ -305,7 +308,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       };
 
       // the amount of time to wait for "push" to resolve before rejecting.
-      const timeout = Math.max((transitionDuration + 100), 750);
+      const timeout = Math.max((transitionDuration + 100), TIMEOUT_COMMAND);
 
       if(hasTransition){
         // temporarily override the last route's "push" transition
@@ -331,7 +334,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         //    note: This promise will reject if `onNavRouteViewAdded` fails to fire
         //    within 500 ms (i.e. if it takes to long for the promise to be fulfilled).
         // ----------------------------------------------------------------------------
-        Helpers.promiseWithTimeout(500, new Promise<void>(resolve => {
+        Helpers.promiseWithTimeout(TIMEOUT_MOUNT, new Promise<void>(resolve => {
           this.emitter.once(NavEvents.onNavRouteViewAdded, ({nativeEvent}: onNavRouteViewAddedPayload) => {
             if(routeItem.routeKey == nativeEvent.routeKey){
               resolve();
@@ -416,7 +419,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       };
 
       // the amount of time to wait for "pop" to resolve before rejecting.
-      const timeout = Math.max((transitionDuration + 100), 750);
+      const timeout = Math.max((transitionDuration + 100), TIMEOUT_COMMAND);
 
       if(hasTransition){
         // temporarily change the last route's "pop" transition
@@ -480,7 +483,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       ));
 
       // the amount of time to wait for "popToRoot" to resolve before rejecting.
-      const timeout = Math.max((transitionDuration + 100), 750);
+      const timeout = Math.max((transitionDuration + 100), TIMEOUT_COMMAND);
 
       if(transitionDuration > 10000){
         throw new Error("`NavigatorView` failed to do: `pop`: transition duration too big"
@@ -549,7 +552,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       this.navStatus = NavStatus.NAV_REMOVING;
 
-      await Helpers.promiseWithTimeout(750,
+      await Helpers.promiseWithTimeout(TIMEOUT_COMMAND,
         RNINavigatorViewModule.removeRoute(
           findNodeHandle(this.nativeRef),
           routeToBeRemoved.routeID,
@@ -603,7 +606,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       this.navStatus = NavStatus.NAV_REMOVING;
 
-      await Helpers.promiseWithTimeout(750,
+      await Helpers.promiseWithTimeout(TIMEOUT_COMMAND,
         RNINavigatorViewModule.removeRoutes(
           findNodeHandle(this.nativeRef),
           // routes to remove,
@@ -666,7 +669,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       await Promise.all([
         // 1. wait for replacement route to be added
-        Helpers.promiseWithTimeout(500, new Promise<void>(resolve => {
+        Helpers.promiseWithTimeout(TIMEOUT_MOUNT, new Promise<void>(resolve => {
           this.emitter.once(NavEvents.onNavRouteViewAdded, ({nativeEvent}: onNavRouteViewAddedPayload) => {
             if(nativeEvent.routeKey == routeItem.routeKey){
               resolve();
@@ -685,7 +688,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       ]);
 
       // forward command to native module
-      await Helpers.promiseWithTimeout(750,
+      await Helpers.promiseWithTimeout(TIMEOUT_COMMAND,
         RNINavigatorViewModule.replaceRoute(
           findNodeHandle(this.nativeRef),
           prevRouteIndex,
@@ -749,7 +752,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         //    note: This promise will reject if `onNavRouteViewAdded` fails to fire
         //    within 500 ms (i.e. if it takes to long for the promise to be fulfilled).
         // ----------------------------------------------------------------------------
-        Helpers.promiseWithTimeout(500, new Promise<void>(resolve => {
+        Helpers.promiseWithTimeout(TIMEOUT_MOUNT, new Promise<void>(resolve => {
           this.emitter.once(NavEvents.onNavRouteViewAdded, ({nativeEvent}: onNavRouteViewAddedPayload) => {
             if(routeItem.routeKey == nativeEvent.routeKey){
               resolve();
@@ -768,7 +771,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       ]);
 
       // forward command to native module
-      await Helpers.promiseWithTimeout((750),
+      await Helpers.promiseWithTimeout(TIMEOUT_COMMAND,
         RNINavigatorViewModule.insertRoute(
           findNodeHandle(this.nativeRef),
           nextRoute.routeID,
@@ -793,7 +796,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
   public setNavigationBarHidden = async (isHidden: boolean, animated: boolean) => {
     try {
-      await Helpers.promiseWithTimeout(1000,
+      await Helpers.promiseWithTimeout(TIMEOUT_COMMAND,
         RNINavigatorViewModule.setNavigationBarHidden(
           findNodeHandle(this.nativeRef),
           isHidden, animated
