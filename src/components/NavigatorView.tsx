@@ -8,7 +8,7 @@ import { RNINavigatorViewModule } from '../native_modules/RNINavigatorViewModule
 import { NavigatorRouteView } from './NavigatorRouteView';
 
 import type { RouteOptions } from '../types/NavTypes';
-import type { NavCommandPush, NavCommandPop, NavCommandPopToRoot, NavCommandRemoveRoute, NavCommandReplaceRoute, NavCommandInsertRoute, NavCommandReplaceRoutePreset, NavCommandRemoveRoutePreset, NavRouteItem, RenderNavBarItem, NavCommandRemoveRoutes, NavCommandRemoveRoutesPreset } from '../types/NavSharedTypes';
+import type { NavCommandPush, NavCommandPop, NavCommandPopToRoot, NavCommandRemoveRoute, NavCommandReplaceRoute, NavCommandInsertRoute, NavCommandReplaceRoutePreset, NavCommandRemoveRoutePreset, NavRouteItem, RenderNavBarItem, NavCommandRemoveRoutes, NavCommandRemoveRoutesPreset, NavCommandSetRoutes } from '../types/NavSharedTypes';
 import type { NavBarAppearanceCombinedConfig } from '../types/NavBarAppearanceConfig';
 
 import type { RouteContentProps } from '../components/NavigatorRouteView';
@@ -35,6 +35,7 @@ enum NavStatus {
   NAV_REMOVING   = "NAV_REMOVING"  , // nav. is busy removing a route
   NAV_REPLACING  = "NAV_REPLACING" , // nav. is busy replacing a route
   NAV_INSERTING  = "NAV_INSERTING" , // nav. is busy inserting a route
+  NAV_UPDATING   = "NAV_UPDATING"  , // nav. is busy updating the routes
   UNMOUNTED      = "UNMOUNTED"     , // nav. comp. has been unmounted
   NAV_ABORT_PUSH = "NAV_ABORT_PUSH", // nav. has been popped before push completed
 };
@@ -167,7 +168,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   };
 
   private getActiveRoutesSorted(){
-    return this.state.activeRoutes.sort((a, b) => 
+    const activeRoutes = [...this.state.activeRoutes];
+
+    return activeRoutes.sort((a, b) => 
       (a.routeID - b.routeID)
     );
   };
@@ -800,6 +803,100 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
   };
 
+  // TODO: Use this command to replace the other native commands
+  // * All the other nav commands (e.g. `removeRoute`, `removeRoutes`, `replaceRoute`,
+  //   `popToRoot`, and `insertRoute`) can be updated to use this command instead.
+  // * So we'll have 3 kinds of nav commands: 
+  //     1. native nav. commands: e.g. `push`, `pop`, and `setRoutes`.
+  //     2. nav commands: e.g. nav. commands that are just wrappers around the
+  //        the native commands.
+  //     3. convenience nav commands: preset nav. commands around #1 and #2.
+  public setRoutes: NavCommandSetRoutes = async (transform, animated = false) => {
+    try {
+      // if busy, wait for prev. to finish
+      const queue = this.queue.schedule();
+      await queue.promise;
+
+      this.navStatus = NavStatus.NAV_UPDATING;
+
+      const currentRoutes = this.state.activeRoutes;
+      const currentRoutesMap = currentRoutes.reduce<Record<number, NavRouteStateItem>>((acc, curr) => {
+        acc[curr.routeID] = {...curr};
+        return acc;
+      }, {} as {[key: number]: NavRouteStateItem});
+
+      const transformResult = transform(
+        currentRoutes.map(route => ({
+          routeID: route.routeID,
+          routeKey: route.routeKey,
+        }))
+      );
+
+      const nextRoutes: Array<NavRouteStateItem> = transformResult.map((route, index) => ({
+        // merge old + new route items
+        ...currentRoutesMap[route.routeID], ...route,
+        // set the new routeIndex
+        routeIndex: index,
+      }));
+
+      // next routes, but not mounted/added yet
+      const nextRoutesNew = nextRoutes.filter(newRoute => (
+        !currentRoutes.some(currentRoute => (
+          currentRoute.routeID === newRoute.routeID
+        ))
+      ));
+
+      console.log("nextRoutes 1: ", nextRoutes);
+      console.log("nextRoutesNew: ", nextRoutesNew);
+      
+
+      await Promise.all([
+        // 1. wait for the new route items to mount (if any)
+        ...nextRoutesNew.map(route => (
+          Helpers.promiseWithTimeout(TIMEOUT_MOUNT, new Promise<void>(resolve => {
+            this.emitter.once(NavEvents.onNavRouteViewAdded, ({nativeEvent}: onNavRouteViewAddedPayload) => {
+              // TODO: Change this to use the routeID
+              if(route.routeKey == nativeEvent.routeKey){
+                resolve();
+              };
+            })
+          }))
+        )),
+        // 2. update the state route items
+        Helpers.setStateAsync<NavigatorViewState>(this, () => ({
+          activeRoutes: nextRoutes,
+        }))
+      ]);
+
+      console.log("nextRoutes 2: ", nextRoutes);
+
+
+      // forward command to native module
+      await Helpers.promiseWithTimeout(TIMEOUT_COMMAND,
+        RNINavigatorViewModule.setRoutes(
+          findNodeHandle(this.nativeRef),
+          nextRoutes.map(route => route.routeID),
+          animated
+        )
+      );
+
+      console.log("nextRoutes 3: ", nextRoutes);
+      console.log("activeRoutes: ", this.state.activeRoutes);
+
+      // finished, start next item
+      this.navStatus = NavStatus.IDLE;
+      this.queue.dequeue();
+
+    } catch(error){
+      if(this.navStatus != NavStatus.UNMOUNTED) {
+        this.navStatus = NavStatus.IDLE_ERROR;
+        this.queue.dequeue();
+
+        throw new Error("`NavigatorView` failed to do: `insertRoute` with error: " + error);
+      };
+    };
+  };
+
   public setNavigationBarHidden = async (isHidden: boolean, animated: boolean) => {
     try {
       await Helpers.promiseWithTimeout(TIMEOUT_COMMAND,
@@ -999,6 +1096,12 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
 /** Utilities for `NavigatorView` */
 class NavigatorViewUtils {
+  static sortByRouteIndex<T>(routes: Array<T & {routeIndex: number}>){
+    return routes.sort((a, b) => 
+      (a.routeIndex - b.routeIndex)
+    );
+  };
+
   static isNavStateIdle(navStatus: NavStatus){
     return (
       navStatus == NavStatus.IDLE           ||

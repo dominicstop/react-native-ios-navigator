@@ -378,4 +378,47 @@ class RNINavigatorViewModule: NSObject {
       };
     };
   };
+  
+  @objc func setRoutes(
+    _ node      : NSNumber,
+    nextRouteIDs: NSArray,
+    animated    : Bool,
+    // promise blocks ------------------------
+    resolve: @escaping RCTPromiseResolveBlock,
+    reject : @escaping RCTPromiseRejectBlock
+  ){
+    
+    DispatchQueue.main.async {
+      do {
+        // get `RNINavigatorView` instance that matches node/reactTag
+        guard let navigatorView = Self.getNavigatorView(node) else {
+          throw RNIError.commandFailed(
+            source : "RNINavigatorViewModule.setRoutes",
+            message:
+                "Unable to `setRoutes` because no corresponding `RNINavigatorView` "
+              + "instance found for the given node",
+            debug: "for node: \(node)"
+          );
+        };
+    
+        // forward "setRoutes" command to navigator
+        try navigatorView.setRoutes(
+          nextRouteIDs: nextRouteIDs.compactMap { $0 as? Int },
+          isAnimated  : animated
+        ) {
+          resolve([:]);
+        };
+        
+      } catch {
+        let message = RNIError.constructErrorMessage(error);
+
+        #if DEBUG
+        print("ERROR - \(message)");
+        #endif
+
+        // reject promise w/: code, message, error
+        reject("LIB_ERROR", message, nil);
+      };
+    };
+  };
 };

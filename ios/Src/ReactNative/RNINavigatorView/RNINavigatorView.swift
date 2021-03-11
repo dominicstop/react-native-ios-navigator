@@ -24,7 +24,7 @@ class RNINavigatorView: UIView {
   /// ref to the shared `RCTBridge` instance
   weak var bridge: RCTBridge!;
   
-  /// The`activeRoute` items, i.e.the routes added/to be added to the nav. stack.
+  /// The routes added/to be added to the nav. stack.
   /// Note: The key is the `routeID`, also when removing an item, don't forget
   /// to call `cleanup` on the `routeView`
   private var routeItemsMap: Dictionary<Int, RNINavigatorRouteViewController> = [:];
@@ -762,6 +762,70 @@ extension RNINavigatorView {
     nextRoutes.insert(routeToBeInserted, at: atIndex);
     
     self.navigationVC.setViewControllers(nextRoutes, animated: isAnimated) {
+      completion();
+    };
+  };
+  
+  func setRoutes(
+    nextRouteIDs: [Int],
+    isAnimated  : Bool,
+    completion  : @escaping Completion
+  ) throws {
+    
+    let currentRoutes = self.activeRoutes;
+    
+    #if DEBUG
+    let debug =
+        "with args, nextRouteIDs: \(nextRouteIDs.debugDescription)"
+      + " - isAnimated: \(isAnimated)"
+      + " - \(self.debug())"
+    #else
+    let debug: String? = nil;
+    #endif
+    
+    guard nextRouteIDs.count > 0 else {
+      throw RNIError.commandFailed(
+        source : "RNINavigatorView.insertRoute",
+        message: "Unable to `insertRoute` because the given `nextRouteIDs` is empty",
+        debug  : debug
+      );
+    };
+    
+    let (routesToRemove, routesToAdd): (
+      [RNINavigatorRouteViewController],
+      [RNINavigatorRouteViewController]
+    ) = {
+      var toRemove: [RNINavigatorRouteViewController] = [];
+      var toAdd   : [RNINavigatorRouteViewController] = [];
+      
+      for routeID in nextRouteIDs {
+        guard let routeVC = self.routeItemsMap[routeID] else { continue };
+        
+        if currentRoutes.contains(where: { $0.routeID == routeID }) {
+          toAdd.insert(routeVC, at: 0);
+          
+        } else {
+          
+          toRemove.append(routeVC);
+        };
+      };
+      
+      return (toRemove, toAdd);
+    }();
+    
+    for route in routesToRemove {
+      route.isToBeRemoved = true;
+      self.routeItemsMap.removeValue(forKey: route.routeID);
+    };
+    
+    #if DEBUG
+    print("LOG - NativeView, RNINavigatorView: setRoutes - \(debug)"
+      + " - routesToRemove: \(routesToRemove.map { $0.routeID }.debugDescription)"
+      + " - routesToAdd: \(routesToAdd.map { $0.routeID }.debugDescription)"
+    );
+    #endif
+    
+    self.navigationVC.setViewControllers(routesToAdd, animated: isAnimated) {
       completion();
     };
   };

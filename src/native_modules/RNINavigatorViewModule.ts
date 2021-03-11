@@ -57,6 +57,12 @@ interface RNINavigatorViewModule {
     atIndex: number,
     animated: boolean,
   ): Promise<void>;
+
+  setRoutes(
+    node: number,
+    nextRouteIDs: Array<number>,
+    animated: boolean,
+  ): Promise<void>;
 };
 
 // Import native component

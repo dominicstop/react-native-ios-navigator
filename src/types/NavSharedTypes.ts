@@ -64,6 +64,14 @@ export type NavCommandInsertRoute = (
   animated?: boolean
 ) => Promise<void>;
 
+export type NavCommandSetRoutes = (
+  transform: (currentRoutes: Array<NavRouteItem & {routeID?: number}>) => typeof currentRoutes, 
+  animated?: boolean
+) => Promise<void>;
+
+// Convenience Navigation Commands
+// -------------------------------
+
 export type NavCommandSetNavigationBarHidden = (
   isHidden: boolean, 
   animated: boolean

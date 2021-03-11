@@ -7,7 +7,7 @@ import type { BackButtonDisplayMode, LargeTitleDisplayMode, RouteTransitionPopCo
 import type { EventEmitter } from "../functions/EventEmitter";
 
 import type { NavBarBackItemConfig, NavBarItemsConfig } from "./NavBarItemConfig";
-import type { NavCommandPop, NavCommandPopToRoot, NavCommandPush, NavCommandRemoveRoute, NavCommandReplaceRoute, NavCommandInsertRoute, NavCommandSetNavigationBarHidden, NavCommandReplaceRoutePreset, NavCommandRemoveRoutePreset, NavCommandRemoveRoutes, NavCommandRemoveRoutesPreset, RouteCommandGetRouteOptions, RouteCommandSetRouteOptions, RouteCommandSetHidesBackButton } from "./NavSharedTypes";
+import type { NavCommandPop, NavCommandPopToRoot, NavCommandPush, NavCommandRemoveRoute, NavCommandReplaceRoute, NavCommandInsertRoute, NavCommandSetNavigationBarHidden, NavCommandReplaceRoutePreset, NavCommandRemoveRoutePreset, NavCommandRemoveRoutes, NavCommandRemoveRoutesPreset, RouteCommandGetRouteOptions, RouteCommandSetRouteOptions, RouteCommandSetHidesBackButton, NavCommandSetRoutes } from "./NavSharedTypes";
 import type { NavBarAppearanceConfig } from "./NavBarAppearanceConfig";
 
 // Nav-related types that are exported/public
@@ -50,6 +50,7 @@ export type NavigationObject = {
   removeRoutes?: NavCommandRemoveRoutes;
   replaceRoute?: NavCommandReplaceRoute;
   insertRoute ?: NavCommandInsertRoute;
+  setRoutes   ?: NavCommandSetRoutes;
 
   setNavigationBarHidden?: NavCommandSetNavigationBarHidden;
 
