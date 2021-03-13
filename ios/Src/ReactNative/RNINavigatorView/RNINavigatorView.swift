@@ -190,6 +190,7 @@ class RNINavigatorView: UIView {
         
         // send event: notify js navigator that a new route view was added
         self.onNavRouteViewAdded?([
+          "routeID"    : routeView.routeID,
           "routeKey"   : routeView.routeKey,
           "routeIndex" : routeView.routeIndex,
           "navigatorID": self.navigatorID!,
