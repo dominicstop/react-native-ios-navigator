@@ -41,7 +41,7 @@ function useNavRouteEvents(
     const emitterRef = getEmitterRef();
 
     // create event listener that calls handler function stored in ref
-    const eventListener = (params) => savedHandler.current(params);
+    const eventListener = (params: any) => savedHandler.current(params);
 
     // subscribe to events
     emitterRef.addListener(eventName, eventListener);

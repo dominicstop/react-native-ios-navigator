@@ -46,6 +46,7 @@ class HelperUtilities {
     };
 
     for (let key of keys1) {
+      // @ts-ignore
       if (itemA[key] !== itemB[key]) {
         return false;
       };

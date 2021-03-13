@@ -70,6 +70,6 @@ export class RouteViewPortal extends React.Component<RouteViewPortalProps> {
   };
 
   render(){
-    return null;
+    return null as any;
   };
 };

@@ -1,12 +1,13 @@
 import React from 'react';
-import { NavRouteEvents } from '../components/NavigatorRouteView';
 
+import { NavRouteEvents } from '../components/NavigatorRouteView';
 import { NavRouteViewContext } from '../context/NavRouteViewContext';
 
 
-export function withRouteViewLifecycle(WrappedComponent){
+export function withRouteViewLifecycle(WrappedComponent: any){
   return class extends React.PureComponent {
     static contextType = NavRouteViewContext;
+
     context: React.ContextType<typeof NavRouteViewContext>;
     childRef: any;
 
@@ -17,6 +18,7 @@ export function withRouteViewLifecycle(WrappedComponent){
       for (const eventKey in NavRouteEvents) {
         const functionName = `handle-${eventKey}`;
         
+        // @ts-ignore
         this[functionName] = (event) => {
           // @ts-ignore
           this.childRef?.onModalShow?.(event);
@@ -38,7 +40,7 @@ export function withRouteViewLifecycle(WrappedComponent){
       };
     };
 
-    _handleChildRef = (node) => {
+    _handleChildRef = (node: any) => {
       // @ts-ignore
       const { ref } = this.props;
       

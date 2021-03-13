@@ -36,7 +36,7 @@ export function promiseWithTimeout<T>(ms: Number, promise: Promise<T>){
   return Promise.race([promise, timeoutPromise]);
 };
 
-export function isClassComponent(component) {
+export function isClassComponent(component: any) {
   return !!(
     typeof component === 'function'
     && component?.prototype?.isReactComponent

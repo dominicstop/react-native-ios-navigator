@@ -406,7 +406,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
       navigation: this.getRouteNavigationObject(),
       // store a ref to this element
       ...(Helpers.isClassComponent(routeContent) && {
-        ref: node => { this._routeContentRef = node }
+        ref: (node: any) => { this._routeContentRef = node }
       }),
     });
 

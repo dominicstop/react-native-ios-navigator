@@ -208,6 +208,6 @@ export class RouteViewEvents extends React.Component<RouteViewEventsProps> {
   //#endregion
 
   render(){
-    return null;
+    return null as any;
   };
 };

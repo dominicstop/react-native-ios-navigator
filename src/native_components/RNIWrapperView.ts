@@ -16,6 +16,7 @@ const NativeComponent =
   requireNativeComponent<RNIWrapperViewProps>('RNIWrapperView');
 
 const NativeCommands: NativeComponentCommands = 
+  // @ts-ignore
   UIManager["RNIWrapperView"].Commands;
 
 
