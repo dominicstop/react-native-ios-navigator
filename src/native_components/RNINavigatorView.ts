@@ -4,6 +4,7 @@ import type { NavBarAppearanceCombinedConfig } from 'src/types/NavBarAppearanceC
 //#region - `RNINavigatorView` Event Payloads
 export type onNavRouteViewAddedPayload = { nativeEvent: {
   target     : number,
+  routeID    : number,
   routeKey   : string,
   routeIndex : number,
   navigatorID: number,

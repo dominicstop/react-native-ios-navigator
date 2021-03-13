@@ -345,7 +345,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         // ----------------------------------------------------------------------------
         Helpers.promiseWithTimeout(TIMEOUT_MOUNT, new Promise<void>(resolve => {
           this.emitter.once(NavEvents.onNavRouteViewAdded, ({nativeEvent}: onNavRouteViewAddedPayload) => {
-            if(routeItem.routeKey == nativeEvent.routeKey){
+            if(nextRouteID == nativeEvent.routeID){
               resolve();
             };
           })
@@ -680,7 +680,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         // 1. wait for replacement route to be added
         Helpers.promiseWithTimeout(TIMEOUT_MOUNT, new Promise<void>(resolve => {
           this.emitter.once(NavEvents.onNavRouteViewAdded, ({nativeEvent}: onNavRouteViewAddedPayload) => {
-            if(nativeEvent.routeKey == routeItem.routeKey){
+            if(replacementRoute.routeID == nativeEvent.routeID){
               resolve();
             };
           })
@@ -763,7 +763,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         // ----------------------------------------------------------------------------
         Helpers.promiseWithTimeout(TIMEOUT_MOUNT, new Promise<void>(resolve => {
           this.emitter.once(NavEvents.onNavRouteViewAdded, ({nativeEvent}: onNavRouteViewAddedPayload) => {
-            if(routeItem.routeKey == nativeEvent.routeKey){
+            if(nextRoute.routeID == nativeEvent.routeID){
               resolve();
             };
           })
@@ -837,9 +837,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         // merge old + new route items
         ...currentRoutesMap[route.routeID], ...route,
         // assign a routeID if it doesn't have one yet
-        ...((route.routeID == null) && { 
-          routeID: ROUTE_ID_COUNTER++ 
-        }),
+        routeID: route.routeID ?? ROUTE_ID_COUNTER++,
         // assign new routeIndex
         routeIndex: index,
       }));
@@ -865,8 +863,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         ...nextRoutesNew.map(route => (
           Helpers.promiseWithTimeout(TIMEOUT_MOUNT, new Promise<void>(resolve => {
             this.emitter.once(NavEvents.onNavRouteViewAdded, ({nativeEvent}: onNavRouteViewAddedPayload) => {
-              // TODO: Change this to use the routeID
-              if(route.routeKey == nativeEvent.routeKey){
+              if(route.routeID === nativeEvent.routeID){
                 resolve();
               };
             })
