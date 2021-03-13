@@ -7,7 +7,6 @@ import type { BackButtonDisplayMode, LargeTitleDisplayMode, RouteTransitionPopCo
 import type { EventEmitter } from "../functions/EventEmitter";
 
 import type { NavBarBackItemConfig, NavBarItemsConfig } from "./NavBarItemConfig";
-import type { NavCommandPop, NavCommandPopToRoot, NavCommandPush, NavCommandRemoveRoute, NavCommandReplaceRoute, NavCommandInsertRoute, NavCommandSetNavigationBarHidden, NavCommandReplaceRoutePreset, NavCommandRemoveRoutePreset, NavCommandRemoveRoutes, NavCommandRemoveRoutesPreset, RouteCommandGetRouteOptions, RouteCommandSetRouteOptions, RouteCommandSetHidesBackButton, NavCommandSetRoutes } from "./NavSharedTypes";
 import type { NavBarAppearanceConfig } from "./NavBarAppearanceConfig";
 
 // Nav-related types that are exported/public
@@ -43,27 +42,27 @@ export type NavigationObject = {
   routeProps?: object;
 
   // navigator commands
-  push        ?: NavCommandPush;
-  pop         ?: NavCommandPop;
-  popToRoot   ?: NavCommandPopToRoot;
-  removeRoute ?: NavCommandRemoveRoute;
-  removeRoutes?: NavCommandRemoveRoutes;
-  replaceRoute?: NavCommandReplaceRoute;
-  insertRoute ?: NavCommandInsertRoute;
-  setRoutes   ?: NavCommandSetRoutes;
+  push        ?: typeof NavigatorView.prototype.push;
+  pop         ?: typeof NavigatorView.prototype.pop;
+  popToRoot   ?: typeof NavigatorView.prototype.popToRoot;
+  removeRoute ?: typeof NavigatorView.prototype.removeRoute;
+  removeRoutes?: typeof NavigatorView.prototype.removeRoutes;
+  replaceRoute?: typeof NavigatorView.prototype.replaceRoute;
+  insertRoute ?: typeof NavigatorView.prototype.insertRoute;
+  setRoutes   ?: typeof NavigatorView.prototype.setRoutes;
 
-  setNavigationBarHidden?: NavCommandSetNavigationBarHidden;
+  setNavigationBarHidden?: typeof NavigatorView.prototype.setNavigationBarHidden;
 
   // convenience navigator commands
-  replacePreviousRoute?: NavCommandReplaceRoutePreset;
-  replaceCurrentRoute ?: NavCommandReplaceRoutePreset;
-  removePreviousRoute ?: NavCommandRemoveRoutePreset;
-  removeAllPrevRoutes ?: NavCommandRemoveRoutesPreset;
+  replacePreviousRoute?: typeof NavigatorView.prototype.replacePreviousRoute;
+  replaceCurrentRoute ?: typeof NavigatorView.prototype.replaceCurrentRoute;
+  removePreviousRoute ?: typeof NavigatorView.prototype.removePreviousRoute;
+  removeAllPrevRoutes ?: typeof NavigatorView.prototype.removeAllPrevRoutes;
 
   // route commands
-  getRouteOptions   ?: RouteCommandGetRouteOptions;
-  setRouteOptions   ?: RouteCommandSetRouteOptions;
-  setHidesBackButton?: RouteCommandSetHidesBackButton;
+  getRouteOptions   ?: typeof NavigatorRouteView.prototype.getRouteOptions;
+  setRouteOptions   ?: typeof NavigatorRouteView.prototype.setRouteOptions;
+  setHidesBackButton?: typeof NavigatorRouteView.prototype.setHidesBackButton;
 
   // get ref functions
   getRefToRoute          ?: () => NavigatorRouteView;

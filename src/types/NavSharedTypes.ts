@@ -20,89 +20,13 @@ export type NavRouteItem = {
   routeOptions?: RouteOptions;
 };
 
-//#region - Navigator Commands
-type NavCommandPushOptions = NativePushPopOptions & {
+export type NavCommandPushOptions = NativePushPopOptions & {
   transitionConfig?: RouteTransitionPushConfig;
 };
 
-type NavCommandPopOptions = NativePushPopOptions & {
+export type NavCommandPopOptions = NativePushPopOptions & {
   transitionConfig?: RouteTransitionPopConfig;
 };
-
-export type NavCommandPush = (
-  routeItem: NavRouteItem, 
-  options?: NavCommandPushOptions
-) => Promise<void>;
-
-export type NavCommandPop = (
-  options?: NavCommandPopOptions
-) => Promise<void>;
-
-export type NavCommandPopToRoot = (
-  options?: NavCommandPopOptions
-) => Promise<void>;
-
-export type NavCommandRemoveRoute = (
-  routeIndex: number, 
-  animated?: boolean
-) => Promise<void>;
-
-export type NavCommandRemoveRoutes = (
-  routeIndexes: Array<number>,
-  animated?: boolean
-) => Promise<void>;
-
-export type NavCommandReplaceRoute = (
-  prevRouteIndex: number, 
-  routeItem: NavRouteItem, 
-  animated?: boolean
-) => Promise<void>;
-
-export type NavCommandInsertRoute = (
-  routeItem: NavRouteItem, 
-  atIndex: number, 
-  animated?: boolean
-) => Promise<void>;
-
-export type NavCommandSetRoutes = (
-  transform: (currentRoutes: Array<NavRouteItem & {routeID?: number}>) => typeof currentRoutes, 
-  animated?: boolean
-) => Promise<void>;
-
-// Convenience Navigation Commands
-// -------------------------------
-
-export type NavCommandSetNavigationBarHidden = (
-  isHidden: boolean, 
-  animated: boolean
-) => Promise<void>;
-
-export type NavCommandReplaceRoutePreset = (
-  routeItem: NavRouteItem, 
-  animated?: boolean
-) => Promise<void>;
-
-export type NavCommandRemoveRoutePreset = (
-  animated?: boolean
-) => Promise<void>;
-
-export type NavCommandRemoveRoutesPreset = (
-  animated?: boolean
-) => Promise<void>;
-//#endregion
-
-//#region - Route Commands
-export type RouteCommandGetRouteOptions = () => RouteOptions;
-
-export type RouteCommandSetRouteOptions = (
-  routeOptions: RouteOptions
-) => Promise<void>;
-
-export type RouteCommandSetHidesBackButton = (
-  isHidden: boolean,
-  animated: boolean
-) => Promise<void>;
-//#endregion
 
 export type RenderNavBarItemParams = {
   routeKey    ?: string;

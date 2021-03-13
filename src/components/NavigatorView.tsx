@@ -8,7 +8,7 @@ import { RNINavigatorViewModule } from '../native_modules/RNINavigatorViewModule
 import { NavigatorRouteView } from './NavigatorRouteView';
 
 import type { RouteOptions } from '../types/NavTypes';
-import type { NavCommandPush, NavCommandPop, NavCommandPopToRoot, NavCommandRemoveRoute, NavCommandReplaceRoute, NavCommandInsertRoute, NavCommandReplaceRoutePreset, NavCommandRemoveRoutePreset, NavRouteItem, RenderNavBarItem, NavCommandRemoveRoutes, NavCommandRemoveRoutesPreset, NavCommandSetRoutes } from '../types/NavSharedTypes';
+import type { NavCommandPushOptions, NavRouteItem, RenderNavBarItem, NavCommandPopOptions } from '../types/NavSharedTypes';
 import type { NavBarAppearanceCombinedConfig } from '../types/NavBarAppearanceConfig';
 
 import type { RouteContentProps } from '../components/NavigatorRouteView';
@@ -287,7 +287,11 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   // Navigation Commands
   // -------------------
 
-  public push: NavCommandPush = async (routeItem, options) => {
+  public push = async (
+    routeItem: NavRouteItem, 
+    options?: NavCommandPushOptions
+  ): Promise<void> => {
+
     const routeConfig = this.getMatchingRoute(routeItem.routeKey);
 
     if(!routeConfig){
@@ -399,7 +403,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
   };
 
-  public pop: NavCommandPop = async (options) => {
+  public pop = async (options?: NavCommandPopOptions): Promise<void> => {
     const { activeRoutes } = this.state;
 
     if(activeRoutes.length < 1){
@@ -469,7 +473,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
   };
 
-  public popToRoot: NavCommandPopToRoot = async (options) => {
+  public popToRoot = async (options?: NavCommandPopOptions): Promise<void> => {
     const { activeRoutes } = this.state;
 
     if(activeRoutes.length < 1){
@@ -542,7 +546,11 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
   };
 
-  public removeRoute: NavCommandRemoveRoute = async (routeIndex, animated = false) => {
+  public removeRoute = async (
+    routeIndex: number, 
+    animated = false
+  ): Promise<void> => {
+
     const { activeRoutes } = this.state;
     const routeToBeRemoved = activeRoutes[routeIndex];
 
@@ -592,7 +600,11 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
   };
 
-  public removeRoutes: NavCommandRemoveRoutes = async (routeIndexes, animated = false) => {
+  public removeRoutes = async (
+    routeIndexes: Array<number>,
+    animated = false
+  ): Promise<void> => {
+    
     const { activeRoutes } = this.state;
 
     if(routeIndexes.length == 0){
@@ -649,7 +661,12 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
   };
 
-  public replaceRoute: NavCommandReplaceRoute = async (prevRouteIndex, routeItem, animated = false) => {
+  public replaceRoute = async (
+    prevRouteIndex: number, 
+    routeItem: NavRouteItem, 
+    animated = false
+  ): Promise<void> => {
+
     const { activeRoutes } = this.state;
 
     const routeToReplace         = activeRoutes[prevRouteIndex];
@@ -720,7 +737,12 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
   };
 
-  public insertRoute: NavCommandInsertRoute = async (routeItem, atIndex, animated = false) => {
+  public insertRoute = async (
+    routeItem: NavRouteItem, 
+    atIndex: number, 
+    animated = false
+  ) => {
+
     const state = this.state;
     const routeConfig = this.getMatchingRoute(routeItem.routeKey);
 
@@ -811,7 +833,11 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   //     2. nav commands: e.g. nav. commands that are just wrappers around the
   //        the native commands.
   //     3. convenience nav commands: preset nav. commands around #1 and #2.
-  public setRoutes: NavCommandSetRoutes = async (transform, animated = false) => {
+  public setRoutes = async (
+    transform: (currentRoutes: Array<NavRouteItem & {routeID?: number}>) => typeof currentRoutes, 
+    animated?: boolean
+  ): Promise<void> => {
+
     try {
       // if busy, wait for prev. to finish
       const queue = this.queue.schedule();
@@ -898,7 +924,11 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
   };
 
-  public setNavigationBarHidden = async (isHidden: boolean, animated: boolean) => {
+  public setNavigationBarHidden = async (
+    isHidden: boolean, 
+    animated: boolean
+  ): Promise<void> => {
+
     try {
       await Helpers.promiseWithTimeout(TIMEOUT_COMMAND,
         RNINavigatorViewModule.setNavigationBarHidden(
@@ -918,28 +948,36 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   // Convenience Navigation Commands
   // -------------------------------
 
-  public replacePreviousRoute: NavCommandReplaceRoutePreset = async (routeItem, animated = false) => {
+  public replacePreviousRoute = async (
+    routeItem: NavRouteItem, 
+    animated = false
+  ) => {
+    
     const { activeRoutes } = this.state;
     const lastRouteIndex = activeRoutes.length - 1;
 
     await this.replaceRoute(lastRouteIndex - 1, routeItem, animated);
   };
 
-  public replaceCurrentRoute: NavCommandReplaceRoutePreset = async (routeItem, animated = false) => {
+  public replaceCurrentRoute = async (
+    routeItem: NavRouteItem, 
+    animated = false
+  ): Promise<void> => {
+
     const { activeRoutes } = this.state;
     const lastRouteIndex = activeRoutes.length - 1;
 
     await this.replaceRoute(lastRouteIndex, routeItem, animated);
   };
 
-  public removePreviousRoute: NavCommandRemoveRoutePreset = async (animated = false) => {
+  public removePreviousRoute = async (animated = false): Promise<void> => {
     const { activeRoutes } = this.state;
     const lastRouteIndex = activeRoutes.length - 1;
 
     await this.removeRoute(lastRouteIndex - 1, animated);
   };
 
-  public removeAllPrevRoutes: NavCommandRemoveRoutesPreset = async (animated = false) => {
+  public removeAllPrevRoutes = async (animated = false): Promise<void> => {
     const { activeRoutes } = this.state;
     const lastRouteIndex = activeRoutes.length - 1;
 
