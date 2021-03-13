@@ -48,6 +48,12 @@ class RNINavigatorView: UIView {
     };
   };
   
+  var inactiveRoutes: [RNINavigatorRouteViewController] {
+    self.routeItemsMap.values.filter {
+      !self.activeRoutes.contains($0)
+    };
+  };
+  
   var routeItems: [RNINavigatorRouteViewController] {
     self.routeItemsMap.values
       .map { $0 }
@@ -329,6 +335,7 @@ fileprivate extension RNINavigatorView {
     return(
         "current routeVC count: \(routeItems.count)"
       + " - current nav vc count: \(self.navigationVC.viewControllers.count)"
+      + " - last routeID: \(routeItems.last?.routeID ?? -1)"
       + " - last routeKey: \(routeItems.last?.routeKey ?? "N/A")"
       + " - last routeIndex: \(routeItems.last?.routeIndex ?? -1)"
     );
@@ -772,13 +779,16 @@ extension RNINavigatorView {
     completion  : @escaping Completion
   ) throws {
     
-    let currentRoutes = self.activeRoutes;
+    let currentRoutes  = self.activeRoutes;
+    let inactiveRoutes = self.inactiveRoutes;
     
     #if DEBUG
     let debug =
         "with args, nextRouteIDs: \(nextRouteIDs.debugDescription)"
       + " - isAnimated: \(isAnimated)"
+      + " - and, inactiveRoutes: \(inactiveRoutes.map { $0.routeID }.debugDescription)"
       + " - \(self.debug())"
+      
     #else
     let debug: String? = nil;
     #endif
@@ -794,18 +804,27 @@ extension RNINavigatorView {
     let (routesToRemove, routesToAdd): (
       [RNINavigatorRouteViewController],
       [RNINavigatorRouteViewController]
-    ) = {
+    ) = try {
       var toRemove: [RNINavigatorRouteViewController] = [];
       var toAdd   : [RNINavigatorRouteViewController] = [];
       
+      let availableRoutes = currentRoutes + inactiveRoutes;
+      
       for routeID in nextRouteIDs {
-        guard let routeVC = self.routeItemsMap[routeID] else { continue };
+        guard let routeVC = self.routeItemsMap[routeID] else {
+          throw RNIError.commandFailed(
+            source : "RNINavigatorView.setRoutes",
+            message:
+                "Unable to `setRoutes` because no corresponding route could be"
+              + " found for routeID: \(routeID)",
+            debug: debug
+          );
+        };
         
-        if currentRoutes.contains(where: { $0.routeID == routeID }) {
-          toAdd.insert(routeVC, at: 0);
+        if availableRoutes.contains(where: { $0.routeID == routeID }) {
+          toAdd.append(routeVC);
           
         } else {
-          
           toRemove.append(routeVC);
         };
       };

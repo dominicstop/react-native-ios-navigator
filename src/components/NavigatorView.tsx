@@ -819,7 +819,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       this.navStatus = NavStatus.NAV_UPDATING;
 
-      const currentRoutes = this.state.activeRoutes;
+      const currentRoutes = [...this.state.activeRoutes];
+      
       const currentRoutesMap = currentRoutes.reduce<Record<number, NavRouteStateItem>>((acc, curr) => {
         acc[curr.routeID] = {...curr};
         return acc;
@@ -835,21 +836,30 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       const nextRoutes: Array<NavRouteStateItem> = transformResult.map((route, index) => ({
         // merge old + new route items
         ...currentRoutesMap[route.routeID], ...route,
-        // set the new routeIndex
+        // assign a routeID if it doesn't have one yet
+        ...((route.routeID == null) && { 
+          routeID: ROUTE_ID_COUNTER++ 
+        }),
+        // assign new routeIndex
         routeIndex: index,
       }));
 
-      // next routes, but not mounted/added yet
+      // get nextRoutes items that aren't mounted/added yet
       const nextRoutesNew = nextRoutes.filter(newRoute => (
         !currentRoutes.some(currentRoute => (
           currentRoute.routeID === newRoute.routeID
         ))
       ));
 
-      console.log("nextRoutes 1: ", nextRoutes);
-      console.log("nextRoutesNew: ", nextRoutesNew);
+      //#region - 🐞 DEBUG 🐛
+      LIB_GLOBAL.debugLog && console.log(
+          `LOG/JS - NavigatorView, setRoutes`
+        + ` - current routes: ${currentRoutes}`
+        + ` - next routes: ${nextRoutes}`
+        + ` - new routes: ${nextRoutesNew}`
+      );
+      //#endregion
       
-
       await Promise.all([
         // 1. wait for the new route items to mount (if any)
         ...nextRoutesNew.map(route => (
@@ -868,9 +878,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         }))
       ]);
 
-      console.log("nextRoutes 2: ", nextRoutes);
-
-
       // forward command to native module
       await Helpers.promiseWithTimeout(TIMEOUT_COMMAND,
         RNINavigatorViewModule.setRoutes(
@@ -879,9 +886,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
           animated
         )
       );
-
-      console.log("nextRoutes 3: ", nextRoutes);
-      console.log("activeRoutes: ", this.state.activeRoutes);
 
       // finished, start next item
       this.navStatus = NavStatus.IDLE;
