@@ -111,6 +111,30 @@ export function NavigatorTest03(props: RouteContentProps){
           props.navigation.insertRoute({routeKey: 'NavigatorTest01'}, 1);
         }}
       />
+
+      <View style={{marginTop: 30}}/>
+      <ButtonWithSubtitle
+        title={'Set Routes: Reverse Sort'}
+        subtitle={'Sort the routes in reverse order'}
+        onPress={() => {
+          props.navigation.setRoutes((routes) => [...routes].reverse());
+        }}
+      />
+      <ButtonWithSubtitle
+        title={'Set Routes: Insert Route Front'}
+        subtitle={'Insert route w/ `routeKey: NavigatorTest01`'}
+        onPress={() => {
+          props.navigation.setRoutes((routes) => [...routes, {routeKey: 'NavigatorTest01'}]);
+        }}
+      />
+      <ButtonWithSubtitle
+        title={'Set Routes: Remove Current'}
+        subtitle={'Remove the topmost route'}
+        onPress={() => {
+          props.navigation.setRoutes((routes) => routes.slice(0, routes.length - 1));
+        }}
+      />
+
       <View style={{marginTop: 30}}/>
       <ButtonWithSubtitle
         title={'Replace Route: 0'}
@@ -133,6 +157,7 @@ export function NavigatorTest03(props: RouteContentProps){
           props.navigation.removeRoute(1);
         }}
       />
+
       <View style={{marginTop: 30}}/>
       <ButtonWithSubtitle
         title={'Remove Prev. Route'}
