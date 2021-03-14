@@ -196,6 +196,22 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     );
   };
 
+  /** 
+   * Wait for the new route to be added as a subview in the native side.
+   * note: This promise will reject if `onNavRouteViewAdded` fails to fire
+   * within `TIMEOUT_MOUNT` ms. (i.e. if it takes to long for the promise to be fulfilled). */
+  private waitForRoutesToBeAdded(routeIDItems: Array<number>){
+    return Helpers.promiseWithTimeout(TIMEOUT_MOUNT, Promise.all(
+      routeIDItems.map(routeID => new Promise<void>(resolve => {
+        this.emitter.once(NavEvents.onNavRouteViewAdded, ({nativeEvent}: onNavRouteViewAddedPayload) => {
+          if(nativeEvent.routeID == routeID){
+            resolve();
+          };
+        })
+      }))
+    ));
+  };
+
   /** Remove route from `state.activeRoutes` */
   private removeRouteBatchedFromState = async (params?: { routeKey: string, routeIndex: number }) => { 
     if(params){
@@ -251,27 +267,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
     this.navStatus = NavStatus.IDLE;
     this.queue.dequeue();
-  };
-
-  /** Remove route from `state.activeRoutes` */
-  private removeRouteFromState = (params: { routeKey: string, routeIndex: number }) => {
-    //#region - 🐞 DEBUG 🐛
-    LIB_GLOBAL.debugLog && console.log(
-        `LOG/JS - NavigatorView, removeRouteFromState`
-      + ` - with routeKey: ${params.routeKey}`
-      + ` - routeIndex: ${params.routeIndex}`
-      + ` - current activeRoutes: ${this.state.activeRoutes.length}`
-    );
-    //#endregion
-
-    // Remove route from `activeRoutes`.
-    // The route will be "removed" from `RNINavigatorView`'s subviews.
-    return Helpers.setStateAsync<NavigatorViewState>(this, (prevState) => ({
-      activeRoutes: prevState.activeRoutes.filter((route) => !(
-        (route.routeIndex == params.routeIndex) &&
-        (route.routeKey   == params.routeKey  )
-      ))
-    }));
   };
 
   private _handleGetRefToNavigator = (): NavigatorView => {
@@ -340,24 +335,10 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       const nextRouteID = ROUTE_ID_COUNTER++;
 
-      // summary: add new route, and wait for it be added
       await Promise.all([
-        // ----------------------------------------------------------------------
-        // 1. Wait for the new route to be added as a subview in the native side.
-        //    note: This promise will reject if `onNavRouteViewAdded` fails to fire
-        //    within 500 ms (i.e. if it takes to long for the promise to be fulfilled).
-        // ----------------------------------------------------------------------------
-        Helpers.promiseWithTimeout(TIMEOUT_MOUNT, new Promise<void>(resolve => {
-          this.emitter.once(NavEvents.onNavRouteViewAdded, ({nativeEvent}: onNavRouteViewAddedPayload) => {
-            if(nextRouteID == nativeEvent.routeID){
-              resolve();
-            };
-          })
-        })),
-        // --------------------------------------
-        // 2. Append new route to `activeRoutes`.
-        //    The new route will be "received" from `RNINavigatorView`.
-        // ------------------------------------------------------------
+        // 1. Wait for new route to be added
+        this.waitForRoutesToBeAdded([nextRouteID]),
+        // 2. Append new route to `activeRoutes`
         Helpers.setStateAsync<NavigatorViewState>(this, ({activeRoutes: prevRoutes}) => ({
           activeRoutes: [...prevRoutes, {
             ...routeItem,
@@ -451,7 +432,12 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       );
 
       // remove popped route from `activeRoutes`
-      await this.removeRouteFromState(result);
+      await Helpers.setStateAsync<NavigatorViewState>(this, (prevState) => ({
+        activeRoutes: prevState.activeRoutes.filter((route) => !(
+          (route.routeIndex == result.routeIndex) &&
+          (route.routeKey   == result.routeKey  )
+        ))
+      }));
 
       if(hasTransition){
         // reset transition override
@@ -695,18 +681,12 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       await Promise.all([
         // 1. wait for replacement route to be added
-        Helpers.promiseWithTimeout(TIMEOUT_MOUNT, new Promise<void>(resolve => {
-          this.emitter.once(NavEvents.onNavRouteViewAdded, ({nativeEvent}: onNavRouteViewAddedPayload) => {
-            if(replacementRoute.routeID == nativeEvent.routeID){
-              resolve();
-            };
-          })
-        })),
+        this.waitForRoutesToBeAdded([replacementRoute.routeID]),
         // 2. replace route in state
         Helpers.setStateAsync<NavigatorViewState>(this, (prevState) => ({
           ...prevState,
           activeRoutes: prevState.activeRoutes.map((route, index) => (
-            (prevRouteIndex == index && routeToReplace.routeKey == route.routeKey)
+            (routeToReplace.routeID == route.routeID)
               ? { routeIndex: index, ...replacementRoute } 
               : { routeIndex: index, ...route }
           ))
@@ -778,25 +758,11 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       // summary: add new route, and wait for it be added
       await Promise.all([
-        // ----------------------------------------------------------------------
-        // 1. Wait for the new route to be added as a subview in the native side.
-        //    note: This promise will reject if `onNavRouteViewAdded` fails to fire
-        //    within 500 ms (i.e. if it takes to long for the promise to be fulfilled).
-        // ----------------------------------------------------------------------------
-        Helpers.promiseWithTimeout(TIMEOUT_MOUNT, new Promise<void>(resolve => {
-          this.emitter.once(NavEvents.onNavRouteViewAdded, ({nativeEvent}: onNavRouteViewAddedPayload) => {
-            if(nextRoute.routeID == nativeEvent.routeID){
-              resolve();
-            };
-          })
-        })),
-        // -----------------------------------
-        // 2. add new route to `activeRoutes`.
-        //    The new route will be "received" from `RNINavigatorView`.
-        // ------------------------------------------------------------
+        // 1. Wait for replacement route to be added
+        this.waitForRoutesToBeAdded([nextRoute.routeID]),
+        // 2. update `activeRoutes` with replacement route
         Helpers.setStateAsync<NavigatorViewState>(this, ({activeRoutes: prevRoutes}) => ({
-          activeRoutes: Helpers
-            .arrayInsert(prevRoutes, atIndex, nextRoute)
+          activeRoutes: Helpers.arrayInsert(prevRoutes, atIndex, nextRoute)
             .map((route, index) => ({...route, routeIndex: index}))
         }))
       ]);
@@ -886,15 +852,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       
       await Promise.all([
         // 1. wait for the new route items to mount (if any)
-        ...nextRoutesNew.map(route => (
-          Helpers.promiseWithTimeout(TIMEOUT_MOUNT, new Promise<void>(resolve => {
-            this.emitter.once(NavEvents.onNavRouteViewAdded, ({nativeEvent}: onNavRouteViewAddedPayload) => {
-              if(route.routeID === nativeEvent.routeID){
-                resolve();
-              };
-            })
-          }))
-        )),
+        this.waitForRoutesToBeAdded(nextRoutesNew.map(route => route.routeID)),
         // 2. update the state route items
         Helpers.setStateAsync<NavigatorViewState>(this, () => ({
           activeRoutes: nextRoutes,
