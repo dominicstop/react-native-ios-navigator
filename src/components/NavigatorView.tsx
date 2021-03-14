@@ -835,7 +835,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   //     3. convenience nav commands: preset nav. commands around #1 and #2.
   public setRoutes = async (
     transform: (currentRoutes: Array<NavRouteItem & {routeID?: number}>) => typeof currentRoutes, 
-    animated?: boolean
+    animated = false
   ): Promise<void> => {
 
     try {
