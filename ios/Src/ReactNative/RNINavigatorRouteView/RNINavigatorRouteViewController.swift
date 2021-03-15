@@ -239,23 +239,11 @@ class RNINavigatorRouteViewController: UIViewController {
   };
   
   // ------------------------
-  // MARK:- Private Functions
-  // ------------------------
-  
-  private func getSecondToLastNavigationItem() -> UINavigationItem? {
-    guard let navBarItems = self.navigationController?.navigationBar.items,
-          navBarItems.count > 1
-    else { return nil };
-    
-    return navBarItems[navBarItems.count - 2];
-  };
-  
-  // ------------------------
   // MARK:- Public  Functions
   // ------------------------
   
   /// In cases  where a route's `backBarButtonItem` was mutated (e.g. via the
-  /// navbar back config's `applyToPrevBackConfig` option), this function needs
+  /// nav bar back config's `applyToPrevBackConfig` option), this function needs
   /// to be called to re-create another `backBarButtonItem` and re-apply it.
   /// Note: this also resets `backButtonTitle` and `backButtonDisplayMode`.
   func resetRouteNavBarBackConfig(){
@@ -353,8 +341,10 @@ extension RNINavigatorRouteViewController: RNINavigatorRouteViewDelegate {
     _ applyToPrevBackConfig: Bool
   ) {
     if applyToPrevBackConfig {
-      guard let navItem = self.getSecondToLastNavigationItem() else { return };
-      navItem.backBarButtonItem = item;
+      guard let backItem = self.navigationController?.navigationBar.backItem
+      else { return };
+      
+      backItem.backBarButtonItem = item;
       
     } else {
       self.navigationItem.backBarButtonItem = item;
@@ -384,9 +374,11 @@ extension RNINavigatorRouteViewController: RNINavigatorRouteViewDelegate {
     guard #available(iOS 11.0, *) else { return };
     
     if applyToPrevBackConfig {
-      guard let navItem = self.getSecondToLastNavigationItem() else { return };
-      navItem.backButtonTitle = title;
+      guard let backItem = self.navigationController?.navigationBar.backItem
+      else { return };
       
+      backItem.backButtonTitle = title;
+  
     } else {
       self.navigationItem.backButtonTitle = title;
     };
@@ -399,8 +391,10 @@ extension RNINavigatorRouteViewController: RNINavigatorRouteViewDelegate {
     guard #available(iOS 14.0, *) else { return };
     
     if applyToPrevBackConfig {
-      guard let navItem = self.getSecondToLastNavigationItem() else { return };
-      navItem.backButtonDisplayMode = displayMode;
+      guard let backItem = self.navigationController?.navigationBar.backItem
+      else { return };
+      
+      backItem.backButtonDisplayMode = displayMode;
       
     } else {
       self.navigationItem.backButtonDisplayMode = displayMode;
