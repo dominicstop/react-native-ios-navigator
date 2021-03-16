@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import { StyleSheet, findNodeHandle, ViewStyle } from 'react-native';
 
 import { RNIWrapperView } from '../native_components/RNIWrapperView';
-import { RNINavigatorView } from '../native_components/RNINavigatorView';
+import { RNINavigatorView, RNINavigatorViewProps } from '../native_components/RNINavigatorView';
 import { RNINavigatorViewModule } from '../native_modules/RNINavigatorViewModule';
 
 import { NavigatorRouteView } from './NavigatorRouteView';
@@ -45,13 +45,13 @@ enum NavEvents {
 };
 
 /** Represents a route in the nav. `state.activeRoutes` */
-interface NavRouteStateItem extends NavRouteItem {
+type NavRouteStateItem = NavRouteItem & {
   routeIndex: number;
   routeID: number;
 };
 
 export type NavRouteConfigItem = {
-  routeKey: string;
+  routeKey: NavRouteItem['routeKey'];
   initialRouteProps?: object;
   routeOptionsDefault?: RouteOptions;
   renderRoute: (routeItem: NavRouteItem) => ReactElement<RouteContentProps>;
@@ -62,7 +62,10 @@ export type NavRouteConfigItem = {
 };
 
 /** `NavigatorView` comp. props */
-type NavigatorViewProps = {
+type NavigatorViewProps = Pick<RNINavigatorViewProps,
+  'isInteractivePopGestureEnabled' | 'navBarPrefersLargeTitles' | 
+  'navBarAppearance' | 'isNavBarTranslucent'
+> & {
   style?: ViewStyle;
 
   // Nav. Route Config
@@ -70,14 +73,6 @@ type NavigatorViewProps = {
   initialRouteKey: string;
   routeContainerStyle?: ViewStyle;
   
-  // `RNINavigatorView` - General/Misc. Config
-  isInteractivePopGestureEnabled?: boolean;
-
-  // `RNINavigatorView` - Navbar Customization
-  navBarPrefersLargeTitles?: boolean;
-  navBarIsTranslucent?: boolean;
-  navBarAppearance?: NavBarAppearanceCombinedConfig;
-
   // `RNINavigatorView` - Global/Default Navbar items
   renderNavBarLeftItem ?: RenderNavBarItem;
   renderNavBarRightItem?: RenderNavBarItem;
@@ -1069,7 +1064,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         navigatorID={this.navigatorID}
         isInteractivePopGestureEnabled={props.isInteractivePopGestureEnabled ?? true}
         // Navigation Bar customization
-        isNavBarTranslucent={props.navBarIsTranslucent ?? true}
+        isNavBarTranslucent={props.isNavBarTranslucent ?? true}
         navBarPrefersLargeTitles={props.navBarPrefersLargeTitles ?? true}
         navBarAppearance={props.navBarAppearance}
         // event handlers: push/pop

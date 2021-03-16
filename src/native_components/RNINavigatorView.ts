@@ -28,7 +28,7 @@ export type onNavRouteDidPopPayload = { nativeEvent: {
 //#endregion
 
 /** `RNINavigatorView` native comp. props */
-type RNINavigatorViewProps = {
+export type RNINavigatorViewProps = {
   style: ViewStyle | Array<ViewStyle>;
   
   // General/Misc. Config
