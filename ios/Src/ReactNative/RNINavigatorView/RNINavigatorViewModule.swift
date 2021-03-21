@@ -21,9 +21,9 @@ class RNINavigatorViewModule: NSObject {
     return navView;
   };
   
-  // ----------------------
-  // MARK:- Module Commands
-  // ----------------------
+  // ---------------------------------
+  // MARK:- Module Commands: Navigator
+  // ---------------------------------
   
   @objc func push(
     _ node : NSNumber,
@@ -420,5 +420,61 @@ class RNINavigatorViewModule: NSObject {
         reject("LIB_ERROR", message, nil);
       };
     };
+  };
+  
+  @objc func addNativeRoute(
+    _ node         : NSNumber,
+    nativeRouteKeys: NSArray,
+    // promise blocks ------------------------
+    resolve: @escaping RCTPromiseResolveBlock,
+    reject : @escaping RCTPromiseRejectBlock
+  ){
+    
+    DispatchQueue.main.async {
+      do {
+        // get `RNINavigatorView` instance that matches node/reactTag
+        guard let navigatorView = Self.getNavigatorView(node) else {
+          throw RNIError.commandFailed(
+            source : "RNINavigatorViewModule.addNativeRoute",
+            message:
+                "Unable to `setRoutes` because no corresponding `RNINavigatorView` "
+              + "instance found for the given node",
+            debug: "for node: \(node)"
+          );
+        };
+        
+        let routeKeys = nativeRouteKeys.compactMap { $0 as? String };
+    
+        // forward command to navigator
+        try navigatorView.addNativeRoute(nativeRouteKeys: routeKeys) {
+          let routesAdded = $0.map { NSDictionary(dictionary: [
+            "routeKey": $0.routeKey,
+            "routeID" : $0.routeID
+          ])};
+          
+          resolve(["routesAdded": routesAdded]);
+        };
+        
+      } catch {
+        let message = RNIError.constructErrorMessage(error);
+
+        #if DEBUG
+        print("ERROR - \(message)");
+        #endif
+
+        // reject promise w/: code, message, error
+        reject("LIB_ERROR", message, nil);
+      };
+    };
+  };
+  
+  // ----------------------------
+  // MARK:- Module Commands: Misc
+  // ----------------------------
+  
+  @objc func getNativeRouteKeys(_ callback: RCTResponseSenderBlock) {
+    // extract keys
+    let keys = RNINavigatorViewManager.viewControllerRegistry.keys.map { $0 };
+    callback([keys]);
   };
 };

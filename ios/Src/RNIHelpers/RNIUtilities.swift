@@ -26,7 +26,7 @@ class RNIUtilities {
   /// The `_viewRegistry` keeps a ref. to all of the "react views" in the app.
   /// This explains how you can get a ref. to a view via `viewForReactTag` and
   /// `viewForNativeID` (which also means that `reactTag`/`node` is just an index,
-  /// i.e. it's just a number that gets inc. everytime a "react view" is added).
+  /// i.e. it's just a number that gets inc. every-time a "react view" is added).
   ///
   /// If you are **absolutely sure** that a particular `reactView` is no longer
   /// being used, this helper func. will remove `reactView` (and all of it's
@@ -44,7 +44,10 @@ class RNIUtilities {
     // recursively remove subviews
     func removeView(_ v: UIView){
       /// if this really is a "react view" then it should have a `reactTag`
-      if let reactTag = v.reactTag {
+      if let reactTag = v.reactTag,
+         viewRegistry[reactTag] != nil {
+        
+        /// remove from view hierarchy
         v.removeFromSuperview();
         
         /// remove this "react view" from `_viewRegistry`

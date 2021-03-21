@@ -179,8 +179,8 @@ class RNINavigatorRouteView: UIView {
   };
   
   //  MARK: Props - Navbar Config
-  /// * General/Misc. Navbar-related props for config. the VC's `navigationItem`
-  ///   properties that are navbar-related.
+  /// * General/Misc. NavBar-related props for config. the VC's `navigationItem`
+  ///   properties that are NavBar-related.
   /// -------------------------------------------------------------------------
   
   @objc var routeTitle: NSString? {
@@ -298,9 +298,9 @@ class RNINavigatorRouteView: UIView {
     }
   };
   
-  //  MARK: Props - Navbar Back Button Config
-  /// * Navbar back button specific props for config. the VC's `navigationItem`
-  ///   navbar "back button item" related properties.
+  //  MARK: Props - NavBar Back Button Config
+  /// * NavBar back button specific props for config. the VC's `navigationItem`
+  ///   NavBar "back button item" related properties.
   /// -------------------------------------------------------------------------
 
   @objc var leftItemsSupplementBackButton: Bool = true {

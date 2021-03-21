@@ -2,14 +2,13 @@ import React, { ReactElement } from 'react';
 import { StyleSheet, findNodeHandle, ViewStyle } from 'react-native';
 
 import { RNIWrapperView } from '../native_components/RNIWrapperView';
-import { RNINavigatorView, RNINavigatorViewProps } from '../native_components/RNINavigatorView';
+import { NativeRouteDataMap, onSetNativeRouteDataPayload, RNINavigatorView, RNINavigatorViewProps } from '../native_components/RNINavigatorView';
 import { RNINavigatorViewModule } from '../native_modules/RNINavigatorViewModule';
 
 import { NavigatorRouteView } from './NavigatorRouteView';
 
 import type { RouteOptions } from '../types/NavTypes';
 import type { NavCommandPushOptions, NavRouteItem, RenderNavBarItem, NavCommandPopOptions } from '../types/NavSharedTypes';
-import type { NavBarAppearanceCombinedConfig } from '../types/NavBarAppearanceConfig';
 
 import type { RouteContentProps } from '../components/NavigatorRouteView';
 
@@ -41,7 +40,8 @@ enum NavStatus {
 };
 
 enum NavEvents {
-  onNavRouteViewAdded = "onNavRouteViewAdded"
+  onNavRouteViewAdded  = "onNavRouteViewAdded" ,
+  onSetNativeRouteData = "onSetNativeRouteData",
 };
 
 /** Represents a route in the nav. `state.activeRoutes` */
@@ -50,9 +50,19 @@ type NavRouteStateItem = NavRouteItem & {
   routeID: number;
 };
 
-export type NavRouteConfigItem = {
+type NavRouteConfigItemBase = {
   routeKey: NavRouteItem['routeKey'];
   initialRouteProps?: object;
+};
+
+/** Native route */
+type NavRouteConfigItemNative = NavRouteConfigItemBase & {
+  isNativeRoute: true;
+};
+
+/** JS/React route */
+type NavRouteConfigItemJS = NavRouteConfigItemBase & {
+  isNativeRoute?: false;
   routeOptionsDefault?: RouteOptions;
   renderRoute: (routeItem: NavRouteItem) => ReactElement<RouteContentProps>;
   // render nav bar items
@@ -60,6 +70,9 @@ export type NavRouteConfigItem = {
   renderNavBarRightItem?: RenderNavBarItem;
   renderNavBarTitleItem?: RenderNavBarItem;
 };
+
+export type NavRouteConfigItem = 
+  NavRouteConfigItemNative | NavRouteConfigItemJS;
 
 /** `NavigatorView` comp. props */
 type NavigatorViewProps = Pick<RNINavigatorViewProps,
@@ -78,7 +91,6 @@ type NavigatorViewProps = Pick<RNINavigatorViewProps,
   renderNavBarRightItem?: RenderNavBarItem;
   renderNavBarTitleItem?: RenderNavBarItem;
 
-  //
   renderNavBarBackground?: () => ReactElement;
 };
 
@@ -95,6 +107,24 @@ const TIMEOUT_COMMAND = 1000;
 
 let NAVIGATOR_ID_COUNTER = 0;
 let ROUTE_ID_COUNTER     = 0;
+
+let nativeRouteKeys: { [key: string]: string } = null;
+
+// init. `nativeRouteKeys`
+RNINavigatorViewModule.getNativeRouteKeys(keys => {
+  //#region - 🐞 DEBUG 🐛
+  LIB_GLOBAL.debugLog && console.log(
+      `LOG/JS - NavigatorViewModule, getNativeRouteKeys`
+    + ` - keys: ${JSON.stringify(keys)}`
+    + ` - typeof keys: ${typeof keys}`
+  );
+  //#endregion
+
+  nativeRouteKeys = keys.reduce((acc, curr) => {
+    acc[curr] = curr;
+    return acc;
+  }, {} as typeof nativeRouteKeys);
+});
 
 export class NavigatorView extends React.PureComponent<NavigatorViewProps, NavigatorViewState> {
   //#region - Property Declarations
@@ -157,23 +187,55 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
   //#region - Private Functions
   private isValidRouteKey = (routeKey: string) => {
-    return this.props.routes.some(route => (
+    const { routes } = this.props;
+    const isNativeRoute = (nativeRouteKeys[routeKey] != null);
+
+    return isNativeRoute || routes.some(route => (
       route.routeKey == routeKey
     ));
   };
 
-  private getActiveRoutesSorted(){
-    const activeRoutes = [...this.state.activeRoutes];
+  private getNativeRouteDataMap = (): NativeRouteDataMap => {
+    const { activeRoutes } = this.state;
 
-    return activeRoutes.sort((a, b) => 
-      (a.routeID - b.routeID)
+    const nativeRoutes = activeRoutes.filter(route => 
+      nativeRouteKeys?.[route.routeKey] != null
     );
+
+    return nativeRoutes.reduce((acc, curr) => {
+      acc[curr.routeID] = {
+        routeIndex: curr.routeIndex
+      };
+
+      return acc;
+    }, {} as NativeRouteDataMap);
   };
 
-  private getMatchingRoute = (routeKey: string) => {
-    return this.props.routes.find(item => (
-      item.routeKey == routeKey
-    ));
+  private getRoutesToRender = () => {
+    // make a copy
+    const activeRoutes = [...this.state.activeRoutes];
+    
+    return activeRoutes
+      // only return js/react routes
+      .filter(route => nativeRouteKeys?.[route.routeKey] == null)
+      // sort by routeID in asc. order
+      .sort((a, b) => (a.routeID - b.routeID))
+  };
+
+  // TODO: rename to: `getRouteConfig`
+  private getMatchingRoute = (routeKey: string): NavRouteConfigItem => {
+    const { routes } = this.props;
+
+    const routeConfig = routes.find(item => (item.routeKey == routeKey));
+
+    const nativeRouteKey = nativeRouteKeys?.[routeKey];
+    const hasNativeRouteKeyMatch = (nativeRouteKey != null);
+
+    return (!hasNativeRouteKeyMatch)? routeConfig : {
+      routeKey,
+      isNativeRoute: true,
+      initialRouteProps: routeConfig?.initialRouteProps,
+    };
   };
 
   private getLastRouteTransitionDuration = (isPushing: boolean) => {
@@ -183,7 +245,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     const lastRoute = activeRoutes[lastIndex];
 
     const lastRouteRef = this.routeRefMap[lastRoute.routeID];
-    const routeConfig = lastRouteRef.getRouteOptions();
+    // if the last route is a native route, then this will be null
+    const routeConfig = lastRouteRef?.getRouteOptions();
 
     return (isPushing
       ? routeConfig?.transitionConfigPush?.duration ?? 0
@@ -191,20 +254,127 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     );
   };
 
+  private configureTransitionOverride = (params: {
+    isPushing: boolean;
+    pushConfig?: RouteTransitionPushConfig;
+    popConfig?: RouteTransitionPopConfig;
+  }) => {
+
+    const hasTransitionConfig = (
+      params.pushConfig != null ||
+      params.popConfig  != null 
+    );
+
+    // the push/pop duration in seconds
+    const transitionConfigDuration = (params.isPushing
+      ? params.pushConfig?.duration
+      : params.popConfig ?.duration
+    );
+
+    // note: convert seconds -> ms
+    const transitionDuration = (1000 * (
+      transitionConfigDuration ??
+      this.getLastRouteTransitionDuration(true) ?? 0
+    ));
+
+    if(transitionDuration > 10000){
+      throw new Error(`The transition duration of ${transitionDuration} sec. is too big`
+        + " - reminder: specify duration in seconds (ex: 0.5), not in ms (ex: 500)"
+      );
+    };
+
+    return({
+      // add some wiggle room
+      transitionDuration: (transitionDuration + 250),
+      setTransition: async () => {
+        if(hasTransitionConfig){
+          // temporarily override the last route's push/pop transition
+          await Helpers.setStateAsync<Partial<NavigatorViewState>>(this, {
+            transitionConfigPushOverride: params.pushConfig,
+            transitionConfigPopOverride : params.popConfig ,
+          });
+        };
+      },
+      resetTransition: async () => {
+        if(hasTransitionConfig){
+          // temporarily override the last route's push/pop transition
+          await Helpers.setStateAsync<Partial<NavigatorViewState>>(this, {
+            transitionConfigPushOverride: null,
+            transitionConfigPopOverride : null,
+          });
+        };
+      },
+    });
+  };
+
+  /** Handles `routeID` creation for js/react + native route */
+  private initWithRouteID = (
+    routeItems: Array<NavRouteItem & { routeIndex?: number }>
+  ) => {
+    const nativeRoutes = routeItems.filter(route => 
+      (nativeRouteKeys?.[route.routeKey] != null)
+    );
+
+    return new Promise<Array<NavRouteStateItem>>(async resolve => {
+      if(nativeRoutes.length == 0){
+        // no native routes, generate routeID for react/js routes
+        resolve(routeItems.map(route => ({
+          ...route,
+          routeIndex: route.routeIndex,
+          routeID: ROUTE_ID_COUNTER++
+        })));
+
+      } else {
+        // there's a native route, wait for it to be created + registered first
+        const { routesAdded } = await RNINavigatorViewModule.addNativeRoute(
+          findNodeHandle(this.nativeRef),
+          nativeRoutes.map(route => route.routeKey)
+        );
+
+        let counter = 0;
+        resolve(routeItems.map(route => ({
+          routeKey: route.routeKey,
+          routeIndex: route.routeIndex,
+          routeID: ((nativeRouteKeys?.[route.routeKey] != null)
+            // assume that `routesAdded` order is preserved
+            ? routesAdded[counter++].routeID
+            : ROUTE_ID_COUNTER++
+          )
+        })));
+      };
+    });
+  };
+
   /** 
-   * Wait for the new route to be added as a subview in the native side.
-   * note: This promise will reject if `onNavRouteViewAdded` fails to fire
-   * within `TIMEOUT_MOUNT` ms. (i.e. if it takes to long for the promise to be fulfilled). */
-  private waitForRoutesToBeAdded(routeIDItems: Array<number>){
-    return Helpers.promiseWithTimeout(TIMEOUT_MOUNT, Promise.all(
-      routeIDItems.map(routeID => new Promise<void>(resolve => {
+   * Wait for the react routes to be added as a subview in the native side, and wait fot
+   * native routes to be init. with data.
+   * note: This promise will reject if the events fail to fire within `TIMEOUT_MOUNT` ms. */
+  private waitForRoutes = (routeItems: Array<NavRouteStateItem>) => {
+    // filter out react and native routes
+    const [nativeRoutes, reactRoutes] = routeItems.reduce((acc, curr) => {
+      const isNativeRoute = (nativeRouteKeys[curr.routeKey] != null);
+      acc[isNativeRoute? 0 : 1].push(curr.routeID);
+      return acc;
+    }, [[], []] as [Array<number>, Array<number>]);
+
+    const hasNativeRoutes = nativeRoutes.length > 0;
+    
+    return Helpers.promiseWithTimeout(TIMEOUT_MOUNT, Promise.all([
+      // 1. wait for native routes to be init. with data
+      hasNativeRoutes && new Promise<void>(resolve => {
+        this.emitter.once(NavEvents.onSetNativeRouteData, () => {
+          resolve();
+        });
+      }),
+      // 2. wait for react routes to be "received" from native
+      ...reactRoutes.map(routeID => new Promise<void>(resolve => {
         this.emitter.once(NavEvents.onNavRouteViewAdded, ({nativeEvent}: onNavRouteViewAddedPayload) => {
           if(nativeEvent.routeID == routeID){
             resolve();
           };
         })
       }))
-    ));
+    ]));
   };
 
   /** Remove route from `state.activeRoutes` */
@@ -294,31 +464,21 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       const queue = this.queue.schedule();
       await queue.promise;
 
+      const { activeRoutes } = this.state;
       this.navStatus = NavStatus.NAV_PUSHING;
 
-      const hasTransition = (options?.transitionConfig != null);
-
-      // note: convert seconds -> ms
-      const transitionDuration = (1000 * (
-        options?.transitionConfig?.duration       ??
-        this.getLastRouteTransitionDuration(true) ?? 0
-      ));
-
-      if(transitionDuration > 10000){
-        throw new Error("`NavigatorView` failed to do: `push`: transition duration too big"
-          + " - reminder: specify duration in seconds (ex: 0.5), not in ms (ex: 500)"
-        );
-      };
+      const transitionConfig = this.configureTransitionOverride({
+        isPushing: true,
+        pushConfig: options?.transitionConfig,
+      });
 
       // the amount of time to wait for "push" to resolve before rejecting.
-      const timeout = Math.max((transitionDuration + 100), TIMEOUT_COMMAND);
+      const timeout = Math.max(
+        transitionConfig.transitionDuration, TIMEOUT_COMMAND
+      );
 
-      if(hasTransition){
-        // temporarily override the last route's "push" transition
-        await Helpers.setStateAsync<Partial<NavigatorViewState>>(this, {
-          transitionConfigPushOverride: options.transitionConfig
-        });
-      };
+      // temporarily override the last route's "push" transition
+      await transitionConfig.setTransition();
 
       //#region - 🐞 DEBUG 🐛
       LIB_GLOBAL.debugLog && console.log(
@@ -327,19 +487,26 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         + ` - current activeRoutes: ${this.state.activeRoutes.length}`
       );
       //#endregion
+      
+      const nextRouteIndex = activeRoutes.length;
 
-      const nextRouteID = ROUTE_ID_COUNTER++;
+      // generate routeID for routeConfig
+      const [nextRoute] = await this.initWithRouteID([{
+        routeKey: routeItem.routeKey,
+        routeOptions: routeItem.routeOptions,
+        routeIndex: nextRouteIndex,
+        routeProps: (
+          routeItem.routeProps ?? 
+          routeConfig.initialRouteProps
+        ),
+      }]);
 
       await Promise.all([
-        // 1. Wait for new route to be added
-        this.waitForRoutesToBeAdded([nextRouteID]),
+        // 1. Wait for new route to be added/init
+        this.waitForRoutes([nextRoute]),
         // 2. Append new route to `activeRoutes`
         Helpers.setStateAsync<NavigatorViewState>(this, ({activeRoutes: prevRoutes}) => ({
-          activeRoutes: [...prevRoutes, {
-            ...routeItem,
-            routeID: nextRouteID,
-            routeIndex: ((Helpers.lastElement(prevRoutes)?.routeIndex ?? 0) + 1)
-          }]
+          activeRoutes: [...prevRoutes, nextRoute]
         }))
       ]);
 
@@ -347,18 +514,14 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       await Helpers.promiseWithTimeout(timeout,
         RNINavigatorViewModule.push(
           findNodeHandle(this.nativeRef),
-          nextRouteID, {
+          nextRoute.routeID, {
             isAnimated: (options?.isAnimated ?? true)
           }
         )
       );
 
-      if(hasTransition){
-        // reset transition override
-        await Helpers.setStateAsync<Partial<NavigatorViewState>>(this, {
-          transitionConfigPushOverride: null,
-        });
-      };
+      // reset transition override
+      transitionConfig.resetTransition();
       
       // finished, start next item
       this.navStatus = NavStatus.IDLE;
@@ -393,29 +556,16 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       this.navStatus = NavStatus.NAV_POPPING;
 
-      const hasTransition = (options?.transitionConfig != null);
-
-      // note: convert seconds -> ms
-      const transitionDuration = (1000 * (
-        options?.transitionConfig?.duration        ??
-        this.getLastRouteTransitionDuration(false) ?? 0
-      ));
-
-      if(transitionDuration > 10000){
-        throw new Error("`NavigatorView` failed to do: `pop`: transition duration too big"
-          + " - reminder: specify duration in seconds (ex: 0.5), not in ms (ex: 500)"
-        );
-      };
+      const transitionConfig = this.configureTransitionOverride({
+        isPushing: false,
+        popConfig: options?.transitionConfig,
+      });
 
       // the amount of time to wait for "pop" to resolve before rejecting.
-      const timeout = Math.max((transitionDuration + 100), TIMEOUT_COMMAND);
+      const timeout = Math.max(transitionConfig.transitionDuration, TIMEOUT_COMMAND);
 
-      if(hasTransition){
-        // temporarily change the last route's "pop" transition
-        await Helpers.setStateAsync<Partial<NavigatorViewState>>(this, {
-          transitionConfigPopOverride: options.transitionConfig
-        });
-      };
+      // temporarily change the last route's "pop" transition
+      await transitionConfig.setTransition();
 
       // forward "pop" request to native module
       const result = await Helpers.promiseWithTimeout(timeout,
@@ -434,12 +584,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         ))
       }));
 
-      if(hasTransition){
-        // reset transition override
-        await Helpers.setStateAsync<Partial<NavigatorViewState>>(this, {
-           transitionConfigPopOverride: null,
-         });
-      };
+      // reset transition override
+      await transitionConfig.resetTransition();
 
       this.navStatus = NavStatus.IDLE;
       this.queue.dequeue();
@@ -468,29 +614,16 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       this.navStatus = NavStatus.NAV_POPPING;
 
-      const hasTransition = (options?.transitionConfig != null);
+      const transitionConfig = this.configureTransitionOverride({
+        isPushing: false,
+        popConfig: options?.transitionConfig,
+      });
 
-      // note: convert seconds -> ms
-      const transitionDuration = (1000 * (
-        options?.transitionConfig?.duration        ??
-        this.getLastRouteTransitionDuration(false) ?? 0
-      ));
+      // the amount of time to wait for "pop" to resolve before rejecting.
+      const timeout = Math.max(transitionConfig.transitionDuration, TIMEOUT_COMMAND);
 
-      // the amount of time to wait for "popToRoot" to resolve before rejecting.
-      const timeout = Math.max((transitionDuration + 100), TIMEOUT_COMMAND);
-
-      if(transitionDuration > 10000){
-        throw new Error("`NavigatorView` failed to do: `pop`: transition duration too big"
-          + " - reminder: specify duration in seconds (ex: 0.5), not in ms (ex: 500)"
-        );
-      };
-
-      if(hasTransition){
-        // temporarily change the last route's "pop" transition
-        await Helpers.setStateAsync<Partial<NavigatorViewState>>(this, {
-          transitionConfigPopOverride: options.transitionConfig
-        });
-      };
+      // temporarily change the last route's "pop" transition
+      await transitionConfig.setTransition();
 
       // forward `popToRoot` request to native module
       await Helpers.promiseWithTimeout(timeout,
@@ -507,12 +640,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         activeRoutes: [prevState.activeRoutes[0]]
       }));
 
-      if(hasTransition){
-        // reset transition override
-        await Helpers.setStateAsync<Partial<NavigatorViewState>>(this, {
-           transitionConfigPopOverride: null,
-         });
-      };
+      // reset transition override
+      await transitionConfig.resetTransition();
 
       this.navStatus = NavStatus.IDLE;
       this.queue.dequeue();
@@ -661,11 +790,16 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       throw new Error(`\`replaceRoute\` failed, no route found for the given \`routeKey\`: ${routeItem?.routeKey}`);
     };
 
-    const replacementRoute: NavRouteStateItem = {
-      ...routeItem,
-      routeID: ROUTE_ID_COUNTER++,
+    // generate routeID for the next route
+    const [replacementRoute] = await this.initWithRouteID([{
+      routeKey: routeItem.routeKey,
       routeIndex: prevRouteIndex,
-    };
+      routeOptions: routeItem.routeOptions,
+      routeProps: (
+        routeItem.routeProps ??
+        replacementRouteConfig.initialRouteProps
+      ),
+    }]);
 
     try {
       // if busy, wait for prev. to finish first...
@@ -675,8 +809,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       this.navStatus = NavStatus.NAV_REPLACING;
 
       await Promise.all([
-        // 1. wait for replacement route to be added
-        this.waitForRoutesToBeAdded([replacementRoute.routeID]),
+        // 1. wait for replacement route to be added/init
+        this.waitForRoutes([replacementRoute]),
         // 2. replace route in state
         Helpers.setStateAsync<NavigatorViewState>(this, (prevState) => ({
           ...prevState,
@@ -687,6 +821,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
           ))
         })),
       ]);
+
+      await Helpers.timeout(500);
 
       // forward command to native module
       await Helpers.promiseWithTimeout(TIMEOUT_COMMAND,
@@ -730,11 +866,16 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       throw new Error("`NavigatorView` failed to do: `insertRoute`: Invalid `atIndex` (out of bounds)");
     };
 
-    const nextRoute: NavRouteStateItem = {
-      ...routeItem,
-      routeID: ROUTE_ID_COUNTER++,
+    // generate routeID for the next route
+    const [nextRoute] = await this.initWithRouteID([{
+      routeKey: routeItem.routeKey,
       routeIndex: atIndex,
-    };
+      routeOptions: routeItem.routeOptions,
+      routeProps: (
+        routeItem.routeProps ??
+        routeConfig.initialRouteProps
+      ),
+    }]);
     
     try {
       // if busy, wait for prev. to finish
@@ -751,11 +892,10 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       );
       //#endregion
 
-      // summary: add new route, and wait for it be added
       await Promise.all([
-        // 1. Wait for replacement route to be added
-        this.waitForRoutesToBeAdded([nextRoute.routeID]),
-        // 2. update `activeRoutes` with replacement route
+        // 1. wait for next route to be added/init
+        this.waitForRoutes([nextRoute]),
+        // 2. append new route to `activeRoutes`
         Helpers.setStateAsync<NavigatorViewState>(this, ({activeRoutes: prevRoutes}) => ({
           activeRoutes: Helpers.arrayInsert(prevRoutes, atIndex, nextRoute)
             .map((route, index) => ({...route, routeIndex: index}))
@@ -785,7 +925,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       };
     };
   };
-
+  
+  // TODO: Update to support native routes
   // TODO: Use this command to replace the other native commands
   // * All the other nav commands (e.g. `removeRoute`, `removeRoutes`, `replaceRoute`,
   //   `popToRoot`, and `insertRoute`) can be updated to use this command instead.
@@ -793,7 +934,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   //     1. native nav. commands: e.g. `push`, `pop`, and `setRoutes`.
   //     2. nav commands: e.g. nav. commands that are just wrappers around the
   //        the native commands.
-  //     3. convenience nav commands: preset nav. commands around #1 and #2.
+  //     3. convenience nav commands: preset nav. commands.
   public setRoutes = async (
     transform: (currentRoutes: Array<NavRouteItem & {routeID?: number}>) => typeof currentRoutes, 
     animated = false
@@ -847,7 +988,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       
       await Promise.all([
         // 1. wait for the new route items to mount (if any)
-        this.waitForRoutesToBeAdded(nextRoutesNew.map(route => route.routeID)),
+        this.waitForRoutes(nextRoutesNew),
         // 2. update the state route items
         Helpers.setStateAsync<NavigatorViewState>(this, () => ({
           activeRoutes: nextRoutes,
@@ -950,6 +1091,13 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     this.emitter.emit(NavEvents.onNavRouteViewAdded, event);
   };
 
+  private _handleOnSetNativeRouteData = (event: onSetNativeRouteDataPayload) => {
+    if(this.navigatorID != event.nativeEvent.navigatorID) return;
+
+    // emit event: route data was set for the native routes
+    this.emitter.emit(NavEvents.onSetNativeRouteData, event);
+  };
+
   private _handleOnNavRouteWillPop = ({nativeEvent}: onNavRouteWillPopPayload) => {
     if(this.navigatorID != nativeEvent.navigatorID) return;
 
@@ -999,11 +1147,12 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     //   the comps. to be "recreated" from scratch.
     // * So this is a temp. workaround to prevent the unnecessary reordering of the
     //   comps., the downside is that the routes need to be sorted on every render...
-    const activeRoutes = this.getActiveRoutesSorted();
+    const activeRoutes = this.getRoutesToRender();
     const activeRoutesCount = activeRoutes.length;
 
     return activeRoutes.map(route => {
-      const routeConfig = this.getMatchingRoute(route.routeKey);
+      // the routes from `activeRoutes` will only ever have js/react routes
+      const routeConfig = this.getMatchingRoute(route.routeKey) as NavRouteConfigItemJS;
 
       const isLast         = (activeRoutesCount - 1) == route.routeIndex;
       const isSecondToLast = (activeRoutesCount - 2) == route.routeIndex;
@@ -1063,6 +1212,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         // General config
         navigatorID={this.navigatorID}
         isInteractivePopGestureEnabled={props.isInteractivePopGestureEnabled ?? true}
+        nativeRouteData={this.getNativeRouteDataMap()}
         // Navigation Bar customization
         isNavBarTranslucent={props.isNavBarTranslucent ?? true}
         navBarPrefersLargeTitles={props.navBarPrefersLargeTitles ?? true}
@@ -1071,6 +1221,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         onNavRouteWillPop={this._handleOnNavRouteWillPop}
         onNavRouteDidPop={this._handleOnNavRouteDidPop}
         onNavRouteViewAdded={this._handleOnNavRouteViewAdded}
+        onSetNativeRouteData={this._handleOnSetNativeRouteData}
       >
         {this._renderRoutes()}
         {props.renderNavBarBackground && (

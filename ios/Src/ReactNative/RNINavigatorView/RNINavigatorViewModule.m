@@ -18,7 +18,6 @@ RCT_EXTERN_METHOD(push   : (nonnull NSNumber      )node
                   resolve: (RCTPromiseResolveBlock *)resolve
                   reject : (RCTPromiseRejectBlock  *)reject);
 
-
 RCT_EXTERN_METHOD(pop    : (nonnull NSNumber      )node
                   options: (nonnull NSDictionary *)options
                   // promise blocks -----------------------
@@ -76,5 +75,14 @@ RCT_EXTERN_METHOD(setRoutes   : (nonnull NSNumber )node
                   // promise blocks -----------------------
                   resolve: (RCTPromiseResolveBlock)resolve
                   reject : (RCTPromiseRejectBlock )reject);
+
+RCT_EXTERN_METHOD(addNativeRoute : (nonnull NSNumber )node
+                  nativeRouteKeys: (nonnull NSArray *)nativeRouteKeys
+                  // promise blocks -----------------------
+                  resolve: (RCTPromiseResolveBlock)resolve
+                  reject : (RCTPromiseRejectBlock )reject);
+
+
+RCT_EXTERN_METHOD(getNativeRouteKeys: (RCTResponseSenderBlock)callback)
 
 @end

@@ -5,6 +5,10 @@ export type NativePushPopOptions = {
 };
 
 interface RNINavigatorViewModule {
+
+  // Module Commands: Navigator
+  // --------------------------
+
   push(
     node: number, 
     routeID: number,
@@ -63,8 +67,22 @@ interface RNINavigatorViewModule {
     nextRouteIDs: Array<number>,
     animated: boolean,
   ): Promise<void>;
+
+  addNativeRoute(
+    node: number,
+    nativeRouteKeys: Array<string>
+  ): Promise<{
+    routesAdded: Array<{
+      routeKey: string, 
+      routeID: number
+    }>
+  }>;
+
+  // Module Commands: Misc
+  // -----------------------
+
+  getNativeRouteKeys(callback: (keys: [string]) => void): void;
 };
 
-// Import native component
 export const RNINavigatorViewModule: RNINavigatorViewModule =
   NativeModules["RNINavigatorViewModule"];

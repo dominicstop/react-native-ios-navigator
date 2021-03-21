@@ -27,7 +27,7 @@ class RNINavigatorView: UIView {
   /// The routes added/to be added to the nav. stack.
   /// Note: The key is the `routeID`, also when removing an item, don't forget
   /// to call `cleanup` on the `routeView`
-  private var routeItemsMap: Dictionary<Int, RNINavigatorRouteViewController> = [:];
+  private var routeItemsMap: Dictionary<Int, RNINavigatorRouteBaseViewController> = [:];
   
   /// The react view to show behind the navigation bar
   private var reactNavBarBackground: UIView?;
@@ -42,19 +42,19 @@ class RNINavigatorView: UIView {
     self.navigationVC.navigationBar;
   };
   
-  var activeRoutes: [RNINavigatorRouteViewController] {
+  var activeRoutes: [RNINavigatorRouteBaseViewController] {
     self.navigationVC.viewControllers.compactMap {
       $0 as? RNINavigatorRouteViewController
     };
   };
   
-  var inactiveRoutes: [RNINavigatorRouteViewController] {
+  var inactiveRoutes: [RNINavigatorRouteBaseViewController] {
     self.routeItemsMap.values.filter {
       !self.activeRoutes.contains($0)
     };
   };
   
-  var routeItems: [RNINavigatorRouteViewController] {
+  var routeItems: [RNINavigatorRouteBaseViewController] {
     self.routeItemsMap.values
       .map { $0 }
       .sorted { $0.routeIndex < $1.routeIndex }
@@ -65,7 +65,10 @@ class RNINavigatorView: UIView {
   // -----------------------------
   
   /// A `RNINavigatorRouteView` instance was added as a subview.
-  @objc var onNavRouteViewAdded: RCTBubblingEventBlock?;  
+  @objc var onNavRouteViewAdded: RCTBubblingEventBlock?;
+  
+  /// Native route was init. w/ data via `nativeRouteData` prop
+  @objc var onSetNativeRouteData: RCTBubblingEventBlock?;
   
   /// Fired when a route is *about to be* "popped", either due to a "user initiated"
   /// pop (because the "back" button was pressed or it was swiped back via a
@@ -82,6 +85,45 @@ class RNINavigatorView: UIView {
   // ------------------------
   
   @objc var navigatorID: NSNumber!;
+  
+  @objc var nativeRouteData: NSDictionary! {
+    didSet {
+      let didChange  = oldValue != self.nativeRouteData;
+      let isNotEmpty = self.nativeRouteData.count > 0;
+      
+      guard didChange,
+            let data = self.nativeRouteData,
+            // js keys are implicitly casted to strings
+            let keys = data.allKeys as? [String]
+      else { return };
+      
+      #if DEBUG
+      print("LOG - NativeView, RNINavigatorView: nativeRouteData"
+        + " - keys: \(keys)"
+        + " - data: \(data.debugDescription)"
+      );
+      #endif
+      
+      for key in keys {
+        guard let routeID   = Int(key),
+              let routeData = data[key] as? NSDictionary,
+              let routeVC   = self.routeItemsMap[routeID],
+              // make sure routeVC is a native route, and not a js/react route
+              routeVC as? RNINavigatorRouteViewController == nil,
+              // extract route data
+              let routeIndex = routeData["routeIndex"] as? Int
+        else { continue };
+        
+        if routeVC.routeIndex != routeIndex {
+          routeVC.setRouteIndex(routeIndex);
+        };
+      };
+      
+      self.onSetNativeRouteData?([
+        "navigatorID": self.navigatorID!
+      ]);
+    }
+  };
   
   @objc var isInteractivePopGestureEnabled: Bool = true {
     willSet {
@@ -189,12 +231,7 @@ class RNINavigatorView: UIView {
         self.routeItemsMap[routeVC.routeID] = routeVC;
         
         // send event: notify js navigator that a new route view was added
-        self.onNavRouteViewAdded?([
-          "routeID"    : routeView.routeID,
-          "routeKey"   : routeView.routeKey,
-          "routeIndex" : routeView.routeIndex,
-          "navigatorID": self.navigatorID!,
-        ]);
+        self.notifyOnNavRouteViewAdded(vc: routeVC);
         
         #if DEBUG
         print("LOG - NativeView, RNINavigatorView: insertReactSubview"
@@ -220,7 +257,8 @@ class RNINavigatorView: UIView {
   // MARK:- Public Functions
   // -----------------------
   
-  func getSecondToLastRouteVC() -> RNINavigatorRouteViewController? {
+  // TODO: Remove if not needed?
+  func getSecondToLastRouteVC() -> RNINavigatorRouteBaseViewController? {
     guard self.routeItemsMap.count > 1 else { return nil };
     let routeItems = self.routeItems;
     
@@ -285,8 +323,21 @@ fileprivate extension RNINavigatorView {
     ]);
   };
   
+  /// send event: notify js that a new route view was added
+  func notifyOnNavRouteViewAdded(vc: RNINavigatorRouteBaseViewController){
+    let isNativeRoute = (vc as? RNINavigatorRouteViewController) == nil;
+      
+    self.onNavRouteViewAdded?([
+      "routeID"      : vc.routeID,
+      "routeKey"     : vc.routeKey,
+      "routeIndex"   : vc.routeIndex,
+      "navigatorID"  : self.navigatorID!,
+      "isNativeRoute": isNativeRoute,
+    ]);
+  };
+  
   /// remove route from `navRoutes`
-  func removeRouteVC(routeVC: RNINavigatorRouteViewController){
+  func removeRouteVC(routeVC: RNINavigatorRouteBaseViewController){
     guard self.routeItemsMap[routeVC.routeID] != nil else { return };
     
     #if DEBUG
@@ -294,7 +345,10 @@ fileprivate extension RNINavigatorView {
     #endif
     
     self.routeItemsMap.removeValue(forKey: routeVC.routeID);
-    routeVC.routeView.cleanup();
+    
+    if let reactRouteVC = routeVC as? RNINavigatorRouteViewController {
+      reactRouteVC.routeView.cleanup();
+    };
     
     #if DEBUG
     let nextCountRouteVCs = self.routeItemsMap.count;
@@ -320,7 +374,9 @@ fileprivate extension RNINavigatorView {
     
     // remove routes from view registry
     self.routeItemsMap.values.forEach {
-      $0.routeView.cleanup();
+      if let routeVC = $0 as? RNINavigatorRouteViewController {
+        routeVC.routeView.cleanup();
+      };
     };
     
     // remove this view from registry
@@ -360,18 +416,15 @@ extension RNINavigatorView {
     let isAnimated = options["isAnimated"] as? Bool ?? true;
     
     #if DEBUG
-    let debug =
-        "with args - routeID: \(routeID)"
+    let debug = "with args - routeID: \(routeID)"
       + " - isAnimated: \(isAnimated)"
       + " - and, \(self.debug())"
     #else
     let debug: String? = nil;
     #endif
     
-    /// get the `routeView` to be pushed in the nav stack
-    guard let nextRouteVC   = self.routeItemsMap[routeID],
-          let nextRouteView = nextRouteVC.routeView
-    else {
+    /// get the route to be pushed in the nav stack
+    guard let nextRouteVC = self.routeItemsMap[routeID] else {
       throw RNIError.commandFailed(
         source : "RNINavigatorView.push",
         message:
@@ -381,7 +434,9 @@ extension RNINavigatorView {
       );
     };
     
-    guard routeItems.last?.routeID == routeID else {
+    let reactRouteVC = nextRouteVC as? RNINavigatorRouteViewController;
+    
+    guard  routeItems.last?.routeID == routeID else {
       throw RNIError.commandFailed(
         source : "RNINavigatorView.push",
         message:
@@ -398,8 +453,11 @@ extension RNINavigatorView {
     );
     #endif
     
+    let nextRouteView =
+      (nextRouteVC as? RNINavigatorRouteViewController)?.routeView;
+    
     // notify js `RNINavigatorRouteView` that it's about to be pushed
-    nextRouteView.notifyOnRoutePush(
+    nextRouteView?.notifyOnRoutePush(
       isDone: false,
       isAnimated: isAnimated
     );
@@ -408,7 +466,7 @@ extension RNINavigatorView {
       completion();
       
       // notify js `RNINavigatorRouteView` that it's been pushed
-      nextRouteView.notifyOnRoutePush(
+      nextRouteView?.notifyOnRoutePush(
         isDone: true,
         isAnimated: isAnimated
       );
@@ -803,11 +861,11 @@ extension RNINavigatorView {
     };
     
     let (routesToRemove, routesToAdd): (
-      [RNINavigatorRouteViewController],
-      [RNINavigatorRouteViewController]
+      [RNINavigatorRouteBaseViewController],
+      [RNINavigatorRouteBaseViewController]
     ) = try {
-      var toRemove: [RNINavigatorRouteViewController] = [];
-      var toAdd   : [RNINavigatorRouteViewController] = [];
+      var toRemove: [RNINavigatorRouteBaseViewController] = [];
+      var toAdd   : [RNINavigatorRouteBaseViewController] = [];
       
       let availableRoutes = currentRoutes + inactiveRoutes;
       
@@ -849,6 +907,36 @@ extension RNINavigatorView {
       completion();
     };
   };
+  
+  func addNativeRoute(
+    nativeRouteKeys: [String],
+    completion     : @escaping ([(routeKey: String, routeID: Int)]) -> Void
+  ) throws {
+    
+    let routesToAdd: [RNINavigatorRouteBaseViewController] = try nativeRouteKeys.map {
+      guard let vc = RNINavigatorViewManager.viewControllerRegistry[$0] else {
+        throw RNIError.commandFailed(
+          source : "RNINavigatorView.addNativeRoute",
+          message: "Unable to `addNativeRoute` because `atIndex` is invalid, because"
+            + " no matching native route could be found for routeKey: '\($0)'"
+        );
+      };
+      
+      return vc.init(routeKey: $0);
+    };
+    
+    for vc in routesToAdd {
+      vc.delegate = self;
+      self.routeItemsMap[vc.routeID] = vc;
+      self.notifyOnNavRouteViewAdded(vc: vc);
+    };
+    
+    completion(
+      routesToAdd.map {
+        (routeKey: $0.routeKey, routeID: $0.routeID)
+      }
+    );
+  };
 };
 
 // -----------------------------------------------
@@ -858,7 +946,10 @@ extension RNINavigatorView {
 /// receive events from route vc's
 extension RNINavigatorView: RNINavigatorRouteViewControllerDelegate {
   
-  func onRouteWillPop(sender: RNINavigatorRouteView, isUserInitiated: Bool){
+  func onRouteWillPop(
+    sender: RNINavigatorRouteBaseViewController,
+    isUserInitiated: Bool
+  ){
     #if DEBUG
     print("LOG - NativeView, RNINavigatorView"
       + " - RNINavigatorRouteViewDelegate, onNavRouteWillPop"
@@ -876,12 +967,14 @@ extension RNINavigatorView: RNINavigatorRouteViewControllerDelegate {
     ]);
   };
   
-  func onRouteDidPop(sender: RNINavigatorRouteView, isUserInitiated: Bool){
+  func onRouteDidPop(
+    sender: RNINavigatorRouteBaseViewController,
+    isUserInitiated: Bool
+  ){
     #if DEBUG
     print("LOG - NativeView, RNINavigatorView"
       + " - RNINavigatorRouteViewDelegate, onNavRouteDidPop"
-      + " - with routeKey: \(sender.routeKey)"
-      + " - with routeIndex: \(sender.routeIndex)"
+      + " - \(self.debug())"
     );
     #endif
     
@@ -893,6 +986,6 @@ extension RNINavigatorView: RNINavigatorRouteViewControllerDelegate {
     ]);
     
     // route popped, remove route from `navRoutes`
-    self.removeRouteVC(routeVC: sender.routeVC!);
+    self.removeRouteVC(routeVC: sender);
   };
 };

@@ -8,7 +8,8 @@
 import UIKit;
 
 
-class RNINavigatorRouteViewController: UIViewController {
+/// A view controller to hold js/react routes
+class RNINavigatorRouteViewController: RNINavigatorRouteBaseViewController {
   
   // -----------------
   // MARK:- Properties
@@ -21,16 +22,6 @@ class RNINavigatorRouteViewController: UIViewController {
       self.routeView!.delegate = self;
     }
   };
-  
-  /// Used to send/forward navigation-related events
-  weak var delegate: RNINavigatorRouteViewControllerDelegate?;
-  
-  /// A flag that indicates that the nav. controller responsible for this vc is
-  /// about to remove it from the nav. stack. This is used to differentiate if
-  /// the "remove command" was user initiated (i.e. invoked via tapping the
-  /// "back" button, or a swipe gesture), or if it was invoked programmtically
-  /// via the parent nav.
-  var isToBeRemoved = false;
   
   /// A ref. to the `ScrollView` subview of the `reactRouteContent`
   var reactScrollView: RCTScrollView?;
@@ -74,21 +65,19 @@ class RNINavigatorRouteViewController: UIViewController {
     }
   };
   
-  var shouldResetNavBarBackConfig = false;
-  
   // -----------------------------------
   // MARK:- Convenient Property Wrappers
   // -----------------------------------
   
-  var routeID: Int {
+  override var routeID: Int {
     self.routeView.routeID.intValue;
   };
   
-  var routeKey: String {
+  override var routeKey: String {
     self.routeView.routeKey as String;
   };
   
-  var routeIndex: Int {
+  override var routeIndex: Int {
     self.routeView.routeIndex.intValue;
   };
   
@@ -112,7 +101,6 @@ class RNINavigatorRouteViewController: UIViewController {
               let reactSafeAreaView = contentView as? RCTSafeAreaView {
       
       self.reactSafeAreaView = reactSafeAreaView;
-      print("DEBUG -* reactSafeAreaView");
     };
   };
   
@@ -171,15 +159,6 @@ class RNINavigatorRouteViewController: UIViewController {
   override func willMove(toParent parent: UIViewController?){
     super.willMove(toParent: parent);
     
-    #if DEBUG
-    print("LOG - VC, RNINavigatorRouteViewController: willMove"
-      + " - toParent: \(parent == nil ? "N/A" : "VC")"
-      + " - for routeKey: \(self.routeKey)"
-      + " - routeIndex: \(self.routeIndex)"
-      + " - isUserInitiated: \(!self.isToBeRemoved)"
-    );
-    #endif
-    
     if parent == nil {
       // this vc 'will' be popped
       // note: if `isToBeRemoved` is false, then "pop"/back is user initiated.
@@ -191,12 +170,6 @@ class RNINavigatorRouteViewController: UIViewController {
         isUserInitiated: isUserInitiated
       );
       
-      // notify parent (i.e. `RNINavigatorView`) that this vc will be "popped".
-      self.delegate?.onRouteWillPop(
-        sender: self.routeView!,
-        isUserInitiated: isUserInitiated
-      );
-      
     } else {
       // TODO: View controller was moved, possibly due replacing a route?
     };
@@ -204,17 +177,6 @@ class RNINavigatorRouteViewController: UIViewController {
   
   override func didMove(toParent parent: UIViewController?) {
     super.didMove(toParent: parent);
-    
-    guard let routeView = self.routeView else { return };
-    
-    #if DEBUG
-    print("LOG - VC, RNINavigatorRouteViewController: didMove"
-      + " - toParent: \(parent == nil ? "N/A" : "VC")"
-      + " - for routeKey: \(self.routeKey)"
-      + " - routeIndex: \(self.routeIndex)"
-      + " - isUserInitiated: \(!self.isToBeRemoved)"
-    );
-    #endif
     
     if parent == nil {
       // this vc 'will' be popped
@@ -227,12 +189,6 @@ class RNINavigatorRouteViewController: UIViewController {
         isUserInitiated: isUserInitiated
       );
       
-      // notify parent (i.e. `RNINavigatorView`) that this vc has been "popped".
-      self.delegate?.onRouteDidPop(
-        sender: routeView,
-        isUserInitiated: isUserInitiated
-      );
-      
     } else {
       // TODO: View controller was moved, possibly due replacing a route?
     };
@@ -242,11 +198,9 @@ class RNINavigatorRouteViewController: UIViewController {
   // MARK:- Public  Functions
   // ------------------------
   
-  /// In cases  where a route's `backBarButtonItem` was mutated (e.g. via the
-  /// nav bar back config's `applyToPrevBackConfig` option), this function needs
-  /// to be called to re-create another `backBarButtonItem` and re-apply it.
-  /// Note: this also resets `backButtonTitle` and `backButtonDisplayMode`.
-  func resetRouteNavBarBackConfig(){
+  /// Override the base impl. so that values used to reset the back config comes
+  /// from the js/react values instead of `prevBackItem`.
+  override func resetRouteNavBarBackConfig(){
     guard let routeView = self.routeView else { return };
     
     self.navigationItem.backBarButtonItem = routeView.backBarButtonItem;
@@ -344,6 +298,7 @@ extension RNINavigatorRouteViewController: RNINavigatorRouteViewDelegate {
       guard let backItem = self.navigationController?.navigationBar.backItem
       else { return };
       
+      self.prevBackItem.backBarButtonItem = backItem.backBarButtonItem;
       backItem.backBarButtonItem = item;
       
     } else {
@@ -360,7 +315,7 @@ extension RNINavigatorRouteViewController: RNINavigatorRouteViewDelegate {
   };
   
   // ----------------------------------------------
-  // MARK: Receive Props: Navbar Back Button Config
+  // MARK: Receive Props: NavBar Back Button Config
   // ----------------------------------------------
   
   func didReceiveLeftItemsSupplementBackButton(_ bool: Bool) {
@@ -377,6 +332,7 @@ extension RNINavigatorRouteViewController: RNINavigatorRouteViewDelegate {
       guard let backItem = self.navigationController?.navigationBar.backItem
       else { return };
       
+      self.prevBackItem.backTitle = backItem.title;
       backItem.backButtonTitle = title;
   
     } else {
@@ -394,6 +350,7 @@ extension RNINavigatorRouteViewController: RNINavigatorRouteViewDelegate {
       guard let backItem = self.navigationController?.navigationBar.backItem
       else { return };
       
+      self.prevBackItem.backButtonDisplayMode = backItem.backButtonDisplayMode;
       backItem.backButtonDisplayMode = displayMode;
       
     } else {
