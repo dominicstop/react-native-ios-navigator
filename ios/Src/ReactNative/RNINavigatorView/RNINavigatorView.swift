@@ -92,7 +92,7 @@ class RNINavigatorView: UIView {
       let didChange  = oldValue != self.nativeRoutes;
       let isNotEmpty = self.nativeRoutes.count > 0;
       
-      guard didChange,
+      guard didChange && isNotEmpty,
             let data = self.nativeRoutes,
             // js keys are implicitly casted to strings
             let keys = data.allKeys as? [String]
@@ -461,8 +461,6 @@ extension RNINavigatorView {
         debug: debug
       );
     };
-    
-    let reactRouteVC = nextRouteVC as? RNINavigatorRouteViewController;
     
     guard  routeItems.last?.routeID == routeID else {
       throw RNIError.commandFailed(

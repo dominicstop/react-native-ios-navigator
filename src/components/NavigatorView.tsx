@@ -309,10 +309,10 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
   /** 
    * Wait for the react routes to be added as a subview in the native side, and wait fot
-   * native routes to be init. with data.
+   * native routes to be created/init. w/ data.
    * note: This promise will reject if the events fail to fire within `TIMEOUT_MOUNT` ms. */
   private waitForRoutes = (routeItems: Array<NavRouteStateItem>) => {
-    // filter out react and native routes
+    // filter out/separate react and native routes
     const [nativeRoutes, reactRoutes] = routeItems.reduce((acc, curr) => {
       const isNativeRoute = (nativeRouteKeys[curr.routeKey] != null);
       acc[isNativeRoute? 0 : 1].push(curr.routeID);
@@ -331,7 +331,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       // 2. wait for react routes to be "received" from native
       ...reactRoutes.map(routeID => new Promise<void>(resolve => {
         this.emitter.once(NavEvents.onNavRouteViewAdded, ({nativeEvent}: OnNavRouteViewAddedPayload) => {
-          if(nativeEvent.routeID == routeID){
+          if(nativeEvent.routeID === routeID){
             resolve();
           };
         })
@@ -926,10 +926,15 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       const nextRoutes: Array<NavRouteStateItem> = transformResult.map((route, index) => ({
         // merge old + new route items
         ...currentRoutesMap[route.routeID], ...route,
-        // assign a routeID if it doesn't have one yet
-        routeID: route.routeID ?? ROUTE_ID_COUNTER++,
         // assign new routeIndex
         routeIndex: index,
+        // assign a routeID if it doesn't have one yet
+        routeID: route.routeID ?? ROUTE_ID_COUNTER++,
+        // merge route props
+        routeProps: (
+          route.routeProps ??
+          this.getRouteConfig(route.routeKey)?.initialRouteProps
+        ),
       }));
 
       // get nextRoutes items that aren't mounted/added yet
