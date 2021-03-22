@@ -19,7 +19,6 @@ import * as Helpers from '../functions/Helpers';
 import { EventEmitter } from '../functions/EventEmitter';
 import { SimpleQueue } from '../functions/SimpleQueue';
 
-
 import { NativeIDKeys } from '../constants/LibraryConstants';
 
 
@@ -55,12 +54,12 @@ type NavRouteConfigItemBase = {
   initialRouteProps?: object;
 };
 
-/** Native route */
+/** Native route config */
 type NavRouteConfigItemNative = NavRouteConfigItemBase & {
   isNativeRoute: true;
 };
 
-/** JS/React route */
+/** JS/React route config */
 type NavRouteConfigItemJS = NavRouteConfigItemBase & {
   isNativeRoute?: false;
   routeOptionsDefault?: RouteOptions;
@@ -195,6 +194,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     ));
   };
 
+  /** Creates a dict of the current native routes based on `state.activeRoutes` */
   private getNativeRoutes = (): NativeRouteMap => {
     const { activeRoutes } = this.state;
 
@@ -212,6 +212,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     }, {} as NativeRouteMap);
   };
 
+  /** returns the current js/react routes sorted by `routeID` */
   private getRoutesToRender = () => {
     // make a copy
     const activeRoutes = [...this.state.activeRoutes];
@@ -223,9 +224,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       .sort((a, b) => (a.routeID - b.routeID))
   };
 
+  /** get route config with the matching `routeKey` */
   private getRouteConfig = (routeKey: string): NavRouteConfigItem => {
     const { routes } = this.props;
-
     const routeConfig = routes.find(item => (item.routeKey == routeKey));
 
     const nativeRouteKey = nativeRouteKeys?.[routeKey];
@@ -254,6 +255,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     );
   };
 
+  /** used to set/reset the transition override for the current route  */
   private configureTransitionOverride = (params: {
     isPushing: boolean;
     pushConfig?: RouteTransitionPushConfig;
@@ -888,7 +890,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
   };
   
-  // TODO: Update to support native routes
   // TODO: Use this command to replace the other native commands
   // * All the other nav commands (e.g. `removeRoute`, `removeRoutes`, `replaceRoute`,
   //   `popToRoot`, and `insertRoute`) can be updated to use this command instead.
