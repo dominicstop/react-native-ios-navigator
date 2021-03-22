@@ -2,8 +2,7 @@ import { ViewStyle, requireNativeComponent } from 'react-native';
 import type { NavBarAppearanceCombinedConfig } from 'src/types/NavBarAppearanceConfig';
 
 //#region - `RNINavigatorView` Event Payloads
-// TODO: Refactor - capitalize, use `;`
-export type onNavRouteViewAddedPayload = { nativeEvent: {
+export type OnNavRouteViewAddedPayload = { nativeEvent: {
   target       : number,
   routeID      : number,
   routeKey     : string,
@@ -12,7 +11,7 @@ export type onNavRouteViewAddedPayload = { nativeEvent: {
   navigatorID  : number,
 }};
 
-export type onNavRouteWillPopPayload = { nativeEvent: {
+export type OnNavRouteWillPopPayload = { nativeEvent: {
   target         : number ,
   routeKey       : string ,
   routeIndex     : number ,
@@ -20,7 +19,7 @@ export type onNavRouteWillPopPayload = { nativeEvent: {
   isUserInitiated: boolean,
 }};
 
-export type onNavRouteDidPopPayload = { nativeEvent: {
+export type OnNavRouteDidPopPayload = { nativeEvent: {
   target         : number ,
   routeKey       : string ,
   routeIndex     : number ,
@@ -28,7 +27,7 @@ export type onNavRouteDidPopPayload = { nativeEvent: {
   isUserInitiated: boolean,
 }};
 
-export type onSetNativeRouteDataPayload = { nativeEvent: {
+export type OnSetNativeRouteDataPayload = { nativeEvent: {
   target     : number,
   navigatorID: number,
 }};
@@ -58,10 +57,10 @@ export type RNINavigatorViewProps = {
   
   // Native Events
   // TODO: Rename to `event`
-  onNavRouteViewAdded ?: (events: onNavRouteViewAddedPayload ) => void;
-  onNavRouteWillPop   ?: (events: onNavRouteWillPopPayload   ) => void;
-  onNavRouteDidPop    ?: (events: onNavRouteDidPopPayload    ) => void;
-  onSetNativeRoutes?: (events: onSetNativeRouteDataPayload) => void;
+  onNavRouteViewAdded ?: (events: OnNavRouteViewAddedPayload ) => void;
+  onNavRouteWillPop   ?: (events: OnNavRouteWillPopPayload   ) => void;
+  onNavRouteDidPop    ?: (events: OnNavRouteDidPopPayload    ) => void;
+  onSetNativeRoutes?: (events: OnSetNativeRouteDataPayload) => void;
 };
 
 export const RNINavigatorView = 

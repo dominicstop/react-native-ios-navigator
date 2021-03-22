@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import { StyleSheet, findNodeHandle, ViewStyle } from 'react-native';
 
 import { RNIWrapperView } from '../native_components/RNIWrapperView';
-import { NativeRouteMap, onSetNativeRouteDataPayload as onSetNativeRoutesPayload, RNINavigatorView, RNINavigatorViewProps } from '../native_components/RNINavigatorView';
+import { NativeRouteMap, OnSetNativeRouteDataPayload as onSetNativeRoutesPayload, RNINavigatorView, RNINavigatorViewProps } from '../native_components/RNINavigatorView';
 import { RNINavigatorViewModule } from '../native_modules/RNINavigatorViewModule';
 
 import { NavigatorRouteView } from './NavigatorRouteView';
@@ -12,7 +12,7 @@ import type { NavCommandPushOptions, NavRouteItem, RenderNavBarItem, NavCommandP
 
 import type { RouteContentProps } from '../components/NavigatorRouteView';
 
-import type { onNavRouteDidPopPayload, onNavRouteViewAddedPayload, onNavRouteWillPopPayload } from '../native_components/RNINavigatorView';
+import type { OnNavRouteDidPopPayload, OnNavRouteViewAddedPayload, OnNavRouteWillPopPayload } from '../native_components/RNINavigatorView';
 import type { RouteTransitionPopConfig, RouteTransitionPushConfig } from '../native_components/RNINavigatorRouteView';
 
 import * as Helpers from '../functions/Helpers';
@@ -330,7 +330,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       }),
       // 2. wait for react routes to be "received" from native
       ...reactRoutes.map(routeID => new Promise<void>(resolve => {
-        this.emitter.once(NavEvents.onNavRouteViewAdded, ({nativeEvent}: onNavRouteViewAddedPayload) => {
+        this.emitter.once(NavEvents.onNavRouteViewAdded, ({nativeEvent}: OnNavRouteViewAddedPayload) => {
           if(nativeEvent.routeID == routeID){
             resolve();
           };
@@ -1046,7 +1046,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   //#endregion
 
   //#region - Native Event Handlers
-  private _handleOnNavRouteViewAdded = (event: onNavRouteViewAddedPayload) => {
+  private _handleOnNavRouteViewAdded = (event: OnNavRouteViewAddedPayload) => {
     if(this.navigatorID != event.nativeEvent.navigatorID) return;
 
     // emit event: nav. route was added to `RNINavigatorView`'s subviews
@@ -1060,7 +1060,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     this.emitter.emit(NavEvents.onSetNativeRoutes, event);
   };
 
-  private _handleOnNavRouteWillPop = ({nativeEvent}: onNavRouteWillPopPayload) => {
+  private _handleOnNavRouteWillPop = ({nativeEvent}: OnNavRouteWillPopPayload) => {
     if(this.navigatorID != nativeEvent.navigatorID) return;
 
     if(this.navStatus == NavStatus.NAV_PUSHING){
@@ -1068,7 +1068,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
   };
 
-  private _handleOnNavRouteDidPop = ({nativeEvent}: onNavRouteDidPopPayload) => {
+  private _handleOnNavRouteDidPop = ({nativeEvent}: OnNavRouteDidPopPayload) => {
     if(this.navigatorID != nativeEvent.navigatorID) return;
 
     //#region - 🐞 DEBUG 🐛
