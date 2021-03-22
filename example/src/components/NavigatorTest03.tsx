@@ -187,9 +187,43 @@ export function NavigatorTest03(props: RouteContentProps){
           props.navigation.replacePreviousRoute({routeKey: 'NavigatorTest01'});
         }}
       />
+
+      <View style={{marginTop: 30}}/>
+      <ButtonWithSubtitle
+        title={'Push Native Route'}
+        subtitle={'Push a native route: `TestNativeRoute`'}
+        onPress={() => {
+          props.navigation.push({routeKey: 'TestNativeRoute'});
+        }}
+      />
+      <ButtonWithSubtitle
+        title={'Replace w/ Native Route`'}
+        subtitle={'Replace current route with: `TestNativeRoute``'}
+        onPress={() => {
+          props.navigation.replaceCurrentRoute({routeKey: 'TestNativeRoute'});
+        }}
+      />
+      <ButtonWithSubtitle
+        title={'Insert w/ Native Route`'}
+        subtitle={'Insert native route `TestNativeRoute` at index 1'}
+        onPress={() => {
+          props.navigation.insertRoute({routeKey: 'TestNativeRoute'}, 1);
+        }}
+      />
+      <ButtonWithSubtitle
+        title={'SetRoutes w/ Native Route`'}
+        subtitle={'Insert native route `TestNativeRoute` in the front.'}
+        onPress={() => {
+          props.navigation.setRoutes((routes) => ([
+            ...routes, { routeKey: `TestNativeRoute` }
+          ]));
+        }}
+      />
     </ScrollView>
   );
 };
+
+//
 
 const styles = StyleSheet.create({
   testContainer: {
