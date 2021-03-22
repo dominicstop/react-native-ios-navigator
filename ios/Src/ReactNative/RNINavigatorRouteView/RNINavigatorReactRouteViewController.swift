@@ -1,5 +1,5 @@
 //
-//  RNINavigatorRouteViewController.swift
+//  RNINavigatorReactRouteViewController.swift
 //  IosNavigatorExample
 //
 //  Created by Dominic Go on 1/5/21.
@@ -9,7 +9,7 @@ import UIKit;
 
 
 /// A view controller to hold js/react routes
-class RNINavigatorRouteViewController: RNINavigatorRouteBaseViewController {
+class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewController {
   
   // -----------------
   // MARK:- Properties
@@ -227,7 +227,7 @@ class RNINavigatorRouteViewController: RNINavigatorRouteBaseViewController {
 
 /// Receive events from the "route view" that is paired with this vc.
 /// This delegate is used to receive "props" from `RNINavigatorRouteView`.
-extension RNINavigatorRouteViewController: RNINavigatorRouteViewDelegate {
+extension RNINavigatorReactRouteViewController: RNINavigatorRouteViewDelegate {
   
   // --------------------------------------
   // MARK: Receive Props: Transition Config
@@ -367,7 +367,7 @@ extension RNINavigatorRouteViewController: RNINavigatorRouteViewDelegate {
 // MARK:- Extension: UINavigationControllerDelegate
 // ------------------------------------------------
 
-extension RNINavigatorRouteViewController: UINavigationControllerDelegate {
+extension RNINavigatorReactRouteViewController: UINavigationControllerDelegate {
   func navigationController(
     _           navigationController: UINavigationController,
     animationControllerFor operation: UINavigationController.Operation,

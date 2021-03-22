@@ -37,7 +37,7 @@ class RNINavigatorRouteView: UIView {
   weak var navigatorView: RNINavigatorView?;
   
   /// ref. to the parent route vc
-  weak var routeVC: RNINavigatorRouteViewController? {
+  weak var routeVC: RNINavigatorReactRouteViewController? {
     didSet {
       self.setupRouteVC();
     }

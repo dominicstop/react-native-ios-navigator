@@ -44,7 +44,7 @@ class RNINavigatorView: UIView {
   
   var activeRoutes: [RNINavigatorRouteBaseViewController] {
     self.navigationVC.viewControllers.compactMap {
-      $0 as? RNINavigatorRouteViewController
+      $0 as? RNINavigatorReactRouteViewController
     };
   };
   
@@ -116,7 +116,7 @@ class RNINavigatorView: UIView {
         guard let nativeRouteVC: RNINavigatorRouteBaseViewController = {
           if let routeVC = self.routeItemsMap[routeID] {
             // route already added, check if it's a native route
-            let isNativeRoute = routeVC as? RNINavigatorRouteViewController == nil;
+            let isNativeRoute = routeVC as? RNINavigatorReactRouteViewController == nil;
             // verify that the existing route is in fact a native route
             return isNativeRoute ? routeVC : nil;
             
@@ -239,9 +239,9 @@ class RNINavigatorView: UIView {
         // pass a ref to this nav view
         routeView.navigatorView = self;
         
-        let routeVC: RNINavigatorRouteViewController = {
+        let routeVC: RNINavigatorReactRouteViewController = {
           /// create the wrapper vc that holds the `routeView`
-          let vc = RNINavigatorRouteViewController();
+          let vc = RNINavigatorReactRouteViewController();
           
           // listen for route navigator-related events
           vc.delegate = self;
@@ -353,7 +353,7 @@ fileprivate extension RNINavigatorView {
   
   /// send event: notify js that a new route view was added
   func notifyOnNavRouteViewAdded(vc: RNINavigatorRouteBaseViewController){
-    let isNativeRoute = (vc as? RNINavigatorRouteViewController) == nil;
+    let isNativeRoute = (vc as? RNINavigatorReactRouteViewController) == nil;
       
     self.onNavRouteViewAdded?([
       "routeID"      : vc.routeID,
@@ -374,7 +374,7 @@ fileprivate extension RNINavigatorView {
     
     self.routeItemsMap.removeValue(forKey: routeVC.routeID);
     
-    if let reactRouteVC = routeVC as? RNINavigatorRouteViewController {
+    if let reactRouteVC = routeVC as? RNINavigatorReactRouteViewController {
       reactRouteVC.routeView.cleanup();
     };
     
@@ -402,7 +402,7 @@ fileprivate extension RNINavigatorView {
     
     // remove routes from view registry
     self.routeItemsMap.values.forEach {
-      if let routeVC = $0 as? RNINavigatorRouteViewController {
+      if let routeVC = $0 as? RNINavigatorReactRouteViewController {
         routeVC.routeView.cleanup();
       };
     };
@@ -480,7 +480,7 @@ extension RNINavigatorView {
     #endif
     
     let nextRouteView =
-      (nextRouteVC as? RNINavigatorRouteViewController)?.routeView;
+      (nextRouteVC as? RNINavigatorReactRouteViewController)?.routeView;
     
     // notify js `RNINavigatorRouteView` that it's about to be pushed
     nextRouteView?.notifyOnRoutePush(
