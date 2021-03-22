@@ -160,7 +160,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     this.emitter = new EventEmitter<NavEvents>();
     this.queue = new SimpleQueue();
 
-    const initialRoute = this.getMatchingRoute(props.initialRouteKey);
+    const initialRoute = this.getRouteConfig(props.initialRouteKey);
     if(!initialRoute){
       // no matching route config found for `initialRouteKey`
       throw new Error("`NavigatorView` error: invalid value for `initialRouteKey` prop"
@@ -223,8 +223,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       .sort((a, b) => (a.routeID - b.routeID))
   };
 
-  // TODO: rename to: `getRouteConfig`
-  private getMatchingRoute = (routeKey: string): NavRouteConfigItem => {
+  private getRouteConfig = (routeKey: string): NavRouteConfigItem => {
     const { routes } = this.props;
 
     const routeConfig = routes.find(item => (item.routeKey == routeKey));
@@ -415,7 +414,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     options?: NavCommandPushOptions
   ): Promise<void> => {
 
-    const routeConfig = this.getMatchingRoute(routeItem.routeKey);
+    const routeConfig = this.getRouteConfig(routeItem.routeKey);
 
     if(!routeConfig){
       // no matching route config found for `routeItem`
@@ -743,7 +742,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     const { activeRoutes } = this.state;
 
     const routeToReplace         = activeRoutes[prevRouteIndex];
-    const replacementRouteConfig = this.getMatchingRoute(routeItem.routeKey);
+    const replacementRouteConfig = this.getRouteConfig(routeItem.routeKey);
 
     if(routeToReplace == null){
       throw new Error(`\`replaceRoute\` failed, no route found for the given \`routeIndex\`: ${prevRouteIndex}`);
@@ -818,7 +817,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   ) => {
 
     const state = this.state;
-    const routeConfig = this.getMatchingRoute(routeItem.routeKey);
+    const routeConfig = this.getRouteConfig(routeItem.routeKey);
 
     if(!routeConfig){
       // no matching route config found for `routeItem`
@@ -1115,7 +1114,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
     return activeRoutes.map(route => {
       // the routes from `activeRoutes` will only ever have js/react routes
-      const routeConfig = this.getMatchingRoute(route.routeKey) as NavRouteConfigItemJS;
+      const routeConfig = this.getRouteConfig(route.routeKey) as NavRouteConfigItemJS;
 
       const isLast         = (activeRoutesCount - 1) == route.routeIndex;
       const isSecondToLast = (activeRoutesCount - 2) == route.routeIndex;
