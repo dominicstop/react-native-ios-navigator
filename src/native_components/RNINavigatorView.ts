@@ -34,9 +34,10 @@ export type onSetNativeRouteDataPayload = { nativeEvent: {
 }};
 //#endregion
 
-export type NativeRouteDataMap = {
+export type NativeRouteMap = {
   // key is `routeID`
   [key: string]: {
+    routeKey: string;
     routeIndex: number;
   };
 };
@@ -47,7 +48,7 @@ export type RNINavigatorViewProps = {
   
   // General/Misc. Config
   navigatorID: number;
-  nativeRouteData: NativeRouteDataMap;
+  nativeRoutes: NativeRouteMap;
   isInteractivePopGestureEnabled: boolean;
 
   // Customize the Bar's Appearance
@@ -60,7 +61,7 @@ export type RNINavigatorViewProps = {
   onNavRouteViewAdded ?: (events: onNavRouteViewAddedPayload ) => void;
   onNavRouteWillPop   ?: (events: onNavRouteWillPopPayload   ) => void;
   onNavRouteDidPop    ?: (events: onNavRouteDidPopPayload    ) => void;
-  onSetNativeRouteData?: (events: onSetNativeRouteDataPayload) => void;
+  onSetNativeRoutes?: (events: onSetNativeRouteDataPayload) => void;
 };
 
 export const RNINavigatorView = 

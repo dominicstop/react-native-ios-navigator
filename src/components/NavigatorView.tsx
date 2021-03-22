@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import { StyleSheet, findNodeHandle, ViewStyle } from 'react-native';
 
 import { RNIWrapperView } from '../native_components/RNIWrapperView';
-import { NativeRouteDataMap, onSetNativeRouteDataPayload, RNINavigatorView, RNINavigatorViewProps } from '../native_components/RNINavigatorView';
+import { NativeRouteMap, onSetNativeRouteDataPayload as onSetNativeRoutesPayload, RNINavigatorView, RNINavigatorViewProps } from '../native_components/RNINavigatorView';
 import { RNINavigatorViewModule } from '../native_modules/RNINavigatorViewModule';
 
 import { NavigatorRouteView } from './NavigatorRouteView';
@@ -40,8 +40,8 @@ enum NavStatus {
 };
 
 enum NavEvents {
-  onNavRouteViewAdded  = "onNavRouteViewAdded" ,
-  onSetNativeRouteData = "onSetNativeRouteData",
+  onNavRouteViewAdded = "onNavRouteViewAdded",
+  onSetNativeRoutes   = "onSetNativeRoutes"  ,
 };
 
 /** Represents a route in the nav. `state.activeRoutes` */
@@ -195,7 +195,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     ));
   };
 
-  private getNativeRouteDataMap = (): NativeRouteDataMap => {
+  private getNativeRoutes = (): NativeRouteMap => {
     const { activeRoutes } = this.state;
 
     const nativeRoutes = activeRoutes.filter(route => 
@@ -204,11 +204,12 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
     return nativeRoutes.reduce((acc, curr) => {
       acc[curr.routeID] = {
-        routeIndex: curr.routeIndex
+        routeKey  : curr.routeKey,
+        routeIndex: curr.routeIndex,
       };
 
       return acc;
-    }, {} as NativeRouteDataMap);
+    }, {} as NativeRouteMap);
   };
 
   private getRoutesToRender = () => {
@@ -307,44 +308,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     });
   };
 
-  /** Handles `routeID` creation for js/react + native route */
-  private initWithRouteID = (
-    routeItems: Array<NavRouteItem & { routeIndex?: number }>
-  ) => {
-    const nativeRoutes = routeItems.filter(route => 
-      (nativeRouteKeys?.[route.routeKey] != null)
-    );
-
-    return new Promise<Array<NavRouteStateItem>>(async resolve => {
-      if(nativeRoutes.length == 0){
-        // no native routes, generate routeID for react/js routes
-        resolve(routeItems.map(route => ({
-          ...route,
-          routeIndex: route.routeIndex,
-          routeID: ROUTE_ID_COUNTER++
-        })));
-
-      } else {
-        // there's a native route, wait for it to be created + registered first
-        const { routesAdded } = await RNINavigatorViewModule.addNativeRoute(
-          findNodeHandle(this.nativeRef),
-          nativeRoutes.map(route => route.routeKey)
-        );
-
-        let counter = 0;
-        resolve(routeItems.map(route => ({
-          routeKey: route.routeKey,
-          routeIndex: route.routeIndex,
-          routeID: ((nativeRouteKeys?.[route.routeKey] != null)
-            // assume that `routesAdded` order is preserved
-            ? routesAdded[counter++].routeID
-            : ROUTE_ID_COUNTER++
-          )
-        })));
-      };
-    });
-  };
-
   /** 
    * Wait for the react routes to be added as a subview in the native side, and wait fot
    * native routes to be init. with data.
@@ -360,9 +323,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     const hasNativeRoutes = nativeRoutes.length > 0;
     
     return Helpers.promiseWithTimeout(TIMEOUT_MOUNT, Promise.all([
-      // 1. wait for native routes to be init. with data
+      // 1. wait for native routes to be init.
       hasNativeRoutes && new Promise<void>(resolve => {
-        this.emitter.once(NavEvents.onSetNativeRouteData, () => {
+        this.emitter.once(NavEvents.onSetNativeRoutes, () => {
           resolve();
         });
       }),
@@ -490,8 +453,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       
       const nextRouteIndex = activeRoutes.length;
 
-      // generate routeID for routeConfig
-      const [nextRoute] = await this.initWithRouteID([{
+      const nextRoute: NavRouteStateItem = {
+        routeID: ROUTE_ID_COUNTER++,
         routeKey: routeItem.routeKey,
         routeOptions: routeItem.routeOptions,
         routeIndex: nextRouteIndex,
@@ -499,7 +462,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
           routeItem.routeProps ?? 
           routeConfig.initialRouteProps
         ),
-      }]);
+      };
 
       await Promise.all([
         // 1. Wait for new route to be added/init
@@ -790,8 +753,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       throw new Error(`\`replaceRoute\` failed, no route found for the given \`routeKey\`: ${routeItem?.routeKey}`);
     };
 
-    // generate routeID for the next route
-    const [replacementRoute] = await this.initWithRouteID([{
+    const replacementRoute: NavRouteStateItem = {
+      routeID: ROUTE_ID_COUNTER++,
       routeKey: routeItem.routeKey,
       routeIndex: prevRouteIndex,
       routeOptions: routeItem.routeOptions,
@@ -799,7 +762,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         routeItem.routeProps ??
         replacementRouteConfig.initialRouteProps
       ),
-    }]);
+    };
 
     try {
       // if busy, wait for prev. to finish first...
@@ -866,8 +829,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       throw new Error("`NavigatorView` failed to do: `insertRoute`: Invalid `atIndex` (out of bounds)");
     };
 
-    // generate routeID for the next route
-    const [nextRoute] = await this.initWithRouteID([{
+    const nextRoute: NavRouteStateItem = {
+      routeID: ROUTE_ID_COUNTER++,
       routeKey: routeItem.routeKey,
       routeIndex: atIndex,
       routeOptions: routeItem.routeOptions,
@@ -875,7 +838,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         routeItem.routeProps ??
         routeConfig.initialRouteProps
       ),
-    }]);
+    };
     
     try {
       // if busy, wait for prev. to finish
@@ -1091,11 +1054,11 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     this.emitter.emit(NavEvents.onNavRouteViewAdded, event);
   };
 
-  private _handleOnSetNativeRouteData = (event: onSetNativeRouteDataPayload) => {
+  private _handleOnSetNativeRoutes = (event: onSetNativeRoutesPayload) => {
     if(this.navigatorID != event.nativeEvent.navigatorID) return;
 
     // emit event: route data was set for the native routes
-    this.emitter.emit(NavEvents.onSetNativeRouteData, event);
+    this.emitter.emit(NavEvents.onSetNativeRoutes, event);
   };
 
   private _handleOnNavRouteWillPop = ({nativeEvent}: onNavRouteWillPopPayload) => {
@@ -1212,7 +1175,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         // General config
         navigatorID={this.navigatorID}
         isInteractivePopGestureEnabled={props.isInteractivePopGestureEnabled ?? true}
-        nativeRouteData={this.getNativeRouteDataMap()}
+        nativeRoutes={this.getNativeRoutes()}
         // Navigation Bar customization
         isNavBarTranslucent={props.isNavBarTranslucent ?? true}
         navBarPrefersLargeTitles={props.navBarPrefersLargeTitles ?? true}
@@ -1221,7 +1184,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         onNavRouteWillPop={this._handleOnNavRouteWillPop}
         onNavRouteDidPop={this._handleOnNavRouteDidPop}
         onNavRouteViewAdded={this._handleOnNavRouteViewAdded}
-        onSetNativeRouteData={this._handleOnSetNativeRouteData}
+        onSetNativeRoutes={this._handleOnSetNativeRoutes}
       >
         {this._renderRoutes()}
         {props.renderNavBarBackground && (

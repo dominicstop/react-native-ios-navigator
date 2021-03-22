@@ -25,11 +25,10 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
   /// Used to send/forward navigation-related events
   weak var delegate: RNINavigatorRouteViewControllerDelegate?;
   
-  private(set) var routeID: Int = {
-    // auto inc.
-    defer { ROUTE_ID_COUNTER += 1 };
-    return ROUTE_ID_COUNTER;
-  }();
+  var _routeID = -1;
+  var routeID: Int {
+    self._routeID;
+  };
   
   private var _routeKey: String!;
   var routeKey: String {
@@ -64,8 +63,10 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
     super.init(nibName: nil, bundle: nil);
   };
   
-  required public init(routeKey: String){
+  required public init(routeID: Int, routeKey: String){
     self._routeKey = routeKey;
+    self._routeID = routeID;
+    
     super.init(nibName: nil, bundle: nil);
   };
   

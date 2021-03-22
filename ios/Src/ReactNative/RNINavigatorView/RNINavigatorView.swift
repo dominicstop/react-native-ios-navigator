@@ -67,8 +67,8 @@ class RNINavigatorView: UIView {
   /// A `RNINavigatorRouteView` instance was added as a subview.
   @objc var onNavRouteViewAdded: RCTBubblingEventBlock?;
   
-  /// Native route was init. w/ data via `nativeRouteData` prop
-  @objc var onSetNativeRouteData: RCTBubblingEventBlock?;
+  /// Native route was init. via `nativeRoutes` prop
+  @objc var onSetNativeRoutes: RCTBubblingEventBlock?;
   
   /// Fired when a route is *about to be* "popped", either due to a "user initiated"
   /// pop (because the "back" button was pressed or it was swiped back via a
@@ -86,13 +86,14 @@ class RNINavigatorView: UIView {
   
   @objc var navigatorID: NSNumber!;
   
-  @objc var nativeRouteData: NSDictionary! {
+  
+  @objc var nativeRoutes: NSDictionary! {
     didSet {
-      let didChange  = oldValue != self.nativeRouteData;
-      let isNotEmpty = self.nativeRouteData.count > 0;
+      let didChange  = oldValue != self.nativeRoutes;
+      let isNotEmpty = self.nativeRoutes.count > 0;
       
       guard didChange,
-            let data = self.nativeRouteData,
+            let data = self.nativeRoutes,
             // js keys are implicitly casted to strings
             let keys = data.allKeys as? [String]
       else { return };
@@ -107,19 +108,46 @@ class RNINavigatorView: UIView {
       for key in keys {
         guard let routeID   = Int(key),
               let routeData = data[key] as? NSDictionary,
-              let routeVC   = self.routeItemsMap[routeID],
-              // make sure routeVC is a native route, and not a js/react route
-              routeVC as? RNINavigatorRouteViewController == nil,
               // extract route data
+              let routeKey   = routeData["routeKey"  ] as? String,
               let routeIndex = routeData["routeIndex"] as? Int
         else { continue };
         
-        if routeVC.routeIndex != routeIndex {
-          routeVC.setRouteIndex(routeIndex);
-        };
+        guard let nativeRouteVC: RNINavigatorRouteBaseViewController = {
+          if let routeVC = self.routeItemsMap[routeID] {
+            // route already added, check if it's a native route
+            let isNativeRoute = routeVC as? RNINavigatorRouteViewController == nil;
+            // verify that the existing route is in fact a native route
+            return isNativeRoute ? routeVC : nil;
+            
+          } else if let vc = RNINavigatorViewManager.viewControllerRegistry[routeKey] {
+            // create/init native route
+            let routeVC = vc.init(routeID: routeID, routeKey: routeKey);
+            routeVC.delegate = self;
+            
+            // add native route
+            self.routeItemsMap[routeID] = routeVC;
+            return routeVC;
+            
+          } else {
+            // could not get/create native route vc
+            return nil;
+          };
+        }() else { continue };
+        
+        #if DEBUG
+        print("LOG - NativeView, RNINavigatorView: nativeRouteData"
+          + " - for routeID: \(routeID)"
+          + " - set routeKey: \(routeKey)"
+          + " - set routeIndex: \(routeIndex)"
+        );
+        #endif
+        
+        // update values
+        nativeRouteVC.setRouteIndex(routeIndex);
       };
       
-      self.onSetNativeRouteData?([
+      self.onSetNativeRoutes?([
         "navigatorID": self.navigatorID!
       ]);
     }
@@ -906,36 +934,6 @@ extension RNINavigatorView {
     self.navigationVC.setViewControllers(routesToAdd, animated: isAnimated) {
       completion();
     };
-  };
-  
-  func addNativeRoute(
-    nativeRouteKeys: [String],
-    completion     : @escaping ([(routeKey: String, routeID: Int)]) -> Void
-  ) throws {
-    
-    let routesToAdd: [RNINavigatorRouteBaseViewController] = try nativeRouteKeys.map {
-      guard let vc = RNINavigatorViewManager.viewControllerRegistry[$0] else {
-        throw RNIError.commandFailed(
-          source : "RNINavigatorView.addNativeRoute",
-          message: "Unable to `addNativeRoute` because `atIndex` is invalid, because"
-            + " no matching native route could be found for routeKey: '\($0)'"
-        );
-      };
-      
-      return vc.init(routeKey: $0);
-    };
-    
-    for vc in routesToAdd {
-      vc.delegate = self;
-      self.routeItemsMap[vc.routeID] = vc;
-      self.notifyOnNavRouteViewAdded(vc: vc);
-    };
-    
-    completion(
-      routesToAdd.map {
-        (routeKey: $0.routeKey, routeID: $0.routeID)
-      }
-    );
   };
 };
 

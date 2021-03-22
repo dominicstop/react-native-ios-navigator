@@ -14,7 +14,7 @@
 // ----------------------------
 
 RCT_EXPORT_VIEW_PROPERTY(onNavRouteViewAdded, RCTBubblingEventBlock);
-RCT_EXPORT_VIEW_PROPERTY(onSetNativeRouteData, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onSetNativeRoutes, RCTBubblingEventBlock);
 
 RCT_EXPORT_VIEW_PROPERTY(onNavRouteWillPop, RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onNavRouteDidPop, RCTBubblingEventBlock);
@@ -24,7 +24,7 @@ RCT_EXPORT_VIEW_PROPERTY(onNavRouteDidPop, RCTBubblingEventBlock);
 // ----------------------------
 
 RCT_EXPORT_VIEW_PROPERTY(navigatorID, NSNumber);
-RCT_EXPORT_VIEW_PROPERTY(nativeRouteData, NSDictionary);
+RCT_EXPORT_VIEW_PROPERTY(nativeRoutes, NSDictionary);
 
 // MARK: General/Misc. Config
 RCT_EXPORT_VIEW_PROPERTY(isNavBarTranslucent, BOOL);

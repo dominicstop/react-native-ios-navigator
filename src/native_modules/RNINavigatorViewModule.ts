@@ -68,16 +68,6 @@ interface RNINavigatorViewModule {
     animated: boolean,
   ): Promise<void>;
 
-  addNativeRoute(
-    node: number,
-    nativeRouteKeys: Array<string>
-  ): Promise<{
-    routesAdded: Array<{
-      routeKey: string, 
-      routeID: number
-    }>
-  }>;
-
   // Module Commands: Misc
   // -----------------------
 
