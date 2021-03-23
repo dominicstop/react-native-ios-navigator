@@ -120,7 +120,7 @@ internal class RNINavigatorView: UIView {
             // verify that the existing route is in fact a native route
             return isNativeRoute ? routeVC : nil;
             
-          } else if let vc = RNINavigatorViewManager.viewControllerRegistry[routeKey] {
+          } else if let vc = RNINavigator.routeRegistry[routeKey] {
             // create/init native route
             let routeVC = vc.init(routeID: routeID, routeKey: routeKey);
             routeVC.delegate = self;

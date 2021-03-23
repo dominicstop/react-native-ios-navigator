@@ -10,13 +10,6 @@ import Foundation
 @objc(RNINavigatorViewManager)
 internal class RNINavigatorViewManager: RCTViewManager {
   
-  #if DEBUG
-  @objc static var viewControllerRegistry: [String: RNINavigatorRouteBaseViewController.Type] =
-    ["TestNativeRoute": RNIExampleRouteViewController.self];
-  #else
-  @objc static var viewControllerRegistry: [String: RNINavigatorRouteBaseViewController.Type] = [:];
-  #endif
-  
   // -----------------------
   // MARK:- Shared Instances
   // -----------------------
