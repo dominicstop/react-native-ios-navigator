@@ -9,7 +9,7 @@ import Foundation
 
 
 @objc(RNINavigatorRouteViewModule)
-class RNINavigatorRouteViewModule: NSObject {
+internal class RNINavigatorRouteViewModule: NSObject {
   
   static func getRouteView(_ node: NSNumber) -> RNINavigatorRouteView? {
     // get shared bridge instance from view manager

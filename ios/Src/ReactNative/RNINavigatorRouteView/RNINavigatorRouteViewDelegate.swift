@@ -12,7 +12,7 @@ import Foundation
 ///
 /// This delegate allows you to receive props from a `RNINavigatorRouteView`
 /// instance when they are set/updated from JS/RN.
-protocol RNINavigatorRouteViewDelegate: AnyObject {
+internal protocol RNINavigatorRouteViewDelegate: AnyObject {
   
   // --------------------------------------
   // MARK: Receive Props: Transition Config

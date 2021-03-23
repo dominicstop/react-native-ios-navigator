@@ -13,11 +13,11 @@ import Foundation;
 /// to `RCTBridge`. So you either have to pass `RCTBridge` or the `RCTModule`
 /// around if you want to use it, which is a bit inconvenient, so we save a ref.
 /// to module.
-class RNISharedInstances {
+internal class RNISharedInstances {
   static weak var imageLoader: RCTImageLoader?;
 };
 
-class RNIUtilities {
+internal class RNIUtilities {
   
   /// If you remove a "react view" from the view hierarchy (e.g. via
   /// `removeFromSuperview`), it won't be released, because it's being retained

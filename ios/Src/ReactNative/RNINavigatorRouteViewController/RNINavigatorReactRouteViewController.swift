@@ -9,7 +9,7 @@ import UIKit;
 
 
 /// A view controller to hold js/react routes
-class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewController {
+internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewController {
   
   // -----------------
   // MARK:- Properties

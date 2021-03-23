@@ -8,7 +8,7 @@
 import Foundation
 
 @objc(RNINavigatorRouteViewManager)
-class RNINavigatorRouteViewManager: RCTViewManager {
+internal class RNINavigatorRouteViewManager: RCTViewManager {
   
   // --------------------
   // MARK:- Shared Bridge

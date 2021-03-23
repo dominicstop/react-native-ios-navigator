@@ -7,7 +7,7 @@
 
 import Foundation
 
-class RNINavTransitionConfig {
+internal class RNINavTransitionConfig {
   
   enum TransitionTypes: String {
     case DefaultPush;

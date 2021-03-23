@@ -8,7 +8,7 @@
 import Foundation
 
 
-protocol RNINavigatorRouteViewControllerDelegate: AnyObject {
+internal protocol RNINavigatorRouteViewControllerDelegate: AnyObject {
   
   /// Fired when a route is *about to be* "popped", either due to a "user initiated"
   /// pop (i.e. a route's "back button" was pressed, or was swiped back via a

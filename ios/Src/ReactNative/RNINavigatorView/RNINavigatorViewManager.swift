@@ -8,7 +8,7 @@
 import Foundation
 
 @objc(RNINavigatorViewManager)
-class RNINavigatorViewManager: RCTViewManager {
+internal class RNINavigatorViewManager: RCTViewManager {
   
   #if DEBUG
   @objc static var viewControllerRegistry: [String: RNINavigatorRouteBaseViewController.Type] =

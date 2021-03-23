@@ -7,7 +7,7 @@
 
 import Foundation
 
-class RNINavBarAppearance {
+internal class RNINavBarAppearance {
   
   // ---------------------
   // MARK:- Embedded Types

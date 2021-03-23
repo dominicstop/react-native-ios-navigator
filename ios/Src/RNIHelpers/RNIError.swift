@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum RNIError: Error {
+internal enum RNIError: Error {
 
   /// An error for react native module/view commands
   case commandFailed(source: String, message: String, debug: String? = nil);

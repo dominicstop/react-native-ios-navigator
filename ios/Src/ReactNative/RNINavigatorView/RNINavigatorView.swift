@@ -10,7 +10,7 @@ import UIKit;
 typealias Completion = () -> Void;
 
 
-class RNINavigatorView: UIView {
+internal class RNINavigatorView: UIView {
   
   struct NativeIDKeys {
     static let NavRouteItem     = "NavRouteItem";
@@ -437,7 +437,7 @@ fileprivate extension RNINavigatorView {
 // MARK:- Functions for Module
 // ---------------------------
 
-extension RNINavigatorView {
+internal extension RNINavigatorView {
   
   func push(
     _ routeID: Int,

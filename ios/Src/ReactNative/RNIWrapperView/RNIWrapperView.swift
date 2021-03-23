@@ -12,7 +12,7 @@ import UIKit
 };
 
 /// Holds react views that have been detached, and are no longer managed by RN.
-class RNIWrapperView: UIView {
+internal class RNIWrapperView: UIView {
   
   var bridge: RCTBridge!;
   var reactContent: UIView?;

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct RNIImageMaker {
+internal struct RNIImageMaker {
 
   let size        : CGSize;
   let fillColor   : UIColor;
@@ -46,7 +46,7 @@ struct RNIImageMaker {
   };
 };
 
-class RNIImageItem {
+internal class RNIImageItem {
   
   static var imageCache: [String: UIImage] = [:];
   
@@ -144,7 +144,7 @@ class RNIImageItem {
   };
 };
 
-extension RNIImageItem {
+internal extension RNIImageItem {
   
   static func waitForAllImagesToLoad(
     images    : [RNIImageItem],

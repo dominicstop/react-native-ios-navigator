@@ -8,7 +8,7 @@
 import UIKit;
 
 
-class RNINavigatorRouteView: UIView {
+internal class RNINavigatorRouteView: UIView {
   
   // ---------------------
   // MARK:- Embedded Types
@@ -462,7 +462,7 @@ class RNINavigatorRouteView: UIView {
 // MARK:- Convenience Property Wrappers
 // ------------------------------------
 
-extension RNINavigatorRouteView {
+internal extension RNINavigatorRouteView {
   /// Creates a back nav bar button item based on `navBarButtonBackItemConfig`
   var backBarButtonItem: UIBarButtonItem? {
     guard let backConfigItem = self._navBarButtonBackItemConfig
@@ -615,7 +615,7 @@ private extension RNINavigatorRouteView {
 // MARK:- Public Functions
 // -----------------------
 
-extension RNINavigatorRouteView {
+internal extension RNINavigatorRouteView {
   
   /// Notify `RouteView`'s bounds had changed and resize
   func notifyForBoundsChange(_ newBounds: CGRect){
@@ -676,7 +676,7 @@ extension RNINavigatorRouteView {
       self
     ];
     
-    // detatch RCTTouchandler from react view
+    // detach RCTToucHandler from react view
     if let routeContent = self.reactRouteContent {
       self.touchHandlerRouteContent.detach(from: routeContent);
     };

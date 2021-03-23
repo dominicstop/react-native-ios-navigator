@@ -8,7 +8,7 @@
 import Foundation
 
 @objc(RNIWrapperViewManager)
-class RNIWrapperViewManager: RCTViewManager {
+internal class RNIWrapperViewManager: RCTViewManager {
   
   static func getWrapperView(_ node: NSNumber) -> RNIWrapperView? {
     // get shared bridge instance from view manager

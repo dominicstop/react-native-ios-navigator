@@ -8,8 +8,7 @@
 import UIKit
 
  
-class RNIExampleRouteViewController: RNINavigatorRouteBaseViewController {
-  
+internal class RNIExampleRouteViewController: RNINavigatorRouteBaseViewController {
   
   override func loadView() {
     super.loadView();

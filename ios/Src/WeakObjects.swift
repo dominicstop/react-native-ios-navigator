@@ -5,7 +5,7 @@
 //  Created by Dominic Go on 1/6/21.
 //
 
-final class WeakObject<T: AnyObject> {
+internal final class WeakObject<T: AnyObject> {
   private(set) weak var value: T?;
   
   init(_ value: T) {
@@ -15,7 +15,7 @@ final class WeakObject<T: AnyObject> {
 
 /** Holds an array of weak elements */
 @propertyWrapper
-struct WeakArray<Element> where Element: AnyObject {
+internal struct WeakArray<Element> where Element: AnyObject {
   private var storage = [WeakObject<Element>]();
 
   var wrappedValue: [Element] {

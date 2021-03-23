@@ -8,7 +8,7 @@
 import Foundation
 
 
-class RNINavBarItemConfig {
+internal class RNINavBarItemConfig {
   
   // ---------------------
   // MARK:- Embedded Types

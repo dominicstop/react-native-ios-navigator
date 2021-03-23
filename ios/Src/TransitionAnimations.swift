@@ -7,9 +7,9 @@
 
 import UIKit;
 
-// Add `isPresenting` so that push and pop can be combined together
+// TODO: Add `isPresenting` so that push and pop can be combined together
 
-class CustomAnimator: NSObject, UIViewControllerAnimatedTransitioning {
+internal class CustomAnimator: NSObject, UIViewControllerAnimatedTransitioning {
 
   let duration: TimeInterval;
   var interactionController: UIPercentDrivenInteractiveTransition?;
@@ -28,7 +28,7 @@ class CustomAnimator: NSObject, UIViewControllerAnimatedTransitioning {
   };
 };
 
-class LeftEdgeInteractionController: UIPercentDrivenInteractiveTransition {
+internal class LeftEdgeInteractionController: UIPercentDrivenInteractiveTransition {
     
   var inProgress = false;
 
@@ -91,7 +91,7 @@ class LeftEdgeInteractionController: UIPercentDrivenInteractiveTransition {
   };
 };
 
-class FadePushAnimator: CustomAnimator {
+internal class FadePushAnimator: CustomAnimator {
   override func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
     guard let toViewController = transitionContext.viewController(forKey: .to)
     else { return };
@@ -114,7 +114,7 @@ class FadePushAnimator: CustomAnimator {
   };
 };
 
-class FadePopAnimator: CustomAnimator {
+internal class FadePopAnimator: CustomAnimator {
   
   init(duration: TimeInterval = 0.25, interactionController: UIPercentDrivenInteractiveTransition? = nil){
     super.init(duration: duration);
@@ -144,7 +144,7 @@ class FadePopAnimator: CustomAnimator {
   };
 };
 
-class SlidePushAnimator: CustomAnimator {
+internal class SlidePushAnimator: CustomAnimator {
   override func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
     guard let fromViewController = transitionContext.viewController(forKey: .from),
           let toViewController   = transitionContext.viewController(forKey: .to)
@@ -213,7 +213,7 @@ class SlidePushAnimator: CustomAnimator {
   };
 };
 
-class SlidePopAnimator: CustomAnimator {
+internal class SlidePopAnimator: CustomAnimator {
   
   init(duration: TimeInterval = 0.25, interactionController: UIPercentDrivenInteractiveTransition? = nil){
     super.init(duration: duration);
