@@ -38,6 +38,7 @@ export type NativeRouteMap = {
   [key: string]: {
     routeKey: string;
     routeIndex: number;
+    routeProps?: object;
   };
 };
 

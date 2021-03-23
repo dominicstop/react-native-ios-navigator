@@ -206,6 +206,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       acc[curr.routeID] = {
         routeKey  : curr.routeKey,
         routeIndex: curr.routeIndex,
+        routeProps: curr.routeProps,
       };
 
       return acc;

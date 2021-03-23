@@ -143,8 +143,13 @@ class RNINavigatorView: UIView {
         );
         #endif
         
-        // update values
+        // update route index
         nativeRouteVC.setRouteIndex(routeIndex);
+        
+        if let routeProps = routeData["routeProps"] as? Dictionary<String, Any> {
+          print("LOG - NativeView, RNINavigatorView: nativeRouteData, routeProps: \(routeProps.debugDescription)");
+          nativeRouteVC.routeProps = routeProps;
+        };
       };
       
       self.onSetNativeRoutes?([

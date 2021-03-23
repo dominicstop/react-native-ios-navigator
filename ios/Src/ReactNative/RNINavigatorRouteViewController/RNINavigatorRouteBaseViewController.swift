@@ -7,7 +7,6 @@
 
 import UIKit;
 
-fileprivate var ROUTE_ID_COUNTER = 100000;
 
 open class RNINavigatorRouteBaseViewController: UIViewController {
   
@@ -25,7 +24,7 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
   /// Used to send/forward navigation-related events
   weak var delegate: RNINavigatorRouteViewControllerDelegate?;
   
-  var _routeID = -1;
+  private var _routeID = -1;
   var routeID: Int {
     self._routeID;
   };
@@ -39,6 +38,9 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
   var routeIndex: Int {
     self._routeIndex;
   };
+  
+  /// Receive route data when this route was pushed/added from js/react
+  var routeProps: Dictionary<String, Any> = [:];
   
   /// A flag that indicates that the nav. controller responsible for this vc is
   /// about to remove it from the nav. stack. This is used to differentiate if
@@ -138,8 +140,7 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
   // MARK: Functions
   // ---------------
   
-  /// note: internal lib function
-  func setRouteIndex(_ routeIndex: Int){
+  internal func setRouteIndex(_ routeIndex: Int){
     self._routeIndex = routeIndex;
   };
   
@@ -149,7 +150,7 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
   /// before it was changed.
   ///
   /// Note: this also resets `backButtonTitle` and `backButtonDisplayMode`.
-  func resetRouteNavBarBackConfig(){
+  internal func resetRouteNavBarBackConfig(){
     if let backBarItem = self.prevBackItem.backBarButtonItem {
       self.navigationItem.backBarButtonItem = backBarItem;
     };
