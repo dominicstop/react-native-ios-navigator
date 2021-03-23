@@ -122,7 +122,9 @@ internal class RNINavigatorView: UIView {
             
           } else if let vc = RNINavigator.routeRegistry[routeKey] {
             // create/init native route
-            let routeVC = vc.init(routeID: routeID, routeKey: routeKey);
+            let routeVC = vc.init();
+            routeVC.setRouteID(routeID);
+            routeVC.setRouteKey(routeKey);
             routeVC.delegate = self;
             
             // add native route

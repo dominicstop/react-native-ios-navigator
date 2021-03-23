@@ -22,7 +22,7 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
   // ----------------
   
   /// Used to send/forward navigation-related events
-  weak var delegate: RNINavigatorRouteViewControllerDelegate?;
+  internal weak var delegate: RNINavigatorRouteViewControllerDelegate?;
   
   private var _routeID = -1;
   var routeID: Int {
@@ -56,25 +56,6 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
   /// Stores the prev. back item, used to reset the back item whenever it's
   /// been temporarily modified.
   internal var prevBackItem = BackItemCache();
-  
-  // ----------
-  // MARK: Init
-  // ----------
-  
-  init(){
-    super.init(nibName: nil, bundle: nil);
-  };
-  
-  required public init(routeID: Int, routeKey: String){
-    self._routeKey = routeKey;
-    self._routeID = routeID;
-    
-    super.init(nibName: nil, bundle: nil);
-  };
-  
-  required public init?(coder aDecoder: NSCoder) {
-    super.init(coder: aDecoder);
-  };
   
   // --------------------------------
   // MARK:- View Controller Lifecycle
@@ -139,6 +120,14 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
   // ---------------
   // MARK: Functions
   // ---------------
+  
+  internal func setRouteID(_ routeID: Int){
+    self._routeID = routeID;
+  };
+  
+  internal func setRouteKey(_ routeKey: String){
+    self._routeKey = routeKey;
+  };
   
   internal func setRouteIndex(_ routeIndex: Int){
     self._routeIndex = routeIndex;
