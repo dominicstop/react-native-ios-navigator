@@ -45,8 +45,9 @@ enum NavEvents {
 
 /** Represents a route in the nav. `state.activeRoutes` */
 type NavRouteStateItem = NavRouteItem & {
-  routeIndex: number;
   routeID: number;
+  routeIndex: number;
+  isNativeRoute: boolean;
 };
 
 type NavRouteConfigItemBase = {
@@ -159,11 +160,14 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     this.emitter = new EventEmitter<NavEvents>();
     this.queue = new SimpleQueue();
 
+    // TODO: Add native route key validation in `componentDidMount`
     const initialRoute = this.getRouteConfig(props.initialRouteKey);
     if(!initialRoute){
       // no matching route config found for `initialRouteKey`
       throw new Error("`NavigatorView` error: invalid value for `initialRouteKey` prop"
-        + ` - no matching route found for \`initialRouteKey\`: ${props.initialRouteKey}`
+        + ` - no matching route found for \`initialRouteKey\`: ${props.initialRouteKey}.`
+        + " If this is a native route, please add it to the `routes` prop w/ `isNativeRoute`"
+        + " property set to true."
       );
     };
 
@@ -172,7 +176,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         // create initial route item
         routeKey: initialRoute.routeKey,
         routeIndex: 0, 
-        routeID: ROUTE_ID_COUNTER++
+        routeID: ROUTE_ID_COUNTER++,
+        isNativeRoute: initialRoute?.isNativeRoute,
       }],
       transitionConfigPushOverride: null,
       transitionConfigPopOverride: null,
@@ -187,9 +192,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   //#region - Private Functions
   private isValidRouteKey = (routeKey: string) => {
     const { routes } = this.props;
-    const isNativeRoute = (nativeRouteKeys[routeKey] != null);
+    const hasNativeRouteKeyMatch = (nativeRouteKeys?.[routeKey] != null);
 
-    return isNativeRoute || routes.some(route => (
+    return hasNativeRouteKeyMatch || routes.some(route => (
       route.routeKey == routeKey
     ));
   };
@@ -198,9 +203,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   private getNativeRoutes = (): NativeRouteMap => {
     const { activeRoutes } = this.state;
 
-    const nativeRoutes = activeRoutes.filter(route => 
-      nativeRouteKeys?.[route.routeKey] != null
-    );
+    const nativeRoutes = activeRoutes.filter(route => route.isNativeRoute);
 
     return nativeRoutes.reduce((acc, curr) => {
       acc[curr.routeID] = {
@@ -220,7 +223,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     
     return activeRoutes
       // only return js/react routes
-      .filter(route => nativeRouteKeys?.[route.routeKey] == null)
+      .filter(route => !route.isNativeRoute)
       // sort by routeID in asc. order
       .sort((a, b) => (a.routeID - b.routeID))
   };
@@ -228,12 +231,14 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   /** get route config with the matching `routeKey` */
   private getRouteConfig = (routeKey: string): NavRouteConfigItem => {
     const { routes } = this.props;
+
     const routeConfig = routes.find(item => (item.routeKey == routeKey));
-
     const nativeRouteKey = nativeRouteKeys?.[routeKey];
-    const hasNativeRouteKeyMatch = (nativeRouteKey != null);
 
-    return (!hasNativeRouteKeyMatch)? routeConfig : {
+    const hasNativeRouteKeyMatch = (nativeRouteKey != null);
+    const isNativeRoute = routeConfig?.isNativeRoute || hasNativeRouteKeyMatch;
+
+    return (!isNativeRoute)? routeConfig : {
       routeKey,
       isNativeRoute: true,
       initialRouteProps: routeConfig?.initialRouteProps,
@@ -317,8 +322,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   private waitForRoutes = (routeItems: Array<NavRouteStateItem>) => {
     // filter out/separate react and native routes
     const [nativeRoutes, reactRoutes] = routeItems.reduce((acc, curr) => {
-      const isNativeRoute = (nativeRouteKeys[curr.routeKey] != null);
-      acc[isNativeRoute? 0 : 1].push(curr.routeID);
+      acc[curr.isNativeRoute? 0 : 1].push(curr.routeID);
       return acc;
     }, [[], []] as [Array<number>, Array<number>]);
 
@@ -460,6 +464,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         routeKey: routeItem.routeKey,
         routeOptions: routeItem.routeOptions,
         routeIndex: nextRouteIndex,
+        isNativeRoute: routeConfig?.isNativeRoute ?? false,
         routeProps: (
           routeItem.routeProps ?? 
           routeConfig.initialRouteProps
@@ -760,6 +765,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       routeKey: routeItem.routeKey,
       routeIndex: prevRouteIndex,
       routeOptions: routeItem.routeOptions,
+      isNativeRoute: replacementRouteConfig?.isNativeRoute ?? false,
       routeProps: (
         routeItem.routeProps ??
         replacementRouteConfig.initialRouteProps
@@ -836,6 +842,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       routeKey: routeItem.routeKey,
       routeIndex: atIndex,
       routeOptions: routeItem.routeOptions,
+      isNativeRoute: routeConfig?.isNativeRoute ?? false,
       routeProps: (
         routeItem.routeProps ??
         routeConfig.initialRouteProps
