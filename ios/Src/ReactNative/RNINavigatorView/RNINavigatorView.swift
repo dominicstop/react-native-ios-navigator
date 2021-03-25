@@ -34,6 +34,8 @@ internal class RNINavigatorView: UIView {
   
   var navigationVC: UINavigationController!;
   
+  private var nativeCommandRequestCompletionMap: Dictionary<String, Completion> = [:];
+  
   // ----------------------------------
   // MARK: Convenient Property Wrappers
   // ----------------------------------
@@ -70,6 +72,10 @@ internal class RNINavigatorView: UIView {
   /// Native route was init. via `nativeRoutes` prop
   @objc var onSetNativeRoutes: RCTBubblingEventBlock?;
   
+  /// This event is fired to forward commands from native to js/react, i.e send
+  /// a command that will be executed from the js/react navigator
+  @objc var onNativeCommandRequest: RCTBubblingEventBlock?;
+  
   /// Fired when a route is *about to be* "popped", either due to a "user initiated"
   /// pop (because the "back" button was pressed or it was swiped back via a
   /// gesture), or due to it being "popped" programmatically via the nav.
@@ -86,7 +92,7 @@ internal class RNINavigatorView: UIView {
   
   @objc var navigatorID: NSNumber!;
   
-  
+  /// Receives from js/react the native routes to add/init or update
   @objc var nativeRoutes: NSDictionary! {
     didSet {
       let didChange  = oldValue != self.nativeRoutes;
@@ -125,7 +131,9 @@ internal class RNINavigatorView: UIView {
             let routeVC = vc.init();
             routeVC.setRouteID(routeID);
             routeVC.setRouteKey(routeKey);
+            
             routeVC.delegate = self;
+            routeVC.navigator = self;
             
             // add native route
             self.routeItemsMap[routeID] = routeVC;
@@ -990,5 +998,46 @@ extension RNINavigatorView: RNINavigatorRouteViewControllerDelegate {
     
     // route popped, remove route from `navRoutes`
     self.removeRouteVC(routeVC: sender);
+  };
+};
+
+// --------------------------------------------
+// MARK:- Extension: RNINavigatorNativeCommands
+// --------------------------------------------
+
+extension RNINavigatorView: RNINavigatorNativeCommands {
+  func pushViewController(
+    _ viewController: RNINavigatorRouteBaseViewController,
+    animated: Bool = true
+  ) {
+    // create routeID and routeKey
+    viewController.setRouteID();
+    viewController.setRouteKey();
+    
+    viewController.delegate  = self;
+    viewController.navigator = self;
+    
+    // add native route
+    self.routeItemsMap[viewController.routeID] = viewController;
+    
+    let commandData: [String: Any] = [
+      "commandKey": "pushViewController",
+      "routeID"   : viewController.routeID,
+      "routeKey"  : viewController.routeKey,
+      "isAnimated": animated
+    ];
+    
+    self.onNativeCommandRequest?([
+      "navigatorID": self.navigatorID!,
+      "commandData": commandData,
+    ]);
+  };
+  
+  func push(routeKey: String, routeProps: Dictionary<String, Any>?) {
+    // TODO
+  };
+  
+  func pop() {
+    // TODO
   };
 };

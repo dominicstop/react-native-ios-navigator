@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import { StyleSheet, findNodeHandle, ViewStyle } from 'react-native';
 
 import { RNIWrapperView } from '../native_components/RNIWrapperView';
-import { NativeRouteMap, OnSetNativeRouteDataPayload as onSetNativeRoutesPayload, RNINavigatorView, RNINavigatorViewProps } from '../native_components/RNINavigatorView';
+import { NativeRouteMap, OnNativeCommandRequestPayload, OnSetNativeRouteDataPayload as onSetNativeRoutesPayload, RNINavigatorView, RNINavigatorViewProps } from '../native_components/RNINavigatorView';
 import { RNINavigatorViewModule } from '../native_modules/RNINavigatorViewModule';
 
 import { NavigatorRouteView } from './NavigatorRouteView';
@@ -1074,6 +1074,74 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     this.emitter.emit(NavEvents.onSetNativeRoutes, event);
   };
 
+  private _handleOnNativeCommandRequest = async ({nativeEvent}: OnNativeCommandRequestPayload) => {
+    const { commandData } = nativeEvent;
+    //#region - 🐞 DEBUG 🐛
+    LIB_GLOBAL.debugLog && console.log(
+        `LOG/JS - NavigatorView, _handleOnNativeCommandRequest`
+      + `commandKey: ${nativeEvent.commandData.commandKey}`
+      + `commandData: ${JSON.stringify(nativeEvent.commandData)}`
+    );
+    //#endregion
+    
+    try {
+      // if busy, wait for prev. to finish
+      const queue = this.queue.schedule();
+      await queue.promise;
+
+      const { activeRoutes } = this.state;
+
+      switch (commandData.commandKey) {
+        case 'pushViewController':
+          const nextRouteIndex = activeRoutes.length;
+          this.navStatus = NavStatus.NAV_PUSHING;
+
+          const nextRoute: NavRouteStateItem = {
+            routeID: commandData.routeID,
+            routeKey: commandData.routeKey,
+            routeIndex: nextRouteIndex,
+            isNativeRoute: true,
+          };
+
+          //#region - 🐞 DEBUG 🐛
+          console.log('nextRoute', nextRoute);
+          //#endregion
+
+          await Promise.all([
+            // 1. wait for the native route to be init
+            this.waitForRoutes([nextRoute]),
+            // 2. Append new route to `activeRoutes`
+            Helpers.setStateAsync<NavigatorViewState>(this, ({activeRoutes: prevRoutes}) => ({
+              activeRoutes: [...prevRoutes, nextRoute]
+            }))
+          ]);
+
+          // forward "push" request to native module
+          await Helpers.promiseWithTimeout(TIMEOUT_COMMAND,
+            RNINavigatorViewModule.push(
+              findNodeHandle(this.nativeRef),
+              nextRoute.routeID, {
+                isAnimated: commandData.isAnimated
+              }
+            )
+          );
+          break;
+      };
+
+      // finished, start next item
+      this.navStatus = NavStatus.IDLE;
+      this.queue.dequeue();
+
+    } catch (error) {
+      this.navStatus = NavStatus.IDLE_ERROR;
+      this.queue.dequeue();
+
+      throw new Error(
+        `\`NavigatorView\` failed to do: \`${commandData.commandKey}\` with error: ${error}`
+      );
+    };
+  };
+
   private _handleOnNavRouteWillPop = ({nativeEvent}: OnNavRouteWillPopPayload) => {
     if(this.navigatorID != nativeEvent.navigatorID) return;
 
@@ -1198,6 +1266,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         onNavRouteDidPop={this._handleOnNavRouteDidPop}
         onNavRouteViewAdded={this._handleOnNavRouteViewAdded}
         onSetNativeRoutes={this._handleOnSetNativeRoutes}
+        onNativeCommandRequest={this._handleOnNativeCommandRequest}
       >
         {this._renderRoutes()}
         {props.renderNavBarBackground && (

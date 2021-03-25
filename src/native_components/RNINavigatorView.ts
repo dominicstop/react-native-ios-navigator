@@ -31,6 +31,21 @@ export type OnSetNativeRouteDataPayload = { nativeEvent: {
   target     : number,
   navigatorID: number,
 }};
+
+export type OnNativeCommandRequestPayload = { nativeEvent: {
+  target: number;
+  navigatorID: number;
+  commandData: {
+    commandKey: 'pushViewController';
+    routeID: number;
+    routeKey: string;
+    isAnimated: boolean;
+  } | {
+    commandKey: 'push';
+  } | {
+    commandKey: 'pop';
+  };
+}};
 //#endregion
 
 export type NativeRouteMap = {
@@ -58,10 +73,11 @@ export type RNINavigatorViewProps = {
   
   // Native Events
   // TODO: Rename to `event`
-  onNavRouteViewAdded ?: (events: OnNavRouteViewAddedPayload ) => void;
-  onNavRouteWillPop   ?: (events: OnNavRouteWillPopPayload   ) => void;
-  onNavRouteDidPop    ?: (events: OnNavRouteDidPopPayload    ) => void;
-  onSetNativeRoutes?: (events: OnSetNativeRouteDataPayload) => void;
+  onNavRouteViewAdded   ?: (events: OnNavRouteViewAddedPayload   ) => void;
+  onNavRouteWillPop     ?: (events: OnNavRouteWillPopPayload     ) => void;
+  onNavRouteDidPop      ?: (events: OnNavRouteDidPopPayload      ) => void;
+  onSetNativeRoutes     ?: (events: OnSetNativeRouteDataPayload  ) => void;
+  onNativeCommandRequest?: (events: OnNativeCommandRequestPayload) => void;
 };
 
 export const RNINavigatorView = 

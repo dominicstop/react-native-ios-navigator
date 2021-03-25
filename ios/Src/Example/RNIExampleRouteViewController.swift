@@ -27,8 +27,17 @@ internal class RNIExampleRouteViewController: RNINavigatorRouteBaseViewControlle
     subtitle2.text = "Route Data: \(self.routeProps.debugDescription)";
     subtitle2.font = .systemFont(ofSize: 16, weight: .regular);
     
+    let button: UIButton = {
+      let button = UIButton();
+      button.layoutMargins = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0);
+      button.setTitle("Push ViewController", for: .normal);
+      button.addTarget(self, action:#selector(self.onPressPushViewController), for: .touchUpInside);
+      
+      return button;
+    }();
+    
     let stack = UIStackView(arrangedSubviews: [
-      title, subtitle1, subtitle2
+      title, subtitle1, subtitle2, button
     ]);
     
     stack.layer.cornerRadius = 10;
@@ -53,5 +62,12 @@ internal class RNIExampleRouteViewController: RNINavigatorRouteBaseViewControlle
       stack.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
       stack.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
     ]);
+  };
+  
+  @objc func onPressPushViewController(){
+    let vc = RNINavigatorRouteBaseViewController();
+    vc.view.backgroundColor = .red;
+    
+    self.navigator?.pushViewController(vc, animated: true);
   };
 };

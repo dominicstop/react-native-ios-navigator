@@ -18,3 +18,17 @@ public class RNINavigator {
   #endif
   
 };
+
+/// Send commands to the `RNINavigatorView` instance
+public protocol RNINavigatorNativeCommands: AnyObject {
+  
+  func pushViewController(
+    _ viewController: RNINavigatorRouteBaseViewController,
+    animated: Bool
+  );
+  
+  func push(routeKey: String, routeProps: Dictionary<String, Any>?);
+  
+  func pop();
+  
+};

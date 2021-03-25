@@ -7,6 +7,7 @@
 
 import UIKit;
 
+var ROUTE_ID_COUNTER = 1000000;
 
 open class RNINavigatorRouteBaseViewController: UIViewController {
   
@@ -23,6 +24,8 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
   
   /// Used to send/forward navigation-related events
   internal weak var delegate: RNINavigatorRouteViewControllerDelegate?;
+  
+  public weak var navigator: RNINavigatorNativeCommands?;
   
   private var _routeID = -1;
   var routeID: Int {
@@ -121,8 +124,17 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
   // MARK: Functions
   // ---------------
   
+  internal func setRouteID(){
+    self._routeID = ROUTE_ID_COUNTER;
+    ROUTE_ID_COUNTER += 1;
+  };
+  
   internal func setRouteID(_ routeID: Int){
     self._routeID = routeID;
+  };
+  
+  internal func setRouteKey(){
+    self._routeKey = UUID().uuidString;
   };
   
   internal func setRouteKey(_ routeKey: String){
