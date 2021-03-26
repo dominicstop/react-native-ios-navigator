@@ -42,6 +42,9 @@ export type OnNativeCommandRequestPayload = { nativeEvent: {
     isAnimated: boolean;
   } | {
     commandKey: 'push';
+    routeKey: string,
+    routeProps?: object;
+    isAnimated: boolean
   } | {
     commandKey: 'pop';
   };

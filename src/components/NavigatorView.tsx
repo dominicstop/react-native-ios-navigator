@@ -1076,6 +1076,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
   private _handleOnNativeCommandRequest = async ({nativeEvent}: OnNativeCommandRequestPayload) => {
     const { commandData } = nativeEvent;
+
     //#region - 🐞 DEBUG 🐛
     LIB_GLOBAL.debugLog && console.log(
         `LOG/JS - NavigatorView, _handleOnNativeCommandRequest`
@@ -1084,15 +1085,15 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     );
     //#endregion
     
-    try {
-      // if busy, wait for prev. to finish
-      const queue = this.queue.schedule();
-      await queue.promise;
+    switch (commandData.commandKey) {
+      case 'pushViewController':
+        try {
+          // if busy, wait for prev. to finish
+          const queue = this.queue.schedule();
+          await queue.promise;
 
-      const { activeRoutes } = this.state;
+          const { activeRoutes } = this.state;
 
-      switch (commandData.commandKey) {
-        case 'pushViewController':
           const nextRouteIndex = activeRoutes.length;
           this.navStatus = NavStatus.NAV_PUSHING;
 
@@ -1102,10 +1103,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
             routeIndex: nextRouteIndex,
             isNativeRoute: true,
           };
-
-          //#region - 🐞 DEBUG 🐛
-          console.log('nextRoute', nextRoute);
-          //#endregion
 
           await Promise.all([
             // 1. wait for the native route to be init
@@ -1125,20 +1122,28 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
               }
             )
           );
-          break;
-      };
 
-      // finished, start next item
-      this.navStatus = NavStatus.IDLE;
-      this.queue.dequeue();
+          // finished, start next item
+          this.navStatus = NavStatus.IDLE;
+          this.queue.dequeue();
 
-    } catch (error) {
-      this.navStatus = NavStatus.IDLE_ERROR;
-      this.queue.dequeue();
+        } catch(error) {
+          this.navStatus = NavStatus.IDLE_ERROR;
+          this.queue.dequeue();
 
-      throw new Error(
-        `\`NavigatorView\` failed to do: \`${commandData.commandKey}\` with error: ${error}`
-      );
+          throw new Error(
+              `\`NavigatorView\` failed to do: \`${commandData.commandKey}\``
+            + `with error: ${error}`
+          );
+        };
+        break;
+
+      case "push":
+        await this.push({
+          routeKey  : commandData.routeKey,
+          routeProps: commandData.routeProps,
+        });
+        break;
     };
   };
 

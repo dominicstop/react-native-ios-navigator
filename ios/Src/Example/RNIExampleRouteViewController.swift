@@ -7,7 +7,26 @@
 
 import UIKit
 
- 
+fileprivate class BlankRoute: RNINavigatorRouteBaseViewController {
+  override func loadView() {
+    super.loadView();
+    
+    let title = UILabel();
+    title.text = "Native Route";
+    title.font = .systemFont(ofSize: 18, weight: .bold);
+    
+    self.view.addSubview(title);
+    self.view.backgroundColor = .white;
+    
+    title.translatesAutoresizingMaskIntoConstraints = false;
+    
+    NSLayoutConstraint.activate([
+      title.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+      title.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
+    ]);
+  };
+};
+
 internal class RNIExampleRouteViewController: RNINavigatorRouteBaseViewController {
   
   override func loadView() {
@@ -27,7 +46,7 @@ internal class RNIExampleRouteViewController: RNINavigatorRouteBaseViewControlle
     subtitle2.text = "Route Data: \(self.routeProps.debugDescription)";
     subtitle2.font = .systemFont(ofSize: 16, weight: .regular);
     
-    let button: UIButton = {
+    let button1: UIButton = {
       let button = UIButton();
       button.layoutMargins = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0);
       button.setTitle("Push ViewController", for: .normal);
@@ -36,8 +55,17 @@ internal class RNIExampleRouteViewController: RNINavigatorRouteBaseViewControlle
       return button;
     }();
     
+    let button2: UIButton = {
+      let button = UIButton();
+      button.layoutMargins = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0);
+      button.setTitle("Push React Route", for: .normal);
+      button.addTarget(self, action:#selector(self.onPressPushReactRoute), for: .touchUpInside);
+      
+      return button;
+    }();
+    
     let stack = UIStackView(arrangedSubviews: [
-      title, subtitle1, subtitle2, button
+      title, subtitle1, subtitle2, button1, button2
     ]);
     
     stack.layer.cornerRadius = 10;
@@ -65,9 +93,11 @@ internal class RNIExampleRouteViewController: RNINavigatorRouteBaseViewControlle
   };
   
   @objc func onPressPushViewController(){
-    let vc = RNINavigatorRouteBaseViewController();
-    vc.view.backgroundColor = .red;
-    
+    let vc = BlankRoute();
     self.navigator?.pushViewController(vc, animated: true);
+  };
+  
+  @objc func onPressPushReactRoute(){
+    self.navigator?.push(routeKey: "NavigatorTest01", routeProps: nil, animated: true);
   };
 };

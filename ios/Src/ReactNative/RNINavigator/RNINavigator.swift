@@ -27,7 +27,11 @@ public protocol RNINavigatorNativeCommands: AnyObject {
     animated: Bool
   );
   
-  func push(routeKey: String, routeProps: Dictionary<String, Any>?);
+  func push(
+    routeKey: String,
+    routeProps: Dictionary<String, Any>?,
+    animated: Bool	
+  );
   
   func pop();
   

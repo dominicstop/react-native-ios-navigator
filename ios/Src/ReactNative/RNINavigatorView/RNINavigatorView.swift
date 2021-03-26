@@ -1033,8 +1033,25 @@ extension RNINavigatorView: RNINavigatorNativeCommands {
     ]);
   };
   
-  func push(routeKey: String, routeProps: Dictionary<String, Any>?) {
-    // TODO
+  func push(
+    routeKey: String,
+    routeProps: Dictionary<String, Any>? = nil,
+    animated: Bool = true
+  ) {
+    var commandData: [String: Any] = [
+      "commandKey": "push",
+      "routeKey"  : routeKey,
+      "isAnimated": animated
+    ];
+    
+    if let routeProps = routeProps {
+      commandData["routeProps"] = routeProps;
+    };
+    
+    self.onNativeCommandRequest?([
+      "navigatorID": self.navigatorID!,
+      "commandData": commandData,
+    ]);
   };
   
   func pop() {
