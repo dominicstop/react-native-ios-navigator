@@ -75,10 +75,13 @@ export type NavRouteConfigItem =
   NavRouteConfigItemNative | NavRouteConfigItemJS;
 
 /** `NavigatorView` comp. props */
-type NavigatorViewProps = Pick<RNINavigatorViewProps,
-  'isInteractivePopGestureEnabled' | 'navBarPrefersLargeTitles' | 
-  'navBarAppearance' | 'isNavBarTranslucent'
-> & {
+type NavigatorViewProps = Partial<Pick<RNINavigatorViewProps,
+  // mirror props from `RNINavigatorViewProps`
+  | 'isInteractivePopGestureEnabled' 
+  | 'navBarPrefersLargeTitles' 
+  | 'navBarAppearance' 
+  | 'isNavBarTranslucent'
+>> & {
   style?: ViewStyle;
 
   // Nav. Route Config

@@ -26,7 +26,7 @@ class DemoUtils {
   };
 };
 
-function BlankRoute(props: RouteContentProps){
+function BlankRoute(_: RouteContentProps){
   return(
     <View>
     </View>

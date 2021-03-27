@@ -11,7 +11,6 @@ import * as Helpers from '../functions/Helpers';
 
 // NOTE: This is messy.
 
-
 const colors = [
   Colors.PINK.A700,
   Colors.RED.A700,
@@ -363,7 +362,7 @@ function randomBGColor(){
   return Helpers.randomElement<string>(colors);
 };
 
-function ItemTitle(props){
+function ItemTitle(props: any){
   return (
     <React.Fragment>
       <View style={{
@@ -408,13 +407,13 @@ function ItemTitle(props){
   );
 };
 
-function Spacer(props){
+function Spacer(props: any){
   return(
     <View style={{marginTop: props.space ?? 0}}/>
   );
 };
 
-function SpacerLine(props){
+function SpacerLine(props: any){
   return(
     <View style={{
       paddingTop: props.space ?? 12,
@@ -424,7 +423,7 @@ function SpacerLine(props){
   );
 };
 
-function ButtonPrimary(props){
+function ButtonPrimary(props: any){
   return(
     <TouchableOpacity 
       style={{
@@ -455,7 +454,7 @@ function ButtonPrimary(props){
   );
 };
 
-function ItemContainer(props) {
+function ItemContainer(props: any) {
   return (
     <View style={{
       paddingHorizontal: 12,
@@ -470,7 +469,7 @@ function ItemContainer(props) {
   );
 };
 
-function RowLabelText(props){
+function RowLabelText(props: any){
   return (
     <View style={{
       flexDirection: 'row',
@@ -537,6 +536,7 @@ function ObjectPropertyDisplay(props: {
         ...(props.style ?? {}),
       }}>
         {objectKeys.map((objKey, index) => {
+          // @ts-ignore
           const value = props.object[objKey];
           const isValueObj = (typeof value === 'object' && value !== null);
 
@@ -593,6 +593,7 @@ function ObjectPropertyDisplay(props: {
                   opacity: 0.4,
                 }}
               >
+                {/** @ts-ignore */}
                 {isValueObj? `...`: `'${props.object[objKey]}'`}
               </Text>
             </View>
@@ -638,7 +639,7 @@ class StyledTextInput extends React.PureComponent<{
   };
 };
 
-function SwitchRow(props){
+function SwitchRow(props: any){
   return(
     <View style={{
       flexDirection: 'row',
@@ -677,7 +678,7 @@ function SwitchRow(props){
   );
 };
 
-function NavBarConfigGeneral(props){
+function NavBarConfigGeneral(props: any){
   const inputRouteTitleRef = React.useRef();
   const inputPromptRef = React.useRef();
 
@@ -745,6 +746,7 @@ function NavBarConfigGeneral(props){
         subtitle={`Cycle to the next display mode`}
         onPress={() => {
           const parentRef = props.getParentRef();
+          // @ts-ignore
           parentRef.setState(prevState => ({
             // @ts-ignore
             displayModeIndex: prevState.displayModeIndex + 1
@@ -755,7 +757,7 @@ function NavBarConfigGeneral(props){
   );
 };
 
-function NavBarBackItemsConfig(props){
+function NavBarBackItemsConfig(props: any){
   const currentConfig = backButtonItemConfigs[
     props.parentState.backButtonItemsConfigIndex %
     navBarItemsConfigs.length
@@ -778,6 +780,7 @@ function NavBarBackItemsConfig(props){
         subtitle={`Cycle to the next back item config`}
         onPress={() => {
           const parentRef = props.getParentRef();
+          // @ts-ignore
           parentRef.setState(prevState => ({
             // @ts-ignore
             backButtonItemsConfigIndex: 
@@ -795,6 +798,7 @@ function NavBarBackItemsConfig(props){
       <SwitchRow
         title={`leftItemsSupplementBackButton`}
         value={props.parentState.leftItemsSupplementBackButton}
+        // @ts-ignore
         onValueChange={value => {
           const parentRef = props.getParentRef();
           parentRef.setState({
@@ -805,6 +809,7 @@ function NavBarBackItemsConfig(props){
       <SwitchRow
         title={`applyToPrevBackConfig`}
         value={props.parentState.applyToPrevBackConfig}
+        // @ts-ignore
         onValueChange={value => {
           const parentRef = props.getParentRef();
           parentRef.setState({
@@ -815,6 +820,7 @@ function NavBarBackItemsConfig(props){
       <SwitchRow
         title={`hidesBackButton`}
         value={props.parentState.hidesBackButton}
+        // @ts-ignore
         onValueChange={value => {
           const parentRef = props.getParentRef();
           parentRef.setState({
@@ -838,6 +844,7 @@ function NavBarBackItemsConfig(props){
         subtitle={`Cycle to the next mode`}
         onPress={() => {
           const parentRef = props.getParentRef();
+          // @ts-ignore
           parentRef.setState(prevState => ({
             // @ts-ignore
             backButtonDisplayModeIndex: 
@@ -878,7 +885,7 @@ function NavBarBackItemsConfig(props){
   );
 };
 
-function NavBarRightItemsConfig(props){
+function NavBarRightItemsConfig(props: any){
   const currentConfig = navBarItemsConfigs[
     props.parentState.navBarButtonRightItemsConfigIndex %
     navBarItemsConfigs.length
@@ -897,6 +904,7 @@ function NavBarRightItemsConfig(props){
             object={null}
           />
       ):(
+        // @ts-ignore
         currentConfig.config.map((config, index) =>
           <ObjectPropertyDisplay
             key={`config-${index}`}
@@ -909,6 +917,7 @@ function NavBarRightItemsConfig(props){
         subtitle={`Cycle to the next nav bar item config`}
         onPress={() => {
           const parentRef = props.getParentRef();
+          // @ts-ignore
           parentRef.setState(prevState => ({
             // @ts-ignore
             navBarButtonRightItemsConfigIndex: 
@@ -920,7 +929,7 @@ function NavBarRightItemsConfig(props){
   );
 };
 
-function NavBarLeftItemsConfig(props){
+function NavBarLeftItemsConfig(props: any){
   const currentConfig = navBarItemsConfigs[
     props.parentState.navBarButtonLeftItemsConfigIndex %
     navBarItemsConfigs.length
@@ -939,6 +948,7 @@ function NavBarLeftItemsConfig(props){
             object={null}
           />
       ):(
+        // @ts-ignore
         currentConfig.config.map((config, index) =>
           <ObjectPropertyDisplay
             key={`config-${index}`}
@@ -951,6 +961,7 @@ function NavBarLeftItemsConfig(props){
         subtitle={`Cycle to the next nav bar item config`}
         onPress={() => {
           const parentRef = props.getParentRef();
+          // @ts-ignore
           parentRef.setState(prevState => ({
             // @ts-ignore
             navBarButtonLeftItemsConfigIndex: 
@@ -962,7 +973,7 @@ function NavBarLeftItemsConfig(props){
   );
 };
 
-function NavBarTitleItemConfig(props){
+function NavBarTitleItemConfig(props: any){
   return(
     <ItemContainer>
       <ItemTitle
@@ -973,6 +984,7 @@ function NavBarTitleItemConfig(props){
       <SwitchRow
         title={`renderNavBarTitleItem`}
         value={props.parentState.renderNavBarTitleItem}
+        // @ts-ignore
         onValueChange={value => {
           const parentRef = props.getParentRef();
           parentRef.setState({
@@ -984,7 +996,7 @@ function NavBarTitleItemConfig(props){
   );
 };
 
-function NavBarAppearanceOverrideItemConfig(props){
+function NavBarAppearanceOverrideItemConfig(props: any){
   const currentConfig = navBarAppearanceOverride[
     props.parentState.navBarAppearanceOverrideIndex %
     navBarAppearanceOverride.length
@@ -1006,6 +1018,7 @@ function NavBarAppearanceOverrideItemConfig(props){
         subtitle={`Cycle to the next preset config`}
         onPress={() => {
           const parentRef = props.getParentRef();
+          // @ts-ignore
           parentRef.setState(prevState => ({
             // @ts-ignore
             navBarAppearanceOverrideIndex: 
@@ -1055,7 +1068,9 @@ function NavigationCommandsConfig(props: RouteContentProps){
 
 export class NavigatorTest01 extends React.Component<RouteContentProps> {
   state = {
+    // @ts-ignore
     routeTitle: null,
+    // @ts-ignore
     routePrompt: null,
     displayModeIndex: 0,
 
@@ -1066,6 +1081,7 @@ export class NavigatorTest01 extends React.Component<RouteContentProps> {
 
     leftItemsSupplementBackButton: false,
     hidesBackButton: false,
+    // @ts-ignore
     backButtonTitle: null,
     backButtonDisplayModeIndex: 0,
     applyToPrevBackConfig: false,
@@ -1180,6 +1196,7 @@ export class NavigatorTest01 extends React.Component<RouteContentProps> {
         <NavBarConfigGeneral
           getParentRef={() => this}
           parentState={state}
+          // @ts-ignore
           onSetRoutePrompt={(prompt) => {
             this.setState({routePrompt: prompt});
           }}

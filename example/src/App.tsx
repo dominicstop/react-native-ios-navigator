@@ -60,16 +60,13 @@ class HomeRoute extends React.PureComponent<RouteContentProps> {
     },
   });
 
+  // @ts-ignore
   _handleOnPressItem = async ({item, index}) => {
     const navigation = this.props.navigation;
-
-    if(item.routeKey != RouteKeys.NavigatorTest02){
-      //await navRef.setNavigationBarHidden(true, true);
-    };
-
     await navigation.push({routeKey: item.routeKey});
   };
 
+  // @ts-ignore
   _renderItem = ({item, index}) => {
     const { styles } = HomeRoute;
 
