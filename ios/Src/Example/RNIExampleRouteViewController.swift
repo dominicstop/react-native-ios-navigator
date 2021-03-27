@@ -51,13 +51,19 @@ internal class RNIExampleRouteViewController: RNINavigatorRouteBaseViewControlle
     subtitle2.text = "Route Data: \(self.routeProps.debugDescription)";
     subtitle2.font = .systemFont(ofSize: 16, weight: .regular);
     
-    let button1: UIButton = {
+    func buttonMaker() -> UIButton {
       let button = UIButton();
       button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10);
       
       button.backgroundColor = UIColor(hexString: "#6200EA");
       button.tintColor = .white;
       button.layer.cornerRadius = 10;
+      
+      return button;
+    };
+    
+    let button1: UIButton = {
+      let button = buttonMaker();
       
       button.setTitle("Push ViewController", for: .normal);
       button.addTarget(self, action:#selector(self.onPressPushViewController), for: .touchUpInside);
@@ -66,12 +72,7 @@ internal class RNIExampleRouteViewController: RNINavigatorRouteBaseViewControlle
     }();
     
     let button2: UIButton = {
-      let button = UIButton();
-      button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10);
-      
-      button.backgroundColor = UIColor(hexString: "#6200EA");
-      button.tintColor = .white;
-      button.layer.cornerRadius = 10;
+      let button = buttonMaker();
       
       button.setTitle("Push React Route", for: .normal);
       button.addTarget(self, action:#selector(self.onPressPushReactRoute), for: .touchUpInside);
@@ -80,12 +81,8 @@ internal class RNIExampleRouteViewController: RNINavigatorRouteBaseViewControlle
     }();
     
     let button3: UIButton = {
-      let button = UIButton();
-      button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10);
+      let button = buttonMaker();
       
-      button.backgroundColor = UIColor(hexString: "#6200EA");
-      button.tintColor = .white;
-      button.layer.cornerRadius = 10;
       button.setTitle("Pop Current Route", for: .normal);
       button.addTarget(self, action:#selector(self.onPressPopCurrentRoute), for: .touchUpInside);
       
