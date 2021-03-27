@@ -35,7 +35,7 @@ enum NavStatus {
   NAV_INSERTING  = "NAV_INSERTING" , // nav. is busy inserting a route
   NAV_UPDATING   = "NAV_UPDATING"  , // nav. is busy updating the routes
   UNMOUNTED      = "UNMOUNTED"     , // nav. comp. has been unmounted
-  NAV_ABORT_PUSH = "NAV_ABORT_PUSH", // nav. has been popped before push completed
+  NAV_ABORT = "NAV_ABORT_PUSH", // nav. has been popped before push completed
 };
 
 enum NavEvents {
@@ -164,7 +164,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     const initialRoute = this.getRouteConfig(props.initialRouteKey);
     if(!initialRoute){
       // no matching route config found for `initialRouteKey`
-      throw new Error("`NavigatorView` error: invalid value for `initialRouteKey` prop"
+      throw new Error(
+          "`NavigatorView` error: invalid value for `initialRouteKey` prop"
         + ` - no matching route found for \`initialRouteKey\`: ${props.initialRouteKey}.`
         + " If this is a native route, please add it to the `routes` prop w/ `isNativeRoute`"
         + " property set to true."
@@ -185,7 +186,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   };
 
   componentWillUnmount(){
-    this.navStatus == NavStatus.UNMOUNTED;
+    this.setNavStatus(NavStatus.UNMOUNTED);
     this.queue.clear();
   };
 
@@ -261,6 +262,12 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     );
   };
 
+  private setNavStatus(navStatus: NavStatus){
+    if(this.navStatus != NavStatus.UNMOUNTED){
+      this.navStatus = navStatus;
+    };
+  };
+
   /** used to set/reset the transition override for the current route  */
   private configureTransitionOverride = (params: {
     isPushing: boolean;
@@ -286,7 +293,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     ));
 
     if(transitionDuration > 10000){
-      throw new Error(`The transition duration of ${transitionDuration} sec. is too big`
+      throw new Error(
+          `The transition duration of ${transitionDuration} sec. is too long`
         + " - reminder: specify duration in seconds (ex: 0.5), not in ms (ex: 500)"
       );
     };
@@ -366,8 +374,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     const queue = this.queue.schedule();
     await queue.promise;
 
-    this.navStatus = NavStatus.NAV_POPPING;
-
+    this.setNavStatus(NavStatus.NAV_POPPING);
+    
     while(shouldRemove()){
       //#region - 🐞 DEBUG 🐛
       LIB_GLOBAL.debugLog && console.log(
@@ -399,7 +407,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       }));
     };
 
-    this.navStatus = NavStatus.IDLE;
+    this.setNavStatus(NavStatus.IDLE);
     this.queue.dequeue();
   };
 
@@ -425,7 +433,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
     if(!routeConfig){
       // no matching route config found for `routeItem`
-      throw new Error("`NavigatorView` failed to do: `push`: Invalid `routeKey`");
+      throw new Error(
+        `NavigatorView' failed to do: 'push', invalid 'routeKey': ${routeItem.routeKey}`
+      );
     };
     
     try {
@@ -434,7 +444,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       await queue.promise;
 
       const { activeRoutes } = this.state;
-      this.navStatus = NavStatus.NAV_PUSHING;
+      this.setNavStatus(NavStatus.NAV_PUSHING);
 
       const transitionConfig = this.configureTransitionOverride({
         isPushing: true,
@@ -494,20 +504,17 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       transitionConfig.resetTransition();
       
       // finished, start next item
-      this.navStatus = NavStatus.IDLE;
+      this.setNavStatus(NavStatus.IDLE);
       this.queue.dequeue();
 
     } catch(error){
-      const wasAborted = (
-        this.navStatus == NavStatus.NAV_ABORT_PUSH ||
-        this.navStatus == NavStatus.UNMOUNTED 
-      );
+      const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
+
+      this.setNavStatus(NavStatus.IDLE_ERROR);
+      this.queue.dequeue();
 
       if(!wasAborted) {
-        this.navStatus = NavStatus.IDLE_ERROR;
-        this.queue.dequeue();
-
-        throw new Error("`NavigatorView` failed to do: `push` with error " + error);
+        throw new Error(`'NavigatorView' failed to do: 'push' with error: ${error}`);
       };
     };
   };
@@ -516,7 +523,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     const { activeRoutes } = this.state;
 
     if(activeRoutes.length < 1){
-      throw new Error(`\`pop\` failed, active route count must be > 1`);
+      throw new Error(`'pop' failed, active route count must be > 1`);
     };
 
     try {
@@ -524,7 +531,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       const queue = this.queue.schedule();
       await queue.promise;
 
-      this.navStatus = NavStatus.NAV_POPPING;
+      this.setNavStatus(NavStatus.NAV_POPPING);
 
       const transitionConfig = this.configureTransitionOverride({
         isPushing: false,
@@ -557,15 +564,17 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       // reset transition override
       await transitionConfig.resetTransition();
 
-      this.navStatus = NavStatus.IDLE;
+      this.setNavStatus(NavStatus.IDLE);
       this.queue.dequeue();
 
     } catch(error){
-      if(this.navStatus != NavStatus.UNMOUNTED){
-        this.navStatus = NavStatus.IDLE_ERROR;
-        this.queue.dequeue();
+      const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
 
-        throw new Error("`NavigatorView` failed to do: `pop` with error " + error);
+      this.setNavStatus(NavStatus.IDLE_ERROR);
+      this.queue.dequeue();
+
+      if(!wasAborted) {
+        throw new Error(`'NavigatorView' failed to do: 'pop' with error: ${error}`);
       };
     };
   };
@@ -582,7 +591,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       const queue = this.queue.schedule();
       await queue.promise;
 
-      this.navStatus = NavStatus.NAV_POPPING;
+      this.setNavStatus(NavStatus.NAV_POPPING);
 
       const transitionConfig = this.configureTransitionOverride({
         isPushing: false,
@@ -613,15 +622,17 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       // reset transition override
       await transitionConfig.resetTransition();
 
-      this.navStatus = NavStatus.IDLE;
+      this.setNavStatus(NavStatus.IDLE);
       this.queue.dequeue();
 
     } catch(error){
-      if(this.navStatus != NavStatus.UNMOUNTED){
-        this.navStatus = NavStatus.IDLE_ERROR;
-        this.queue.dequeue();
+      const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
 
-        throw new Error("`NavigatorView` failed to do: `popToRoot` with error " + error);
+      this.setNavStatus(NavStatus.IDLE_ERROR);
+      this.queue.dequeue();
+
+      if(!wasAborted) {
+        throw new Error(`'NavigatorView' failed to do: 'popToRoot' with error: ${error}`);
       };
     };
   };
@@ -647,7 +658,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       const queue = this.queue.schedule();
       await queue.promise;
 
-      this.navStatus = NavStatus.NAV_REMOVING;
+      this.setNavStatus(NavStatus.NAV_REMOVING);
 
       await Helpers.promiseWithTimeout(TIMEOUT_COMMAND,
         RNINavigatorViewModule.removeRoute(
@@ -667,15 +678,17 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
           .map((route, index) => ({...route, routeIndex: index}))
       }));
 
-      this.navStatus = NavStatus.IDLE;
+      this.setNavStatus(NavStatus.IDLE);
       this.queue.dequeue();
 
     } catch(error){
-      if(this.navStatus != NavStatus.UNMOUNTED){
-        this.navStatus = NavStatus.IDLE_ERROR;
-        this.queue.dequeue();
+      const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
 
-        throw new Error(`\`removeRoute\` failed with error: ${error}`);
+      this.setNavStatus(NavStatus.IDLE_ERROR);
+      this.queue.dequeue();
+
+      if(!wasAborted) {
+        throw new Error(`'NavigatorView' failed to do: 'removeRoute' with error: ${error}`);
       };
     };
   };
@@ -705,7 +718,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       const queue = this.queue.schedule();
       await queue.promise;
 
-      this.navStatus = NavStatus.NAV_REMOVING;
+      this.setNavStatus(NavStatus.NAV_REMOVING);
 
       await Helpers.promiseWithTimeout(TIMEOUT_COMMAND,
         RNINavigatorViewModule.removeRoutes(
@@ -728,15 +741,17 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
           .map((route, index) => ({...route, routeIndex: index}))
       }));
 
-      this.navStatus = NavStatus.IDLE;
+      this.setNavStatus(NavStatus.IDLE);
       this.queue.dequeue();
 
     } catch(error){
-      if(this.navStatus != NavStatus.UNMOUNTED){
-        this.navStatus = NavStatus.IDLE_ERROR;
-        this.queue.dequeue();
+      const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
 
-        throw new Error(`\`removeRoute\` failed with error: ${error}`);
+      this.setNavStatus(NavStatus.IDLE_ERROR);
+      this.queue.dequeue();
+
+      if(!wasAborted) {
+        throw new Error(`'NavigatorView' failed to do: 'removeRoutes' with error: ${error}`);
       };
     };
   };
@@ -777,7 +792,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       const queue = this.queue.schedule();
       await queue.promise;
 
-      this.navStatus = NavStatus.NAV_REPLACING;
+      this.setNavStatus(NavStatus.NAV_REPLACING);
 
       await Promise.all([
         // 1. wait for replacement route to be added/init
@@ -806,15 +821,17 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         )
       );
 
-      this.navStatus = NavStatus.IDLE;
+      this.setNavStatus(NavStatus.IDLE);
       this.queue.dequeue();
 
     } catch(error){
-      if(this.navStatus != NavStatus.UNMOUNTED){
-        this.navStatus = NavStatus.IDLE_ERROR;
-        this.queue.dequeue();
+      const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
 
-        throw new Error(`\`replaceRoute\` failed with error: ${error}`);
+      this.setNavStatus(NavStatus.IDLE_ERROR);
+      this.queue.dequeue();
+
+      if(!wasAborted) {
+        throw new Error(`'NavigatorView' failed to do: 'removeRoutes' with error: ${error}`);
       };
     };
   };
@@ -854,7 +871,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       const queue = this.queue.schedule();
       await queue.promise;
       
-      this.navStatus = NavStatus.NAV_INSERTING;
+      this.setNavStatus(NavStatus.NAV_INSERTING);
 
       //#region - 🐞 DEBUG 🐛
       LIB_GLOBAL.debugLog && console.log(
@@ -885,15 +902,17 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       );
       
       // finished, start next item
-      this.navStatus = NavStatus.IDLE;
+      this.setNavStatus(NavStatus.IDLE);
       this.queue.dequeue();
 
     } catch(error){
-      if(this.navStatus != NavStatus.UNMOUNTED) {
-        this.navStatus = NavStatus.IDLE_ERROR;
-        this.queue.dequeue();
+      const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
 
-        throw new Error("`NavigatorView` failed to do: `insertRoute` with error: " + error);
+      this.setNavStatus(NavStatus.IDLE_ERROR);
+      this.queue.dequeue();
+
+      if(!wasAborted) {
+        throw new Error(`'NavigatorView' failed to do: 'insertRoute' with error: ${error}`);
       };
     };
   };
@@ -916,7 +935,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       const queue = this.queue.schedule();
       await queue.promise;
 
-      this.navStatus = NavStatus.NAV_UPDATING;
+      this.setNavStatus(NavStatus.NAV_UPDATING);
 
       const currentRoutes = [...this.state.activeRoutes];
       
@@ -981,15 +1000,17 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       );
 
       // finished, start next item
-      this.navStatus = NavStatus.IDLE;
+      this.setNavStatus(NavStatus.IDLE);
       this.queue.dequeue();
 
     } catch(error){
-      if(this.navStatus != NavStatus.UNMOUNTED) {
-        this.navStatus = NavStatus.IDLE_ERROR;
-        this.queue.dequeue();
+      const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
 
-        throw new Error("`NavigatorView` failed to do: `insertRoute` with error: " + error);
+      this.setNavStatus(NavStatus.IDLE_ERROR);
+      this.queue.dequeue();
+
+      if(!wasAborted) {
+        throw new Error(`'NavigatorView' failed to do: 'setRoutes' with error: ${error}`);
       };
     };
   };
@@ -1008,9 +1029,13 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       );
 
     } catch(error){
-      if(this.navStatus != NavStatus.UNMOUNTED){
-        this.navStatus = NavStatus.IDLE_ERROR;
-        throw new Error(`\`setNavigationBarHidden\` failed with error: ${error}`);
+      const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
+
+      this.setNavStatus(NavStatus.IDLE_ERROR);
+      this.queue.dequeue();
+
+      if(!wasAborted) {
+        throw new Error(`'NavigatorView' failed to do: 'setNavigationBarHidden' with error: ${error}`);
       };
     };
   };
@@ -1095,7 +1120,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
           const { activeRoutes } = this.state;
 
           const nextRouteIndex = activeRoutes.length;
-          this.navStatus = NavStatus.NAV_PUSHING;
+          this.setNavStatus(NavStatus.NAV_PUSHING);
 
           const nextRoute: NavRouteStateItem = {
             routeID: commandData.routeID,
@@ -1124,21 +1149,25 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
           );
 
           // finished, start next item
-          this.navStatus = NavStatus.IDLE;
+          this.setNavStatus(NavStatus.IDLE);
           this.queue.dequeue();
 
         } catch(error) {
-          this.navStatus = NavStatus.IDLE_ERROR;
+          const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
+
+          this.setNavStatus(NavStatus.IDLE_ERROR);
           this.queue.dequeue();
 
-          throw new Error(
-              `\`NavigatorView\` failed to do: \`${commandData.commandKey}\``
-            + `with error: ${error}`
-          );
+          if(!wasAborted) {
+            throw new Error(
+                `'NavigatorView' failed to do: '${commandData.commandKey}'`
+              + `with error: ${error}`
+            );
+          };
         };
         break;
 
-      case "push":
+      case 'push':
         await this.push({
           routeKey  : commandData.routeKey,
           routeProps: commandData.routeProps,
@@ -1150,8 +1179,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   private _handleOnNavRouteWillPop = ({nativeEvent}: OnNavRouteWillPopPayload) => {
     if(this.navigatorID != nativeEvent.navigatorID) return;
 
-    if(this.navStatus == NavStatus.NAV_PUSHING){
-      this.navStatus = NavStatus.NAV_ABORT_PUSH;
+    if(!NavigatorViewUtils.isNavStateIdle(this.navStatus)){
+      this.setNavStatus(NavStatus.NAV_ABORT);
     };
   };
 
@@ -1297,10 +1326,18 @@ class NavigatorViewUtils {
 
   static isNavStateIdle(navStatus: NavStatus){
     return (
-      navStatus == NavStatus.IDLE           ||
-      navStatus == NavStatus.IDLE_INIT      ||
-      navStatus == NavStatus.IDLE_ERROR     ||
-      navStatus == NavStatus.NAV_ABORT_PUSH
+      navStatus == NavStatus.IDLE       ||
+      navStatus == NavStatus.IDLE_INIT  ||
+      navStatus == NavStatus.IDLE_ERROR ||
+      navStatus == NavStatus.NAV_ABORT
+    );
+  };
+
+  static wasAborted(navStatus: NavStatus){
+    return (
+      navStatus == NavStatus.UNMOUNTED   ||
+      navStatus == NavStatus.NAV_ABORT   ||
+      navStatus == NavStatus.NAV_POPPING 
     );
   };
 
