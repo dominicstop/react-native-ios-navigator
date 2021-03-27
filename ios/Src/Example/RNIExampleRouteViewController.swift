@@ -34,9 +34,14 @@ internal class RNIExampleRouteViewController: RNINavigatorRouteBaseViewControlle
     
     self.navigationItem.title = "Native Route";
     
-    let title = UILabel();
-    title.text = "Native Route: \(self.routeKey)";
-    title.font = .systemFont(ofSize: 18, weight: .bold);
+    let title1 = UILabel();
+    title1.text = "UIViewController";
+    title1.font = .systemFont(ofSize: 24, weight: .bold);
+    title1.textColor = UIColor(hexString: "#311B92");
+    
+    let title2 = UILabel();
+    title2.text = "Native Route: \(self.routeKey)";
+    title2.font = .systemFont(ofSize: 18, weight: .semibold);
     
     let subtitle1 = UILabel();
     subtitle1.text = "Route Index: \(self.routeIndex)";
@@ -48,7 +53,12 @@ internal class RNIExampleRouteViewController: RNINavigatorRouteBaseViewControlle
     
     let button1: UIButton = {
       let button = UIButton();
-      button.layoutMargins = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0);
+      button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10);
+      
+      button.backgroundColor = UIColor(hexString: "#6200EA");
+      button.tintColor = .white;
+      button.layer.cornerRadius = 10;
+      
       button.setTitle("Push ViewController", for: .normal);
       button.addTarget(self, action:#selector(self.onPressPushViewController), for: .touchUpInside);
       
@@ -57,7 +67,12 @@ internal class RNIExampleRouteViewController: RNINavigatorRouteBaseViewControlle
     
     let button2: UIButton = {
       let button = UIButton();
-      button.layoutMargins = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0);
+      button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10);
+      
+      button.backgroundColor = UIColor(hexString: "#6200EA");
+      button.tintColor = .white;
+      button.layer.cornerRadius = 10;
+      
       button.setTitle("Push React Route", for: .normal);
       button.addTarget(self, action:#selector(self.onPressPushReactRoute), for: .touchUpInside);
       
@@ -66,7 +81,11 @@ internal class RNIExampleRouteViewController: RNINavigatorRouteBaseViewControlle
     
     let button3: UIButton = {
       let button = UIButton();
-      button.layoutMargins = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0);
+      button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10);
+      
+      button.backgroundColor = UIColor(hexString: "#6200EA");
+      button.tintColor = .white;
+      button.layer.cornerRadius = 10;
       button.setTitle("Pop Current Route", for: .normal);
       button.addTarget(self, action:#selector(self.onPressPopCurrentRoute), for: .touchUpInside);
       
@@ -75,23 +94,26 @@ internal class RNIExampleRouteViewController: RNINavigatorRouteBaseViewControlle
     
     let stack = UIStackView(arrangedSubviews: [
       // title
-      title, subtitle1, subtitle2,
+      title1, title2, subtitle1, subtitle2,
       // nav commands buttons
       button1, button2, button3
     ]);
     
-    stack.layer.cornerRadius = 10;
-    
     if #available(iOS 11.0, *) {
-      stack.isLayoutMarginsRelativeArrangement = true
-      stack.directionalLayoutMargins =
-        NSDirectionalEdgeInsets(top: 15, leading: 15, bottom: 15, trailing: 15);
+      stack.setCustomSpacing(20, after: subtitle2);
+      stack.setCustomSpacing(10, after: button1);
+      stack.setCustomSpacing(10, after: button2);
     };
 
     stack.axis = .vertical;
     stack.alignment = .center;
-    stack.backgroundColor = .lightGray;
+    stack.backgroundColor = UIColor(hexString: "#EDE7F6");
+    stack.layer.cornerRadius = 10;
     
+    if #available(iOS 11.0, *) {
+      stack.isLayoutMarginsRelativeArrangement = true;
+      stack.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20)
+    };
     
     self.view.backgroundColor = .white;
     
@@ -99,6 +121,7 @@ internal class RNIExampleRouteViewController: RNINavigatorRouteBaseViewControlle
     stack.translatesAutoresizingMaskIntoConstraints = false;
     
     NSLayoutConstraint.activate([
+      // make center
       stack.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
       stack.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
     ]);
