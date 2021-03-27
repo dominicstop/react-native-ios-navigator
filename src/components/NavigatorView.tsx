@@ -1111,6 +1111,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     //#endregion
     
     switch (commandData.commandKey) {
+      // TODO: Move to sep. function
       case 'pushViewController':
         try {
           // if busy, wait for prev. to finish
@@ -1171,7 +1172,15 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         await this.push({
           routeKey  : commandData.routeKey,
           routeProps: commandData.routeProps,
+        }, {
+          isAnimated: commandData.isAnimated,
         });
+        break;
+      
+      case 'pop':
+        await this.pop({
+          isAnimated: commandData.isAnimated,
+        })
         break;
     };
   };

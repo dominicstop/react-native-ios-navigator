@@ -33,6 +33,6 @@ public protocol RNINavigatorNativeCommands: AnyObject {
     animated: Bool	
   );
   
-  func pop();
+  func pop(animated: Bool);
   
 };

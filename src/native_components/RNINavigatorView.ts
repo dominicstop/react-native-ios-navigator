@@ -2,6 +2,7 @@ import { ViewStyle, requireNativeComponent } from 'react-native';
 import type { NavBarAppearanceCombinedConfig } from 'src/types/NavBarAppearanceConfig';
 
 //#region - `RNINavigatorView` Event Payloads
+// TODO: Cleanup comma in obj. declaration
 export type OnNavRouteViewAddedPayload = { nativeEvent: {
   target       : number,
   routeID      : number,
@@ -47,6 +48,7 @@ export type OnNativeCommandRequestPayload = { nativeEvent: {
     isAnimated: boolean
   } | {
     commandKey: 'pop';
+    isAnimated: boolean;
   };
 }};
 //#endregion

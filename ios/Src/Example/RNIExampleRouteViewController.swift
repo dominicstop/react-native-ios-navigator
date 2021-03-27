@@ -64,8 +64,20 @@ internal class RNIExampleRouteViewController: RNINavigatorRouteBaseViewControlle
       return button;
     }();
     
+    let button3: UIButton = {
+      let button = UIButton();
+      button.layoutMargins = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0);
+      button.setTitle("Pop Current Route", for: .normal);
+      button.addTarget(self, action:#selector(self.onPressPopCurrentRoute), for: .touchUpInside);
+      
+      return button;
+    }();
+    
     let stack = UIStackView(arrangedSubviews: [
-      title, subtitle1, subtitle2, button1, button2
+      // title
+      title, subtitle1, subtitle2,
+      // nav commands buttons
+      button1, button2, button3
     ]);
     
     stack.layer.cornerRadius = 10;
@@ -99,5 +111,9 @@ internal class RNIExampleRouteViewController: RNINavigatorRouteBaseViewControlle
   
   @objc func onPressPushReactRoute(){
     self.navigator?.push(routeKey: "NavigatorTest01", routeProps: nil, animated: true);
+  };
+  
+  @objc func onPressPopCurrentRoute(){
+    self.navigator?.pop(animated: true);
   };
 };
