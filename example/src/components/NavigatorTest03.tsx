@@ -193,7 +193,10 @@ export function NavigatorTest03(props: RouteContentProps){
         title={'Push Native Route'}
         subtitle={'Push a native route: `TestNativeRoute`'}
         onPress={() => {
-          props.navigation.push({routeKey: 'TestNativeRoute'});
+          props.navigation.push({
+            routeKey: 'TestNativeRoute',
+            routeProps: { message: "Hello from JS" },
+          });
         }}
       />
       <ButtonWithSubtitle
