@@ -2,35 +2,34 @@ import { ViewStyle, requireNativeComponent } from 'react-native';
 import type { NavBarAppearanceCombinedConfig } from 'src/types/NavBarAppearanceConfig';
 
 //#region - `RNINavigatorView` Event Payloads
-// TODO: Cleanup comma in obj. declaration
 export type OnNavRouteViewAddedPayload = { nativeEvent: {
-  target       : number,
-  routeID      : number,
-  routeKey     : string,
-  routeIndex   : number,
-  isNativeRoute: boolean,
-  navigatorID  : number,
+  target       : number;
+  routeID      : number;
+  routeKey     : string;
+  routeIndex   : number;
+  isNativeRoute: boolean;
+  navigatorID  : number;
 }};
 
 export type OnNavRouteWillPopPayload = { nativeEvent: {
-  target         : number ,
-  routeKey       : string ,
-  routeIndex     : number ,
-  navigatorID    : number ,
-  isUserInitiated: boolean,
+  target         : number;
+  routeKey       : string;
+  routeIndex     : number;
+  navigatorID    : number;
+  isUserInitiated: boolean;
 }};
 
 export type OnNavRouteDidPopPayload = { nativeEvent: {
-  target         : number ,
-  routeKey       : string ,
-  routeIndex     : number ,
-  navigatorID    : number ,
-  isUserInitiated: boolean,
+  target         : number;
+  routeKey       : string;
+  routeIndex     : number;
+  navigatorID    : number;
+  isUserInitiated: boolean;
 }};
 
 export type OnSetNativeRouteDataPayload = { nativeEvent: {
-  target     : number,
-  navigatorID: number,
+  target     : number;
+  navigatorID: number;
 }};
 
 export type OnNativeCommandRequestPayload = { nativeEvent: {
