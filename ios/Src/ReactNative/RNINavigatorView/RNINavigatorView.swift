@@ -46,7 +46,7 @@ internal class RNINavigatorView: UIView {
   
   var activeRoutes: [RNINavigatorRouteBaseViewController] {
     self.navigationVC.viewControllers.compactMap {
-      $0 as? RNINavigatorReactRouteViewController
+      $0 as? RNINavigatorRouteBaseViewController
     };
   };
   
@@ -1054,7 +1054,15 @@ extension RNINavigatorView: RNINavigatorNativeCommands {
     ]);
   };
   
-  func pop() {
-    // TODO
+  func pop(animated: Bool = true) {
+    let commandData: [String: Any] = [
+      "commandKey": "pop",
+      "isAnimated": animated
+    ];
+    
+    self.onNativeCommandRequest?([
+      "navigatorID": self.navigatorID!,
+      "commandData": commandData,
+    ]);
   };
 };
