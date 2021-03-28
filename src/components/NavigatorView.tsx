@@ -1244,17 +1244,18 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       // the routes from `activeRoutes` will only ever have js/react routes
       const routeConfig = this.getRouteConfig(route.routeKey) as NavRouteConfigItemJS;
 
-      const isLast         = (activeRoutesCount - 1) == route.routeIndex;
-      const isSecondToLast = (activeRoutesCount - 2) == route.routeIndex;
+      const isLast         = route.routeIndex == (activeRoutesCount - 1);
+      const isSecondToLast = route.routeIndex == (activeRoutesCount - 2);
 
       return (
         <NavigatorRouteView
           key={`routeID-${route.routeID}`}
           ref={r => this.routeRefMap[route.routeID] = r}
+          routeContainerStyle={props.routeContainerStyle}
           routeID={route.routeID}
           routeIndex={route.routeIndex}
-          routeContainerStyle={props.routeContainerStyle}
           routeKey={route.routeKey}
+          isRootRoute={(route.routeIndex == 0)}
           routeProps={(
             route      .routeProps ??
             routeConfig.initialRouteProps

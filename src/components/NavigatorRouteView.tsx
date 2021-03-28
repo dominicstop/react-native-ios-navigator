@@ -61,12 +61,18 @@ type NavigatorRouteViewProps = {
   routeKey: string;
   routeIndex: number;
   routeProps: object;
+
+  isRootRoute: boolean;
+
   routeOptionsDefault: RouteOptions;
-  routeContainerStyle: ViewStyle,
+  routeContainerStyle: ViewStyle;
+
   transitionConfigPushOverride: RouteTransitionPushConfig;
   transitionConfigPopOverride: RouteTransitionPopConfig;
-  getRefToNavigator: () => NavigatorView,
-  renderRouteContent: () => ReactElement<RouteContentProps>
+
+  getRefToNavigator: () => NavigatorView;
+  renderRouteContent: () => ReactElement<RouteContentProps>;
+
   // render nav bar items
   renderNavBarLeftItem ?: RenderNavBarItem;
   renderNavBarRightItem?: RenderNavBarItem;
