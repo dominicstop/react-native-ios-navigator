@@ -307,11 +307,16 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       transitionDuration: (transitionDuration + 250),
       setTransition: async () => {
         if(hasTransitionConfig){
-          // temporarily override the last route's push/pop transition
-          await Helpers.setStateAsync<Partial<NavigatorViewState>>(this, {
-            transitionConfigPushOverride: params.pushConfig,
-            transitionConfigPopOverride : params.popConfig ,
-          });
+          await Promise.all([
+            // temp bugfix: delay so that pop transition config is set/received
+            // from native.
+            !params.isPushing && Helpers.timeout(100),
+            // temporarily override the last route's push/pop transition
+            Helpers.setStateAsync<Partial<NavigatorViewState>>(this, {
+              transitionConfigPushOverride: params.pushConfig,
+              transitionConfigPopOverride : params.popConfig ,
+            }),
+          ])
         };
       },
       resetTransition: async () => {

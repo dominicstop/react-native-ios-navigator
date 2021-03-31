@@ -39,52 +39,52 @@ internal class LeftEdgeInteractionController: UIPercentDrivenInteractiveTransiti
     super.init();
 
     self.viewController = viewController;
-    self.setupGestureRecognizer(in: viewController.view);
+    self.setupGestureRecognizer();
   };
   
-  private func setupGestureRecognizer(in view: UIView) {
-    let edge = UIScreenEdgePanGestureRecognizer(
+  func setupGestureRecognizer() {
+    let swipeBackGesture = UIScreenEdgePanGestureRecognizer(
       target: self,
       action: #selector(self.handleEdgePan(_:))
     );
     
-    edge.edges = .left;
-    view.addGestureRecognizer(edge);
+    swipeBackGesture.edges = .left;
+    self.viewController.view.addGestureRecognizer(swipeBackGesture);
   };
   
   @objc func handleEdgePan(_ gesture: UIScreenEdgePanGestureRecognizer) {
-    let translate = gesture.translation(in: gesture.view);
+    let translate = gesture.translation(in: gesture.view!.superview!);
     let percent = translate.x / gesture.view!.bounds.size.width;
       
     switch gesture.state {
       case .began:
         self.inProgress = true;
         
-        if let navigationController = viewController.navigationController {
+        if let navigationController = self.viewController.navigationController {
           navigationController.popViewController(animated: true);
           return;
         };
         
-        viewController.dismiss(animated: true, completion: nil);
+        self.viewController.dismiss(animated: true, completion: nil);
         
       case .changed:
-          self.update(percent);
+        self.shouldCompleteTransition = percent > 0.5;
+        self.update(percent);
         
       case .cancelled:
-          self.inProgress = false;
-          self.cancel();
-        
+        self.inProgress = false;
+        self.cancel();
+      
       case .ended:
-          self.inProgress = false;
+        self.inProgress = false;
 
-          let velocity = gesture.velocity(in: gesture.view);
-
-          if percent > 0.5 || velocity.x > 0 {
-            self.finish();
-            
-          } else {
-            self.cancel();
-          };
+        let velocity = gesture.velocity(in: gesture.view);
+        if self.shouldCompleteTransition || velocity.x > 0 {
+          self.finish();
+          
+        } else {
+          self.cancel();
+        };
         
       default: break;
     };

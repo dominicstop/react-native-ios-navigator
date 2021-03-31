@@ -47,6 +47,9 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
   
   var transitionTypePop = RNINavTransitionConfig(type: .DefaultPop) {
     willSet {
+      guard let navigationController = self.navigationController
+      else { return };
+      
       // don't set the delegate when using the default push/pop transition
       // to not disable the interactive swipe gesture.
       // TODO: This can be fixed by re-impl. the default pop transition.
@@ -54,13 +57,13 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
          self.transitionTypePush.transitionType == .DefaultPush {
         
         self.interactionController = nil;
-        self.navigationController?.delegate = nil;
+        navigationController.delegate = nil;
         
       } else {
         self.interactionController =
           LeftEdgeInteractionController(viewController: self);
         
-        self.navigationController?.delegate = self;
+        navigationController.delegate = self;
       };
     }
   };
@@ -101,6 +104,15 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
               let reactSafeAreaView = contentView as? RCTSafeAreaView {
       
       self.reactSafeAreaView = reactSafeAreaView;
+    };
+  };
+  
+  override func viewDidLoad() {
+    super.viewDidLoad();
+    
+    if self.transitionTypePop.transitionType != .DefaultPop {
+      self.navigationController?.delegate = self;
+      self.interactionController = LeftEdgeInteractionController(viewController: self);
     };
   };
   
@@ -367,7 +379,9 @@ extension RNINavigatorReactRouteViewController: RNINavigatorRouteViewDelegate {
 // MARK:- Extension: UINavigationControllerDelegate
 // ------------------------------------------------
 
-extension RNINavigatorReactRouteViewController: UINavigationControllerDelegate {
+extension RNINavigatorReactRouteViewController:
+  UINavigationControllerDelegate, UIViewControllerTransitioningDelegate {
+  
   func navigationController(
     _           navigationController: UINavigationController,
     animationControllerFor operation: UINavigationController.Operation,
@@ -375,7 +389,6 @@ extension RNINavigatorReactRouteViewController: UINavigationControllerDelegate {
     to   toVC  : UIViewController
 
   ) -> UIViewControllerAnimatedTransitioning? {
-    
     switch operation {
       case .push: return self.transitionTypePush.makeAnimator();
         
@@ -383,17 +396,15 @@ extension RNINavigatorReactRouteViewController: UINavigationControllerDelegate {
         interactionController: self.interactionController
       );
       
-      default:  return nil;
+      default: return nil;
     };
   };
   
-  func navigationController(
-    _ navigationController: UINavigationController,
-    interactionControllerFor animationController: UIViewControllerAnimatedTransitioning
-
+  func interactionControllerForDismissal(
+    using animator: UIViewControllerAnimatedTransitioning
   ) -> UIViewControllerInteractiveTransitioning? {
     
-    guard let animator = animationController as? CustomAnimator,
+    guard let animator = animator as? CustomAnimator,
           let interactionController = animator.interactionController as? LeftEdgeInteractionController,
           interactionController.inProgress
     else { return nil };
