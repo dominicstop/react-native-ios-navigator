@@ -8,6 +8,7 @@ import { NavigatorExample01 } from './components/NavigatorExample01';
 import { NavigatorTest01 } from './components/NavigatorTest01';
 import { NavigatorTest02 } from './components/NavigatorTest02';
 import { NavigatorTest03 } from './components/NavigatorTest03';
+import { NavigatorTest04 } from './components/NavigatorTest04';
 
 import { NavigatorDemo01 } from './components/NavigatorDemo01';
 import { NavigatorDemo02 } from './components/NavigatorDemo02';
@@ -21,33 +22,46 @@ const RouteKeys = {
   NavigatorTest01: 'NavigatorTest01',
   NavigatorTest02: 'NavigatorTest02',
   NavigatorTest03: 'NavigatorTest03',
+  NavigatorTest04: 'NavigatorTest04',
   NavigatorDemo01: 'NavigatorDemo01',
   NavigatorDemo02: 'NavigatorDemo02',
 };
 
 const RouteItems = [{ 
   routeKey: RouteKeys.NavigatorExample01,
-  desc: 'Nested navigator example',
+  title: 'Basic Nested',
+  desc: 'Nested navigator example w/ basic navigation (e.g. push and pop).',
 }, {
   routeKey: RouteKeys.NavigatorTest01,
+  title: 'Navbar Config',
   desc: (
       `Test for all the different ways a navigator bar can be configured,`
     + ` e.g. this is a test for setting/updating the 'RouteOptions'.`
   ),
 }, {
   routeKey: RouteKeys.NavigatorTest02,
+  title: 'Navbar Custom Title',
   desc: (
       `Test for showing a custom nav. bar title item and testing whether it`
     + ` updates property when the props updates.`
   )
 }, { 
   routeKey: RouteKeys.NavigatorTest03,
+  title: 'Navigation Commands',
   desc: (
       `Tester for all the navigation commands currently supported, e.g.`
     + ` push, pop, 'popToRoot', etc.`
   )
 }, { 
+  routeKey: RouteKeys.NavigatorTest04,
+  title: 'Push/Pop Transitions',
+  desc: (
+      `Tester for the preset transitions that can be used for the push and pop`
+    + ` navigation commands.`
+  )
+}, { 
   routeKey: RouteKeys.NavigatorDemo01,
+  title: 'Navigator Nested Layout',
   desc: (
       `Automatic demo for showing nested navigators in varying configurations`
     + ` any layout. Also tests whether the 'push'/'pop' can be chained together`
@@ -55,6 +69,7 @@ const RouteItems = [{
   )
 }, { 
   routeKey: RouteKeys.NavigatorDemo02,
+  title: 'Navigator Recursive Nest',
   desc: (
       `Automatic demo for showing nested navigators, specifically this demos`
     + ` a customized nav. bar and tests whether they layout properly when they're`
@@ -66,6 +81,7 @@ const RouteItems = [{
 
 function RouteItem(props: {
   routeKey: string;
+  title: string;
   desc: string;
   index: number;
   onPress: Function;
@@ -81,6 +97,9 @@ function RouteItem(props: {
         </Text>
       </View>
       <View style={styles.routeItemContentContainer}>
+        <Text style={styles.routeItemTitleText}>
+          {props.title}
+        </Text>
         <Text style={styles.routeItemDescText}>
           {props.desc}
         </Text>
@@ -122,6 +141,7 @@ class HomeRoute extends React.PureComponent<RouteContentProps> {
     return (
       <RouteItem
         key={item.routeKey}
+        title={item.title}
         routeKey={item.routeKey}
         desc={item.desc}
         index={index}
@@ -183,6 +203,11 @@ export default function App() {
           <NavigatorTest03/>
         ),
       }, {
+        routeKey: RouteKeys.NavigatorTest04,
+        renderRoute: () => (
+          <NavigatorTest04/>
+        ),
+      }, {
         routeKey: RouteKeys.NavigatorDemo01,
         routeOptionsDefault: {
           largeTitleDisplayMode: 'never',
@@ -212,7 +237,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     borderRadius: 10,
     marginTop: 15,
-    marginHorizontal: 12,
+    marginHorizontal: 13,
     backgroundColor: Colors.PURPLE[50],
   },
   routeItemTitleContainer: {
@@ -228,13 +253,20 @@ const styles = StyleSheet.create({
   },
   textRouteItemTitleBullet: {
     color: 'white',
+    fontSize: 17,
     marginRight: 7,
-    fontWeight: 'bold',
+    fontWeight: '300',
   },
   textRouteItemTitle: {
     color: 'white',
     fontWeight: 'bold',
     fontSize: 17,
+  },
+  routeItemTitleText: {
+    color: Colors.PURPLE[1100],
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 3,
   },
   routeItemDescText: {
     color: Colors.PURPLE[1100],
