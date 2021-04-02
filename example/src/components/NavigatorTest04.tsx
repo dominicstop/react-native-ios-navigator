@@ -119,14 +119,14 @@ function MainRoute(props: RouteContentProps){
 
       <Button
         title={'Push'}
-        subtitle={'with `SlideUpPush` 1s'}
+        subtitle={'with `GlideUpPush` 1s'}
         marginTop={30}
         onPress={() => {
           props.navigation.push({
             routeKey: 'MainRoute'
           }, {
             transitionConfig: {
-              type: 'SlideUpPush',
+              type: 'GlideUpPush',
               duration: 1,
             }
           });
@@ -134,11 +134,11 @@ function MainRoute(props: RouteContentProps){
       />
       <Button
         title={'Pop'}
-        subtitle={'with `SlideUpPop` 1s'}
+        subtitle={'with `GlideUpPop` 1s'}
         onPress={() => {
           props.navigation.pop({
             transitionConfig: {
-              type: 'SlideUpPop',
+              type: 'GlideUpPop',
               duration: 1,
             }
           });

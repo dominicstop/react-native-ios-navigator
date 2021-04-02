@@ -19,8 +19,8 @@ internal class RNINavTransitionConfig {
     case SlidePush;
     case SlidePop;
     
-    case SlideUpPush;
-    case SlideUpPop;
+    case GlideUpPush;
+    case GlideUpPop;
   };
   
   let transitionType: TransitionTypes;
@@ -65,8 +65,8 @@ internal class RNINavTransitionConfig {
         interactionController: interactionController
       );
       
-      case .SlideUpPush: return SlideUpPushAnimator(duration: duration);
-      case .SlideUpPop : return SlideUpPopAnimator(
+      case .GlideUpPush: return GlideUpPushAnimator(duration: duration);
+      case .GlideUpPop : return GlideUpPopAnimator(
         duration: self.duration,
         interactionController: interactionController
       );

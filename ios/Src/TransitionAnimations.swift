@@ -291,7 +291,7 @@ internal class SlidePopAnimator: CustomAnimator {
 };
 
 
-internal class SlideUpPushAnimator: CustomAnimator {
+internal class GlideUpPushAnimator: CustomAnimator {
   override func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
     guard let fromViewController = transitionContext.viewController(forKey: .from),
           let toViewController   = transitionContext.viewController(forKey: .to)
@@ -353,7 +353,7 @@ internal class SlideUpPushAnimator: CustomAnimator {
   };
 };
 
-internal class SlideUpPopAnimator: CustomAnimator {
+internal class GlideUpPopAnimator: CustomAnimator {
   
   init(duration: TimeInterval = 0.25, interactionController: UIPercentDrivenInteractiveTransition? = nil){
     super.init(duration: duration);
