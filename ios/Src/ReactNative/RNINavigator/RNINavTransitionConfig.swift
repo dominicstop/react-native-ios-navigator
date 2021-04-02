@@ -18,6 +18,9 @@ internal class RNINavTransitionConfig {
     
     case SlidePush;
     case SlidePop;
+    
+    case SlideUpPush;
+    case SlideUpPop;
   };
   
   let transitionType: TransitionTypes;
@@ -55,8 +58,15 @@ internal class RNINavTransitionConfig {
         interactionController: interactionController
       );
       
+      // TODO: Rename to "SlideLeftPush"
       case .SlidePush: return SlidePushAnimator(duration: duration);
-      case .SlidePop: return SlidePopAnimator(
+      case .SlidePop : return SlidePopAnimator(
+        duration: self.duration,
+        interactionController: interactionController
+      );
+      
+      case .SlideUpPush: return SlideUpPushAnimator(duration: duration);
+      case .SlideUpPop : return SlideUpPopAnimator(
         duration: self.duration,
         interactionController: interactionController
       );
