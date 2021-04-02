@@ -52,7 +52,10 @@ function MainRoute(props: RouteContentProps){
   const routeContainerStyle = { backgroundColor: bgColor };
 
   return (
-    <ScrollView style={[styles.routeContainer, routeContainerStyle]}>
+    <ScrollView 
+      style={[styles.routeContainer, routeContainerStyle]}
+      contentContainerStyle={styles.routeContentContainer}
+    >
       <View style={styles.debugDataContainer}>
         <Text style={styles.debugDataRouteIndexLabel}>
           {'Current Route Index'}
@@ -111,6 +114,34 @@ function MainRoute(props: RouteContentProps){
           props.navigation.pop({
             transitionConfig: {
               type: 'SlidePop',
+              duration: 1,
+            }
+          });
+        }}
+      />
+
+      <Button
+        title={'Push'}
+        subtitle={'with `SlideUpPush` 1s'}
+        marginTop={30}
+        onPress={() => {
+          props.navigation.push({
+            routeKey: 'MainRoute'
+          }, {
+            transitionConfig: {
+              type: 'SlideUpPush',
+              duration: 1,
+            }
+          });
+        }}
+      />
+      <Button
+        title={'Pop'}
+        subtitle={'with `SlideUpPop` 1s'}
+        onPress={() => {
+          props.navigation.pop({
+            transitionConfig: {
+              type: 'SlideUpPop',
               duration: 1,
             }
           });
@@ -179,9 +210,11 @@ const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
   },
-  routeContainer: {
-    paddingTop: 25,
+  routeContentContainer: {
     paddingBottom: 100,
+  },
+  routeContainer: {
+    paddingTop: 20,
     paddingHorizontal: 10,
   },
   debugDataContainer: {

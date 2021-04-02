@@ -5,10 +5,10 @@ import type { NavBarAppearanceConfig } from '../types/NavBarAppearanceConfig';
 
 
 type RouteTransitionPushTypes = 
-  "DefaultPush" | "FadePush" | "SlidePush" | "GlideUpPush";
+  "DefaultPush" | "FadePush" | "SlidePush" | "SlideUpPush" | "GlideUpPush";
 
 type RouteTransitionPopTypes = 
-  "DefaultPop" | "FadePop" | "SlidePop" | "GlideUpPop";
+  "DefaultPop" | "FadePop" | "SlidePop" | "SlideUpPop" | "GlideUpPop";
 
 type RouteTransitionConfigBase = {
   duration?: number
