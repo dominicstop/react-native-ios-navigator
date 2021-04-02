@@ -146,7 +146,7 @@ internal class FadePopAnimator: CustomAnimator {
 };
 
 
-internal class SlidePushAnimator: CustomAnimator {
+internal class SlideLeftPushAnimator: CustomAnimator {
   override func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
     guard let fromViewController = transitionContext.viewController(forKey: .from),
           let toViewController   = transitionContext.viewController(forKey: .to)
@@ -215,7 +215,7 @@ internal class SlidePushAnimator: CustomAnimator {
   };
 };
 
-internal class SlidePopAnimator: CustomAnimator {
+internal class SlideLeftPopAnimator: CustomAnimator {
   
   init(duration: TimeInterval = 0.25, interactionController: UIPercentDrivenInteractiveTransition? = nil){
     super.init(duration: duration);

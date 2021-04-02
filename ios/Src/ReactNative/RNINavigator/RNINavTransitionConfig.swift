@@ -16,8 +16,8 @@ internal class RNINavTransitionConfig {
     case FadePush;
     case FadePop;
     
-    case SlidePush;
-    case SlidePop;
+    case SlideLeftPush;
+    case SlideLeftPop;
     
     case SlideUpPush;
     case SlideUpPop;
@@ -62,8 +62,8 @@ internal class RNINavTransitionConfig {
       );
       
       // TODO: Rename to "SlideLeftPush"
-      case .SlidePush: return SlidePushAnimator(duration: duration);
-      case .SlidePop : return SlidePopAnimator(
+      case .SlideLeftPush: return SlideLeftPushAnimator(duration: duration);
+      case .SlideLeftPop : return SlideLeftPopAnimator(
         duration: self.duration,
         interactionController: interactionController
       );

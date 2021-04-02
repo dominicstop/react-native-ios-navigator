@@ -53,7 +53,7 @@ function ExampleRoute(props: ExampleRouteProps){
         onPress={() => {
           const nav = props.navigation;
           nav.push({routeKey: 'routeA'}, {
-            transitionConfig: { type: 'SlidePush', duration: 0.3 }
+            transitionConfig: { type: 'SlideLeftPush', duration: 0.3 }
           });
         }}
       >
