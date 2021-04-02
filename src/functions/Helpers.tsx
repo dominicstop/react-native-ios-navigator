@@ -58,3 +58,9 @@ export function arrayInsert<T>(array: Array<T>, index: number, newItem: T){
     ...array.slice(index)
   ];
 };
+
+export function addOptional<T extends object, U extends object>
+  (a: T, b: U | null): T & Partial<U> {
+    
+  return {...a, ...b};
+};
