@@ -9,6 +9,7 @@ import { NavigatorTest01 } from './components/NavigatorTest01';
 import { NavigatorTest02 } from './components/NavigatorTest02';
 import { NavigatorTest03 } from './components/NavigatorTest03';
 import { NavigatorTest04 } from './components/NavigatorTest04';
+import { NavigatorTest05 } from './components/NavigatorTest05';
 
 import { NavigatorDemo01 } from './components/NavigatorDemo01';
 import { NavigatorDemo02 } from './components/NavigatorDemo02';
@@ -23,6 +24,7 @@ const RouteKeys = {
   NavigatorTest02: 'NavigatorTest02',
   NavigatorTest03: 'NavigatorTest03',
   NavigatorTest04: 'NavigatorTest04',
+  NavigatorTest05: 'NavigatorTest05',
   NavigatorDemo01: 'NavigatorDemo01',
   NavigatorDemo02: 'NavigatorDemo02',
 };
@@ -58,6 +60,13 @@ const RouteItems = [{
   desc: (
       `Tester for the preset transitions that can be used for the push and pop`
     + ` navigation commands.`
+  )
+}, {
+  routeKey: RouteKeys.NavigatorTest05,
+  title: 'Multiple Initial Routes',
+  desc: (
+      `Tester for the 'initialRoutes' prop, e.g. testing setting multiple react and`
+    + ` native routes on first mount.`
   )
 }, { 
   routeKey: RouteKeys.NavigatorDemo01,
@@ -206,6 +215,11 @@ export default function App() {
         routeKey: RouteKeys.NavigatorTest04,
         renderRoute: () => (
           <NavigatorTest04/>
+        ),
+      }, {
+        routeKey: RouteKeys.NavigatorTest05,
+        renderRoute: () => (
+          <NavigatorTest05/>
         ),
       }, {
         routeKey: RouteKeys.NavigatorDemo01,
