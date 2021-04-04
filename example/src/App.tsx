@@ -171,7 +171,7 @@ export default function App() {
     <NavigatorView
       ref={r => this.navRef = r}
       style={styles.container}
-      initialRouteKey={RouteKeys.Home}
+      initialRoutes={[{routeKey: RouteKeys.Home}]}
       isInteractivePopGestureEnabled={true}
       navBarPrefersLargeTitles={true}
       routes={[{

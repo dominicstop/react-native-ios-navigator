@@ -115,7 +115,7 @@ class NestTestA2 extends React.PureComponent<RouteContentProps & {
         <SafeAreaView style={styles.rowContainer}>
           <NavigatorView
             ref={r => this.navRefA = r}
-            initialRouteKey={'BlankRoute'}
+            initialRoutes={[{routeKey: 'BlankRoute'}]}
             routes={[{
               routeKey: 'BlankRoute',
               routeOptionsDefault: {
@@ -131,7 +131,7 @@ class NestTestA2 extends React.PureComponent<RouteContentProps & {
           />
           <NavigatorView
             ref={r => this.navRefB = r}
-            initialRouteKey={'BlankRoute'}
+            initialRoutes={[{routeKey: 'BlankRoute'}]}
             routes={[{
               routeKey: 'BlankRoute',
               routeOptionsDefault: {
@@ -228,7 +228,7 @@ class NestTestA1 extends React.PureComponent<{
         <SafeAreaView style={styles.rootContainer}>
           <NavigatorView
             ref={r => this.navRefA = r}
-            initialRouteKey={'BlankRoute'}
+            initialRoutes={[{routeKey: 'BlankRoute'}]}
             routes={[{
               routeKey: 'BlankRoute',
               routeOptionsDefault: {
@@ -256,7 +256,7 @@ class NestTestA1 extends React.PureComponent<{
           />
           <NavigatorView
             ref={r => this.navRefB = r}
-            initialRouteKey={'BlankRoute'}
+            initialRoutes={[{routeKey: 'BlankRoute'}]}
             routes={[{
               routeKey: 'BlankRoute',
               routeOptionsDefault: {
@@ -343,7 +343,7 @@ export class NavigatorDemo01 extends React.Component {
         <SafeAreaView style={styles.rootContainer}>
           <NavigatorView
             ref={r => this.navRef = r}
-            initialRouteKey={'BlankRoute'}
+            initialRoutes={[{routeKey: 'BlankRoute'}]}
             routes={[{
               routeKey: 'BlankRoute',
               routeOptionsDefault: {

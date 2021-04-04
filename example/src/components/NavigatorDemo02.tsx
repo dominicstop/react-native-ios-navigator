@@ -65,7 +65,7 @@ export function NavigatorDemo02(props: RouteContentProps & {
     <SafeAreaView style={{flex: 1}}>
       <NavigatorView
         ref={navRef}
-        initialRouteKey={'BlankRoute'}
+        initialRoutes={[{routeKey: 'BlankRoute'}]}
         navBarAppearance={{
           mode: 'legacy',
           barTintColor: currentColor,

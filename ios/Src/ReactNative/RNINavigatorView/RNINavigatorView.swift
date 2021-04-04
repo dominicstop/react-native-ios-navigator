@@ -29,10 +29,12 @@ internal class RNINavigatorView: UIView {
   /// to call `cleanup` on the `routeView`
   private var routeItemsMap: Dictionary<Int, RNINavigatorRouteBaseViewController> = [:];
   
+  private var didReceiveAllInitialRoutes = false;
+  
   /// The react view to show behind the navigation bar
   private var reactNavBarBackground: UIView?;
   
-  var navigationVC: UINavigationController!;
+  public var navigationVC: UINavigationController!;
   
   private var nativeCommandRequestCompletionMap: Dictionary<String, Completion> = [:];
   
@@ -91,6 +93,14 @@ internal class RNINavigatorView: UIView {
   // ------------------------
   
   @objc var navigatorID: NSNumber!;
+  
+  private var _initialRouteKeys: [String] = [];
+  @objc var initialRouteKeys: NSArray! {
+    willSet {
+      self._initialRouteKeys =
+        newValue.compactMap { $0 as? String };
+    }
+  };
   
   /// Receives from js/react the native routes to add/init or update
   @objc var nativeRoutes: NSDictionary! {
@@ -157,11 +167,11 @@ internal class RNINavigatorView: UIView {
         nativeRouteVC.setRouteIndex(routeIndex);
         
         if let routeProps = routeData["routeProps"] as? Dictionary<String, Any> {
-          print("LOG - NativeView, RNINavigatorView: nativeRouteData, routeProps: \(routeProps.debugDescription)");
           nativeRouteVC.routeProps = routeProps;
         };
       };
       
+      self.setupInitialRoutes();
       self.onSetNativeRoutes?([
         "navigatorID": self.navigatorID!
       ]);
@@ -272,6 +282,7 @@ internal class RNINavigatorView: UIView {
         
         /// save a ref to `routeView`'s vc instance
         self.routeItemsMap[routeVC.routeID] = routeVC;
+        self.setupInitialRoutes();
         
         // send event: notify js navigator that a new route view was added
         self.notifyOnNavRouteViewAdded(vc: routeVC);
@@ -283,11 +294,6 @@ internal class RNINavigatorView: UIView {
           + " - routeView.routeIndex: \(routeView.routeIndex)"
         );
         #endif
-        
-        if atIndex == 0 {
-          // the first item will become navController's root vc
-          self.navigationVC.setViewControllers([routeVC], animated: false);
-        };
         
       case NativeIDKeys.NavBarBackground:
         self.reactNavBarBackground = subview;
@@ -315,6 +321,19 @@ internal class RNINavigatorView: UIView {
 // ------------------------
 
 fileprivate extension RNINavigatorView {
+  
+  /// setup - if init., set the initial routes
+  func setupInitialRoutes(){
+    guard !self.didReceiveAllInitialRoutes else { return };
+    
+    let currentRouteCount = self.routeItemsMap.count;
+    let initialRouteCount = self._initialRouteKeys.count;
+    
+    if currentRouteCount == initialRouteCount {
+      self.didReceiveAllInitialRoutes = true;
+      self.navigationVC.setViewControllers(self.routeItems, animated: false);
+    };
+  };
   
   /// setup - create nav. and add it as a subview
   func embedNavigationVC(){

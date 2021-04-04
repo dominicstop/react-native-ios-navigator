@@ -88,7 +88,7 @@ export function NavigatorExample01() {
       />
       <NavigatorView
         ref={r => this.navRef = r}
-        initialRouteKey={'routeA'}
+        initialRoutes={[{routeKey: 'routeA'}]}
         navBarPrefersLargeTitles={false}
         routes={[{
           routeKey: 'routeA',

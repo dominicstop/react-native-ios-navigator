@@ -41,7 +41,7 @@ function ExampleRoute(props){
 export function HelloWorld() {
   return(
     <NavigatorView
-      initialRouteKey={'routeA'}
+      initialRoutes={[{routeKey: 'routeA'}]}
       routes={[{
         routeKey: 'routeA',
         routeOptionsDefault: {

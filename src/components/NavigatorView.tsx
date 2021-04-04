@@ -86,7 +86,7 @@ type NavigatorViewProps = Partial<Pick<RNINavigatorViewProps,
 
   // Nav. Route Config
   routes: Array<NavRouteConfigItem>;
-  initialRouteKey: string;
+  initialRoutes: Array<NavRouteItem>;
   routeContainerStyle?: ViewStyle;
   
   // `RNINavigatorView` - Global/Default Navbar items
@@ -164,25 +164,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     this.queue = new SimpleQueue();
 
     // TODO: Add native route key validation in `componentDidMount`
-    const initialRoute = this.getRouteConfig(props.initialRouteKey);
-    if(!initialRoute){
-      // no matching route config found for `initialRouteKey`
-      throw new Error(
-          "`NavigatorView` error: invalid value for `initialRouteKey` prop"
-        + ` - no matching route found for \`initialRouteKey\`: ${props.initialRouteKey}.`
-        + " If this is a native route, please add it to the `routes` prop w/ `isNativeRoute`"
-        + " property set to true."
-      );
-    };
 
     this.state = {
-      activeRoutes: [{
-        // create initial route item
-        routeKey: initialRoute.routeKey,
-        routeIndex: 0, 
-        routeID: ROUTE_ID_COUNTER++,
-        isNativeRoute: initialRoute?.isNativeRoute,
-      }],
+      activeRoutes: this.getInitialRoutes(),
       transitionConfigPushOverride: null,
       transitionConfigPopOverride: null,
     };
@@ -201,6 +185,49 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     return hasNativeRouteKeyMatch || routes.some(route => (
       route.routeKey == routeKey
     ));
+  };
+
+  private getInitialRoutes = (): Array<NavRouteStateItem> => {
+    const { initialRoutes } = this.props;
+
+    // guard: initial validation for `initialRoutes`
+    const isValid = ((initialRoutes != null) && Array.isArray(initialRoutes));
+    const isEmpty = (initialRoutes?.length == 0);
+
+    if(!isValid || isEmpty){
+      throw new Error(`'NavigatorView' error: Invalid value given to 'initialRoutes' prop.`);
+    };
+
+    return initialRoutes.map((route, index) => {
+      const config = this.getRouteConfig(route.routeKey);
+
+      // guard: no matching route config found for `routeKey`
+      if(config == null){
+        throw new Error(
+            "'NavigatorView' error: invalid value for 'initialRoutes' prop"
+          + ` - no matching route found for 'routeKey': ${route.routeKey}.`
+          + " All routes must be declared in the routes prop."
+          + " If this is a native route, please add it to the 'routes' prop w/"
+          + " the 'isNativeRoute' property set to true."
+        );
+      };
+
+      const routeItem: NavRouteStateItem = {
+        isNativeRoute: config.isNativeRoute,
+        routeID: ROUTE_ID_COUNTER++,
+        routeIndex: index,
+        routeKey: route.routeKey,
+        routeProps: (
+          route.routeProps ??
+          config.initialRouteProps
+        ),
+      };
+
+      return (config.isNativeRoute ? routeItem : ({
+        ...routeItem,
+        routeOptions: (config as NavRouteConfigItemJS).routeOptionsDefault,
+      }));
+    });
   };
 
   /** Creates a dict of the current native routes based on `state.activeRoutes` */
@@ -1309,6 +1336,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         navigatorID={this.navigatorID}
         isInteractivePopGestureEnabled={props.isInteractivePopGestureEnabled ?? true}
         nativeRoutes={this.getNativeRoutes()}
+        initialRouteKeys={
+          props.initialRoutes.map(route => route.routeKey)
+        }
         // Navigation Bar customization
         isNavBarTranslucent={props.isNavBarTranslucent ?? true}
         navBarPrefersLargeTitles={props.navBarPrefersLargeTitles ?? true}

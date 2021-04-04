@@ -68,6 +68,7 @@ export type RNINavigatorViewProps = {
   // General/Misc. Config
   navigatorID: number;
   nativeRoutes: NativeRouteMap;
+  initialRouteKeys: Array<string>;
   isInteractivePopGestureEnabled: boolean;
 
   // Customize the Bar's Appearance
