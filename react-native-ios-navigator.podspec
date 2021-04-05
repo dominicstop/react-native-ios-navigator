@@ -13,9 +13,7 @@ Pod::Spec.new do |s|
   s.platforms    = { :ios => "10.0" }
   s.source       = { :git => "https://github.com/dominicstop/react-native-ios-navigator.git", :tag => "#{s.version}" }
 
-  
   s.source_files = "ios/**/*.{h,m,mm,swift}"
-  
 
   s.dependency "React-Core"
 end
