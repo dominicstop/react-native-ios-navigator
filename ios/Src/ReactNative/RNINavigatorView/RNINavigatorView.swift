@@ -46,18 +46,21 @@ internal class RNINavigatorView: UIView {
     self.navigationVC.navigationBar;
   };
   
+  /// current active view controllers in the navigator
   var activeRoutes: [RNINavigatorRouteBaseViewController] {
     self.navigationVC.viewControllers.compactMap {
       $0 as? RNINavigatorRouteBaseViewController
     };
   };
   
+  /// "registered" routes in `routeItemsMap` that aren't in the current navigator
   var inactiveRoutes: [RNINavigatorRouteBaseViewController] {
     self.routeItemsMap.values.filter {
       !self.activeRoutes.contains($0)
     };
   };
   
+  /// "registered" routes in `routeItemsMap` sorted by their `routeIndex`
   var routeItems: [RNINavigatorRouteBaseViewController] {
     self.routeItemsMap.values
       .map { $0 }
