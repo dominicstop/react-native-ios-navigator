@@ -28,22 +28,22 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
   public weak var navigator: RNINavigatorNativeCommands?;
   
   private var _routeID = -1;
-  var routeID: Int {
+  public var routeID: Int {
     self._routeID;
   };
   
   private var _routeKey: String!;
-  var routeKey: String {
+  public var routeKey: String {
     self._routeKey;
   };
   
   private var _routeIndex = -1;
-  var routeIndex: Int {
+  public var routeIndex: Int {
     self._routeIndex;
   };
   
   /// Receive route data when this route was pushed/added from js/react
-  var routeProps: Dictionary<String, Any> = [:];
+  public var routeProps: Dictionary<String, Any> = [:];
   
   /// A flag that indicates that the nav. controller responsible for this vc is
   /// about to remove it from the nav. stack. This is used to differentiate if

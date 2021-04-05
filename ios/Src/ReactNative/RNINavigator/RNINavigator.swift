@@ -10,12 +10,7 @@ import Foundation
 /// Register native routes
 public class RNINavigator {
   
-  #if DEBUG
-  @objc static var routeRegistry: [String: RNINavigatorRouteBaseViewController.Type] =
-    ["TestNativeRoute": RNIExampleRouteViewController.self];
-  #else
-  @objc static var routeRegistry: [String: RNINavigatorRouteBaseViewController.Type] = [:];
-  #endif
+  @objc public static var routeRegistry: [String: RNINavigatorRouteBaseViewController.Type] = [:];
   
 };
 
