@@ -111,25 +111,10 @@ const TIMEOUT_COMMAND = 1000;
 let NAVIGATOR_ID_COUNTER = 0;
 let ROUTE_ID_COUNTER     = 0;
 
-let nativeRouteKeys: { [key: string]: string } = null;
-
-// init. `nativeRouteKeys`
-RNINavigatorViewModule.getNativeRouteKeys(keys => {
-  //#region - 🐞 DEBUG 🐛
-  LIB_GLOBAL.debugLog && console.log(
-      `LOG/JS - NavigatorViewModule, getNativeRouteKeys`
-    + ` - keys: ${JSON.stringify(keys)}`
-    + ` - typeof keys: ${typeof keys}`
-  );
-  //#endregion
-
-  nativeRouteKeys = keys.reduce((acc, curr) => {
-    acc[curr] = curr;
-    return acc;
-  }, {} as typeof nativeRouteKeys);
-});
+let nativeRouteKeys: Record<string, string> = null
 
 export class NavigatorView extends React.PureComponent<NavigatorViewProps, NavigatorViewState> {
+  
   //#region - Property Declarations
   state: NavigatorViewState;
 
@@ -151,7 +136,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   // note: the key should be the routeID
   private routeRefMap: {[key: number]: NavigatorRouteView} = {};
   //#endregion
-
+  
   constructor(props: NavigatorViewProps){
     super(props);
 
@@ -162,8 +147,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
     this.emitter = new EventEmitter<NavEvents>();
     this.queue = new SimpleQueue();
-
-    // TODO: Add native route key validation in `componentDidMount`
 
     this.state = {
       activeRoutes: this.getInitialRoutes(),
@@ -257,7 +240,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   };
 
   /** get route config with the matching `routeKey` */
-  private getRouteConfig = (routeKey: string): NavRouteConfigItem => {
+  private getRouteConfig = (routeKey: string): NavRouteConfigItem | null => {
     const { routes } = this.props;
 
     const routeConfig = routes.find(item => (item.routeKey == routeKey));
@@ -291,6 +274,13 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
   private setNavStatus(navStatus: NavStatus){
     if(this.navStatus != NavStatus.UNMOUNTED){
+      //#region - 🐞 DEBUG 🐛
+      LIB_GLOBAL.debugLog && console.log(
+          `LOG/JS - NavigatorView, setNavStatus`
+        + ` - next status: ${navStatus}`
+        + ` - current status: ${this.navStatus}`
+      );
+      //#endregion
       this.navStatus = navStatus;
     };
   };
@@ -1378,7 +1368,23 @@ class NavigatorViewUtils {
   static isNavStateBusy(navStatus: NavStatus){
     return !NavigatorViewUtils.isNavStateIdle(navStatus);
   };
+
+  static getNativeRouteKeys() {
+    return new Promise<Record<string, string>>(resolve => {
+      RNINavigatorViewModule.getNativeRouteKeys(keys => {
+        resolve(keys.reduce((acc, curr) => {
+          acc[curr] = curr;
+          return acc;
+        }, {} as Record<string, string>))
+      });
+    });
+  };
 };
+
+// init. `nativeRouteKeys`
+NavigatorViewUtils.getNativeRouteKeys().then(keys => {
+  nativeRouteKeys = keys;
+});
 
 const styles = StyleSheet.create({
   navigatorView: {
