@@ -217,10 +217,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         routeID: ROUTE_ID_COUNTER++,
         routeIndex: index,
         routeKey: route.routeKey,
-        routeProps: (
-          route.routeProps ??
-          config.initialRouteProps
-        ),
+        routeProps: route.routeProps,
       };
 
       return (config.isNativeRoute ? routeItem : ({
@@ -506,14 +503,11 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       const nextRoute: NavRouteStateItem = {
         routeID: ROUTE_ID_COUNTER++,
-        routeKey: routeItem.routeKey,
-        routeOptions: routeItem.routeOptions,
         routeIndex: nextRouteIndex,
+        routeKey: routeItem.routeKey,
+        routeProps: routeItem.routeProps,
+        routeOptions: routeItem.routeOptions,
         isNativeRoute: routeConfig?.isNativeRoute ?? false,
-        routeProps: (
-          routeItem.routeProps ?? 
-          routeConfig.initialRouteProps
-        ),
       };
 
       await Promise.all([
@@ -814,12 +808,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       routeID: ROUTE_ID_COUNTER++,
       routeKey: routeItem.routeKey,
       routeIndex: prevRouteIndex,
+      routeProps: routeItem.routeProps,
       routeOptions: routeItem.routeOptions,
       isNativeRoute: replacementRouteConfig?.isNativeRoute ?? false,
-      routeProps: (
-        routeItem.routeProps ??
-        replacementRouteConfig.initialRouteProps
-      ),
     };
 
     try {
@@ -893,12 +884,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       routeID: ROUTE_ID_COUNTER++,
       routeKey: routeItem.routeKey,
       routeIndex: atIndex,
+      routeProps: routeItem.routeProps,
       routeOptions: routeItem.routeOptions,
       isNativeRoute: routeConfig?.isNativeRoute ?? false,
-      routeProps: (
-        routeItem.routeProps ??
-        routeConfig.initialRouteProps
-      ),
     };
     
     try {
@@ -987,17 +975,13 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       );
 
       const nextRoutes: Array<NavRouteStateItem> = transformResult.map((route, index) => ({
+        routeProps: route.routeProps,
         // merge old + new route items
         ...currentRoutesMap[route.routeID], ...route,
         // assign new routeIndex
         routeIndex: index,
         // assign a routeID if it doesn't have one yet
         routeID: route.routeID ?? ROUTE_ID_COUNTER++,
-        // merge route props
-        routeProps: (
-          route.routeProps ??
-          this.getRouteConfig(route.routeKey)?.initialRouteProps
-        ),
       }));
 
       // get nextRoutes items that aren't mounted/added yet
@@ -1288,13 +1272,15 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
           routeIndex={route.routeIndex}
           routeKey={route.routeKey}
           isRootRoute={(route.routeIndex == 0)}
-          routeProps={(
-            route      .routeProps ??
-            routeConfig.initialRouteProps
+          // merge routeProps
+          routeProps={Helpers.shallowMergeObjects(
+            routeConfig.initialRouteProps,
+            route.routeProps
           )}
-          routeOptionsDefault={(
-            route      .routeOptions ??
-            routeConfig.routeOptionsDefault
+          // merge routeOptions
+          routeOptionsDefault={Helpers.shallowMergeObjects(
+            routeConfig.routeOptionsDefault,
+            route.routeOptions
           )}
           transitionConfigPushOverride={(isSecondToLast
             ? state.transitionConfigPushOverride

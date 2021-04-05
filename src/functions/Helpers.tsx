@@ -59,8 +59,13 @@ export function arrayInsert<T>(array: Array<T>, index: number, newItem: T){
   ];
 };
 
-export function addOptional<T extends object, U extends object>
-  (a: T, b: U | null): T & Partial<U> {
+export function addOptional
+  <T extends object, U extends object>(a: T, b: U | null): T & Partial<U> {
     
   return {...a, ...b};
+};
+
+export function shallowMergeObjects<T extends object | null>(a: T, b: T): T {
+  if(a == null && b == null) return null;
+  return { ...a, ...b };
 };
