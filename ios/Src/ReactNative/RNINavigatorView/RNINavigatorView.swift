@@ -499,13 +499,13 @@ internal extension RNINavigatorView {
       throw RNIError.commandFailed(
         source : "RNINavigatorView.push",
         message:
-            "Unable to push due to invalid routeID, no corresponding route found` "
+            "Unable to push due to invalid routeID, no corresponding route found "
           + "for the given routeID.",
         debug: debug
       );
     };
     
-    guard  routeItems.last?.routeID == routeID else {
+    guard routeItems.last?.routeID == routeID else {
       throw RNIError.commandFailed(
         source : "RNINavigatorView.push",
         message:

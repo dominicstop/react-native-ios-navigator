@@ -1207,12 +1207,12 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     if(this.navigatorID != nativeEvent.navigatorID) return;
 
     //#region - 🐞 DEBUG 🐛
-      LIB_GLOBAL.debugLog && console.log(
-          `LOG/JS - NavigatorView, onNavRouteDidPop`
-        + ` - with args, routeKey: ${nativeEvent.routeKey}`
-        + ` - routeIndex: ${nativeEvent.routeIndex}`
-      );
-      //#endregion
+    LIB_GLOBAL.debugLog && console.log(
+        `LOG/JS - NavigatorView, onNavRouteDidPop`
+      + ` - with args, routeKey: ${nativeEvent.routeKey}`
+      + ` - routeIndex: ${nativeEvent.routeIndex}`
+    );
+    //#endregion
 
     // A route has been removed either through a tap on the "back" 
     // button, or through a swipe back gesture.
