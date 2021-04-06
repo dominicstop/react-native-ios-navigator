@@ -98,7 +98,8 @@ public final class RNINavigatorView: UIView {
   @objc var navigatorID: NSNumber! {
     willSet {
       // save a ref to this instance
-      RNINavigator.navigatorViewInstances.setObject(self, forKey: newValue);
+      RNINavigator.sharedInstance
+        .registerNavigatorView(self, forRouteID: newValue);
     }
   };
   

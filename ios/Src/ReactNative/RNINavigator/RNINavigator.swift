@@ -10,15 +10,25 @@ import Foundation
 /// Register native routes
 public class RNINavigator {
   
+  public static let sharedInstance = RNINavigator();
+  
+  /// The "native" routes to be used in the `NavigatorView`
   @objc public static var routeRegistry: [String: RNINavigatorRouteBaseViewController.Type] = [:];
   
-  internal static var navigatorViewInstances = NSMapTable<NSNumber, RNINavigatorView>.init(
+  private var navigatorViewInstances = NSMapTable<NSNumber, RNINavigatorView>.init(
     keyOptions: .copyIn,
     valueOptions: .weakMemory
   );
   
-  public static func getNavigatorViewInstances() -> Array<RNINavigatorView> {
-    guard let enumerator = Self.navigatorViewInstances.objectEnumerator()
+  public var delegate: RNINavigatorDelegate?;
+  
+  internal func registerNavigatorView(_ instance: RNINavigatorView, forRouteID routeID: NSNumber){
+    self.navigatorViewInstances.setObject(instance, forKey: routeID);
+    self.delegate?.onNavigatorViewAdded(instance);
+  };
+  
+  public func getNavigatorViewInstances() -> Array<RNINavigatorView> {
+    guard let enumerator = self.navigatorViewInstances.objectEnumerator()
     else { return [] };
     
     return enumerator.compactMap {
@@ -26,9 +36,13 @@ public class RNINavigator {
     };
   };
   
-  public static func getNavigatorViewInstance(forNavigatorID key: Int) -> RNINavigatorView? {
-    return Self.navigatorViewInstances.object(forKey: key as NSNumber);
+  public func getNavigatorViewInstance(forNavigatorID key: Int) -> RNINavigatorView? {
+    return self.navigatorViewInstances.object(forKey: key as NSNumber);
   };
+};
+
+public protocol RNINavigatorDelegate {
+  func onNavigatorViewAdded(_ navigatorView: RNINavigatorView);
 };
 
 /// Send commands to the `RNINavigatorView` instance
