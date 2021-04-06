@@ -9,7 +9,7 @@ import Foundation
 import react_native_ios_navigator
 
 
-@objc class NavigatorManagerListener: NSObject, RNINavigatorDelegate {
+@objc class NavigatorManagerListener: NSObject, RNINavigatorManagerDelegate {
   static var sharedInstance: NavigatorManagerListener? = nil;
   
   @objc static func setup(){

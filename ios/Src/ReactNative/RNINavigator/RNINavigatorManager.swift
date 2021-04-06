@@ -20,7 +20,7 @@ public class RNINavigatorManager {
     valueOptions: .weakMemory
   );
   
-  public var delegate: RNINavigatorDelegate?;
+  public var delegate: RNINavigatorManagerDelegate?;
   
   internal func registerNavigatorView(
     _ instance: RNINavigatorView,
@@ -44,7 +44,7 @@ public class RNINavigatorManager {
   };
 };
 
-public protocol RNINavigatorDelegate {
+public protocol RNINavigatorManagerDelegate {
   func onNavigatorViewAdded(_ navigatorView: RNINavigatorView, _ navigatorID: Int);
 };
 
