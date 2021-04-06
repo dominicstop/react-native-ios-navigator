@@ -77,6 +77,7 @@ export type NavRouteConfigItem =
 /** `NavigatorView` comp. props */
 type NavigatorViewProps = Partial<Pick<RNINavigatorViewProps,
   // mirror props from `RNINavigatorViewProps`
+  | 'nativeID'
   | 'isInteractivePopGestureEnabled' 
   | 'navBarPrefersLargeTitles' 
   | 'navBarAppearance' 

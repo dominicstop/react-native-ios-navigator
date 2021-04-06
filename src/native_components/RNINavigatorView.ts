@@ -64,6 +64,7 @@ export type NativeRouteMap = {
 /** `RNINavigatorView` native comp. props */
 export type RNINavigatorViewProps = {
   style: ViewStyle | Array<ViewStyle>;
+  nativeID?: string;
   
   // General/Misc. Config
   navigatorID: number;
