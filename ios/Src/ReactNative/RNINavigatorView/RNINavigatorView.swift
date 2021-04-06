@@ -95,11 +95,11 @@ public final class RNINavigatorView: UIView {
   // MARK:- RN Exported Props
   // ------------------------
   
-  @objc var navigatorID: NSNumber! {
+  @objc public private(set) var navigatorID: NSNumber! {
     willSet {
       // save a ref to this instance
       RNINavigatorManager.sharedInstance
-        .registerNavigatorView(self, forRouteID: newValue);
+        .registerNavigatorView(self, forNavigatorID: newValue);
     }
   };
   

@@ -22,9 +22,12 @@ public class RNINavigatorManager {
   
   public var delegate: RNINavigatorDelegate?;
   
-  internal func registerNavigatorView(_ instance: RNINavigatorView, forRouteID routeID: NSNumber){
-    self.navigatorViewInstances.setObject(instance, forKey: routeID);
-    self.delegate?.onNavigatorViewAdded(instance);
+  internal func registerNavigatorView(
+    _ instance: RNINavigatorView,
+    forNavigatorID navigatorID: NSNumber
+  ){
+    self.navigatorViewInstances.setObject(instance, forKey: navigatorID);
+    self.delegate?.onNavigatorViewAdded(instance, navigatorID.intValue);
   };
   
   public func getNavigatorViewInstances() -> Array<RNINavigatorView> {
@@ -42,7 +45,7 @@ public class RNINavigatorManager {
 };
 
 public protocol RNINavigatorDelegate {
-  func onNavigatorViewAdded(_ navigatorView: RNINavigatorView);
+  func onNavigatorViewAdded(_ navigatorView: RNINavigatorView, _ navigatorID: Int);
 };
 
 /// Send commands to the `RNINavigatorView` instance

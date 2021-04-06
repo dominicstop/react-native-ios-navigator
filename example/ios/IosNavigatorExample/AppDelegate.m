@@ -37,8 +37,9 @@ static void InitializeFlipper(UIApplication *application) {
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  
+  // start setup
   [RouteRegistry registerRoutes];
+  [NavigatorManagerListener setup];
   
   #ifdef FB_SONARKIT_ENABLED
     InitializeFlipper(application);
