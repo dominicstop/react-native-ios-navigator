@@ -1110,6 +1110,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   };
 
   private _handleOnNativeCommandRequest = async ({nativeEvent}: OnNativeCommandRequestPayload) => {
+    if(this.navigatorID != nativeEvent.navigatorID) return;
+    
     const { commandData } = nativeEvent;
 
     //#region - 🐞 DEBUG 🐛
