@@ -115,6 +115,7 @@
 		13B07FAE1A68108700A75B9A /* IosNavigatorExample */ = {
 			isa = PBXGroup;
 			children = (
+				886F2968261CED7800AF0CF4 /* Example */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -123,8 +124,6 @@
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				886F2878261B873400AF0CF4 /* IosNavigatorExample-Bridging-Header.h */,
-				886F287F261B888300AF0CF4 /* RNIExampleRouteViewController.swift */,
-				886F28B2261B8BE500AF0CF4 /* RouteRegistry.swift */,
 			);
 			name = IosNavigatorExample;
 			sourceTree = "<group>";
@@ -179,6 +178,15 @@
 				2D02E4901E0B4A5D006451C7 /* IosNavigatorExample-tvOSTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		886F2968261CED7800AF0CF4 /* Example */ = {
+			isa = PBXGroup;
+			children = (
+				886F287F261B888300AF0CF4 /* RNIExampleRouteViewController.swift */,
+				886F28B2261B8BE500AF0CF4 /* RouteRegistry.swift */,
+			);
+			path = Example;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
