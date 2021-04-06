@@ -12,6 +12,23 @@ public class RNINavigator {
   
   @objc public static var routeRegistry: [String: RNINavigatorRouteBaseViewController.Type] = [:];
   
+  internal static var navigatorViewInstances = NSMapTable<NSNumber, RNINavigatorView>.init(
+    keyOptions: .copyIn,
+    valueOptions: .weakMemory
+  );
+  
+  public static func getNavigatorViewInstances() -> Array<RNINavigatorView> {
+    guard let enumerator = Self.navigatorViewInstances.objectEnumerator()
+    else { return [] };
+    
+    return enumerator.compactMap {
+      $0 as? RNINavigatorView;
+    };
+  };
+  
+  public static func getNavigatorViewInstance(forNavigatorID key: Int) -> RNINavigatorView? {
+    return Self.navigatorViewInstances.object(forKey: key as NSNumber);
+  };
 };
 
 /// Send commands to the `RNINavigatorView` instance

@@ -10,7 +10,7 @@ import UIKit;
 typealias Completion = () -> Void;
 
 
-internal class RNINavigatorView: UIView {
+public final class RNINavigatorView: UIView {
   
   struct NativeIDKeys {
     static let NavRouteItem     = "NavRouteItem";
@@ -95,7 +95,12 @@ internal class RNINavigatorView: UIView {
   // MARK:- RN Exported Props
   // ------------------------
   
-  @objc var navigatorID: NSNumber!;
+  @objc var navigatorID: NSNumber! {
+    willSet {
+      // save a ref to this instance
+      RNINavigator.navigatorViewInstances.setObject(self, forKey: newValue);
+    }
+  };
   
   private var _initialRouteKeys: [String] = [];
   @objc var initialRouteKeys: NSArray! {
@@ -234,7 +239,7 @@ internal class RNINavigatorView: UIView {
     fatalError("init(coder:) has not been implemented");
   };
   
-  override func didMoveToWindow() {
+  public override func didMoveToWindow() {
     if self.window == nil {
       // this view has been "unmounted"...
       self.cleanup();
@@ -250,7 +255,7 @@ internal class RNINavigatorView: UIView {
   // MARK:- RN Lifecycle
   // -------------------
   
-  override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
+  public override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
     super.insertSubview(subview, at: atIndex);
     
     /// do not show as subview, i.e. remove from view hierarchy.
@@ -1028,7 +1033,7 @@ extension RNINavigatorView: RNINavigatorRouteViewControllerDelegate {
 // --------------------------------------------
 
 extension RNINavigatorView: RNINavigatorNativeCommands {
-  func pushViewController(
+  public func pushViewController(
     _ viewController: RNINavigatorRouteBaseViewController,
     animated: Bool = true
   ) {
@@ -1055,7 +1060,7 @@ extension RNINavigatorView: RNINavigatorNativeCommands {
     ]);
   };
   
-  func push(
+  public func push(
     routeKey: String,
     routeProps: Dictionary<String, Any>? = nil,
     animated: Bool = true
@@ -1076,7 +1081,7 @@ extension RNINavigatorView: RNINavigatorNativeCommands {
     ]);
   };
   
-  func pop(animated: Bool = true) {
+  public func pop(animated: Bool = true) {
     let commandData: [String: Any] = [
       "commandKey": "pop",
       "isAnimated": animated
