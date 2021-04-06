@@ -93,17 +93,27 @@ class RNIExampleRouteViewController: RNINavigatorRouteBaseViewController {
       return button;
     }();
     
+    let button4: UIButton = {
+      let button = buttonMaker();
+      
+      button.setTitle("Push ViewController #2", for: .normal);
+      button.addTarget(self, action:#selector(self.onPressPushViewController2), for: .touchUpInside);
+      
+      return button;
+    }();
+    
     let stack = UIStackView(arrangedSubviews: [
       // title
       title1, title2, subtitle1, subtitle2,
       // nav commands buttons
-      button1, button2, button3
+      button1, button2, button3, button4
     ]);
     
     if #available(iOS 11.0, *) {
       stack.setCustomSpacing(20, after: subtitle2);
       stack.setCustomSpacing(10, after: button1);
       stack.setCustomSpacing(10, after: button2);
+      stack.setCustomSpacing(10, after: button3);
     };
 
     stack.axis = .vertical;
@@ -139,5 +149,12 @@ class RNIExampleRouteViewController: RNINavigatorRouteBaseViewController {
 
   @objc func onPressPopCurrentRoute(){
     self.navigator?.pop(animated: true);
+  };
+  
+  @objc func onPressPushViewController2(){
+    let vc = RNIExampleRouteViewController();
+    vc.setRouteKey("TestNativeRoute");
+    
+    self.navigator?.pushViewController(vc, animated: true);
   };
 };

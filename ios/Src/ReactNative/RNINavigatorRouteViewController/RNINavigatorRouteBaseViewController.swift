@@ -32,7 +32,7 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
     self._routeID;
   };
   
-  private var _routeKey: String!;
+  internal var _routeKey: String!;
   public var routeKey: String {
     self._routeKey;
   };
@@ -137,7 +137,7 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
     self._routeKey = UUID().uuidString;
   };
   
-  internal func setRouteKey(_ routeKey: String){
+  public func setRouteKey(_ routeKey: String){
     self._routeKey = routeKey;
   };
   

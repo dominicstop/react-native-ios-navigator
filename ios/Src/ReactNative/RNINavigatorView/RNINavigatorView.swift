@@ -1038,9 +1038,14 @@ extension RNINavigatorView: RNINavigatorNativeCommands {
     _ viewController: RNINavigatorRouteBaseViewController,
     animated: Bool = true
   ) {
-    // create routeID and routeKey
+    
+    // create routeID
     viewController.setRouteID();
-    viewController.setRouteKey();
+    
+    // create routeKey if none exist
+    if viewController._routeKey == nil {
+      viewController.setRouteKey();
+    };
     
     viewController.delegate  = self;
     viewController.navigator = self;
