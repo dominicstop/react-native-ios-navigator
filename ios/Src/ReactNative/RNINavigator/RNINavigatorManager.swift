@@ -1,5 +1,5 @@
 //
-//  RNINavigatorRouteRegistry.swift
+//  RNINavigatorManager.swift
 //  IosNavigatorExample
 //
 //  Created by Dominic Go on 3/23/21.
@@ -8,9 +8,9 @@
 import Foundation
 
 /// Register native routes
-public class RNINavigator {
+public class RNINavigatorManager {
   
-  public static let sharedInstance = RNINavigator();
+  public static let sharedInstance = RNINavigatorManager();
   
   /// The "native" routes to be used in the `NavigatorView`
   @objc public static var routeRegistry: [String: RNINavigatorRouteBaseViewController.Type] = [:];

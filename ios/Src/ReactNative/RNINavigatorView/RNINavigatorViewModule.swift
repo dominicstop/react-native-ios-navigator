@@ -428,7 +428,7 @@ internal class RNINavigatorViewModule: NSObject {
   
   @objc func getNativeRouteKeys(_ callback: RCTResponseSenderBlock) {
     // extract keys
-    let keys = RNINavigator.routeRegistry.keys.map { $0 };
+    let keys = RNINavigatorManager.routeRegistry.keys.map { $0 };
     callback([keys]);
   };
 };

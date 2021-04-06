@@ -12,7 +12,7 @@ import react_native_ios_navigator
   @objc static func registerRoutes(){
     print("register routes");
     
-    RNINavigator.routeRegistry["TestNativeRoute"] =
+    RNINavigatorManager.routeRegistry["TestNativeRoute"] =
       RNIExampleRouteViewController.self;
   };
 };

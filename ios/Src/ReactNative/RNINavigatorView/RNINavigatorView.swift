@@ -98,7 +98,7 @@ public final class RNINavigatorView: UIView {
   @objc var navigatorID: NSNumber! {
     willSet {
       // save a ref to this instance
-      RNINavigator.sharedInstance
+      RNINavigatorManager.sharedInstance
         .registerNavigatorView(self, forRouteID: newValue);
     }
   };
@@ -145,7 +145,7 @@ public final class RNINavigatorView: UIView {
             // verify that the existing route is in fact a native route
             return isNativeRoute ? routeVC : nil;
             
-          } else if let vc = RNINavigator.routeRegistry[routeKey] {
+          } else if let vc = RNINavigatorManager.routeRegistry[routeKey] {
             // create/init native route
             let routeVC = vc.init();
             routeVC.setRouteID(routeID);
