@@ -79,11 +79,11 @@ export type RNINavigatorViewProps = {
   
   // Native Events
   // TODO: Rename to `event`
-  onNavRouteViewAdded   ?: (events: OnNavRouteViewAddedPayload   ) => void;
-  onNavRouteWillPop     ?: (events: OnNavRouteWillPopPayload     ) => void;
-  onNavRouteDidPop      ?: (events: OnNavRouteDidPopPayload      ) => void;
-  onSetNativeRoutes     ?: (events: OnSetNativeRouteDataPayload  ) => void;
-  onNativeCommandRequest?: (events: OnNativeCommandRequestPayload) => void;
+  onNavRouteViewAdded   ?: (event: OnNavRouteViewAddedPayload   ) => void;
+  onNavRouteWillPop     ?: (event: OnNavRouteWillPopPayload     ) => void;
+  onNavRouteDidPop      ?: (event: OnNavRouteDidPopPayload      ) => void;
+  onSetNativeRoutes     ?: (event: OnSetNativeRouteDataPayload  ) => void;
+  onNativeCommandRequest?: (event: OnNativeCommandRequestPayload) => void;
 };
 
 export const RNINavigatorView = 
