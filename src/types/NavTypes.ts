@@ -59,6 +59,9 @@ export type NavigationObject = {
   removePreviousRoute ?: typeof NavigatorView.prototype.removePreviousRoute;
   removeAllPrevRoutes ?: typeof NavigatorView.prototype.removeAllPrevRoutes;
 
+  // misc. navigator commands
+  sendCustomCommand?: typeof NavigatorView.prototype.sendCustomCommand;
+
   // route commands
   getRouteOptions   ?: typeof NavigatorRouteView.prototype.getRouteOptions;
   setRouteOptions   ?: typeof NavigatorRouteView.prototype.setRouteOptions;

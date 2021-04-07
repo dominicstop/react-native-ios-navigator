@@ -431,4 +431,50 @@ internal class RNINavigatorViewModule: NSObject {
     let keys = RNINavigatorManager.routeRegistry.keys.map { $0 };
     callback([keys]);
   };
+  
+  @objc func sendCustomCommand(
+    _ node     : NSNumber,
+    commandKey : NSString,
+    commandData: NSDictionary?,
+    // promise blocks ------------------------
+    resolve: @escaping RCTPromiseResolveBlock,
+    reject : @escaping RCTPromiseRejectBlock
+  ){
+    
+    DispatchQueue.main.async {
+      do {
+        // get `RNINavigatorView` instance that matches node/reactTag
+        guard let navigatorView = Self.getNavigatorView(node) else {
+          throw RNIError.commandFailed(
+            source : "RNINavigatorViewModule.sendCustomCommand",
+            message:
+                "Unable to `insertRoute` because no corresponding `RNINavigatorView` "
+              + "instance found for the given node",
+            debug: "for node: \(node)"
+          );
+        };
+        
+        try navigatorView.didReceiveCustomCommand(
+          commandKey as String,
+          commandData as? Dictionary<String, Any>,
+          resolve: {
+            resolve($0);
+          },
+          reject: {
+            reject("LIB_ERROR", $0, nil);
+          }
+        );
+        
+      } catch {
+        let message = RNIError.constructErrorMessage(error);
+
+        #if DEBUG
+        print("ERROR - \(message)");
+        #endif
+
+        // reject promise w/: code, message, error
+        reject("LIB_ERROR", message, nil);
+      };
+    };
+  };
 };

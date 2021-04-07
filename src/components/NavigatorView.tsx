@@ -1092,6 +1092,21 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
     await this.removeRoutes(routesToRemove, animated);
   };
+
+  // Misc. Navigation Commands
+  // -------------------------
+
+  public sendCustomCommand = async (
+    commandKey: string, 
+    commandData: object | null = null
+  ): Promise<object | null> => {
+
+    return await RNINavigatorViewModule.sendCustomCommand(
+      findNodeHandle(this.nativeRef),
+      commandKey,
+      commandData
+    );
+  };
   //#endregion
 
   //#region - Native Event Handlers

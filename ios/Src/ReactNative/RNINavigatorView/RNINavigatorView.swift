@@ -24,6 +24,8 @@ public final class RNINavigatorView: UIView {
   /// ref to the shared `RCTBridge` instance
   weak var bridge: RCTBridge!;
   
+  weak var delegate: RNINavigatorViewDelegate?;
+  
   /// The routes added/to be added to the nav. stack.
   /// Note: The key is the `routeID`, also when removing an item, don't forget
   /// to call `cleanup` on the `routeView`
@@ -975,6 +977,30 @@ internal extension RNINavigatorView {
     self.navigationVC.setViewControllers(routesToAdd, animated: isAnimated) {
       completion();
     };
+  };
+  
+  func didReceiveCustomCommand(
+    _ key: String,
+    _ data: Dictionary<String, Any>?,
+    // promise blocks -------------------
+    resolve: @escaping (Any?   ) -> Void,
+    reject : @escaping (String?) -> Void
+  ) throws {
+    #if DEBUG
+    print("LOG - NativeView, RNINavigatorView: didReceiveCustomCommand"
+      + " - key: \(key)"
+      + " - data: \(data?.debugDescription ?? "N/A")"
+    );
+    #endif
+    
+    guard let delegate = self.delegate else {
+      throw RNIError.commandFailed(
+        source : "RNINavigatorView.didReceiveCustomCommand",
+        message: "Unable to forward command because delegate is nil"
+      );
+    };
+    
+    delegate.didReceiveCustomCommand(key, data, resolve, reject);
   };
 };
 

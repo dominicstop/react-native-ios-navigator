@@ -69,9 +69,15 @@ interface RNINavigatorViewModule {
   ): Promise<void>;
 
   // Module Commands: Misc
-  // -----------------------
+  // ---------------------
 
   getNativeRouteKeys(callback: (keys: [string]) => void): void;
+
+  sendCustomCommand(
+    node: number,
+    commandKey: string,
+    commandData: object | null
+  ): Promise<object | null>;
 };
 
 export const RNINavigatorViewModule: RNINavigatorViewModule =

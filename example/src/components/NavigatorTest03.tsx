@@ -222,6 +222,17 @@ export function NavigatorTest03(props: RouteContentProps){
           ]));
         }}
       />
+
+      <View style={{marginTop: 30}}/>
+      <ButtonWithSubtitle
+        title={'Trigger `sendCustomCommand`'}
+        subtitle={'Send custom command to the current navigator.'}
+        onPress={() => {
+          props.navigation.sendCustomCommand('Test01', {
+            message: 'Hello' 
+          });
+        }}
+      />
     </ScrollView>
   );
 };
