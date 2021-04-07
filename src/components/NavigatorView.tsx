@@ -1096,12 +1096,12 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   // Misc. Navigation Commands
   // -------------------------
 
-  public sendCustomCommand = async (
+  public sendCustomCommandToNative = async (
     commandKey: string, 
     commandData: object | null = null
   ): Promise<object | null> => {
 
-    return await RNINavigatorViewModule.sendCustomCommand(
+    return await RNINavigatorViewModule.sendCustomCommandToNative(
       findNodeHandle(this.nativeRef),
       commandKey,
       commandData

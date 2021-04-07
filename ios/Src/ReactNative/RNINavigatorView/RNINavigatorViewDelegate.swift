@@ -9,7 +9,7 @@ import UIKit
 
 public protocol RNINavigatorViewDelegate: AnyObject {
   
-  func didReceiveCustomCommand(
+  func didReceiveCustomCommandFromJS(
     _ key: String,
     _ data: Dictionary<String, Any>?,
     // promise blocks -------------------

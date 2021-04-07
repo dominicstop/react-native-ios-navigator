@@ -85,7 +85,7 @@ RCT_EXTERN_METHOD(addNativeRoute : (nonnull NSNumber )node
 RCT_EXTERN_METHOD(getNativeRouteKeys: (RCTResponseSenderBlock)callback);
 
 
-RCT_EXTERN_METHOD(sendCustomCommand: (nonnull NSNumber      )node
+RCT_EXTERN_METHOD(sendCustomCommandToNative: (nonnull NSNumber      )node
                   commandKey       : (nonnull NSString     *)commandKey
                   commandData      : (        NSDictionary *)commandData
                   // promise blocks -----------------------

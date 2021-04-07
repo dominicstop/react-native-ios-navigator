@@ -432,7 +432,7 @@ internal class RNINavigatorViewModule: NSObject {
     callback([keys]);
   };
   
-  @objc func sendCustomCommand(
+  @objc func sendCustomCommandToNative(
     _ node     : NSNumber,
     commandKey : NSString,
     commandData: NSDictionary?,
@@ -446,7 +446,7 @@ internal class RNINavigatorViewModule: NSObject {
         // get `RNINavigatorView` instance that matches node/reactTag
         guard let navigatorView = Self.getNavigatorView(node) else {
           throw RNIError.commandFailed(
-            source : "RNINavigatorViewModule.sendCustomCommand",
+            source : "RNINavigatorViewModule.sendCustomCommandToNative",
             message:
                 "Unable to `insertRoute` because no corresponding `RNINavigatorView` "
               + "instance found for the given node",
@@ -454,7 +454,7 @@ internal class RNINavigatorViewModule: NSObject {
           );
         };
         
-        try navigatorView.didReceiveCustomCommand(
+        try navigatorView.didReceiveCustomCommandFromJS(
           commandKey as String,
           commandData as? Dictionary<String, Any>,
           resolve: {

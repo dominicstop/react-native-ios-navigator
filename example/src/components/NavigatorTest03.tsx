@@ -225,10 +225,10 @@ export function NavigatorTest03(props: RouteContentProps){
 
       <View style={{marginTop: 30}}/>
       <ButtonWithSubtitle
-        title={'Trigger `sendCustomCommand`'}
+        title={'Trigger `sendCustomCommandToNative`'}
         subtitle={'Send custom command to the current navigator.'}
         onPress={() => {
-          props.navigation.sendCustomCommand('Test01', {
+          props.navigation.sendCustomCommandToNative('Test01', {
             message: 'Hello' 
           });
         }}

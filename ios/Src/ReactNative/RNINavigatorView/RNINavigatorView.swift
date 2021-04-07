@@ -979,7 +979,7 @@ internal extension RNINavigatorView {
     };
   };
   
-  func didReceiveCustomCommand(
+  func didReceiveCustomCommandFromJS(
     _ key: String,
     _ data: Dictionary<String, Any>?,
     // promise blocks -------------------
@@ -987,7 +987,7 @@ internal extension RNINavigatorView {
     reject : @escaping (String?) -> Void
   ) throws {
     #if DEBUG
-    print("LOG - NativeView, RNINavigatorView: didReceiveCustomCommand"
+    print("LOG - NativeView, RNINavigatorView: didReceiveCustomCommandFromJS"
       + " - key: \(key)"
       + " - data: \(data?.debugDescription ?? "N/A")"
     );
@@ -995,12 +995,12 @@ internal extension RNINavigatorView {
     
     guard let delegate = self.delegate else {
       throw RNIError.commandFailed(
-        source : "RNINavigatorView.didReceiveCustomCommand",
+        source : "RNINavigatorView.didReceiveCustomCommandFromJS",
         message: "Unable to forward command because delegate is nil"
       );
     };
     
-    delegate.didReceiveCustomCommand(key, data, resolve, reject);
+    delegate.didReceiveCustomCommandFromJS(key, data, resolve, reject);
   };
 };
 

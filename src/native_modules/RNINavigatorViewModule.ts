@@ -73,7 +73,7 @@ interface RNINavigatorViewModule {
 
   getNativeRouteKeys(callback: (keys: [string]) => void): void;
 
-  sendCustomCommand(
+  sendCustomCommandToNative(
     node: number,
     commandKey: string,
     commandData: object | null
