@@ -1,5 +1,5 @@
 //
-//  RNIExampleRouteViewController.swift
+//  RNITestRouteViewController01.swift
 //  IosNavigatorExample
 //
 //  Created by Dominic Go on 3/15/21.
@@ -8,7 +8,6 @@
 import UIKit
 import react_native_ios_navigator
 
-/// TODO: Rename to RNITestRouteViewController01
 /// Example route that's used via `pushViewController`
 class BlankRoute: RNINavigatorRouteBaseViewController {
   override func loadView() {
@@ -30,9 +29,8 @@ class BlankRoute: RNINavigatorRouteBaseViewController {
   };
 };
 
-
 /// Example route that get's registered in the route registry
-class RNIExampleRouteViewController: RNINavigatorRouteBaseViewController {
+class RNITestRouteViewController01: RNINavigatorRouteBaseViewController {
 
   override func loadView() {
     super.loadView();
@@ -163,7 +161,7 @@ class RNIExampleRouteViewController: RNINavigatorRouteBaseViewController {
   };
   
   @objc func onPressPushViewController2(){
-    let vc = RNIExampleRouteViewController();
+    let vc = RNITestRouteViewController01();
     vc.setRouteKey("TestNativeRoute");
     
     self.navigator?.pushViewController(vc, animated: true);

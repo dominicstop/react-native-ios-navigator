@@ -13,6 +13,6 @@ import react_native_ios_navigator
     print("register routes");
     
     RNINavigatorManager.routeRegistry["TestNativeRoute"] =
-      RNIExampleRouteViewController.self;
+      RNITestRouteViewController01.self;
   };
 };
