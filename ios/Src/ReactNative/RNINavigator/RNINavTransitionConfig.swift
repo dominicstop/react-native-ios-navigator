@@ -61,7 +61,6 @@ internal class RNINavTransitionConfig {
         interactionController: interactionController
       );
       
-      // TODO: Rename to "SlideLeftPush"
       case .SlideLeftPush: return SlideLeftPushAnimator(duration: duration);
       case .SlideLeftPop : return SlideLeftPopAnimator(
         duration: self.duration,
