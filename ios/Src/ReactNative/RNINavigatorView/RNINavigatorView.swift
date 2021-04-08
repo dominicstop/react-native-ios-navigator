@@ -83,6 +83,8 @@ public final class RNINavigatorView: UIView {
   /// a command that will be executed from the js/react navigator
   @objc var onNativeCommandRequest: RCTBubblingEventBlock?;
   
+  @objc var onCustomCommandFromNative: RCTBubblingEventBlock?;
+  
   /// Fired when a route is *about to be* "popped", either due to a "user initiated"
   /// pop (because the "back" button was pressed or it was swiped back via a
   /// gesture), or due to it being "popped" programmatically via the nav.
@@ -1122,6 +1124,14 @@ extension RNINavigatorView: RNINavigatorNativeCommands {
     self.onNativeCommandRequest?([
       "navigatorID": self.navigatorID!,
       "commandData": commandData,
+    ]);
+  };
+  
+  public func sendCustomCommandToJS(key: String, data: Dictionary<String, Any>){
+    self.onCustomCommandFromNative?([
+      "navigatorID": self.navigatorID!,
+      "commandKey" : key,
+      "commandData": data
     ]);
   };
 };

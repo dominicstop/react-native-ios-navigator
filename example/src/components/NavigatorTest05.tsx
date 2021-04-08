@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, SafeAreaView, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, SafeAreaView, TouchableOpacity, Alert } from 'react-native';
 
 import { NavigatorView, RouteContentProps, RouteViewPortal, useNavRouteLifeCycle } from 'react-native-ios-navigator';
 
@@ -103,6 +103,12 @@ export function NavigatorTest05() {
           routeProps: { message: 'H' }
         }]}
         navBarPrefersLargeTitles={false}
+        onCustomCommandFromNative={({nativeEvent}) => {
+          Alert.alert(
+            nativeEvent.commandKey, 
+            JSON.stringify(nativeEvent.commandData)
+          );
+        }}
         routes={[{
           routeKey: 'routeA',
           routeOptionsDefault: {

@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import { StyleSheet, findNodeHandle, ViewStyle } from 'react-native';
 
 import { RNIWrapperView } from '../native_components/RNIWrapperView';
-import { NativeRouteMap, OnNativeCommandRequestPayload, OnSetNativeRouteDataPayload as onSetNativeRoutesPayload, RNINavigatorView, RNINavigatorViewProps } from '../native_components/RNINavigatorView';
+import { NativeRouteMap, OnCustomCommandFromNativePayload, OnNativeCommandRequestPayload, OnSetNativeRouteDataPayload as onSetNativeRoutesPayload, RNINavigatorView, RNINavigatorViewProps } from '../native_components/RNINavigatorView';
 import { RNINavigatorViewModule } from '../native_modules/RNINavigatorViewModule';
 
 import { NavigatorRouteView } from './NavigatorRouteView';
@@ -82,6 +82,7 @@ type NavigatorViewProps = Partial<Pick<RNINavigatorViewProps,
   | 'navBarPrefersLargeTitles' 
   | 'navBarAppearance' 
   | 'isNavBarTranslucent'
+  | 'onCustomCommandFromNative'
 >> & {
   style?: ViewStyle;
 
@@ -1212,6 +1213,11 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
   };
 
+  private _handleOnCustomCommandFromNative = (event: OnCustomCommandFromNativePayload) => {
+    if(this.navigatorID != event.nativeEvent.navigatorID) return;
+    this.props.onCustomCommandFromNative?.(event);
+  };
+
   private _handleOnNavRouteWillPop = ({nativeEvent}: OnNavRouteWillPopPayload) => {
     if(this.navigatorID != nativeEvent.navigatorID) return;
 
@@ -1343,6 +1349,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         onNavRouteViewAdded={this._handleOnNavRouteViewAdded}
         onSetNativeRoutes={this._handleOnSetNativeRoutes}
         onNativeCommandRequest={this._handleOnNativeCommandRequest}
+        onCustomCommandFromNative={this._handleOnCustomCommandFromNative}
       >
         {this._renderRoutes()}
         {props.renderNavBarBackground && (

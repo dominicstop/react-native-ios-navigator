@@ -8,6 +8,7 @@
 import UIKit
 import react_native_ios_navigator
 
+/// TODO: Rename to RNITestRouteViewController01
 /// Example route that's used via `pushViewController`
 class BlankRoute: RNINavigatorRouteBaseViewController {
   override func loadView() {
@@ -102,11 +103,20 @@ class RNIExampleRouteViewController: RNINavigatorRouteBaseViewController {
       return button;
     }();
     
+    let button5: UIButton = {
+      let button = buttonMaker();
+      
+      button.setTitle("sendCustomCommandToJS", for: .normal);
+      button.addTarget(self, action:#selector(self.onPressSendCustomCommandToJS), for: .touchUpInside);
+      
+      return button;
+    }();
+    
     let stack = UIStackView(arrangedSubviews: [
       // title
       title1, title2, subtitle1, subtitle2,
       // nav commands buttons
-      button1, button2, button3, button4
+      button1, button2, button3, button4, button5
     ]);
     
     if #available(iOS 11.0, *) {
@@ -114,6 +124,7 @@ class RNIExampleRouteViewController: RNINavigatorRouteBaseViewController {
       stack.setCustomSpacing(10, after: button1);
       stack.setCustomSpacing(10, after: button2);
       stack.setCustomSpacing(10, after: button3);
+      stack.setCustomSpacing(10, after: button4);
     };
 
     stack.axis = .vertical;
@@ -156,5 +167,11 @@ class RNIExampleRouteViewController: RNINavigatorRouteBaseViewController {
     vc.setRouteKey("TestNativeRoute");
     
     self.navigator?.pushViewController(vc, animated: true);
+  };
+  
+  @objc func onPressSendCustomCommandToJS(){
+    self.navigator?.sendCustomCommandToJS(
+      key: "test", data: ["message": "hello from native"]
+    );
   };
 };

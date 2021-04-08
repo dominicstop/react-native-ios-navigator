@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { StyleSheet, View, Text, FlatList, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, View, Text, FlatList, TouchableOpacity, Image, Alert } from 'react-native';
 import { NavigatorView, RouteContentProps } from 'react-native-ios-navigator';
 
 import { NavigatorExample01 } from './components/NavigatorExample01';
@@ -183,6 +183,12 @@ export default function App() {
       initialRoutes={[{routeKey: RouteKeys.Home}]}
       isInteractivePopGestureEnabled={true}
       navBarPrefersLargeTitles={true}
+      onCustomCommandFromNative={({nativeEvent}) => {
+        Alert.alert(
+          nativeEvent.commandKey, 
+          JSON.stringify(nativeEvent.commandData)
+        );
+      }}
       routes={[{
         routeKey: RouteKeys.Home,
         routeOptionsDefault: {

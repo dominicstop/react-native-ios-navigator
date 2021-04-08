@@ -50,6 +50,13 @@ export type OnNativeCommandRequestPayload = { nativeEvent: {
     isAnimated: boolean;
   };
 }};
+
+export type OnCustomCommandFromNativePayload = { nativeEvent: {
+  target: number;
+  navigatorID: number;
+  commandKey: string;
+  commandData: object;
+}};
 //#endregion
 
 export type NativeRouteMap = {
@@ -79,11 +86,13 @@ export type RNINavigatorViewProps = {
   
   // Native Events
   // TODO: Rename to `event`
-  onNavRouteViewAdded   ?: (event: OnNavRouteViewAddedPayload   ) => void;
-  onNavRouteWillPop     ?: (event: OnNavRouteWillPopPayload     ) => void;
-  onNavRouteDidPop      ?: (event: OnNavRouteDidPopPayload      ) => void;
-  onSetNativeRoutes     ?: (event: OnSetNativeRouteDataPayload  ) => void;
-  onNativeCommandRequest?: (event: OnNativeCommandRequestPayload) => void;
+  // TODO: Use as handler directly
+  onNavRouteViewAdded      ?: (event: OnNavRouteViewAddedPayload      ) => void;
+  onNavRouteWillPop        ?: (event: OnNavRouteWillPopPayload        ) => void;
+  onNavRouteDidPop         ?: (event: OnNavRouteDidPopPayload         ) => void;
+  onSetNativeRoutes        ?: (event: OnSetNativeRouteDataPayload     ) => void;
+  onNativeCommandRequest   ?: (event: OnNativeCommandRequestPayload   ) => void;
+  onCustomCommandFromNative?: (event: OnCustomCommandFromNativePayload) => void;
 };
 
 export const RNINavigatorView = 
