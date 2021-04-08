@@ -85,8 +85,6 @@ export type RNINavigatorViewProps = {
   navBarAppearance: NavBarAppearanceCombinedConfig;
   
   // Native Events
-  // TODO: Rename to `event`
-  // TODO: Use as handler directly
   onNavRouteViewAdded      ?: (event: OnNavRouteViewAddedPayload      ) => void;
   onNavRouteWillPop        ?: (event: OnNavRouteWillPopPayload        ) => void;
   onNavRouteDidPop         ?: (event: OnNavRouteDidPopPayload         ) => void;

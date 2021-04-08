@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import { StyleSheet, findNodeHandle, ViewStyle } from 'react-native';
 
 import { RNIWrapperView } from '../native_components/RNIWrapperView';
-import { NativeRouteMap, OnCustomCommandFromNativePayload, OnNativeCommandRequestPayload, OnSetNativeRouteDataPayload as onSetNativeRoutesPayload, RNINavigatorView, RNINavigatorViewProps } from '../native_components/RNINavigatorView';
+import { NativeRouteMap, RNINavigatorView, RNINavigatorViewProps } from '../native_components/RNINavigatorView';
 import { RNINavigatorViewModule } from '../native_modules/RNINavigatorViewModule';
 
 import { NavigatorRouteView } from './NavigatorRouteView';
@@ -12,7 +12,7 @@ import type { NavCommandPushOptions, NavRouteItem, RenderNavBarItem, NavCommandP
 
 import type { RouteContentProps } from '../components/NavigatorRouteView';
 
-import type { OnNavRouteDidPopPayload, OnNavRouteViewAddedPayload, OnNavRouteWillPopPayload } from '../native_components/RNINavigatorView';
+import type { OnNavRouteViewAddedPayload } from '../native_components/RNINavigatorView';
 import type { RouteTransitionPopConfig, RouteTransitionPushConfig } from '../native_components/RNINavigatorRouteView';
 
 import * as Helpers from '../functions/Helpers';
@@ -23,6 +23,16 @@ import { NativeIDKeys } from '../constants/LibraryConstants';
 
 
 //#region - Type Definitions
+//#region - Extract handlers from RNINavigatorView
+type OnNavRouteViewAdded    =  RNINavigatorViewProps['onNavRouteViewAdded'];
+type OnNavRouteWillPop      =  RNINavigatorViewProps['onNavRouteWillPop'];
+type OnNavRouteDidPop       =  RNINavigatorViewProps['onNavRouteDidPop'];
+type OnSetNativeRoutes      =  RNINavigatorViewProps['onSetNativeRoutes'];
+type OnNativeCommandRequest =  RNINavigatorViewProps['onNativeCommandRequest'];
+//#endregion
+
+export type OnCustomCommandFromNative = RNINavigatorViewProps['onCustomCommandFromNative'];
+
 /** Represents the current status of the navigator */
 enum NavStatus {
   IDLE           = "IDLE"          , // nav. is idle, not busy
@@ -56,12 +66,12 @@ type NavRouteConfigItemBase = {
 };
 
 /** Native route config */
-type NavRouteConfigItemNative = NavRouteConfigItemBase & {
+export type NavRouteConfigItemNative = NavRouteConfigItemBase & {
   isNativeRoute: true;
 };
 
 /** JS/React route config */
-type NavRouteConfigItemJS = NavRouteConfigItemBase & {
+export type NavRouteConfigItemJS = NavRouteConfigItemBase & {
   isNativeRoute?: false;
   routeOptionsDefault?: RouteOptions;
   renderRoute: (routeItem: NavRouteItem) => ReactElement<RouteContentProps>;
@@ -75,7 +85,7 @@ export type NavRouteConfigItem =
   NavRouteConfigItemNative | NavRouteConfigItemJS;
 
 /** `NavigatorView` comp. props */
-type NavigatorViewProps = Partial<Pick<RNINavigatorViewProps,
+export type NavigatorViewProps = Partial<Pick<RNINavigatorViewProps,
   // mirror props from `RNINavigatorViewProps`
   | 'nativeID'
   | 'isInteractivePopGestureEnabled' 
@@ -1111,21 +1121,21 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   //#endregion
 
   //#region - Native Event Handlers
-  private _handleOnNavRouteViewAdded = (event: OnNavRouteViewAddedPayload) => {
+  private _handleOnNavRouteViewAdded: OnNavRouteViewAdded = (event) => {
     if(this.navigatorID != event.nativeEvent.navigatorID) return;
 
     // emit event: nav. route was added to `RNINavigatorView`'s subviews
     this.emitter.emit(NavEvents.onNavRouteViewAdded, event);
   };
 
-  private _handleOnSetNativeRoutes = (event: onSetNativeRoutesPayload) => {
+  private _handleOnSetNativeRoutes: OnSetNativeRoutes = (event) => {
     if(this.navigatorID != event.nativeEvent.navigatorID) return;
 
     // emit event: route data was set for the native routes
     this.emitter.emit(NavEvents.onSetNativeRoutes, event);
   };
 
-  private _handleOnNativeCommandRequest = async ({nativeEvent}: OnNativeCommandRequestPayload) => {
+  private _handleOnNativeCommandRequest: OnNativeCommandRequest = async ({nativeEvent}) => {
     if(this.navigatorID != nativeEvent.navigatorID) return;
     
     const { commandData } = nativeEvent;
@@ -1213,12 +1223,12 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
   };
 
-  private _handleOnCustomCommandFromNative = (event: OnCustomCommandFromNativePayload) => {
+  private _handleOnCustomCommandFromNative: OnCustomCommandFromNative = (event) => {
     if(this.navigatorID != event.nativeEvent.navigatorID) return;
     this.props.onCustomCommandFromNative?.(event);
   };
 
-  private _handleOnNavRouteWillPop = ({nativeEvent}: OnNavRouteWillPopPayload) => {
+  private _handleOnNavRouteWillPop: OnNavRouteWillPop = ({nativeEvent}) => {
     if(this.navigatorID != nativeEvent.navigatorID) return;
 
     if(!NavigatorViewUtils.isNavStateIdle(this.navStatus)){
@@ -1226,7 +1236,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
   };
 
-  private _handleOnNavRouteDidPop = ({nativeEvent}: OnNavRouteDidPopPayload) => {
+  private _handleOnNavRouteDidPop: OnNavRouteDidPop = ({nativeEvent}) => {
     if(this.navigatorID != nativeEvent.navigatorID) return;
 
     //#region - 🐞 DEBUG 🐛
