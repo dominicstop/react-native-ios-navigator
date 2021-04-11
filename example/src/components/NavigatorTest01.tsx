@@ -146,6 +146,27 @@ const navBarItemsConfigs: Array<{
     }
   }]
 }, {
+  description: "3 Nav bar items with gradient bg color",
+  config: [{
+    type: 'TEXT',
+    key: 'A',
+    title: 'Item A',
+    tintColor: 'white',
+    backgroundImage: {
+      default: {
+        controlState: 'normal',
+        imageItem: {
+          type: 'IMAGE_GRADIENT',
+          imageValue: {
+            colors: ['red', 'blue', 'green'],
+            width: 100,
+            height: 50,
+          }
+        },
+      }
+    },
+  }]
+}, {
   description: "A nav bar item with `Type: SYSTEM_ITEM` w/ `systemItem: 'close'`",
   config: [{
     type: 'SYSTEM_ITEM',
@@ -296,7 +317,7 @@ const navBarAppearanceOverride: Array<{
   description: "N/A",
   config: null,
 }, {
-  description: "",
+  description: "Red BG w/ white title",
   config: {
     standardAppearance: {
       backgroundColor: Colors.RED.A700,
@@ -309,6 +330,13 @@ const navBarAppearanceOverride: Array<{
         color: 'white',
         fontSize: 20,
       },
+    }
+  }
+}, {
+  description: "Gradient BG",
+  config: {
+    standardAppearance: {
+      
     }
   }
 }, {

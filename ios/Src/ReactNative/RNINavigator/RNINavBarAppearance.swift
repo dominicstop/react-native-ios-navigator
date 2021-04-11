@@ -133,7 +133,7 @@ internal class RNINavBarAppearance {
       return appearance;
     };
     
-    // MARK: Init + Conifg
+    // MARK: Init + Config
     // -------------------
     
     init(navBarPreset: NavBarPreset = .none){

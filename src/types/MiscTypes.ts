@@ -1,3 +1,8 @@
+export type Point = {
+  x: number;
+  y: number;
+};
+
 /** Object returned by `Image.resolveAssetSource()` */
 export type ImageResolvedAssetSource = {
   height: number;
@@ -11,6 +16,23 @@ export type ImageRectConfig = {
   height: number;
   fillColor: string;
   borderRadius?: number;
+};
+
+export type ImageGradientConfig = Partial<Pick<ImageRectConfig, 
+  | 'width'
+  | 'height'
+  | 'borderRadius'
+>> & {
+  /* An array defining the color of each gradient stop. */
+  colors: Array<string>;
+  /* Defines the location of each gradient stop. */
+  locations?: Array<number>;
+  /* The start point of the gradient when drawn in the layer’s coordinate space. */
+  startPoint?: Point;
+  /* The end point of the gradient when drawn in the layer’s coordinate space. */
+  endPoint?: Point;
+  /* Style of gradient drawn by the layer. Defaults to axial. */
+  type?: 'axial' | 'conic' | 'radial'
 };
 
 /** Object return by `DynamicColorIOS` */
@@ -28,11 +50,12 @@ export type Offset = {
 };
 
 export enum ImageTypes {
-  IMAGE_ASSET   = 'IMAGE_ASSET'  ,
-  IMAGE_SYSTEM  = 'IMAGE_SYSTEM' ,
-  IMAGE_REQUIRE = 'IMAGE_REQUIRE',
-  IMAGE_EMPTY   = 'IMAGE_EMPTY'  ,
-  IMAGE_RECT    = 'IMAGE_RECT'   ,
+  IMAGE_ASSET    = 'IMAGE_ASSET'   ,
+  IMAGE_SYSTEM   = 'IMAGE_SYSTEM'  ,
+  IMAGE_REQUIRE  = 'IMAGE_REQUIRE' ,
+  IMAGE_EMPTY    = 'IMAGE_EMPTY'   ,
+  IMAGE_RECT     = 'IMAGE_RECT'    ,
+  IMAGE_GRADIENT = 'IMAGE_GRADIENT',
 };
 
 export type ImageItemConfig = {
@@ -52,6 +75,9 @@ export type ImageItemConfig = {
 } | {
   type: ImageTypes.IMAGE_RECT | "IMAGE_RECT";
   imageValue: ImageRectConfig;
+} | {
+  type: ImageTypes.IMAGE_GRADIENT | "IMAGE_GRADIENT";
+  imageValue: ImageGradientConfig;
 };
 
 /** Blur styles available for blur effect objects. */

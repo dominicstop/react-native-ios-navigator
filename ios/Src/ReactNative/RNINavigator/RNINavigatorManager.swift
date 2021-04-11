@@ -47,4 +47,3 @@ public class RNINavigatorManager {
 public protocol RNINavigatorManagerDelegate {
   func onNavigatorViewAdded(_ navigatorView: RNINavigatorView, _ navigatorID: Int);
 };
-
