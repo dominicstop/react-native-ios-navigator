@@ -1,4 +1,4 @@
-import type { DynamicColor, ImageItemConfig, BarMetrics, ControlState, Offset } from "./MiscTypes";
+import type { DynamicColor, ImageItemConfig, BarMetrics, ControlState, Offset, ImageTypes, ImageResolvedAssetSource } from "./MiscTypes";
 
 //#region - BarButtonItemSystemItem
 type BarButtonItemSystemItem =
@@ -52,7 +52,18 @@ type BarButtonItemSystemItem =
   | "close"
 //#endregion
 
-type NavBarItemConfigBase = ImageItemConfig | {
+
+type SupportedImageTypes = {
+  type: ImageTypes.IMAGE_ASSET | "IMAGE_ASSET";
+  imageValue: string;
+} | {
+  type: ImageTypes.IMAGE_SYSTEM | "IMAGE_SYSTEM";
+  imageValue: string;
+} | {
+  type: ImageTypes.IMAGE_EMPTY | "IMAGE_EMPTY";
+};
+
+type NavBarItemConfigBase = SupportedImageTypes | {
   type: "TEXT";
   title: string;
 } | {
