@@ -246,7 +246,7 @@ internal class RNINavBarAppearance {
     var backgroundImage: [(UIBarMetrics, RNIImageItem)]?;
     var shadowImage: RNIImageItem?;
     
-    // MARK: Init + Conifg
+    // MARK: Init + Config
     // -------------------
     
     init(dict: NSDictionary) {
@@ -362,6 +362,11 @@ internal class RNINavBarAppearance {
       let shouldSetBG     = self.navBarPreset != .clearBackground;
       let shouldSetShadow = self.navBarPreset != .noShadow && shouldSetBG;
       
+      let statusBarHeight = UIApplication.shared.statusBarFrame.size.height;
+      
+      let navBarHeight = navBar.frame.height;
+      let navBarWidth  = navBar.frame.width;
+      
       // Section: Title Config
       // ---------------------
       
@@ -412,6 +417,13 @@ internal class RNINavBarAppearance {
       for (metric, imageItem) in self.backgroundImage ?? [] {
         // allow set bg image, else stop
         guard shouldSetBG else { break };
+        
+        // set image size
+        imageItem.defaultSize = CGSize(
+          width : navBarWidth,
+          height: navBarHeight + statusBarHeight
+        );
+        
         let bgImage = imageItem.image;
         
         // did change, else skip...
