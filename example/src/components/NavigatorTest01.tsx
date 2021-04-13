@@ -333,13 +333,6 @@ const navBarAppearanceOverride: Array<{
     }
   }
 }, {
-  description: "Gradient BG",
-  config: {
-    standardAppearance: {
-      
-    }
-  }
-}, {
   description: "",
   config: {
     standardAppearance: {
@@ -401,6 +394,36 @@ const navBarAppearanceOverrideLegacy: Array<{
         type: 'IMAGE_GRADIENT',
         imageValue: {
           colors: ['rgba(255,0,0,0.5)', 'blue'],
+        }
+      }
+    }
+  },
+}, {
+  description: 'Gradient BG test 2',
+  config: {
+    mode: 'legacy',
+    backgroundImage: {
+      default: {
+        type: 'IMAGE_GRADIENT',
+        imageValue: {
+          colors: ['red', 'blue', 'green'],
+          startPoint: 'left',
+          endPoint: 'right'
+        }
+      }
+    }
+  },
+}, {
+  description: 'Gradient BG test 3',
+  config: {
+    mode: 'legacy',
+    backgroundImage: {
+      default: {
+        type: 'IMAGE_GRADIENT',
+        imageValue: {
+          colors: ['red', 'blue', 'green'],
+          startPoint: 'right',
+          endPoint: 'left'
         }
       }
     }
@@ -1104,12 +1127,12 @@ function NavBarAppearanceOverrideLegacyConfig(props: any){
           const nextIndex = props.parentState.navBarAppearanceOverrideLegacyIndex + 1;
 
           const nextConfig = navBarAppearanceOverrideLegacy[
-            props.parentState.navBarAppearanceOverrideLegacyIndex %
-            nextIndex + 1
+            (nextIndex) %
+            navBarAppearanceOverrideLegacy.length
           ];
 
           const navigation: NavigationObject = props.navigation;
-          navigation.setNavBarAppearance(nextConfig.config);
+          navigation.setNavBarAppearance(nextConfig?.config);
 
           // @ts-ignore
           parentRef.setState(prevState => ({
