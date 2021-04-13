@@ -200,8 +200,8 @@ internal class RNINavigatorRouteView: UIView {
   };
   
   //  MARK: Props - Navbar Item Config
-  /// * Specific props for config. the VC's `navigationItem` proerties that are
-  ///   related to setting the various "navbar button item(s)" properties.
+  /// * Specific props for config. the VC's `navigationItem` properties that are
+  ///   related to setting the various "nav bar button item(s)" properties.
   /// -------------------------------------------------------------------------
   
   private var _largeTitleDisplayMode: UINavigationItem.LargeTitleDisplayMode = .automatic;

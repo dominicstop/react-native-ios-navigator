@@ -9,6 +9,7 @@ import { NavigatorRouteView } from './NavigatorRouteView';
 
 import type { RouteOptions } from '../types/NavTypes';
 import type { NavCommandPushOptions, NavRouteItem, RenderNavBarItem, NavCommandPopOptions } from '../types/NavSharedTypes';
+import type { NavBarAppearanceCombinedConfig } from '../types/NavBarAppearanceConfig';
 
 import type { RouteContentProps } from '../components/NavigatorRouteView';
 
@@ -112,6 +113,7 @@ export type NavigatorViewProps = Partial<Pick<RNINavigatorViewProps,
 /** `NavigatorView` comp. state */
 type NavigatorViewState = {
   activeRoutes: Array<NavRouteStateItem>;
+  navBarAppearanceOverride?: NavBarAppearanceCombinedConfig;
   transitionConfigPushOverride?: RouteTransitionPushConfig;
   transitionConfigPopOverride ?: RouteTransitionPopConfig;
 };
@@ -162,6 +164,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
     this.state = {
       activeRoutes: this.getInitialRoutes(),
+      navBarAppearanceOverride: null,
       transitionConfigPushOverride: null,
       transitionConfigPopOverride: null,
     };
@@ -453,6 +456,12 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   //#region - Public Functions
   public getActiveRoutes = () => {
     return this.state.activeRoutes;
+  };
+
+  public setNavBarAppearance = async (appearance: NavBarAppearanceCombinedConfig) => {
+    await Helpers.setStateAsync<Partial<NavigatorViewState>>(this, {
+      navBarAppearanceOverride: appearance
+    });
   };
 
   // Navigation Commands
@@ -1337,6 +1346,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   
   render(){
     const props = this.props;
+    const state = this.state;
 
     return (
       <RNINavigatorView 
@@ -1352,7 +1362,10 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         // Navigation Bar customization
         isNavBarTranslucent={props.isNavBarTranslucent ?? true}
         navBarPrefersLargeTitles={props.navBarPrefersLargeTitles ?? true}
-        navBarAppearance={props.navBarAppearance}
+        navBarAppearance={
+          state.navBarAppearanceOverride ?? 
+          props.navBarAppearance
+        }
         // event handlers: push/pop
         onNavRouteWillPop={this._handleOnNavRouteWillPop}
         onNavRouteDidPop={this._handleOnNavRouteDidPop}

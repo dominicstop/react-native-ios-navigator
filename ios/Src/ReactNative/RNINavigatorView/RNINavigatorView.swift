@@ -216,6 +216,15 @@ public final class RNINavigatorView: UIView {
     didSet {
       guard self.navBarAppearance != oldValue else { return };
       
+      #if DEBUG
+      let dictStr = self.navBarAppearance?.debugDescription
+        .replacingOccurrences(of: "\n", with: " ");
+      
+      print("LOG - NativeView, RNINavigatorView: navBarAppearance, didSet"
+        + " - dict \(dictStr ?? "N/A")"
+      );
+      #endif
+      
       if let dict = self.navBarAppearance {
         // update nav bar appearance
         self._navBarAppearance.updateValues(dict: dict);

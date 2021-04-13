@@ -60,6 +60,7 @@ export type NavigationObject = {
   removeAllPrevRoutes : typeof NavigatorView.prototype.removeAllPrevRoutes;
 
   // misc. navigator commands
+  setNavBarAppearance      : typeof NavigatorView.prototype.setNavBarAppearance;
   sendCustomCommandToNative: typeof NavigatorView.prototype.sendCustomCommandToNative;
 
   // route commands

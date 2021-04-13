@@ -1,10 +1,10 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Text, ScrollView, TouchableOpacity, TextInput, Switch, Alert, ViewStyle } from 'react-native';
-import { RouteViewEvents, RouteViewPortal, RouteContentProps } from 'react-native-ios-navigator';
+import { RouteViewEvents, RouteViewPortal, RouteContentProps, NavigationObject } from 'react-native-ios-navigator';
 
 import type { NavBarItemsConfig, NavBarBackItemConfig } from '../../../src/types/NavBarItemConfig';
-import type { NavBarAppearanceConfig } from '../../../src/types/NavBarAppearanceConfig';
+import type { NavBarAppearanceConfig, NavBarAppearanceCombinedConfig } from '../../../src/types/NavBarAppearanceConfig';
 
 import * as Colors  from '../constants/Colors';
 import * as Helpers from '../functions/Helpers';
@@ -384,6 +384,27 @@ const navBarAppearanceOverride: Array<{
       },
     }
   }
+}];
+
+const navBarAppearanceOverrideLegacy: Array<{
+  config: NavBarAppearanceCombinedConfig,
+  description: string
+}> = [{
+  description: 'N/A',
+  config: null,
+}, {
+  description: 'Gradient BG test',
+  config: {
+    mode: 'legacy',
+    backgroundImage: {
+      default: {
+        type: 'IMAGE_GRADIENT',
+        imageValue: {
+          colors: ['rgba(255,0,0,0.5)', 'blue'],
+        }
+      }
+    }
+  },
 }];
 
 function randomBGColor(){
@@ -1058,6 +1079,49 @@ function NavBarAppearanceOverrideItemConfig(props: any){
   );
 };
 
+function NavBarAppearanceOverrideLegacyConfig(props: any){
+  const currentConfig = navBarAppearanceOverrideLegacy[
+    props.parentState.navBarAppearanceOverrideLegacyIndex %
+    navBarAppearanceOverrideLegacy.length
+  ];
+
+  return(
+    <ItemContainer>
+      <ItemTitle
+        title={'Set '}
+        titleCode={'NavigatorView Appearance'}
+        subtitle={`This overrides the 'NavigatorView' 'navBarAppearance' w/ legacy config.`}
+      />
+      <ObjectPropertyDisplay
+        key={`config-NavBarAppearanceOverrideLegacyConfig`}
+        object={currentConfig.config}
+      />
+      <ButtonPrimary
+        title={'Update config'}
+        subtitle={`Cycle to the next preset config`}
+        onPress={() => {
+          const parentRef = props.getParentRef();
+          const nextIndex = props.parentState.navBarAppearanceOverrideLegacyIndex + 1;
+
+          const nextConfig = navBarAppearanceOverrideLegacy[
+            props.parentState.navBarAppearanceOverrideLegacyIndex %
+            nextIndex + 1
+          ];
+
+          const navigation: NavigationObject = props.navigation;
+          navigation.setNavBarAppearance(nextConfig.config);
+
+          // @ts-ignore
+          parentRef.setState(prevState => ({
+            // @ts-ignore
+            navBarAppearanceOverrideLegacyIndex: nextIndex
+          }));
+        }}
+      />
+    </ItemContainer>
+  );
+};
+
 function NavigationCommandsConfig(props: RouteContentProps){
 
   return(
@@ -1106,6 +1170,7 @@ export class NavigatorTest01 extends React.Component<RouteContentProps> {
     navBarButtonLeftItemsConfigIndex: 0,
     backButtonItemsConfigIndex: 0,
     navBarAppearanceOverrideIndex: 0,
+    navBarAppearanceOverrideLegacyIndex: 0,
 
     leftItemsSupplementBackButton: false,
     hidesBackButton: false,
@@ -1249,6 +1314,11 @@ export class NavigatorTest01 extends React.Component<RouteContentProps> {
         <NavBarAppearanceOverrideItemConfig
           getParentRef={() => this}
           parentState={state}
+        />
+        <NavBarAppearanceOverrideLegacyConfig
+          getParentRef={() => this}
+          parentState={state}
+          navigation={this.props.navigation}
         />
         <NavigationCommandsConfig
           navigation={this.props.navigation}
