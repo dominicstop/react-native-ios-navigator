@@ -3,6 +3,10 @@ export type Point = {
   y: number;
 };
 
+type PointPreset = 
+  | 'top' | 'bottom' | 'left' | 'right'
+  | 'bottomLeft' | 'bottomRight' | 'topLeft' | 'topRight';
+
 /** Object returned by `Image.resolveAssetSource()` */
 export type ImageResolvedAssetSource = {
   height: number;
@@ -28,9 +32,9 @@ export type ImageGradientConfig = Partial<Pick<ImageRectConfig,
   /* Defines the location of each gradient stop. */
   locations?: Array<number>;
   /* The start point of the gradient when drawn in the layer’s coordinate space. */
-  startPoint?: Point;
+  startPoint?: Point | PointPreset;
   /* The end point of the gradient when drawn in the layer’s coordinate space. */
-  endPoint?: Point;
+  endPoint?: Point | PointPreset;
   /* Style of gradient drawn by the layer. Defaults to axial. */
   type?: 'axial' | 'conic' | 'radial'
 };
