@@ -458,7 +458,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     return this.state.activeRoutes;
   };
 
-  public setNavBarAppearance = async (appearance: NavBarAppearanceCombinedConfig) => {
+  public setNavBarAppearance = async (appearance?: NavBarAppearanceCombinedConfig) => {
     await Helpers.setStateAsync<Partial<NavigatorViewState>>(this, {
       navBarAppearanceOverride: appearance
     });

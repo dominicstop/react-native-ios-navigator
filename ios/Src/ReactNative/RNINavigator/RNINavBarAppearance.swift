@@ -470,6 +470,12 @@ internal class RNINavBarAppearance {
     }
   };
   
+  var isUsingNewAppearance: Bool {
+    self.appearanceConfigStandard   != nil ||
+    self.appearanceConfigCompact    != nil ||
+    self.appearanceConfigScrollEdge != nil
+  };
+  
   // determines whether to reset the navbar first before applying the config
   private var shouldResetNavBar = false;
   
@@ -579,14 +585,14 @@ internal class RNINavBarAppearance {
     };
   };
   
-  func resetNavBarAppearance(_ navBar: UINavigationBar?){
+  func resetNavBarAppearance(_ navBar: UINavigationBar?, resetLegacyOnly: Bool = false){
     guard let navBar = navBar else { return };
     self.shouldResetNavBar = false;
     
     let defaultAppearance = UINavigationBar.appearance();
     
-    // reset navbar appearance
-    if #available(iOS 13.0, *) {
+    // reset nav bar appearance
+    if #available(iOS 13.0, *), !resetLegacyOnly {
       navBar.standardAppearance   = defaultAppearance.standardAppearance;
       navBar.compactAppearance    = defaultAppearance.compactAppearance;
       navBar.scrollEdgeAppearance = defaultAppearance.scrollEdgeAppearance;
