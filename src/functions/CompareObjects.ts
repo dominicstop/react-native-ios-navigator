@@ -103,6 +103,8 @@ export function compareAppearanceConfig(itemA: NavBarAppearance, itemB: NavBarAp
     (itemA?.backgroundColor  === itemB?.backgroundColor  ) &&
     (itemA?.shadowColor      === itemB?.shadowColor      ) &&
 
+    HelperUtilities.shallowCompareObject(itemA?.backgroundImage, itemB?.backgroundImage) &&
+
     // NavBarAppearance ------------------------------------------------
     (itemA?.titlePositionAdjustment === itemB?.titlePositionAdjustment) &&
 

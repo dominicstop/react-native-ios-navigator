@@ -333,7 +333,7 @@ const navBarAppearanceOverride: Array<{
     }
   }
 }, {
-  description: "",
+  description: "...",
   config: {
     standardAppearance: {
       backgroundColor: 'rgba(0,0,255,0.25)',
@@ -356,7 +356,7 @@ const navBarAppearanceOverride: Array<{
     }
   }
 }, {
-  description: "",
+  description: "...",
   config: {
     standardAppearance: {
       backgroundColor: 'rgba(0,255,0,0.25)',
@@ -376,7 +376,36 @@ const navBarAppearanceOverride: Array<{
         imageValue: 'arrow.left'
       },
     }
-  }
+  },
+}, {
+  description: "Gradient Test #1",
+  config: {
+    standardAppearance: {
+      backgroundImage: {
+        type: 'IMAGE_GRADIENT',
+        imageValue: {
+          colors: ['red', 'rgba(0,0,255,0.5)'],
+          startPoint: 'left',
+          endPoint: 'right',
+        }
+      }
+    }
+  },
+}, {
+  description: "Gradient Test #2",
+  config: {
+    standardAppearance: {
+      backgroundEffect: 'systemUltraThinMaterial',
+      backgroundImage: {
+        type: 'IMAGE_GRADIENT',
+        imageValue: {
+          colors: ['rgba(255,0,0,0.5)', 'rgba(0,0,255,0.5)'],
+          startPoint: 'right',
+          endPoint: 'left',
+        }
+      }
+    }
+  },
 }];
 
 const navBarAppearanceOverrideLegacy: Array<{
@@ -1113,7 +1142,11 @@ function NavBarAppearanceOverrideLegacyConfig(props: any){
       <ItemTitle
         title={'Set '}
         titleCode={'NavigatorView Appearance'}
-        subtitle={`This overrides the 'NavigatorView' 'navBarAppearance' w/ legacy config.`}
+        subtitle={
+            `This overrides the 'NavigatorView''s 'navBarAppearance' w/ legacy config.`
+          + ` Note that once you use the iOS 13+ appearance API, the legacy appearance API will`
+          + ` no longer work. Choose and to stick one, switching between them is also unsupported.`
+        }
       />
       <ObjectPropertyDisplay
         key={`config-NavBarAppearanceOverrideLegacyConfig`}

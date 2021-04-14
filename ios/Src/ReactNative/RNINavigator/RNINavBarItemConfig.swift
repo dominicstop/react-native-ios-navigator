@@ -43,7 +43,7 @@ internal class RNINavBarItemConfig {
   // MARK:- Properties
   // -----------------
     
-  // inidcates what "type" of nav bar item to create
+  // indicates what "type" of nav bar item to create
   let type: ItemType!;
   
   // invoked when a nav bar item is tapped.

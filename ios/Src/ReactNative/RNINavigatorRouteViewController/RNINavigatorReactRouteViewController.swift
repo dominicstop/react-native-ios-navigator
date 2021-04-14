@@ -278,6 +278,12 @@ extension RNINavigatorReactRouteViewController: RNINavigatorRouteViewDelegate {
   ) {
     guard #available(iOS 13.0, *) else { return };
     let defaultAppearance = UINavigationBar.appearance();
+     
+    if let navBar = self.navigationController?.navigationBar {
+      standard?.prepareForUpdate(navBar);
+      compact?.prepareForUpdate(navBar);
+      scrollEdge?.prepareForUpdate(navBar);
+    };
     
     self.navigationItem.standardAppearance = standard?.appearance
       ?? defaultAppearance.standardAppearance;

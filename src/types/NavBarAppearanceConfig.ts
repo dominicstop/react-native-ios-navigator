@@ -27,12 +27,20 @@ type BarAppearance = {
   // Background Appearance
   /** The blur effect to apply to the bar's background. The blur effect provides the base layer for the bar's appearance, and it determines how much of the underlying content is visible. UIKit applies the `backgroundColor` and `backgroundImage` on top of this effect. */
   backgroundEffect?: BlurEffectStyle;
+
   /** The background color of the bar. */
   backgroundColor?: string | DynamicColor;
+
+  /** The image to display on top of the bar's background color. */
+  backgroundImage?: ImageItemConfig;
+
+  // TODO: backgroundImageContentMode: UIView.ContentMode
 
   // Shadow Appearance
   /** The color to apply to the bar's custom or default shadow. */
   shadowColor?: string | DynamicColor;
+
+  // TODO: shadowImage: UIImage?
 };
 
 /** `UINavigationBarAppearance` - An object for customizing the appearance of a navigation bar. */
@@ -43,7 +51,7 @@ export type NavBarAppearance = BarAppearance & {
   
   /** String attributes to apply to the text of a large-size title. */
   largeTitleTextAttributes?: TextStyle & TextStyleIOS;
-  
+
   /** The distance, in points, by which to offset the title horizontally and vertically. */
   titlePositionAdjustment?: Offset;
 

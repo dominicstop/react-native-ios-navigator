@@ -18,7 +18,7 @@ internal class RNINavBarAppearance {
   ///
   /// The current "preset" in the config tells us whether or not we should allow
   /// changes to certain "appearance"-related properties of the navbar (e.g. when
-  /// `.noShadow`, oon't allow "shadowColor" to be set, etc).
+  /// `.noShadow`, don't allow "shadowColor" to be set, etc).
   enum NavBarPreset: String {
     case none;
     case noShadow;
@@ -27,7 +27,10 @@ internal class RNINavBarAppearance {
   
   /// Defines whether or not to use the legacy or appearance API
   enum AppearanceMode: String {
+    /// Uses the pre-iOS 13 API's for customizing the navigation bar
     case legacy;
+    
+    /// Uses the iOS 13+ API's for customizing the nav bar.
     case appearance;
   };
   
@@ -49,13 +52,19 @@ internal class RNINavBarAppearance {
     var largeTitleTextAttributes: RCTTextAttributes?;
     var titlePositionAdjustment: UIOffset?;
     
-    // MARK: `BarAppearance`-related
+    // MARK: `UIBarAppearance`-related
     var backgroundEffect: UIBlurEffect?;
     var backgroundColor: UIColor?;
-    var shadowColor: UIColor?;
+    var backgroundImage: RNIImageItem?
     
-    // MARK:
+    var shadowColor: UIColor?;
+    // TODO: shadowImage: UIImage?
+    
+    // MARK: Button Appearance
     var backIndicatorImage: RNIImageItem?;
+    // TODO: backButtonAppearance: UIBarButtonItemAppearance
+    // TODO: doneButtonAppearance: UIBarButtonItemAppearance
+    // TODO: buttonAppearance: UIBarButtonItemAppearance
     
     // MARK: Computed Properties
     @available(iOS 13.0, *)
@@ -97,10 +106,9 @@ internal class RNINavBarAppearance {
       
       if shouldSetBackground {
         appearance.backgroundEffect = self.backgroundEffect;
-      };
-      
-      if shouldSetBackground {
         appearance.backgroundColor = self.backgroundColor;
+        
+        appearance.backgroundImage = self.backgroundImage?.image;
       };
       
       if shouldSetShadow {
@@ -121,6 +129,7 @@ internal class RNINavBarAppearance {
         case .clearBackground:
           appearance.backgroundColor  = .clear;
           appearance.backgroundEffect = nil;
+          appearance.backgroundImage  = nil;
           fallthrough;
           
         case .noShadow:
@@ -203,6 +212,15 @@ internal class RNINavBarAppearance {
         return color;
       }();
       
+      /// set/init: `backgroundImage`
+      self.backgroundImage = {
+        guard let imageDict = dict["backgroundImage"] as? NSDictionary,
+              let imageItem = RNIImageItem(dict: imageDict)
+        else { return nil };
+        
+        return imageItem;
+      }();
+      
       /// set/init: `shadowColor`
       self.shadowColor = {
         guard let value = dict["shadowColor"],
@@ -222,6 +240,19 @@ internal class RNINavBarAppearance {
         
         return imageItem;
       }();
+    };
+    
+    func prepareForUpdate(_ navBar: UINavigationBar){
+      let statusBarHeight = UIApplication.shared.statusBarFrame.size.height;
+      
+      let navBarHeight = navBar.frame.height;
+      let navBarWidth  = navBar.frame.width;
+      
+      // setup background image size
+      self.backgroundImage?.defaultSize = CGSize(
+        width: navBarWidth,
+        height: navBarHeight + statusBarHeight
+      );
     };
   };
   
@@ -561,6 +592,10 @@ internal class RNINavBarAppearance {
     switch mode {
       case .appearance:
         guard #available(iOS 13.0, *) else { return };
+        
+        self.appearanceConfigStandard?.prepareForUpdate(navBar);
+        self.appearanceConfigCompact?.prepareForUpdate(navBar);
+        self.appearanceConfigScrollEdge?.prepareForUpdate(navBar);
         
         let standardConfig = self.appearanceConfigStandard
           // no standard config provided, create a "default" config
