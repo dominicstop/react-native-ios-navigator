@@ -861,7 +861,7 @@ function NavBarConfigGeneral(props: any){
 function NavBarBackItemsConfig(props: any){
   const currentConfig = backButtonItemConfigs[
     props.parentState.backButtonItemsConfigIndex %
-    navBarItemsConfigs.length
+    backButtonItemConfigs.length
   ];
 
   const backButtonTitleRef = React.useRef();
