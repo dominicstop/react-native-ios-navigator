@@ -3,7 +3,15 @@ import type { RouteTransitionPushConfig, RouteTransitionPopConfig } from "src/na
 import type { NavBarItemConfig, NavBarItemsConfig, NavBarBackItemConfig } from "../types/NavBarItemConfig";
 import type { NavBarAppearance, NavBarAppearanceConfig } from '../types/NavBarAppearanceConfig';
 import type { RouteOptions } from "../types/NavTypes";
+import type { BarMetrics } from "../types/MiscTypes";
 
+
+type ComparisonConfig<T> = {[K in keyof Required<T>]: {
+  mode: "shallow" | "shallowObject" | "ignore";
+} | {
+  mode: "custom";
+  customCompare: (itemA?: T[K], itemB?: T[K]) => boolean;
+}};
 
 // Note: These functions are used to compare objects and decide whether or not to
 // to trigger an update or re-render, so it has to be fast.
@@ -17,7 +25,7 @@ import type { RouteOptions } from "../types/NavTypes";
 
 class HelperUtilities {
   /** if one value is null, and the other isn't, then they aren't the same. */
-  static compareObjectsNull(itemA: object, itemB: object){
+  static compareItemsNull(itemA?: any, itemB?: any){
     return ((itemA == null) === (itemB == null));
   };
 
@@ -29,25 +37,171 @@ class HelperUtilities {
     if(HelperUtilities.isBothNull(itemA, itemB)) return true;
 
     return (
-      HelperUtilities.compareObjectsNull(itemA, itemB) && 
+      HelperUtilities.compareItemsNull(itemA, itemB) && 
       (itemA?.length == itemB?.length)
     );
   };
 
-  static shallowCompareObject(itemA: object, itemB: object){
-    if(!HelperUtilities.compareObjectsNull(itemA, itemB)) return false;
+  static shallowCompareObject<T extends Object>(itemA: T, itemB: T){
     if(HelperUtilities.isBothNull(itemA, itemB)) return true;
+    if(!HelperUtilities.compareItemsNull(itemA, itemB)) return false;
 
-    const keys1 = Object.keys(itemA);
-    const keys2 = Object.keys(itemB);
+    let key: keyof T; 
+    for (key in itemA) {
+      if ((itemA[key] && itemB[key] == null) || (itemA[key] !== itemB[key])) {
+        return false;
+      };
+    };
 
-    if (keys1.length !== keys2.length) {
+    return true;
+  };
+
+  static compareObject<T extends Object>(
+    propertyMap: ComparisonConfig<T>,
+    oldItem: T, 
+    newItem: T
+  ): boolean {
+    if(HelperUtilities.isBothNull(oldItem, newItem)) return true;
+    if(!HelperUtilities.compareItemsNull(oldItem, newItem)) return false;
+
+    let key: keyof T;
+    for(key in oldItem){
+      const config = propertyMap[key];
+
+      // value does not exist on newItem, not equal
+      if(oldItem[key] && newItem[key] == null) return false;
+
+      switch (config?.mode) {
+        case 'shallow':
+          if(oldItem[key] !== newItem[key]) return false;
+          break;
+
+        case 'custom':
+          // @ts-ignore
+          if(!config.customCompare(oldItem[key], newItem[key])) return false;
+          break;
+
+        case 'shallowObject':
+          if(!HelperUtilities.shallowCompareObject(oldItem, newItem)) return false;
+          break;
+
+        case 'ignore':
+          break;
+      };
+    };
+
+    return true;
+  };
+};
+
+export class CompareNavBarItemConfig {
+  static propertyMap: ComparisonConfig<NavBarItemConfig> = {
+    // shallow compare 
+    key  : { mode: 'shallow' },
+    type : { mode: 'shallow' },
+    width: { mode: 'shallow' },
+
+    barButtonItemStyle: { mode: 'shallow' },
+
+    // shallow compare object
+    tintColor      : { mode: 'shallowObject' },
+    possibleTitles : { mode: 'shallowObject' },
+
+    // custom compare
+    titlePositionAdjustment: {
+      mode: 'custom',
+      customCompare: CompareNavBarItemConfig.compareTitlePositionAdjustment,
+    },
+    backgroundImage: {
+      mode: 'custom',
+      customCompare: CompareNavBarItemConfig.compareBackgroundImage,
+    },
+  };
+
+  private static compareTitlePositionAdjustment(
+    oldItem: NavBarItemConfig['titlePositionAdjustment'], 
+    newItem: NavBarItemConfig['titlePositionAdjustment']
+  ): boolean {
+    if(!HelperUtilities.shallowCompareObject(oldItem, newItem)){
       return false;
     };
 
-    for (let key of keys1) {
+    let key: keyof typeof oldItem;
+    for (key in oldItem) {
+      // compare each Offset object
+      if(!HelperUtilities.shallowCompareObject(oldItem[key], newItem[key])){
+        return false;
+      };
+    };
+
+    return true;
+  };
+
+  private static compareBackgroundImage(
+    oldItem: NavBarItemConfig['backgroundImage'], 
+    newItem: NavBarItemConfig['backgroundImage']
+  ): boolean {
+    if(!HelperUtilities.shallowCompareObject(oldItem, newItem)){
+      return false;
+    };
+
+    let key: keyof typeof oldItem;
+    for (key in oldItem) {
+      // compare each background image
+      if(!HelperUtilities.shallowCompareObject(oldItem[key], newItem[key])){
+        return false;
+      };
+    };
+
+    return true;
+  };
+
+  static compare(oldItem?: NavBarItemConfig, newItem?: NavBarItemConfig){
+    return (
+      HelperUtilities.compareObject(CompareNavBarItemConfig.propertyMap, oldItem, newItem) &&
+
       // @ts-ignore
-      if (itemA[key] !== itemB[key]) {
+      // compare `SupportedImageTypes`
+      oldItem.imageValue === newItem.imageValue && // @ts-ignore
+      // compare `NavBarItemConfigBase`
+      oldItem.title      === newItem.title      && // @ts-ignore 
+      oldItem.systemItem === newItem.systemItem 
+    );
+  };
+};
+
+export class CompareNavBarButtonBackItemConfig {
+  static propertyMap: ComparisonConfig<NavBarBackItemConfig> = {
+    ...CompareNavBarItemConfig.propertyMap,
+    applyToPrevBackConfig: { mode: 'shallow' },
+  };
+
+  static compare(oldItem?: NavBarBackItemConfig, newItem?: NavBarBackItemConfig){
+    return (
+      // @ts-ignore
+      // compare `SupportedImageTypes`
+      oldItem.imageValue === newItem.imageValue && // @ts-ignore
+      // compare `NavBarItemConfigBase`
+      oldItem.title      === newItem.title      && // @ts-ignore 
+      oldItem.systemItem === newItem.systemItem &&
+
+      HelperUtilities.compareObject(CompareNavBarButtonBackItemConfig.propertyMap, oldItem, newItem)
+    );
+  };
+};
+
+export class CompareNavBarItemsConfig {
+  static compare(oldItem?: NavBarItemsConfig, newItem?: NavBarItemsConfig){
+    if(!HelperUtilities.compareArraySimple(oldItem, newItem)) return false;
+
+    for (let i = 0; i < oldItem?.length ?? 0; i++) {
+      if(oldItem[i] !== newItem[i]){
+        return false;
+
+      } else if(!CompareNavBarItemConfig.compare(
+        oldItem[i] as NavBarItemConfig, 
+        newItem[i] as NavBarItemConfig
+      )){
         return false;
       };
     };
@@ -56,137 +210,114 @@ class HelperUtilities {
   };
 };
 
-export function compareNavBarItemConfigBase(itemA: NavBarItemConfig, itemB: NavBarItemConfig){
-  if(HelperUtilities.isBothNull(itemA, itemB)) return true;
-  
-  return (
-    (itemA?.type       === itemB?.type      ) && // @ts-ignore
-    (itemA?.title      === itemB?.title     ) && // @ts-ignore
-    (itemA?.imageValue === itemB?.imageValue) 
-  );
-};
-
-export function compareNavBarItemConfigShared(itemA: NavBarItemConfig, itemB: NavBarItemConfig){
-  if(HelperUtilities.isBothNull(itemA, itemB)) return true;
-  
-  return (
-    (itemA?.key                === itemB?.key                ) &&
-    (itemA?.tintColor          === itemB?.tintColor          ) &&
-    (itemA?.barButtonItemStyle === itemB?.barButtonItemStyle ) &&
-    (itemA?.possibleTitles     === itemB?.possibleTitles     ) &&
-    (itemA?.width              === itemB?.width              )
-  );
-};
-
-export function compareTransitionConfig(
-  itemA: RouteTransitionPushConfig | RouteTransitionPopConfig, 
-  itemB: RouteTransitionPushConfig | RouteTransitionPopConfig
-){
-  if(!HelperUtilities.compareObjectsNull(itemA, itemB)) return false;
-  if(HelperUtilities.isBothNull(itemA, itemB)) return true;
-
-  return (
-    (itemA?.type     === itemB?.type    ) &&
-    (itemA?.duration === itemB?.duration)
-  );
-};
-
-export function compareAppearanceConfig(itemA: NavBarAppearance, itemB: NavBarAppearance){
-  if(HelperUtilities.isBothNull(itemA, itemB)) return true;
-  
-  return (
-    HelperUtilities.compareObjectsNull(itemA, itemB) &&
-    // BarAppearance --------------------------------------
-    (itemA?.backgroundColor  === itemB?.backgroundColor  ) &&
-    (itemA?.baseConfig       === itemB?.baseConfig       ) &&
-    (itemA?.backgroundEffect === itemB?.backgroundEffect ) &&
-    (itemA?.backgroundColor  === itemB?.backgroundColor  ) &&
-    (itemA?.shadowColor      === itemB?.shadowColor      ) &&
-
-    HelperUtilities.shallowCompareObject(itemA?.backgroundImage, itemB?.backgroundImage) &&
-
-    // NavBarAppearance ------------------------------------------------
-    (itemA?.titlePositionAdjustment === itemB?.titlePositionAdjustment) &&
-
-    HelperUtilities.shallowCompareObject(itemA?.titleTextAttributes     , itemB?.titleTextAttributes     ) &&
-    HelperUtilities.shallowCompareObject(itemA?.largeTitleTextAttributes, itemB?.largeTitleTextAttributes) &&
-    HelperUtilities.shallowCompareObject(itemA?.backIndicatorImage      , itemB?.backIndicatorImage      )
-  );
-};
-
-export function compareNavBarItemConfig(itemA: NavBarItemConfig, itemB: NavBarItemConfig){
-  if(HelperUtilities.isBothNull(itemA, itemB)) return true;
-  
-  return (
-    HelperUtilities.compareObjectsNull(itemA, itemB) &&
-    compareNavBarItemConfigBase  (itemA, itemB) &&
-    compareNavBarItemConfigShared(itemA, itemB)
-  );
-};
-
-export function compareNavBarItemsConfig(itemA: NavBarItemsConfig, itemB: NavBarItemsConfig){
-  if(!HelperUtilities.compareArraySimple(itemA, itemB)) return false;
-  if(HelperUtilities.isBothNull(itemA, itemB)) return true;
-
-  for (let i = 0; i < itemA?.length ?? 0; i++) {
-    // @ts-ignore
-    if(!compareNavBarItemConfig(itemA[i], itemB[i])) return false;
+export class CompareRouteTransitionPushConfig {
+  static propertyMap: ComparisonConfig<RouteTransitionPushConfig> = {
+    // shallow compare
+    type    : { mode: 'shallow' },
+    duration: { mode: 'shallow' },
   };
 
-  return true;
+  static compare(oldItem?: RouteTransitionPushConfig, newItem?: RouteTransitionPushConfig){
+    return HelperUtilities.compareObject(CompareRouteTransitionPushConfig.propertyMap, oldItem, newItem);
+  };
 };
 
-export function compareNavBarButtonBackItemConfig(itemA: NavBarBackItemConfig, itemB: NavBarBackItemConfig){
-  if(HelperUtilities.isBothNull(itemA, itemB)) return true;
-  
-  return (
-    HelperUtilities.compareObjectsNull(itemA, itemB) && 
+export class CompareRouteTransitionPopConfig {
+  static propertyMap: ComparisonConfig<RouteTransitionPopConfig> = {
+    // shallow compare
+    type    : { mode: 'shallow' },
+    duration: { mode: 'shallow' },
+  };
 
-    compareNavBarItemConfigBase  (itemA, itemB) && 
-    compareNavBarItemConfigShared(itemA, itemB) &&
-
-    // compare back button config
-    (itemA?.applyToPrevBackConfig === itemB?.applyToPrevBackConfig)
-  );
+  static compare(oldItem?: RouteTransitionPopConfig, newItem?: RouteTransitionPopConfig){
+    return HelperUtilities.compareObject(CompareRouteTransitionPopConfig.propertyMap, oldItem, newItem);
+  };
 };
 
-export function compareNavBarAppearanceOverride(itemA: NavBarAppearanceConfig, itemB: NavBarAppearanceConfig){
-  if(HelperUtilities.isBothNull(itemA, itemB)) return true;
-  
-  return (
-    HelperUtilities.compareObjectsNull(itemA, itemB) &&
-    compareAppearanceConfig(itemA.standardAppearance  , itemB.standardAppearance) &&
-    compareAppearanceConfig(itemA.compactAppearance   , itemB.compactAppearance ) &&
-    compareAppearanceConfig(itemA.scrollEdgeAppearance, itemB.scrollEdgeAppearance)
-  );
+export class CompareAppearanceConfig {
+  static propertyMap:  ComparisonConfig<NavBarAppearance> = {
+    // shallow compare
+    baseConfig             : { mode: 'shallow' },
+    backgroundEffect       : { mode: 'shallow' },
+    backgroundColor        : { mode: 'shallow' },
+    shadowColor            : { mode: 'shallow' },
+    titlePositionAdjustment: { mode: 'shallow' },
+
+    // shallow compare object
+    backgroundImage         : { mode: 'shallowObject' },
+    titleTextAttributes     : { mode: 'shallowObject' },
+    largeTitleTextAttributes: { mode: 'shallowObject' },
+    backIndicatorImage      : { mode: 'shallowObject' },
+  };
+
+  static compare(oldItem?: NavBarAppearance, newItem?: NavBarAppearance){
+    return HelperUtilities.compareObject(CompareAppearanceConfig.propertyMap, oldItem, newItem);
+  };
 };
 
-export function compareRouteOptions(itemA: RouteOptions, itemB: RouteOptions){
-  if(!HelperUtilities.compareObjectsNull(itemA, itemB)) return false;
-  if(HelperUtilities.isBothNull(itemA, itemB)) return true;
+export class CompareNavBarAppearanceOverride {
+  static propertyMap: ComparisonConfig<NavBarAppearanceConfig> = {
+    // shallow compare 
+    navBarPreset: { mode: 'shallow' },
+    // custom compare
+    standardAppearance: {
+      mode: 'custom',
+      customCompare: CompareAppearanceConfig.compare,
+    },
+    compactAppearance: {
+      mode: 'custom',
+      customCompare: CompareAppearanceConfig.compare,
+    },
+    scrollEdgeAppearance: {
+      mode: 'custom',
+      customCompare: CompareAppearanceConfig.compare,
+    },
+  };
 
-  return (
-    // Compare: Navbar Config --------------------------------------
-    (itemA.routeTitle            === itemB.routeTitle           ) &&
-    (itemA.prompt                === itemB.prompt               ) &&
-    (itemA.largeTitleDisplayMode === itemB.largeTitleDisplayMode) &&
+  static compare(oldItem?: NavBarAppearanceConfig, newItem?: NavBarAppearanceConfig){
+    return HelperUtilities.compareObject(CompareNavBarAppearanceOverride.propertyMap, oldItem, newItem);
+  };
+};
 
-    // Compare: Navbar Config Objects ----------------------------------------------------------------
-    compareNavBarAppearanceOverride(itemA.navBarAppearanceOverride, itemB.navBarAppearanceOverride) &&
+export class CompareRouteOptions {
+  static propertyMap: ComparisonConfig<RouteOptions> = {
+    // shallow compare 
+    routeTitle                   : { mode: 'shallow' },
+    prompt                       : { mode: 'shallow' },
+    largeTitleDisplayMode        : { mode: 'shallow' },
+    hidesBackButton              : { mode: 'shallow' },
+    backButtonTitle              : { mode: 'shallow' },
+    backButtonDisplayMode        : { mode: 'shallow' },
+    leftItemsSupplementBackButton: { mode: 'shallow' },
 
-    // Compare: Navbar back button item config -------------------------------------
-    (itemA.hidesBackButton               === itemB.hidesBackButton              ) &&
-    (itemA.backButtonTitle               === itemB.backButtonTitle              ) &&
-    (itemA.backButtonDisplayMode         === itemB.backButtonDisplayMode        ) &&
-    (itemA.leftItemsSupplementBackButton === itemB.leftItemsSupplementBackButton) &&
+    // custom compare
+    navBarAppearanceOverride: {
+      mode: 'custom',
+      customCompare: CompareNavBarAppearanceOverride.compare,
+    },
+    transitionConfigPush: {
+      mode: 'custom',
+      customCompare: CompareRouteTransitionPushConfig.compare,
+    },
+    transitionConfigPop: {
+      mode: 'custom',
+      customCompare: CompareRouteTransitionPopConfig.compare,
+    },
+    navBarButtonLeftItemsConfig: {
+      mode: 'custom',
+      customCompare: CompareNavBarItemsConfig.compare,
+    },
+    navBarButtonRightItemsConfig: {
+      mode: 'custom',
+      customCompare: CompareNavBarItemsConfig.compare,
+    },
+    navBarButtonBackItemConfig: {
+      mode: 'custom',
+      customCompare: CompareNavBarButtonBackItemConfig.compare,
+    },
+  };
 
-    // Transition Config -------------------------------------------------------------
-    compareTransitionConfig(itemA.transitionConfigPush, itemB.transitionConfigPush) &&
-    compareTransitionConfig(itemA.transitionConfigPop , itemB.transitionConfigPop ) &&
-
-    // Compare: Navbar item config -----------------------------------------------------------------------------
-    compareNavBarItemsConfig         (itemA.navBarButtonLeftItemsConfig , itemB.navBarButtonLeftItemsConfig ) &&
-    compareNavBarItemsConfig         (itemA.navBarButtonRightItemsConfig, itemB.navBarButtonRightItemsConfig) &&
-    compareNavBarButtonBackItemConfig(itemA.navBarButtonBackItemConfig  , itemB.navBarButtonBackItemConfig  )
-  );
+  static compare(oldItem?: RouteOptions, newItem?: RouteOptions){
+    return HelperUtilities.compareObject(CompareRouteOptions.propertyMap, oldItem, newItem);
+  };
 };

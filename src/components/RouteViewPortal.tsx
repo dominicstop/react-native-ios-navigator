@@ -5,7 +5,7 @@ import type { NavigatorRouteView } from '../components/NavigatorRouteView';
 import type { RouteOptions } from '../types/NavTypes';
 import type { RenderNavBarItem } from '../types/NavSharedTypes';
 
-import { compareRouteOptions } from '../functions/CompareObjects';
+import { CompareRouteOptions } from '../functions/CompareObjects';
 import { NavRouteViewContext, NavRouteViewContextProps } from '../context/NavRouteViewContext';
 
 
@@ -56,12 +56,12 @@ export class RouteViewPortal extends React.Component<RouteViewPortalProps> {
     const nextProps = this.props;
 
     const didRouteOptionsChange = 
-      !compareRouteOptions(prevProps.routeOptions, nextProps.routeOptions);
+      !CompareRouteOptions.compare(prevProps.routeOptions, nextProps.routeOptions);
 
     const didChangeCustomNavBarItems = (
-      ((prevProps.renderNavBarLeftItem  == null) != (nextProps.renderNavBarLeftItem  == null)) ||
-      ((prevProps.renderNavBarRightItem == null) != (nextProps.renderNavBarRightItem == null)) ||
-      ((prevProps.renderNavBarTitleItem == null) != (nextProps.renderNavBarTitleItem == null))
+      prevProps.renderNavBarLeftItem  !== nextProps.renderNavBarLeftItem  &&
+      prevProps.renderNavBarRightItem !== nextProps.renderNavBarRightItem &&
+      prevProps.renderNavBarTitleItem !== nextProps.renderNavBarTitleItem 
     );
 
     if(didRouteOptionsChange || didChangeCustomNavBarItems){
