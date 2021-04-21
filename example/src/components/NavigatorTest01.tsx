@@ -310,7 +310,7 @@ const backButtonItemConfigs: Array<{
   }
 }];
 
-const navBarAppearanceOverride: Array<{
+const navBarAppearanceConfigs: Array<{
   config: NavBarAppearanceConfig,
   description: string
 }> = [{
@@ -408,12 +408,18 @@ const navBarAppearanceOverride: Array<{
   },
 }];
 
-const navBarAppearanceOverrideLegacy: Array<{
+const navBarAppearanceLegacyConfigs: Array<{
   config: NavBarAppearanceCombinedConfig,
   description: string
 }> = [{
   description: 'N/A',
   config: null,
+}, {
+  description: 'Simple Test',
+  config: {
+    mode: 'legacy',
+    barTintColor: 'red'
+  },
 }, {
   description: 'Gradient BG test',
   config: {
@@ -422,7 +428,9 @@ const navBarAppearanceOverrideLegacy: Array<{
       default: {
         type: 'IMAGE_GRADIENT',
         imageValue: {
-          colors: ['rgba(255,0,0,0.5)', 'blue'],
+          colors: ['red', 'blue'],
+          startPoint: 'top',
+          endPoint: 'bottom'
         }
       }
     }
@@ -740,7 +748,12 @@ class StyledTextInput extends React.PureComponent<{
   };
 };
 
-function SwitchRow(props: any){
+function SwitchRow(props: {
+  title: string;
+  subtitle?: string;
+  value: boolean;
+  onValueChange: (value: boolean) => void;
+}){
   return(
     <View style={{
       flexDirection: 'row',
@@ -777,6 +790,13 @@ function SwitchRow(props: any){
       />
     </View>
   );
+};
+
+type NavigatorTest01State = typeof NavigatorTest01.prototype.state;
+
+type SharedSectionProps = {
+  parentState: NavigatorTest01State;
+  getParentRef: () => typeof NavigatorTest01.prototype;
 };
 
 function NavBarConfigGeneral(props: any){
@@ -1097,33 +1117,56 @@ function NavBarTitleItemConfig(props: any){
   );
 };
 
-function NavBarAppearanceOverrideItemConfig(props: any){
-  const currentConfig = navBarAppearanceOverride[
-    props.parentState.navBarAppearanceOverrideIndex %
-    navBarAppearanceOverride.length
-  ];
+function NavBarAppearanceOverrideItemConfig(props: SharedSectionProps & {
+  currentAppearanceOverrideConfig: NavBarAppearanceCombinedConfig
+}){
 
+  const subtilePrefix = "This updates the navigation bar's current appearance using the " + (
+     props.parentState
+      ? "legacy appearance API by temp. overriding the 'legacy customization'-related nav bar properties."
+      : "iOS 13+ appearance API via the appearance-related properties in the 'navigationItem'."
+  );
+
+  const subtitleSuffix = (
+    + "Note that once you use the iOS 13+ appearance API, the legacy appearance API will"
+    + " no longer work. Choose and to stick one, switching between them is unsupported."
+  );
+  
   return(
     <ItemContainer>
       <ItemTitle
         title={'Set '}
         titleCode={'NavBarAppearanceConfig'}
-        subtitle={`Update 'navBarAppearanceOverride' - i.e. overriding the navigation bar's appearance settings. Requires iOS 13+`}
+        subtitle={subtilePrefix + ' \n\n' + subtitleSuffix}
+      />
+      <SwitchRow
+        title={'Use legacy appearance'}
+        value={props.parentState.isUsingLegacyConfig}
+        onValueChange={(value) => {
+          const parentRef = props.getParentRef();
+
+          parentRef.setState({
+            isUsingLegacyConfig: value
+          });
+        }}
       />
       <ObjectPropertyDisplay
         key={`config-NavBarAppearanceOverrideItemConfig`}
-        object={currentConfig.config}
+        object={props.currentAppearanceOverrideConfig}
       />
       <ButtonPrimary
         title={'Update config'}
         subtitle={`Cycle to the next preset config`}
         onPress={() => {
+          const { isUsingLegacyConfig } = props.parentState;
           const parentRef = props.getParentRef();
-          // @ts-ignore
-          parentRef.setState(prevState => ({
-            // @ts-ignore
-            navBarAppearanceOverrideIndex: 
-              prevState.navBarAppearanceOverrideIndex + 1
+
+          parentRef.setState((prevState: NavigatorTest01State) => (isUsingLegacyConfig ? {
+            navBarAppearanceLegacyConfigsIndex: 
+              prevState.navBarAppearanceLegacyConfigsIndex + 1
+          } : {
+            navBarAppearanceConfigsIndex: 
+              prevState.navBarAppearanceConfigsIndex + 1
           }));
         }}
       />
@@ -1131,52 +1174,6 @@ function NavBarAppearanceOverrideItemConfig(props: any){
   );
 };
 
-function NavBarAppearanceOverrideLegacyConfig(props: any){
-  const currentConfig = navBarAppearanceOverrideLegacy[
-    props.parentState.navBarAppearanceOverrideLegacyIndex %
-    navBarAppearanceOverrideLegacy.length
-  ];
-
-  return(
-    <ItemContainer>
-      <ItemTitle
-        title={'Set '}
-        titleCode={'NavigatorView Appearance'}
-        subtitle={
-            `This overrides the 'NavigatorView''s 'navBarAppearance' w/ legacy config.`
-          + ` Note that once you use the iOS 13+ appearance API, the legacy appearance API will`
-          + ` no longer work. Choose and to stick one, switching between them is also unsupported.`
-        }
-      />
-      <ObjectPropertyDisplay
-        key={`config-NavBarAppearanceOverrideLegacyConfig`}
-        object={currentConfig.config}
-      />
-      <ButtonPrimary
-        title={'Update config'}
-        subtitle={`Cycle to the next preset config`}
-        onPress={() => {
-          const parentRef = props.getParentRef();
-          const nextIndex = props.parentState.navBarAppearanceOverrideLegacyIndex + 1;
-
-          const nextConfig = navBarAppearanceOverrideLegacy[
-            (nextIndex) %
-            navBarAppearanceOverrideLegacy.length
-          ];
-
-          const navigation: NavigationObject = props.navigation;
-          navigation.setNavBarAppearance(nextConfig?.config);
-
-          // @ts-ignore
-          parentRef.setState(prevState => ({
-            // @ts-ignore
-            navBarAppearanceOverrideLegacyIndex: nextIndex
-          }));
-        }}
-      />
-    </ItemContainer>
-  );
-};
 
 function NavigationCommandsConfig(props: RouteContentProps){
 
@@ -1225,8 +1222,10 @@ export class NavigatorTest01 extends React.Component<RouteContentProps> {
     navBarButtonRightItemsConfigIndex: 0,
     navBarButtonLeftItemsConfigIndex: 0,
     backButtonItemsConfigIndex: 0,
-    navBarAppearanceOverrideIndex: 0,
-    navBarAppearanceOverrideLegacyIndex: 0,
+
+    isUsingLegacyConfig: true,
+    navBarAppearanceConfigsIndex: 0,
+    navBarAppearanceLegacyConfigsIndex: 0,
 
     leftItemsSupplementBackButton: false,
     hidesBackButton: false,
@@ -1241,6 +1240,28 @@ export class NavigatorTest01 extends React.Component<RouteContentProps> {
   render(){
     const props = this.props;
     const state = this.state;
+
+    const navBarAppearanceLegacyConfig = navBarAppearanceLegacyConfigs[
+      state.navBarAppearanceLegacyConfigsIndex %
+      navBarAppearanceLegacyConfigs.length
+    ];
+
+    const navBarAppearanceConfig = navBarAppearanceConfigs[
+      state.navBarAppearanceConfigsIndex %
+      navBarAppearanceConfigs.length
+    ];
+
+    const navBarAppearanceOverride: NavBarAppearanceCombinedConfig = state.isUsingLegacyConfig ? (
+      navBarAppearanceLegacyConfig.config && {
+        mode: 'legacy',
+        ...navBarAppearanceLegacyConfig.config,
+      }
+    ) : (
+      navBarAppearanceConfig.config && {
+        mode: 'appearance',
+        ...navBarAppearanceConfig.config,
+      }
+    );
     
     return(
       <ScrollView style={styles.rootContainer}>
@@ -1275,10 +1296,7 @@ export class NavigatorTest01 extends React.Component<RouteContentProps> {
               backButtonDisplayModes.length
             ],
             backButtonTitle: state.backButtonTitle,
-            navBarAppearanceOverride: navBarAppearanceOverride[
-              state.navBarAppearanceOverrideIndex %
-              navBarAppearanceOverride.length
-            ].config,
+            navBarAppearanceOverride,
           }}
           renderNavBarLeftItem={() => (
             <View style={{
@@ -1370,11 +1388,7 @@ export class NavigatorTest01 extends React.Component<RouteContentProps> {
         <NavBarAppearanceOverrideItemConfig
           getParentRef={() => this}
           parentState={state}
-        />
-        <NavBarAppearanceOverrideLegacyConfig
-          getParentRef={() => this}
-          parentState={state}
-          navigation={this.props.navigation}
+          currentAppearanceOverrideConfig={navBarAppearanceOverride}
         />
         <NavigationCommandsConfig
           navigation={this.props.navigation}

@@ -7,7 +7,7 @@ import type { BackButtonDisplayMode, LargeTitleDisplayMode, RouteTransitionPopCo
 import type { EventEmitter } from "../functions/EventEmitter";
 
 import type { NavBarBackItemConfig, NavBarItemsConfig } from "./NavBarItemConfig";
-import type { NavBarAppearanceConfig } from "./NavBarAppearanceConfig";
+import type { NavBarAppearanceCombinedConfig } from "./NavBarAppearanceConfig";
 
 // Nav-related types that are exported/public
 // ------------------------------------------
@@ -32,7 +32,7 @@ export type RouteOptions = {
   hidesBackButton      ?: boolean;
   backButtonDisplayMode?: BackButtonDisplayMode;
 
-  navBarAppearanceOverride?: NavBarAppearanceConfig;
+  navBarAppearanceOverride?: NavBarAppearanceCombinedConfig;
   leftItemsSupplementBackButton?: boolean;
 };
 

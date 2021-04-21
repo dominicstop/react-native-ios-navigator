@@ -11,6 +11,25 @@ import UIKit;
 /// A view controller to hold js/react routes
 internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewController {
   
+  // ---------------------
+  // MARK:- Embedded Types
+  // ---------------------
+  
+  struct NavigationConfigOverride {
+    /// store a ref of the navigation bar's current legacy appearance config
+    /// so that we can restore it later.
+    var navBarLegacyConfig: RNINavBarAppearance.NavBarAppearanceLegacyConfig?;
+    
+    mutating func saveLegacyAppearanceConfig(from navigatorView: RNINavigatorView){
+      let config = navigatorView.navBarAppearanceConfig;
+      self.navBarLegacyConfig = config.appearanceLegacy;
+    };
+    
+    func restoreConfig(for navController: UINavigationController){
+      self.navBarLegacyConfig?.updateNavBarAppearance(navController.navigationBar);
+    };
+  };
+  
   // -----------------
   // MARK:- Properties
   // -----------------
@@ -68,6 +87,8 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     }
   };
   
+  var navigationConfigOverride = NavigationConfigOverride();
+  
   // -----------------------------------
   // MARK:- Convenient Property Wrappers
   // -----------------------------------
@@ -99,6 +120,8 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
        let reactScrollView = contentView as? RCTScrollView {
   
       self.reactScrollView = reactScrollView;
+      print("reactScrollView scrollView delegate", reactScrollView.scrollView.delegate);
+      
       
     } else if let contentView     = reactRouteContent.subviews.first,
               let reactSafeAreaView = contentView as? RCTSafeAreaView {
@@ -124,15 +147,37 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
   };
   
   override func viewWillAppear(_ animated: Bool) {
+    // by this point, it's already been set so force unwrap
+    let routeView = self.routeView!;
+    
     // send event: notify js nav. route is about to appear
-    self.routeView?.notifyOnRouteFocus(
+    routeView.notifyOnRouteFocus(
       isDone: false,
       isAnimated: animated
     );
     
+    // if back config was prev. overridden, then restore...
     if self.shouldResetNavBarBackConfig {
       self.resetRouteNavBarBackConfig();
       self.shouldResetNavBarBackConfig = false;
+    };
+    
+    let navBarAppearanceConfig = routeView.navBarAppearanceOverrideConfig;
+    let shouldOverrideNavBarAppearance = navBarAppearanceConfig.mode != nil;
+    
+    /// temp. overriding the nav bar appearance...
+    if shouldOverrideNavBarAppearance,
+       let navigatorView = routeView.navigatorView {
+      
+      // save the current legacy config (if it has one) so it can be restored later
+      self.navigationConfigOverride.saveLegacyAppearanceConfig(from: navigatorView);
+      
+      // update the navigation bar appearance
+      // (uses `navigationItem` if mode is appearance)
+      routeView.navBarAppearanceOverrideConfig.updateNavBarAppearance(
+        self.navigationController?.navigationBar,
+        navigationItem: self.navigationItem
+      );
     };
   };
   
@@ -152,6 +197,11 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       isDone: false,
       isAnimated: animated
     );
+    
+    if let navigationController = self.navigationController {
+      // restore if prev. overridden
+      self.navigationConfigOverride.restoreConfig(for: navigationController);
+    };
   };
   
   override func viewDidDisappear(_ animated: Bool) {
@@ -271,33 +321,13 @@ extension RNINavigatorReactRouteViewController: RNINavigatorRouteViewDelegate {
     };
   };
   
-  func didReceiveNavBarAppearanceOverride(
-    _ standard  : RNINavBarAppearance.NavBarAppearanceConfig?,
-    _ compact   : RNINavBarAppearance.NavBarAppearanceConfig?,
-    _ scrollEdge: RNINavBarAppearance.NavBarAppearanceConfig?
-  ) {
-    guard #available(iOS 13.0, *) else { return };
-    let defaultAppearance = UINavigationBar.appearance();
-     
-    if let navBar = self.navigationController?.navigationBar {
-      standard?.prepareForUpdate(navBar);
-      compact?.prepareForUpdate(navBar);
-      scrollEdge?.prepareForUpdate(navBar);
-    };
-    
-    self.navigationItem.standardAppearance = standard?.appearance
-      ?? defaultAppearance.standardAppearance;
-    
-    self.navigationItem.compactAppearance = compact?.appearance
-      ?? standard?.appearance
-      ?? defaultAppearance.compactAppearance;
-    
-    self.navigationItem.scrollEdgeAppearance = scrollEdge?.appearance
-      ?? standard?.appearance
-      ?? defaultAppearance.scrollEdgeAppearance;
-    
-    // refresh the navbar appearance
-    self.navigationController?.navigationBar.setNeedsLayout();
+  func didReceiveNavBarAppearanceOverride(_ config: RNINavBarAppearance) {
+    // if using legacy mode, update the nav bar appearance directly, otherwise if
+    // using appearance mode, then update the nav bar appearance via the `navigationItem`
+    config.updateNavBarAppearance(
+      self.navigationController?.navigationBar,
+      navigationItem: self.navigationItem
+    );
   };
   
   // ---------------------------------

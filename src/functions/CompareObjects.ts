@@ -1,7 +1,7 @@
 import type { RouteTransitionPushConfig, RouteTransitionPopConfig } from "src/native_components/RNINavigatorRouteView";
 
 import type { NavBarItemConfig, NavBarItemsConfig, NavBarBackItemConfig } from "../types/NavBarItemConfig";
-import type { NavBarAppearance, NavBarAppearanceConfig } from '../types/NavBarAppearanceConfig';
+import type { NavBarAppearance, NavBarAppearanceCombinedConfig, NavBarAppearanceConfig, NavBarAppearanceLegacyConfig } from '../types/NavBarAppearanceConfig';
 import type { RouteOptions } from "../types/NavTypes";
 import type { BarMetrics } from "../types/MiscTypes";
 
@@ -234,7 +234,7 @@ export class CompareRouteTransitionPopConfig {
   };
 };
 
-export class CompareAppearanceConfig {
+export class CompareNavBarAppearance {
   static propertyMap:  ComparisonConfig<NavBarAppearance> = {
     // shallow compare
     baseConfig             : { mode: 'shallow' },
@@ -251,31 +251,88 @@ export class CompareAppearanceConfig {
   };
 
   static compare(oldItem?: NavBarAppearance, newItem?: NavBarAppearance){
-    return HelperUtilities.compareObject(CompareAppearanceConfig.propertyMap, oldItem, newItem);
+    return HelperUtilities.compareObject(CompareNavBarAppearance.propertyMap, oldItem, newItem);
   };
 };
 
-export class CompareNavBarAppearanceOverride {
+export class CompareNavBarAppearanceConfig {
   static propertyMap: ComparisonConfig<NavBarAppearanceConfig> = {
     // shallow compare 
     navBarPreset: { mode: 'shallow' },
     // custom compare
     standardAppearance: {
       mode: 'custom',
-      customCompare: CompareAppearanceConfig.compare,
+      customCompare: CompareNavBarAppearance.compare,
     },
     compactAppearance: {
       mode: 'custom',
-      customCompare: CompareAppearanceConfig.compare,
+      customCompare: CompareNavBarAppearance.compare,
     },
     scrollEdgeAppearance: {
       mode: 'custom',
-      customCompare: CompareAppearanceConfig.compare,
+      customCompare: CompareNavBarAppearance.compare,
     },
   };
 
   static compare(oldItem?: NavBarAppearanceConfig, newItem?: NavBarAppearanceConfig){
-    return HelperUtilities.compareObject(CompareNavBarAppearanceOverride.propertyMap, oldItem, newItem);
+    return HelperUtilities.compareObject(CompareNavBarAppearanceConfig.propertyMap, oldItem, newItem);
+  };
+};
+
+export class CompareLegacyAppearanceConfig {
+  static propertyMap: ComparisonConfig<NavBarAppearanceLegacyConfig> = {
+    // shallow compare 
+    barStyle    : { mode: 'shallow' },
+    navBarPreset: { mode: 'shallow' },
+
+    // shallow object compare
+    tintColor               : { mode: 'shallowObject'  },
+    barTintColor            : { mode: 'shallowObject'  },
+    backIndicatorImage      : { mode: 'shallowObject'  },
+    backgroundImage         : { mode: 'shallowObject'  },
+    shadowImage             : { mode: 'shallowObject'  },
+    titleTextAttributes     : { mode: 'shallowObject'  },
+    largeTitleTextAttributes: { mode: 'shallowObject'  },
+
+    titleVerticalPositionAdjustment: {
+      mode: 'custom',
+      customCompare: CompareLegacyAppearanceConfig.compareTitleVerticalPositionAdjustment
+    },
+  };
+
+  static compareTitleVerticalPositionAdjustment(
+    oldItem?: NavBarAppearanceLegacyConfig['titleVerticalPositionAdjustment'], 
+    newItem?: NavBarAppearanceLegacyConfig['titleVerticalPositionAdjustment']
+  ){
+    if(HelperUtilities.isBothNull(oldItem, newItem)) return true;
+    if(!HelperUtilities.compareItemsNull(oldItem, newItem)) return false;
+
+    return (
+      HelperUtilities.shallowCompareObject(oldItem.default      , newItem.default      ) &&
+      HelperUtilities.shallowCompareObject(oldItem.defaultPrompt, newItem.defaultPrompt) &&
+      HelperUtilities.shallowCompareObject(oldItem.compact      , newItem.compact      ) &&
+      HelperUtilities.shallowCompareObject(oldItem.compactPrompt, newItem.compactPrompt) 
+    );
+  };
+
+  static compare(oldItem?: NavBarAppearanceLegacyConfig, newItem?: NavBarAppearanceLegacyConfig){
+    return HelperUtilities.compareObject(CompareLegacyAppearanceConfig.propertyMap, oldItem, newItem);
+  };
+};
+
+export class CompareNavBarAppearanceCombinedConfig {
+  static compare(oldItem?: NavBarAppearanceCombinedConfig, newItem?: NavBarAppearanceCombinedConfig){
+    if(HelperUtilities.isBothNull(oldItem, newItem)) return true;
+    if(!HelperUtilities.compareItemsNull(oldItem, newItem)) return false;
+
+    return (
+      oldItem.mode         === newItem.mode         &&
+      oldItem.navBarPreset === newItem.navBarPreset && (
+        oldItem.mode === 'legacy'
+          ? CompareLegacyAppearanceConfig.compare(oldItem, newItem)
+          : CompareNavBarAppearanceConfig.compare(oldItem, newItem)
+      )
+    );
   };
 };
 
@@ -293,7 +350,7 @@ export class CompareRouteOptions {
     // custom compare
     navBarAppearanceOverride: {
       mode: 'custom',
-      customCompare: CompareNavBarAppearanceOverride.compare,
+      customCompare: CompareNavBarAppearanceCombinedConfig.compare,
     },
     transitionConfigPush: {
       mode: 'custom',

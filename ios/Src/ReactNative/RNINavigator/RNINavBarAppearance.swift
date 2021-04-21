@@ -390,6 +390,8 @@ internal class RNINavBarAppearance {
     };
     
     func updateNavBarAppearance(_ navBar: UINavigationBar){
+      let defaultAppearance = UINavigationBar.appearance();
+      
       let shouldSetBG     = self.navBarPreset != .clearBackground;
       let shouldSetShadow = self.navBarPreset != .noShadow && shouldSetBG;
       
@@ -444,22 +446,40 @@ internal class RNINavBarAppearance {
         navBar.backIndicatorTransitionMaskImage = backImage;
       };
       
-      /// set/init: `backgroundImage`
-      for (metric, imageItem) in self.backgroundImage ?? [] {
+      for metric in UIBarMetrics.allCases {
         // allow set bg image, else stop
         guard shouldSetBG else { break };
         
-        // set image size
-        imageItem.defaultSize = CGSize(
-          width : navBarWidth,
-          height: navBarHeight + statusBarHeight
-        );
+        // get the current bg image for the current metric
+        let currentBGImage = navBar.backgroundImage(for: metric);
         
-        let bgImage = imageItem.image;
+        // get the matching bg image for the current metric
+        let bgImageConfig = self.backgroundImage?.first { metric == $0.0 };
         
-        // did change, else skip...
-        guard bgImage != navBar.backgroundImage(for: metric) else { continue };
-        navBar.setBackgroundImage(bgImage, for: .any, barMetrics: metric);
+        if let (_, bgImageItem) = bgImageConfig {
+          // set image size
+          bgImageItem.defaultSize = CGSize(
+            width : navBarWidth,
+            height: navBarHeight + statusBarHeight
+          );
+          
+          // get background image
+          let newBGImage = bgImageItem.image;
+          
+          // did change, else skip...
+          guard currentBGImage != newBGImage  else { continue };
+          navBar.setBackgroundImage(newBGImage, for: .any, barMetrics: metric);
+          
+        } else {
+          // get the default bg image for the current metric
+          let defaultBGImage = defaultAppearance.backgroundImage(for: .any, barMetrics: metric);
+          
+          // did change, else skip...
+          guard currentBGImage != defaultBGImage  else { continue };
+          
+          // reset bg image to default
+          navBar.setBackgroundImage(defaultBGImage, for: .any, barMetrics: metric);
+        };
       };
             
       if shouldSetShadow {
@@ -486,26 +506,30 @@ internal class RNINavBarAppearance {
   // MARK:- RNINavBarAppearance
   // --------------------------
   
-  // Tells us which API to use to change the navbar appearance.
+  /// indicates whether or not the iOS 13+ appearance API was ever used
+  static var didUseNewAppearance = false;
+  
+  // Tells us which API to use to change the nav bar appearance.
   var mode: AppearanceMode? {
     willSet {
-      // mode has changed, trigger navbar reset
-      self.shouldResetNavBar = (self.mode != newValue);
+      // mode has changed, trigger nav bar reset
+      self.shouldResetNavBar = (
+        self.shouldResetNavBar || (self.mode != newValue)
+      );
     }
   };
   
   var navBarPreset: NavBarPreset = .none {
     willSet {
       // preset has changed, trigger navbar reset
-      self.shouldResetNavBar = (self.navBarPreset != newValue);
+      self.shouldResetNavBar = (
+        self.shouldResetNavBar || (self.navBarPreset != newValue)
+      );
     }
   };
   
-  /// indicates whether or not the iOS 13+ appearance API was ever used
-  var didUseNewAppearance = false;
-  
   // determines whether to reset the nav bar first before applying the config
-  private var shouldResetNavBar = false;
+  var shouldResetNavBar = false;
   
   var appearanceLegacy: NavBarAppearanceLegacyConfig?;
   
@@ -580,6 +604,8 @@ internal class RNINavBarAppearance {
   };
   
   func resetValues(){
+    self.shouldResetNavBar = true;
+    
     self.mode = nil;
     self.navBarPreset = .none;
     
@@ -590,7 +616,10 @@ internal class RNINavBarAppearance {
     self.appearanceConfigScrollEdge = nil;
   };
   
-  func updateNavBarAppearance(_ navBar: UINavigationBar?){
+  func updateNavBarAppearance(
+    _ navBar: UINavigationBar?,
+    navigationItem: UINavigationItem? = nil
+  ){
     // reset the nav bar first before updating
     if self.shouldResetNavBar {
       self.resetNavBarAppearance(navBar);
@@ -603,7 +632,7 @@ internal class RNINavBarAppearance {
     switch mode {
       case .appearance:
         guard #available(iOS 13.0, *) else { return };
-        self.didUseNewAppearance = true;
+        Self.didUseNewAppearance = true;
         
         self.appearanceConfigStandard?.prepareForUpdate(navBar);
         self.appearanceConfigCompact?.prepareForUpdate(navBar);
@@ -613,16 +642,26 @@ internal class RNINavBarAppearance {
           // no standard config provided, create a "default" config
           ?? NavBarAppearanceConfig(navBarPreset: self.navBarPreset);
         
-        // create standard appearance object from config
-        navBar.standardAppearance = standardConfig.appearance;
-        
-        // create compact appearance object from config
-        navBar.compactAppearance =
-          (self.appearanceConfigCompact ?? standardConfig).appearance;
-        
-        // create "scroll edge" appearance object from config
-        navBar.scrollEdgeAppearance =
-          (self.appearanceConfigScrollEdge ?? standardConfig).appearance;
+        if let navigationItem = navigationItem {
+          // update the nav bar appearance via the `navigationItem`
+          navigationItem.standardAppearance = standardConfig.appearance;
+          
+          navigationItem.compactAppearance =
+            (self.appearanceConfigCompact ?? standardConfig).appearance;
+          
+          navigationItem.scrollEdgeAppearance =
+            (self.appearanceConfigScrollEdge ?? standardConfig).appearance;
+          
+        } else {
+          // update the nav bar appearance directly
+          navBar.standardAppearance = standardConfig.appearance;
+          
+          navBar.compactAppearance =
+            (self.appearanceConfigCompact ?? standardConfig).appearance;
+          
+          navBar.scrollEdgeAppearance =
+            (self.appearanceConfigScrollEdge ?? standardConfig).appearance;
+        };
         
         // refresh the navbar appearance
         navBar.setNeedsLayout();
@@ -641,7 +680,7 @@ internal class RNINavBarAppearance {
     
     // reset nav bar appearance
     // only reset appearance if was prev. set
-    if #available(iOS 13.0, *), self.didUseNewAppearance {
+    if #available(iOS 13.0, *), Self.didUseNewAppearance {
       navBar.standardAppearance   = defaultAppearance.standardAppearance;
       navBar.compactAppearance    = defaultAppearance.compactAppearance;
       navBar.scrollEdgeAppearance = defaultAppearance.scrollEdgeAppearance;

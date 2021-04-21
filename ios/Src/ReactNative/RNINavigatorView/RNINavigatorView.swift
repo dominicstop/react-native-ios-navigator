@@ -12,6 +12,10 @@ typealias Completion = () -> Void;
 
 public final class RNINavigatorView: UIView {
   
+  // ---------------------
+  // MARK:- Embedded Types
+  // ---------------------
+  
   struct NativeIDKeys {
     static let NavRouteItem     = "NavRouteItem";
     static let NavBarBackground = "NavBarBackground";
@@ -211,7 +215,7 @@ public final class RNINavigatorView: UIView {
     }
   };
   
-  private var _navBarAppearance = RNINavBarAppearance(dict: nil);
+  let navBarAppearanceConfig = RNINavBarAppearance(dict: nil);
   @objc var navBarAppearance: NSDictionary? {
     didSet {
       guard self.navBarAppearance != oldValue else { return };
@@ -228,13 +232,13 @@ public final class RNINavigatorView: UIView {
       
       if let dict = self.navBarAppearance {
         // update nav bar appearance
-        self._navBarAppearance.updateValues(dict: dict);
-        self._navBarAppearance.updateNavBarAppearance(self.navigationBar);
+        self.navBarAppearanceConfig.updateValues(dict: dict);
+        self.navBarAppearanceConfig.updateNavBarAppearance(self.navigationBar);
         
       } else {
         // reset appearance config
-        self._navBarAppearance.resetValues();
-        self._navBarAppearance.resetNavBarAppearance(self.navigationBar);
+        self.navBarAppearanceConfig.resetValues();
+        self.navBarAppearanceConfig.resetNavBarAppearance(self.navigationBar);
       };
     }
   };
@@ -324,10 +328,6 @@ public final class RNINavigatorView: UIView {
       default: break;
     };
   };
-  
-  // -----------------------
-  // MARK:- Public Functions
-  // -----------------------
   
   // TODO: Remove if not needed?
   func getSecondToLastRouteVC() -> RNINavigatorRouteBaseViewController? {

@@ -32,11 +32,7 @@ internal protocol RNINavigatorRouteViewDelegate: AnyObject {
   
   func didReceiveLargeTitleDisplayMode(_ displayMode: UINavigationItem.LargeTitleDisplayMode);
   
-  func didReceiveNavBarAppearanceOverride(
-    _ standard  : RNINavBarAppearance.NavBarAppearanceConfig?,
-    _ compact   : RNINavBarAppearance.NavBarAppearanceConfig?,
-    _ scrollEdge: RNINavBarAppearance.NavBarAppearanceConfig?
-  );
+  func didReceiveNavBarAppearanceOverride(_ config: RNINavBarAppearance);
   
   // ---------------------------------
   // MARK: Receive Props: Navbar Items

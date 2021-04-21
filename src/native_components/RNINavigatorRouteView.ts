@@ -1,7 +1,7 @@
 import { requireNativeComponent, ViewStyle } from 'react-native';
 
 import type { NavBarBackItemConfig, NavBarItemsConfig } from '../types/NavBarItemConfig';
-import type { NavBarAppearanceConfig } from '../types/NavBarAppearanceConfig';
+import type { NavBarAppearanceCombinedConfig, NavBarAppearanceConfig } from '../types/NavBarAppearanceConfig';
 
 
 type RouteTransitionPushTypes = 
@@ -101,8 +101,16 @@ export type RNINavigatorRouteViewProps = {
   backButtonDisplayMode?: BackButtonDisplayMode;
   leftItemsSupplementBackButton?: boolean;
 
-  // Overriding the NavBar Appearance
-  navBarAppearanceOverride?: NavBarAppearanceConfig;
+  // `NavigationConfigOverride`-related
+  /**
+   * note: If you are using the iOS 13+ appearance API (i.e. 'appearance' mode), then it will use
+   * the appearance-related properties from `UINavigationItem` (e.g. 'standardAppearance', etc.)
+   * to override the current navigation bar customizations Otherwise, if `legacy` mode is used,
+   * then it will override the current navigation bar customizations via temp. changing the 
+   * navigation bar properties when a route is focused, and resetting it back to it's prev. values
+   * it's blurred.
+   */
+  navBarAppearanceOverride?: NavBarAppearanceCombinedConfig;
 
   // Native Events: Push
   onRouteWillPush?: onRoutePushEvent;
