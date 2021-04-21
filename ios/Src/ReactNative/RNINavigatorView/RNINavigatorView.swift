@@ -40,9 +40,6 @@ public final class RNINavigatorView: UIView {
   
   private var nativeCommandRequestCompletionMap: Dictionary<String, Completion> = [:];
   
-  /// Indicates whether the iOS 13+ Appearance API was ever set/used
-  private var shouldResetLegacyOnly = true;
-  
   // ----------------------------------
   // MARK: Convenient Property Wrappers
   // ----------------------------------
@@ -220,12 +217,12 @@ public final class RNINavigatorView: UIView {
       guard self.navBarAppearance != oldValue else { return };
       
       #if DEBUG
-      let dictStr = self.navBarAppearance?.debugDescription
+      let dictStr = navBarAppearance.debugDescription
         .replacingOccurrences(of: "\n", with: " ")
         .replacingOccurrences(of: "  ", with: "");
       
       print("LOG - NativeView, RNINavigatorView: navBarAppearance, didSet"
-        + " - dict \(dictStr ?? "N/A")"
+        + " - dict \(dictStr)"
       );
       #endif
       
@@ -234,17 +231,10 @@ public final class RNINavigatorView: UIView {
         self._navBarAppearance.updateValues(dict: dict);
         self._navBarAppearance.updateNavBarAppearance(self.navigationBar);
         
-        if self._navBarAppearance.isUsingNewAppearance {
-          self.shouldResetLegacyOnly = false;
-        };
-        
       } else {
         // reset appearance config
-        self._navBarAppearance = RNINavBarAppearance(dict: nil);
-        self._navBarAppearance.resetNavBarAppearance(
-          self.navigationBar,
-          resetLegacyOnly: self.shouldResetLegacyOnly
-        );
+        self._navBarAppearance.resetValues();
+        self._navBarAppearance.resetNavBarAppearance(self.navigationBar);
       };
     }
   };
