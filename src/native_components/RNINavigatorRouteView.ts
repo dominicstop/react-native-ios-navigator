@@ -111,6 +111,8 @@ export type RNINavigatorRouteViewProps = {
    * it's blurred.
    */
   navBarAppearanceOverride?: NavBarAppearanceCombinedConfig;
+  isNavigationBarHidden?: boolean;
+
 
   // Native Events: Push
   onRouteWillPush?: onRoutePushEvent;

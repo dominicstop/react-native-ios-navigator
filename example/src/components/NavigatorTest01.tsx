@@ -418,7 +418,11 @@ const navBarAppearanceLegacyConfigs: Array<{
   description: 'Simple Test',
   config: {
     mode: 'legacy',
-    barTintColor: 'red'
+    barTintColor: 'red',
+    titleTextAttributes: {
+      fontSize: 24,
+      fontWeight: 'bold',
+    },
   },
 }, {
   description: 'Gradient BG test',
@@ -1122,7 +1126,7 @@ function NavBarAppearanceOverrideItemConfig(props: SharedSectionProps & {
 }){
 
   const subtilePrefix = "This updates the navigation bar's current appearance using the " + (
-     props.parentState
+    props.parentState.isUsingLegacyConfig
       ? "legacy appearance API by temp. overriding the 'legacy customization'-related nav bar properties."
       : "iOS 13+ appearance API via the appearance-related properties in the 'navigationItem'."
   );
@@ -1138,6 +1142,17 @@ function NavBarAppearanceOverrideItemConfig(props: SharedSectionProps & {
         title={'Set '}
         titleCode={'NavBarAppearanceConfig'}
         subtitle={subtilePrefix + ' \n\n' + subtitleSuffix}
+      />
+      <SwitchRow
+        title={'Apply to current route'}
+        value={props.parentState.applyNavBarAppearanceToCurrentRoute}
+        onValueChange={(value) => {
+          const parentRef = props.getParentRef();
+
+          parentRef.setState({
+            applyNavBarAppearanceToCurrentRoute: value
+          });
+        }}
       />
       <SwitchRow
         title={'Use legacy appearance'}
@@ -1170,6 +1185,23 @@ function NavBarAppearanceOverrideItemConfig(props: SharedSectionProps & {
           }));
         }}
       />
+      {!props.parentState.applyNavBarAppearanceToCurrentRoute && (
+        <ButtonPrimary
+          title={'Push Route w/ Config'}
+            subtitle={`Push a route with the current navbar appearance config`}
+            onPress={() => {
+              const { isUsingLegacyConfig } = props.parentState;
+              const parentRef = props.getParentRef();
+
+              parentRef.props.navigation.push({
+                routeKey: 'NavigatorTest01',
+                routeOptions: {
+                  navBarAppearanceOverride: props.currentAppearanceOverrideConfig
+                }
+              })
+            }}
+          />
+      )}
     </ItemContainer>
   );
 };
@@ -1223,6 +1255,7 @@ export class NavigatorTest01 extends React.Component<RouteContentProps> {
     navBarButtonLeftItemsConfigIndex: 0,
     backButtonItemsConfigIndex: 0,
 
+    applyNavBarAppearanceToCurrentRoute: true,
     isUsingLegacyConfig: true,
     navBarAppearanceConfigsIndex: 0,
     navBarAppearanceLegacyConfigsIndex: 0,
@@ -1296,7 +1329,11 @@ export class NavigatorTest01 extends React.Component<RouteContentProps> {
               backButtonDisplayModes.length
             ],
             backButtonTitle: state.backButtonTitle,
-            navBarAppearanceOverride,
+
+            navBarAppearanceOverride: (state.applyNavBarAppearanceToCurrentRoute
+              ? navBarAppearanceOverride
+              : null
+            ),
           }}
           renderNavBarLeftItem={() => (
             <View style={{

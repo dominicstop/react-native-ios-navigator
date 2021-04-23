@@ -14,19 +14,99 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
   // ---------------------
   // MARK:- Embedded Types
   // ---------------------
-  
-  struct NavigationConfigOverride {
-    /// store a ref of the navigation bar's current legacy appearance config
-    /// so that we can restore it later.
-    var navBarLegacyConfig: RNINavBarAppearance.NavBarAppearanceLegacyConfig?;
+
+  class NavigationConfigOverride {
     
-    mutating func saveLegacyAppearanceConfig(from navigatorView: RNINavigatorView){
-      let config = navigatorView.navBarAppearanceConfig;
-      self.navBarLegacyConfig = config.appearanceLegacy;
+    /// stores/holds values for nav bar's legacy appearance properties
+    struct NavBarAppearanceLegacyConfig {
+      // MARK: Title Config
+      var titleTextAttributes: Dictionary<NSAttributedString.Key, Any>?;
+      var largeTitleTextAttributes: Dictionary<NSAttributedString.Key, Any>?;
+      var titleVerticalPositionAdjustment: Dictionary<UIBarMetrics, CGFloat> = [:];
+      
+      // MARK: Navbar Style
+      var barStyle: UIBarStyle?;
+      var tintColor: UIColor?;
+      var barTintColor: UIColor?;
+      
+      // MARK: Misc. Images
+      var backIndicatorImage: UIImage?;
+      var backgroundImage: Dictionary<UIBarMetrics, UIImage> = [:];
+      var shadowImage: UIImage?;
+      
+      init(from navBar: UINavigationBar){
+        self.titleTextAttributes = navBar.titleTextAttributes;
+        
+        if #available(iOS 11.0, *) {
+          self.largeTitleTextAttributes = navBar.largeTitleTextAttributes
+        };
+        
+        self.barStyle = navBar.barStyle;
+        self.tintColor = navBar.tintColor;
+        self.barTintColor = navBar.barTintColor;
+        
+        self.backIndicatorImage = navBar.backIndicatorImage;
+        self.shadowImage = navBar.shadowImage;
+        
+        for metric in UIBarMetrics.allCases {
+          self.titleVerticalPositionAdjustment[metric] =
+            navBar.titleVerticalPositionAdjustment(for: metric);
+          
+          self.backgroundImage[metric] = navBar.backgroundImage(for: metric);
+        };
+      };
+      
+      func applyConfig(to navBar: UINavigationBar){
+        navBar.titleTextAttributes = titleTextAttributes;
+        
+        if #available(iOS 11.0, *) {
+          navBar.largeTitleTextAttributes = self.largeTitleTextAttributes
+        };
+        
+        if let barStyle = self.barStyle {
+          navBar.barStyle = barStyle;
+        };
+        
+        navBar.tintColor = self.tintColor;
+        navBar.barTintColor = self.barTintColor;
+        
+        navBar.backIndicatorImage = self.backIndicatorImage;
+        navBar.shadowImage = self.shadowImage;
+        
+        for metric in UIBarMetrics.allCases {
+          if let adj = self.titleVerticalPositionAdjustment[metric] {
+            navBar.setTitleVerticalPositionAdjustment(adj, for: metric);
+          };
+          
+          navBar.setBackgroundImage(self.backgroundImage[metric], for: metric);
+        };
+      };
+    };
+    
+    /// store the navigation bar's current legacy appearance config (before it's
+    /// ben overridden/replaced) so that we can restore it later.
+    var navBarLegacyConfig: NavBarAppearanceLegacyConfig?;
+    
+    func saveLegacyAppearanceConfig(from navBar: UINavigationBar){
+      self.navBarLegacyConfig = NavBarAppearanceLegacyConfig(from: navBar);
+      
+      #if DEBUG
+      print("LOG *- VC, RNINavigatorReactRouteViewController: NavigationConfigOverride"
+        + " - saveLegacyAppearanceConfig"
+      );
+      #endif
     };
     
     func restoreConfig(for navController: UINavigationController){
-      self.navBarLegacyConfig?.updateNavBarAppearance(navController.navigationBar);
+      if let navBarLegacyConfig = self.navBarLegacyConfig {
+        #if DEBUG
+        print("LOG *- VC, RNINavigatorReactRouteViewController: NavigationConfigOverride"
+          + " - restoreConfig"
+        );
+        #endif
+        
+        navBarLegacyConfig.applyConfig(to: navController.navigationBar)
+      };
     };
   };
   
@@ -167,12 +247,12 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     
     /// temp. overriding the nav bar appearance...
     if shouldOverrideNavBarAppearance,
-       let navigatorView = routeView.navigatorView {
+       let navController = self.navigationController {
       
-      // save the current legacy config (if it has one) so it can be restored later
-      self.navigationConfigOverride.saveLegacyAppearanceConfig(from: navigatorView);
+      // first save the current legacy config (if it has one) so it can be restored later
+      self.navigationConfigOverride.saveLegacyAppearanceConfig(from: navController.navigationBar);
       
-      // update the navigation bar appearance
+      // then update the navigation bar appearance
       // (uses `navigationItem` if mode is appearance)
       routeView.navBarAppearanceOverrideConfig.updateNavBarAppearance(
         self.navigationController?.navigationBar,

@@ -507,7 +507,7 @@ internal class RNINavBarAppearance {
   // --------------------------
   
   /// indicates whether or not the iOS 13+ appearance API was ever used
-  static var didUseNewAppearance = false;
+  var didUseNewAppearance = false;
   
   // Tells us which API to use to change the nav bar appearance.
   var mode: AppearanceMode? {
@@ -632,7 +632,7 @@ internal class RNINavBarAppearance {
     switch mode {
       case .appearance:
         guard #available(iOS 13.0, *) else { return };
-        Self.didUseNewAppearance = true;
+        self.didUseNewAppearance = true;
         
         self.appearanceConfigStandard?.prepareForUpdate(navBar);
         self.appearanceConfigCompact?.prepareForUpdate(navBar);
@@ -680,7 +680,7 @@ internal class RNINavBarAppearance {
     
     // reset nav bar appearance
     // only reset appearance if was prev. set
-    if #available(iOS 13.0, *), Self.didUseNewAppearance {
+    if #available(iOS 13.0, *), self.didUseNewAppearance {
       navBar.standardAppearance   = defaultAppearance.standardAppearance;
       navBar.compactAppearance    = defaultAppearance.compactAppearance;
       navBar.scrollEdgeAppearance = defaultAppearance.scrollEdgeAppearance;
