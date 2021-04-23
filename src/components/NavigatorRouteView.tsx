@@ -54,14 +54,14 @@ enum RouteStatus {
   UNMOUNTED      = "UNMOUNTED"     ,
 };
 
-type NavigatorRouteViewProps = {
-  /** Unique identifier for this navigator */
-  routeID: number; 
 
-  routeKey: string;
-  routeIndex: number;
+type NavigatorRouteViewProps = Partial<Pick<RNINavigatorRouteViewProps,
+  // mirror props from `RNINavigatorRouteViewProps`
+  | 'routeID'
+  | 'routeKey'
+  | 'routeIndex'
+>> & {
   routeProps: object;
-
   isRootRoute: boolean;
 
   routeOptionsDefault: RouteOptions;
