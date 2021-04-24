@@ -715,5 +715,7 @@ internal class RNINavBarAppearance {
     if #available(iOS 11.0, *) {
       navBar.largeTitleTextAttributes = defaultAppearance.largeTitleTextAttributes;
     };
+    
+    navBar.setNeedsLayout();
   };
 };

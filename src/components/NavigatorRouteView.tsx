@@ -240,6 +240,10 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
         routeOptions       ?.navBarAppearanceOverride ??
         routeOptionsDefault?.navBarAppearanceOverride 
       ),
+      navigationBarVisibility: (
+        routeOptions       ?.navigationBarVisibility ??
+        routeOptionsDefault?.navigationBarVisibility 
+      ),
       // #endregion ------------------*
       // #region - Navbar Item Config |
       // -----------------------------*

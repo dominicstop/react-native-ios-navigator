@@ -21,6 +21,10 @@ internal class RNINavigatorRouteView: UIView {
     static let NavBarTitleItem = "NavBarTitleItem";
   };
   
+  enum NavBarVisibility: String {
+    case visible, hidden, `default`;
+  };
+  
   // -----------------
   // MARK:- Properties
   // -----------------
@@ -354,7 +358,7 @@ internal class RNINavigatorRouteView: UIView {
   };
   
   //  MARK: Props - NavigationConfigOverride-related
-  ///
+  /// These props are handled by `RNINavigatorReactRouteViewController.NavigationConfigOverride`
   
   let navBarAppearanceOverrideConfig = RNINavBarAppearance(dict: nil);
   @objc var navBarAppearanceOverride: NSDictionary? {
@@ -382,6 +386,32 @@ internal class RNINavigatorRouteView: UIView {
       
       // notify delegate of update
       self.delegate?.didReceiveNavBarAppearanceOverride(self.navBarAppearanceOverrideConfig);
+    }
+  };
+  
+  var navigationBarVisibilityMode: NavBarVisibility = .default;
+  @objc var navigationBarVisibility: NSString? {
+    didSet {
+      guard oldValue != self.navigationBarVisibility else { return };
+      
+      let visibility: NavBarVisibility = {
+        guard let string     = self.navigationBarVisibility,
+              let visibility = NavBarVisibility(rawValue: string as String)
+        else { return .default };
+        
+        return visibility;
+      }();
+      
+      self.navigationBarVisibilityMode = visibility;
+      
+      #if DEBUG
+      print("LOG - NativeView, RNINavigatorView: navigationBarVisibility, didSet"
+        + " - visibility: \(visibility.rawValue)"
+      );
+      #endif
+      
+      // notify delegate of update
+      self.delegate?.didReceiveNavBarVisibility(visibility);
     }
   };
   

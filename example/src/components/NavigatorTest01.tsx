@@ -29,6 +29,9 @@ const largeTitleDisplayModes = ['automatic', 'always', 'never'];
 
 const backButtonDisplayModes = ['default', 'generic', 'minimal'];
 
+const navBarVisibilityModes = ['default', 'visible', 'hidden'];
+
+
 const navBarItemsConfigs: Array<{
   config: NavBarItemsConfig,
   description: string
@@ -1125,6 +1128,11 @@ function NavBarAppearanceOverrideItemConfig(props: SharedSectionProps & {
   currentAppearanceOverrideConfig: NavBarAppearanceCombinedConfig
 }){
 
+  const currentNavBarVisibilityMode = navBarVisibilityModes[
+    props.parentState.navBarVisibilityModeIndex % 
+    navBarVisibilityModes.length
+  ];
+
   const subtilePrefix = "This updates the navigation bar's current appearance using the " + (
     props.parentState.isUsingLegacyConfig
       ? "legacy appearance API by temp. overriding the 'legacy customization'-related nav bar properties."
@@ -1141,7 +1149,7 @@ function NavBarAppearanceOverrideItemConfig(props: SharedSectionProps & {
       <ItemTitle
         title={'Set '}
         titleCode={'NavBarAppearanceConfig'}
-        subtitle={subtilePrefix + ' \n\n' + subtitleSuffix}
+        subtitle={subtilePrefix + ' \n\n ' + subtitleSuffix}
       />
       <SwitchRow
         title={'Apply to current route'}
@@ -1185,6 +1193,30 @@ function NavBarAppearanceOverrideItemConfig(props: SharedSectionProps & {
           }));
         }}
       />
+
+      <SpacerLine/>
+      <ItemTitle
+        title={'Set'}
+        titleCode={'RouteOptions.navigationBarVisibility'}
+        subtitle={`Will temp. override the current/default navigation bar visibility for this route.`}
+        marginTop={24}
+      />
+      <RowLabelText
+        value={currentNavBarVisibilityMode}
+      />
+      <ButtonPrimary
+        title={'Update `navigationBarVisibility`'}
+        subtitle={`Cycle to the next mode`}
+        onPress={() => {
+          const parentRef = props.getParentRef();
+
+          parentRef.setState((prevState: NavigatorTest01State) => ({
+            navBarVisibilityModeIndex: prevState.navBarVisibilityModeIndex + 1
+          }));
+        }}
+      />
+
+
       {!props.parentState.applyNavBarAppearanceToCurrentRoute && (
         <ButtonPrimary
           title={'Push Route w/ Config'}
@@ -1196,7 +1228,9 @@ function NavBarAppearanceOverrideItemConfig(props: SharedSectionProps & {
               parentRef.props.navigation.push({
                 routeKey: 'NavigatorTest01',
                 routeOptions: {
-                  navBarAppearanceOverride: props.currentAppearanceOverrideConfig
+                  navBarAppearanceOverride: props.currentAppearanceOverrideConfig,
+                  // @ts-ignore
+                  navigationBarVisibility: currentNavBarVisibilityMode
                 }
               })
             }}
@@ -1255,10 +1289,11 @@ export class NavigatorTest01 extends React.Component<RouteContentProps> {
     navBarButtonLeftItemsConfigIndex: 0,
     backButtonItemsConfigIndex: 0,
 
-    applyNavBarAppearanceToCurrentRoute: true,
+    applyNavBarAppearanceToCurrentRoute: false,
     isUsingLegacyConfig: true,
     navBarAppearanceConfigsIndex: 0,
     navBarAppearanceLegacyConfigsIndex: 0,
+    navBarVisibilityModeIndex: 0,
 
     leftItemsSupplementBackButton: false,
     hidesBackButton: false,
@@ -1301,17 +1336,23 @@ export class NavigatorTest01 extends React.Component<RouteContentProps> {
         <RouteViewPortal
           routeOptions={{
             // @ts-ignore
-            largeTitleDisplayMode: largeTitleDisplayModes[state.displayModeIndex % largeTitleDisplayModes.length],
+            largeTitleDisplayMode: largeTitleDisplayModes[
+              state.displayModeIndex % 
+              largeTitleDisplayModes.length
+            ],
+
             routeTitle: state.routeTitle,
             prompt: state.routePrompt,
             navBarButtonRightItemsConfig: navBarItemsConfigs[
               state.navBarButtonRightItemsConfigIndex %
               navBarItemsConfigs.length
             ].config,
+
             navBarButtonLeftItemsConfig: navBarItemsConfigs[
               state.navBarButtonLeftItemsConfigIndex %
               navBarItemsConfigs.length
             ].config,
+
             navBarButtonBackItemConfig: {
               applyToPrevBackConfig: state.applyToPrevBackConfig,
               ...(
@@ -1321,17 +1362,28 @@ export class NavigatorTest01 extends React.Component<RouteContentProps> {
                 ].config
               ),
             },
+
             leftItemsSupplementBackButton: state.leftItemsSupplementBackButton,
             hidesBackButton: state.hidesBackButton,
+
             // @ts-ignore
             backButtonDisplayMode: backButtonDisplayModes[
               state.backButtonDisplayModeIndex %
               backButtonDisplayModes.length
             ],
-            backButtonTitle: state.backButtonTitle,
 
+            backButtonTitle: state.backButtonTitle,
             navBarAppearanceOverride: (state.applyNavBarAppearanceToCurrentRoute
               ? navBarAppearanceOverride
+              : null
+            ),
+
+            // @ts-ignore
+            navigationBarVisibility: (state.applyNavBarAppearanceToCurrentRoute
+              ? navBarVisibilityModes[
+                  state.navBarVisibilityModeIndex % 
+                  navBarVisibilityModes.length
+                ]
               : null
             ),
           }}

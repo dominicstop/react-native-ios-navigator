@@ -73,6 +73,8 @@ export type LargeTitleDisplayMode =
   /** Never display a large title. */
   | 'never';
 
+export type NavigationBarVisibilityMode = 'visible' | 'hidden' | 'default';
+
 export type RNINavigatorRouteViewProps = {
   style: ViewStyle;
 
@@ -111,8 +113,7 @@ export type RNINavigatorRouteViewProps = {
    * it's blurred.
    */
   navBarAppearanceOverride?: NavBarAppearanceCombinedConfig;
-  isNavigationBarHidden?: boolean;
-
+  navigationBarVisibility?: NavigationBarVisibilityMode;
 
   // Native Events: Push
   onRouteWillPush?: onRoutePushEvent;

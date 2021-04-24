@@ -346,6 +346,7 @@ export class CompareRouteOptions {
     backButtonTitle              : { mode: 'shallow' },
     backButtonDisplayMode        : { mode: 'shallow' },
     leftItemsSupplementBackButton: { mode: 'shallow' },
+    navigationBarVisibility      : { mode: 'shallow' },
 
     // custom compare
     navBarAppearanceOverride: {

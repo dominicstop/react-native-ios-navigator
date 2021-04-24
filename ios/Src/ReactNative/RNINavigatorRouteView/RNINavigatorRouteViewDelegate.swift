@@ -34,6 +34,8 @@ internal protocol RNINavigatorRouteViewDelegate: AnyObject {
   
   func didReceiveNavBarAppearanceOverride(_ config: RNINavBarAppearance);
   
+  func didReceiveNavBarVisibility(_ mode: RNINavigatorRouteView.NavBarVisibility)
+  
   // ---------------------------------
   // MARK: Receive Props: Navbar Items
   // ---------------------------------
