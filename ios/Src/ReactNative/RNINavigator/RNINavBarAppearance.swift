@@ -622,7 +622,7 @@ internal class RNINavBarAppearance {
   ){
     // reset the nav bar first before updating
     if self.shouldResetNavBar {
-      self.resetNavBarAppearance(navBar);
+      self.resetNavBarAppearance(navBar, navigationItem: navigationItem);
     };
     
     guard let navBar = navBar,
@@ -671,7 +671,10 @@ internal class RNINavBarAppearance {
     };
   };
   
-  func resetNavBarAppearance(_ navBar: UINavigationBar?){
+  func resetNavBarAppearance(
+    _ navBar: UINavigationBar?,
+    navigationItem: UINavigationItem? = nil
+  ){
     guard let navBar = navBar else { return };
     // since a reset was done, no need to reset on next nav bar update
     self.shouldResetNavBar = false;
@@ -681,9 +684,16 @@ internal class RNINavBarAppearance {
     // reset nav bar appearance
     // only reset appearance if was prev. set
     if #available(iOS 13.0, *), self.didUseNewAppearance {
-      navBar.standardAppearance   = defaultAppearance.standardAppearance;
-      navBar.compactAppearance    = defaultAppearance.compactAppearance;
-      navBar.scrollEdgeAppearance = defaultAppearance.scrollEdgeAppearance;
+      if let navItem = navigationItem {
+        navItem.standardAppearance   = defaultAppearance.standardAppearance;
+        navItem.compactAppearance    = defaultAppearance.compactAppearance;
+        navItem.scrollEdgeAppearance = defaultAppearance.scrollEdgeAppearance;
+        
+      } else {
+        navBar.standardAppearance   = defaultAppearance.standardAppearance;
+        navBar.compactAppearance    = defaultAppearance.compactAppearance;
+        navBar.scrollEdgeAppearance = defaultAppearance.scrollEdgeAppearance;
+      };
     };
     
     // reset legacy appearance
