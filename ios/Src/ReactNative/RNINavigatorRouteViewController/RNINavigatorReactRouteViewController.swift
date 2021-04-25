@@ -14,7 +14,14 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
   // ---------------------
   // MARK:- Embedded Types
   // ---------------------
-
+  
+  
+  enum RouteContentWrapper {
+    case view(view: UIView);
+    case reactSafeAreaView(view: RCTSafeAreaView);
+    case reactScrollView(view: RCTScrollView);
+  };
+  
   /// Used to override the current nav. config and restore it when the route becomes inactive.
   class NavigationConfigOverride {
     
@@ -225,9 +232,8 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     }
   };
   
-  /// A ref. to the `ScrollView` subview of the `reactRouteContent`
-  var reactScrollView: RCTScrollView?;
-  var reactSafeAreaView: RCTSafeAreaView?;
+  /// Holds the subview for `reactRouteContent`
+  var wrapperView: RouteContentWrapper!;
   
   // used for the custom transitions
   var interactionController: LeftEdgeInteractionController?;
@@ -298,18 +304,15 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     let reactRouteContent = self.routeView!.reactRouteContent!;
     self.view = reactRouteContent;
     
-    // is content a scrollview
-    if let contentView     = reactRouteContent.subviews.first,
-       let reactScrollView = contentView as? RCTScrollView {
-  
-      self.reactScrollView = reactScrollView;
-      print("reactScrollView scrollView delegate", reactScrollView.scrollView.delegate);
+    let contentView = reactRouteContent.subviews.first;
+    
+    if let reactScrollView = contentView as? RCTScrollView {
+      // is content a scrollview
+      self.wrapperView = .reactScrollView(view: reactScrollView);
       
-      
-    } else if let contentView     = reactRouteContent.subviews.first,
-              let reactSafeAreaView = contentView as? RCTSafeAreaView {
-      
-      self.reactSafeAreaView = reactSafeAreaView;
+    } else if let reactSafeAreaView = contentView as? RCTSafeAreaView {
+      // is content a safe area view
+      self.wrapperView = .reactSafeAreaView(view: reactSafeAreaView);
     };
   };
   
@@ -381,8 +384,13 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
   
   override func viewDidLayoutSubviews() {
     super.viewWillLayoutSubviews();
-
-    self.reactScrollView?.refreshContentInset();
+    
+    switch self.wrapperView {
+      case let .reactScrollView(reactScrollView):
+        reactScrollView.refreshContentInset();
+        
+      default: break;
+    };
   };
   
   override func willMove(toParent parent: UIViewController?){
