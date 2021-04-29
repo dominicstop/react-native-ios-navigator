@@ -51,11 +51,12 @@ export class RouteViewEvents extends React.Component<RouteViewEventsProps> {
   
   constructor(props: RouteViewEventsProps, context: NavRouteViewContextProps){
     super(props);
+    const { navigation } = context;
 
-    const routerRef = context.getRouteRef();
-    this.routerRef = routerRef;
+    const routeRef = navigation.getRefToRoute();
+    this.routerRef = routeRef;
 
-    const routeEmitterRef = routerRef.getEmitterRef();
+    const routeEmitterRef = routeRef.getEmitterRef();
     this.emitterRef = routeEmitterRef;
 
     routeEmitterRef.addListener(

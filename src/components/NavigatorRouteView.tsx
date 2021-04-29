@@ -155,44 +155,6 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
   //#endregion
 
   //#region - Public Functions
-  public getRouteNavigationObject = (): NavigationObject => {
-    const props = this.props;
-
-    return {
-      // pass down route props
-      routeProps: props.routeProps,
-      // pass down route details
-      routeKey  : props.routeKey,
-      routeIndex: props.routeIndex,
-      // pass down navigator commands
-      push        : this._navigatorRef.push,
-      pop         : this._navigatorRef.pop,
-      popToRoot   : this._navigatorRef.popToRoot,
-      removeRoute : this._navigatorRef.removeRoute,
-      removeRoutes: this._navigatorRef.removeRoutes,
-      replaceRoute: this._navigatorRef.replaceRoute,
-      insertRoute : this._navigatorRef.insertRoute,
-      setRoutes   : this._navigatorRef.setRoutes,
-      setNavigationBarHidden: this._navigatorRef.setNavigationBarHidden,
-      // pass down misc. navigator commands
-      setNavBarAppearance      : this._navigatorRef.setNavBarAppearance,
-      sendCustomCommandToNative: this._navigatorRef.sendCustomCommandToNative,
-      // pass down convenience navigator commands
-      replacePreviousRoute: this._navigatorRef.replacePreviousRoute,
-      replaceCurrentRoute : this._navigatorRef.replaceCurrentRoute,
-      removePreviousRoute : this._navigatorRef.removePreviousRoute,
-      removeAllPrevRoutes : this._navigatorRef.removeAllPrevRoutes,
-      // navigator route commands
-      getRouteOptions   : this.getRouteOptions,
-      setRouteOptions   : this.setRouteOptions,
-      setHidesBackButton: this.setHidesBackButton,
-      // pass down 'get ref' functions
-      getRefToRoute          : this._handleGetRefToRoute,
-      getRefToNavigator      : props.getRefToNavigator,
-      getRefToNavRouteEmitter: this._handleGetRefToNavRouteEmitter,
-    };
-  };
-
   /** Combines all the route configs into one */
   public getRouteOptions = (): RouteOptions => {
     const props = this.props;
@@ -287,6 +249,45 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
         routeOptionsDefault?.hidesBackButton
       ),
       // #endregion
+    };
+  };
+
+  public getRouteNavigationObject = (): NavigationObject => {
+    const props = this.props;
+    const routeOptions = this.getRouteOptions();
+
+    return {
+      routeOptions,
+      // pass down route details/data
+      routeKey    : props.routeKey,
+      routeIndex  : props.routeIndex,
+      routeProps  : props.routeProps,
+      // pass down navigator commands
+      push        : this._navigatorRef.push,
+      pop         : this._navigatorRef.pop,
+      popToRoot   : this._navigatorRef.popToRoot,
+      removeRoute : this._navigatorRef.removeRoute,
+      removeRoutes: this._navigatorRef.removeRoutes,
+      replaceRoute: this._navigatorRef.replaceRoute,
+      insertRoute : this._navigatorRef.insertRoute,
+      setRoutes   : this._navigatorRef.setRoutes,
+      setNavigationBarHidden: this._navigatorRef.setNavigationBarHidden,
+      // pass down misc. navigator commands
+      setNavBarAppearance      : this._navigatorRef.setNavBarAppearance,
+      sendCustomCommandToNative: this._navigatorRef.sendCustomCommandToNative,
+      // pass down convenience navigator commands
+      replacePreviousRoute: this._navigatorRef.replacePreviousRoute,
+      replaceCurrentRoute : this._navigatorRef.replaceCurrentRoute,
+      removePreviousRoute : this._navigatorRef.removePreviousRoute,
+      removeAllPrevRoutes : this._navigatorRef.removeAllPrevRoutes,
+      // navigator route commands
+      getRouteOptions   : this.getRouteOptions,
+      setRouteOptions   : this.setRouteOptions,
+      setHidesBackButton: this.setHidesBackButton,
+      // pass down 'get ref' functions
+      getRefToRoute          : this._handleGetRefToRoute,
+      getRefToNavigator      : props.getRefToNavigator,
+      getRefToNavRouteEmitter: this._handleGetRefToNavRouteEmitter,
     };
   };
   

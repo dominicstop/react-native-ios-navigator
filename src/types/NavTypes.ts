@@ -39,9 +39,10 @@ export type RouteOptions = {
 };
 
 export type NavigationObject = {
-  routeKey   : string;
-  routeIndex : number;
-  routeProps?: object;
+  routeKey    : string;
+  routeIndex  : number;
+  routeProps ?: object;
+  routeOptions: RouteOptions;
 
   // navigator commands
   push        : typeof NavigatorView.prototype.push;

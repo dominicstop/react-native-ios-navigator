@@ -24,7 +24,7 @@ function useNavRouteEvents(
   eventName: NavRouteLifeCycleEvents | NavBarItemEvents,
   handler: Function
 ){
-  const { getEmitterRef } = useContext(NavRouteViewContext);
+  const { navigation } = useContext(NavRouteViewContext);
   
   // Create a ref that stores handler
   const savedHandler = useRef(null);
@@ -38,7 +38,7 @@ function useNavRouteEvents(
   }, [handler]);
 
   useEffect(() => {
-    const emitterRef = getEmitterRef();
+    const emitterRef = navigation.getRefToNavRouteEmitter();
 
     // create event listener that calls handler function stored in ref
     const eventListener = (params: any) => savedHandler.current(params);
