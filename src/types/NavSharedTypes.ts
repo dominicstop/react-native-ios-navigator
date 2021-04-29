@@ -6,7 +6,7 @@ import type { NavigatorView } from 'src/components/NavigatorView';
 import type { RouteTransitionPopConfig, RouteTransitionPushConfig } from '../native_components/RNINavigatorRouteView';
 import type { NativePushPopOptions } from '../native_modules/RNINavigatorViewModule';
 
-import type { RouteOptions } from './NavTypes';
+import type { NavigationObject, RouteOptions } from './NavTypes';
 import type { EventEmitter } from "../functions/EventEmitter";
 
 
@@ -28,15 +28,5 @@ export type NavCommandPopOptions = NativePushPopOptions & {
   transitionConfig?: RouteTransitionPopConfig;
 };
 
-export type RenderNavBarItemParams = {
-  routeKey    ?: string;
-  routeIndex  ?: number;
-  routeProps  ?: object;
-  routeOptions?: RouteOptions;
-  // get ref functions
-  getRefToRoute          ?: () => NavigatorRouteView;
-  getRefToNavigator      ?: () => NavigatorView;
-  getRefToNavRouteEmitter?: () => EventEmitter<NavRouteEvents>;
-};
+export type RenderNavBarItem = (navigation: NavigationObject) => ReactElement;
 
-export type RenderNavBarItem = (params: RenderNavBarItemParams) => ReactElement;

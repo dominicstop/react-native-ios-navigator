@@ -2,27 +2,18 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 
 import type { RouteViewPortal } from './RouteViewPortal';
-import type { NavigatorView } from './NavigatorView';
-import type { NavigatorRouteView, NavRouteEvents } from './NavigatorRouteView';
-
-import type { EventEmitter } from '../functions/EventEmitter';
-import type { RouteOptions } from '../types/NavTypes';
-import type { RenderNavBarItem, RenderNavBarItemParams } from '../types/NavSharedTypes';
+import type { RenderNavBarItem } from '../types/NavSharedTypes';
 
 import { NativeIDKeys } from '../constants/LibraryConstants';
 import { RNIWrapperView } from '../native_components/RNIWrapperView';
+import type { NavigationObject } from '../types/NavTypes';
 
 
-type NavBarBackItemsWrapperProps = {
-  routeKey    : string;
-  routeIndex  : number;
-  routeProps  : object;
-  routeOptions: RouteOptions;
-  // get ref functions
-  getRefToNavigator: () => NavigatorView;
-  getEmitterRef    : () => EventEmitter<NavRouteEvents>;
-  getRouteRef      : () => NavigatorRouteView;
-  getPortalRef     : () => RouteViewPortal;
+type NavBarItemsWrapperProps = {
+  navigation: NavigationObject;
+
+  getPortalRef: () => RouteViewPortal;
+
   // render nav bar items
   renderNavBarLeftItem : RenderNavBarItem;
   renderNavBarRightItem: RenderNavBarItem;
@@ -30,15 +21,17 @@ type NavBarBackItemsWrapperProps = {
 };
 
 /** 
- * This component is used to hold `NavigatorRouteView`'s navigation bar items.
- * This component needs to wrap the navigation bar items so that they can re-render and
- * update when needed.
+ * This component is used to hold `NavigatorRouteView`'s navigation bar items, and the
+ * other route-related comp. such as the route header.
  * 
- * This component receives the navigation bar items from `RouteViewPortal`. Whenever
+ * This component needs to wrap the route component items so that they can re-render 
+ * and update when needed.
+ * 
+ * This component receives the route component items from `RouteViewPortal`. Whenever
  * `RouteViewPortal` updates, this comp. will also update, causing the nav. bar items
  * to re-render and update.
  */
-export class NavBarItemsWrapper extends React.Component<NavBarBackItemsWrapperProps> {
+export class NavBarItemsWrapper extends React.Component<NavBarItemsWrapperProps> {
   private _routeViewPortalRef: RouteViewPortal;
 
   componentDidMount(){
@@ -54,31 +47,21 @@ export class NavBarItemsWrapper extends React.Component<NavBarBackItemsWrapperPr
     const props = this.props;
     const portalProps = this._routeViewPortalRef?.props;
 
-    const sharedParams: RenderNavBarItemParams = {
-      // pass "get ref" functions...
-      getRefToRoute          : props.getRouteRef      ,
-      getRefToNavigator      : props.getRefToNavigator,
-      getRefToNavRouteEmitter: props.getEmitterRef    ,
-      // pass down route props...
-      routeKey    : props.routeKey    ,
-      routeIndex  : props.routeIndex  ,
-      routeProps  : props.routeProps  ,
-      routeOptions: props.routeOptions,
-    };
+    const navigation = props.navigation;
 
     const navBarLeftItem = (
-      portalProps?.renderNavBarLeftItem?.(sharedParams) ??
-      props.renderNavBarLeftItem?.(sharedParams)
+      portalProps?.renderNavBarLeftItem?.(navigation) ??
+      props.renderNavBarLeftItem?.(navigation)
     );
 
     const navBarRightItem = (
-      portalProps?.renderNavBarRightItem?.(sharedParams) ??
-      props.renderNavBarRightItem?.(sharedParams)
+      portalProps?.renderNavBarRightItem?.(navigation) ??
+      props.renderNavBarRightItem?.(navigation)
     );
 
     const navBarTitleItem = (
-      portalProps?.renderNavBarTitleItem?.(sharedParams) ??
-      props.renderNavBarTitleItem?.(sharedParams)
+      portalProps?.renderNavBarTitleItem?.(navigation) ??
+      props.renderNavBarTitleItem?.(navigation)
     );
 
     return(

@@ -471,14 +471,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
           {this._renderRouteContents()}
           <NavBarItemsWrapper
             ref={r => this._navBarItemsWrapperRef = r}
-            routeKey={props.routeKey}
-            routeIndex={props.routeIndex}
-            routeProps={props.routeProps}
-            routeOptions={routeOptions}
-            // get ref functions
-            getRefToNavigator={props.getRefToNavigator}
-            getEmitterRef={this.getEmitterRef}
-            getRouteRef={this.getRouteRef}
+            navigation={this.getRouteNavigationObject()}
             getPortalRef={this.getPortalRef}
             // render nav bar items
             renderNavBarLeftItem={props.renderNavBarLeftItem}
