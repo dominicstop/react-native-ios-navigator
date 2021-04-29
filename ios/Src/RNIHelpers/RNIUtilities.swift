@@ -103,4 +103,16 @@ internal class RNIUtilities {
       imageLoader.loadImage(with: imageSource.request, callback: completion);
     };
   };
+  
+  static func getView<T>(
+    forNode node: NSNumber,
+    type: T.Type,
+    bridge: RCTBridge?
+  ) -> T? {
+    guard let bridge = bridge,
+          let view   = bridge.uiManager?.view(forReactTag: node)
+    else { return nil };
+    
+    return view as? T;
+  };
 };

@@ -12,13 +12,11 @@ import Foundation
 internal class RNINavigatorViewModule: NSObject {
   
   static func getNavigatorView(_ node: NSNumber) -> RNINavigatorView? {
-    // get shared bridge instance from view manager
-    guard let bridge  = RNINavigatorViewManager.sharedBridge,
-          let view    = bridge.uiManager?.view(forReactTag: node),
-          let navView = view as? RNINavigatorView
-    else { return nil };
-    
-    return navView;
+    return RNIUtilities.getView(
+      forNode: node,
+      type   : RNINavigatorView.self,
+      bridge : RNINavigatorViewManager.sharedBridge
+    );
   };
   
   // ---------------------------------

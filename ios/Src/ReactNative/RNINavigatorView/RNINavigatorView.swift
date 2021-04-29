@@ -33,7 +33,8 @@ public final class RNINavigatorView: UIView {
   /// The routes added/to be added to the nav. stack.
   /// Note: The key is the `routeID`, also when removing an item, don't forget
   /// to call `cleanup` on the `routeView`
-  private var routeItemsMap: Dictionary<Int, RNINavigatorRouteBaseViewController> = [:];
+  private(set) public var routeItemsMap:
+    Dictionary<Int, RNINavigatorRouteBaseViewController> = [:];
   
   private var didReceiveAllInitialRoutes = false;
   

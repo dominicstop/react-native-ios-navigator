@@ -11,16 +11,6 @@ import Foundation
 @objc(RNINavigatorRouteViewModule)
 internal class RNINavigatorRouteViewModule: NSObject {
   
-  static func getRouteView(_ node: NSNumber) -> RNINavigatorRouteView? {
-    // get shared bridge instance from view manager
-    guard let bridge    = RNINavigatorRouteViewManager.sharedBridge,
-          let view      = bridge.uiManager?.view(forReactTag: node),
-          let routeView = view as? RNINavigatorRouteView
-    else { return nil };
-    
-    return routeView;
-  };
-  
   // ----------------------
   // MARK:- Module Commands
   // ----------------------
@@ -35,8 +25,12 @@ internal class RNINavigatorRouteViewModule: NSObject {
     
     DispatchQueue.main.async {
       // get `RNINavigatorRouteView` instance that matches node/reactTag
-      guard let routeView = Self.getRouteView(node),
-            let routeVC    = routeView.routeVC
+      guard let routeView = RNIUtilities.getView(
+              forNode: node,
+              type   : RNINavigatorRouteView.self,
+              bridge : RNINavigatorRouteViewManager.sharedBridge
+            ),
+            let routeVC = routeView.routeVC
       else {
         // construct error message for promise
         let errorMessage = (
