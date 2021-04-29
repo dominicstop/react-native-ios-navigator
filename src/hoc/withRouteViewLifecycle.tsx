@@ -12,8 +12,8 @@ export function withRouteViewLifecycle(WrappedComponent: any){
     childRef: any;
 
     componentDidMount(){
-      const routeViewContext = this.context;
-      const routeViewEmitter = routeViewContext.getEmitterRef();
+      const { navigation } = this.context;
+      const routeViewEmitter = navigation.getRefToNavRouteEmitter();
 
       for (const eventKey in NavRouteEvents) {
         const functionName = `handle-${eventKey}`;
@@ -30,8 +30,8 @@ export function withRouteViewLifecycle(WrappedComponent: any){
     };
 
     componentWillUnmount(){
-      const routeViewContext = this.context;
-      const routeViewEmitter = routeViewContext.getEmitterRef();
+      const { navigation } = this.context;
+      const routeViewEmitter = navigation.getRefToNavRouteEmitter();
 
       for (const eventKey in NavRouteEvents) {
         const functionName = `handle-${eventKey}`;
