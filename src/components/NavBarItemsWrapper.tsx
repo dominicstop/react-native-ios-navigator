@@ -3,10 +3,10 @@ import { StyleSheet } from 'react-native';
 
 import type { RouteViewPortal } from './RouteViewPortal';
 import type { RenderNavBarItem } from '../types/NavSharedTypes';
+import type { NavigationObject } from '../types/NavTypes';
 
 import { NativeIDKeys } from '../constants/LibraryConstants';
 import { RNIWrapperView } from '../native_components/RNIWrapperView';
-import type { NavigationObject } from '../types/NavTypes';
 
 
 type NavBarItemsWrapperProps = {

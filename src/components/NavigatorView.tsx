@@ -458,6 +458,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     return this.state.activeRoutes;
   };
 
+  // TODO: rename to `setNavBarAppearanceOverride` or remove completely
   public setNavBarAppearance = async (appearance?: NavBarAppearanceCombinedConfig) => {
     await Helpers.setStateAsync<Partial<NavigatorViewState>>(this, {
       navBarAppearanceOverride: appearance
@@ -1301,6 +1302,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
           key={`routeID-${route.routeID}`}
           ref={r => this.routeRefMap[route.routeID] = r}
           routeContainerStyle={props.routeContainerStyle}
+          navigatorID={this.navigatorID}
           routeID={route.routeID}
           routeIndex={route.routeIndex}
           routeKey={route.routeKey}

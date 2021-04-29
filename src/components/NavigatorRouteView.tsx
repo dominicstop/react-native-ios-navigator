@@ -55,12 +55,14 @@ enum RouteStatus {
 };
 
 
-type NavigatorRouteViewProps = Partial<Pick<RNINavigatorRouteViewProps,
+export type NavigatorRouteViewProps = Partial<Pick<RNINavigatorRouteViewProps,
   // mirror props from `RNINavigatorRouteViewProps`
   | 'routeID'
   | 'routeKey'
   | 'routeIndex'
 >> & {
+  navigatorID: number;
+
   routeProps: object;
   isRootRoute: boolean;
 
@@ -435,13 +437,15 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
 
   render(){
     const props = this.props;
+
+    const navigation = this.getRouteNavigationObject();
     const routeOptions = this.getRouteOptions();
 
     return(
       <NavRouteViewContext.Provider value={{
-        // pass down function to get refs
-        getRouteRef: this.getRouteRef,
-        getEmitterRef: this.getEmitterRef,
+        navigation,
+        navigatorID: props.navigatorID,
+        routeID: props.routeID,
       }}>
         <RNINavigatorRouteView
           style={styles.navigatorRouteView}
@@ -471,7 +475,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
           {this._renderRouteContents()}
           <NavBarItemsWrapper
             ref={r => this._navBarItemsWrapperRef = r}
-            navigation={this.getRouteNavigationObject()}
+            navigation={navigation}
             getPortalRef={this.getPortalRef}
             // render nav bar items
             renderNavBarLeftItem={props.renderNavBarLeftItem}

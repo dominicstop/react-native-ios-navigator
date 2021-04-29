@@ -44,8 +44,10 @@ export class RouteViewPortal extends React.Component<RouteViewPortalProps> {
   
   constructor(props: RouteViewPortalProps, context: NavRouteViewContextProps){
     super(props);
+    const { navigation } = context;
 
-    const routerRef = context.getRouteRef();
+    // TODO: Fix typo - rename `routerRef` -> `routeRef`
+    const routerRef = navigation.getRefToRoute();
     this.routerRef = routerRef;
 
     routerRef.setRouteViewPortalRef(this);
