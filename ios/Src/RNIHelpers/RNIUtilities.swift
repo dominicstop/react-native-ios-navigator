@@ -104,6 +104,22 @@ internal class RNIUtilities {
     };
   };
   
+  /// Recursive climb the responder chain until `T` is found.
+  /// Useful for finding the corresponding view controller of a view.
+  static func getParent<T>(responder: UIResponder, type: T.Type) -> T? {
+    var parentResponder: UIResponder? = responder;
+    
+    while parentResponder != nil {
+      parentResponder = parentResponder!.next;
+      
+      if let parent = parentResponder as? T {
+        return parent;
+      };
+    };
+    
+    return nil;
+  };
+  
   static func getView<T>(
     forNode node: NSNumber,
     type: T.Type,

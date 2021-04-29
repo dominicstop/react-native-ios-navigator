@@ -492,6 +492,11 @@ internal class RNINavigatorRouteView: UIView {
 // ------------------------------------
 
 internal extension RNINavigatorRouteView {
+  
+  var navigatorID: Int? {
+    self.navigatorView?.navigatorID?.intValue;
+  };
+  
   /// Creates a back nav bar button item based on `navBarButtonBackItemConfig`
   var backBarButtonItem: UIBarButtonItem? {
     guard let backConfigItem = self._navBarButtonBackItemConfig

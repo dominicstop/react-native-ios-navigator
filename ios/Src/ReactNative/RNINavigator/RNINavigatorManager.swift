@@ -28,11 +28,24 @@ public class RNINavigatorManager {
   ){
     self.navigatorViewInstances.setObject(instance, forKey: navigatorID);
     self.delegate?.onNavigatorViewAdded(instance, navigatorID.intValue);
+    
+    #if DEBUG
+    print("LOG - RNINavigatorManager: registerNavigatorView"
+      + " - for navigatorID: \(navigatorID)"
+      + " - instance count: \(self.navigatorViewInstances.count)"
+    );
+    #endif
   };
   
   public func getNavigatorViewInstances() -> Array<RNINavigatorView> {
     guard let enumerator = self.navigatorViewInstances.objectEnumerator()
     else { return [] };
+    
+    #if DEBUG
+    print("LOG - RNINavigatorManager: getNavigatorViewInstances"
+      + " - enumerator: \(enumerator.underestimatedCount)"
+    );
+    #endif
     
     return enumerator.compactMap {
       $0 as? RNINavigatorView;
