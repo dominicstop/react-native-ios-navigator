@@ -195,12 +195,18 @@ export class CompareNavBarItemsConfig {
     if(!HelperUtilities.compareArraySimple(oldItem, newItem)) return false;
 
     for (let i = 0; i < oldItem?.length ?? 0; i++) {
-      if(oldItem[i] !== newItem[i]){
-        return false;
+      const oldNavBarItem = oldItem[i];
+      const newBavBarItem = newItem[i];
 
+      if(HelperUtilities.isBothNull(oldNavBarItem, newBavBarItem)){
+        return true;
+
+      } else if (!HelperUtilities.compareItemsNull(oldNavBarItem, newBavBarItem)){
+        return false;
+        
       } else if(!CompareNavBarItemConfig.compare(
-        oldItem[i] as NavBarItemConfig, 
-        newItem[i] as NavBarItemConfig
+        oldNavBarItem as NavBarItemConfig, 
+        newBavBarItem as NavBarItemConfig
       )){
         return false;
       };
