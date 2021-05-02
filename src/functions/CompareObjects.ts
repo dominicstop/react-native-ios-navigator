@@ -42,13 +42,18 @@ class HelperUtilities {
     );
   };
 
-  static shallowCompareObject<T extends Object>(itemA: T, itemB: T){
+  static shallowCompareObject<T extends Object>(itemA: T, itemB: T): boolean {
     if(HelperUtilities.isBothNull(itemA, itemB)) return true;
     if(!HelperUtilities.compareItemsNull(itemA, itemB)) return false;
 
     let key: keyof T; 
     for (key in itemA) {
-      if ((itemA[key] && itemB[key] == null) || (itemA[key] !== itemB[key])) {
+      // skip objects
+      if(typeof itemA[key] === 'object'){
+        continue;
+      };
+
+      if ((itemA[key] !== itemB[key])) {
         return false;
       };
     };
