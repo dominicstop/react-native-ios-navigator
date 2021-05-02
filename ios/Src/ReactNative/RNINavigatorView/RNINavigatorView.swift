@@ -43,6 +43,7 @@ public final class RNINavigatorView: UIView {
   
   public var navigationVC: UINavigationController!;
   
+  // TODO
   private var nativeCommandRequestCompletionMap: Dictionary<String, Completion> = [:];
   
   // ----------------------------------

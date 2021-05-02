@@ -14,11 +14,12 @@ internal class RNINavigatorRouteView: UIView {
   // MARK:- Embedded Types
   // ---------------------
   
-  struct NativeIDKeys {
-    static let RouteContent    = "RouteContent";
-    static let NavBarLeftItem  = "NavBarLeftItem";
-    static let NavBarRightItem = "NavBarRightItem";
-    static let NavBarTitleItem = "NavBarTitleItem";
+  enum NativeIDKeys: String {
+    case RouteContent;
+    case NavBarLeftItem;
+    case NavBarRightItem;
+    case NavBarTitleItem;
+    case RouteHeader;
   };
   
   enum NavBarVisibility: String {
@@ -53,12 +54,13 @@ internal class RNINavigatorRouteView: UIView {
   var reactNavBarRightItem: RNIWrapperView?;
   var reactNavBarTitleItem: RNIWrapperView?;
   
-  private var didTriggerCleanup = false;
+  var reactRouteHeader: RNINavigatorRouteHeaderView?;
+  
+  private(set) var didTriggerCleanup = false;
   
   var applyToPrevBackConfig = false {
     didSet {
       guard self.applyToPrevBackConfig != oldValue,
-            let routeVC = self.navigatorView?.getSecondToLastRouteVC()
             let prevRouteVC = self.navigatorView?.getSecondToLastRouteVC()
       else { return };
       
@@ -455,7 +457,9 @@ internal class RNINavigatorRouteView: UIView {
   override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
     super.insertSubview(subview, at: atIndex);
     
-    guard let nativeID = subview.nativeID else {
+    guard let nativeID    = subview.nativeID,
+          let nativeIDKey = NativeIDKeys(rawValue: nativeID)
+    else {
       #if DEBUG
       print("LOG - ERROR - NativeView, RNINavigatorRouteView"
         + " - insertReactSubview: Received unknown child!"
@@ -464,8 +468,15 @@ internal class RNINavigatorRouteView: UIView {
       return;
     };
     
-    if nativeID != NativeIDKeys.RouteContent {
-      // do not show as subview, i.e. remove from view hieaarchy
+    #if DEBUG
+    print("LOG - NativeView, RNINavigatorRouteView"
+      + " - insertReactSubview: \(nativeIDKey.rawValue)!"
+      + " - atIndex: \(atIndex)"
+    );
+    #endif
+    
+    if nativeIDKey != .RouteContent {
+      // do not show as subview, i.e. remove from view hierarchy
       subview.removeFromSuperview();
     };
     
@@ -476,22 +487,23 @@ internal class RNINavigatorRouteView: UIView {
     
     /// receive child comps. from `RNINavigatorRouteView`.
     /// note: the child comp. can be identified based on their `nativeID`
-    switch nativeID {
-      case NativeIDKeys.RouteContent:
+    switch nativeIDKey {
+      case .RouteContent:
         self.reactRouteContent = subview;
         self.touchHandlerRouteContent.attach(to: subview);
         
-      case NativeIDKeys.NavBarLeftItem:
+      case .NavBarLeftItem:
         self.reactNavBarLeftItem = wrapperView;
         
-      case NativeIDKeys.NavBarRightItem:
+      case .NavBarRightItem:
         self.reactNavBarRightItem = wrapperView;
         
-      case NativeIDKeys.NavBarTitleItem:
+      case .NavBarTitleItem:
         self.reactNavBarTitleItem = wrapperView;
         self.delegate?.didReceiveNavBarButtonTitleView(subview);
         
-      default: break;
+      case .RouteHeader:
+        self.reactRouteHeader = wrapperView as? RNINavigatorRouteHeaderView;
     };
   };
 };
@@ -750,17 +762,23 @@ internal extension RNINavigatorRouteView {
 /// Receive `RNIWrapperView` events
 extension RNINavigatorRouteView: RNIWrapperViewDelegate {
   func onJSComponentWillUnmount(sender: RNIWrapperView, isManuallyTriggered: Bool) {
+    guard let nativeID    = sender.nativeID,
+          let nativeIDKey = NativeIDKeys(rawValue: nativeID)
+    else { return };
     
-    switch sender.nativeID {
-      case NativeIDKeys.NavBarLeftItem:
+    switch nativeIDKey {
+      case .NavBarLeftItem:
         self.reactNavBarLeftItem = nil;
         
-      case NativeIDKeys.NavBarRightItem:
+      case .NavBarRightItem:
         self.reactNavBarRightItem = nil;
         
-      case NativeIDKeys.NavBarTitleItem:
+      case .NavBarTitleItem:
         self.reactNavBarTitleItem = nil;
         self.delegate?.didReceiveNavBarButtonTitleView(nil);
+        
+      case .RouteHeader:
+        self.reactRouteHeader = nil;
         
       default: return;
     };

@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import { StyleSheet, View, ViewStyle, findNodeHandle } from 'react-native';
 
 import type { NavigationObject, RouteOptions } from '../types/NavTypes';
-import type { RenderNavBarItem } from '../types/NavSharedTypes';
+import type { RenderNavBarItem, RenderRouteHeader } from '../types/NavSharedTypes';
 
 import type { NavigatorView } from './NavigatorView';
 import type { RouteViewPortal } from './RouteViewPortal';
@@ -79,6 +79,8 @@ export type NavigatorRouteViewProps = Partial<Pick<RNINavigatorRouteViewProps,
   renderNavBarLeftItem ?: RenderNavBarItem;
   renderNavBarRightItem?: RenderNavBarItem;
   renderNavBarTitleItem?: RenderNavBarItem;
+
+  renderRouteHeader?: RenderRouteHeader;
 };
 
 /** `NavigatorView` comp. state */
@@ -482,6 +484,8 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
             renderNavBarLeftItem={props.renderNavBarLeftItem}
             renderNavBarRightItem={props.renderNavBarRightItem}
             renderNavBarTitleItem={props.renderNavBarTitleItem}
+            //
+            renderRouteHeader={props.renderRouteHeader}
           />
         </RNINavigatorRouteView>
       </NavRouteViewContext.Provider>

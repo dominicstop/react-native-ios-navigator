@@ -15,11 +15,23 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
   // MARK:- Embedded Types
   // ---------------------
   
-  
   enum RouteContentWrapper {
     case view(view: UIView);
     case reactSafeAreaView(view: RCTSafeAreaView);
     case reactScrollView(view: RCTScrollView);
+    
+    var description: String {
+      switch self {
+        case .view:
+          return "view";
+          
+        case .reactSafeAreaView:
+          return "reactSafeAreaView";
+          
+        case .reactScrollView:
+          return "reactScrollView";
+      };
+    };
   };
   
   /// Used to override the current nav. config and restore it when the route becomes inactive.
@@ -301,19 +313,48 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
   override func loadView() {
     super.loadView();
     
-    let reactRouteContent = self.routeView!.reactRouteContent!;
-    self.view = reactRouteContent;
-    
-    let contentView = reactRouteContent.subviews.first;
-    
-    if let reactScrollView = contentView as? RCTScrollView {
-      // is content a scrollview
-      self.wrapperView = .reactScrollView(view: reactScrollView);
+    /// The "root view" is the `routeView`'s `reactRouteContent`.
+    /// * The `routeView` is a container that holds all the route-related components
+    ///   i.e. it facilitates as a way to receive components from react and acts
+    ///   as a temp. parent/container.
+    /// * The `reactRouteContent` is a container that holds the route contents. It
+    ///    will contain a `wrapperView`. The `wrapperView` is the actual view
+    ///    that contains the content that we want to show from the the react route.
+    let rootView = self.routeView!.reactRouteContent!;
+    self.view = rootView;
+        
+    self.wrapperView = {
+      guard let contentView = rootView.subviews.first
+      else { return nil };
       
-    } else if let reactSafeAreaView = contentView as? RCTSafeAreaView {
-      // is content a safe area view
-      self.wrapperView = .reactSafeAreaView(view: reactSafeAreaView);
+      if let reactScrollView = contentView as? RCTScrollView {
+        // is content a scrollview
+        return .reactScrollView(view: reactScrollView);
+        
+      } else if let reactSafeAreaView = contentView as? RCTSafeAreaView {
+        // is content a safe area view
+        return .reactSafeAreaView(view: reactSafeAreaView);
+      };
+      
+      // content is a normal view
+      return .view(view: contentView);
+    }();
+    
+    if let headerView = self.routeView.reactRouteHeader {
+      headerView.routeViewController = self;
+      
+      headerView.setup(
+        rootView: rootView,
+        wrapperView: self.wrapperView
+      );
     };
+    
+    #if DEBUG
+    print("LOG - RNINavigatorReactRouteViewController: loadView"
+      + " - wrapperView: \(self.wrapperView?.description ?? "N/A")!"
+      + " - headerView: \(self.routeView.reactRouteHeader != nil ? "true" : "false")"
+    );
+    #endif
   };
   
   override func viewDidLoad() {

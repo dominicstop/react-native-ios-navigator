@@ -5,6 +5,7 @@ export enum NativeIDKeys {
   'NavBarLeftItem'   = 'NavBarLeftItem' ,
   'NavBarRightItem'  = 'NavBarRightItem',
   'NavBarTitleItem'  = 'NavBarTitleItem',
+  'RouteHeader'      = 'RouteHeader'    ,
 
   // `NavigatorView` Keys
   'NavRouteItem'     = 'NavRouteItem'    ,

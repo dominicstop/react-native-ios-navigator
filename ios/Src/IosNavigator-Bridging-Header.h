@@ -11,11 +11,11 @@
 #import "React/RCTEventEmitter.h"
 
 #import <React/RCTView.h>
+#import <React/RCTShadowView.h>
 #import <React/RCTScrollView.h>
-#import <React/RCTSafeAreaView.h>
-#import <React/RCTAutoInsetsProtocol.h>
-
 #import <React/RCTTouchHandler.h>
+
+#import <React/RCTSafeAreaView.h>
 
 #import <React/RCTConvert.h>
 #import <React/RCTTextAttributes.h>

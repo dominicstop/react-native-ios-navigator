@@ -1,25 +1,27 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 
+import type { NavigatorRouteViewProps } from './NavigatorRouteView';
 import type { RouteViewPortal } from './RouteViewPortal';
-import type { RenderNavBarItem } from '../types/NavSharedTypes';
 import type { NavigationObject } from '../types/NavTypes';
 
 import { NativeIDKeys } from '../constants/LibraryConstants';
 import { RNIWrapperView } from '../native_components/RNIWrapperView';
+import type { RouteHeaderView } from './RouteHeaderView';
 
 
-type NavBarItemsWrapperProps = {
+type NavBarItemsWrapperProps = Required<Pick<NavigatorRouteViewProps,
+  // mirror props from `NavigatorRouteViewProps`
+  | 'renderNavBarLeftItem'
+  | 'renderNavBarRightItem'
+  | 'renderNavBarTitleItem'
+  | 'renderRouteHeader'
+>> & {
   navigation: NavigationObject;
-
   getPortalRef: () => RouteViewPortal;
-
-  // render nav bar items
-  renderNavBarLeftItem : RenderNavBarItem;
-  renderNavBarRightItem: RenderNavBarItem;
-  renderNavBarTitleItem: RenderNavBarItem;
 };
 
+// TODO: Rename to `RouteComponentsWrapper`
 /** 
  * This component is used to hold `NavigatorRouteView`'s navigation bar items, and the
  * other route-related comp. such as the route header.
@@ -64,11 +66,16 @@ export class NavBarItemsWrapper extends React.Component<NavBarItemsWrapperProps>
       props.renderNavBarTitleItem?.(navigation)
     );
 
+    const routeHeader = (
+      portalProps?.renderRouteHeader?.(navigation) ??
+      props.renderRouteHeader?.(navigation)
+    );
+
     return(
       <React.Fragment>
         {navBarLeftItem && (
           <RNIWrapperView 
-            style={styles.navBarItemContainer}
+            style={styles.routeItemContainer}
             nativeID={NativeIDKeys.NavBarLeftItem}
           >
             {navBarLeftItem}
@@ -76,7 +83,7 @@ export class NavBarItemsWrapper extends React.Component<NavBarItemsWrapperProps>
         )}
         {navBarRightItem && (
           <RNIWrapperView  
-            style={styles.navBarItemContainer}
+            style={styles.routeItemContainer}
             nativeID={NativeIDKeys.NavBarRightItem}
           >
             {navBarRightItem}
@@ -84,19 +91,20 @@ export class NavBarItemsWrapper extends React.Component<NavBarItemsWrapperProps>
         )}
         {navBarTitleItem && (
           <RNIWrapperView 
-            style={styles.navBarItemContainer}
+            style={styles.routeItemContainer}
             nativeID={NativeIDKeys.NavBarTitleItem}
           >
             {navBarTitleItem}
           </RNIWrapperView>
         )}
+        {routeHeader}
       </React.Fragment>
     );
   };
 };
 
 const styles = StyleSheet.create({
-  navBarItemContainer: {
+  routeItemContainer: {
     position: 'absolute',
   },
 });

@@ -1,7 +1,9 @@
 import './Globals';
 
-export * from './components/NavigatorRouteView';
 export * from './components/NavigatorView';
+export * from './components/NavigatorRouteView';
+
+export * from './components/RouteHeaderView';
 export * from './components/RouteViewPortal';
 export * from './components/RouteViewEvents';
 

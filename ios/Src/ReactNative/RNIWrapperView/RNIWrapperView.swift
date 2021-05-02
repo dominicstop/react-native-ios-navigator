@@ -30,6 +30,8 @@ internal class RNIWrapperView: UIView {
   
   var autoSetSizeOnLayout = true;
   
+  var isWrapperView = true;
+  
   private var touchHandler: RCTTouchHandler!;
   
   init(bridge: RCTBridge) {
@@ -37,6 +39,10 @@ internal class RNIWrapperView: UIView {
     
     self.bridge = bridge;
     self.touchHandler = RCTTouchHandler(bridge: self.bridge);
+    
+    if !self.isWrapperView {
+      self.touchHandler.attach(to: self);
+    };
   };
   
   override func layoutSubviews() {
@@ -59,17 +65,24 @@ internal class RNIWrapperView: UIView {
   
   override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
     super.insertSubview(subview, at: atIndex);
-    self.reactContent = subview;
-    self.touchHandler.attach(to: subview);
+    
+    if self.isWrapperView {
+      self.reactContent = subview;
+      self.touchHandler.attach(to: subview);
+    };
   };
   
   func notifyForBoundsChange(_ newBounds: CGRect){
-    guard let bridge    = self.bridge,
-          let reactView = self.reactContent
-    else { return };
+    guard let bridge = self.bridge else { return };
     
-    // update react view's size
-    bridge.uiManager.setSize(newBounds.size, for: reactView);
+    if self.isWrapperView,
+       let reactView = self.reactContent {
+      
+      bridge.uiManager.setSize(newBounds.size, for: reactView);
+      
+    } else {
+      bridge.uiManager.setSize(newBounds.size, for: self);
+    };
   };
   
   func onJSComponentWillUnmount(isManuallyTriggered: Bool){
@@ -87,7 +100,9 @@ internal class RNIWrapperView: UIView {
     guard !self.didTriggerCleanup else { return };
     self.didTriggerCleanup = true;
     
-    self.touchHandler.detach(from: self.reactContent);
+    self.touchHandler.detach(
+      from: self.isWrapperView ? self.reactContent : self
+    );
     
     RNIUtilities.recursivelyRemoveFromViewRegistry(
       bridge: self.bridge,

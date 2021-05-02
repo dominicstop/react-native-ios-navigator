@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Text, FlatList, TouchableOpacity, Image, Alert } from 'react-native';
-import { NavigatorView, RouteContentProps } from 'react-native-ios-navigator';
+import { NavigatorView, RouteContentProps, RouteHeaderView, RouteViewPortal } from 'react-native-ios-navigator';
 
 import { NavigatorExample01 } from './components/NavigatorExample01';
 
@@ -10,6 +10,7 @@ import { NavigatorTest02 } from './components/NavigatorTest02';
 import { NavigatorTest03 } from './components/NavigatorTest03';
 import { NavigatorTest04 } from './components/NavigatorTest04';
 import { NavigatorTest05 } from './components/NavigatorTest05';
+import { NavigatorTest06 } from './components/NavigatorTest06';
 
 import { NavigatorDemo01 } from './components/NavigatorDemo01';
 import { NavigatorDemo02 } from './components/NavigatorDemo02';
@@ -20,11 +21,14 @@ import * as Colors from './constants/Colors';
 const RouteKeys = {
   Home: 'Home',
   NavigatorExample01: 'NavigatorExample01',
+
   NavigatorTest01: 'NavigatorTest01',
   NavigatorTest02: 'NavigatorTest02',
   NavigatorTest03: 'NavigatorTest03',
   NavigatorTest04: 'NavigatorTest04',
   NavigatorTest05: 'NavigatorTest05',
+  NavigatorTest06: 'NavigatorTest06',
+
   NavigatorDemo01: 'NavigatorDemo01',
   NavigatorDemo02: 'NavigatorDemo02',
 };
@@ -68,6 +72,10 @@ const RouteItems = [{
       `Tester for the 'initialRoutes' prop, e.g. testing setting multiple react and`
     + ` native routes on first mount.`
   )
+}, {
+  routeKey: RouteKeys.NavigatorTest06,
+  title: 'Route Header Test',
+  desc: `Tester for a route with a 'RouteHeaderView' component.`
 }, { 
   routeKey: RouteKeys.NavigatorDemo01,
   title: 'Navigator Nested Layout',
@@ -226,6 +234,11 @@ export default function App() {
         routeKey: RouteKeys.NavigatorTest05,
         renderRoute: () => (
           <NavigatorTest05/>
+        ),
+      }, {
+        routeKey: RouteKeys.NavigatorTest06,
+        renderRoute: () => (
+          <NavigatorTest06/>
         ),
       }, {
         routeKey: RouteKeys.NavigatorDemo01,

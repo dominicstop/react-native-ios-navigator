@@ -1,21 +1,23 @@
 import React from 'react';
 
-import type { NavigatorRouteView } from '../components/NavigatorRouteView';
+import type { NavigatorRouteView, NavigatorRouteViewProps } from '../components/NavigatorRouteView';
 
 import type { RouteOptions } from '../types/NavTypes';
-import type { RenderNavBarItem } from '../types/NavSharedTypes';
+import type { RenderNavBarItem, RenderRouteHeader } from '../types/NavSharedTypes';
 
 import { CompareRouteOptions } from '../functions/CompareObjects';
 import { NavRouteViewContext, NavRouteViewContextProps } from '../context/NavRouteViewContext';
 
 
-type RouteViewPortalProps = {
+type RouteViewPortalProps = Partial<Pick<NavigatorRouteViewProps,
+  // mirror props from `NavigatorRouteViewProps`
+  | 'renderNavBarLeftItem'
+  | 'renderNavBarRightItem'
+  | 'renderNavBarTitleItem'
+  | 'renderRouteHeader'
+>> & {
+  // TODO: Impl. `trackValues?: object;`
   routeOptions?: RouteOptions;
-  
-  // render props
-  renderNavBarLeftItem ?: RenderNavBarItem;
-  renderNavBarRightItem?: RenderNavBarItem;
-  renderNavBarTitleItem?: RenderNavBarItem;
 };
 
 /** 
@@ -31,10 +33,17 @@ type RouteViewPortalProps = {
  * e.g. you can render a custom title via `renderNavBarTitleItem`, etc.)
  * 
  * Note: The reason why this component is called `RouteViewPortal` is because it's transporting
- * the elements (and props) you pass to this component to the route navigator. In other words,
- * the props and elements you pass to this component are being used/rendered somewhere else in
- * the view hierarchy. This is achieved through context, and as such, you can only use this
- * component if it's a child of a route navigator.
+ * the elements (and props) you pass to this component to the parent route navigator. 
+ * In other words, the props and elements you pass to this component are being used/rendered 
+ * somewhere else in the view hierarchy. 
+ * 
+ * This is achieved through context, and as such, you can only use this component if it's a child 
+ * of a route. So this component actually renders nothing/`null` and does not affect layout.
+ * 
+ * Because of this, it has some weird quirks. 
+ * For example, there are situations where the parent might re-render (e.g. due to `setState`) 
+ * but the components inside the render props (e.g. `renderNavBarLeftItem`) won't update 
+ * even though a prop directly depends on a value from the parent's state.
  */
 export class RouteViewPortal extends React.Component<RouteViewPortalProps> {
   static contextType = NavRouteViewContext;
@@ -60,14 +69,23 @@ export class RouteViewPortal extends React.Component<RouteViewPortalProps> {
     const didRouteOptionsChange = 
       !CompareRouteOptions.compare(prevProps.routeOptions, nextProps.routeOptions);
 
-    const didChangeCustomNavBarItems = (
+    const didChangeRenderItems = (
       prevProps.renderNavBarLeftItem  !== nextProps.renderNavBarLeftItem  &&
       prevProps.renderNavBarRightItem !== nextProps.renderNavBarRightItem &&
-      prevProps.renderNavBarTitleItem !== nextProps.renderNavBarTitleItem 
+      prevProps.renderNavBarTitleItem !== nextProps.renderNavBarTitleItem &&
+      prevProps.renderRouteHeader     !== nextProps.renderRouteHeader
     );
 
-    if(didRouteOptionsChange || didChangeCustomNavBarItems){
+    if(didRouteOptionsChange || didChangeRenderItems){
       this.routerRef.setRouteOptions(nextProps.routeOptions);
+
+      //#region - 🐞 DEBUG 🐛
+      LIB_GLOBAL.debugLog && console.log(
+          `LOG/JS - RouteViewPortal, componentDidUpdate`
+        + ` - didRouteOptionsChange: ${didRouteOptionsChange? 'true' : 'false'}`
+        + ` - didChangeRenderItems: ${didChangeRenderItems? 'true' : 'false'}`
+      );
+      //#endregion
     };
   };
 
