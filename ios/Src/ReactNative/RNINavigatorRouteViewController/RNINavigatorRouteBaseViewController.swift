@@ -152,6 +152,10 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
   ///
   /// Note: this also resets `backButtonTitle` and `backButtonDisplayMode`.
   internal func resetRouteNavBarBackConfig(){
+    #if DEBUG
+    print("LOG -* resetRouteNavBarBackConfig");
+    #endif
+    
     if let backBarItem = self.prevBackItem.backBarButtonItem {
       self.navigationItem.backBarButtonItem = backBarItem;
     };

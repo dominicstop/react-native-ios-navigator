@@ -59,14 +59,18 @@ internal class RNINavigatorRouteView: UIView {
     didSet {
       guard self.applyToPrevBackConfig != oldValue,
             let routeVC = self.navigatorView?.getSecondToLastRouteVC()
+            let prevRouteVC = self.navigatorView?.getSecondToLastRouteVC()
       else { return };
       
+      #if DEBUG
+      print("LOG -* applyToPrevBackConfig: \(self.applyToPrevBackConfig)");
+      #endif
+      
+      prevRouteVC.shouldResetNavBarBackConfig = self.applyToPrevBackConfig;
+      
       // was prev. set to true, and is now false
-      if !self.applyToPrevBackConfig && oldValue {
-        routeVC.resetRouteNavBarBackConfig();
-        
-      } else {
-        routeVC.shouldResetNavBarBackConfig = true;
+      if oldValue && !self.applyToPrevBackConfig  {
+        prevRouteVC.resetRouteNavBarBackConfig();
       };
     }
   };
@@ -247,6 +251,11 @@ internal class RNINavigatorRouteView: UIView {
         self.applyToPrevBackConfig = flag;
         return flag;
       }();
+      
+      #if DEBUG
+      let dictStr = navBarButtonBackItemConfig?.debugDescription.replacingOccurrences(of: "\n", with: "");
+      print("LOG -* navBarButtonBackItemConfig, dict: \(dictStr ?? "N/A")");
+      #endif
       
       self._navBarButtonBackItemConfig = configItem;
       delegate?.didReceiveNavBarButtonBackItem(self.backBarButtonItem, applyToPrevBackConfig);

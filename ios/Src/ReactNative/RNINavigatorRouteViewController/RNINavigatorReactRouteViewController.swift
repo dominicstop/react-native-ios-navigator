@@ -521,14 +521,28 @@ extension RNINavigatorReactRouteViewController: RNINavigatorRouteViewDelegate {
     _ item: UIBarButtonItem?,
     _ applyToPrevBackConfig: Bool
   ) {
+    #if DEBUG
+    print("LOG -* didReceiveNavBarButtonBackItem, dict: \(item.debugDescription)");
+    #endif
+    
     if applyToPrevBackConfig {
-      guard let backItem = self.navigationController?.navigationBar.backItem
+      guard let prevRouteVC = self.routeView.navigatorView?.getSecondToLastRouteVC()
       else { return };
       
+      let backItem = prevRouteVC.navigationItem;
+      
+      #if DEBUG
+      print("LOG -* didReceiveNavBarButtonBackItem, applyToPrevBackConfig: true");
+      #endif
+      
+      // save then override
       self.prevBackItem.backBarButtonItem = backItem.backBarButtonItem;
       backItem.backBarButtonItem = item;
       
     } else {
+      #if DEBUG
+      print("LOG -* didReceiveNavBarButtonBackItem, applyToPrevBackConfig: false");
+      #endif
       self.navigationItem.backBarButtonItem = item;
     };
   };
@@ -556,10 +570,13 @@ extension RNINavigatorReactRouteViewController: RNINavigatorRouteViewDelegate {
     guard #available(iOS 11.0, *) else { return };
     
     if applyToPrevBackConfig {
-      guard let backItem = self.navigationController?.navigationBar.backItem
+      guard let prevRouteVC = self.routeView.navigatorView?.getSecondToLastRouteVC()
       else { return };
       
-      self.prevBackItem.backTitle = backItem.title;
+      let backItem = prevRouteVC.navigationItem;
+      
+      // save then override
+      self.prevBackItem.backTitle = backItem.backButtonTitle;
       backItem.backButtonTitle = title;
   
     } else {
@@ -574,9 +591,12 @@ extension RNINavigatorReactRouteViewController: RNINavigatorRouteViewDelegate {
     guard #available(iOS 14.0, *) else { return };
     
     if applyToPrevBackConfig {
-      guard let backItem = self.navigationController?.navigationBar.backItem
+      guard let prevRouteVC = self.routeView.navigatorView?.getSecondToLastRouteVC()
       else { return };
       
+      let backItem = prevRouteVC.navigationItem;
+      
+      // save then override
       self.prevBackItem.backButtonDisplayMode = backItem.backButtonDisplayMode;
       backItem.backButtonDisplayMode = displayMode;
       
