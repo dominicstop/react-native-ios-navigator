@@ -8,7 +8,7 @@
 import UIKit;
 
 
-internal class RNINavigatorRouteView: UIView {
+internal class RNINavigatorRouteView: UIView, RCTInvalidating {
   
   // ---------------------
   // MARK:- Embedded Types
@@ -63,10 +63,6 @@ internal class RNINavigatorRouteView: UIView {
       guard self.applyToPrevBackConfig != oldValue,
             let prevRouteVC = self.navigatorView?.getSecondToLastRouteVC()
       else { return };
-      
-      #if DEBUG
-      print("LOG -* applyToPrevBackConfig: \(self.applyToPrevBackConfig)");
-      #endif
       
       prevRouteVC.shouldResetNavBarBackConfig = self.applyToPrevBackConfig;
       
@@ -244,7 +240,7 @@ internal class RNINavigatorRouteView: UIView {
       }();
       
       // extract `applyToPrevBackConfig` from back item config,
-      // note: this property only exist for `navBarButtonBackItemConfig`
+      // note: this property only exists for `navBarButtonBackItemConfig`
       let applyToPrevBackConfig: Bool = {
         guard let dict = self.navBarButtonBackItemConfig,
               let flag = dict["applyToPrevBackConfig"] as? Bool
@@ -253,11 +249,6 @@ internal class RNINavigatorRouteView: UIView {
         self.applyToPrevBackConfig = flag;
         return flag;
       }();
-      
-      #if DEBUG
-      let dictStr = navBarButtonBackItemConfig?.debugDescription.replacingOccurrences(of: "\n", with: "");
-      print("LOG -* navBarButtonBackItemConfig, dict: \(dictStr ?? "N/A")");
-      #endif
       
       self._navBarButtonBackItemConfig = configItem;
       delegate?.didReceiveNavBarButtonBackItem(self.backBarButtonItem, applyToPrevBackConfig);
@@ -506,6 +497,14 @@ internal class RNINavigatorRouteView: UIView {
         self.reactRouteHeader = wrapperView as? RNINavigatorRouteHeaderView;
     };
   };
+  
+  func invalidate() {
+    #if DEBUG
+    print("LOG - RNINavigatorRouteView: invalidate");
+    #endif
+    
+    self.cleanup(isInvalidating: true);
+  };
 };
 
 // ------------------------------------
@@ -663,9 +662,9 @@ private extension RNINavigatorRouteView {
   };
 };
 
-// -----------------------
-// MARK:- Public Functions
-// -----------------------
+// -------------------------
+// MARK:- Internal Functions
+// -------------------------
 
 internal extension RNINavigatorRouteView {
   
@@ -715,20 +714,24 @@ internal extension RNINavigatorRouteView {
     
   /// Once we're done w/ this "route view" (e.g. it has been popped or removed),
   /// then we need to cleanup to prevent this instance from leaking.
-  func cleanup(){
+  func cleanup(isInvalidating: Bool = false){
     guard !self.didTriggerCleanup else { return };
     self.didTriggerCleanup = true;
     
     // "react views" to be removed
-    let viewsToRemove = [
+    var viewsToRemove = [
       self.reactRouteContent   ,
+      self.reactRouteHeader    ,
       self.reactNavBarLeftItem ,
       self.reactNavBarRightItem,
       self.reactNavBarTitleItem,
-      self
     ];
     
-    // detach RCTToucHandler from react view
+    if !isInvalidating {
+      viewsToRemove.append(self);
+    };
+    
+    // detach `RCTToucHandler` from react view
     if let routeContent = self.reactRouteContent {
       self.touchHandlerRouteContent.detach(from: routeContent);
     };
@@ -749,6 +752,7 @@ internal extension RNINavigatorRouteView {
     
     // remove references to the react views
     self.reactRouteContent    = nil;
+    self.reactRouteHeader     = nil;
     self.reactNavBarLeftItem  = nil;
     self.reactNavBarRightItem = nil;
     self.reactNavBarTitleItem = nil;

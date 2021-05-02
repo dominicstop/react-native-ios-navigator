@@ -9,6 +9,10 @@ import Foundation
 
 internal class RNINavigatorRouteHeaderView: RNIWrapperView {
   
+  // ---------------------
+  // MARK:- Embedded Types
+  // ---------------------
+  
   struct RouteHeaderConfig {
     enum HeaderHeight {
       case navigationBar;
@@ -83,10 +87,18 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
     };
   };
   
+  // -----------------
+  // MARK:- Properties
+  // -----------------
+  
   /// Ref. to the parent react route vc
   weak var routeViewController: RNINavigatorReactRouteViewController?;
   
   var headerHeightConstraint: NSLayoutConstraint!;
+  
+  // ------------------------
+  // MARK:- RN Exported Props
+  // ------------------------
   
   private var headerConfig = RouteHeaderConfig(dict: nil);
   @objc var config: NSDictionary? {
@@ -108,22 +120,25 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
     }
   };
   
+  // ---------------------
+  // MARK:- Init/Lifecycle
+  // ---------------------
+  
   override init(bridge: RCTBridge) {
     super.init(bridge: bridge);
     
-    self.autoCleanupOnJSUnmount = true;
-    self.autoSetSizeOnLayout = false;
     self.isWrapperView = false;
+    self.autoSetSizeOnLayout = false;
+    self.autoCleanupOnJSUnmount = false;
   };
   
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented");
   };
   
-  // add additional cleanup
-  override func cleanup() {
-    super.cleanup();
-  };
+  // -------------------------
+  // MARK:- Internal Functions
+  // -------------------------
   
   func setup(
     rootView: UIView,
@@ -196,7 +211,6 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
     };
   };
 
-
   func setSafeAreaInsets(){
     guard self.window != nil && !self.didTriggerCleanup,
           let routeVC = self.routeViewController
@@ -213,7 +227,12 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
   };
 };
 
+// ---------------------------
+// MARK:- UIScrollViewDelegate
+// ---------------------------
+
 extension RNINavigatorRouteHeaderView: UIScrollViewDelegate {
+  
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
     guard let routeVC = self.routeViewController,
           let headerHeightMin = self.headerConfig.headerHeightMin?.getHeight(viewController: routeVC),
@@ -251,11 +270,6 @@ extension RNINavigatorRouteHeaderView: UIScrollViewDelegate {
     // update react layout
     self.notifyForBoundsChange(
       CGRect(origin: .zero, size: newHeaderSize)
-    );
-
-    print("LOG - RNINavigatorReactRouteViewController"
-      + " - scrollY: \(scrollY)"
-      + " - scrollYAdj: \(scrollYAdj)"
     );
   };
 };

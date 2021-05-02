@@ -54,7 +54,7 @@ public final class RNINavigatorView: UIView {
     self.navigationVC.navigationBar;
   };
   
-  /// current active view controllers in the navigator
+  /// current active route view controllers in the navigator
   var activeRoutes: [RNINavigatorRouteBaseViewController] {
     self.navigationVC.viewControllers.compactMap {
       $0 as? RNINavigatorRouteBaseViewController
@@ -331,7 +331,6 @@ public final class RNINavigatorView: UIView {
     };
   };
   
-  // TODO: Remove if not needed?
   func getSecondToLastRouteVC() -> RNINavigatorRouteBaseViewController? {
     guard self.routeItemsMap.count > 1 else { return nil };
     let routeItems = self.routeItems;

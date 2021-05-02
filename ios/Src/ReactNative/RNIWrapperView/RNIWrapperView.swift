@@ -34,6 +34,10 @@ internal class RNIWrapperView: UIView {
   
   private var touchHandler: RCTTouchHandler!;
   
+  // ---------------------
+  // MARK:- Init/Lifecycle
+  // ---------------------
+  
   init(bridge: RCTBridge) {
     super.init(frame: CGRect());
     
@@ -45,6 +49,10 @@ internal class RNIWrapperView: UIView {
     };
   };
   
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented");
+  };
+  
   override func layoutSubviews() {
     super.layoutSubviews();
     
@@ -53,15 +61,15 @@ internal class RNIWrapperView: UIView {
     };
   };
   
-  required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented");
-  };
-  
   override func didMoveToWindow() {
     if self.window == nil && self.autoCleanupOnWindowNil {
       self.cleanup();
     };
   };
+  
+  // ----------------------
+  // MARK:- React Lifecycle
+  // ----------------------
   
   override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
     super.insertSubview(subview, at: atIndex);
@@ -71,6 +79,18 @@ internal class RNIWrapperView: UIView {
       self.touchHandler.attach(to: subview);
     };
   };
+  
+  func invalidate() {
+    #if DEBUG
+    print("LOG - RNIWrapperView: invalidate");
+    #endif
+    
+    self.cleanup(isInvalidating: true);
+  };
+  
+  // -------------------------
+  // MARK:- Internal Functions
+  // -------------------------
   
   func notifyForBoundsChange(_ newBounds: CGRect){
     guard let bridge = self.bridge else { return };
@@ -96,9 +116,12 @@ internal class RNIWrapperView: UIView {
     );
   };
   
-  func cleanup(){
+  func cleanup(isInvalidating: Bool = false){
     guard !self.didTriggerCleanup else { return };
-    self.didTriggerCleanup = true;
+    
+    if !isInvalidating {
+      self.didTriggerCleanup = true;
+    };
     
     self.touchHandler.detach(
       from: self.isWrapperView ? self.reactContent : self

@@ -375,6 +375,8 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
   };
   
   override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated);
+    
     // by this point, it's already been set so force unwrap
     let routeView = self.routeView!;
     
@@ -472,9 +474,9 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     };
   };
   
-  // ------------------------
-  // MARK:- Public  Functions
-  // ------------------------
+  // --------------------------
+  // MARK:- Internal  Functions
+  // --------------------------
   
   /// Override the base impl. so that values used to reset the back config comes
   /// from the js/react values instead of `prevBackItem`.
@@ -562,28 +564,17 @@ extension RNINavigatorReactRouteViewController: RNINavigatorRouteViewDelegate {
     _ item: UIBarButtonItem?,
     _ applyToPrevBackConfig: Bool
   ) {
-    #if DEBUG
-    print("LOG -* didReceiveNavBarButtonBackItem, dict: \(item.debugDescription)");
-    #endif
     
-    if applyToPrevBackConfig {
-      guard let prevRouteVC = self.routeView.navigatorView?.getSecondToLastRouteVC()
-      else { return };
-      
+    if applyToPrevBackConfig,
+       let prevRouteVC = self.routeView.navigatorView?.getSecondToLastRouteVC() {
+
       let backItem = prevRouteVC.navigationItem;
-      
-      #if DEBUG
-      print("LOG -* didReceiveNavBarButtonBackItem, applyToPrevBackConfig: true");
-      #endif
       
       // save then override
       self.prevBackItem.backBarButtonItem = backItem.backBarButtonItem;
       backItem.backBarButtonItem = item;
       
     } else {
-      #if DEBUG
-      print("LOG -* didReceiveNavBarButtonBackItem, applyToPrevBackConfig: false");
-      #endif
       self.navigationItem.backBarButtonItem = item;
     };
   };
@@ -610,9 +601,8 @@ extension RNINavigatorReactRouteViewController: RNINavigatorRouteViewDelegate {
   ) {
     guard #available(iOS 11.0, *) else { return };
     
-    if applyToPrevBackConfig {
-      guard let prevRouteVC = self.routeView.navigatorView?.getSecondToLastRouteVC()
-      else { return };
+    if applyToPrevBackConfig,
+       let prevRouteVC = self.routeView.navigatorView?.getSecondToLastRouteVC() {
       
       let backItem = prevRouteVC.navigationItem;
       
@@ -631,9 +621,8 @@ extension RNINavigatorReactRouteViewController: RNINavigatorRouteViewDelegate {
   ) {
     guard #available(iOS 14.0, *) else { return };
     
-    if applyToPrevBackConfig {
-      guard let prevRouteVC = self.routeView.navigatorView?.getSecondToLastRouteVC()
-      else { return };
+    if applyToPrevBackConfig,
+       let prevRouteVC = self.routeView.navigatorView?.getSecondToLastRouteVC() {
       
       let backItem = prevRouteVC.navigationItem;
       

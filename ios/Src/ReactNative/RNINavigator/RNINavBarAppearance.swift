@@ -7,6 +7,8 @@
 
 import Foundation
 
+/// This class is used to hold config for customizing the navigation bar and also
+/// handles applying/resetting the nav bar appearance.
 internal class RNINavBarAppearance {
   
   // ---------------------
@@ -256,7 +258,7 @@ internal class RNINavBarAppearance {
     };
   };
   
-  /// Holds the "raw" values for customizing the navigatiob bar via the "legacy"
+  /// Holds the "raw" values for customizing the navigation bar via the "legacy"
   /// appearance API's.
   class NavBarAppearanceLegacyConfig {
     

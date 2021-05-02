@@ -30,7 +30,7 @@ internal class RNINavigatorRouteViewManager: RCTViewManager {
   };
   
   #if DEBUG
-  /// invalidate RCTBridge instance
+  /// reset RCTBridge instance
   @objc static func resetSharedBridge() {
     print("RNINavigatorRouteViewManager: resetSharedBridge...");
     Self.sharedBridge = nil;

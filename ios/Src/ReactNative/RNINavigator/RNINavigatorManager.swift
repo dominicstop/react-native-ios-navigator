@@ -7,14 +7,16 @@
 
 import Foundation
 
-/// Register native routes
+/// This is singleton class for interacting + configuring the `RNINavigatorView`
 public class RNINavigatorManager {
   
   public static let sharedInstance = RNINavigatorManager();
   
-  /// The "native" routes to be used in the `NavigatorView`
+  /// The "native" routes to be used in the `NavigatorView`.
   @objc public static var routeRegistry: [String: RNINavigatorRouteBaseViewController.Type] = [:];
   
+  /// Contains a map of all the active `RNINavigatorView` instances in the app
+  /// (usually there's only 1 navigator for the entire app).
   private var navigatorViewInstances = NSMapTable<NSNumber, RNINavigatorView>.init(
     keyOptions: .copyIn,
     valueOptions: .weakMemory

@@ -8,6 +8,8 @@
 import Foundation
 
 
+/// This object is used for holding the config for creating a `UIBarButtonItem`
+/// and handles creating them based on the config.
 internal class RNINavBarItemConfig {
   
   // ---------------------

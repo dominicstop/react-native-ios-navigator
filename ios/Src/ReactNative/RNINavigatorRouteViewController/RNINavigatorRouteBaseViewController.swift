@@ -60,6 +60,14 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
   /// been temporarily modified.
   internal var prevBackItem = BackItemCache();
   
+  // ----------------------------------
+  // MARK: Convenient Property Wrappers
+  // ----------------------------------
+  
+  var isCurrentlyInFocus: Bool {
+    self.navigationController?.topViewController == self
+  };
+  
   // --------------------------------
   // MARK:- View Controller Lifecycle
   // --------------------------------
@@ -152,9 +160,7 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
   ///
   /// Note: this also resets `backButtonTitle` and `backButtonDisplayMode`.
   internal func resetRouteNavBarBackConfig(){
-    #if DEBUG
-    print("LOG -* resetRouteNavBarBackConfig");
-    #endif
+    self.shouldResetNavBarBackConfig = false;
     
     if let backBarItem = self.prevBackItem.backBarButtonItem {
       self.navigationItem.backBarButtonItem = backBarItem;
