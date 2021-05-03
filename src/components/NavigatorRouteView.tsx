@@ -7,7 +7,7 @@ import type { RenderNavBarItem, RenderRouteHeader } from '../types/NavSharedType
 import type { NavigatorView } from './NavigatorView';
 import type { RouteViewPortal } from './RouteViewPortal';
 
-import { NavBarItemsWrapper } from './NavBarItemsWrapper';
+import { RouteComponentsWrapper } from './RouteComponentsWrapper';
 
 import { RNINavigatorRouteView, RNINavigatorRouteViewProps, onPressNavBarItem, onRoutePushEvent, onRoutePopEvent, RouteTransitionPopConfig, RouteTransitionPushConfig, onRouteFocusBlurEvent } from '../native_components/RNINavigatorRouteView';
 import { RNINavigatorRouteViewModule } from '../native_modules/RNINavigatorRouteViewModule';
@@ -104,7 +104,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
   private _navigatorRef         : NavigatorView;
   private _routeContentRef      : ReactElement;
   private _routeViewPortalRef   : RouteViewPortal;
-  private _navBarItemsWrapperRef: NavBarItemsWrapper;
+  private _navBarItemsWrapperRef: RouteComponentsWrapper;
   //#endregion
 
   constructor(props: NavigatorRouteViewProps){
@@ -476,7 +476,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
           {...routeOptions}
         >
           {this._renderRouteContents()}
-          <NavBarItemsWrapper
+          <RouteComponentsWrapper
             ref={r => this._navBarItemsWrapperRef = r}
             navigation={navigation}
             getPortalRef={this.getPortalRef}

@@ -7,10 +7,9 @@ import type { NavigationObject } from '../types/NavTypes';
 
 import { NativeIDKeys } from '../constants/LibraryConstants';
 import { RNIWrapperView } from '../native_components/RNIWrapperView';
-import type { RouteHeaderView } from './RouteHeaderView';
 
 
-type NavBarItemsWrapperProps = Required<Pick<NavigatorRouteViewProps,
+type RouteComponentsWrapperProps = Required<Pick<NavigatorRouteViewProps,
   // mirror props from `NavigatorRouteViewProps`
   | 'renderNavBarLeftItem'
   | 'renderNavBarRightItem'
@@ -21,7 +20,6 @@ type NavBarItemsWrapperProps = Required<Pick<NavigatorRouteViewProps,
   getPortalRef: () => RouteViewPortal;
 };
 
-// TODO: Rename to `RouteComponentsWrapper`
 /** 
  * This component is used to hold `NavigatorRouteView`'s navigation bar items, and the
  * other route-related comp. such as the route header.
@@ -33,7 +31,7 @@ type NavBarItemsWrapperProps = Required<Pick<NavigatorRouteViewProps,
  * `RouteViewPortal` updates, this comp. will also update, causing the nav. bar items
  * to re-render and update.
  */
-export class NavBarItemsWrapper extends React.Component<NavBarItemsWrapperProps> {
+export class RouteComponentsWrapper extends React.Component<RouteComponentsWrapperProps> {
   private _routeViewPortalRef: RouteViewPortal;
 
   componentDidMount(){
