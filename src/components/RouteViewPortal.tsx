@@ -49,18 +49,17 @@ export class RouteViewPortal extends React.Component<RouteViewPortalProps> {
   static contextType = NavRouteViewContext;
   
   context: NavRouteViewContextProps;
-  routerRef: NavigatorRouteView;
+  routeRef: NavigatorRouteView;
   
   constructor(props: RouteViewPortalProps, context: NavRouteViewContextProps){
     super(props);
     const { navigation } = context;
 
-    // TODO: Fix typo - rename `routerRef` -> `routeRef`
-    const routerRef = navigation.getRefToRoute();
-    this.routerRef = routerRef;
+    const routeRef = navigation.getRefToRoute();
+    this.routeRef = routeRef;
 
-    routerRef.setRouteViewPortalRef(this);
-    routerRef.setRouteOptions(props.routeOptions);
+    routeRef.setRouteViewPortalRef(this);
+    routeRef.setRouteOptions(props.routeOptions);
   };
 
   componentDidUpdate(prevProps: RouteViewPortalProps){
@@ -77,7 +76,7 @@ export class RouteViewPortal extends React.Component<RouteViewPortalProps> {
     );
 
     if(didRouteOptionsChange || didChangeRenderItems){
-      this.routerRef.setRouteOptions(nextProps.routeOptions);
+      this.routeRef.setRouteOptions(nextProps.routeOptions);
 
       //#region - 🐞 DEBUG 🐛
       LIB_GLOBAL.debugLog && console.log(
