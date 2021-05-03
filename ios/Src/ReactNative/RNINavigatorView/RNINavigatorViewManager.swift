@@ -10,33 +10,7 @@ import Foundation
 @objc(RNINavigatorViewManager)
 internal class RNINavigatorViewManager: RCTViewManager {
   
-  // -----------------------
-  // MARK:- Shared Instances
-  // -----------------------
-  
-  static weak var sharedBridge: RCTBridge? {
-    didSet {
-      #if DEBUG
-      print("RNINavigatorViewManager, sharedBridge: didSet");
-      
-      // when RN app reloads, set `sharedBridge` to nil
-      NotificationCenter.default.addObserver(Self.self,
-        selector: #selector(Self.resetSharedBridge),
-        name: NSNotification.Name(rawValue: "RCTBridgeWillReloadNotification"),
-        object: nil
-      );
-      #endif
-    }
-  };
-  
-  
-  #if DEBUG
-  /// reset RCTBridge instance
-  @objc static func resetSharedBridge() {
-    print("RNINavigatorViewManager: resetSharedBridge...");
-    Self.sharedBridge = nil;
-  };
-  #endif
+  static weak var sharedBridge: RCTBridge?;
   
   // ----------------------
   // MARK:- RN Module Setup
