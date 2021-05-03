@@ -11,6 +11,7 @@ import { NavigatorTest03 } from './components/NavigatorTest03';
 import { NavigatorTest04 } from './components/NavigatorTest04';
 import { NavigatorTest05 } from './components/NavigatorTest05';
 import { NavigatorTest06 } from './components/NavigatorTest06';
+import { NavigatorTest07 } from './components/NavigatorTest07';
 
 import { NavigatorDemo01 } from './components/NavigatorDemo01';
 import { NavigatorDemo02 } from './components/NavigatorDemo02';
@@ -28,6 +29,7 @@ const RouteKeys = {
   NavigatorTest04: 'NavigatorTest04',
   NavigatorTest05: 'NavigatorTest05',
   NavigatorTest06: 'NavigatorTest06',
+  NavigatorTest07: 'NavigatorTest07',
 
   NavigatorDemo01: 'NavigatorDemo01',
   NavigatorDemo02: 'NavigatorDemo02',
@@ -74,8 +76,12 @@ const RouteItems = [{
   )
 }, {
   routeKey: RouteKeys.NavigatorTest06,
-  title: 'Route Header Test',
-  desc: `Tester for a route with a 'RouteHeaderView' component.`
+  title: 'Route Header Test #1',
+  desc: `Tester for a route with a 'RouteHeaderView' that expands`
+}, {
+  routeKey: RouteKeys.NavigatorTest07,
+  title: 'Route Header Test #2',
+  desc: `Tester for a route with a 'RouteHeaderView' that's fixed.`
 }, { 
   routeKey: RouteKeys.NavigatorDemo01,
   title: 'Navigator Nested Layout',
@@ -239,6 +245,11 @@ export default function App() {
         routeKey: RouteKeys.NavigatorTest06,
         renderRoute: () => (
           <NavigatorTest06/>
+        ),
+      }, {
+        routeKey: RouteKeys.NavigatorTest07,
+        renderRoute: () => (
+          <NavigatorTest07/>
         ),
       }, {
         routeKey: RouteKeys.NavigatorDemo01,
