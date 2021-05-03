@@ -68,6 +68,20 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
     self.navigationController?.topViewController == self
   };
   
+  var safeAreaInsets: UIEdgeInsets {
+    if #available(iOS 11.0, *) {
+      return self.view.safeAreaInsets;
+      
+    } else {
+      return UIEdgeInsets(
+        top: self.topLayoutGuide.length,
+        left: 0,
+        bottom: self.bottomLayoutGuide.length,
+        right: 0
+      );
+    };
+  };
+  
   // --------------------------------
   // MARK:- View Controller Lifecycle
   // --------------------------------

@@ -362,6 +362,14 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       self.navigationController?.delegate = self;
       self.interactionController = LeftEdgeInteractionController(viewController: self);
     };
+    
+    #if DEBUG
+    NotificationCenter.default.addObserver(self,
+      selector: #selector(self.onRCTBridgeFastRefreshNotification),
+      name: NSNotification.Name(rawValue: "RCTBridgeFastRefreshNotification"),
+      object: nil
+    );
+    #endif
   };
   
   override func viewWillLayoutSubviews() {
@@ -470,6 +478,14 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       // TODO: View controller was moved, possibly due replacing a route?
     };
   };
+  
+  #if DEBUG
+  @objc func onRCTBridgeFastRefreshNotification(notification: NSNotification) {
+    
+    // TODO: Fix Bug - When refreshing, the scrollview's insets are wrong
+    print("LOG - RNINavigatorReactRouteViewController, onRCTBridgeFastRefreshNotification");
+  };
+  #endif
   
   // --------------------------
   // MARK:- Internal  Functions
