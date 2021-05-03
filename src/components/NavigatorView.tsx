@@ -113,7 +113,6 @@ export type NavigatorViewProps = Partial<Pick<RNINavigatorViewProps,
 /** `NavigatorView` comp. state */
 type NavigatorViewState = {
   activeRoutes: Array<NavRouteStateItem>;
-  navBarAppearanceOverride?: NavBarAppearanceCombinedConfig;
   transitionConfigPushOverride?: RouteTransitionPushConfig;
   transitionConfigPopOverride ?: RouteTransitionPopConfig;
 };
@@ -164,7 +163,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
     this.state = {
       activeRoutes: this.getInitialRoutes(),
-      navBarAppearanceOverride: null,
       transitionConfigPushOverride: null,
       transitionConfigPopOverride: null,
     };
@@ -456,13 +454,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   //#region - Public Functions
   public getActiveRoutes = () => {
     return this.state.activeRoutes;
-  };
-
-  // TODO: rename to `setNavBarAppearanceOverride` or remove completely
-  public setNavBarAppearance = async (appearance?: NavBarAppearanceCombinedConfig) => {
-    await Helpers.setStateAsync<Partial<NavigatorViewState>>(this, {
-      navBarAppearanceOverride: appearance
-    });
   };
 
   // Navigation Commands
@@ -1364,10 +1355,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         // Navigation Bar customization
         isNavBarTranslucent={props.isNavBarTranslucent ?? true}
         navBarPrefersLargeTitles={props.navBarPrefersLargeTitles ?? true}
-        navBarAppearance={
-          state.navBarAppearanceOverride ?? 
-          props.navBarAppearance
-        }
+        navBarAppearance={props.navBarAppearance}
         // event handlers: push/pop
         onNavRouteWillPop={this._handleOnNavRouteWillPop}
         onNavRouteDidPop={this._handleOnNavRouteDidPop}
