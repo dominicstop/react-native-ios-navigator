@@ -50,11 +50,14 @@ RCT_EXPORT_VIEW_PROPERTY(navBarButtonBackItemConfig  , NSDictionary);
 RCT_EXPORT_VIEW_PROPERTY(navBarButtonLeftItemsConfig , NSArray);
 RCT_EXPORT_VIEW_PROPERTY(navBarButtonRightItemsConfig, NSArray);
 
+
 // MARK: Props - Navbar back button item config
+RCT_EXPORT_VIEW_PROPERTY(hidesBackButton, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(leftItemsSupplementBackButton, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(backButtonTitle, NSString);
 RCT_EXPORT_VIEW_PROPERTY(backButtonDisplayMode, NSString);
-RCT_EXPORT_VIEW_PROPERTY(hidesBackButton, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(applyBackButtonConfigToCurrentRoute, BOOL);
+
 
 // MARK: Props - NavigationConfigOverride-related
 RCT_EXPORT_VIEW_PROPERTY(navBarAppearanceOverride, NSDictionary);

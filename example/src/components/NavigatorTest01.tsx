@@ -935,13 +935,13 @@ function NavBarBackItemsConfig(props: any){
         }}
       />
       <SwitchRow
-        title={`applyToPrevBackConfig`}
-        value={props.parentState.applyToPrevBackConfig}
+        title={`applyBackButtonConfigToCurrentRoute`}
+        value={props.parentState.applyBackButtonConfigToCurrentRoute}
         // @ts-ignore
         onValueChange={value => {
           const parentRef = props.getParentRef();
           parentRef.setState({
-            applyToPrevBackConfig: value,
+            applyBackButtonConfigToCurrentRoute: value,
           });
         }}
       />
@@ -1300,7 +1300,7 @@ export class NavigatorTest01 extends React.Component<RouteContentProps> {
     // @ts-ignore
     backButtonTitle: null,
     backButtonDisplayModeIndex: 0,
-    applyToPrevBackConfig: false,
+    applyBackButtonConfigToCurrentRoute: false,
 
     renderNavBarTitleItem: false,
   };
@@ -1353,18 +1353,15 @@ export class NavigatorTest01 extends React.Component<RouteContentProps> {
               navBarItemsConfigs.length
             ].config,
 
-            navBarButtonBackItemConfig: {
-              applyToPrevBackConfig: state.applyToPrevBackConfig,
-              ...(
-                backButtonItemConfigs[
-                  state.backButtonItemsConfigIndex %
-                  backButtonItemConfigs.length
-                ].config
-              ),
-            },
+            navBarButtonBackItemConfig: backButtonItemConfigs[
+              state.backButtonItemsConfigIndex %
+              backButtonItemConfigs.length
+            ].config,
 
             leftItemsSupplementBackButton: state.leftItemsSupplementBackButton,
             hidesBackButton: state.hidesBackButton,
+
+            applyBackButtonConfigToCurrentRoute: state.applyBackButtonConfigToCurrentRoute,
 
             // @ts-ignore
             backButtonDisplayMode: backButtonDisplayModes[

@@ -250,6 +250,10 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
         routeOptions       ?.hidesBackButton ??
         routeOptionsDefault?.hidesBackButton
       ),
+      applyBackButtonConfigToCurrentRoute: (
+        routeOptions       ?.applyBackButtonConfigToCurrentRoute ??
+        routeOptionsDefault?.applyBackButtonConfigToCurrentRoute
+      ),
       // #endregion
     };
   };

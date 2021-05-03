@@ -178,10 +178,12 @@ export class CompareNavBarItemConfig {
 export class CompareNavBarButtonBackItemConfig {
   static propertyMap: ComparisonConfig<NavBarBackItemConfig> = {
     ...CompareNavBarItemConfig.propertyMap,
-    applyToPrevBackConfig: { mode: 'shallow' },
   };
 
   static compare(oldItem?: NavBarBackItemConfig, newItem?: NavBarBackItemConfig){
+    if(HelperUtilities.isBothNull(oldItem, newItem)) return true;
+    if(!HelperUtilities.compareItemsNull(oldItem, newItem)) return false;
+
     return (
       // @ts-ignore
       // compare `SupportedImageTypes`
@@ -350,14 +352,15 @@ export class CompareNavBarAppearanceCombinedConfig {
 export class CompareRouteOptions {
   static propertyMap: ComparisonConfig<RouteOptions> = {
     // shallow compare 
-    routeTitle                   : { mode: 'shallow' },
-    prompt                       : { mode: 'shallow' },
-    largeTitleDisplayMode        : { mode: 'shallow' },
-    hidesBackButton              : { mode: 'shallow' },
-    backButtonTitle              : { mode: 'shallow' },
-    backButtonDisplayMode        : { mode: 'shallow' },
-    leftItemsSupplementBackButton: { mode: 'shallow' },
-    navigationBarVisibility      : { mode: 'shallow' },
+    routeTitle                         : { mode: 'shallow' },
+    prompt                             : { mode: 'shallow' },
+    largeTitleDisplayMode              : { mode: 'shallow' },
+    hidesBackButton                    : { mode: 'shallow' },
+    backButtonTitle                    : { mode: 'shallow' },
+    backButtonDisplayMode              : { mode: 'shallow' },
+    leftItemsSupplementBackButton      : { mode: 'shallow' },
+    navigationBarVisibility            : { mode: 'shallow' },
+    applyBackButtonConfigToCurrentRoute: { mode: 'shallow' },
 
     // custom compare
     navBarAppearanceOverride: {

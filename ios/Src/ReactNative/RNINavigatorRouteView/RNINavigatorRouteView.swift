@@ -58,21 +58,6 @@ internal class RNINavigatorRouteView: UIView {
   
   private(set) var didTriggerCleanup = false;
   
-  var applyToPrevBackConfig = false {
-    didSet {
-      guard self.applyToPrevBackConfig != oldValue,
-            let prevRouteVC = self.navigatorView?.getSecondToLastRouteVC()
-      else { return };
-      
-      prevRouteVC.shouldResetNavBarBackConfig = self.applyToPrevBackConfig;
-      
-      // was prev. set to true, and is now false
-      if oldValue && !self.applyToPrevBackConfig  {
-        prevRouteVC.resetRouteNavBarBackConfig();
-      };
-    }
-  };
-  
   // ------------------------------
   // MARK:- RN Exported Event Props
   // ------------------------------
@@ -239,19 +224,11 @@ internal class RNINavigatorRouteView: UIView {
         return RNINavBarItemConfig(dictionary: dict);
       }();
       
-      // extract `applyToPrevBackConfig` from back item config,
-      // note: this property only exists for `navBarButtonBackItemConfig`
-      let applyToPrevBackConfig: Bool = {
-        guard let dict = self.navBarButtonBackItemConfig,
-              let flag = dict["applyToPrevBackConfig"] as? Bool
-        else { return false };
-        
-        self.applyToPrevBackConfig = flag;
-        return flag;
-      }();
-      
       self._navBarButtonBackItemConfig = configItem;
-      delegate?.didReceiveNavBarButtonBackItem(self.backBarButtonItem, applyToPrevBackConfig);
+      delegate?.didReceiveNavBarButtonBackItem(
+        self.backBarButtonItem,
+        self.applyBackButtonConfigToCurrentRoute
+      );
     }
   };
   
@@ -309,7 +286,7 @@ internal class RNINavigatorRouteView: UIView {
   /// * NavBar back button specific props for config. the VC's `navigationItem`
   ///   NavBar "back button item" related properties.
   /// -------------------------------------------------------------------------
-
+  
   @objc var leftItemsSupplementBackButton: Bool = true {
     didSet {
       guard self.leftItemsSupplementBackButton != oldValue
@@ -321,12 +298,51 @@ internal class RNINavigatorRouteView: UIView {
     }
   };
   
+  @objc var applyBackButtonConfigToCurrentRoute = false {
+    didSet {
+      guard self.applyBackButtonConfigToCurrentRoute != oldValue,
+            let prevRouteVC = self.navigatorView?.getSecondToLastRouteVC()
+      else { return };
+      
+      #if DEBUG
+      print("LOG - RNINavigatorRouteView, didSet"
+        + " - applyBackButtonConfigToCurrentRoute: \(self.applyBackButtonConfigToCurrentRoute)"
+        + " - oldValue: \(oldValue)"
+      );
+      #endif
+      
+      if oldValue && !self.applyBackButtonConfigToCurrentRoute {
+        // was prev. set to true, and is now false, so reset
+        prevRouteVC.resetRouteNavBarBackConfig();
+        
+      } else if self.applyBackButtonConfigToCurrentRoute {
+        // was enabled, so apply current config
+        prevRouteVC.shouldResetNavBarBackConfig = true;
+        
+        delegate?.didReceiveNavBarButtonBackItem(
+          self.backBarButtonItem,
+          self.applyBackButtonConfigToCurrentRoute
+        );
+        
+        delegate?.didReceiveBackButtonTitle(
+          self.backButtonTitle as String?,
+          self.applyBackButtonConfigToCurrentRoute
+        );
+        
+        delegate?.didReceiveBackButtonDisplayMode(
+          self._backButtonDisplayMode,
+          self.applyBackButtonConfigToCurrentRoute
+        );
+      };
+    }
+  };
+  
   @objc var backButtonTitle: NSString? {
     didSet {
       guard self.backButtonTitle != oldValue else { return };
       delegate?.didReceiveBackButtonTitle(
         self.backButtonTitle as String?,
-        self.applyToPrevBackConfig
+        self.applyBackButtonConfigToCurrentRoute
       );
     }
   };
@@ -347,7 +363,7 @@ internal class RNINavigatorRouteView: UIView {
       self._backButtonDisplayMode = displayMode;
       delegate?.didReceiveBackButtonDisplayMode(
         displayMode,
-        self.applyToPrevBackConfig
+        self.applyBackButtonConfigToCurrentRoute
       );
     }
   };
@@ -601,7 +617,7 @@ private extension RNINavigatorRouteView {
     // set nav bar back item
     delegate.didReceiveNavBarButtonBackItem(
       self.backBarButtonItem,
-      self.applyToPrevBackConfig
+      self.applyBackButtonConfigToCurrentRoute
     );
     
     // set nav bar left item
@@ -623,13 +639,13 @@ private extension RNINavigatorRouteView {
     // init `navigationItem` property from `backButtonTitle` prop
     delegate.didReceiveBackButtonTitle(
       self.backButtonTitle as String?,
-      self.applyToPrevBackConfig
+      self.applyBackButtonConfigToCurrentRoute
     );
     
     // init `navigationItem` property from `backButtonDisplayMode` prop
     delegate.didReceiveBackButtonDisplayMode(
       self._backButtonDisplayMode,
-      self.applyToPrevBackConfig
+      self.applyBackButtonConfigToCurrentRoute
     );
     
     // init `navigationItem` property from `hidesBackButton` prop

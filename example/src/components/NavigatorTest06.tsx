@@ -11,11 +11,11 @@ export function NavigatorTest06(){
       <RouteViewPortal
         routeOptions={{
           largeTitleDisplayMode: 'never',
+          applyBackButtonConfigToCurrentRoute: true,
           navBarButtonBackItemConfig: {
             type: 'TEXT',
             title: '',
             tintColor: 'white',
-            applyToPrevBackConfig: true,
           },
           navBarAppearanceOverride: {
             mode: 'legacy',

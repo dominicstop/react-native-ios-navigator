@@ -102,16 +102,9 @@ export type RNINavigatorRouteViewProps = {
   backButtonTitle?: string;
   backButtonDisplayMode?: BackButtonDisplayMode;
   leftItemsSupplementBackButton?: boolean;
-
+  applyBackButtonConfigToCurrentRoute?: boolean;
+  
   // `NavigationConfigOverride`-related
-  /**
-   * note: If you are using the iOS 13+ appearance API (i.e. 'appearance' mode), then it will use
-   * the appearance-related properties from `UINavigationItem` (e.g. 'standardAppearance', etc.)
-   * to override the current navigation bar customizations Otherwise, if `legacy` mode is used,
-   * then it will override the current navigation bar customizations via temp. changing the 
-   * navigation bar properties when a route is focused, and resetting it back to it's prev. values
-   * it's blurred.
-   */
   navBarAppearanceOverride?: NavBarAppearanceCombinedConfig;
   navigationBarVisibility?: NavigationBarVisibilityMode;
 
