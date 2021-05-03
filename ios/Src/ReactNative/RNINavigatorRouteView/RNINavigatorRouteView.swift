@@ -8,7 +8,7 @@
 import UIKit;
 
 
-internal class RNINavigatorRouteView: UIView, RCTInvalidating {
+internal class RNINavigatorRouteView: UIView {
   
   // ---------------------
   // MARK:- Embedded Types
@@ -497,14 +497,6 @@ internal class RNINavigatorRouteView: UIView, RCTInvalidating {
         self.reactRouteHeader = wrapperView as? RNINavigatorRouteHeaderView;
     };
   };
-  
-  func invalidate() {
-    #if DEBUG
-    print("LOG - RNINavigatorRouteView: invalidate");
-    #endif
-    
-    self.cleanup(isInvalidating: true);
-  };
 };
 
 // ------------------------------------
@@ -714,22 +706,19 @@ internal extension RNINavigatorRouteView {
     
   /// Once we're done w/ this "route view" (e.g. it has been popped or removed),
   /// then we need to cleanup to prevent this instance from leaking.
-  func cleanup(isInvalidating: Bool = false){
+  func cleanup(){
     guard !self.didTriggerCleanup else { return };
     self.didTriggerCleanup = true;
     
     // "react views" to be removed
-    var viewsToRemove = [
+    let viewsToRemove = [
       self.reactRouteContent   ,
       self.reactRouteHeader    ,
       self.reactNavBarLeftItem ,
       self.reactNavBarRightItem,
       self.reactNavBarTitleItem,
+      self,
     ];
-    
-    if !isInvalidating {
-      viewsToRemove.append(self);
-    };
     
     // detach `RCTToucHandler` from react view
     if let routeContent = self.reactRouteContent {

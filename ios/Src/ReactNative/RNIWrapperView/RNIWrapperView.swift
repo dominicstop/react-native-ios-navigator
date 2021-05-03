@@ -80,14 +80,6 @@ internal class RNIWrapperView: UIView {
     };
   };
   
-  func invalidate() {
-    #if DEBUG
-    print("LOG - RNIWrapperView: invalidate");
-    #endif
-    
-    self.cleanup(isInvalidating: true);
-  };
-  
   // -------------------------
   // MARK:- Internal Functions
   // -------------------------
@@ -116,16 +108,13 @@ internal class RNIWrapperView: UIView {
     );
   };
   
-  func cleanup(isInvalidating: Bool = false){
+  func cleanup(){
     guard !self.didTriggerCleanup else { return };
+    self.didTriggerCleanup = true;
     
-    if !isInvalidating {
-      self.didTriggerCleanup = true;
+    if self.isWrapperView {
+      self.touchHandler.detach(from: self.reactContent);
     };
-    
-    self.touchHandler.detach(
-      from: self.isWrapperView ? self.reactContent : self
-    );
     
     RNIUtilities.recursivelyRemoveFromViewRegistry(
       bridge: self.bridge,
