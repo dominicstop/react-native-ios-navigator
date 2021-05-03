@@ -94,6 +94,10 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
   /// Ref. to the parent react route vc
   weak var routeViewController: RNINavigatorReactRouteViewController?;
   
+  var wrapperView: RNINavigatorReactRouteViewController.RouteContentWrapper? {
+    self.routeViewController?.wrapperView
+  };
+  
   var headerHeightConstraint: NSLayoutConstraint!;
   
   // ------------------------
@@ -140,38 +144,47 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
   // MARK:- Internal Functions
   // -------------------------
   
-  func setup(
-    rootView: UIView,
-    wrapperView: RNINavigatorReactRouteViewController.RouteContentWrapper
-  ){
-    guard self.headerConfig.headerMode == .resize,
-          let routeVC = self.routeViewController,
-          let headerHeightMax = self.headerConfig
-            .headerHeightMax?.getHeight(viewController: routeVC)
+  func setup(rootView: UIView) {
+    guard let routeVC = self.routeViewController,
+          let wrapperView = self.wrapperView
     else { return };
     
-    switch wrapperView {
-      case let .reactScrollView(view: reactScrollView):
+    switch self.headerConfig.headerMode {
+      case .fixed:
+        guard let headerHeightMode = self.headerConfig.headerHeight else { break };
+        let headerHeight = headerHeightMode.getHeight(viewController: routeVC);
+
+        self.setWrapperViewInsets(headerHeight: headerHeight);
+        
+        // insert the header into the route view
+        rootView.addSubview(self);
+        self.translatesAutoresizingMaskIntoConstraints = false;
+        
+        NSLayoutConstraint.activate([
+          self.heightAnchor  .constraint(equalToConstant: headerHeight   ),
+          self.leadingAnchor .constraint(equalTo: rootView.leadingAnchor ),
+          self.trailingAnchor.constraint(equalTo: rootView.trailingAnchor),
+          self.topAnchor     .constraint(equalTo: rootView.topAnchor     ),
+        ]);
+        
+        let navigationBarFrame = routeVC.navigationController!.navigationBar.frame;
+        self.notifyForBoundsChange(
+          CGRect(
+            origin: self.frame.origin,
+            size: CGSize(width: navigationBarFrame.width, height: headerHeight)
+          )
+        );
+        
+      case .resize:
+        guard case let .reactScrollView(reactScrollView) = wrapperView,
+              let scrollView = reactScrollView.scrollView,
+              let headerHeightMaxMode = self.headerConfig.headerHeightMax
+        else { break };
+        
         reactScrollView.addScrollListener(self);
-        guard let scrollView = reactScrollView.scrollView else { break };
         
-        
-        reactScrollView.automaticallyAdjustContentInsets = false;
-        
-        if #available(iOS 11.0, *) {
-          reactScrollView.insetsLayoutMarginsFromSafeArea = false;
-          scrollView.contentInsetAdjustmentBehavior = .never;
-        };
-        
-        if #available(iOS 13.0, *) {
-          scrollView.automaticallyAdjustsScrollIndicatorInsets = false;
-        };
-        
-        let headerInset = UIEdgeInsets(top: headerHeightMax, left: 0, bottom: 0, right: 0);
-        reactScrollView.contentInset = headerInset;
-        
-        scrollView.scrollIndicatorInsets = headerInset;
-        scrollView.contentOffset = CGPoint(x: 0, y: -headerHeightMax);
+        let headerHeightMax = headerHeightMaxMode.getHeight(viewController: routeVC);
+        self.setWrapperViewInsets(headerHeight: headerHeightMax);
         
         // insert the header into the route view
         rootView.addSubview(self);
@@ -204,10 +217,6 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
             size: CGSize(width: navigationBarFrame.width, height: headerHeightMax)
           )
         );
-        
-        self.setSafeAreaInsets();
-        
-      default: break;
     };
   };
 
@@ -224,6 +233,43 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
     };
     
     self.bridge.uiManager.setLocalData(localData, for: self);
+  };
+  
+  func setWrapperViewInsets(headerHeight: CGFloat){
+    guard let routeVC = self.routeViewController else { return };
+    
+    switch self.wrapperView  {
+      case let .reactScrollView(reactScrollView):
+        guard let scrollView = reactScrollView.scrollView else { break };
+        
+        if #available(iOS 11.0, *) {
+          reactScrollView.insetsLayoutMarginsFromSafeArea = false;
+          scrollView.contentInsetAdjustmentBehavior = .never;
+        };
+        
+        if #available(iOS 13.0, *) {
+          scrollView.automaticallyAdjustsScrollIndicatorInsets = false;
+        };
+        
+        reactScrollView.automaticallyAdjustContentInsets = false;
+        
+        let headerInset = UIEdgeInsets(top: headerHeight, left: 0, bottom: 0, right: 0);
+        reactScrollView.contentInset = headerInset;
+        
+        scrollView.scrollIndicatorInsets = headerInset;
+        scrollView.contentOffset = CGPoint(x: 0, y: -headerHeight);
+        
+        self.setSafeAreaInsets();
+        
+      default:
+        if #available(iOS 11.0, *) {
+          let navBarHeight = routeVC.navBarWithStatusBarHeight;
+          let topInset = headerHeight - navBarHeight;
+          
+          routeVC.additionalSafeAreaInsets =
+            UIEdgeInsets(top: topInset, left: 0, bottom: 0, right: 0)
+        };
+    }
   };
 };
 

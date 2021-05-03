@@ -343,10 +343,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     if let headerView = self.routeView.reactRouteHeader {
       headerView.routeViewController = self;
       
-      headerView.setup(
-        rootView: rootView,
-        wrapperView: self.wrapperView
-      );
+      headerView.setup(rootView: rootView);
     };
     
     #if DEBUG

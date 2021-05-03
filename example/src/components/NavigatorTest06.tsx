@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { StyleSheet, View, Text, FlatList, TouchableOpacity, Image, Alert, ScrollView } from 'react-native';
-import { NavigatorView, RouteContentProps, RouteHeaderView, RouteViewPortal } from 'react-native-ios-navigator';
+import { StyleSheet, View, Text, Image, ScrollView } from 'react-native';
+import { RouteHeaderView, RouteViewPortal } from 'react-native-ios-navigator';
 
 const AssetImageCoffee = require('../../assets/images/unsplash_coffee.jpg');
 
