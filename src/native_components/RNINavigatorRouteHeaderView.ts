@@ -2,9 +2,9 @@ import { ViewStyle, requireNativeComponent } from 'react-native';
 
 export type HeaderHeightValue = 
   | number 
-  | 'navigationBarHeight'
   | 'navigationBar'
   | 'statusBar'
+  | 'navigationBarWithStatusBar'
   | 'safeArea'
   | 'none';
 
@@ -22,6 +22,7 @@ export type RNINavigatorRouteHeaderViewProps = {
   style: ViewStyle;
   nativeID: string;
   config?: RouteHeaderConfig;
+  headerTopPadding?: HeaderHeightValue;
 };
 
 export const RNINavigatorRouteHeaderView = 

@@ -22,10 +22,10 @@ extension UIViewController {
       let window = self.view.window
         ?? UIApplication.shared.windows.filter { $0.isKeyWindow }.first;
       
-      return window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0;
+      return window?.windowScene?.statusBarManager?.statusBarFrame.size.height ?? 0;
     };
     
-    return UIApplication.shared.statusBarFrame.height;
+    return UIApplication.shared.statusBarFrame.size.height;
   };
   
   var navBarWithStatusBarHeight: CGFloat {

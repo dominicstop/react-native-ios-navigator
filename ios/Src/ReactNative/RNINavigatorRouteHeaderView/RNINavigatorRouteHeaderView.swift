@@ -7,15 +7,17 @@
 
 import Foundation
 
+
 internal class RNINavigatorRouteHeaderView: RNIWrapperView {
   
   // ---------------------
   // MARK:- Embedded Types
   // ---------------------
   
-  enum HeaderHeight {
+  enum HeaderHeight: Equatable {
     case navigationBar;
     case statusBar;
+    case navigationBarWithStatusBar;
     case safeArea;
     case none;
     
@@ -25,22 +27,37 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
       switch self {
         case let .custom(height): return height;
           
-        case .navigationBar: return viewController.navBarHeight;
-        case .statusBar    : return viewController.statusBarHeight;
-        case .safeArea     : return viewController.synthesizedSafeAreaInsets.top;
-        case .none         : return 0;
+        case .navigationBar             : return viewController.navBarHeight;
+        case .statusBar                 : return viewController.statusBarHeight;
+        case .safeArea                  : return viewController.synthesizedSafeAreaInsets.top;
+        case .navigationBarWithStatusBar: return viewController.navBarWithStatusBarHeight;
+        case .none                      : return 0;
       };
     };
     
-    static func fromString(string: String) -> HeaderHeight? {
+    static func fromString(_ string: String) -> HeaderHeight? {
       switch string {
-        case "navigationBar": return .navigationBar;
-        case "statusBar"    : return .navigationBar;
-        case "safeArea"     : return .safeArea;
-        case "none"         : return .navigationBar;
+        case "navigationBar"             : return .navigationBar;
+        case "statusBar"                 : return .statusBar;
+        case "safeArea"                  : return .safeArea;
+        case "navigationBarWithStatusBar": return .navigationBarWithStatusBar;
+        case "none"                      : return HeaderHeight.none;
         
         default: return nil;
       }
+    };
+    
+    static func fromAnyObject(_ value: Any) -> HeaderHeight? {
+      if let string = value as? String,
+         let mode   = Self.fromString(string) {
+        
+        return mode;
+        
+      } else if let number = value as? NSNumber {
+        return .custom(height: CGFloat(truncating: number));
+      };
+      
+      return nil;
     };
   };
   
@@ -89,20 +106,12 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
       key: String,
       default: HeaderHeight? = nil
     ) -> HeaderHeight? {
-      guard let dict = dict,
-            let value = dict["headerHeight"]
-      else { return `default` ?? .safeArea };
-      
-      if let string = value as? String,
-         let mode   = HeaderHeight.fromString(string: string) {
-        
-        return mode;
-        
-      } else if let number = value as? NSNumber {
-        return .custom(height: CGFloat(truncating: number));
+      guard let value = dict?[key] else {
+        return `default` ?? .safeArea;
       };
       
-      return `default` ?? .safeArea;
+      return HeaderHeight.fromAnyObject(value)
+        ?? `default` ?? .safeArea;
     };
   };
   
@@ -137,9 +146,27 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
     }
   };
   
-  @objc var applySafeAreaTopPadding = true {
-    didSet {
-      self.setSafeAreaInsets();
+  var _headerTopPadding: HeaderHeight = .safeArea;
+  @objc var headerTopPadding: NSString? {
+    willSet {
+      guard self.headerTopPadding != newValue else { return };
+      
+      self._headerTopPadding = {
+        guard let string = newValue as String?,
+              let height = HeaderHeight.fromString(string)
+        else { return .statusBar };
+        
+        return height;
+      }();
+      
+      #if DEBUG
+      print("LOG - RNINavigatorRouteHeaderView: didSet"
+        + " - headerTopPadding: \(self._headerTopPadding)"
+        + " - newValue: \(newValue ?? "N/A")"
+      );
+      #endif
+      
+      self.refreshHeaderTopPadding();
     }
   };
   
@@ -168,6 +195,7 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
           let wrapperView = self.wrapperView
     else { return };
     
+    self.refreshHeaderTopPadding();
     switch self.headerConfig.headerMode {
       case .fixed:
         guard let headerHeightMode = self.headerConfig.headerHeight else { break };
@@ -239,17 +267,22 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
     };
   };
 
-  func setSafeAreaInsets(){
-    guard self.window != nil && !self.didTriggerCleanup,
+  func refreshHeaderTopPadding(){
+    guard !self.didTriggerCleanup,
           let routeVC = self.routeViewController
     else { return };
     
-    let statusBarHeight = routeVC.statusBarHeight;
-
+    let height = self._headerTopPadding.getHeight(viewController: routeVC);
+    
     let localData = RNINavigatorRouteHeaderShadowView.RouteHeaderLocalData();
-    if self.applySafeAreaTopPadding {
-      localData.insets = UIEdgeInsets(top: statusBarHeight, left: 0, bottom: 0, right: 0);
-    };
+    localData.insets = UIEdgeInsets(top: height, left: 0, bottom: 0, right: 0);
+    
+    #if DEBUG
+    print("LOG - RNINavigatorRouteHeaderView: refreshHeaderTopPadding"
+      + " - headerTopPadding: \(self._headerTopPadding)"
+      + " - height: \(height)"
+    );
+    #endif
     
     self.bridge.uiManager.setLocalData(localData, for: self);
   };
@@ -277,8 +310,6 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
         
         scrollView.scrollIndicatorInsets = headerInset;
         scrollView.contentOffset = CGPoint(x: 0, y: -headerHeight);
-        
-        self.setSafeAreaInsets();
         
       default:
         if #available(iOS 11.0, *) {

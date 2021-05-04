@@ -7,16 +7,20 @@ export type RouteHeaderViewProps = Partial<Pick<RNINavigatorRouteHeaderViewProps
   // mirror props from `NavigatorRouteViewProps`
   | 'config'
   | 'style'
+  | 'headerTopPadding'
 >>;
 
 export class RouteHeaderView extends React.PureComponent<RouteHeaderViewProps> {
   render(){
     const props = this.props;
+    console.log('headerTopPadding: ', props.headerTopPadding);
+    
 
     return (
       <RNINavigatorRouteHeaderView
         nativeID={NativeIDKeys.RouteHeader}
         config={props.config}
+        headerTopPadding={props.headerTopPadding}
         style={{
           position: 'absolute', 
           ...props.style

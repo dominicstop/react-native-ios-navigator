@@ -119,7 +119,7 @@ type NavigatorViewState = {
 //#endregion
 
 const TIMEOUT_MOUNT   = 750;
-const TIMEOUT_COMMAND = 1000;
+const TIMEOUT_COMMAND = 1500;
 
 let NAVIGATOR_ID_COUNTER = 0;
 let ROUTE_ID_COUNTER     = 0;

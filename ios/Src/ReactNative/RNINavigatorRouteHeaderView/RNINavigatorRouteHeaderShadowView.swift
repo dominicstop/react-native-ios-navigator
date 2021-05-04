@@ -24,7 +24,6 @@ class RNINavigatorRouteHeaderShadowView: RCTShadowView {
       return;
     };
     
-    
     self.overrideTopPadding = true;
     super.paddingTop = YGValue(value: Float(insets.top), unit: .point);
     self.didSetProps(["paddingTop"]);
