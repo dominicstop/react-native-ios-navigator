@@ -13,21 +13,30 @@ import type { NavBarAppearanceCombinedConfig } from "./NavBarAppearanceConfig";
 // ------------------------------------------
 
 export type RouteOptions = {
+
   // Transition Config
+  // -----------------
+
   transitionConfigPush?: RouteTransitionPushConfig;
   transitionConfigPop ?: RouteTransitionPopConfig;
   
   // Navbar Config
+  // -------------
+
   routeTitle?: string;
   prompt    ?: string;
   largeTitleDisplayMode?: LargeTitleDisplayMode;
 
   // Navbar item config
+  // ------------------
+
   navBarButtonBackItemConfig  ?: NavBarBackItemConfig;
   navBarButtonLeftItemsConfig ?: NavBarItemsConfig;
   navBarButtonRightItemsConfig?: NavBarItemsConfig;
 
   // Navbar back button item config
+  // ------------------------------
+
   backButtonTitle              ?: string;
   hidesBackButton              ?: boolean;
   backButtonDisplayMode        ?: BackButtonDisplayMode;
@@ -48,8 +57,10 @@ export type RouteOptions = {
   applyBackButtonConfigToCurrentRoute?: boolean;
 
   // NavigationConfigOverride-related
+  // --------------------------------
+  
   /**
-   * If you are using the iOS 13+ appearance API (i.e.  `mode: 'appearance'`), then it will use
+   * If you are using the iOS 13+ appearance API (i.e. `mode: 'appearance'`), then it will use
    * the appearance-related properties from `UINavigationItem` (e.g. `standardAppearance`, etc.)
    * to override the current navigation bar customizations. 
    * 

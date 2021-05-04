@@ -46,7 +46,7 @@ enum NavStatus {
   NAV_INSERTING  = "NAV_INSERTING" , // nav. is busy inserting a route
   NAV_UPDATING   = "NAV_UPDATING"  , // nav. is busy updating the routes
   UNMOUNTED      = "UNMOUNTED"     , // nav. comp. has been unmounted
-  NAV_ABORT = "NAV_ABORT_PUSH", // nav. has been popped before push completed
+  NAV_ABORT      = "NAV_ABORT"     , // nav. has been popped before push completed
 };
 
 enum NavEvents {
