@@ -13,21 +13,38 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
   // MARK:- Embedded Types
   // ---------------------
   
-  struct RouteHeaderConfig {
-    enum HeaderHeight {
-      case navigationBar;
-      case custom(height: CGFloat);
-      
-      func getHeight(viewController: UIViewController) -> CGFloat {
-        switch self {
-          case let .custom(height):
-            return height;
-            
-          case .navigationBar:
-            return viewController.navBarWithStatusBarHeight;
-        };
+  enum HeaderHeight {
+    case navigationBar;
+    case statusBar;
+    case safeArea;
+    case none;
+    
+    case custom(height: CGFloat);
+    
+    func getHeight(viewController: UIViewController) -> CGFloat {
+      switch self {
+        case let .custom(height): return height;
+          
+        case .navigationBar: return viewController.navBarHeight;
+        case .statusBar    : return viewController.statusBarHeight;
+        case .safeArea     : return viewController.synthesizedSafeAreaInsets.top;
+        case .none         : return 0;
       };
     };
+    
+    static func fromString(string: String) -> HeaderHeight? {
+      switch string {
+        case "navigationBar": return .navigationBar;
+        case "statusBar"    : return .navigationBar;
+        case "safeArea"     : return .safeArea;
+        case "none"         : return .navigationBar;
+        
+        default: return nil;
+      }
+    };
+  };
+  
+  struct RouteHeaderConfig {
     
     enum HeaderMode: String {
       case fixed;
@@ -74,16 +91,18 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
     ) -> HeaderHeight? {
       guard let dict = dict,
             let value = dict["headerHeight"]
-      else { return `default` ?? .navigationBar };
+      else { return `default` ?? .safeArea };
       
-      if let string = value as? String, string == "navigationBar" {
-        return .navigationBar;
+      if let string = value as? String,
+         let mode   = HeaderHeight.fromString(string: string) {
+        
+        return mode;
         
       } else if let number = value as? NSNumber {
         return .custom(height: CGFloat(truncating: number));
       };
       
-      return `default` ?? .navigationBar;
+      return `default` ?? .safeArea;
     };
   };
   

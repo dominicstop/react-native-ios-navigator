@@ -1,7 +1,12 @@
 import { ViewStyle, requireNativeComponent } from 'react-native';
-import type {  } from 'src/types/NavBarAppearanceConfig';
 
-export type HeaderHeightValue = number | 'navigationBarHeight';
+export type HeaderHeightValue = 
+  | number 
+  | 'navigationBarHeight'
+  | 'navigationBar'
+  | 'statusBar'
+  | 'safeArea'
+  | 'none';
 
 export type RouteHeaderConfig = {
   headerMode: 'fixed';

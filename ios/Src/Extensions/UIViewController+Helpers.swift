@@ -8,6 +8,11 @@
 import UIKit
 
 extension UIViewController {
+  
+  var isCurrentlyInFocus: Bool {
+    self.navigationController?.topViewController == self
+  };
+  
   var navBarHeight: CGFloat {
     self.navigationController?.navigationBar.frame.height ?? 0;
   };
@@ -25,5 +30,19 @@ extension UIViewController {
   
   var navBarWithStatusBarHeight: CGFloat {
     self.statusBarHeight + self.navBarHeight;
+  };
+  
+  var synthesizedSafeAreaInsets: UIEdgeInsets {
+    if #available(iOS 11.0, *) {
+      return self.view.safeAreaInsets;
+      
+    } else {
+      return UIEdgeInsets(
+        top: self.topLayoutGuide.length,
+        left: 0,
+        bottom: self.bottomLayoutGuide.length,
+        right: 0
+      );
+    };
   };
 };
