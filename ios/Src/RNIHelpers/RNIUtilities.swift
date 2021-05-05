@@ -110,7 +110,7 @@ internal class RNIUtilities {
     var parentResponder: UIResponder? = responder;
     
     while parentResponder != nil {
-      parentResponder = parentResponder!.next;
+      parentResponder = parentResponder?.next;
       
       if let parent = parentResponder as? T {
         return parent;

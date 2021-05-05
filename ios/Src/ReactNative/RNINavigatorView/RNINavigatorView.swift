@@ -43,6 +43,10 @@ public final class RNINavigatorView: UIView {
   
   public var navigationVC: UINavigationController!;
   
+  /// read by the `UINavigationBar`
+  /// if set to `true`, views behind the navigation bar will receive touch events
+  var allowTouchEventsToPassThroughNavigationBar = false;
+  
   // TODO
   private var nativeCommandRequestCompletionMap: Dictionary<String, Completion> = [:];
   
