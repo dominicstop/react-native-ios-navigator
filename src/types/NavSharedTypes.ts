@@ -3,7 +3,7 @@ import type { ReactElement } from 'react';
 import type { RouteTransitionPopConfig, RouteTransitionPushConfig } from '../native_components/RNINavigatorRouteView';
 import type { NativePushPopOptions } from '../native_modules/RNINavigatorViewModule';
 
-import type { NavigationObject } from './NavTypes';
+import type { NavigationObject } from './NavigationObject';
 import type { RouteOptions } from './RouteOptions';
 
 

@@ -1,8 +1,7 @@
 import React from 'react';
-import type { NavigationObject } from '../types/NavTypes';
 
-import type { NavigatorRouteView, NavigatorRouteViewProps, NavRouteEvents } from '../components/NavigatorRouteView';
-import type { EventEmitter } from '../functions/EventEmitter';
+import type { NavigationObject } from '../types/NavigationObject';
+import type { NavigatorRouteViewProps } from '../components/NavigatorRouteView';
 
 
 export type NavRouteViewContextProps = Pick<NavigatorRouteViewProps,

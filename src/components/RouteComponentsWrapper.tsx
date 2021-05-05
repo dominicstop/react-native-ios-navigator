@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 
 import type { NavigatorRouteViewProps } from './NavigatorRouteView';
 import type { RouteViewPortal } from './RouteViewPortal';
-import type { NavigationObject } from '../types/NavTypes';
+import type { NavigationObject } from '../types/NavigationObject';
 
 import { NativeIDKeys } from '../constants/LibraryConstants';
 import { RNIWrapperView } from '../native_components/RNIWrapperView';

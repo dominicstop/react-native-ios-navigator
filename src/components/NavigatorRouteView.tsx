@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import { StyleSheet, View, ViewStyle, findNodeHandle } from 'react-native';
 
-import type { NavigationObject } from '../types/NavTypes';
+import type { NavigationObject } from '../types/NavigationObject';
 import type { RouteOptions } from '../types/RouteOptions';
 import type { RenderNavBarItem, RenderRouteHeader } from '../types/NavSharedTypes';
 

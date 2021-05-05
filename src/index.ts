@@ -15,5 +15,7 @@ export * from './context/NavRouteViewContext';
 // Types
 export { HeaderHeightValue } from './native_components/RNINavigatorRouteHeaderView';
 
-export * from './types/NavTypes';
+export * from './types/RouteOptions';
+export * from './types/NavigationObject';
+
 export { ImageResolvedAssetSource, ImageRectConfig, ImageGradientConfig, DynamicColor, Offset, ImageTypes, ImageItemConfig } from './types/MiscTypes';
