@@ -12,6 +12,7 @@ import type { NavBarAppearanceCombinedConfig } from "./NavBarAppearanceConfig";
 // Nav-related types that are exported/public
 // ------------------------------------------
 
+// TODO: Cleanup Types - Mirror from source (e.g. RNINavigatorRouteViewProps, etc.)
 export type RouteOptions = {
 
   // Transition Config
@@ -71,7 +72,8 @@ export type RouteOptions = {
    * **note**: Stick to one mode, switching between `appearance` and `legacy` is not supported.
    */
   navBarAppearanceOverride?: NavBarAppearanceCombinedConfig;
-  navigationBarVisibility ?: NavigationBarVisibilityMode;
+  navigationBarVisibility?: NavigationBarVisibilityMode;
+  allowTouchEventsToPassThroughNavigationBar?: boolean;
 };
 
 export type NavigationObject = {

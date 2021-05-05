@@ -107,6 +107,7 @@ export type RNINavigatorRouteViewProps = {
   // `NavigationConfigOverride`-related
   navBarAppearanceOverride?: NavBarAppearanceCombinedConfig;
   navigationBarVisibility?: NavigationBarVisibilityMode;
+  allowTouchEventsToPassThroughNavigationBar: Boolean;
 
   // Native Events: Push
   onRouteWillPush?: onRoutePushEvent;

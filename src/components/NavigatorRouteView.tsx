@@ -202,6 +202,9 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
         routeOptions       ?.largeTitleDisplayMode ??
         routeOptionsDefault?.largeTitleDisplayMode 
       ),
+      // #endregion ----------------------------------*
+      // #region - `NavigationConfigOverride`-related |
+      // ---------------------------------------------*
       navBarAppearanceOverride: (
         routeOptions       ?.navBarAppearanceOverride ??
         routeOptionsDefault?.navBarAppearanceOverride 
@@ -209,6 +212,10 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
       navigationBarVisibility: (
         routeOptions       ?.navigationBarVisibility ??
         routeOptionsDefault?.navigationBarVisibility 
+      ),
+      allowTouchEventsToPassThroughNavigationBar: (
+        routeOptions       ?.allowTouchEventsToPassThroughNavigationBar ??
+        routeOptionsDefault?.allowTouchEventsToPassThroughNavigationBar 
       ),
       // #endregion ------------------*
       // #region - Navbar Item Config |
@@ -477,6 +484,10 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
           onPressNavBarRightItem={this._handleOnPressNavBarRightItem}
           // pass down: navbar item config + back button item config
           {...routeOptions}
+          allowTouchEventsToPassThroughNavigationBar={
+            // required prop - provide default value if absent from `routeOptions`
+            routeOptions.allowTouchEventsToPassThroughNavigationBar ?? false
+          }
         >
           {this._renderRouteContents()}
           <RouteComponentsWrapper

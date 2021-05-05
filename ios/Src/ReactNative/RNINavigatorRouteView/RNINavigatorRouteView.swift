@@ -433,6 +433,16 @@ internal class RNINavigatorRouteView: UIView {
     }
   };
   
+  @objc var allowTouchEventsToPassThroughNavigationBar = false {
+    willSet {
+      guard self.allowTouchEventsToPassThroughNavigationBar != newValue,
+            let navigatorView = self.navigatorView
+      else { return };
+      
+      navigatorView.allowTouchEventsToPassThroughNavigationBar = newValue;
+    }
+  };
+  
   // ---------------------
   // MARK:- Init/Lifecycle
   // ---------------------

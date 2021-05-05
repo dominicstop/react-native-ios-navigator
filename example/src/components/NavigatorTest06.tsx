@@ -57,12 +57,15 @@ function RouteHeaderWithButton(){
 };
 
 export function NavigatorTest06(){
+  const [passthroughTouchEvents, setPassthroughTouchEvents] = React.useState(false);
+
   return (
     <React.Fragment>
       <RouteViewPortal
         routeOptions={{
           largeTitleDisplayMode: 'never',
           applyBackButtonConfigToCurrentRoute: true,
+          allowTouchEventsToPassThroughNavigationBar: passthroughTouchEvents,
           navBarButtonBackItemConfig: {
             type: 'TEXT',
             title: '',
@@ -85,11 +88,20 @@ export function NavigatorTest06(){
           height: 1000, 
           alignSelf: 'stretch',
           alignItems: 'center',
-          paddingTop: 15,
         }}>
-          <Text style={{fontSize: 64, fontWeight: '600'}}>
+          <Text style={{fontSize: 64, fontWeight: '600', margin: 10}}>
             Hello World
           </Text>
+          <TouchableOpacity 
+            style={styles.headerButton}
+            onPress={() => {
+              setPassthroughTouchEvents(prevValue => !prevValue);
+            }}
+          >
+            <Text style={{color: 'white'}}>
+              {`allowTouchEventsToPassThroughNavigationBar: ${passthroughTouchEvents}`}
+            </Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </React.Fragment>

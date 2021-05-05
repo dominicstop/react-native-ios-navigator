@@ -352,15 +352,17 @@ export class CompareNavBarAppearanceCombinedConfig {
 export class CompareRouteOptions {
   static propertyMap: ComparisonConfig<RouteOptions> = {
     // shallow compare 
-    routeTitle                         : { mode: 'shallow' },
-    prompt                             : { mode: 'shallow' },
-    largeTitleDisplayMode              : { mode: 'shallow' },
-    hidesBackButton                    : { mode: 'shallow' },
-    backButtonTitle                    : { mode: 'shallow' },
-    backButtonDisplayMode              : { mode: 'shallow' },
-    leftItemsSupplementBackButton      : { mode: 'shallow' },
-    navigationBarVisibility            : { mode: 'shallow' },
-    applyBackButtonConfigToCurrentRoute: { mode: 'shallow' },
+    routeTitle                   : { mode: 'shallow' },
+    prompt                       : { mode: 'shallow' },
+    largeTitleDisplayMode        : { mode: 'shallow' },
+    hidesBackButton              : { mode: 'shallow' },
+    backButtonTitle              : { mode: 'shallow' },
+    backButtonDisplayMode        : { mode: 'shallow' },
+    leftItemsSupplementBackButton: { mode: 'shallow' },
+    navigationBarVisibility      : { mode: 'shallow' },
+
+    applyBackButtonConfigToCurrentRoute       : { mode: 'shallow' },
+    allowTouchEventsToPassThroughNavigationBar: { mode: 'shallow' },
 
     // custom compare
     navBarAppearanceOverride: {
