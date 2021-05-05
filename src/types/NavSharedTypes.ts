@@ -1,13 +1,10 @@
 import type { ReactElement } from 'react';
 
-import type { NavigatorRouteView, NavRouteEvents } from 'src/components/NavigatorRouteView';
-import type { NavigatorView } from 'src/components/NavigatorView';
-
 import type { RouteTransitionPopConfig, RouteTransitionPushConfig } from '../native_components/RNINavigatorRouteView';
 import type { NativePushPopOptions } from '../native_modules/RNINavigatorViewModule';
 
-import type { NavigationObject, RouteOptions } from './NavTypes';
-import type { EventEmitter } from "../functions/EventEmitter";
+import type { NavigationObject } from './NavTypes';
+import type { RouteOptions } from './RouteOptions';
 
 
 // Nav-related types that are shared but not exported/public
@@ -28,6 +25,7 @@ export type NavCommandPopOptions = NativePushPopOptions & {
   transitionConfig?: RouteTransitionPopConfig;
 };
 
+// TODO: Move handlers
 export type RenderNavBarItem = (navigation: NavigationObject) => ReactElement;
 
 export type RenderRouteHeader = (navigation: NavigationObject) => ReactElement;

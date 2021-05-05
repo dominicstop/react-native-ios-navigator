@@ -7,7 +7,7 @@ import type { NavigatorRouteView } from '../components/NavigatorRouteView';
 import type { onRoutePopEvent, onRoutePushEvent, onRouteFocusBlurEvent, onPressNavBarItem } from 'src/native_components/RNINavigatorRouteView';
 
 import type { EventEmitter } from '../functions/EventEmitter';
-import type { RouteOptions } from '../types/NavTypes';
+import type { RouteOptions } from '../types/RouteOptions';
 
 import { NavRouteViewContext, NavRouteViewContextProps } from '../context/NavRouteViewContext';
 

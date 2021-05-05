@@ -2,7 +2,7 @@ import React from 'react';
 
 import type { NavigatorRouteView, NavigatorRouteViewProps } from '../components/NavigatorRouteView';
 
-import type { RouteOptions } from '../types/NavTypes';
+import type { RouteOptions } from '../types/RouteOptions';
 import type { RenderNavBarItem, RenderRouteHeader } from '../types/NavSharedTypes';
 
 import { CompareRouteOptions } from '../functions/CompareObjects';

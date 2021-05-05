@@ -2,7 +2,7 @@ import type { RouteTransitionPushConfig, RouteTransitionPopConfig } from "src/na
 
 import type { NavBarItemConfig, NavBarItemsConfig, NavBarBackItemConfig } from "../types/NavBarItemConfig";
 import type { NavBarAppearance, NavBarAppearanceCombinedConfig, NavBarAppearanceConfig, NavBarAppearanceLegacyConfig } from '../types/NavBarAppearanceConfig';
-import type { RouteOptions } from "../types/NavTypes";
+import type { RouteOptions } from "../types/RouteOptions";
 import type { BarMetrics } from "../types/MiscTypes";
 
 
