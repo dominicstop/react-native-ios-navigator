@@ -359,6 +359,9 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
   override func loadView() {
     super.loadView();
     
+    let frame  = self.view.frame;
+    let bounds = self.view.bounds;
+    
     /// The "root view" is the `routeView`'s `reactRouteContent`.
     /// * The `routeView` is a container that holds all the route-related components
     ///   i.e. it facilitates as a way to receive components from react and acts
@@ -367,6 +370,9 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     ///    will contain a `wrapperView`. The `wrapperView` is the actual view
     ///    that contains the content that we want to show from the the react route.
     let rootView = self.routeView!.reactRouteContent!;
+    rootView.frame  = frame;
+    rootView.bounds = bounds;
+    
     self.view = rootView;
         
     self.wrapperView = {
@@ -388,13 +394,17 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     
     if let headerView = self.routeView.reactRouteHeader {
       headerView.routeViewController = self;
-      
       headerView.setup(rootView: rootView);
     };
     
+    /// update `routeView`'s size
+    self.routeView!.notifyForBoundsChange(bounds);
+    
     #if DEBUG
+    //let subviewCount = RNIUtilities.recursivelyGetAllSubviews(for: rootView).count;
     print("LOG - RNINavigatorReactRouteViewController: loadView"
-      + " - wrapperView: \(self.wrapperView?.description ?? "N/A")!"
+      //+ " - total subviews: \(subviewCount)"
+      + " - wrapperView: \(self.wrapperView?.description ?? "N/A")"
       + " - headerView: \(self.routeView.reactRouteHeader != nil ? "true" : "false")"
     );
     #endif
