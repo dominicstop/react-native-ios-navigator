@@ -8,7 +8,8 @@ import { RNINavigatorViewModule } from '../native_modules/RNINavigatorViewModule
 import { NavigatorRouteView } from './NavigatorRouteView';
 
 import type { RouteOptions } from '../types/RouteOptions';
-import type { NavCommandPushOptions, NavRouteItem, RenderNavBarItem, NavCommandPopOptions } from '../types/NavSharedTypes';
+import type { NavRouteItem } from '../types/NavSharedTypes';
+import type { NavCommandPushOptions, RenderNavBarItem, NavCommandPopOptions } from '../types/NavTypes';
 
 import type { RouteContentProps } from '../components/NavigatorRouteView';
 

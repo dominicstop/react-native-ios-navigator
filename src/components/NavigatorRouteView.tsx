@@ -3,7 +3,7 @@ import { StyleSheet, View, ViewStyle, findNodeHandle } from 'react-native';
 
 import type { NavigationObject } from '../types/NavigationObject';
 import type { RouteOptions } from '../types/RouteOptions';
-import type { RenderNavBarItem, RenderRouteHeader } from '../types/NavSharedTypes';
+import type { RenderNavBarItem, RenderRouteHeader } from '../types/NavTypes';
 
 import type { NavigatorView } from './NavigatorView';
 import type { RouteViewPortal } from './RouteViewPortal';
