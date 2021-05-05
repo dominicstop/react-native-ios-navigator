@@ -13,8 +13,6 @@ export type RouteHeaderViewProps = Partial<Pick<RNINavigatorRouteHeaderViewProps
 export class RouteHeaderView extends React.PureComponent<RouteHeaderViewProps> {
   render(){
     const props = this.props;
-    console.log('headerTopPadding: ', props.headerTopPadding);
-    
 
     return (
       <RNINavigatorRouteHeaderView
