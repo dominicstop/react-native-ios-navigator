@@ -131,4 +131,15 @@ internal class RNIUtilities {
     
     return view as? T;
   };
+  
+  static func recursivelyGetAllSubviews(for view: UIView) -> [UIView] {
+    var views: [UIView] = [];
+    
+    for subview in view.subviews {
+      views += Self.recursivelyGetAllSubviews(for: subview);
+      views.append(subview);
+    };
+
+    return views;
+  };
 };

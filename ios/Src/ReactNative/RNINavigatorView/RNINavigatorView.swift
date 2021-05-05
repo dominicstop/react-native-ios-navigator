@@ -153,13 +153,15 @@ public final class RNINavigatorView: UIView {
         else { continue };
         
         guard let nativeRouteVC: RNINavigatorRouteBaseViewController = {
-          if let routeVC = self.routeItemsMap[routeID] {
-            // route already added, check if it's a native route
-            let isNativeRoute = routeVC as? RNINavigatorReactRouteViewController == nil;
-            // verify that the existing route is in fact a native route
-            return isNativeRoute ? routeVC : nil;
+          if let routeVC = self.routeItemsMap[routeID],
+             // check if it's a native route
+             routeVC as? RNINavigatorReactRouteViewController == nil {
+            
+            // A - native route for `routeID`  already added...
+            return routeVC;
             
           } else if let vc = RNINavigatorManager.routeRegistry[routeKey] {
+            // B - native route for `routeID` not added yet...
             // create/init native route
             let routeVC = vc.init();
             routeVC.setRouteID(routeID);
@@ -168,14 +170,16 @@ public final class RNINavigatorView: UIView {
             routeVC.delegate = self;
             routeVC.navigator = self;
             
-            // add native route
+            // add/register native route
             self.routeItemsMap[routeID] = routeVC;
-            return routeVC;
+            // preload native route vc
+            routeVC.loadViewIfNeeded();
             
-          } else {
-            // could not get/create native route vc
-            return nil;
+            return routeVC;
           };
+          
+          // could not get/create native route vc
+          return nil;
         }() else { continue };
         
         #if DEBUG
@@ -189,6 +193,7 @@ public final class RNINavigatorView: UIView {
         // update route index
         nativeRouteVC.setRouteIndex(routeIndex);
         
+        // set/update route props
         if let routeProps = routeData["routeProps"] as? Dictionary<String, Any> {
           nativeRouteVC.routeProps = routeProps;
         };
@@ -307,9 +312,11 @@ public final class RNINavigatorView: UIView {
           // set the "react view" to show in the route vc
           vc.routeView = routeView;
           
+          // pass a ref to this navigator view.
           // note: this will trigger the "setup" function so that the
           // `routeView` can prepare `routeVC` for the 1st time...
           routeView.routeVC = vc;
+          
           return vc;
         }();
         
