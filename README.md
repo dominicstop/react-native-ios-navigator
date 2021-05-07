@@ -2,7 +2,7 @@
 A native wrapper component around `UINavigationController` for react-native
 
 ## 🚧⚠️ **Library WIP** ⚠️🚧
-Currently in development... 😅
+Currently in development... 😅 (See [TODO.md](https://github.com/dominicstop/react-native-ios-navigator/blob/master/docs/TODO.md) for current progress).
 
 ---
 
