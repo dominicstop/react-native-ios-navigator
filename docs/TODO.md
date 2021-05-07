@@ -1,9 +1,18 @@
 # TODO
 
+## Table of Contents
+
+[TOC]
+
+---
+
+<br>
+
 ## In Progress
 
-- [ ] **Implement**: `NavigatorRouteView` - Impl. `getConstants` function.
-	- A module function that can be called for each route to get route-related constants. The function returns a promise that resolves to return the following constants: ``
+- [ ] **Implement**: `NavigatorRouteView` - `getConstants` function.
+	- A module function that can be called for each route to get route-related constants. The function returns a promise that resolves to return the following constants: ``.
+	- Should be callable as a ref. from the `NavigatorRouteView` component. Expose function via the navigation object.
 
 <br>
 
@@ -11,11 +20,16 @@
 	- Maybe related to commit: `2888fe5`, could be a regression?
 	- Only happens on manual reload (no errors during fast refresh). Probably related to the navigator module?
 
+<br>
+
+- [ ] **Fix**: Route flickering during push transition.
+	* When receiving a react route view from `RNINavigatorView.insertReactView`, set the bounds/frame of the route view to the navigator view's current frame//bounds, then call `notifyForBoundsChange`.
+
 ---
 
 <br>
 
-## Unsorted
+## Implement
 
 
 - [ ] **Implement**: Create shared package: `react-native-shared-utilities`
@@ -82,10 +96,11 @@
 	- Current implementation doesn't animate the status bar changes because when putting `setNeedsStatusBarAppearanceUpdate()` inside an animation block using `UIView.animate()` it triggers the `ScrollView` offset bug.
 
 - [ ] **Implement**: Status bar animation should animate together with view controller transition + swipe back pop gesture.
-
 	- Implement status bar animation inside `animate(alongsideTransition:completion:)` in `UIViewControllerTransitionCoordinator`.
 
-		
+<br>
+
+- [ ] **Implement**: Adopt `RCTInvalidating` protocol for all the `UIView`/`RCTView` subclasses.
 
 ---
 
@@ -185,11 +200,11 @@
 	* Via `routeOptions` config, make the navigation bar transparent. Then add the `RouteHeaderView` component into the route.
 	* The navigation bar will still exists but now it's transparent, so you can use `RouteHeaderView` to show anything you want behind the navigation bar.
 	* Note: This is the easiest workaround I could find to customize the navigation bar, most apps actually do this. For example, the spotify app uses a transparent navigation bar so they can show album art behind it as you scroll.
-	* [x] Commit: `1060169`) **Implement**: Initial implementation for `RouteHeaderView` with `headerMode: 'resize'`
-	* [x] Commit: `d88a3a0`) **Implement**: Support for `RouteHeaderView` with `headerMode: 'fixed'`
-	* [x] Commit: `a02be8e`) **Implement**: Added support for new modes for `HeaderHeight`
+	* [x] (Commit: `1060169`) **Implement**: Initial implementation for `RouteHeaderView` with `headerMode: 'resize'`
+	* [x] (Commit: `d88a3a0`) **Implement**: Support for `RouteHeaderView` with `headerMode: 'fixed'`
+	* [x] (Commit: `a02be8e`) **Implement**: Added support for new modes for `HeaderHeight`
 		* Updated modes: `statusBar`,`navigationBar`,  `safeArea` (i.e. `statusBar` + `navigationBar`), `none`.
-	* [x] Commit: `n/a`) **Implement**: `RouteHeaderView` `headerTopPadding` prop
+	* [x] (Commit: `ed49d5a`) **Implement**: `RouteHeaderView`    `headerTopPadding` prop
 		* Controls the top padding for `RouteHeaderView`, accepts a `HeaderHeight` value.
 
 - [x]  **Implement**: `NavigationConfigOverride` — A config that overrides the current navigation controller properties that gets applied on each route view controller.
@@ -220,7 +235,7 @@
 
 <br>
 
-- [x]  (Commit: `c3dd061`) Fix: React routes flashing in when being pushed/transitioning in.
+- [x]  (Commit: `c3dd061`) **Fix**: React routes flashing in when being pushed/transitioning in.
 	- For routes with many views, it flickers because it's loading the subviews. Also the button freezes for a few ms when navigating to a route with many views.
 		* Removing the await from `setState` in the `push` command doesn't really change much.
 		* Calling `loadViewIfNeeded()` causes the safe area insets/scroll view insets for the route to not work.
