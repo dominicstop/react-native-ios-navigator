@@ -9,7 +9,6 @@ import UIKit;
 
 typealias Completion = () -> Void;
 
-
 public final class RNINavigatorView: UIView {
   
   // ---------------------
@@ -29,6 +28,8 @@ public final class RNINavigatorView: UIView {
   weak var bridge: RCTBridge!;
   
   weak var delegate: RNINavigatorViewDelegate?;
+  
+  weak var parentVC: UIViewController?;
   
   /// The routes added/to be added to the nav. stack.
   /// Note: The key is the `routeID`, also when removing an item, don't forget
@@ -262,7 +263,7 @@ public final class RNINavigatorView: UIView {
     super.init(frame: CGRect());
     
     self.bridge = bridge;
-    self.embedNavigationVC();
+    self.setupNavigationController();
   };
   
   required init?(coder: NSCoder) {
@@ -271,13 +272,16 @@ public final class RNINavigatorView: UIView {
   
   public override func didMoveToWindow() {
     if self.window == nil {
-      // this view has been "unmounted"...
+      // A - this view has been "unmounted"...
       self.cleanup();
       
     } else {
-      // this view has been "mounted"...
+      // B - this view has been "mounted"...
       // add the custom RN navBar BG if any
       self.embedCustomNavBarBackground();
+      
+      // embed nav controller to closest parent vc
+      self.setupEmbedNavigationControllerToClosestVC();
     };
   };
   
@@ -371,9 +375,9 @@ fileprivate extension RNINavigatorView {
   };
   
   /// setup - create nav. and add it as a subview
-  func embedNavigationVC(){
+  func setupNavigationController(){
     // create nav controller
-    let navigationVC = UINavigationController();
+    let navigationVC = RNINavigationController();
     // save a ref to this instance
     self.navigationVC = navigationVC;
     
@@ -396,6 +400,26 @@ fileprivate extension RNINavigatorView {
       navigationVC.view.leadingAnchor .constraint(equalTo: self.leadingAnchor ),
       navigationVC.view.trailingAnchor.constraint(equalTo: self.trailingAnchor)
     ]);
+  };
+  
+  /// Embed the navigation controller as a child view controller to the closest
+  /// parent view controller. By default it should be the root view controller:
+  /// `RCTRootContentView` -> `RCTRootView` -> `UIViewController` (root vc).
+  func setupEmbedNavigationControllerToClosestVC(){
+    guard let parentVC = RNIUtilities.getParent(responder: self, type: UIViewController.self)
+    else { return };
+    
+    #if DEBUG
+    let isRootVC = self.window?.rootViewController == parentVC;
+    print("LOG - NativeView, RNINavigatorView: setupEmbedNavigationControllerToClosestVC"
+      + " - parentVC: \(parentVC)"
+      + " - isRootVC: \(isRootVC)"
+      + " - child vc count: \(parentVC.children.count)"
+    );
+    #endif
+    
+    parentVC.addChild(self.navigationVC);
+    self.navigationVC.didMove(toParent: parentVC);
   };
   
   /// setup - "mount" custom react navBar BG view
@@ -462,6 +486,7 @@ fileprivate extension RNINavigatorView {
   
   /// remove this view (+ related-views) from the RN view registry
   func cleanup(){
+    // remove background view if any
     if let backgroundView = self.reactNavBarBackground {
       RNIUtilities.recursivelyRemoveFromViewRegistry(
         bridge   : self.bridge,
@@ -469,11 +494,20 @@ fileprivate extension RNINavigatorView {
       );
     };
     
+    // remove nav controller from parent vc if any
+    if self.parentVC != nil {
+      self.navigationVC.willMove(toParent: nil);
+      self.navigationVC.removeFromParent();
+    };
+    
     // remove routes from view registry
     self.routeItemsMap.values.forEach {
       if let routeVC = $0 as? RNINavigatorReactRouteViewController {
         routeVC.routeView.cleanup();
       };
+      
+      // remove from registry
+      self.routeItemsMap.removeValue(forKey: $0.routeID);
     };
     
     // remove this view from registry
@@ -481,6 +515,9 @@ fileprivate extension RNINavigatorView {
       bridge   : self.bridge,
       reactView: self
     );
+    
+    self.navigationVC = nil;
+    self.reactNavBarBackground = nil;
   };
   
   #if DEBUG

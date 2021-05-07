@@ -36,6 +36,8 @@ RCT_EXPORT_VIEW_PROPERTY(routeID   , NSNumber);
 RCT_EXPORT_VIEW_PROPERTY(routeKey  , NSString);
 RCT_EXPORT_VIEW_PROPERTY(routeIndex, NSNumber);
 
+RCT_EXPORT_VIEW_PROPERTY(statusBarStyle, NSString);
+
 // MARK: Props - Transition Config
 RCT_EXPORT_VIEW_PROPERTY(transitionConfigPush, NSDictionary);
 RCT_EXPORT_VIEW_PROPERTY(transitionConfigPop, NSDictionary);

@@ -176,6 +176,10 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
       // `{...routeOptionsDefault, ...routeOptions}`
       // but it's less clear/explicit, idk refactor this later.
       // ------------------------------------------------------
+      statusBarStyle: (
+        routeOptions       ?.statusBarStyle ??
+        routeOptionsDefault?.statusBarStyle
+      ),
       // #region - Transition Config |
       // ----------------------------*
       transitionConfigPush: (

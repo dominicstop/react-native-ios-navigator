@@ -360,6 +360,7 @@ export class CompareRouteOptions {
     backButtonDisplayMode        : { mode: 'shallow' },
     leftItemsSupplementBackButton: { mode: 'shallow' },
     navigationBarVisibility      : { mode: 'shallow' },
+    statusBarStyle               : { mode: 'shallow' },
 
     applyBackButtonConfigToCurrentRoute       : { mode: 'shallow' },
     allowTouchEventsToPassThroughNavigationBar: { mode: 'shallow' },

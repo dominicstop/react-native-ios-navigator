@@ -17,6 +17,7 @@
 		2DCD954D1E0B4F2C00145EB5 /* IosNavigatorExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* IosNavigatorExampleTests.m */; };
 		4C39C56BAD484C67AA576FFA /* libPods-IosNavigatorExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CA3E69C5B9553B26FBA2DF04 /* libPods-IosNavigatorExample.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		8822D72F2644107F00075DAA /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8822D72E2644107E00075DAA /* RootViewController.swift */; };
 		886F2880261B888300AF0CF4 /* RNITestRouteViewController01.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886F287F261B888300AF0CF4 /* RNITestRouteViewController01.swift */; };
 		886F28B3261B8BE500AF0CF4 /* RouteRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886F28B2261B8BE500AF0CF4 /* RouteRegistry.swift */; };
 		886F296A261CEE0200AF0CF4 /* NavigatorManagerListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886F2969261CEE0200AF0CF4 /* NavigatorManagerListener.swift */; };
@@ -54,6 +55,7 @@
 		2D02E4901E0B4A5D006451C7 /* IosNavigatorExample-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "IosNavigatorExample-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		47F7ED3B7971BE374F7B8635 /* Pods-IosNavigatorExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IosNavigatorExample.debug.xcconfig"; path = "Target Support Files/Pods-IosNavigatorExample/Pods-IosNavigatorExample.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = IosNavigatorExample/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		8822D72E2644107E00075DAA /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		886F2878261B873400AF0CF4 /* IosNavigatorExample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "IosNavigatorExample-Bridging-Header.h"; sourceTree = "<group>"; };
 		886F287F261B888300AF0CF4 /* RNITestRouteViewController01.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNITestRouteViewController01.swift; sourceTree = "<group>"; };
 		886F28B2261B8BE500AF0CF4 /* RouteRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteRegistry.swift; sourceTree = "<group>"; };
@@ -188,6 +190,7 @@
 				886F287F261B888300AF0CF4 /* RNITestRouteViewController01.swift */,
 				886F28B2261B8BE500AF0CF4 /* RouteRegistry.swift */,
 				886F2969261CEE0200AF0CF4 /* NavigatorManagerListener.swift */,
+				8822D72E2644107E00075DAA /* RootViewController.swift */,
 			);
 			path = Example;
 			sourceTree = "<group>";
@@ -477,6 +480,7 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				886F28B3261B8BE500AF0CF4 /* RouteRegistry.swift in Sources */,
+				8822D72F2644107F00075DAA /* RootViewController.swift in Sources */,
 				886F296A261CEE0200AF0CF4 /* NavigatorManagerListener.swift in Sources */,
 				886F2880261B888300AF0CF4 /* RNITestRouteViewController01.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,

@@ -66,6 +66,7 @@ export function NavigatorTest06(){
           largeTitleDisplayMode: 'never',
           applyBackButtonConfigToCurrentRoute: true,
           allowTouchEventsToPassThroughNavigationBar: passthroughTouchEvents,
+          statusBarStyle: 'lightContent',
           navBarButtonBackItemConfig: {
             type: 'TEXT',
             title: '',

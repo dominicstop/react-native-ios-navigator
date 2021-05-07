@@ -1,7 +1,7 @@
 import { requireNativeComponent, ViewStyle } from 'react-native';
 
 import type { NavBarBackItemConfig, NavBarItemsConfig } from '../types/NavBarItemConfig';
-import type { NavBarAppearanceCombinedConfig, NavBarAppearanceConfig } from '../types/NavBarAppearanceConfig';
+import type { NavBarAppearanceCombinedConfig } from '../types/NavBarAppearanceConfig';
 
 
 type RouteTransitionPushTypes = 
@@ -73,7 +73,12 @@ export type LargeTitleDisplayMode =
   /** Never display a large title. */
   | 'never';
 
-export type NavigationBarVisibilityMode = 'visible' | 'hidden' | 'default';
+export type NavigationBarVisibilityMode = 
+  'visible' | 'hidden' | 'default';
+
+export type StatusBarStyle = 
+  "default" | "lightContent" | "darkContent";
+
 
 export type RNINavigatorRouteViewProps = {
   style: ViewStyle;
@@ -82,6 +87,8 @@ export type RNINavigatorRouteViewProps = {
   nativeID: string;
   routeKey: string;
   routeIndex: number;
+
+  statusBarStyle?: StatusBarStyle;
 
   // Transition Config
   transitionConfigPush?: RouteTransitionPushConfig;

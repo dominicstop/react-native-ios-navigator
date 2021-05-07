@@ -130,6 +130,31 @@ internal class RNINavigatorRouteView: UIView {
     }
   };
   
+  var _statusBarStyle: UIStatusBarStyle?;
+  @objc var statusBarStyle: NSString? {
+    didSet {
+      guard self.statusBarStyle != oldValue else { return };
+      
+      self._statusBarStyle = {
+        guard let string = self.statusBarStyle as String?,
+              let style  = UIStatusBarStyle(string: string)
+        else { return .default };
+        
+        return style;
+      }();
+      
+      #if DEBUG
+      print("LOG - RNINavigatorRouteView: didSet"
+        + " - statusBarStyle: \(self._statusBarStyle?.rawValue ?? -1)"
+        + " - string: \(self.statusBarStyle ?? "N/A")"
+        + " - prev value: \(oldValue ?? "N/A")"
+      );
+      #endif
+      
+      self.delegate?.didReceiveStatusBarStyle(self._statusBarStyle!);
+    }
+  };
+  
   //  MARK: Props - Transition Config
   /// Props for setting the transition to use when the nav. is pushing/popping
   /// -------------------------------------------------------------------------
@@ -376,7 +401,9 @@ internal class RNINavigatorRouteView: UIView {
   };
   
   //  MARK: Props - NavigationConfigOverride-related
-  /// These props are handled by `RNINavigatorReactRouteViewController.NavigationConfigOverride`
+  /// * These props are handled by `NavigationConfigOverride` in
+  ///   the `RNINavigatorReactRouteViewController` class.
+  /// -------------------------------------------------------------------------
   
   let navBarAppearanceOverrideConfig = RNINavBarAppearance(dict: nil);
   @objc var navBarAppearanceOverride: NSDictionary? {
@@ -602,6 +629,10 @@ private extension RNINavigatorRouteView {
   /// triggered here, since those values will be init. set in the vc's `viewDidAppear`.
   func setupRouteVC(){
     guard let delegate = self.delegate else { return };
+    
+    if let statusBarStyle = self._statusBarStyle {
+      delegate.didReceiveStatusBarStyle(statusBarStyle);
+    };
     
     // set push transition config
     if let pushConfig = self._transitionConfigPush {

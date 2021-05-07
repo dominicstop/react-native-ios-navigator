@@ -1,6 +1,6 @@
 
 
-import type { BackButtonDisplayMode, LargeTitleDisplayMode, NavigationBarVisibilityMode, RouteTransitionPopConfig, RouteTransitionPushConfig } from "../native_components/RNINavigatorRouteView";
+import type { BackButtonDisplayMode, LargeTitleDisplayMode, NavigationBarVisibilityMode, RouteTransitionPopConfig, RouteTransitionPushConfig, StatusBarStyle } from "../native_components/RNINavigatorRouteView";
 
 import type { NavBarBackItemConfig, NavBarItemsConfig } from "./NavBarItemConfig";
 import type { NavBarAppearanceCombinedConfig } from "./NavBarAppearanceConfig";
@@ -8,6 +8,8 @@ import type { NavBarAppearanceCombinedConfig } from "./NavBarAppearanceConfig";
 
 // TODO: Cleanup Types - Mirror from source (e.g. RNINavigatorRouteViewProps, etc.)
 export type RouteOptions = {
+
+  statusBarStyle?: StatusBarStyle;
 
   // Transition Config
   // -----------------

@@ -336,6 +336,11 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
   
   lazy var navigationConfigOverride = NavigationConfigOverride(parentRef: self);
   
+  var statusBarStyle: UIStatusBarStyle?;
+  override var preferredStatusBarStyle: UIStatusBarStyle {
+    return self.statusBarStyle ?? .default;
+  };
+  
   // -----------------------------------
   // MARK:- Convenient Property Wrappers
   // -----------------------------------
@@ -406,6 +411,8 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       //+ " - total subviews: \(subviewCount)"
       + " - wrapperView: \(self.wrapperView?.description ?? "N/A")"
       + " - headerView: \(self.routeView.reactRouteHeader != nil ? "true" : "false")"
+      + " - statusBarStyle: \(self.statusBarStyle?.rawValue ?? -1)"
+      + " - preferredStatusBarStyle: \(self.preferredStatusBarStyle.rawValue)"
     );
     #endif
   };
@@ -455,6 +462,9 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     
     /// Override the nav. config based on the current `routeView` props
     self.navigationConfigOverride.overrideIfNeeded(isAnimated: animated);
+    
+    /// Update status bar style
+    self.setNeedsStatusBarAppearanceUpdate();
   };
   
   override func viewDidAppear(_ animated: Bool) {
@@ -577,7 +587,12 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
 /// Receive events from the "route view" that is paired with this vc.
 /// This delegate is used to receive "props" from `RNINavigatorRouteView`.
 extension RNINavigatorReactRouteViewController: RNINavigatorRouteViewDelegate {
-
+  
+  func didReceiveStatusBarStyle(_ style: UIStatusBarStyle) {
+    self.statusBarStyle = style;
+    self.setNeedsStatusBarAppearanceUpdate();
+  };
+  
   // --------------------------------------
   // MARK: Receive Props: Transition Config
   // --------------------------------------

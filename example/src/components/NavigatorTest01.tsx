@@ -5,9 +5,11 @@ import { RouteViewEvents, RouteViewPortal, RouteContentProps, NavigationObject }
 
 import type { NavBarItemsConfig, NavBarBackItemConfig } from '../../../src/types/NavBarItemConfig';
 import type { NavBarAppearanceConfig, NavBarAppearanceCombinedConfig } from '../../../src/types/NavBarAppearanceConfig';
+import type { StatusBarStyle } from '../../../src/native_components/RNINavigatorRouteView';
 
 import * as Colors  from '../constants/Colors';
 import * as Helpers from '../functions/Helpers';
+
 
 // NOTE: This is messy.
 
@@ -30,6 +32,8 @@ const largeTitleDisplayModes = ['automatic', 'always', 'never'];
 const backButtonDisplayModes = ['default', 'generic', 'minimal'];
 
 const navBarVisibilityModes = ['default', 'visible', 'hidden'];
+
+const statusBarStyles: Array<StatusBarStyle> = ['default', 'lightContent', 'darkContent'];
 
 
 const navBarItemsConfigs: Array<{
@@ -1240,9 +1244,51 @@ function NavBarAppearanceOverrideItemConfig(props: SharedSectionProps & {
   );
 };
 
+function StatusBarStyleConfig(props: SharedSectionProps & {
+  navigation: NavigationObject
+}){
+  const currentStatusBarStyle = statusBarStyles[
+    props.parentState.statusBarStyleIndex % 
+    statusBarStyles.length
+  ];
+
+  return(
+    <ItemContainer>
+      <ItemTitle
+        title={'Status Bar Style'}
+        subtitle={`Change the 'statusBarStyle (UIStatusBarStyle)'`}
+      />
+      <RowLabelText
+        value={currentStatusBarStyle}
+      />
+      <ButtonPrimary
+        title={'Update `statusBarStyle`'}
+        subtitle={`Cycle to the next item`}
+        onPress={() => {
+          const parentRef = props.getParentRef();
+
+          parentRef.setState((prevState: NavigatorTest01State) => ({
+            statusBarStyleIndex: prevState.statusBarStyleIndex + 1
+          }));
+        }}
+      />
+      <ButtonPrimary
+        title={'Push `NavigatorTest01`'}
+        subtitle={'Push route w/ statusBarStyle: `lightContent`'}
+        onPress={() => {
+          props.navigation.push({
+            routeKey: 'NavigatorTest01',
+            routeOptions: {
+              statusBarStyle: 'lightContent',
+            },
+          });
+        }}
+      />
+    </ItemContainer>
+  );
+};
 
 function NavigationCommandsConfig(props: RouteContentProps){
-
   return(
     <ItemContainer>
       <ItemTitle
@@ -1281,6 +1327,7 @@ export class NavigatorTest01 extends React.Component<RouteContentProps> {
   state = {
     // @ts-ignore
     routeTitle: null,
+
     // @ts-ignore
     routePrompt: null,
     displayModeIndex: 0,
@@ -1297,6 +1344,9 @@ export class NavigatorTest01 extends React.Component<RouteContentProps> {
 
     leftItemsSupplementBackButton: false,
     hidesBackButton: false,
+
+    statusBarStyleIndex: 0,
+
     // @ts-ignore
     backButtonTitle: null,
     backButtonDisplayModeIndex: 0,
@@ -1374,6 +1424,15 @@ export class NavigatorTest01 extends React.Component<RouteContentProps> {
               ? navBarAppearanceOverride
               : null
             ),
+
+            // should be null at first... 
+            // TODO: cleanup - use -1 to signify null
+            statusBarStyle: (state.statusBarStyleIndex == 0 ? null : (
+              statusBarStyles[
+                state.statusBarStyleIndex % 
+                statusBarStyles.length
+              ]
+            )),
 
             // @ts-ignore
             navigationBarVisibility: (state.applyNavBarAppearanceToCurrentRoute
@@ -1475,6 +1534,11 @@ export class NavigatorTest01 extends React.Component<RouteContentProps> {
           getParentRef={() => this}
           parentState={state}
           currentAppearanceOverrideConfig={navBarAppearanceOverride}
+        />
+        <StatusBarStyleConfig
+          getParentRef={() => this}
+          parentState={state}
+          navigation={this.props.navigation}
         />
         <NavigationCommandsConfig
           navigation={this.props.navigation}

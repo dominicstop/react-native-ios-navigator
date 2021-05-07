@@ -34,7 +34,7 @@ extension UINavigationBar {
     };
     
     return false;
-  }
+  };
 
   private func nestedInteractiveViews(in view: UIView, contain point: CGPoint) -> Bool {
     if view.isPotentiallyInteractive,
