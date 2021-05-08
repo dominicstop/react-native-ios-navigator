@@ -16,12 +16,6 @@
 
 <br>
 
-- [ ]  **Fix**: Reloading the causes the following error for any navigation command: ` no corresponding 'RNINavigatorView' instance found for the given node`
-	- Maybe related to commit: `2888fe5`, could be a regression?
-	- Only happens on manual reload (no errors during fast refresh). Probably related to the navigator module?
-
-<br>
-
 - [ ] **Fix**: Route flickering during push transition.
 	* When receiving a react route view from `RNINavigatorView.insertReactView`, set the bounds/frame of the route view to the navigator view's current frame//bounds, then call `notifyForBoundsChange`.
 
@@ -144,6 +138,7 @@
 
 - [ ] **Cleanup**: Add JSDoc comments to `RouteOptions`
 - [ ] **Cleanup**: Add JSDoc comments to `NavigationObject`
+- [ ] **Cleanup**: Replace back tick usage in print/error logs with comma's.
 
 ------
 
@@ -257,6 +252,17 @@
 	- Updated `RNINavigatorReactRouteViewController` to support setting the `statusBarStyle`.
 	- Implemented support for setting `statusBarStyle` via `routeOptions`.
 	- Updated `NavigatorTest01` and `NavigatorTest06` to test out the `statusBarStyle` via `routeOptions`  .
+
+<br>
+
+- [x]  **Fix**: Reloading the causes the following error for any navigation command: ` no corresponding 'RNINavigatorView' instance found for the given node`
+
+	- Full error message: `Possible Unhandled Promise Rejection (id: 0): Error: 'NavigatorView' failed to do: 'push' with error: Error: RNINavigatorViewModule.push Error: Unable to 'push' because no corresponding 'RNINavigatorView' instance found for the given node - with debug: for node: 387 - with params, routeID: 1`.
+	- Maybe related to commit: `2888fe5`, could be a regression?
+	- Only happens on manual reload (no errors during fast refresh). Probably related to the navigator module?
+
+	- [x] (Commit: `6141ecf`) **Fix**: Reverted  regression, reverted commit: `2888fe5`.
+	- [x] (Commit: `6098069`) **Cleanup**: `RCTBridgeWillReloadNotification` Listeners.
 
 ------
 
