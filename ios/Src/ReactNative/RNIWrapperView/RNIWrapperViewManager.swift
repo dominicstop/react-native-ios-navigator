@@ -12,7 +12,7 @@ internal class RNIWrapperViewManager: RCTViewManager {
   
   static func getWrapperView(_ node: NSNumber) -> RNIWrapperView? {
     // get shared bridge instance from view manager
-    guard let bridge      = RNIWrapperViewManager.sharedBridge,
+    guard let bridge      = Self.sharedBridge,
           let view        = bridge.uiManager?.view(forReactTag: node),
           let wrapperView = view as? RNIWrapperView
     else { return nil };
@@ -80,6 +80,7 @@ internal class RNIWrapperViewManager: RCTViewManager {
           + " - for node: \(node)"
           + " - Error: guard check failed"
           + " - no corresponding view found for node"
+          + " - the view might have already been unmounted..."
         );
         #endif
         return;
