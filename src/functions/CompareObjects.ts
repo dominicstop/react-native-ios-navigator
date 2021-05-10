@@ -68,33 +68,15 @@ class HelperUtilities {
     oldItem: T, 
     newItem: T
   ): boolean {
-    console.log("compareObject",
-      " - oldItem", oldItem,
-      " - newItem", newItem,
-      " - isBothNull", HelperUtilities.isBothNull(oldItem, newItem),
-      " - compareItemsNull", HelperUtilities.compareItemsNull(oldItem, newItem),
-    );
-    
-
     if(HelperUtilities.isBothNull(oldItem, newItem)) return true;
     if(!HelperUtilities.compareItemsNull(oldItem, newItem)) return false;
 
     let key: keyof T;
     for(key in oldItem){
       const config = propertyMap[key];
-      
-      console.log("compareObject",
-        " - key: ", key
-      );
 
       switch (config?.mode) {
         case 'shallow':
-          console.log("compareObject",
-            " - key: ", key,
-            " - oldItem: ", oldItem[key],
-            " - newItem: ", newItem[key],
-            " - result, is diff: ", oldItem[key] !== newItem[key]
-          );
           if(oldItem[key] !== newItem[key]) return false;
           break;
 
@@ -308,17 +290,7 @@ export class CompareNavBarAppearance {
   };
 
   static compare(oldItem?: NavBarAppearance, newItem?: NavBarAppearance){
-    console.log('CompareNavBarAppearance start');
-
-    const res =  HelperUtilities.compareObject(CompareNavBarAppearance.propertyMap, oldItem, newItem);
-
-    console.log('CompareNavBarAppearance',
-      ' - old backgroundEffect: ', oldItem.backgroundEffect,
-      ' - new backgroundEffect: ', newItem.backgroundEffect,
-      ' - result, is same: ', res
-    );
-
-    return res;
+    return HelperUtilities.compareObject(CompareNavBarAppearance.propertyMap, oldItem, newItem);;
   };
 };
 
