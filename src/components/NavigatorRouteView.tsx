@@ -325,6 +325,9 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     this.setState({hasRoutePortal: true});
   };
 
+  // Module Commands
+  // ---------------
+
   public setHidesBackButton = async (isHidden: boolean, animated: boolean) => {
     try {
       if(!RouteViewUtils.isRouteReady(this.routeStatus)){
@@ -349,6 +352,33 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
       throw new Error("`NavigatorRouteView` failed to do: `setHidesBackButton` - " + error);
     };
   };
+
+  public getConstants = async () => {
+    try {
+      if(!RouteViewUtils.isRouteReady(this.routeStatus)){
+        throw new Error("`NavigatorRouteView` is not mounted")
+      };
+
+      const result = await Helpers.promiseWithTimeout(1000,
+        RNINavigatorRouteViewModule.getConstants(
+          findNodeHandle(this._nativeRef)
+        )
+      );
+
+      return result;
+
+    } catch(error){
+      //#region - 🐞 DEBUG 🐛
+      LIB_GLOBAL.debugLog && console.log(
+          `LOG/JS - NavigatorRouteView, getConstants`
+        + ` - error message: ${error}`
+      );
+      //#endregion
+
+      throw new Error("`NavigatorRouteView` failed to do: `getConstants` - " + error);
+    };
+  };
+
   // #endregion
   
   // #region - Handlers

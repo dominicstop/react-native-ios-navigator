@@ -711,6 +711,58 @@ private extension RNINavigatorRouteView {
   };
 };
 
+// ---------------------------
+// MARK:- Functions for Module
+// ---------------------------
+
+internal extension RNINavigatorRouteView {
+  
+  func getConstants(completion: @escaping (NSDictionary) -> Void) throws {
+    guard let routeVC = self.routeVC else {
+      throw RNIError.commandFailed(
+        source : "RNINavigatorRouteView.getConstants",
+        message:
+            "No corresponding 'routeVC' found for the route view."
+          + " The route view may not be completely initialized yet.",
+        debug: nil
+      );
+    };
+    
+    let safeAreaInsets: NSDictionary = {
+      let insets = routeVC.synthesizedSafeAreaInsets;
+      
+      return [
+        "top"   : insets.top,
+        "bottom": insets.bottom,
+        "left"  : insets.left,
+        "right" : insets.right,
+      ];
+    }();
+    
+    let bounds: NSDictionary = {
+      let bounds = self.bounds;
+      
+      return [
+        "x"    : bounds.origin.x,
+        "y"    : bounds.origin.y,
+        "left" : bounds.size.height,
+        "right": bounds.size.width,
+      ];
+    }();
+    
+    completion([
+      "isCurrentlyInFocus": routeVC.isCurrentlyInFocus,
+      
+      // ui values
+      "navBarHeight"             : routeVC.navBarHeight,
+      "statusBarHeight"          : routeVC.statusBarHeight,
+      "navBarWithStatusBarHeight": routeVC.navBarWithStatusBarHeight,
+      "safeAreaInsets"           : safeAreaInsets,
+      "bounds"                   : bounds,
+    ]);
+  };
+};
+
 // -------------------------
 // MARK:- Internal Functions
 // -------------------------
