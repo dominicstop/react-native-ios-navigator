@@ -179,6 +179,42 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       navigatorView.allowTouchEventsToPassThroughNavigationBar = flag;
     };
     
+    func overrideLegacyNavBarAppearance(_ config: RNINavBarAppearance){
+      guard let parentRef      = self.parentRef,
+            let navController  = parentRef.navigationController
+      else { return };
+      
+      if config.mode == .legacy, !config.didUseNewAppearance,
+         self.navBarLegacyConfig == nil {
+        
+        // save the current legacy nav bar customizations if not yet set
+        self.navBarLegacyConfig =
+          NavBarAppearanceLegacyConfig(from: navController.navigationBar);
+        
+      } else if config.mode != .legacy,
+                self.navBarLegacyConfig != nil {
+        
+        // legacy config was prev. set, but the appearance mode has changed...
+        // so remove prev. saved nav bar legacy config.
+        self.navBarLegacyConfig = nil;
+      };
+      
+      #if DEBUG
+      print("LOG - VC, RNINavigatorReactRouteViewController: NavigationConfigOverride"
+        + " - overrideLegacyNavBarAppearance, mode: \(config.mode.debugDescription)"
+        + " - didUseNewAppearance: \(config.didUseNewAppearance)"
+        + " - navBarLegacyConfig set: \(self.navBarLegacyConfig == nil)"
+      );
+      #endif
+      
+      // if using legacy mode, update the nav bar appearance directly, otherwise if
+      // using appearance mode, then update the nav bar appearance via the `navigationItem`
+      config.updateNavBarAppearance(
+        navController.navigationBar,
+        navigationItem: parentRef.navigationItem
+      );
+    };
+    
     /// Will read the props from the `routeView`, and will save the current values,
     /// and then temp. override the navigator config.
     func overrideIfNeeded(isAnimated: Bool){
@@ -188,29 +224,14 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
             let navController = parentRef.navigationController
       else { return };
       
-      let navBarAppearanceConfig = routeView.navBarAppearanceOverrideConfig;
-      let shouldOverrideNavBarAppearance = navBarAppearanceConfig.mode != nil;
+      #if DEBUG
+      print("LOG - VC, RNINavigatorReactRouteViewController: NavigationConfigOverride"
+        + " - overrideIfNeeded"
+      );
+      #endif
       
       // MARK: Appearance Override
-      /// overriding the nav bar appearance...
-      if shouldOverrideNavBarAppearance {
-        #if DEBUG
-        print("LOG - VC, RNINavigatorReactRouteViewController: NavigationConfigOverride"
-          + " - saveConfigAndOverride, for navBarAppearanceConfig"
-        );
-        #endif
-        
-        // first save the current legacy config (if it has one) so it can be restored later
-        self.navBarLegacyConfig =
-          NavBarAppearanceLegacyConfig(from: navController.navigationBar);
-        
-        // then update the navigation bar appearance
-        // (uses `navigationItem` if mode is appearance)
-        routeView.navBarAppearanceOverrideConfig.updateNavBarAppearance(
-          navController.navigationBar,
-          navigationItem: parentRef.navigationItem
-        );
-      };
+      self.overrideLegacyNavBarAppearance(routeView.navBarAppearanceOverrideConfig);
       
       // MARK: Nav Bar Visibility
       let navBarVisibilityCurrent = navController.isNavigationBarHidden;
@@ -232,7 +253,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       self.overrideAllowTouchEventsToPassThroughNavigationBar(
         navigatorView.allowTouchEventsToPassThroughNavigationBar
       );
-      
     };
     
     /// If there were any nav bar config values overridden, then this will restore
@@ -620,12 +640,7 @@ extension RNINavigatorReactRouteViewController: RNINavigatorRouteViewDelegate {
   };
   
   func didReceiveNavBarAppearanceOverride(_ config: RNINavBarAppearance) {
-    // if using legacy mode, update the nav bar appearance directly, otherwise if
-    // using appearance mode, then update the nav bar appearance via the `navigationItem`
-    config.updateNavBarAppearance(
-      self.navigationController?.navigationBar,
-      navigationItem: self.navigationItem
-    );
+    self.navigationConfigOverride.overrideLegacyNavBarAppearance(config);
   };
   
   func didReceiveNavBarVisibility(_ mode: RNINavigatorRouteView.NavBarVisibility) {
@@ -637,9 +652,9 @@ extension RNINavigatorReactRouteViewController: RNINavigatorRouteViewDelegate {
       .overrideAllowTouchEventsToPassThroughNavigationBar(flag);
   };
   
-  // ---------------------------------
-  // MARK: Receive Props: Navbar Items
-  // ---------------------------------
+  // ----------------------------------
+  // MARK: Receive Props: Nav bar Items
+  // ----------------------------------
   
   func didReceiveNavBarButtonTitleView(_ titleView: UIView?) {
     self.navigationItem.titleView = titleView;
