@@ -4,7 +4,7 @@ import type { BlurEffectStyle, DynamicColor, ImageItemConfig, Offset, BarMetrics
 /** `UIBarStyle`: Defines the stylistic appearance of different types of views */
 type BarStyle = 'default' | 'black';
 
-
+// TODO: Rename to `NavBarAppearanceBaseConfigType` and export
 type NavBarAppearanceBaseConfig = 
   /** Configures the bar appearance object with default background and shadow values. */
   | 'defaultBackground'
@@ -14,6 +14,22 @@ type NavBarAppearanceBaseConfig =
   | 'transparentBackground';
 
 export type NavBarPreset = 'none' | 'noShadow' | 'clearBackground';
+
+/** Options to specify how a view adjusts its content when its size changes. */
+export type ViewContentMode = 
+  | 'top'
+  | 'topLeft'
+  | 'topRight'
+  | 'left'
+  | 'center'
+  | 'right'
+  | 'bottom'
+  | 'bottomLeft'
+  | 'bottomRight'
+  | 'redraw'
+  | 'scaleAspectFill'
+  | 'scaleToFill'
+  | 'scaleAspectFit';
 
 // TODO
 type BarButtonItemAppearanceConfig = {
@@ -34,7 +50,8 @@ type BarAppearance = {
   /** The image to display on top of the bar's background color. */
   backgroundImage?: ImageItemConfig;
 
-  // TODO: backgroundImageContentMode: UIView.ContentMode
+  /** the content mode to use when displaying the bar's background image. */
+  backgroundImageContentMode?: ViewContentMode;
 
   // Shadow Appearance
   /** The color to apply to the bar's custom or default shadow. */

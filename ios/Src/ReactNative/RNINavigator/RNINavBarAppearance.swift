@@ -58,13 +58,14 @@ internal class RNINavBarAppearance {
     var backgroundEffect: UIBlurEffect?;
     var backgroundColor: UIColor?;
     var backgroundImage: RNIImageItem?
-    // TODO: backgroundImageContentMode
+    var backgroundImageContentMode: UIView.ContentMode?;
     
     var shadowColor: UIColor?;
     var shadowImage: RNIImageItem?
     
     // MARK: Button Appearance
     var backIndicatorImage: RNIImageItem?;
+    
     // TODO: backButtonAppearance: UIBarButtonItemAppearance
     // TODO: doneButtonAppearance: UIBarButtonItemAppearance
     // TODO: buttonAppearance: UIBarButtonItemAppearance
@@ -113,6 +114,10 @@ internal class RNINavBarAppearance {
         
         if let imageItem = self.backgroundImage {
           appearance.backgroundImage = imageItem.image;
+        };
+        
+        if let mode = self.backgroundImageContentMode {
+          appearance.backgroundImageContentMode = mode;
         };
       };
       
@@ -228,6 +233,14 @@ internal class RNINavBarAppearance {
         else { return nil };
         
         return imageItem;
+      }();
+      
+      self.backgroundImageContentMode = {
+        guard let string = dict["backgroundImageContentMode"] as? String,
+              let value  = UIView.ContentMode(string: string)
+        else { return nil };
+        
+        return value;
       }();
       
       /// set/init: `shadowColor`

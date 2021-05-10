@@ -271,11 +271,12 @@ export class CompareRouteTransitionPopConfig {
 export class CompareNavBarAppearance {
   static propertyMap:  ComparisonConfig<NavBarAppearance> = {
     // shallow compare
-    baseConfig             : { mode: 'shallow' },
-    backgroundEffect       : { mode: 'shallow' },
-    backgroundColor        : { mode: 'shallow' },
-    shadowColor            : { mode: 'shallow' },
-    titlePositionAdjustment: { mode: 'shallow' },
+    baseConfig                : { mode: 'shallow' },
+    backgroundEffect          : { mode: 'shallow' },
+    backgroundColor           : { mode: 'shallow' },
+    backgroundImageContentMode: { mode: 'shallow' },
+    shadowColor               : { mode: 'shallow' },
+    titlePositionAdjustment   : { mode: 'shallow' },
 
     // shallow compare object
     titleTextAttributes     : { mode: 'shallowObject' },

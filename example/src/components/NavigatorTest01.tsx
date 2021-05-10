@@ -414,6 +414,23 @@ const navBarAppearanceConfigs: Array<{
     }
   },
 }, {
+  description: "Gradient Test #3",
+  config: {
+    standardAppearance: {
+      backgroundImageContentMode: 'scaleAspectFill',
+      backgroundImage: {
+        type: 'IMAGE_GRADIENT',
+        imageValue: {
+          colors: ['rgba(255,0,0,0.5)', 'rgba(0,255,0,0.25)'],
+          startPoint: 'left',
+          endPoint: 'right',
+          width: 50,
+          height: 50,
+        }
+      }
+    }
+  },
+}, {
   description: "Shadow Image Test #1",
   config: {
     standardAppearance: {
