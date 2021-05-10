@@ -34,7 +34,8 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     };
   };
   
-  /// Used to override the current nav. config and restore it when the route becomes inactive.
+  /// Used to override the current nav. config and restore it when the route
+  /// becomes inactive.
   class NavigationConfigOverride {
     
     /// stores/holds values for nav bar's "legacy appearance"-related properties

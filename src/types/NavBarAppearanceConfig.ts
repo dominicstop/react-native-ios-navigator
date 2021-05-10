@@ -40,7 +40,7 @@ type BarAppearance = {
   /** The color to apply to the bar's custom or default shadow. */
   shadowColor?: string | DynamicColor;
 
-  // TODO: shadowImage: UIImage?
+  shadowImage?: ImageItemConfig;
 };
 
 /** `UINavigationBarAppearance` - An object for customizing the appearance of a navigation bar. */

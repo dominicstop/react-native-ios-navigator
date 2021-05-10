@@ -58,9 +58,10 @@ internal class RNINavBarAppearance {
     var backgroundEffect: UIBlurEffect?;
     var backgroundColor: UIColor?;
     var backgroundImage: RNIImageItem?
+    // TODO: backgroundImageContentMode
     
     var shadowColor: UIColor?;
-    // TODO: shadowImage: UIImage?
+    var shadowImage: RNIImageItem?
     
     // MARK: Button Appearance
     var backIndicatorImage: RNIImageItem?;
@@ -110,15 +111,21 @@ internal class RNINavBarAppearance {
         appearance.backgroundEffect = self.backgroundEffect;
         appearance.backgroundColor = self.backgroundColor;
         
-        appearance.backgroundImage = self.backgroundImage?.image;
+        if let imageItem = self.backgroundImage {
+          appearance.backgroundImage = imageItem.image;
+        };
       };
       
       if shouldSetShadow {
         appearance.shadowColor = self.shadowColor;
+        
+        if let imageItem = self.shadowImage {
+          appearance.shadowImage = imageItem.image;
+        };
       };
       
-      // Section:
-      // ---------------------
+      // Section: Button Appearance
+      // --------------------------
       
       let backImage = self.backIndicatorImage?.image;
       /// NOTE: cannot hide indicator via setting this to `UIImage()` or `nil`
@@ -232,8 +239,16 @@ internal class RNINavBarAppearance {
         return color;
       }();
       
-      // Section:
-      // ----------------------
+      self.shadowImage = {
+        guard let imageDict = dict["shadowImage"] as? NSDictionary,
+              let imageItem = RNIImageItem(dict: imageDict)
+        else { return nil };
+        
+        return imageItem;
+      }();
+      
+      // Section: Button Appearance
+      // --------------------------
       
       self.backIndicatorImage = {
         guard let imageDict = dict["backIndicatorImage"] as? NSDictionary,
@@ -252,8 +267,13 @@ internal class RNINavBarAppearance {
       
       // setup background image size
       self.backgroundImage?.defaultSize = CGSize(
-        width: navBarWidth,
+        width : navBarWidth,
         height: navBarHeight + statusBarHeight
+      );
+      
+      self.shadowImage?.defaultSize = CGSize(
+        width : navBarWidth,
+        height: navBarHeight
       );
     };
   };

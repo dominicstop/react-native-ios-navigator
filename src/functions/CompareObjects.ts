@@ -287,6 +287,10 @@ export class CompareNavBarAppearance {
       mode: 'custom',
       customCompare: CompareImageConfig.compare,
     },
+    shadowImage: {
+      mode: 'custom',
+      customCompare: CompareImageConfig.compare,
+    },
   };
 
   static compare(oldItem?: NavBarAppearance, newItem?: NavBarAppearance){

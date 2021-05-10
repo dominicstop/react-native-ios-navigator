@@ -413,6 +413,24 @@ const navBarAppearanceConfigs: Array<{
       }
     }
   },
+}, {
+  description: "Shadow Image Test #1",
+  config: {
+    standardAppearance: {
+      backgroundEffect: 'systemUltraThinMaterial',
+      backgroundColor: Colors.PURPLE.A100,
+      shadowImage: {
+        type: 'IMAGE_GRADIENT',
+        imageValue: {
+          colors: ['rgba(0,0,0,0.25)', 'rgba(0,0,0,0)'],
+          startPoint: 'top',
+          endPoint: 'bottom',
+          height: 100,
+          width: 100,
+        }
+      },
+    }
+  },
 }];
 
 const navBarAppearanceLegacyConfigs: Array<{
