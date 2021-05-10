@@ -16,8 +16,8 @@
 
 <br>
 
-- [ ] **Fix**: Route flickering during push transition.
-	* When receiving a react route view from `RNINavigatorView.insertReactView`, set the bounds/frame of the route view to the navigator view's current frame//bounds, then call `notifyForBoundsChange`.
+- [ ] **Implement**: `NavBarAppearance.shadowImage`
+- [ ] **Implement**: `NavBarAppearance.backgroundImageContentMode`
 
 ---
 
@@ -260,9 +260,20 @@
 	- Full error message: `Possible Unhandled Promise Rejection (id: 0): Error: 'NavigatorView' failed to do: 'push' with error: Error: RNINavigatorViewModule.push Error: Unable to 'push' because no corresponding 'RNINavigatorView' instance found for the given node - with debug: for node: 387 - with params, routeID: 1`.
 	- Maybe related to commit: `2888fe5`, could be a regression?
 	- Only happens on manual reload (no errors during fast refresh). Probably related to the navigator module?
-
 	- [x] (Commit: `6141ecf`) **Fix**: Reverted  regression, reverted commit: `2888fe5`.
 	- [x] (Commit: `6098069`) **Cleanup**: `RCTBridgeWillReloadNotification` Listeners.
+
+<br>
+
+- [x] (Commit: `d974b52`) **Fix**: `navBarAppearanceOverride` not resetting
+	* Route sometimes flickering during push transition even after fix (commit: `a6e3186`).
+	* When receiving a react route view from `RNINavigatorView.insertReactView`, set the bounds/frame of the route view to the navigator view's current frame//bounds, then call `notifyForBoundsChange`.
+
+<br>
+
+- [x] (Commit: `489a0af`)  **Fix**: `CompareObjects` - Wrong comparison for `ImageItemConfig`.
+
+
 
 ------
 
