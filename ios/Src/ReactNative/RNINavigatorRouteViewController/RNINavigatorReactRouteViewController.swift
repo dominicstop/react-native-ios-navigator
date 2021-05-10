@@ -133,24 +133,15 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       );
       #endif
       
-      func setNavigationBarHidden(_ isHidden: Bool){
-        if isAnimated {
-          navController.setNavigationBarHidden(isHidden , animated: true);
-          
-        } else {
-          navController.isNavigationBarHidden = isHidden;
-        };
-      };
-      
       /// TODO: Bug - when hiding nav bar, scrollview still snaps
       switch mode {
-        case .hidden : setNavigationBarHidden(true);
-        case .visible: setNavigationBarHidden(false);
+        case .hidden : navController.setNavigationBarHidden(true , animated: isAnimated);
+        case .visible: navController.setNavigationBarHidden(false, animated: isAnimated);
           
         default:
           // reset to the original value (before overriding)
           if let isNavBarHidden = self.isNavBarHidden {
-            setNavigationBarHidden(isNavBarHidden);
+            navController.setNavigationBarHidden(isNavBarHidden, animated: isAnimated);
             self.isNavBarHidden = nil;
           };
       };
@@ -220,39 +211,31 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     func overrideIfNeeded(isAnimated: Bool){
       guard let parentRef     = self.parentRef,
             let routeView     = parentRef.routeView,
-            let navigatorView = routeView.navigatorView,
-            let navController = parentRef.navigationController
+            let navigatorView = routeView.navigatorView
       else { return };
-      
-      #if DEBUG
-      print("LOG - VC, RNINavigatorReactRouteViewController: NavigationConfigOverride"
-        + " - overrideIfNeeded"
-      );
-      #endif
       
       // MARK: Appearance Override
       self.overrideLegacyNavBarAppearance(routeView.navBarAppearanceOverrideConfig);
       
       // MARK: Nav Bar Visibility
-      let navBarVisibilityCurrent = navController.isNavigationBarHidden;
-      let navBarVisibilityNext    = routeView.navigationBarVisibilityMode;
-      
-      /// override isNavigationBarHidden, save current value to restore later
-      // TODO: maybe just use `overrideIsNavBarHidden` instead?
+      let navBarVisibilityNext = routeView.navigationBarVisibilityMode;
       if navBarVisibilityNext != .default {
-        self.isNavBarHidden = navBarVisibilityCurrent;
-      };
-      
-      switch routeView.navigationBarVisibilityMode {
-        case .hidden : navController.setNavigationBarHidden(true , animated: isAnimated);
-        case .visible: navController.setNavigationBarHidden(false, animated: isAnimated);
-        case .default: break;
+        self.overrideIsNavBarHidden(navBarVisibilityNext, isAnimated: isAnimated)
       };
       
       // MARK: Nav Bar Pass Through Touch Events
       self.overrideAllowTouchEventsToPassThroughNavigationBar(
         navigatorView.allowTouchEventsToPassThroughNavigationBar
       );
+      
+      #if DEBUG
+      print("LOG - VC, RNINavigatorReactRouteViewController: NavigationConfigOverride"
+        + " - overrideIfNeeded"
+        + " - navBarLegacyConfig: \(self.navBarLegacyConfig == nil)"
+        + " - isNavBarHidden: \(self.isNavBarHidden.debugDescription)"
+        + " - allowTouchEventsToPassThroughNavigationBar: \(self.allowTouchEventsToPassThroughNavigationBar.debugDescription)"
+      );
+      #endif
     };
     
     /// If there were any nav bar config values overridden, then this will restore
