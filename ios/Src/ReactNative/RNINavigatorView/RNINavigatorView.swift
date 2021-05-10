@@ -305,6 +305,8 @@ public final class RNINavigatorView: UIView {
         
         // pass a ref to this nav view
         routeView.navigatorView = self;
+        // set the initial size of the view...
+        routeView.notifyForBoundsChange(self.bounds);
         
         let routeVC: RNINavigatorReactRouteViewController = {
           /// create the wrapper vc that holds the `routeView`
