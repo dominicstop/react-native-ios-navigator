@@ -14,11 +14,6 @@
 	- A module function that can be called for each route to get route-related constants. The function returns a promise that resolves to return the following constants: ``.
 	- Should be callable as a ref. from the `NavigatorRouteView` component. Expose function via the navigation object.
 
-<br>
-
-- [ ] **Implement**: `NavBarAppearance.shadowImage`
-- [ ] **Implement**: `NavBarAppearance.backgroundImageContentMode`
-
 ---
 
 <br>
@@ -272,6 +267,11 @@
 <br>
 
 - [x] (Commit: `489a0af`)  **Fix**: `CompareObjects` - Wrong comparison for `ImageItemConfig`.
+
+<br>
+
+- [x] (Commit: `10ca12b`) **Implement**: `NavBarAppearance.shadowImage`
+- [x] (Commit: `a481641`) **Implement**: `NavBarAppearance.backgroundImageContentMode`
 
 
 
