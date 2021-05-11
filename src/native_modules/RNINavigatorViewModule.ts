@@ -4,6 +4,8 @@ export type NativePushPopOptions = {
   isAnimated?: boolean;
 };
 
+export type NavigatorConstantsObject = object;
+
 interface RNINavigatorViewModule {
 
   // Module Commands: Navigator
@@ -78,6 +80,9 @@ interface RNINavigatorViewModule {
     commandKey: string,
     commandData: object | null
   ): Promise<object | null>;
+
+  
+  getNavigatorConstants(node: number): Promise<object>;
 };
 
 export const RNINavigatorViewModule: RNINavigatorViewModule =

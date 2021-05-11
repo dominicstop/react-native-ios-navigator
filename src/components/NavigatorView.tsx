@@ -1119,6 +1119,28 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       commandData
     );
   };
+
+  public getNavigatorConstants = async () => {
+    try {
+      const result = await Helpers.promiseWithTimeout(1000,
+        RNINavigatorViewModule.getNavigatorConstants(
+          findNodeHandle(this.nativeRef)
+        )
+      );
+
+      return result;
+
+    } catch(error){
+      //#region - 🐞 DEBUG 🐛
+      LIB_GLOBAL.debugLog && console.log(
+          `LOG/JS - NavigatorView, getNavigatorConstants`
+        + ` - error message: ${error}`
+      );
+      //#endregion
+
+      throw new Error("`NavigatorView` failed to do: `getNavigatorConstants` - " + error);
+    };
+  };
   //#endregion
 
   //#region - Native Event Handlers

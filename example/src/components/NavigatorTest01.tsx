@@ -9,7 +9,9 @@ import type { StatusBarStyle } from '../../../src/native_components/RNINavigator
 
 import * as Colors  from '../constants/Colors';
 import * as Helpers from '../functions/Helpers';
+
 import type { RouteConstantsObject } from 'src/native_modules/RNINavigatorRouteViewModule';
+import type { NavigatorConstantsObject } from 'src/native_modules/RNINavigatorViewModule';
 
 
 // NOTE: This is messy.
@@ -1341,10 +1343,39 @@ function RouteViewConstants(props: RouteContentProps & {
       />
       <ButtonPrimary
         title={'Invoke `getRouteConstants`'}
-        subtitle={'Get values from `NavigatorRouteView.getConstants`'}
+        subtitle={'Get values from `RNINavigatorRouteView.getConstants`'}
         onPress={async () => {
           const constants = await props.navigation.getRouteConstants();
           setRouteConstantsObject(constants);
+        }}
+      />
+    </ItemContainer>
+  );
+};
+
+function NavigatorViewConstants(props: RouteContentProps & {
+  navigation: NavigationObject
+}){
+  const [navigatorConstantsObject, setNavigatorConstantsObject] = React.useState<NavigatorConstantsObject>(null);
+
+  return(
+    <ItemContainer>
+      <ItemTitle
+        title={'Navigator View Constants'}
+        subtitle={`Async. get the navigator view constants from native`}
+      />
+      <ObjectPropertyDisplay
+        key={`config-RouteViewConstants`}
+        object={navigatorConstantsObject}
+      />
+      <ButtonPrimary
+        title={'Invoke `getNavigatorConstants`'}
+        subtitle={'Get values from `RNINavigatorView.getConstants`'}
+        onPress={async () => {
+          const navigatorRef = props.navigation.getRefToNavigator();
+          const constants = await navigatorRef.getNavigatorConstants();
+
+          setNavigatorConstantsObject(constants);
         }}
       />
     </ItemContainer>
@@ -1604,6 +1635,9 @@ export class NavigatorTest01 extends React.Component<RouteContentProps> {
           navigation={this.props.navigation}
         />
         <RouteViewConstants
+          navigation={this.props.navigation}
+        />
+        <NavigatorViewConstants
           navigation={this.props.navigation}
         />
         <NavigationCommandsConfig

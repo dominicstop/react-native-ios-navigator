@@ -446,7 +446,7 @@ internal class RNINavigatorViewModule: NSObject {
           throw RNIError.commandFailed(
             source : "RNINavigatorViewModule.sendCustomCommandToNative",
             message:
-                "Unable to `insertRoute` because no corresponding `RNINavigatorView` "
+                "Command failed because no corresponding `RNINavigatorView` "
               + "instance found for the given node",
             debug: "for node: \(node)"
           );
@@ -470,6 +470,49 @@ internal class RNINavigatorViewModule: NSObject {
         print("ERROR - \(message)");
         #endif
 
+        // reject promise w/: code, message, error
+        reject("LIB_ERROR", message, nil);
+      };
+    };
+  };
+  
+  @objc func getNavigatorConstants(
+    _ node : NSNumber,
+    // promise blocks ------------------------
+    resolve: @escaping RCTPromiseResolveBlock,
+    reject : @escaping RCTPromiseRejectBlock
+  ){
+    
+    DispatchQueue.main.async {
+      do {
+        // get `RNINavigatorView` instance that matches node/reactTag
+        guard let navigatorView = Self.getNavigatorView(node) else {
+          throw RNIError.commandFailed(
+            source : "RNINavigatorViewModule.getNavigatorConstants",
+            message:
+                "Command failed because no corresponding `RNINavigatorView` "
+              + "instance found for the given node",
+            debug: "for node: \(node)"
+          );
+        };
+        
+        #if DEBUG
+        print("LOG - NativeModule, RNINavigatorRouteViewModule: getRouteConstants"
+          + " - for node: \(node)"
+        );
+        #endif
+        
+        try navigatorView.getConstants() {
+          resolve($0);
+        };
+        
+      } catch {
+        let message = RNIError.constructErrorMessage(error);
+        
+        #if DEBUG
+        print("ERROR - \(message)");
+        #endif
+        
         // reject promise w/: code, message, error
         reject("LIB_ERROR", message, nil);
       };

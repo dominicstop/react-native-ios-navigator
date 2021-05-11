@@ -1076,6 +1076,81 @@ internal extension RNINavigatorView {
     
     delegate.didReceiveCustomCommandFromJS(key, data, resolve, reject);
   };
+  
+  func getConstants(completion: @escaping (NSDictionary) -> Void) throws {
+    guard let navigationVC = self.navigationVC else {
+      throw RNIError.commandFailed(
+        source : "RNINavigatorView.getConstants",
+        message: "Unable to get the navigation controller, it may not be initialized yet.",
+        debug: nil
+      );
+    };
+    
+    func getRouteData(vc: UIViewController) -> Dictionary<String, Any> {
+      var dict: Dictionary<String, Any> = [:];
+      
+      dict["type"] =
+        vc is RNINavigatorReactRouteViewController ? "reactRoute"  :
+        vc is RNINavigatorRouteBaseViewController  ? "nativeRoute" : "viewController";
+      
+      if let routeVC = vc as? RNINavigatorRouteBaseViewController {
+        dict["routeID"   ] = routeVC.routeID;
+        dict["routeKey"  ] = routeVC.routeKey;
+        dict["routeIndex"] = routeVC.routeIndex;
+      };
+      
+      return dict;
+    };
+    
+    let safeAreaInsets: NSDictionary = {
+      let insets = navigationVC.synthesizedSafeAreaInsets;
+      
+      return [
+        "top"   : insets.top,
+        "bottom": insets.bottom,
+        "left"  : insets.left,
+        "right" : insets.right,
+      ];
+    }();
+    
+    let bounds: NSDictionary = {
+      let bounds = navigationVC.view.bounds;
+      
+      return [
+        "x"     : bounds.origin.x,
+        "y"     : bounds.origin.y,
+        "height": bounds.size.height,
+        "width" : bounds.size.width,
+      ];
+    }();
+    
+    var dict: Dictionary<String, Any> = [
+      "navigatorID": self.navigatorID!,
+      
+      // ui values
+      "navBarHeight"             : navigationVC.navigationBar.frame.height,
+      "statusBarHeight"          : navigationVC.statusBarHeight,
+      "safeAreaInsets"           : safeAreaInsets,
+      "bounds"                   : bounds,
+      
+      "isPresenting":
+        navigationVC.visibleViewController?.isBeingPresented ?? false,
+      
+      "activeRoutes": self.activeRoutes.map {
+        getRouteData(vc: $0)
+      },
+    ];
+    
+    if let topVC = navigationVC.topViewController {
+      dict["topViewController"] = getRouteData(vc: topVC);
+    };
+    
+    if let visibleVC = navigationVC.visibleViewController {
+      dict["visibleViewController"] = getRouteData(vc: visibleVC);
+    };
+    
+    completion(dict as NSDictionary);
+  };
 };
 
 // -----------------------------------------------
