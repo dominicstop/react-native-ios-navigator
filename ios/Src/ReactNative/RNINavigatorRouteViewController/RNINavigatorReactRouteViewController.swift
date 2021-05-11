@@ -479,7 +479,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
   
   override func viewWillDisappear(_ animated: Bool) {
     // send event: notify js nav. route is about to disappear
-    self.routeView?.notifyOnRouteFocus(
+    self.routeView?.notifyOnRouteBlur(
       isDone: false,
       isAnimated: animated
     );
@@ -490,7 +490,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
   
   override func viewDidDisappear(_ animated: Bool) {
     // send event: notify js nav. route has disappeared
-    self.routeView?.notifyOnRouteFocus(
+    self.routeView?.notifyOnRouteBlur(
       isDone: true,
       isAnimated: animated
     );
