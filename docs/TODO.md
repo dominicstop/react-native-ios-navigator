@@ -10,12 +10,6 @@
 
 ## In Progress
 
-- [ ] **Implement**: `NavigatorView` - `getNavigatorConstants` function.
-	- A module function that can be called for the navigator to get constants. The function returns a promise that resolves to return an object.
-	- Should be callable as a ref. from the `NavigatorView` component. Expose function via the navigation object.
-	- [ ] (Commit: `n/a`) **Implement**: `RNINavigatorModule.getNavigatorConstants`
-	- [ ] (Commit: `n/a`) **Implement**: Updated `NavigationObject` - Expose `RNINavigatorModule.getNavigatorConstants`
-
 ---
 
 <br>
@@ -92,6 +86,10 @@
 <br>
 
 - [ ] **Implement**: Adopt `RCTInvalidating` protocol for all the `UIView`/`RCTView` subclasses.
+	- Tried reloading and fast refresh but `RCTInvalidating.invalidate` is not being invoked.
+
+- [ ] **Implement**: Support landscape orientation/screen rotate.
+	* Already seems to work, but there might be edge cases (especially regarding safe area layout).
 
 ---
 
@@ -283,7 +281,20 @@
 	- [x] (Commit: `3c1e865`) **Implement**: `RNINavigatorRouteViewModule.getRouteConstants`
 	- [x] (Commit: `a051e13`) **Implement**: Updated `NavigationObject` - Expose `RNINavigatorRouteViewModule.getRouteConstants`
 
-	
+
+<br>
+
+- [x] (Commit: `4e12818`) **Implement**: Override `reactSetFrame` for route view to prevent layout updates caused by react.
+
+- [x] **Implement**: `NavigatorView` - `getNavigatorConstants` function.
+	- A module function that can be called for the navigator to get constants. The function returns a promise that resolves to return an object.
+	- Should be callable as a ref. from the `NavigatorView` component. Expose function via the navigation object.
+	- [x] (Commit: `41ce14a`) **Implement**: `RNINavigatorModule.getNavigatorConstants`
+	- [x] (Commit: `548b8d3`) **Implement**: Updated `NavigationObject` - Expose `RNINavigatorModule.getNavigatorConstants`
+
+<br>
+
+- [x] (Commit: `548b8d3`) **Fix**: route view blur events not firing.
 
 ------
 
