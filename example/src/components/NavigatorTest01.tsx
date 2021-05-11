@@ -1372,9 +1372,7 @@ function NavigatorViewConstants(props: RouteContentProps & {
         title={'Invoke `getNavigatorConstants`'}
         subtitle={'Get values from `RNINavigatorView.getConstants`'}
         onPress={async () => {
-          const navigatorRef = props.navigation.getRefToNavigator();
-          const constants = await navigatorRef.getNavigatorConstants();
-
+          const constants = await props.navigation.getNavigatorConstants();
           setNavigatorConstantsObject(constants);
         }}
       />

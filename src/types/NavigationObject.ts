@@ -32,6 +32,7 @@ export type NavigationObject = {
 
   // misc. navigator commands
   sendCustomCommandToNative: typeof NavigatorView.prototype.sendCustomCommandToNative;
+  getNavigatorConstants    : typeof NavigatorView.prototype.getNavigatorConstants;
 
   // route commands
   getRouteOptions: typeof NavigatorRouteView.prototype.getRouteOptions;

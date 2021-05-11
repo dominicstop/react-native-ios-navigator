@@ -292,6 +292,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
       setNavigationBarHidden: this._navigatorRef.setNavigationBarHidden,
       // pass down misc. navigator commands
       sendCustomCommandToNative: this._navigatorRef.sendCustomCommandToNative,
+      getNavigatorConstants    : this._navigatorRef.getNavigatorConstants,
       // pass down convenience navigator commands
       replacePreviousRoute: this._navigatorRef.replacePreviousRoute,
       replaceCurrentRoute : this._navigatorRef.replaceCurrentRoute,
