@@ -15,9 +15,9 @@ public final class RNINavigatorView: UIView {
   // MARK:- Embedded Types
   // ---------------------
   
-  struct NativeIDKeys {
-    static let NavRouteItem     = "NavRouteItem";
-    static let NavBarBackground = "NavBarBackground";
+  enum NativeIDKeys: String {
+    case NavRouteItem;
+    case NavBarBackground;
   };
   
   // -----------------
@@ -297,16 +297,16 @@ public final class RNINavigatorView: UIView {
     /// subview/child is removed from `render()` in the js side.
     subview.removeFromSuperview();
     
-    switch subview.nativeID {
-      case NativeIDKeys.NavRouteItem:
+    let nativeID = NativeIDKeys(rawValue: subview.nativeID);
+    
+    switch nativeID {
+      case .NavRouteItem:
         // This subview is a route item
         guard let routeView = subview as? RNINavigatorRouteView
         else { return };
         
         // pass a ref to this nav view
         routeView.navigatorView = self;
-        // set the initial size of the view...
-        routeView.notifyForBoundsChange(self.bounds);
         
         let routeVC: RNINavigatorReactRouteViewController = {
           /// create the wrapper vc that holds the `routeView`
@@ -326,6 +326,13 @@ public final class RNINavigatorView: UIView {
           return vc;
         }();
         
+        // set the initial size of the view...
+        routeView.bounds = self.bounds;
+        routeView.frame  = self.frame;
+        
+        // and update react size.
+        routeView.notifyForBoundsChange(self.bounds);
+        
         /// save a ref to `routeView`'s vc instance
         self.routeItemsMap[routeVC.routeID] = routeVC;
         self.setupInitialRoutes();
@@ -341,12 +348,16 @@ public final class RNINavigatorView: UIView {
         );
         #endif
         
-      case NativeIDKeys.NavBarBackground:
+      case .NavBarBackground:
         self.reactNavBarBackground = subview;
         
       default: break;
     };
   };
+  
+  // ---------------------
+  // MARK:- Misc Internals
+  // ---------------------
   
   func getSecondToLastRouteVC() -> RNINavigatorRouteBaseViewController? {
     guard self.routeItemsMap.count > 1 else { return nil };

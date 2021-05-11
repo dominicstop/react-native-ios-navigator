@@ -550,6 +550,10 @@ internal class RNINavigatorRouteView: UIView {
         self.reactRouteHeader = wrapperView as? RNINavigatorRouteHeaderView;
     };
   };
+  
+  override func reactSetFrame(_ frame: CGRect) {
+    // noop - prevent layout updates from react
+  };
 };
 
 // ------------------------------------
