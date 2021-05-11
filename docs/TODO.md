@@ -10,9 +10,11 @@
 
 ## In Progress
 
-- [ ] **Implement**: `NavigatorRouteView` - `getConstants` function.
-	- A module function that can be called for each route to get route-related constants. The function returns a promise that resolves to return the following constants: ``.
-	- Should be callable as a ref. from the `NavigatorRouteView` component. Expose function via the navigation object.
+- [ ] **Implement**: `NavigatorView` - `getNavigatorConstants` function.
+	- A module function that can be called for the navigator to get constants. The function returns a promise that resolves to return an object.
+	- Should be callable as a ref. from the `NavigatorView` component. Expose function via the navigation object.
+	- [ ] (Commit: `n/a`) **Implement**: `RNINavigatorModule.getNavigatorConstants`
+	- [ ] (Commit: `n/a`) **Implement**: Updated `NavigationObject` - Expose `RNINavigatorModule.getNavigatorConstants`
 
 ---
 
@@ -273,7 +275,15 @@
 - [x] (Commit: `10ca12b`) **Implement**: `NavBarAppearance.shadowImage`
 - [x] (Commit: `a481641`) **Implement**: `NavBarAppearance.backgroundImageContentMode`
 
+<br>
 
+- [x] **Implement**: `NavigatorRouteView` - `getRouteConstants` function.
+	- A module function that can be called for each route to get route-related constants. The function returns a promise that resolves to return an object.
+	- Should be callable as a ref. from the `NavigatorRouteView` component. Expose function via the navigation object.
+	- [x] (Commit: `3c1e865`) **Implement**: `RNINavigatorRouteViewModule.getRouteConstants`
+	- [x] (Commit: `a051e13`) **Implement**: Updated `NavigationObject` - Expose `RNINavigatorRouteViewModule.getRouteConstants`
+
+	
 
 ------
 
