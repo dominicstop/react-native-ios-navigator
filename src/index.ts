@@ -14,6 +14,7 @@ export * from './context/NavRouteViewContext';
 
 // Types
 export { HeaderHeightValue } from './native_components/RNINavigatorRouteHeaderView';
+export { BackButtonDisplayMode, LargeTitleDisplayMode, NavigationBarVisibilityMode, StatusBarStyle } from './native_components/RNINavigatorRouteView';
 
 export * from './types/RouteOptions';
 export * from './types/NavigationObject';

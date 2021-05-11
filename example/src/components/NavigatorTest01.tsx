@@ -9,6 +9,7 @@ import type { StatusBarStyle } from '../../../src/native_components/RNINavigator
 
 import * as Colors  from '../constants/Colors';
 import * as Helpers from '../functions/Helpers';
+import type { RouteConstantsObject } from 'src/native_modules/RNINavigatorRouteViewModule';
 
 
 // NOTE: This is messy.
@@ -1323,6 +1324,33 @@ function StatusBarStyleConfig(props: SharedSectionProps & {
   );
 };
 
+function RouteViewConstants(props: RouteContentProps & {
+  navigation: NavigationObject
+}){
+  const [routeConstantsObject, setRouteConstantsObject] = React.useState<RouteConstantsObject>(null);
+
+  return(
+    <ItemContainer>
+      <ItemTitle
+        title={'Route View Constants'}
+        subtitle={`Async. get the route view constants from native`}
+      />
+      <ObjectPropertyDisplay
+        key={`config-RouteViewConstants`}
+        object={routeConstantsObject}
+      />
+      <ButtonPrimary
+        title={'Invoke `getRouteConstants`'}
+        subtitle={'Get values from `NavigatorRouteView.getConstants`'}
+        onPress={async () => {
+          const constants = await props.navigation.getRouteConstants();
+          setRouteConstantsObject(constants);
+        }}
+      />
+    </ItemContainer>
+  );
+};
+
 function NavigationCommandsConfig(props: RouteContentProps){
   return(
     <ItemContainer>
@@ -1573,6 +1601,9 @@ export class NavigatorTest01 extends React.Component<RouteContentProps> {
         <StatusBarStyleConfig
           getParentRef={() => this}
           parentState={state}
+          navigation={this.props.navigation}
+        />
+        <RouteViewConstants
           navigation={this.props.navigation}
         />
         <NavigationCommandsConfig

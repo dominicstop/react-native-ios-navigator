@@ -301,6 +301,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
       getRouteOptions   : this.getRouteOptions,
       setRouteOptions   : this.setRouteOptions,
       setHidesBackButton: this.setHidesBackButton,
+      getRouteConstants : this.getRouteConstants,
       // pass down 'get ref' functions
       getRefToRoute          : this._handleGetRefToRoute,
       getRefToNavigator      : props.getRefToNavigator,

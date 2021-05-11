@@ -21,7 +21,7 @@ export type NavigationObject = {
   replaceRoute: typeof NavigatorView.prototype.replaceRoute;
   insertRoute : typeof NavigatorView.prototype.insertRoute;
   setRoutes   : typeof NavigatorView.prototype.setRoutes;
-
+  
   setNavigationBarHidden: typeof NavigatorView.prototype.setNavigationBarHidden;
 
   // convenience navigator commands
@@ -34,9 +34,11 @@ export type NavigationObject = {
   sendCustomCommandToNative: typeof NavigatorView.prototype.sendCustomCommandToNative;
 
   // route commands
-  getRouteOptions   : typeof NavigatorRouteView.prototype.getRouteOptions;
-  setRouteOptions   : typeof NavigatorRouteView.prototype.setRouteOptions;
+  getRouteOptions: typeof NavigatorRouteView.prototype.getRouteOptions;
+  setRouteOptions: typeof NavigatorRouteView.prototype.setRouteOptions;
+
   setHidesBackButton: typeof NavigatorRouteView.prototype.setHidesBackButton;
+  getRouteConstants : typeof NavigatorRouteView.prototype.getRouteConstants;
 
   // get ref functions
   getRefToRoute          : () => NavigatorRouteView;
