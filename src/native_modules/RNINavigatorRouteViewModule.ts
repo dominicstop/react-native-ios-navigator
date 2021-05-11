@@ -15,10 +15,10 @@ export type RouteConstantsObject = {
   };
 
   bounds: {
-    x    : number;
-    y    : number;
-    left : number;
-    right: number;
+    x     : number;
+    y     : number;
+    height: number;
+    width : number;
   };
 };
 

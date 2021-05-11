@@ -740,13 +740,13 @@ internal extension RNINavigatorRouteView {
     }();
     
     let bounds: NSDictionary = {
-      let bounds = self.bounds;
+      let bounds = routeVC.view.bounds;
       
       return [
-        "x"    : bounds.origin.x,
-        "y"    : bounds.origin.y,
-        "left" : bounds.size.height,
-        "right": bounds.size.width,
+        "x"     : bounds.origin.x,
+        "y"     : bounds.origin.y,
+        "height": bounds.size.height,
+        "width" : bounds.size.width,
       ];
     }();
     
