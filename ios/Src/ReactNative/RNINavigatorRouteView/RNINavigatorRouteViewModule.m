@@ -18,7 +18,7 @@ RCT_EXTERN_METHOD(setHidesBackButton: (nonnull NSNumber)node
                   resolve: (RCTPromiseResolveBlock *)resolve
                   reject : (RCTPromiseRejectBlock  *)reject);
 
-RCT_EXTERN_METHOD(getConstants: (nonnull NSNumber)node
+RCT_EXTERN_METHOD(getRouteConstants: (nonnull NSNumber)node
                   // promise blocks -----------------------
                   resolve: (RCTPromiseResolveBlock *)resolve
                   reject : (RCTPromiseRejectBlock  *)reject);

@@ -353,14 +353,14 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     };
   };
 
-  public getConstants = async () => {
+  public getRouteConstants = async () => {
     try {
       if(!RouteViewUtils.isRouteReady(this.routeStatus)){
         throw new Error("`NavigatorRouteView` is not mounted")
       };
 
       const result = await Helpers.promiseWithTimeout(1000,
-        RNINavigatorRouteViewModule.getConstants(
+        RNINavigatorRouteViewModule.getRouteConstants(
           findNodeHandle(this._nativeRef)
         )
       );

@@ -13,7 +13,7 @@ export type RouteConstantsObject = {
     left  : number;
     right : number;
   };
-  
+
   bounds: {
     x    : number;
     y    : number;
@@ -25,7 +25,7 @@ export type RouteConstantsObject = {
 interface RNINavigatorRouteViewModule {
   setHidesBackButton(node: number, isHidden: boolean, animated: boolean): Promise<void>;
 
-  getConstants(node: number): Promise<RouteConstantsObject>;
+  getRouteConstants(node: number): Promise<RouteConstantsObject>;
 };
 
 // Import native component

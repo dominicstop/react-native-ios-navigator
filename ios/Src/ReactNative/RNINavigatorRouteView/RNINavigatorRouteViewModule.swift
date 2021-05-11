@@ -61,7 +61,7 @@ internal class RNINavigatorRouteViewModule: NSObject {
     };
   };
   
-  @objc func getConstants(
+  @objc func getRouteConstants(
     _ node : NSNumber,
     // promise blocks ------------------------
     resolve: @escaping RCTPromiseResolveBlock,
@@ -95,7 +95,7 @@ internal class RNINavigatorRouteViewModule: NSObject {
         };
         
         #if DEBUG
-        print("LOG - NativeModule, RNINavigatorRouteViewModule: setHidesBackButton"
+        print("LOG - NativeModule, RNINavigatorRouteViewModule: getRouteConstants"
           + " - for node: \(node)"
         );
         #endif
