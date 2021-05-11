@@ -166,3 +166,17 @@ export type ControlState =
   | 'selected'
   /* Focused state of a control. */
   | 'focused';
+
+export type EdgeInsets = {
+    top   : number;
+    bottom: number;
+    left  : number;
+    right : number;
+};
+
+export type Rect = {
+    x     : number;
+    y     : number;
+    height: number;
+    width : number;
+};

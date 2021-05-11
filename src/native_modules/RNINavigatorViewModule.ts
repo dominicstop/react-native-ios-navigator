@@ -1,10 +1,37 @@
 import { NativeModules } from 'react-native';
 
+import type { NavigatorRouteView } from 'src/components/NavigatorRouteView';
+import type { RNINavigatorRouteViewProps } from 'src/native_components/RNINavigatorRouteView';
+import type { EdgeInsets, Rect } from 'src/types/MiscTypes';
+
 export type NativePushPopOptions = {
   isAnimated?: boolean;
 };
 
-export type NavigatorConstantsObject = object;
+type RouteData = {
+  type: 'viewController'
+} | ({
+  type: 'reactRoute' | 'nativeRoute'
+} & Pick<RNINavigatorRouteViewProps, 
+  | 'routeID'
+  | 'routeKey'
+  | 'routeIndex'
+>);
+
+export type NavigatorConstantsObject = {
+  navigatorID: number;
+
+  navBarHeight: number;
+  statusBarHeight: number;
+  safeAreaInsets: EdgeInsets;
+  bounds: Rect;
+
+  isPresenting: boolean;
+  activeRoutes: Array<RouteData>;
+
+  topViewController    ?: RouteData;
+  visibleViewController?: RouteData;
+};
 
 interface RNINavigatorViewModule {
 
@@ -82,7 +109,7 @@ interface RNINavigatorViewModule {
   ): Promise<object | null>;
 
   
-  getNavigatorConstants(node: number): Promise<object>;
+  getNavigatorConstants(node: number): Promise<NavigatorConstantsObject>;
 };
 
 export const RNINavigatorViewModule: RNINavigatorViewModule =

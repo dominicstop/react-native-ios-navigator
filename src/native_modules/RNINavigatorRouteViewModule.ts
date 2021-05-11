@@ -1,4 +1,5 @@
 import { NativeModules } from 'react-native';
+import type { EdgeInsets, Rect } from 'src/types/MiscTypes';
 
 export type RouteConstantsObject = {
   isCurrentlyInFocus: boolean;
@@ -7,19 +8,8 @@ export type RouteConstantsObject = {
   statusBarHeight: number;
   navBarWithStatusBarHeight: number;
 
-  safeAreaInsets: {
-    top   : number;
-    bottom: number;
-    left  : number;
-    right : number;
-  };
-
-  bounds: {
-    x     : number;
-    y     : number;
-    height: number;
-    width : number;
-  };
+  safeAreaInsets: EdgeInsets;
+  bounds: Rect;
 };
 
 interface RNINavigatorRouteViewModule {

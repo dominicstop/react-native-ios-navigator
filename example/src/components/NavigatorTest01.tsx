@@ -1,17 +1,13 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Text, ScrollView, TouchableOpacity, TextInput, Switch, Alert, ViewStyle } from 'react-native';
-import { RouteViewEvents, RouteViewPortal, RouteContentProps, NavigationObject } from 'react-native-ios-navigator';
+import { RouteViewEvents, RouteViewPortal, RouteContentProps, NavigationObject, RouteConstantsObject, NavigatorConstantsObject, StatusBarStyle } from 'react-native-ios-navigator';
 
 import type { NavBarItemsConfig, NavBarBackItemConfig } from '../../../src/types/NavBarItemConfig';
 import type { NavBarAppearanceConfig, NavBarAppearanceCombinedConfig } from '../../../src/types/NavBarAppearanceConfig';
-import type { StatusBarStyle } from '../../../src/native_components/RNINavigatorRouteView';
 
 import * as Colors  from '../constants/Colors';
 import * as Helpers from '../functions/Helpers';
-
-import type { RouteConstantsObject } from 'src/native_modules/RNINavigatorRouteViewModule';
-import type { NavigatorConstantsObject } from 'src/native_modules/RNINavigatorViewModule';
 
 
 // NOTE: This is messy.
