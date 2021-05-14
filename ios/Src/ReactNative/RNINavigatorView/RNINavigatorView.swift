@@ -24,6 +24,9 @@ public final class RNINavigatorView: UIView {
   // MARK:- Properties
   // -----------------
   
+  // MARK: Properties - Internal
+  // ---------------------------
+
   /// ref to the shared `RCTBridge` instance
   weak var bridge: RCTBridge!;
   
@@ -31,6 +34,13 @@ public final class RNINavigatorView: UIView {
   
   weak var parentVC: UIViewController?;
   
+  /// read by the `UINavigationBar`
+  /// if set to `true`, views behind the navigation bar will receive touch events
+  var allowTouchEventsToPassThroughNavigationBar = false;
+  
+  // MARK: Properties - Private
+  // --------------------------
+
   /// The routes added/to be added to the nav. stack.
   /// Note: The key is the `routeID`, also when removing an item, don't forget
   /// to call `cleanup` on the `routeView`
@@ -44,15 +54,14 @@ public final class RNINavigatorView: UIView {
   /// The react view to show behind the navigation bar
   private var reactNavBarBackground: UIView?;
   
-  public var navigationVC: UINavigationController!;
-  
-  /// read by the `UINavigationBar`
-  /// if set to `true`, views behind the navigation bar will receive touch events
-  var allowTouchEventsToPassThroughNavigationBar = false;
-  
   // TODO
   private var nativeCommandRequestCompletionMap: Dictionary<String, Completion> = [:];
   
+  // MARK: Properties - Public
+  // --------------------------
+  
+  public var navigationVC: UINavigationController!;
+
   // ----------------------------------
   // MARK: Convenient Property Wrappers
   // ----------------------------------
