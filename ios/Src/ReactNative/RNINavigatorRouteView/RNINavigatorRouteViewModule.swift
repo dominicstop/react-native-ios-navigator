@@ -11,6 +11,16 @@ import Foundation
 @objc(RNINavigatorRouteViewModule)
 internal class RNINavigatorRouteViewModule: NSObject {
   
+  @objc var bridge: RCTBridge!;
+  
+  func getRouteView(_ node: NSNumber) -> RNINavigatorRouteView? {
+    return RNIUtilities.getView(
+      forNode: node,
+      type   : RNINavigatorRouteView.self,
+      bridge : self.bridge
+    );
+  };
+  
   // ----------------------
   // MARK:- Module Commands
   // ----------------------
@@ -25,11 +35,7 @@ internal class RNINavigatorRouteViewModule: NSObject {
     
     DispatchQueue.main.async {
       // get `RNINavigatorRouteView` instance that matches node/reactTag
-      guard let routeView = RNIUtilities.getView(
-              forNode: node,
-              type   : RNINavigatorRouteView.self,
-              bridge : RNINavigatorRouteViewManager.sharedBridge
-            ),
+      guard let routeView = self.getRouteView(node),
             let routeVC = routeView.routeVC
       else {
         // construct error message for promise
@@ -71,12 +77,7 @@ internal class RNINavigatorRouteViewModule: NSObject {
     DispatchQueue.main.async {
       do {
         // get `RNINavigatorRouteView` instance that matches node/reactTag
-        guard let routeView = RNIUtilities.getView(
-                forNode: node,
-                type   : RNINavigatorRouteView.self,
-                bridge : RNINavigatorRouteViewManager.sharedBridge
-              )
-        else {
+        guard let routeView = self.getRouteView(node) else {
           // construct error message for promise
           let errorMessage = (
               "NativeModule, RNINavigatorRouteViewModule: getConstants"

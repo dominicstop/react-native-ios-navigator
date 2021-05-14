@@ -11,11 +11,13 @@ import Foundation
 @objc(RNINavigatorViewModule)
 internal class RNINavigatorViewModule: NSObject {
   
-  static func getNavigatorView(_ node: NSNumber) -> RNINavigatorView? {
+  @objc var bridge: RCTBridge!;
+  
+  func getNavigatorView(_ node: NSNumber) -> RNINavigatorView? {
     return RNIUtilities.getView(
       forNode: node,
       type   : RNINavigatorView.self,
-      bridge : RNINavigatorViewManager.sharedBridge
+      bridge : self.bridge
     );
   };
   
@@ -35,7 +37,7 @@ internal class RNINavigatorViewModule: NSObject {
     DispatchQueue.main.async {
       do {
         // get `RNINavigatorView` instance that matches node/reactTag
-        guard let navigatorView = Self.getNavigatorView(node) else {
+        guard let navigatorView = self.getNavigatorView(node) else {
           throw RNIError.commandFailed(
             source : "RNINavigatorViewModule.push",
             message:
@@ -76,7 +78,7 @@ internal class RNINavigatorViewModule: NSObject {
     DispatchQueue.main.async {
       do {
         // get `RNINavigatorView` instance that matches node/reactTag
-        guard let navigatorView = Self.getNavigatorView(node) else {
+        guard let navigatorView = self.getNavigatorView(node) else {
           throw RNIError.commandFailed(
             source : "RNINavigatorViewModule.pop",
             message:
@@ -119,7 +121,7 @@ internal class RNINavigatorViewModule: NSObject {
 
     DispatchQueue.main.async {
       // get `RNINavigatorView` instance that matches node/reactTag
-      guard let navigatorView = Self.getNavigatorView(node) else {
+      guard let navigatorView = self.getNavigatorView(node) else {
         // construct error message for promise
         let errorMessage = (
             "NativeModule, RNINavigatorViewModule: setNavigationBarHidden"
@@ -162,7 +164,7 @@ internal class RNINavigatorViewModule: NSObject {
     DispatchQueue.main.async {
       do {
         // get `RNINavigatorView` instance that matches node/reactTag
-        guard let navigatorView = Self.getNavigatorView(node) else {
+        guard let navigatorView = self.getNavigatorView(node) else {
           throw RNIError.commandFailed(
             source : "RNINavigatorViewModule.popToRoot",
             message:
@@ -203,7 +205,7 @@ internal class RNINavigatorViewModule: NSObject {
     DispatchQueue.main.async {
       do {
         // get `RNINavigatorView` instance that matches node/reactTag
-        guard let navigatorView = Self.getNavigatorView(node) else {
+        guard let navigatorView = self.getNavigatorView(node) else {
           throw RNIError.commandFailed(
             source : "RNINavigatorViewModule.removeRoute",
             message:
@@ -249,7 +251,7 @@ internal class RNINavigatorViewModule: NSObject {
     DispatchQueue.main.async {
       do {
         // get `RNINavigatorView` instance that matches node/reactTag
-        guard let navigatorView = Self.getNavigatorView(node) else {
+        guard let navigatorView = self.getNavigatorView(node) else {
           throw RNIError.commandFailed(
             source : "RNINavigatorViewModule.replaceRoute",
             message:
@@ -294,7 +296,7 @@ internal class RNINavigatorViewModule: NSObject {
     DispatchQueue.main.async {
       do {
         // get `RNINavigatorView` instance that matches node/reactTag
-        guard let navigatorView = Self.getNavigatorView(node) else {
+        guard let navigatorView = self.getNavigatorView(node) else {
           throw RNIError.commandFailed(
             source : "RNINavigatorViewModule.removeRoutes",
             message:
@@ -345,7 +347,7 @@ internal class RNINavigatorViewModule: NSObject {
     DispatchQueue.main.async {
       do {
         // get `RNINavigatorView` instance that matches node/reactTag
-        guard let navigatorView = Self.getNavigatorView(node) else {
+        guard let navigatorView = self.getNavigatorView(node) else {
           throw RNIError.commandFailed(
             source : "RNINavigatorViewModule.insertRoute",
             message:
@@ -389,7 +391,7 @@ internal class RNINavigatorViewModule: NSObject {
     DispatchQueue.main.async {
       do {
         // get `RNINavigatorView` instance that matches node/reactTag
-        guard let navigatorView = Self.getNavigatorView(node) else {
+        guard let navigatorView = self.getNavigatorView(node) else {
           throw RNIError.commandFailed(
             source : "RNINavigatorViewModule.setRoutes",
             message:
@@ -442,7 +444,7 @@ internal class RNINavigatorViewModule: NSObject {
     DispatchQueue.main.async {
       do {
         // get `RNINavigatorView` instance that matches node/reactTag
-        guard let navigatorView = Self.getNavigatorView(node) else {
+        guard let navigatorView = self.getNavigatorView(node) else {
           throw RNIError.commandFailed(
             source : "RNINavigatorViewModule.sendCustomCommandToNative",
             message:
@@ -486,7 +488,7 @@ internal class RNINavigatorViewModule: NSObject {
     DispatchQueue.main.async {
       do {
         // get `RNINavigatorView` instance that matches node/reactTag
-        guard let navigatorView = Self.getNavigatorView(node) else {
+        guard let navigatorView = self.getNavigatorView(node) else {
           throw RNIError.commandFailed(
             source : "RNINavigatorViewModule.getNavigatorConstants",
             message:
