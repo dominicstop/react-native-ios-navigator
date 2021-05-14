@@ -22,22 +22,11 @@ public class RNINavigatorManager {
     valueOptions: .weakMemory
   );
   
-  public var delegate: RNINavigatorManagerDelegate?;
+  // ---------------------
+  // MARK:- Public Methods
+  // ---------------------
   
-  internal func registerNavigatorView(
-    _ instance: RNINavigatorView,
-    forNavigatorID navigatorID: NSNumber
-  ){
-    self.navigatorViewInstances.setObject(instance, forKey: navigatorID);
-    self.delegate?.onNavigatorViewAdded(instance, navigatorID.intValue);
-    
-    #if DEBUG
-    print("LOG - RNINavigatorManager: registerNavigatorView"
-      + " - for navigatorID: \(navigatorID)"
-      + " - instance count: \(self.navigatorViewInstances.count)"
-    );
-    #endif
-  };
+  public var delegate: RNINavigatorManagerDelegate?;
   
   public func getNavigatorViewInstances() -> Array<RNINavigatorView> {
     guard let enumerator = self.navigatorViewInstances.objectEnumerator()
@@ -57,7 +46,36 @@ public class RNINavigatorManager {
   public func getNavigatorViewInstance(forNavigatorID key: Int) -> RNINavigatorView? {
     return self.navigatorViewInstances.object(forKey: key as NSNumber);
   };
+  
+  // -----------------------
+  // MARK:- Internal Methods
+  // -----------------------
+  
+  internal func registerNavigatorView(
+    _ instance: RNINavigatorView,
+    forNavigatorID navigatorID: NSNumber
+  ){
+    self.navigatorViewInstances.setObject(instance, forKey: navigatorID);
+    self.delegate?.onNavigatorViewAdded(instance, navigatorID.intValue);
+    
+    #if DEBUG
+    print("LOG - RNINavigatorManager: registerNavigatorView"
+      + " - for navigatorID: \(navigatorID)"
+      + " - instance count: \(self.navigatorViewInstances.count)"
+    );
+    #endif
+  };
+  
+  internal func cleanup(){
+    for navigatorView in self.getNavigatorViewInstances() {
+      navigatorView.cleanup();
+    };
+  };
 };
+
+// ----------------------------------
+// MARK:- RNINavigatorManagerDelegate
+// ----------------------------------
 
 public protocol RNINavigatorManagerDelegate {
   func onNavigatorViewAdded(_ navigatorView: RNINavigatorView, _ navigatorID: Int);

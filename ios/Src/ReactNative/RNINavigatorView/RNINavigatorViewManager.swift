@@ -8,7 +8,7 @@
 import Foundation
 
 @objc(RNINavigatorViewManager)
-internal class RNINavigatorViewManager: RCTViewManager {
+internal class RNINavigatorViewManager: RCTViewManager, RCTInvalidating {
   
   // --------------------
   // MARK:- Shared Bridge
@@ -57,5 +57,18 @@ internal class RNINavigatorViewManager: RCTViewManager {
     
     // send a ref to bridge instance
     return RNINavigatorView(bridge: self.bridge);
+  };
+  
+  // ----------------------
+  // MARK:- RCTInvalidating
+  // ----------------------
+  
+  func invalidate() {
+    #if DEBUG
+    print("LOG - RNINavigatorViewManager: invalidate");
+    #endif
+    
+    // cleanup - remove all current navigators
+    RNINavigatorManager.sharedInstance.cleanup();
   };
 };

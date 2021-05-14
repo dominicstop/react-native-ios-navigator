@@ -39,6 +39,8 @@ public final class RNINavigatorView: UIView {
   
   private var didReceiveAllInitialRoutes = false;
   
+  private var didTriggerCleanup = false;
+  
   /// The react view to show behind the navigation bar
   private var reactNavBarBackground: UIView?;
   
@@ -359,6 +361,45 @@ public final class RNINavigatorView: UIView {
   // MARK:- Misc Internals
   // ---------------------
   
+  /// remove this view (+ related-views) from the RN view registry
+  func cleanup(){
+    guard !self.didTriggerCleanup else { return };
+    self.didTriggerCleanup = true;
+    
+    // remove background view if any
+    if let backgroundView = self.reactNavBarBackground {
+      RNIUtilities.recursivelyRemoveFromViewRegistry(
+        bridge   : self.bridge,
+        reactView: backgroundView
+      );
+    };
+    
+    // remove nav controller from parent vc if any
+    if self.parentVC != nil {
+      self.navigationVC.willMove(toParent: nil);
+      self.navigationVC.removeFromParent();
+    };
+    
+    // remove routes from view registry
+    self.routeItemsMap.values.forEach {
+      if let routeVC = $0 as? RNINavigatorReactRouteViewController {
+        routeVC.routeView.cleanup();
+      };
+      
+      // remove from registry
+      self.routeItemsMap.removeValue(forKey: $0.routeID);
+    };
+    
+    // remove this view from registry
+    RNIUtilities.recursivelyRemoveFromViewRegistry(
+      bridge   : self.bridge,
+      reactView: self
+    );
+    
+    self.navigationVC = nil;
+    self.reactNavBarBackground = nil;
+  };
+  
   func getSecondToLastRouteVC() -> RNINavigatorRouteBaseViewController? {
     guard self.routeItemsMap.count > 1 else { return nil };
     let routeItems = self.routeItems;
@@ -495,42 +536,6 @@ fileprivate extension RNINavigatorView {
       + " - routeVCs removed count: \(prevCountRouteVCs - nextCountRouteVCs)"
     );
     #endif
-  };
-  
-  /// remove this view (+ related-views) from the RN view registry
-  func cleanup(){
-    // remove background view if any
-    if let backgroundView = self.reactNavBarBackground {
-      RNIUtilities.recursivelyRemoveFromViewRegistry(
-        bridge   : self.bridge,
-        reactView: backgroundView
-      );
-    };
-    
-    // remove nav controller from parent vc if any
-    if self.parentVC != nil {
-      self.navigationVC.willMove(toParent: nil);
-      self.navigationVC.removeFromParent();
-    };
-    
-    // remove routes from view registry
-    self.routeItemsMap.values.forEach {
-      if let routeVC = $0 as? RNINavigatorReactRouteViewController {
-        routeVC.routeView.cleanup();
-      };
-      
-      // remove from registry
-      self.routeItemsMap.removeValue(forKey: $0.routeID);
-    };
-    
-    // remove this view from registry
-    RNIUtilities.recursivelyRemoveFromViewRegistry(
-      bridge   : self.bridge,
-      reactView: self
-    );
-    
-    self.navigationVC = nil;
-    self.reactNavBarBackground = nil;
   };
   
   #if DEBUG
