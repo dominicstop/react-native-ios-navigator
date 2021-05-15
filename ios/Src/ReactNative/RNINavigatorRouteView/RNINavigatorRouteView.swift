@@ -554,6 +554,10 @@ internal class RNINavigatorRouteView: UIView {
   override func reactSetFrame(_ frame: CGRect) {
     // noop - prevent layout updates from react
   };
+  
+  override func reactSuperview() -> UIView! {
+    return self.navigatorView;
+  }
 };
 
 // ------------------------------------

@@ -128,6 +128,8 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
   
   var headerHeightConstraint: NSLayoutConstraint!;
   
+  private var didTriggerSetup = false;
+  
   // ------------------------
   // MARK:- RN Exported Props
   // ------------------------
@@ -191,9 +193,12 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
   // -------------------------
   
   func setup(rootView: UIView) {
-    guard let routeVC = self.routeViewController,
+    guard !self.didTriggerSetup,
+          let routeVC = self.routeViewController,
           let wrapperView = self.wrapperView
     else { return };
+    
+    self.didTriggerSetup = true;
     
     self.refreshHeaderTopPadding();
     switch self.headerConfig.headerMode {

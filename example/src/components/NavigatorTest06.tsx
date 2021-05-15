@@ -93,6 +93,10 @@ export function NavigatorTest06(){
           <Text style={{fontSize: 64, fontWeight: '600', margin: 10}}>
             Hello World
           </Text>
+          <Image
+            style={{width: 100, height: 100, borderRadius: 10, margin: 10}}
+            source={AssetImageCoffee}
+          />
           <TouchableOpacity 
             style={styles.headerButton}
             onPress={() => {
