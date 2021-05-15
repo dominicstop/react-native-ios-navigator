@@ -90,6 +90,8 @@
 
 - [ ] **Implement**: Navigator command error recovery - revert state to snapshot if command failed.
 
+- [ ] **Implement**: Add main queue setup for `RNINavigatorRouteViewModule` and `RNINavigatorViewModule`
+
 ---
 
 <br>
@@ -142,7 +144,7 @@
 
 - [ ] **Fix**: Layout not updating when the navigation bar is hidden or shown, possibly due to `SafeAreaView`
 	- Possible fix: `setLocalData`, e,g `RCTSafeAreaViewLocalData *localData = [[RCTSafeAreaViewLocalData alloc] initWithInsets:safeAreaInsets];`
-	- did not work: `safeAreaInsetsDidChange`, `layoutSubviews
+	- did not work: `safeAreaInsetsDidChange`, `layoutSubviews`.
 
 <br>
 
@@ -253,6 +255,7 @@
 	- Only happens on manual reload (no errors during fast refresh). Probably related to the navigator module?
 	- [x] (Commit: `6141ecf`) **Fix**: Reverted  regression, reverted commit: `2888fe5`.
 	- [x] (Commit: `6098069`) **Cleanup**: `RCTBridgeWillReloadNotification` Listeners.
+	- [x] (Commit: `a754aad`) **Cleanup**:  Use built-in bridge instance instead of `sharedBridge` for the native modules.
 
 <br>
 
@@ -313,9 +316,32 @@
 
 - [x] (Commit: `45690a0`) **Fix**: `allowTouchEventsToPassThroughNavigationBar` not resetting when route exits.
 
+<br>
 
+- [ ] (Commit: `5f149e2`) **Fix**: Release version of example project not compiling.
+	- The debug build works, but the release build fails with 100+ errors.
+	- The console outputs the following warnings:
+		- `ld: warning: Could not find or use auto-linked library 'swiftDarwin'`
+		- `ld: warning: Could not find or use auto-linked library 'swiftUIKit'`
+		- `ld: warning: Could not find or use auto-linked library 'swiftFoundation'`
+		- `ld: warning: Could not find or use auto-linked library 'swiftObjectiveC'`
+		- `ld: warning: Could not find or use auto-linked library 'swiftCore'`
+		- etc.
+	- Then followed by `Undefined symbols for architecture arm64` , etc.
+	- As the warning suggests, the auto-linking for the swift-related libraries isn't working. Manually linking the swift libraries in the build phase is a bad idea (but it does work).
+		- Normally whenever you import a framework (e.g. `import UIKit`), it'll automagically link that framework to the binary so that you don't have to do it yourself.
+	- This can usually be fixed by adding an empty swift file and a bridging header, but i've already done that and it's still not working for the release build.
+		- Added the bridging header and empty swift file to the compile sources build phase but still nothing.
+		- Checked if the "obj-c bridging header" build setting is valid.
+		- Checked if the "always embed swift standard library" build setting is set to true.
+		- According to the swift forums: "*you shouldn't need to add the toolchain library paths to LIBRARY_SEARCH_PATHS yourself, because Xcode will automatically include those libraries if your minimum deployment target is old enough to need them.*"
+		- But as a last ditch attempt, I'm going to add `$(SDKROOT)/usr/lib/swift` as the first item to the library search path build setting so that the compiler "sees" the built-in swift libraries?
+		- Example project now compiles but this might not be the correct solution.
+	-  Now there's a problem with the "Bundle React Native code and images" build phase. It outputs the ff. error: ``
+		- In other words the js bundle isn't being created because `index.js` cannot be found, which makes sense because i'm using typescript so I have a `index.tsx` file instead.
+		- Fixed by following [this](https://github.com/facebook/react-native/issues/25522#issuecomment-585711247) github comment.
 
-------
+---
 
 <br>
 
@@ -483,7 +509,6 @@ DynamicColorIOS:  {"dynamic": {"dark": "blue", "light": "red"}}
 - [x] Support for native route as the init. route
 - [x] Remove optional properties from Navigation Object
 - [x] Implement weak dict for all the navigator instances `navigatorInstances[navigatorID]`
-
 - [x] Move `applyBackConfig` out of `BackItemConfig` into separate prop: `applyBackConfigToCurrentRoute`
 
 ------
