@@ -90,8 +90,6 @@
 
 - [ ] **Implement**: Navigator command error recovery - revert state to snapshot if command failed.
 
-- [ ] **Implement**: Add main queue setup for `RNINavigatorRouteViewModule` and `RNINavigatorViewModule`
-
 ---
 
 <br>
@@ -340,6 +338,10 @@
 	-  Now there's a problem with the "Bundle React Native code and images" build phase. It outputs the ff. error: ``
 		- In other words the js bundle isn't being created because `index.js` cannot be found, which makes sense because i'm using typescript so I have a `index.tsx` file instead.
 		- Fixed by following [this](https://github.com/facebook/react-native/issues/25522#issuecomment-585711247) github comment.
+
+<br>
+
+- [x] (Commit: `0c19c5e`) **Implement**: Add main queue setup for `RNINavigatorRouteViewModule` and `RNINavigatorViewModule`
 
 ---
 
