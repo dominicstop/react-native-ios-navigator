@@ -21,6 +21,11 @@ internal class RNINavigatorRouteViewModule: NSObject {
     );
   };
   
+  @objc static func requiresMainQueueSetup() -> Bool {
+    // run init in bg thread
+    return false;
+  };
+  
   // ----------------------
   // MARK:- Module Commands
   // ----------------------

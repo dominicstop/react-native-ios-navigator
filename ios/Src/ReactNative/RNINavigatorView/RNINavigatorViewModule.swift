@@ -13,6 +13,11 @@ internal class RNINavigatorViewModule: NSObject {
   
   @objc var bridge: RCTBridge!;
   
+  @objc static func requiresMainQueueSetup() -> Bool {
+    // run init in bg thread
+    return false;
+  };
+  
   func getNavigatorView(_ node: NSNumber) -> RNINavigatorView? {
     return RNIUtilities.getView(
       forNode: node,
