@@ -21,6 +21,8 @@
 		886F2880261B888300AF0CF4 /* RNITestRouteViewController01.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886F287F261B888300AF0CF4 /* RNITestRouteViewController01.swift */; };
 		886F28B3261B8BE500AF0CF4 /* RouteRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886F28B2261B8BE500AF0CF4 /* RouteRegistry.swift */; };
 		886F296A261CEE0200AF0CF4 /* NavigatorManagerListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886F2969261CEE0200AF0CF4 /* NavigatorManagerListener.swift */; };
+		8873235F26505EC60021CD4B /* IosNavigatorExample-Bridging-Header.h in Sources */ = {isa = PBXBuildFile; fileRef = 886F2878261B873400AF0CF4 /* IosNavigatorExample-Bridging-Header.h */; };
+		887323C6265066050021CD4B /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88732226265049A50021CD4B /* File.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +62,7 @@
 		886F287F261B888300AF0CF4 /* RNITestRouteViewController01.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNITestRouteViewController01.swift; sourceTree = "<group>"; };
 		886F28B2261B8BE500AF0CF4 /* RouteRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteRegistry.swift; sourceTree = "<group>"; };
 		886F2969261CEE0200AF0CF4 /* NavigatorManagerListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigatorManagerListener.swift; sourceTree = "<group>"; };
+		88732226265049A50021CD4B /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		CA3E69C5B9553B26FBA2DF04 /* libPods-IosNavigatorExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-IosNavigatorExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E00ACF0FDA8BF921659E2F9A /* Pods-IosNavigatorExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IosNavigatorExample.release.xcconfig"; path = "Target Support Files/Pods-IosNavigatorExample/Pods-IosNavigatorExample.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -128,6 +131,7 @@
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				886F2878261B873400AF0CF4 /* IosNavigatorExample-Bridging-Header.h */,
+				88732226265049A50021CD4B /* File.swift */,
 			);
 			name = IosNavigatorExample;
 			sourceTree = "<group>";
@@ -369,7 +373,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh index.tsx\n";
 		};
 		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -478,6 +482,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				887323C6265066050021CD4B /* File.swift in Sources */,
+				8873235F26505EC60021CD4B /* IosNavigatorExample-Bridging-Header.h in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				886F28B3261B8BE500AF0CF4 /* RouteRegistry.swift in Sources */,
 				8822D72F2644107F00075DAA /* RootViewController.swift in Sources */,
@@ -573,6 +579,7 @@
 				DEVELOPMENT_TEAM = ZC7A6XV8GR;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = IosNavigatorExample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -597,7 +604,34 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = ZC7A6XV8GR;
 				INFOPLIST_FILE = IosNavigatorExample/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(SDKROOT)/usr/lib/swift",
+					"$(inherited)",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/DoubleConversion\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/FBReactNativeSpec\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/Folly\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/RCTTypeSafety\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-Core\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-CoreModules\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTAnimation\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTBlob\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTImage\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTLinking\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTNetwork\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTSettings\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTText\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-RCTVibration\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-cxxreact\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-jsi\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-jsiexecutor\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/React-jsinspector\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/ReactCommon\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/Yoga\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/glog\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/react-native-ios-navigator\"",
+				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
