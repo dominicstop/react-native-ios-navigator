@@ -85,9 +85,6 @@
 
 <br>
 
-- [ ] **Implement**: Adopt `RCTInvalidating` protocol for all the `UIView`/`RCTView` subclasses.
-	- Tried reloading and fast refresh but `RCTInvalidating.invalidate` is not being invoked.
-
 - [ ] **Implement**: Support landscape orientation/screen rotate.
 	* Already seems to work, but there might be edge cases (especially regarding safe area layout).
 
@@ -309,8 +306,14 @@
 		* But there is still a scroll view that's inter-actable after the fast refresh (it even updates properly when you add a new child in the scroll view). This suggests that after the fast refresh, the `RCTScrollView` was replaced by a different instance?
 			* Before fast refresh: `0x7fb4c4454220`
 			* After fast refresh: `0x7fb4c464c620`
-			* The `RCTScrollView` instance was replaced after the fast refresh. So it probably isn't a good idea to direcly save a reference of instances of react subviews since they can be replaced...
+			* The `RCTScrollView` instance was replaced after the fast refresh. So it probably isn't a good idea to directly save a reference of instances of react subviews since they can be replaced...
 	* The fix is to not store a direct ref. to the "wrapper view".
+
+<br>
+
+- [x] (Commit: `45690a0`) **Fix**: `allowTouchEventsToPassThroughNavigationBar` not resetting when route exits.
+
+
 
 ------
 
@@ -498,4 +501,10 @@ DynamicColorIOS:  {"dynamic": {"dark": "blue", "light": "red"}}
 
 - [ ] Impl `imageRequire` (Too buggy)
 - [ ] Create collapsing navigation bar
+
+<br>
+
+- [ ] **Implement**: Adopt `RCTInvalidating` protocol for all the `UIView`/`RCTView` subclasses.
+	- Tried reloading and fast refresh but `RCTInvalidating.invalidate` is not being invoked.
+	- It seems that `RCTInvalidating` is only meant to be used with view managers and native modules.
 
