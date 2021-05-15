@@ -34,12 +34,13 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     };
   };
   
-  /// Used to override the current nav. config and restore it when the route
-  /// becomes inactive.
+  /// Used to temp. override the current nav. config and restore it when the
+  /// route becomes inactive.
   class NavigationConfigOverride {
     
     /// stores/holds values for nav bar's "legacy appearance"-related properties
     struct NavBarAppearanceLegacyConfig {
+      
       // MARK: Title Config
       var titleTextAttributes: Dictionary<NSAttributedString.Key, Any>?;
       var largeTitleTextAttributes: Dictionary<NSAttributedString.Key, Any>?;
@@ -107,7 +108,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     weak var parentRef: RNINavigatorReactRouteViewController?;
     
     /// store the navigation bar's current legacy appearance config (before it's
-    /// ben overridden/replaced) so that we can restore it later.
+    /// been overridden/replaced) so that we can restore it later.
     var navBarLegacyConfig: NavBarAppearanceLegacyConfig?;
     
     var isNavBarHidden: Bool?;
@@ -152,20 +153,18 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       guard let navigatorView = self.parentRef?.routeView?.navigatorView
       else { return };
       
-      let currentValue   = navigatorView.allowTouchEventsToPassThroughNavigationBar;
-      let didChange      = currentValue != flag;
-      let shouldOverride = self.isNavBarHidden == nil && didChange;
+      if self.allowTouchEventsToPassThroughNavigationBar == nil {
+        // save current value to restore later
+        self.allowTouchEventsToPassThroughNavigationBar =
+          navigatorView.allowTouchEventsToPassThroughNavigationBar;
+      };
       
-      guard shouldOverride else { return };
       #if DEBUG
       print("LOG - VC, RNINavigatorReactRouteViewController: NavigationConfigOverride"
-        + " - overrideAllowTouchEventsToPassThroughNavigationBar, currentValue: \(currentValue)"
-        + " - override value: \(flag)"
+        + " - overrideAllowTouchEventsToPassThroughNavigationBar, next value: \((flag))"
+        + " - saved value: \(self.allowTouchEventsToPassThroughNavigationBar.debugDescription)"
       );
       #endif
-        
-      // save current value to restore later
-      self.allowTouchEventsToPassThroughNavigationBar = currentValue;
       
       // override current value
       navigatorView.allowTouchEventsToPassThroughNavigationBar = flag;
@@ -240,7 +239,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     };
     
     /// If there were any nav bar config values overridden, then this will restore
-    /// them to the prev. values.
+    /// them to the original/prev. values.
     func restoreConfigIfNeeded(){
       guard let parentRef     = self.parentRef,
             let navController = parentRef.navigationController,
@@ -248,6 +247,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       else { return };
       
       if let navBarLegacyConfig = self.navBarLegacyConfig {
+        
         navBarLegacyConfig.applyConfig(to: navController.navigationBar);
         self.navBarLegacyConfig = nil;
         
@@ -259,6 +259,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       };
       
       if let isNavBarHidden = self.isNavBarHidden {
+        
         navController.isNavigationBarHidden = isNavBarHidden;
         self.isNavBarHidden = nil;
         
@@ -270,6 +271,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       };
       
       if let flag = self.allowTouchEventsToPassThroughNavigationBar {
+        
         navigatorView.allowTouchEventsToPassThroughNavigationBar = flag;
         self.allowTouchEventsToPassThroughNavigationBar = nil;
         
