@@ -91,6 +91,8 @@
 - [ ] **Implement**: Support landscape orientation/screen rotate.
 	* Already seems to work, but there might be edge cases (especially regarding safe area layout).
 
+- [ ] **Implement**: Navigator command error recovery - revert state to snapshot if command failed.
+
 ---
 
 <br>
@@ -149,10 +151,6 @@
 
 - [ ] **Fix**: autolayout warnings
 - [ ] **Fix** back swipe sometimes not working (`percentDrivenTransitions`)
-- [ ] **Fix** ScrollView offset bug resetting/not updating during fast refresh.
-	* To be more specific, it seems that the content offset is wrong, but the scroll indicator offsets are still correct?
-	* Toggling the navigation bar visibility doesn't trigger this bug even when animated, it behaves correctly. However changing the status bar style inside an animation block triggers the bug. Changing the status bar style without any animation does not trigger the bug.
-	* Manually set the scroll view offsets, however this will disable the built-in behaviors for `RCTScrollView` (e.g. the offsets when a keyboard is shown).
 
 <br>
 
@@ -178,7 +176,8 @@
 
 <br>
 
-- [ ] **Example**: Add test for multiple initial routes + test for initial native route
+- [ ] **Example**: Add test for multiple initial routes + test for initial native route.
+- [ ] **Test**: Scroll view with headers and footers, snapping, etc.
 
 ---
 
@@ -295,6 +294,23 @@
 <br>
 
 - [x] (Commit: `548b8d3`) **Fix**: route view blur events not firing.
+
+- [x] (Commit: `5a8fdff`) **Fix** ScrollView offset bug — Scrollview insets resetting/not updating during fast refresh.
+	* To be more specific, it seems that the content offset is wrong, but the scroll indicator offsets are still correct?
+	* Toggling the navigation bar visibility doesn't trigger this bug even when animated, it behaves correctly. However changing the status bar style inside an animation block triggers the bug. Changing the status bar style without any animation does not trigger the bug.
+	* Possible Fix: Manually set the scroll view offsets, however this will disable the built-in behaviors for `RCTScrollView` (e.g. the offsets when a keyboard is shown, etc).
+	* Observe the react scrollview property values before and after refresh.
+
+		* `reactSuperview` became nil after fast refresh. 
+		* The `reactSuperview` has a size of `(375.0, 667.0)` which matches the size of  `reactRouteContent` (i.e. the root view of the route vc). After some checking, the react superview of the react scrollview is in fact the `reactRouteContent` (which makes sense, but why did it become nil? Was it invalidated?)
+		* `scrollview.safeAreaInsets` changed from `top: 0` to `top: 116`, and `contentInset` changed from `116` to `0`, and `scrollview.contentOffset` changes from `116` to `0`. However the `reactScrollview`'s `contentInset` and `safeAreaInsets` remain unchanged.
+		* Calling `refreshContentInset`, `updateContentOffsetIfNeeded`, `updateConstraints`, `updateConstraintsIfNeeded`, `refreshContentInset`, `safeAreaInsetsDidChange`, on the react scrollview does nothing.
+		* `reactSuperview` is just `superview`, so the superview of `RCTScrollView` became `nil`. It's window property also became nil. Meaning that this specific instance is no longer visible/used after the fast refresh.
+		* But there is still a scroll view that's inter-actable after the fast refresh (it even updates properly when you add a new child in the scroll view). This suggests that after the fast refresh, the `RCTScrollView` was replaced by a different instance?
+			* Before fast refresh: `0x7fb4c4454220`
+			* After fast refresh: `0x7fb4c464c620`
+			* The `RCTScrollView` instance was replaced after the fast refresh. So it probably isn't a good idea to direcly save a reference of instances of react subviews since they can be replaced...
+	* The fix is to not store a direct ref. to the "wrapper view".
 
 ------
 
