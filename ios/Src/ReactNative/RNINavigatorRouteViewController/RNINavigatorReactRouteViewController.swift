@@ -294,9 +294,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     }
   };
   
-  /// Holds the subview for `reactRouteContent`
-  var wrapperView: RouteContentWrapper!;
-  
   // used for the custom transitions
   var interactionController: LeftEdgeInteractionController?;
   
@@ -361,6 +358,28 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     self.routeView.routeIndex.intValue;
   };
   
+  /// Get the first subview for `reactRouteContent`.
+  ///
+  /// Due to "fast refresh" behavior, a direct ref. to the instance cannot be
+  /// stored directly since it can be replaced by a different instance.
+  /// That's why we have to "dynamically" access it every time.
+  var wrapperView: RouteContentWrapper? {
+    guard let contentView = self.view.subviews.first
+    else { return nil };
+    
+    if let reactScrollView = contentView as? RCTScrollView {
+      // is content a scrollview
+      return .reactScrollView(view: reactScrollView);
+      
+    } else if let reactSafeAreaView = contentView as? RCTSafeAreaView {
+      // is content a safe area view
+      return .reactSafeAreaView(view: reactSafeAreaView);
+    };
+    
+    // content is a normal view
+    return .view(view: contentView);
+  };
+  
   // --------------------------------
   // MARK:- View Controller Lifecycle
   // --------------------------------
@@ -369,12 +388,25 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     super.loadView();
     
     /// The "root view" is the `routeView`'s `reactRouteContent`.
-    /// * The `routeView` is a container that holds all the route-related components
-    ///   i.e. it facilitates as a way to receive components from react and acts
-    ///   as a temp. parent/container.
-    /// * The `reactRouteContent` is a container that holds the route contents. It
-    ///    will contain a `wrapperView`. The `wrapperView` is the actual view
-    ///    that contains the content that we want to show from the the react route.
+    ///
+    /// * The `routeView` is a dummy view that holds all the route-related
+    ///   components, it doesn't actually draw anything i.e. it is used as a way
+    ///   to receive components from react and acts as a temp. parent/container.
+    ///
+    /// * The `routeView.reactRouteContent` is the view that is to be shown in
+    ///   the route, so it should be the view that's assigned to the view controller.
+    ///
+    /// * The `reactRouteContent` view can have several subviews, but we assume that
+    ///   the first subview is the "root container".
+    ///
+    ///  * This "root container" might be a `RCTScrollView`, a `RCTSafeAreaView`,
+    ///    or just another view. It holds the route's main content.
+    ///
+    ///  * The "root container" can be accessed via the `wrapperView` property
+    ///    wrapper.
+    ///
+    ///  * TODO: Fix the naming/pick better names because it's so confusing.
+    ///
     let rootView = self.routeView!.reactRouteContent!;
     rootView.frame = self.view.frame;
     
@@ -382,23 +414,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     self.routeView!.notifyForBoundsChange(self.view.bounds);
     /// set/replace the view controller's view
     self.view = rootView;
-        
-    self.wrapperView = {
-      guard let contentView = rootView.subviews.first
-      else { return nil };
-      
-      if let reactScrollView = contentView as? RCTScrollView {
-        // is content a scrollview
-        return .reactScrollView(view: reactScrollView);
-        
-      } else if let reactSafeAreaView = contentView as? RCTSafeAreaView {
-        // is content a safe area view
-        return .reactSafeAreaView(view: reactSafeAreaView);
-      };
-      
-      // content is a normal view
-      return .view(view: contentView);
-    }();
     
     if let headerView = self.routeView.reactRouteHeader {
       headerView.routeViewController = self;
@@ -440,6 +455,17 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     
     /// update `routeView`'s size
     self.routeView?.notifyForBoundsChange(self.view.bounds);
+  };
+  
+  override func viewDidLayoutSubviews() {
+    super.viewWillLayoutSubviews();
+    
+    switch self.wrapperView {
+      case let .reactScrollView(reactScrollView):
+        reactScrollView.refreshContentInset();
+        
+      default: break;
+    };
   };
   
   override func viewWillAppear(_ animated: Bool) {
@@ -496,16 +522,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     );
   };
   
-  override func viewDidLayoutSubviews() {
-    super.viewWillLayoutSubviews();
-    
-    switch self.wrapperView {
-      case let .reactScrollView(reactScrollView):
-        reactScrollView.refreshContentInset();
-        
-      default: break;
-    };
-  };
+
   
   override func willMove(toParent parent: UIViewController?){
     super.willMove(toParent: parent);
