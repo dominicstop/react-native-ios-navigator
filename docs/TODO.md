@@ -341,7 +341,8 @@
 
 <br>
 
-- [x] (Commit: `0c19c5e`) **Implement**: Add main queue setup for `RNINavigatorRouteViewModule` and `RNINavigatorViewModule`
+- [x] (Commit: `0c19c5e`) **Implement**: Add main queue setup for `RNINavigatorRouteViewModule` and `RNINavigatorViewModule`.
+- [x] (Commit: `6564908`) **Fix**: Route header not updating size during rotate.
 
 ---
 
