@@ -562,14 +562,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     };
   };
   
-  #if DEBUG
-  @objc func onRCTBridgeFastRefreshNotification(notification: NSNotification) {
-    
-    // TODO: Fix Bug - When refreshing, the scrollview's insets are wrong
-    print("LOG - RNINavigatorReactRouteViewController, onRCTBridgeFastRefreshNotification");
-  };
-  #endif
-  
   // --------------------------
   // MARK:- Internal  Functions
   // --------------------------

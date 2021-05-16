@@ -192,6 +192,9 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
   // MARK:- Internal Functions
   // -------------------------
   
+  /// TODO: Refactor - uss view controller containment/child vc so that we don't
+  /// have to call `setup` on the parent vc's `loadView`, or perform layout updates
+  /// on the parent vc's `willLayoutSubviews`
   func setup(rootView: UIView) {
     guard !self.didTriggerSetup,
           let routeVC = self.routeViewController,
