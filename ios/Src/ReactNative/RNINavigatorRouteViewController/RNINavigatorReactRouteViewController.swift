@@ -442,14 +442,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       self.navigationController?.delegate = self;
       self.interactionController = LeftEdgeInteractionController(viewController: self);
     };
-    
-    #if DEBUG
-    NotificationCenter.default.addObserver(self,
-      selector: #selector(self.onRCTBridgeFastRefreshNotification),
-      name: NSNotification.Name(rawValue: "RCTBridgeFastRefreshNotification"),
-      object: nil
-    );
-    #endif
   };
   
   override func viewWillLayoutSubviews() {
@@ -457,6 +449,11 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     
     /// update `routeView`'s size
     self.routeView?.notifyForBoundsChange(self.view.bounds);
+    
+    /// update `routeView`'s size
+    if let reactRouteHeader = self.routeView?.reactRouteHeader {
+      reactRouteHeader.notifyForBoundsChange(reactRouteHeader.bounds);
+    };
   };
   
   override func viewDidLayoutSubviews() {
