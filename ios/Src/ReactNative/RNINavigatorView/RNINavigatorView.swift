@@ -266,6 +266,8 @@ public final class RNINavigatorView: UIView {
     }
   };
   
+  @objc var shouldSwizzleRootViewController: Bool = true;
+  
   // ---------------------
   // MARK:- Init/Lifecycle
   // ---------------------
@@ -473,13 +475,22 @@ fileprivate extension RNINavigatorView {
     else { return };
     
     #if DEBUG
-    let isRootVC = self.window?.rootViewController == parentVC;
+    let isParentVCTheRootVC     = self.window?.rootViewController == parentVC;
+    let isRootRNIViewController = self.window?.rootViewController is RNIRootViewController;
+    
     print("LOG - NativeView, RNINavigatorView: setupEmbedNavigationControllerToClosestVC"
       + " - parentVC: \(parentVC)"
-      + " - isRootVC: \(isRootVC)"
+      + " - is parentVC the root VC: \(isParentVCTheRootVC)"
+      + " - is root vc a RNIRootViewController instance: \(isRootRNIViewController)"
+      + " - shouldSwizzleRootViewController: \(self.shouldSwizzleRootViewController)"
       + " - child vc count: \(parentVC.children.count)"
     );
     #endif
+    
+    // Needed to support "view controller based status bar style"
+    if self.shouldSwizzleRootViewController {
+      RNINavigatorManager.sharedInstance.swizzleRootViewController(for: self.window!);
+    };
     
     parentVC.addChild(self.navigationVC);
     self.navigationVC.didMove(toParent: parentVC);

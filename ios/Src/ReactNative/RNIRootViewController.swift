@@ -8,7 +8,8 @@
 import UIKit
 
 @objc public class RNIRootViewController: UIViewController {
-  public override var childForStatusBarStyle: UIViewController? {
+  
+  @objc public override var childForStatusBarStyle: UIViewController? {
     self.children.last;
   };
 };

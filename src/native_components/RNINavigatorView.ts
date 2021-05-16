@@ -78,6 +78,7 @@ export type RNINavigatorViewProps = {
   nativeRoutes: NativeRouteMap;
   initialRouteKeys: Array<string>;
   isInteractivePopGestureEnabled: boolean;
+  shouldSwizzleRootViewController: boolean;
 
   // Customize the Bar's Appearance
   navBarPrefersLargeTitles: boolean;

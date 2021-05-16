@@ -90,6 +90,7 @@ export type NavigatorViewProps = Partial<Pick<RNINavigatorViewProps,
   // mirror props from `RNINavigatorViewProps`
   | 'nativeID'
   | 'isInteractivePopGestureEnabled' 
+  | 'shouldSwizzleRootViewController'
   | 'navBarPrefersLargeTitles' 
   | 'navBarAppearance' 
   | 'isNavBarTranslucent'
@@ -1370,6 +1371,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         // General config
         navigatorID={this.navigatorID}
         isInteractivePopGestureEnabled={props.isInteractivePopGestureEnabled ?? true}
+        shouldSwizzleRootViewController={props.shouldSwizzleRootViewController ?? true}
         nativeRoutes={this.getNativeRoutes()}
         initialRouteKeys={
           props.initialRoutes.map(route => route.routeKey)

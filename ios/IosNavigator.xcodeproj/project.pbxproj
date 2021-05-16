@@ -7,60 +7,61 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		887322C226504E940021CD4B /* UIBarMetrics+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8873228326504E940021CD4B /* UIBarMetrics+Init.swift */; };
-		887322C326504E940021CD4B /* RCTTextTransform+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8873228426504E940021CD4B /* RCTTextTransform+Init.swift */; };
-		887322C426504E940021CD4B /* UINavigationItem+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8873228526504E940021CD4B /* UINavigationItem+Init.swift */; };
-		887322C526504E940021CD4B /* NSUnderlineStyle+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8873228626504E940021CD4B /* NSUnderlineStyle+Init.swift */; };
-		887322C626504E940021CD4B /* RCTTextDecorationLineType+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8873228726504E940021CD4B /* RCTTextDecorationLineType+Init.swift */; };
-		887322C726504E940021CD4B /* RCTTextAttributes+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8873228826504E940021CD4B /* RCTTextAttributes+Init.swift */; };
-		887322C826504E940021CD4B /* UIBlurEffect+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8873228926504E940021CD4B /* UIBlurEffect+Init.swift */; };
-		887322C926504E940021CD4B /* UIBarStyle+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8873228A26504E940021CD4B /* UIBarStyle+Init.swift */; };
-		887322CA26504E940021CD4B /* UIOffset+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8873228B26504E940021CD4B /* UIOffset+Init.swift */; };
-		887322CB26504E940021CD4B /* UIStatusBarStyle+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8873228C26504E940021CD4B /* UIStatusBarStyle+Init.swift */; };
-		887322CC26504E940021CD4B /* NSTextAlignment+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8873228D26504E940021CD4B /* NSTextAlignment+Init.swift */; };
-		887322CD26504E940021CD4B /* UIView+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8873228E26504E940021CD4B /* UIView+Init.swift */; };
-		887322CE26504E940021CD4B /* UIControl+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8873228F26504E940021CD4B /* UIControl+Init.swift */; };
-		887322CF26504E940021CD4B /* CAGradientLayerType+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8873229026504E940021CD4B /* CAGradientLayerType+Init.swift */; };
-		887322D026504E940021CD4B /* UIBarButtonItem+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8873229126504E940021CD4B /* UIBarButtonItem+Init.swift */; };
-		887322D126504E940021CD4B /* WeakObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8873229226504E940021CD4B /* WeakObjects.swift */; };
-		887322D226504E940021CD4B /* UINavigationItem+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8873229426504E940021CD4B /* UINavigationItem+Helpers.swift */; };
-		887322D326504E940021CD4B /* UIViewController+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8873229526504E940021CD4B /* UIViewController+Helpers.swift */; };
-		887322D426504E940021CD4B /* UINavigationBar+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8873229626504E940021CD4B /* UINavigationBar+Helpers.swift */; };
-		887322D526504E940021CD4B /* UIView+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8873229726504E940021CD4B /* UIView+Helpers.swift */; };
-		887322D626504E940021CD4B /* UIColor+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8873229826504E940021CD4B /* UIColor+Helpers.swift */; };
-		887322D726504E940021CD4B /* UINavigationController+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8873229926504E940021CD4B /* UINavigationController+Helpers.swift */; };
-		887322D826504E940021CD4B /* TransitionAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8873229A26504E940021CD4B /* TransitionAnimations.swift */; };
-		887322D926504E940021CD4B /* RNINavigatorRouteHeaderShadowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8873229D26504E940021CD4B /* RNINavigatorRouteHeaderShadowView.swift */; };
-		887322DA26504E940021CD4B /* RNINavigatorRouteHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8873229E26504E940021CD4B /* RNINavigatorRouteHeaderView.swift */; };
-		887322DB26504E940021CD4B /* RNINavigatorRouteHeaderViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8873229F26504E940021CD4B /* RNINavigatorRouteHeaderViewManager.swift */; };
-		887322DC26504E940021CD4B /* RNINavigatorRouteHeaderViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 887322A026504E940021CD4B /* RNINavigatorRouteHeaderViewManager.m */; };
-		887322DD26504E940021CD4B /* RNIRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887322A126504E940021CD4B /* RNIRootViewController.swift */; };
-		887322DE26504E940021CD4B /* RNINavigatorRouteViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887322A326504E940021CD4B /* RNINavigatorRouteViewManager.swift */; };
-		887322DF26504E940021CD4B /* RNINavigatorRouteViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 887322A426504E940021CD4B /* RNINavigatorRouteViewManager.m */; };
-		887322E026504E940021CD4B /* RNINavigatorRouteViewModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 887322A526504E940021CD4B /* RNINavigatorRouteViewModule.m */; };
-		887322E126504E940021CD4B /* RNINavigatorRouteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887322A626504E940021CD4B /* RNINavigatorRouteView.swift */; };
-		887322E226504E940021CD4B /* RNINavigatorRouteViewModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887322A726504E940021CD4B /* RNINavigatorRouteViewModule.swift */; };
-		887322E326504E940021CD4B /* RNINavigatorRouteViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887322A826504E940021CD4B /* RNINavigatorRouteViewDelegate.swift */; };
-		887322E426504E940021CD4B /* RNINavigatorRouteBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887322AA26504E940021CD4B /* RNINavigatorRouteBaseViewController.swift */; };
-		887322E526504E950021CD4B /* RNINavigatorRouteViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887322AB26504E940021CD4B /* RNINavigatorRouteViewControllerDelegate.swift */; };
-		887322E626504E950021CD4B /* RNINavigatorReactRouteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887322AC26504E940021CD4B /* RNINavigatorReactRouteViewController.swift */; };
-		887322E726504E950021CD4B /* RNINavBarItemConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887322AE26504E940021CD4B /* RNINavBarItemConfig.swift */; };
-		887322E826504E950021CD4B /* RNINavigatorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887322AF26504E940021CD4B /* RNINavigatorManager.swift */; };
-		887322E926504E950021CD4B /* RNINavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887322B026504E940021CD4B /* RNINavigationController.swift */; };
-		887322EA26504E950021CD4B /* RNINavTransitionConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887322B126504E940021CD4B /* RNINavTransitionConfig.swift */; };
-		887322EB26504E950021CD4B /* RNINavBarAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887322B226504E940021CD4B /* RNINavBarAppearance.swift */; };
-		887322EC26504E950021CD4B /* RNIWrapperViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887322B426504E940021CD4B /* RNIWrapperViewManager.swift */; };
-		887322ED26504E950021CD4B /* RNIWrapperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887322B526504E940021CD4B /* RNIWrapperView.swift */; };
-		887322EE26504E950021CD4B /* RNIWrapperViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 887322B626504E940021CD4B /* RNIWrapperViewManager.m */; };
-		887322EF26504E950021CD4B /* RNINavigatorViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887322B826504E940021CD4B /* RNINavigatorViewManager.swift */; };
-		887322F026504E950021CD4B /* RNINavigatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887322B926504E940021CD4B /* RNINavigatorView.swift */; };
-		887322F126504E950021CD4B /* RNINavigatorViewModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 887322BA26504E940021CD4B /* RNINavigatorViewModule.m */; };
-		887322F226504E950021CD4B /* RNINavigatorViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 887322BB26504E940021CD4B /* RNINavigatorViewManager.m */; };
-		887322F326504E950021CD4B /* RNINavigatorViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887322BC26504E940021CD4B /* RNINavigatorViewDelegate.swift */; };
-		887322F426504E950021CD4B /* RNINavigatorViewModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887322BD26504E940021CD4B /* RNINavigatorViewModule.swift */; };
-		887322F526504E950021CD4B /* RNIUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887322BF26504E940021CD4B /* RNIUtilities.swift */; };
-		887322F626504E950021CD4B /* RNIImageItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887322C026504E940021CD4B /* RNIImageItem.swift */; };
-		887322F726504E950021CD4B /* RNIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 887322C126504E940021CD4B /* RNIError.swift */; };
+		880DD3E72651924800CEF7D4 /* UIBarMetrics+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3A52651924700CEF7D4 /* UIBarMetrics+Init.swift */; };
+		880DD3E82651924800CEF7D4 /* RCTTextTransform+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3A62651924700CEF7D4 /* RCTTextTransform+Init.swift */; };
+		880DD3E92651924800CEF7D4 /* UINavigationItem+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3A72651924700CEF7D4 /* UINavigationItem+Init.swift */; };
+		880DD3EA2651924800CEF7D4 /* NSUnderlineStyle+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3A82651924700CEF7D4 /* NSUnderlineStyle+Init.swift */; };
+		880DD3EB2651924800CEF7D4 /* RCTTextDecorationLineType+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3A92651924700CEF7D4 /* RCTTextDecorationLineType+Init.swift */; };
+		880DD3EC2651924800CEF7D4 /* RCTTextAttributes+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3AA2651924700CEF7D4 /* RCTTextAttributes+Init.swift */; };
+		880DD3ED2651924800CEF7D4 /* UIBlurEffect+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3AB2651924700CEF7D4 /* UIBlurEffect+Init.swift */; };
+		880DD3EE2651924800CEF7D4 /* UIBarStyle+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3AC2651924700CEF7D4 /* UIBarStyle+Init.swift */; };
+		880DD3EF2651924800CEF7D4 /* UIOffset+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3AD2651924700CEF7D4 /* UIOffset+Init.swift */; };
+		880DD3F02651924800CEF7D4 /* UIStatusBarStyle+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3AE2651924700CEF7D4 /* UIStatusBarStyle+Init.swift */; };
+		880DD3F12651924800CEF7D4 /* NSTextAlignment+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3AF2651924700CEF7D4 /* NSTextAlignment+Init.swift */; };
+		880DD3F22651924800CEF7D4 /* UIView+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3B02651924700CEF7D4 /* UIView+Init.swift */; };
+		880DD3F32651924800CEF7D4 /* UIControl+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3B12651924700CEF7D4 /* UIControl+Init.swift */; };
+		880DD3F42651924800CEF7D4 /* CAGradientLayerType+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3B22651924700CEF7D4 /* CAGradientLayerType+Init.swift */; };
+		880DD3F52651924800CEF7D4 /* UIBarButtonItem+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3B32651924700CEF7D4 /* UIBarButtonItem+Init.swift */; };
+		880DD3F62651924800CEF7D4 /* WeakObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3B42651924700CEF7D4 /* WeakObjects.swift */; };
+		880DD3F72651924800CEF7D4 /* UINavigationItem+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3B62651924700CEF7D4 /* UINavigationItem+Helpers.swift */; };
+		880DD3F82651924800CEF7D4 /* UIViewController+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3B72651924700CEF7D4 /* UIViewController+Helpers.swift */; };
+		880DD3F92651924800CEF7D4 /* UINavigationBar+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3B82651924700CEF7D4 /* UINavigationBar+Helpers.swift */; };
+		880DD3FA2651924800CEF7D4 /* UIView+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3B92651924700CEF7D4 /* UIView+Helpers.swift */; };
+		880DD3FB2651924800CEF7D4 /* UIColor+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3BA2651924700CEF7D4 /* UIColor+Helpers.swift */; };
+		880DD3FC2651924800CEF7D4 /* UINavigationController+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3BB2651924700CEF7D4 /* UINavigationController+Helpers.swift */; };
+		880DD3FD2651924800CEF7D4 /* TransitionAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3BC2651924700CEF7D4 /* TransitionAnimations.swift */; };
+		880DD3FE2651924800CEF7D4 /* RNINavigatorRouteHeaderShadowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3BF2651924700CEF7D4 /* RNINavigatorRouteHeaderShadowView.swift */; };
+		880DD3FF2651924800CEF7D4 /* RNINavigatorRouteHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3C02651924700CEF7D4 /* RNINavigatorRouteHeaderView.swift */; };
+		880DD4002651924800CEF7D4 /* RNINavigatorRouteHeaderViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3C12651924700CEF7D4 /* RNINavigatorRouteHeaderViewManager.swift */; };
+		880DD4012651924800CEF7D4 /* RNINavigatorRouteHeaderViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3C22651924700CEF7D4 /* RNINavigatorRouteHeaderViewManager.m */; };
+		880DD4022651924800CEF7D4 /* RNIRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3C32651924700CEF7D4 /* RNIRootViewController.swift */; };
+		880DD4032651924800CEF7D4 /* RNINavigatorRouteViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3C52651924700CEF7D4 /* RNINavigatorRouteViewManager.swift */; };
+		880DD4042651924800CEF7D4 /* RNINavigatorRouteViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3C62651924700CEF7D4 /* RNINavigatorRouteViewManager.m */; };
+		880DD4052651924800CEF7D4 /* RNINavigatorRouteViewModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3C72651924700CEF7D4 /* RNINavigatorRouteViewModule.m */; };
+		880DD4062651924800CEF7D4 /* RNINavigatorRouteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3C82651924700CEF7D4 /* RNINavigatorRouteView.swift */; };
+		880DD4072651924800CEF7D4 /* RNINavigatorRouteViewModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3C92651924700CEF7D4 /* RNINavigatorRouteViewModule.swift */; };
+		880DD4082651924800CEF7D4 /* RNINavigatorRouteViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3CA2651924700CEF7D4 /* RNINavigatorRouteViewDelegate.swift */; };
+		880DD4092651924800CEF7D4 /* RNINavigatorRouteBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3CC2651924700CEF7D4 /* RNINavigatorRouteBaseViewController.swift */; };
+		880DD40A2651924800CEF7D4 /* RNINavigatorRouteViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3CD2651924700CEF7D4 /* RNINavigatorRouteViewControllerDelegate.swift */; };
+		880DD40B2651924800CEF7D4 /* RNINavigatorReactRouteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3CE2651924700CEF7D4 /* RNINavigatorReactRouteViewController.swift */; };
+		880DD40C2651924800CEF7D4 /* RNINavBarItemConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3D02651924700CEF7D4 /* RNINavBarItemConfig.swift */; };
+		880DD40D2651924800CEF7D4 /* RNINavigatorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3D12651924700CEF7D4 /* RNINavigatorManager.swift */; };
+		880DD40E2651924800CEF7D4 /* RNINavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3D22651924700CEF7D4 /* RNINavigationController.swift */; };
+		880DD40F2651924800CEF7D4 /* RNINavTransitionConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3D32651924700CEF7D4 /* RNINavTransitionConfig.swift */; };
+		880DD4102651924800CEF7D4 /* RNINavBarAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3D42651924700CEF7D4 /* RNINavBarAppearance.swift */; };
+		880DD4122651924800CEF7D4 /* RNIWrapperViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3D92651924700CEF7D4 /* RNIWrapperViewManager.swift */; };
+		880DD4132651924800CEF7D4 /* RNIWrapperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3DA2651924700CEF7D4 /* RNIWrapperView.swift */; };
+		880DD4142651924800CEF7D4 /* RNIWrapperViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3DB2651924700CEF7D4 /* RNIWrapperViewManager.m */; };
+		880DD4152651924800CEF7D4 /* RNINavigatorViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3DD2651924700CEF7D4 /* RNINavigatorViewManager.swift */; };
+		880DD4162651924800CEF7D4 /* RNINavigatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3DE2651924700CEF7D4 /* RNINavigatorView.swift */; };
+		880DD4172651924800CEF7D4 /* RNINavigatorViewModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3DF2651924700CEF7D4 /* RNINavigatorViewModule.m */; };
+		880DD4182651924800CEF7D4 /* RNINavigatorViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3E02651924700CEF7D4 /* RNINavigatorViewManager.m */; };
+		880DD4192651924800CEF7D4 /* RNINavigatorViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3E12651924700CEF7D4 /* RNINavigatorViewDelegate.swift */; };
+		880DD41A2651924800CEF7D4 /* RNINavigatorViewModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3E22651924700CEF7D4 /* RNINavigatorViewModule.swift */; };
+		880DD41B2651924800CEF7D4 /* RNIUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3E42651924700CEF7D4 /* RNIUtilities.swift */; };
+		880DD41C2651924800CEF7D4 /* RNIImageItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3E52651924700CEF7D4 /* RNIImageItem.swift */; };
+		880DD41D2651924800CEF7D4 /* RNIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3E62651924700CEF7D4 /* RNIError.swift */; };
+		880DD423265193BB00CEF7D4 /* RNIRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 880DD3D62651924700CEF7D4 /* RNIRootViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -77,61 +78,63 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libIosNavigator.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libIosNavigator.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		8873228126504E940021CD4B /* IosNavigator-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IosNavigator-Bridging-Header.h"; sourceTree = "<group>"; };
-		8873228326504E940021CD4B /* UIBarMetrics+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIBarMetrics+Init.swift"; sourceTree = "<group>"; };
-		8873228426504E940021CD4B /* RCTTextTransform+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RCTTextTransform+Init.swift"; sourceTree = "<group>"; };
-		8873228526504E940021CD4B /* UINavigationItem+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UINavigationItem+Init.swift"; sourceTree = "<group>"; };
-		8873228626504E940021CD4B /* NSUnderlineStyle+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSUnderlineStyle+Init.swift"; sourceTree = "<group>"; };
-		8873228726504E940021CD4B /* RCTTextDecorationLineType+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RCTTextDecorationLineType+Init.swift"; sourceTree = "<group>"; };
-		8873228826504E940021CD4B /* RCTTextAttributes+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RCTTextAttributes+Init.swift"; sourceTree = "<group>"; };
-		8873228926504E940021CD4B /* UIBlurEffect+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIBlurEffect+Init.swift"; sourceTree = "<group>"; };
-		8873228A26504E940021CD4B /* UIBarStyle+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIBarStyle+Init.swift"; sourceTree = "<group>"; };
-		8873228B26504E940021CD4B /* UIOffset+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIOffset+Init.swift"; sourceTree = "<group>"; };
-		8873228C26504E940021CD4B /* UIStatusBarStyle+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIStatusBarStyle+Init.swift"; sourceTree = "<group>"; };
-		8873228D26504E940021CD4B /* NSTextAlignment+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSTextAlignment+Init.swift"; sourceTree = "<group>"; };
-		8873228E26504E940021CD4B /* UIView+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Init.swift"; sourceTree = "<group>"; };
-		8873228F26504E940021CD4B /* UIControl+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIControl+Init.swift"; sourceTree = "<group>"; };
-		8873229026504E940021CD4B /* CAGradientLayerType+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CAGradientLayerType+Init.swift"; sourceTree = "<group>"; };
-		8873229126504E940021CD4B /* UIBarButtonItem+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+Init.swift"; sourceTree = "<group>"; };
-		8873229226504E940021CD4B /* WeakObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeakObjects.swift; sourceTree = "<group>"; };
-		8873229426504E940021CD4B /* UINavigationItem+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UINavigationItem+Helpers.swift"; sourceTree = "<group>"; };
-		8873229526504E940021CD4B /* UIViewController+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Helpers.swift"; sourceTree = "<group>"; };
-		8873229626504E940021CD4B /* UINavigationBar+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UINavigationBar+Helpers.swift"; sourceTree = "<group>"; };
-		8873229726504E940021CD4B /* UIView+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Helpers.swift"; sourceTree = "<group>"; };
-		8873229826504E940021CD4B /* UIColor+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Helpers.swift"; sourceTree = "<group>"; };
-		8873229926504E940021CD4B /* UINavigationController+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UINavigationController+Helpers.swift"; sourceTree = "<group>"; };
-		8873229A26504E940021CD4B /* TransitionAnimations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionAnimations.swift; sourceTree = "<group>"; };
-		8873229D26504E940021CD4B /* RNINavigatorRouteHeaderShadowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteHeaderShadowView.swift; sourceTree = "<group>"; };
-		8873229E26504E940021CD4B /* RNINavigatorRouteHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteHeaderView.swift; sourceTree = "<group>"; };
-		8873229F26504E940021CD4B /* RNINavigatorRouteHeaderViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteHeaderViewManager.swift; sourceTree = "<group>"; };
-		887322A026504E940021CD4B /* RNINavigatorRouteHeaderViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNINavigatorRouteHeaderViewManager.m; sourceTree = "<group>"; };
-		887322A126504E940021CD4B /* RNIRootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNIRootViewController.swift; sourceTree = "<group>"; };
-		887322A326504E940021CD4B /* RNINavigatorRouteViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteViewManager.swift; sourceTree = "<group>"; };
-		887322A426504E940021CD4B /* RNINavigatorRouteViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNINavigatorRouteViewManager.m; sourceTree = "<group>"; };
-		887322A526504E940021CD4B /* RNINavigatorRouteViewModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNINavigatorRouteViewModule.m; sourceTree = "<group>"; };
-		887322A626504E940021CD4B /* RNINavigatorRouteView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteView.swift; sourceTree = "<group>"; };
-		887322A726504E940021CD4B /* RNINavigatorRouteViewModule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteViewModule.swift; sourceTree = "<group>"; };
-		887322A826504E940021CD4B /* RNINavigatorRouteViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteViewDelegate.swift; sourceTree = "<group>"; };
-		887322AA26504E940021CD4B /* RNINavigatorRouteBaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteBaseViewController.swift; sourceTree = "<group>"; };
-		887322AB26504E940021CD4B /* RNINavigatorRouteViewControllerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteViewControllerDelegate.swift; sourceTree = "<group>"; };
-		887322AC26504E940021CD4B /* RNINavigatorReactRouteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorReactRouteViewController.swift; sourceTree = "<group>"; };
-		887322AE26504E940021CD4B /* RNINavBarItemConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavBarItemConfig.swift; sourceTree = "<group>"; };
-		887322AF26504E940021CD4B /* RNINavigatorManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorManager.swift; sourceTree = "<group>"; };
-		887322B026504E940021CD4B /* RNINavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigationController.swift; sourceTree = "<group>"; };
-		887322B126504E940021CD4B /* RNINavTransitionConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavTransitionConfig.swift; sourceTree = "<group>"; };
-		887322B226504E940021CD4B /* RNINavBarAppearance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavBarAppearance.swift; sourceTree = "<group>"; };
-		887322B426504E940021CD4B /* RNIWrapperViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNIWrapperViewManager.swift; sourceTree = "<group>"; };
-		887322B526504E940021CD4B /* RNIWrapperView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNIWrapperView.swift; sourceTree = "<group>"; };
-		887322B626504E940021CD4B /* RNIWrapperViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNIWrapperViewManager.m; sourceTree = "<group>"; };
-		887322B826504E940021CD4B /* RNINavigatorViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorViewManager.swift; sourceTree = "<group>"; };
-		887322B926504E940021CD4B /* RNINavigatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorView.swift; sourceTree = "<group>"; };
-		887322BA26504E940021CD4B /* RNINavigatorViewModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNINavigatorViewModule.m; sourceTree = "<group>"; };
-		887322BB26504E940021CD4B /* RNINavigatorViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNINavigatorViewManager.m; sourceTree = "<group>"; };
-		887322BC26504E940021CD4B /* RNINavigatorViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorViewDelegate.swift; sourceTree = "<group>"; };
-		887322BD26504E940021CD4B /* RNINavigatorViewModule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorViewModule.swift; sourceTree = "<group>"; };
-		887322BF26504E940021CD4B /* RNIUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNIUtilities.swift; sourceTree = "<group>"; };
-		887322C026504E940021CD4B /* RNIImageItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNIImageItem.swift; sourceTree = "<group>"; };
-		887322C126504E940021CD4B /* RNIError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNIError.swift; sourceTree = "<group>"; };
+		880DD3A32651924700CEF7D4 /* IosNavigator-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IosNavigator-Bridging-Header.h"; sourceTree = "<group>"; };
+		880DD3A52651924700CEF7D4 /* UIBarMetrics+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIBarMetrics+Init.swift"; sourceTree = "<group>"; };
+		880DD3A62651924700CEF7D4 /* RCTTextTransform+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RCTTextTransform+Init.swift"; sourceTree = "<group>"; };
+		880DD3A72651924700CEF7D4 /* UINavigationItem+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UINavigationItem+Init.swift"; sourceTree = "<group>"; };
+		880DD3A82651924700CEF7D4 /* NSUnderlineStyle+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSUnderlineStyle+Init.swift"; sourceTree = "<group>"; };
+		880DD3A92651924700CEF7D4 /* RCTTextDecorationLineType+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RCTTextDecorationLineType+Init.swift"; sourceTree = "<group>"; };
+		880DD3AA2651924700CEF7D4 /* RCTTextAttributes+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RCTTextAttributes+Init.swift"; sourceTree = "<group>"; };
+		880DD3AB2651924700CEF7D4 /* UIBlurEffect+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIBlurEffect+Init.swift"; sourceTree = "<group>"; };
+		880DD3AC2651924700CEF7D4 /* UIBarStyle+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIBarStyle+Init.swift"; sourceTree = "<group>"; };
+		880DD3AD2651924700CEF7D4 /* UIOffset+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIOffset+Init.swift"; sourceTree = "<group>"; };
+		880DD3AE2651924700CEF7D4 /* UIStatusBarStyle+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIStatusBarStyle+Init.swift"; sourceTree = "<group>"; };
+		880DD3AF2651924700CEF7D4 /* NSTextAlignment+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSTextAlignment+Init.swift"; sourceTree = "<group>"; };
+		880DD3B02651924700CEF7D4 /* UIView+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Init.swift"; sourceTree = "<group>"; };
+		880DD3B12651924700CEF7D4 /* UIControl+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIControl+Init.swift"; sourceTree = "<group>"; };
+		880DD3B22651924700CEF7D4 /* CAGradientLayerType+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CAGradientLayerType+Init.swift"; sourceTree = "<group>"; };
+		880DD3B32651924700CEF7D4 /* UIBarButtonItem+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+Init.swift"; sourceTree = "<group>"; };
+		880DD3B42651924700CEF7D4 /* WeakObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeakObjects.swift; sourceTree = "<group>"; };
+		880DD3B62651924700CEF7D4 /* UINavigationItem+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UINavigationItem+Helpers.swift"; sourceTree = "<group>"; };
+		880DD3B72651924700CEF7D4 /* UIViewController+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Helpers.swift"; sourceTree = "<group>"; };
+		880DD3B82651924700CEF7D4 /* UINavigationBar+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UINavigationBar+Helpers.swift"; sourceTree = "<group>"; };
+		880DD3B92651924700CEF7D4 /* UIView+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Helpers.swift"; sourceTree = "<group>"; };
+		880DD3BA2651924700CEF7D4 /* UIColor+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Helpers.swift"; sourceTree = "<group>"; };
+		880DD3BB2651924700CEF7D4 /* UINavigationController+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UINavigationController+Helpers.swift"; sourceTree = "<group>"; };
+		880DD3BC2651924700CEF7D4 /* TransitionAnimations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionAnimations.swift; sourceTree = "<group>"; };
+		880DD3BF2651924700CEF7D4 /* RNINavigatorRouteHeaderShadowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteHeaderShadowView.swift; sourceTree = "<group>"; };
+		880DD3C02651924700CEF7D4 /* RNINavigatorRouteHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteHeaderView.swift; sourceTree = "<group>"; };
+		880DD3C12651924700CEF7D4 /* RNINavigatorRouteHeaderViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteHeaderViewManager.swift; sourceTree = "<group>"; };
+		880DD3C22651924700CEF7D4 /* RNINavigatorRouteHeaderViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNINavigatorRouteHeaderViewManager.m; sourceTree = "<group>"; };
+		880DD3C32651924700CEF7D4 /* RNIRootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNIRootViewController.swift; sourceTree = "<group>"; };
+		880DD3C52651924700CEF7D4 /* RNINavigatorRouteViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteViewManager.swift; sourceTree = "<group>"; };
+		880DD3C62651924700CEF7D4 /* RNINavigatorRouteViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNINavigatorRouteViewManager.m; sourceTree = "<group>"; };
+		880DD3C72651924700CEF7D4 /* RNINavigatorRouteViewModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNINavigatorRouteViewModule.m; sourceTree = "<group>"; };
+		880DD3C82651924700CEF7D4 /* RNINavigatorRouteView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteView.swift; sourceTree = "<group>"; };
+		880DD3C92651924700CEF7D4 /* RNINavigatorRouteViewModule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteViewModule.swift; sourceTree = "<group>"; };
+		880DD3CA2651924700CEF7D4 /* RNINavigatorRouteViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteViewDelegate.swift; sourceTree = "<group>"; };
+		880DD3CC2651924700CEF7D4 /* RNINavigatorRouteBaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteBaseViewController.swift; sourceTree = "<group>"; };
+		880DD3CD2651924700CEF7D4 /* RNINavigatorRouteViewControllerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteViewControllerDelegate.swift; sourceTree = "<group>"; };
+		880DD3CE2651924700CEF7D4 /* RNINavigatorReactRouteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorReactRouteViewController.swift; sourceTree = "<group>"; };
+		880DD3D02651924700CEF7D4 /* RNINavBarItemConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavBarItemConfig.swift; sourceTree = "<group>"; };
+		880DD3D12651924700CEF7D4 /* RNINavigatorManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorManager.swift; sourceTree = "<group>"; };
+		880DD3D22651924700CEF7D4 /* RNINavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigationController.swift; sourceTree = "<group>"; };
+		880DD3D32651924700CEF7D4 /* RNINavTransitionConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavTransitionConfig.swift; sourceTree = "<group>"; };
+		880DD3D42651924700CEF7D4 /* RNINavBarAppearance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavBarAppearance.swift; sourceTree = "<group>"; };
+		880DD3D62651924700CEF7D4 /* RNIRootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNIRootViewController.m; sourceTree = "<group>"; };
+		880DD3D72651924700CEF7D4 /* RNIRootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNIRootViewController.h; sourceTree = "<group>"; };
+		880DD3D92651924700CEF7D4 /* RNIWrapperViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNIWrapperViewManager.swift; sourceTree = "<group>"; };
+		880DD3DA2651924700CEF7D4 /* RNIWrapperView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNIWrapperView.swift; sourceTree = "<group>"; };
+		880DD3DB2651924700CEF7D4 /* RNIWrapperViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNIWrapperViewManager.m; sourceTree = "<group>"; };
+		880DD3DD2651924700CEF7D4 /* RNINavigatorViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorViewManager.swift; sourceTree = "<group>"; };
+		880DD3DE2651924700CEF7D4 /* RNINavigatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorView.swift; sourceTree = "<group>"; };
+		880DD3DF2651924700CEF7D4 /* RNINavigatorViewModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNINavigatorViewModule.m; sourceTree = "<group>"; };
+		880DD3E02651924700CEF7D4 /* RNINavigatorViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNINavigatorViewManager.m; sourceTree = "<group>"; };
+		880DD3E12651924700CEF7D4 /* RNINavigatorViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorViewDelegate.swift; sourceTree = "<group>"; };
+		880DD3E22651924700CEF7D4 /* RNINavigatorViewModule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorViewModule.swift; sourceTree = "<group>"; };
+		880DD3E42651924700CEF7D4 /* RNIUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNIUtilities.swift; sourceTree = "<group>"; };
+		880DD3E52651924700CEF7D4 /* RNIImageItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNIImageItem.swift; sourceTree = "<group>"; };
+		880DD3E62651924700CEF7D4 /* RNIError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNIError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,149 +159,159 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
-				8873228026504E940021CD4B /* Src */,
+				880DD3A22651924700CEF7D4 /* Src */,
 				134814211AA4EA7D00B7C361 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		8873228026504E940021CD4B /* Src */ = {
+		880DD3A22651924700CEF7D4 /* Src */ = {
 			isa = PBXGroup;
 			children = (
-				8873228126504E940021CD4B /* IosNavigator-Bridging-Header.h */,
-				8873228226504E940021CD4B /* Extensions+Init */,
-				8873229226504E940021CD4B /* WeakObjects.swift */,
-				8873229326504E940021CD4B /* Extensions */,
-				8873229A26504E940021CD4B /* TransitionAnimations.swift */,
-				8873229B26504E940021CD4B /* ReactNative */,
+				880DD3A32651924700CEF7D4 /* IosNavigator-Bridging-Header.h */,
+				880DD3A42651924700CEF7D4 /* Extensions+Init */,
+				880DD3B42651924700CEF7D4 /* WeakObjects.swift */,
+				880DD3B52651924700CEF7D4 /* Extensions */,
+				880DD3BC2651924700CEF7D4 /* TransitionAnimations.swift */,
+				880DD3BD2651924700CEF7D4 /* ReactNative */,
 			);
 			path = Src;
 			sourceTree = "<group>";
 		};
-		8873228226504E940021CD4B /* Extensions+Init */ = {
+		880DD3A42651924700CEF7D4 /* Extensions+Init */ = {
 			isa = PBXGroup;
 			children = (
-				8873228326504E940021CD4B /* UIBarMetrics+Init.swift */,
-				8873228426504E940021CD4B /* RCTTextTransform+Init.swift */,
-				8873228526504E940021CD4B /* UINavigationItem+Init.swift */,
-				8873228626504E940021CD4B /* NSUnderlineStyle+Init.swift */,
-				8873228726504E940021CD4B /* RCTTextDecorationLineType+Init.swift */,
-				8873228826504E940021CD4B /* RCTTextAttributes+Init.swift */,
-				8873228926504E940021CD4B /* UIBlurEffect+Init.swift */,
-				8873228A26504E940021CD4B /* UIBarStyle+Init.swift */,
-				8873228B26504E940021CD4B /* UIOffset+Init.swift */,
-				8873228C26504E940021CD4B /* UIStatusBarStyle+Init.swift */,
-				8873228D26504E940021CD4B /* NSTextAlignment+Init.swift */,
-				8873228E26504E940021CD4B /* UIView+Init.swift */,
-				8873228F26504E940021CD4B /* UIControl+Init.swift */,
-				8873229026504E940021CD4B /* CAGradientLayerType+Init.swift */,
-				8873229126504E940021CD4B /* UIBarButtonItem+Init.swift */,
+				880DD3A52651924700CEF7D4 /* UIBarMetrics+Init.swift */,
+				880DD3A62651924700CEF7D4 /* RCTTextTransform+Init.swift */,
+				880DD3A72651924700CEF7D4 /* UINavigationItem+Init.swift */,
+				880DD3A82651924700CEF7D4 /* NSUnderlineStyle+Init.swift */,
+				880DD3A92651924700CEF7D4 /* RCTTextDecorationLineType+Init.swift */,
+				880DD3AA2651924700CEF7D4 /* RCTTextAttributes+Init.swift */,
+				880DD3AB2651924700CEF7D4 /* UIBlurEffect+Init.swift */,
+				880DD3AC2651924700CEF7D4 /* UIBarStyle+Init.swift */,
+				880DD3AD2651924700CEF7D4 /* UIOffset+Init.swift */,
+				880DD3AE2651924700CEF7D4 /* UIStatusBarStyle+Init.swift */,
+				880DD3AF2651924700CEF7D4 /* NSTextAlignment+Init.swift */,
+				880DD3B02651924700CEF7D4 /* UIView+Init.swift */,
+				880DD3B12651924700CEF7D4 /* UIControl+Init.swift */,
+				880DD3B22651924700CEF7D4 /* CAGradientLayerType+Init.swift */,
+				880DD3B32651924700CEF7D4 /* UIBarButtonItem+Init.swift */,
 			);
 			path = "Extensions+Init";
 			sourceTree = "<group>";
 		};
-		8873229326504E940021CD4B /* Extensions */ = {
+		880DD3B52651924700CEF7D4 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				8873229426504E940021CD4B /* UINavigationItem+Helpers.swift */,
-				8873229526504E940021CD4B /* UIViewController+Helpers.swift */,
-				8873229626504E940021CD4B /* UINavigationBar+Helpers.swift */,
-				8873229726504E940021CD4B /* UIView+Helpers.swift */,
-				8873229826504E940021CD4B /* UIColor+Helpers.swift */,
-				8873229926504E940021CD4B /* UINavigationController+Helpers.swift */,
+				880DD3B62651924700CEF7D4 /* UINavigationItem+Helpers.swift */,
+				880DD3B72651924700CEF7D4 /* UIViewController+Helpers.swift */,
+				880DD3B82651924700CEF7D4 /* UINavigationBar+Helpers.swift */,
+				880DD3B92651924700CEF7D4 /* UIView+Helpers.swift */,
+				880DD3BA2651924700CEF7D4 /* UIColor+Helpers.swift */,
+				880DD3BB2651924700CEF7D4 /* UINavigationController+Helpers.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		8873229B26504E940021CD4B /* ReactNative */ = {
+		880DD3BD2651924700CEF7D4 /* ReactNative */ = {
 			isa = PBXGroup;
 			children = (
-				8873229C26504E940021CD4B /* RNINavigatorRouteHeaderView */,
-				887322A126504E940021CD4B /* RNIRootViewController.swift */,
-				887322A226504E940021CD4B /* RNINavigatorRouteView */,
-				887322A926504E940021CD4B /* RNINavigatorRouteViewController */,
-				887322AD26504E940021CD4B /* RNINavigator */,
-				887322B326504E940021CD4B /* RNIWrapperView */,
-				887322B726504E940021CD4B /* RNINavigatorView */,
-				887322BE26504E940021CD4B /* RNIHelpers */,
+				880DD3BE2651924700CEF7D4 /* RNINavigatorRouteHeaderView */,
+				880DD3C32651924700CEF7D4 /* RNIRootViewController.swift */,
+				880DD3C42651924700CEF7D4 /* RNINavigatorRouteView */,
+				880DD3CB2651924700CEF7D4 /* RNINavigatorRouteViewController */,
+				880DD3CF2651924700CEF7D4 /* RNINavigator */,
+				880DD3D52651924700CEF7D4 /* RNIRootViewController */,
+				880DD3D82651924700CEF7D4 /* RNIWrapperView */,
+				880DD3DC2651924700CEF7D4 /* RNINavigatorView */,
+				880DD3E32651924700CEF7D4 /* RNIHelpers */,
 			);
 			path = ReactNative;
 			sourceTree = "<group>";
 		};
-		8873229C26504E940021CD4B /* RNINavigatorRouteHeaderView */ = {
+		880DD3BE2651924700CEF7D4 /* RNINavigatorRouteHeaderView */ = {
 			isa = PBXGroup;
 			children = (
-				8873229D26504E940021CD4B /* RNINavigatorRouteHeaderShadowView.swift */,
-				8873229E26504E940021CD4B /* RNINavigatorRouteHeaderView.swift */,
-				8873229F26504E940021CD4B /* RNINavigatorRouteHeaderViewManager.swift */,
-				887322A026504E940021CD4B /* RNINavigatorRouteHeaderViewManager.m */,
+				880DD3BF2651924700CEF7D4 /* RNINavigatorRouteHeaderShadowView.swift */,
+				880DD3C02651924700CEF7D4 /* RNINavigatorRouteHeaderView.swift */,
+				880DD3C12651924700CEF7D4 /* RNINavigatorRouteHeaderViewManager.swift */,
+				880DD3C22651924700CEF7D4 /* RNINavigatorRouteHeaderViewManager.m */,
 			);
 			path = RNINavigatorRouteHeaderView;
 			sourceTree = "<group>";
 		};
-		887322A226504E940021CD4B /* RNINavigatorRouteView */ = {
+		880DD3C42651924700CEF7D4 /* RNINavigatorRouteView */ = {
 			isa = PBXGroup;
 			children = (
-				887322A326504E940021CD4B /* RNINavigatorRouteViewManager.swift */,
-				887322A426504E940021CD4B /* RNINavigatorRouteViewManager.m */,
-				887322A526504E940021CD4B /* RNINavigatorRouteViewModule.m */,
-				887322A626504E940021CD4B /* RNINavigatorRouteView.swift */,
-				887322A726504E940021CD4B /* RNINavigatorRouteViewModule.swift */,
-				887322A826504E940021CD4B /* RNINavigatorRouteViewDelegate.swift */,
+				880DD3C52651924700CEF7D4 /* RNINavigatorRouteViewManager.swift */,
+				880DD3C62651924700CEF7D4 /* RNINavigatorRouteViewManager.m */,
+				880DD3C72651924700CEF7D4 /* RNINavigatorRouteViewModule.m */,
+				880DD3C82651924700CEF7D4 /* RNINavigatorRouteView.swift */,
+				880DD3C92651924700CEF7D4 /* RNINavigatorRouteViewModule.swift */,
+				880DD3CA2651924700CEF7D4 /* RNINavigatorRouteViewDelegate.swift */,
 			);
 			path = RNINavigatorRouteView;
 			sourceTree = "<group>";
 		};
-		887322A926504E940021CD4B /* RNINavigatorRouteViewController */ = {
+		880DD3CB2651924700CEF7D4 /* RNINavigatorRouteViewController */ = {
 			isa = PBXGroup;
 			children = (
-				887322AA26504E940021CD4B /* RNINavigatorRouteBaseViewController.swift */,
-				887322AB26504E940021CD4B /* RNINavigatorRouteViewControllerDelegate.swift */,
-				887322AC26504E940021CD4B /* RNINavigatorReactRouteViewController.swift */,
+				880DD3CC2651924700CEF7D4 /* RNINavigatorRouteBaseViewController.swift */,
+				880DD3CD2651924700CEF7D4 /* RNINavigatorRouteViewControllerDelegate.swift */,
+				880DD3CE2651924700CEF7D4 /* RNINavigatorReactRouteViewController.swift */,
 			);
 			path = RNINavigatorRouteViewController;
 			sourceTree = "<group>";
 		};
-		887322AD26504E940021CD4B /* RNINavigator */ = {
+		880DD3CF2651924700CEF7D4 /* RNINavigator */ = {
 			isa = PBXGroup;
 			children = (
-				887322AE26504E940021CD4B /* RNINavBarItemConfig.swift */,
-				887322AF26504E940021CD4B /* RNINavigatorManager.swift */,
-				887322B026504E940021CD4B /* RNINavigationController.swift */,
-				887322B126504E940021CD4B /* RNINavTransitionConfig.swift */,
-				887322B226504E940021CD4B /* RNINavBarAppearance.swift */,
+				880DD3D02651924700CEF7D4 /* RNINavBarItemConfig.swift */,
+				880DD3D12651924700CEF7D4 /* RNINavigatorManager.swift */,
+				880DD3D22651924700CEF7D4 /* RNINavigationController.swift */,
+				880DD3D32651924700CEF7D4 /* RNINavTransitionConfig.swift */,
+				880DD3D42651924700CEF7D4 /* RNINavBarAppearance.swift */,
 			);
 			path = RNINavigator;
 			sourceTree = "<group>";
 		};
-		887322B326504E940021CD4B /* RNIWrapperView */ = {
+		880DD3D52651924700CEF7D4 /* RNIRootViewController */ = {
 			isa = PBXGroup;
 			children = (
-				887322B426504E940021CD4B /* RNIWrapperViewManager.swift */,
-				887322B526504E940021CD4B /* RNIWrapperView.swift */,
-				887322B626504E940021CD4B /* RNIWrapperViewManager.m */,
+				880DD3D62651924700CEF7D4 /* RNIRootViewController.m */,
+				880DD3D72651924700CEF7D4 /* RNIRootViewController.h */,
+			);
+			path = RNIRootViewController;
+			sourceTree = "<group>";
+		};
+		880DD3D82651924700CEF7D4 /* RNIWrapperView */ = {
+			isa = PBXGroup;
+			children = (
+				880DD3D92651924700CEF7D4 /* RNIWrapperViewManager.swift */,
+				880DD3DA2651924700CEF7D4 /* RNIWrapperView.swift */,
+				880DD3DB2651924700CEF7D4 /* RNIWrapperViewManager.m */,
 			);
 			path = RNIWrapperView;
 			sourceTree = "<group>";
 		};
-		887322B726504E940021CD4B /* RNINavigatorView */ = {
+		880DD3DC2651924700CEF7D4 /* RNINavigatorView */ = {
 			isa = PBXGroup;
 			children = (
-				887322B826504E940021CD4B /* RNINavigatorViewManager.swift */,
-				887322B926504E940021CD4B /* RNINavigatorView.swift */,
-				887322BA26504E940021CD4B /* RNINavigatorViewModule.m */,
-				887322BB26504E940021CD4B /* RNINavigatorViewManager.m */,
-				887322BC26504E940021CD4B /* RNINavigatorViewDelegate.swift */,
-				887322BD26504E940021CD4B /* RNINavigatorViewModule.swift */,
+				880DD3DD2651924700CEF7D4 /* RNINavigatorViewManager.swift */,
+				880DD3DE2651924700CEF7D4 /* RNINavigatorView.swift */,
+				880DD3DF2651924700CEF7D4 /* RNINavigatorViewModule.m */,
+				880DD3E02651924700CEF7D4 /* RNINavigatorViewManager.m */,
+				880DD3E12651924700CEF7D4 /* RNINavigatorViewDelegate.swift */,
+				880DD3E22651924700CEF7D4 /* RNINavigatorViewModule.swift */,
 			);
 			path = RNINavigatorView;
 			sourceTree = "<group>";
 		};
-		887322BE26504E940021CD4B /* RNIHelpers */ = {
+		880DD3E32651924700CEF7D4 /* RNIHelpers */ = {
 			isa = PBXGroup;
 			children = (
-				887322BF26504E940021CD4B /* RNIUtilities.swift */,
-				887322C026504E940021CD4B /* RNIImageItem.swift */,
-				887322C126504E940021CD4B /* RNIError.swift */,
+				880DD3E42651924700CEF7D4 /* RNIUtilities.swift */,
+				880DD3E52651924700CEF7D4 /* RNIImageItem.swift */,
+				880DD3E62651924700CEF7D4 /* RNIError.swift */,
 			);
 			path = RNIHelpers;
 			sourceTree = "<group>";
@@ -361,60 +374,61 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				887322ED26504E950021CD4B /* RNIWrapperView.swift in Sources */,
-				887322D426504E940021CD4B /* UINavigationBar+Helpers.swift in Sources */,
-				887322CD26504E940021CD4B /* UIView+Init.swift in Sources */,
-				887322E726504E950021CD4B /* RNINavBarItemConfig.swift in Sources */,
-				887322CA26504E940021CD4B /* UIOffset+Init.swift in Sources */,
-				887322C426504E940021CD4B /* UINavigationItem+Init.swift in Sources */,
-				887322D826504E940021CD4B /* TransitionAnimations.swift in Sources */,
-				887322DC26504E940021CD4B /* RNINavigatorRouteHeaderViewManager.m in Sources */,
-				887322C726504E940021CD4B /* RCTTextAttributes+Init.swift in Sources */,
-				887322E326504E940021CD4B /* RNINavigatorRouteViewDelegate.swift in Sources */,
-				887322EB26504E950021CD4B /* RNINavBarAppearance.swift in Sources */,
-				887322DE26504E940021CD4B /* RNINavigatorRouteViewManager.swift in Sources */,
-				887322DA26504E940021CD4B /* RNINavigatorRouteHeaderView.swift in Sources */,
-				887322D326504E940021CD4B /* UIViewController+Helpers.swift in Sources */,
-				887322F526504E950021CD4B /* RNIUtilities.swift in Sources */,
-				887322F426504E950021CD4B /* RNINavigatorViewModule.swift in Sources */,
-				887322E026504E940021CD4B /* RNINavigatorRouteViewModule.m in Sources */,
-				887322E926504E950021CD4B /* RNINavigationController.swift in Sources */,
-				887322F626504E950021CD4B /* RNIImageItem.swift in Sources */,
-				887322D926504E940021CD4B /* RNINavigatorRouteHeaderShadowView.swift in Sources */,
-				887322E226504E940021CD4B /* RNINavigatorRouteViewModule.swift in Sources */,
-				887322EC26504E950021CD4B /* RNIWrapperViewManager.swift in Sources */,
-				887322DD26504E940021CD4B /* RNIRootViewController.swift in Sources */,
-				887322E826504E950021CD4B /* RNINavigatorManager.swift in Sources */,
-				887322E626504E950021CD4B /* RNINavigatorReactRouteViewController.swift in Sources */,
-				887322F226504E950021CD4B /* RNINavigatorViewManager.m in Sources */,
-				887322EE26504E950021CD4B /* RNIWrapperViewManager.m in Sources */,
-				887322CC26504E940021CD4B /* NSTextAlignment+Init.swift in Sources */,
-				887322F126504E950021CD4B /* RNINavigatorViewModule.m in Sources */,
-				887322CB26504E940021CD4B /* UIStatusBarStyle+Init.swift in Sources */,
-				887322E426504E940021CD4B /* RNINavigatorRouteBaseViewController.swift in Sources */,
-				887322C526504E940021CD4B /* NSUnderlineStyle+Init.swift in Sources */,
-				887322CF26504E940021CD4B /* CAGradientLayerType+Init.swift in Sources */,
-				887322F026504E950021CD4B /* RNINavigatorView.swift in Sources */,
-				887322D526504E940021CD4B /* UIView+Helpers.swift in Sources */,
-				887322D026504E940021CD4B /* UIBarButtonItem+Init.swift in Sources */,
-				887322DF26504E940021CD4B /* RNINavigatorRouteViewManager.m in Sources */,
-				887322E126504E940021CD4B /* RNINavigatorRouteView.swift in Sources */,
-				887322D226504E940021CD4B /* UINavigationItem+Helpers.swift in Sources */,
-				887322E526504E950021CD4B /* RNINavigatorRouteViewControllerDelegate.swift in Sources */,
-				887322C926504E940021CD4B /* UIBarStyle+Init.swift in Sources */,
-				887322CE26504E940021CD4B /* UIControl+Init.swift in Sources */,
-				887322C626504E940021CD4B /* RCTTextDecorationLineType+Init.swift in Sources */,
-				887322DB26504E940021CD4B /* RNINavigatorRouteHeaderViewManager.swift in Sources */,
-				887322F726504E950021CD4B /* RNIError.swift in Sources */,
-				887322D626504E940021CD4B /* UIColor+Helpers.swift in Sources */,
-				887322C226504E940021CD4B /* UIBarMetrics+Init.swift in Sources */,
-				887322F326504E950021CD4B /* RNINavigatorViewDelegate.swift in Sources */,
-				887322C326504E940021CD4B /* RCTTextTransform+Init.swift in Sources */,
-				887322EA26504E950021CD4B /* RNINavTransitionConfig.swift in Sources */,
-				887322D126504E940021CD4B /* WeakObjects.swift in Sources */,
-				887322C826504E940021CD4B /* UIBlurEffect+Init.swift in Sources */,
-				887322EF26504E950021CD4B /* RNINavigatorViewManager.swift in Sources */,
-				887322D726504E940021CD4B /* UINavigationController+Helpers.swift in Sources */,
+				880DD423265193BB00CEF7D4 /* RNIRootViewController.m in Sources */,
+				880DD3F92651924800CEF7D4 /* UINavigationBar+Helpers.swift in Sources */,
+				880DD3F22651924800CEF7D4 /* UIView+Init.swift in Sources */,
+				880DD40C2651924800CEF7D4 /* RNINavBarItemConfig.swift in Sources */,
+				880DD3EF2651924800CEF7D4 /* UIOffset+Init.swift in Sources */,
+				880DD3E92651924800CEF7D4 /* UINavigationItem+Init.swift in Sources */,
+				880DD3FD2651924800CEF7D4 /* TransitionAnimations.swift in Sources */,
+				880DD4012651924800CEF7D4 /* RNINavigatorRouteHeaderViewManager.m in Sources */,
+				880DD3EC2651924800CEF7D4 /* RCTTextAttributes+Init.swift in Sources */,
+				880DD4082651924800CEF7D4 /* RNINavigatorRouteViewDelegate.swift in Sources */,
+				880DD4102651924800CEF7D4 /* RNINavBarAppearance.swift in Sources */,
+				880DD4172651924800CEF7D4 /* RNINavigatorViewModule.m in Sources */,
+				880DD4032651924800CEF7D4 /* RNINavigatorRouteViewManager.swift in Sources */,
+				880DD3FF2651924800CEF7D4 /* RNINavigatorRouteHeaderView.swift in Sources */,
+				880DD4182651924800CEF7D4 /* RNINavigatorViewManager.m in Sources */,
+				880DD3F82651924800CEF7D4 /* UIViewController+Helpers.swift in Sources */,
+				880DD4052651924800CEF7D4 /* RNINavigatorRouteViewModule.m in Sources */,
+				880DD40E2651924800CEF7D4 /* RNINavigationController.swift in Sources */,
+				880DD4162651924800CEF7D4 /* RNINavigatorView.swift in Sources */,
+				880DD3FE2651924800CEF7D4 /* RNINavigatorRouteHeaderShadowView.swift in Sources */,
+				880DD4072651924800CEF7D4 /* RNINavigatorRouteViewModule.swift in Sources */,
+				880DD4022651924800CEF7D4 /* RNIRootViewController.swift in Sources */,
+				880DD40D2651924800CEF7D4 /* RNINavigatorManager.swift in Sources */,
+				880DD40B2651924800CEF7D4 /* RNINavigatorReactRouteViewController.swift in Sources */,
+				880DD41C2651924800CEF7D4 /* RNIImageItem.swift in Sources */,
+				880DD3F12651924800CEF7D4 /* NSTextAlignment+Init.swift in Sources */,
+				880DD3F02651924800CEF7D4 /* UIStatusBarStyle+Init.swift in Sources */,
+				880DD4092651924800CEF7D4 /* RNINavigatorRouteBaseViewController.swift in Sources */,
+				880DD3EA2651924800CEF7D4 /* NSUnderlineStyle+Init.swift in Sources */,
+				880DD3F42651924800CEF7D4 /* CAGradientLayerType+Init.swift in Sources */,
+				880DD4142651924800CEF7D4 /* RNIWrapperViewManager.m in Sources */,
+				880DD3FA2651924800CEF7D4 /* UIView+Helpers.swift in Sources */,
+				880DD3F52651924800CEF7D4 /* UIBarButtonItem+Init.swift in Sources */,
+				880DD4042651924800CEF7D4 /* RNINavigatorRouteViewManager.m in Sources */,
+				880DD41D2651924800CEF7D4 /* RNIError.swift in Sources */,
+				880DD4062651924800CEF7D4 /* RNINavigatorRouteView.swift in Sources */,
+				880DD3F72651924800CEF7D4 /* UINavigationItem+Helpers.swift in Sources */,
+				880DD40A2651924800CEF7D4 /* RNINavigatorRouteViewControllerDelegate.swift in Sources */,
+				880DD4152651924800CEF7D4 /* RNINavigatorViewManager.swift in Sources */,
+				880DD3EE2651924800CEF7D4 /* UIBarStyle+Init.swift in Sources */,
+				880DD3F32651924800CEF7D4 /* UIControl+Init.swift in Sources */,
+				880DD3EB2651924800CEF7D4 /* RCTTextDecorationLineType+Init.swift in Sources */,
+				880DD4002651924800CEF7D4 /* RNINavigatorRouteHeaderViewManager.swift in Sources */,
+				880DD3FB2651924800CEF7D4 /* UIColor+Helpers.swift in Sources */,
+				880DD3E72651924800CEF7D4 /* UIBarMetrics+Init.swift in Sources */,
+				880DD3E82651924800CEF7D4 /* RCTTextTransform+Init.swift in Sources */,
+				880DD41B2651924800CEF7D4 /* RNIUtilities.swift in Sources */,
+				880DD4192651924800CEF7D4 /* RNINavigatorViewDelegate.swift in Sources */,
+				880DD40F2651924800CEF7D4 /* RNINavTransitionConfig.swift in Sources */,
+				880DD3F62651924800CEF7D4 /* WeakObjects.swift in Sources */,
+				880DD4132651924800CEF7D4 /* RNIWrapperView.swift in Sources */,
+				880DD41A2651924800CEF7D4 /* RNINavigatorViewModule.swift in Sources */,
+				880DD3ED2651924800CEF7D4 /* UIBlurEffect+Init.swift in Sources */,
+				880DD4122651924800CEF7D4 /* RNIWrapperViewManager.swift in Sources */,
+				880DD3FC2651924800CEF7D4 /* UINavigationController+Helpers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

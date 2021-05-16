@@ -22,6 +22,8 @@ public class RNINavigatorManager {
     valueOptions: .weakMemory
   );
   
+  private var didSwizzleRootViewController = false;
+  
   // ---------------------
   // MARK:- Public Methods
   // ---------------------
@@ -70,6 +72,38 @@ public class RNINavigatorManager {
     for navigatorView in self.getNavigatorViewInstances() {
       navigatorView.cleanup();
     };
+  };
+  
+  internal func swizzleRootViewController(for window: UIWindow){
+   
+    guard !self.didSwizzleRootViewController,
+          // don't swizzle if the root view controller is already a `RNIRootViewController`
+          !(window.rootViewController is RNIRootViewController)
+    else { return };
+    
+    self.didSwizzleRootViewController = true;
+    
+    let baseClass   : AnyClass = UIViewController.self;
+    let baseSelector: Selector = #selector(getter: UIViewController.childForStatusBarStyle);
+    let baseMethod  : Method?  = class_getInstanceMethod(baseClass, baseSelector);
+    
+    let replacementClass   : AnyClass = RNIRootViewController.self;
+    let replacementSelector: Selector = #selector(getter: RNIRootViewController.childForStatusBarStyle);
+    let replacementMethod  : Method?  = class_getInstanceMethod(replacementClass, replacementSelector);
+    
+    // replace the root view controller's default `childForStatusBarStyle` impl.
+    if let originalMethod = baseMethod,
+       let swizzledMethod = replacementMethod {
+      
+      method_exchangeImplementations(originalMethod, swizzledMethod);
+    };
+    
+    #if DEBUG
+    print("LOG - RNINavigatorManager: swizzleRootViewController"
+      + " - has baseMethod: \(baseMethod != nil)"
+      + " - has swizzledMethod: \(replacementMethod != nil)"
+    );
+    #endif
   };
 };
 

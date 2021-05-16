@@ -33,6 +33,7 @@ RCT_EXPORT_VIEW_PROPERTY(initialRouteKeys, NSArray);
 RCT_EXPORT_VIEW_PROPERTY(isNavBarTranslucent, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(navBarPrefersLargeTitles, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(isInteractivePopGestureEnabled, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(shouldSwizzleRootViewController, BOOL);
 
 // MARK: Navigation Bar: Customization
 RCT_EXPORT_VIEW_PROPERTY(navBarAppearance, NSDictionary);

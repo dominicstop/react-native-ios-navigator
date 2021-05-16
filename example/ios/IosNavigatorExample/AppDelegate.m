@@ -53,9 +53,9 @@ static void InitializeFlipper(UIApplication *application) {
 
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
   
-  //UIViewController *rootViewController = [UIViewController new];
+  UIViewController *rootViewController = [UIViewController new];
   // UIViewController *rootViewController = [RootViewController new];
-  UIViewController *rootViewController = [RNIRootViewController new];
+  // UIViewController *rootViewController = [RNIRootViewController new];
   
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
