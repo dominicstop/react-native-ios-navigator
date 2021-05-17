@@ -3,11 +3,16 @@ import * as React from 'react';
 import { StyleSheet, View, Text, ScrollView, TouchableOpacity, TextInput, Switch, Alert, ViewStyle } from 'react-native';
 import { RouteViewEvents, RouteViewPortal, RouteContentProps, NavigationObject, RouteConstantsObject, NavigatorConstantsObject, StatusBarStyle } from 'react-native-ios-navigator';
 
+import { CardBody, CardButton, CardRowLabelDisplay, CardRowSwitch, CardTitle, CardRowTextInput } from './ui/Card';
+import { Spacer, SpacerLine } from './ui/Spacer';
+import { ObjectPropertyDisplay } from './ui/ObjectPropertyDisplay';
+
 import type { NavBarItemsConfig, NavBarBackItemConfig } from '../../../src/types/NavBarItemConfig';
 import type { NavBarAppearanceConfig, NavBarAppearanceCombinedConfig } from '../../../src/types/NavBarAppearanceConfig';
 
 import * as Colors  from '../constants/Colors';
 import * as Helpers from '../functions/Helpers';
+
 
 
 // NOTE: This is messy.
@@ -516,327 +521,6 @@ function randomBGColor(){
   return Helpers.randomElement<string>(colors);
 };
 
-function ItemTitle(props: any){
-  return (
-    <React.Fragment>
-      <View style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginTop: props.marginTop ?? 0
-      }}>
-        <Text style={{
-          fontSize: 18,
-          fontWeight: '600',
-        }}>
-          {props.title ?? ''}
-        </Text>
-        {props.titleCode && (
-          <View style={{
-            backgroundColor: Colors.BLUE.A400,
-            paddingHorizontal: 10,
-            paddingVertical: 5,
-            borderRadius: 10,
-            marginLeft: 10,
-          }}>
-            <Text style={{
-              color: 'white',
-              fontWeight: '600',
-              fontSize: 15,
-            }}>
-              {props.titleCode}
-            </Text>
-          </View>
-        )}
-      </View>
-      <Text style={{
-        marginTop: 7,
-        fontWeight: '300',
-        fontSize: 14,
-        color: 'rgba(0,0,0,0.5)'
-
-      }}>
-        {props.subtitle ?? 'subtitle'}
-      </Text>
-    </React.Fragment>
-  );
-};
-
-function Spacer(props: any){
-  return(
-    <View style={{marginTop: props.space ?? 0}}/>
-  );
-};
-
-function SpacerLine(props: any){
-  return(
-    <View style={{
-      paddingTop: props.space ?? 12,
-      borderBottomWidth: 1,
-      borderBottomColor: 'rgba(0,0,0,0.15)',
-    }}/>
-  );
-};
-
-function ButtonPrimary(props: any){
-  return(
-    <TouchableOpacity 
-      style={{
-        paddingHorizontal: 12,
-        paddingVertical: 8,
-        backgroundColor: Colors.PURPLE.A200,
-        borderRadius: 10,
-        marginTop: 12,
-      }}
-      onPress={props.onPress}
-    >
-      <View>
-        <Text style={{
-          color: 'white',
-          fontSize: 16,
-          fontWeight: '700'
-        }}>
-          {props.title}
-        </Text>
-        <Text style={{
-          color: 'white',
-          fontWeight: '400'
-        }}>
-          {props.subtitle}
-        </Text>
-      </View>
-    </TouchableOpacity>
-  );
-};
-
-function ItemContainer(props: any) {
-  return (
-    <View style={{
-      paddingHorizontal: 12,
-      paddingVertical: 15,
-      marginHorizontal: 10,
-      marginVertical: 10,
-      backgroundColor: Colors.PURPLE[50],
-      borderRadius: 10,
-    }}>
-      {props.children}
-    </View>
-  );
-};
-
-function RowLabelText(props: any){
-  return (
-    <View style={{
-      flexDirection: 'row',
-      marginTop: 12,
-      paddingHorizontal: 12,
-      paddingVertical: 5,
-      backgroundColor: Colors.INDIGO[100],
-      borderRadius: 10,
-      alignItems: 'center',
-    }}>
-      <Text style={{
-        flex: 1,
-        fontSize: 16,
-        fontWeight: '500',
-        color: Colors.PURPLE[1100],
-        opacity: 0.75,
-      }}>
-        {props.label ?? 'Current Value'}
-      </Text>
-      <Text style={{
-        fontSize: 16,
-        fontWeight: '500',
-        color: Colors.PURPLE[1100],
-        opacity: 0.4,
-      }}>
-        {props.value ?? 'Value'}
-      </Text>
-    </View>
-  );
-};
-
-function ObjectPropertyDisplay(props: {
-  object: object,
-  style?: ViewStyle,
-}){
-  if(props.object == null){
-    return (
-      <View style={{
-        marginTop: 12,
-        paddingHorizontal: 12,
-        paddingVertical: 10,
-        backgroundColor: Colors.INDIGO[100],
-        borderRadius: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-        ...(props.style ?? {}),
-      }}>
-        <Text style={{opacity: 0.75}}>
-          {'Nothing to show'}
-        </Text>
-      </View>
-    );
-    
-  } else {
-    const objectKeys = Object.keys(props.object);
-
-    return(
-      <View style={{
-        marginTop: 12,
-        paddingHorizontal: 12,
-        paddingVertical: 5,
-        backgroundColor: Colors.INDIGO[100],
-        borderRadius: 10,
-        ...(props.style ?? {}),
-      }}>
-        {objectKeys.map((objKey, index) => {
-          // @ts-ignore
-          const value = props.object[objKey];
-          const isValueObj = (typeof value === 'object' && value !== null);
-
-          return isValueObj?(
-            <View key={`container-${objKey}-${index}`}>
-              <Text 
-                key={`label-${objKey}-${index}`}
-                style={{
-                  flex: 1,
-                  fontSize: 16,
-                  fontWeight: '500',
-                  color: Colors.PURPLE[1100],
-                  opacity: 0.75,
-                }}
-              >
-                {`${objKey}: `}
-              </Text>
-              <ObjectPropertyDisplay
-                key={`value-ObjectPropertyDisplay-${objKey}-${index}`}
-                object={value}
-                style={{
-                  marginTop: 0,
-                  paddingHorizontal: 7,
-                  paddingVertical: 5,
-                }}
-              />
-            </View>
-          ):(
-            <View 
-              key={`container-${objKey}-${index}`}
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}
-            >
-              <Text 
-                key={`label-${objKey}-${index}`}
-                style={{
-                  flex: 1,
-                  fontSize: 16,
-                  fontWeight: '500',
-                  color: Colors.PURPLE[1100],
-                  opacity: 0.75,
-                }}
-              >
-                {`${objKey}: `}
-              </Text>
-              <Text 
-                key={`value-${objKey}-${index}`}
-                  style={{
-                  fontSize: 16,
-                  fontWeight: '500',
-                  color: Colors.PURPLE[1100],
-                  opacity: 0.4,
-                }}
-              >
-                {/** @ts-ignore */}
-                {isValueObj? `...`: `'${props.object[objKey]}'`}
-              </Text>
-            </View>
-          );
-        })}
-      </View>
-    );
-  };
-};
-
-class StyledTextInput extends React.PureComponent<{
-  placeholder: string
-}> {
-  state = {
-    textInput: '',
-  };
-
-  getText = () => {
-    return this.state.textInput;
-  };
-
-  render(){
-    const props = this.props;
-
-    return(
-      <TextInput
-        onChangeText={(text) => {
-          this.setState({textInput: text});
-        }}
-        placeholder={props.placeholder}
-        placeholderTextColor={Colors.INDIGO[300]}
-        style={{
-          backgroundColor: Colors.INDIGO[100],
-          fontSize: 16,
-          color: Colors.INDIGO[900],
-          paddingHorizontal: 12,
-          paddingVertical: 7,
-          borderRadius: 10,
-          marginTop: 12,
-        }}
-      />
-    );
-  };
-};
-
-function SwitchRow(props: {
-  title: string;
-  subtitle?: string;
-  value: boolean;
-  onValueChange: (value: boolean) => void;
-}){
-  return(
-    <View style={{
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginTop: 12,
-    }}>
-      <View style={{
-        flex: 1,
-        marginRight: 10,
-      }}>
-        <Text style={{
-          fontSize: 16,
-          fontWeight: '500',
-          color: Colors.PURPLE[1200],
-        }}>
-          {props.title ?? 'title'}
-        </Text>
-        <Text style={{
-          flex: 1,
-          fontSize: 16,
-          opacity: 0.5,
-          color: Colors.PURPLE[1100],
-        }}>
-          {props.subtitle ?? 'Toggle the value'}
-        </Text>
-      </View>
-      <Switch
-        value={props.value ?? false}
-        onValueChange={props.onValueChange}
-        trackColor={{
-          true: Colors.PURPLE.A700,
-          false: Colors.PURPLE.A100
-        }}
-      />
-    </View>
-  );
-};
-
 type NavigatorTest01State = typeof NavigatorTest01.prototype.state;
 
 type SharedSectionProps = {
@@ -854,17 +538,17 @@ function NavBarConfigGeneral(props: any){
   ];
 
   return(
-    <ItemContainer>
-      <ItemTitle
+    <CardBody>
+      <CardTitle
         title={'Set'}
-        titleCode={'RouteOptions.routeTitle'}
+        pillTitle={'RouteOptions.routeTitle'}
         subtitle={`Update the navbar title via the \`RouteViewPortal\` comp.`}
       />
-      <StyledTextInput
+      <CardRowTextInput
         ref={inputRouteTitleRef}
         placeholder={'Navbar Title...'}
       />
-      <ButtonPrimary
+      <CardButton
         title={'Update Title'}
         subtitle={`Update the navBar's title`}
         onPress={() => {
@@ -876,17 +560,17 @@ function NavBarConfigGeneral(props: any){
         }}
       />
       <SpacerLine/>
-      <ItemTitle
+      <CardTitle
         title={'Set'}
-        titleCode={'RouteOptions.prompt'}
+        pillTitle={'RouteOptions.prompt'}
         subtitle={`Update the navbar prompt via the \`RouteViewPortal\` comp. The prompt is a single line of text at the top.`}
-        marginTop={24}
+        extraMarginTop={24}
       />
-      <StyledTextInput
+      <CardRowTextInput
         ref={inputPromptRef}
         placeholder={'Navbar Prompt...'}
       />
-      <ButtonPrimary
+      <CardButton
         title={'Update Prompt'}
         subtitle={`Update the navBar's prompt text`}
         onPress={() => {
@@ -898,16 +582,16 @@ function NavBarConfigGeneral(props: any){
         }}
       />
       <SpacerLine/>
-      <ItemTitle
+      <CardTitle
         title={'Set'}
-        titleCode={'RouteOptions.titleDisplayMode'}
+        pillTitle={'RouteOptions.titleDisplayMode'}
         subtitle={`Cycle to the next display mode`}
-        marginTop={24}
+        extraMarginTop={24}
       />
-      <RowLabelText
+      <CardRowLabelDisplay
         value={currentTitleDisplayMode}
       />
-      <ButtonPrimary
+      <CardButton
         title={'Update `titleDisplayMode`'}
         subtitle={`Cycle to the next display mode`}
         onPress={() => {
@@ -919,7 +603,7 @@ function NavBarConfigGeneral(props: any){
           }))
         }}
       />
-    </ItemContainer>
+    </CardBody>
   );
 };
 
@@ -932,16 +616,16 @@ function NavBarBackItemsConfig(props: any){
   const backButtonTitleRef = React.useRef();
 
   return (
-    <ItemContainer>
-      <ItemTitle
+    <CardBody>
+      <CardTitle
         title={'Set'}
-        titleCode={'navBarButtonBackItemsConfig'}
+        pillTitle={'navBarButtonBackItemsConfig'}
         subtitle={`Note: This will configure the next route's back item. Current config for the navbar back item: ${currentConfig?.description ?? 'N/A'}`}
       />
       <ObjectPropertyDisplay
         object={currentConfig?.config}
       />
-      <ButtonPrimary
+      <CardButton
         title={'Update config'}
         subtitle={`Cycle to the next back item config`}
         onPress={() => {
@@ -955,13 +639,13 @@ function NavBarBackItemsConfig(props: any){
         }}
       />
       <SpacerLine/>
-      <ItemTitle
+      <CardTitle
         title={'Configure'}
-        titleCode={'navBarBackButtonItem'}
+        pillTitle={'navBarBackButtonItem'}
         subtitle={`Misc. configurations for the back button`}
-        marginTop={24}
+        extraMarginTop={24}
       />
-      <SwitchRow
+      <CardRowSwitch
         title={`leftItemsSupplementBackButton`}
         value={props.parentState.leftItemsSupplementBackButton}
         // @ts-ignore
@@ -972,7 +656,7 @@ function NavBarBackItemsConfig(props: any){
           });
         }}
       />
-      <SwitchRow
+      <CardRowSwitch
         title={`applyBackButtonConfigToCurrentRoute`}
         value={props.parentState.applyBackButtonConfigToCurrentRoute}
         // @ts-ignore
@@ -983,7 +667,7 @@ function NavBarBackItemsConfig(props: any){
           });
         }}
       />
-      <SwitchRow
+      <CardRowSwitch
         title={`hidesBackButton`}
         value={props.parentState.hidesBackButton}
         // @ts-ignore
@@ -995,17 +679,17 @@ function NavBarBackItemsConfig(props: any){
         }}
       />
       <SpacerLine/>
-      <ItemTitle
+      <CardTitle
         title={'Set'}
-        titleCode={'RouteOptions.backButtonDisplayMode'}
+        pillTitle={'RouteOptions.backButtonDisplayMode'}
         subtitle={`Update the navbar display mode of the Back button. Requires iOS 14.0+. When the backBarButtonItem property is nil, this is used to determine the title of the Back button.`}
-        marginTop={24}
+        extraMarginTop={24}
       />
-      <RowLabelText value={backButtonDisplayModes[
+      <CardRowLabelDisplay value={backButtonDisplayModes[
         props.parentState.backButtonDisplayModeIndex %
         backButtonDisplayModes.length
       ]}/>
-      <ButtonPrimary
+      <CardButton
         title={'Update `backButtonDisplayMode`'}
         subtitle={`Cycle to the next mode`}
         onPress={() => {
@@ -1018,17 +702,17 @@ function NavBarBackItemsConfig(props: any){
           }))
         }}
       />
-      <ItemTitle
+      <CardTitle
         title={'Set'}
-        titleCode={'RouteOptions.backButtonTitle'}
+        pillTitle={'RouteOptions.backButtonTitle'}
         subtitle={`Update the navbar prompt via the \`RouteViewPortal\` comp. The prompt is a single line of text at the top.`}
-        marginTop={24}
+        extraMarginTop={24}
       />
-      <StyledTextInput
+      <CardRowTextInput
         ref={backButtonTitleRef}
         placeholder={'backButtonTitle...'}
       />
-      <ButtonPrimary
+      <CardButton
         title={'Update backButtonTitle'}
         subtitle={`Update the navBar's backButtonTitle text`}
         onPress={() => {
@@ -1039,7 +723,7 @@ function NavBarBackItemsConfig(props: any){
           });
         }}
       />
-      <ButtonPrimary
+      <CardButton
         title={'Push Route'}
         subtitle={`Show route with the current back button config`}
         onPress={() => {
@@ -1047,7 +731,7 @@ function NavBarBackItemsConfig(props: any){
           navigation.push({routeKey: 'NavigatorTest01'});
         }}
       />
-    </ItemContainer>
+    </CardBody>
   );
 };
 
@@ -1058,10 +742,10 @@ function NavBarRightItemsConfig(props: any){
   ];
 
   return (
-    <ItemContainer>
-      <ItemTitle
+    <CardBody>
+      <CardTitle
         title={'Set'}
-        titleCode={'navBarButtonRightItemsConfig'}
+        pillTitle={'navBarButtonRightItemsConfig'}
         subtitle={`Current config for the nav bar right item: ${currentConfig?.description ?? 'N/A'}`}
       />
       {(currentConfig.config.length == 0)?(
@@ -1078,7 +762,7 @@ function NavBarRightItemsConfig(props: any){
           />
         )
       )}
-      <ButtonPrimary
+      <CardButton
         title={'Update config'}
         subtitle={`Cycle to the next nav bar item config`}
         onPress={() => {
@@ -1091,7 +775,7 @@ function NavBarRightItemsConfig(props: any){
           }));
         }}
       />
-    </ItemContainer>
+    </CardBody>
   );
 };
 
@@ -1102,10 +786,10 @@ function NavBarLeftItemsConfig(props: any){
   ];
 
   return (
-    <ItemContainer>
-      <ItemTitle
+    <CardBody>
+      <CardTitle
         title={'Set'}
-        titleCode={'navBarButtonLeftItemsConfig'}
+        pillTitle={'navBarButtonLeftItemsConfig'}
         subtitle={`Current config for the nav bar left item: ${currentConfig?.description ?? 'N/A'}`}
       />
       {(currentConfig.config.length == 0)?(
@@ -1122,7 +806,7 @@ function NavBarLeftItemsConfig(props: any){
           />
         )
       )}
-      <ButtonPrimary
+      <CardButton
         title={'Update config'}
         subtitle={`Cycle to the next nav bar item config`}
         onPress={() => {
@@ -1135,19 +819,19 @@ function NavBarLeftItemsConfig(props: any){
           }));
         }}
       />
-    </ItemContainer>
+    </CardBody>
   );
 };
 
 function NavBarTitleItemConfig(props: any){
   return(
-    <ItemContainer>
-      <ItemTitle
+    <CardBody>
+      <CardTitle
         title={'Toggle '}
-        titleCode={'renderNavBarTitleItem'}
+        pillTitle={'renderNavBarTitleItem'}
         subtitle={`Render a custom component for the navbar title`}
       />
-      <SwitchRow
+      <CardRowSwitch
         title={`renderNavBarTitleItem`}
         value={props.parentState.renderNavBarTitleItem}
         // @ts-ignore
@@ -1158,7 +842,7 @@ function NavBarTitleItemConfig(props: any){
           });
         }}
       />
-    </ItemContainer>
+    </CardBody>
   );
 };
 
@@ -1183,13 +867,13 @@ function NavBarAppearanceOverrideItemConfig(props: SharedSectionProps & {
   );
   
   return(
-    <ItemContainer>
-      <ItemTitle
+    <CardBody>
+      <CardTitle
         title={'Set '}
-        titleCode={'NavBarAppearanceConfig'}
+        pillTitle={'NavBarAppearanceConfig'}
         subtitle={subtilePrefix + ' \n\n ' + subtitleSuffix}
       />
-      <SwitchRow
+      <CardRowSwitch
         title={'Apply to current route'}
         value={props.parentState.applyNavBarAppearanceToCurrentRoute}
         onValueChange={(value) => {
@@ -1200,7 +884,7 @@ function NavBarAppearanceOverrideItemConfig(props: SharedSectionProps & {
           });
         }}
       />
-      <SwitchRow
+      <CardRowSwitch
         title={'Use legacy appearance'}
         value={props.parentState.isUsingLegacyConfig}
         onValueChange={(value) => {
@@ -1215,7 +899,7 @@ function NavBarAppearanceOverrideItemConfig(props: SharedSectionProps & {
         key={`config-NavBarAppearanceOverrideItemConfig`}
         object={props.currentAppearanceOverrideConfig}
       />
-      <ButtonPrimary
+      <CardButton
         title={'Update config'}
         subtitle={`Cycle to the next preset config`}
         onPress={() => {
@@ -1233,16 +917,16 @@ function NavBarAppearanceOverrideItemConfig(props: SharedSectionProps & {
       />
 
       <SpacerLine/>
-      <ItemTitle
+      <CardTitle
         title={'Set'}
-        titleCode={'RouteOptions.navigationBarVisibility'}
+        pillTitle={'RouteOptions.navigationBarVisibility'}
         subtitle={`Will temp. override the current/default navigation bar visibility for this route.`}
-        marginTop={24}
+        extraMarginTop={24}
       />
-      <RowLabelText
+      <CardRowLabelDisplay
         value={currentNavBarVisibilityMode}
       />
-      <ButtonPrimary
+      <CardButton
         title={'Update `navigationBarVisibility`'}
         subtitle={`Cycle to the next mode`}
         onPress={() => {
@@ -1256,7 +940,7 @@ function NavBarAppearanceOverrideItemConfig(props: SharedSectionProps & {
 
 
       {!props.parentState.applyNavBarAppearanceToCurrentRoute && (
-        <ButtonPrimary
+        <CardButton
           title={'Push Route w/ Config'}
             subtitle={`Push a route with the current navbar appearance config`}
             onPress={() => {
@@ -1274,7 +958,7 @@ function NavBarAppearanceOverrideItemConfig(props: SharedSectionProps & {
             }}
           />
       )}
-    </ItemContainer>
+    </CardBody>
   );
 };
 
@@ -1287,15 +971,15 @@ function StatusBarStyleConfig(props: SharedSectionProps & {
   ];
 
   return(
-    <ItemContainer>
-      <ItemTitle
+    <CardBody>
+      <CardTitle
         title={'Status Bar Style'}
         subtitle={`Change the 'statusBarStyle (UIStatusBarStyle)'`}
       />
-      <RowLabelText
+      <CardRowLabelDisplay
         value={currentStatusBarStyle}
       />
-      <ButtonPrimary
+      <CardButton
         title={'Update `statusBarStyle`'}
         subtitle={`Cycle to the next item`}
         onPress={() => {
@@ -1306,7 +990,7 @@ function StatusBarStyleConfig(props: SharedSectionProps & {
           }));
         }}
       />
-      <ButtonPrimary
+      <CardButton
         title={'Push `NavigatorTest01`'}
         subtitle={'Push route w/ statusBarStyle: `lightContent`'}
         onPress={() => {
@@ -1318,7 +1002,7 @@ function StatusBarStyleConfig(props: SharedSectionProps & {
           });
         }}
       />
-    </ItemContainer>
+    </CardBody>
   );
 };
 
@@ -1328,8 +1012,8 @@ function RouteViewConstants(props: RouteContentProps & {
   const [routeConstantsObject, setRouteConstantsObject] = React.useState<RouteConstantsObject>(null);
 
   return(
-    <ItemContainer>
-      <ItemTitle
+    <CardBody>
+      <CardTitle
         title={'Route View Constants'}
         subtitle={`Async. get the route view constants from native`}
       />
@@ -1337,7 +1021,7 @@ function RouteViewConstants(props: RouteContentProps & {
         key={`config-RouteViewConstants`}
         object={routeConstantsObject}
       />
-      <ButtonPrimary
+      <CardButton
         title={'Invoke `getRouteConstants`'}
         subtitle={'Get values from `RNINavigatorRouteView.getConstants`'}
         onPress={async () => {
@@ -1345,7 +1029,7 @@ function RouteViewConstants(props: RouteContentProps & {
           setRouteConstantsObject(constants);
         }}
       />
-    </ItemContainer>
+    </CardBody>
   );
 };
 
@@ -1355,8 +1039,8 @@ function NavigatorViewConstants(props: RouteContentProps & {
   const [navigatorConstantsObject, setNavigatorConstantsObject] = React.useState<NavigatorConstantsObject>(null);
 
   return(
-    <ItemContainer>
-      <ItemTitle
+    <CardBody>
+      <CardTitle
         title={'Navigator View Constants'}
         subtitle={`Async. get the navigator view constants from native`}
       />
@@ -1364,7 +1048,7 @@ function NavigatorViewConstants(props: RouteContentProps & {
         key={`config-RouteViewConstants`}
         object={navigatorConstantsObject}
       />
-      <ButtonPrimary
+      <CardButton
         title={'Invoke `getNavigatorConstants`'}
         subtitle={'Get values from `RNINavigatorView.getConstants`'}
         onPress={async () => {
@@ -1372,18 +1056,18 @@ function NavigatorViewConstants(props: RouteContentProps & {
           setNavigatorConstantsObject(constants);
         }}
       />
-    </ItemContainer>
+    </CardBody>
   );
 };
 
 function NavigationCommandsConfig(props: RouteContentProps){
   return(
-    <ItemContainer>
-      <ItemTitle
+    <CardBody>
+      <CardTitle
         title={'Navigation Commands'}
         subtitle={`Test out the navigation commands`}
       />
-      <ButtonPrimary
+      <CardButton
         title={'Push `NavigatorTest03`'}
         subtitle={'Push a new route with fade animation'}
         onPress={() => {
@@ -1396,7 +1080,7 @@ function NavigationCommandsConfig(props: RouteContentProps){
           });
         }}
       />
-      <ButtonPrimary
+      <CardButton
         title={'Pop Current'}
         subtitle={'Pop the current route with fade animation'}
         onPress={() => {
@@ -1407,7 +1091,7 @@ function NavigationCommandsConfig(props: RouteContentProps){
           });
         }}
       />
-    </ItemContainer>
+    </CardBody>
   );
 };
 
