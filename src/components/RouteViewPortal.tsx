@@ -3,7 +3,7 @@ import React from 'react';
 import type { NavigatorRouteView, NavigatorRouteViewProps } from '../components/NavigatorRouteView';
 import type { RouteOptions } from '../types/RouteOptions';
 
-import { CompareRouteOptions } from '../functions/CompareObjects';
+import { CompareRouteOptions, CompareUtilities } from '../functions/CompareObjects';
 import { NavRouteViewContext, NavRouteViewContextProps } from '../context/NavRouteViewContext';
 
 
@@ -66,11 +66,23 @@ export class RouteViewPortal extends React.Component<RouteViewPortalProps> {
     const didRouteOptionsChange = 
       !CompareRouteOptions.compare(prevProps.routeOptions, nextProps.routeOptions);
 
-    const didChangeRenderItems = (
-      prevProps.renderNavBarLeftItem  !== nextProps.renderNavBarLeftItem  &&
-      prevProps.renderNavBarRightItem !== nextProps.renderNavBarRightItem &&
-      prevProps.renderNavBarTitleItem !== nextProps.renderNavBarTitleItem &&
-      prevProps.renderRouteHeader     !== nextProps.renderRouteHeader
+    const didChangeRenderItems = !(
+      CompareUtilities.compareItemsNull(
+        prevProps.renderNavBarLeftItem, 
+        nextProps.renderNavBarLeftItem
+      ) &&
+      CompareUtilities.compareItemsNull(
+        prevProps.renderNavBarRightItem, 
+        nextProps.renderNavBarRightItem
+      ) &&
+      CompareUtilities.compareItemsNull(
+        prevProps.renderNavBarTitleItem, 
+        nextProps.renderNavBarTitleItem
+      ) &&
+      CompareUtilities.compareItemsNull(
+        prevProps.renderRouteHeader, 
+        nextProps.renderRouteHeader
+      ) 
     );
 
     if(didRouteOptionsChange || didChangeRenderItems){
