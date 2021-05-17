@@ -23,7 +23,7 @@ type ComparisonConfig<T> = {[K in keyof Required<T>]: {
 // This is a ugly brute force approach, and there might be other ways to do this, but
 // it'll do for now.
 
-class HelperUtilities {
+export class CompareUtilities {
   /** if one value is null, and the other isn't, then they aren't the same. 
    * Returns true if they're the same, false if different.
   */
@@ -36,17 +36,17 @@ class HelperUtilities {
   };
 
   static compareArraySimple(itemA: Array<any>, itemB: Array<any>){
-    if(HelperUtilities.isBothNull(itemA, itemB)) return true;
+    if(CompareUtilities.isBothNull(itemA, itemB)) return true;
 
     return (
-      HelperUtilities.compareItemsNull(itemA, itemB) && 
+      CompareUtilities.compareItemsNull(itemA, itemB) && 
       (itemA?.length == itemB?.length)
     );
   };
 
   static shallowCompareObject<T extends Object>(itemA: T, itemB: T): boolean {
-    if(HelperUtilities.isBothNull(itemA, itemB)) return true;
-    if(!HelperUtilities.compareItemsNull(itemA, itemB)) return false;
+    if(CompareUtilities.isBothNull(itemA, itemB)) return true;
+    if(!CompareUtilities.compareItemsNull(itemA, itemB)) return false;
 
     let key: keyof T; 
     for (key in itemA) {
@@ -68,8 +68,8 @@ class HelperUtilities {
     oldItem: T, 
     newItem: T
   ): boolean {
-    if(HelperUtilities.isBothNull(oldItem, newItem)) return true;
-    if(!HelperUtilities.compareItemsNull(oldItem, newItem)) return false;
+    if(CompareUtilities.isBothNull(oldItem, newItem)) return true;
+    if(!CompareUtilities.compareItemsNull(oldItem, newItem)) return false;
 
     let key: keyof T;
     for(key in oldItem){
@@ -86,7 +86,7 @@ class HelperUtilities {
           break;
 
         case 'shallowObject':
-          if(!HelperUtilities.shallowCompareObject(oldItem, newItem)) return false;
+          if(!CompareUtilities.shallowCompareObject(oldItem, newItem)) return false;
           break;
 
         case 'ignore':
@@ -100,8 +100,8 @@ class HelperUtilities {
 
 export class CompareImageConfig {
   static compare(oldItem?: ImageItemConfig, newItem?: ImageItemConfig){
-    if(HelperUtilities.isBothNull(oldItem, newItem)) return true;
-    if(!HelperUtilities.compareItemsNull(oldItem, newItem)) return false;
+    if(CompareUtilities.isBothNull(oldItem, newItem)) return true;
+    if(!CompareUtilities.compareItemsNull(oldItem, newItem)) return false;
 
     if(oldItem.type !== newItem.type) return false;
     
@@ -113,7 +113,7 @@ export class CompareImageConfig {
       case 'IMAGE_REQUIRE':
       case 'IMAGE_RECT':
       case 'IMAGE_GRADIENT':
-        return HelperUtilities.shallowCompareObject(oldItem.imageValue, (newItem as any).imageValue);
+        return CompareUtilities.shallowCompareObject(oldItem.imageValue, (newItem as any).imageValue);
     };
 
     return true;
@@ -148,14 +148,14 @@ export class CompareNavBarItemConfig {
     oldItem: NavBarItemConfig['titlePositionAdjustment'], 
     newItem: NavBarItemConfig['titlePositionAdjustment']
   ): boolean {
-    if(!HelperUtilities.shallowCompareObject(oldItem, newItem)){
+    if(!CompareUtilities.shallowCompareObject(oldItem, newItem)){
       return false;
     };
 
     let key: keyof typeof oldItem;
     for (key in oldItem) {
       // compare each Offset object
-      if(!HelperUtilities.shallowCompareObject(oldItem[key], newItem[key])){
+      if(!CompareUtilities.shallowCompareObject(oldItem[key], newItem[key])){
         return false;
       };
     };
@@ -167,14 +167,14 @@ export class CompareNavBarItemConfig {
     oldItem: NavBarItemConfig['backgroundImage'], 
     newItem: NavBarItemConfig['backgroundImage']
   ): boolean {
-    if(!HelperUtilities.shallowCompareObject(oldItem, newItem)){
+    if(!CompareUtilities.shallowCompareObject(oldItem, newItem)){
       return false;
     };
 
     let key: keyof typeof oldItem;
     for (key in oldItem) {
       // compare each background image
-      if(!HelperUtilities.shallowCompareObject(oldItem[key], newItem[key])){
+      if(!CompareUtilities.shallowCompareObject(oldItem[key], newItem[key])){
         return false;
       };
     };
@@ -184,7 +184,7 @@ export class CompareNavBarItemConfig {
 
   static compare(oldItem?: NavBarItemConfig, newItem?: NavBarItemConfig){
     return (
-      HelperUtilities.compareObject(CompareNavBarItemConfig.propertyMap, oldItem, newItem) &&
+      CompareUtilities.compareObject(CompareNavBarItemConfig.propertyMap, oldItem, newItem) &&
 
       // @ts-ignore
       // compare `SupportedImageTypes`
@@ -202,8 +202,8 @@ export class CompareNavBarButtonBackItemConfig {
   };
 
   static compare(oldItem?: NavBarBackItemConfig, newItem?: NavBarBackItemConfig){
-    if(HelperUtilities.isBothNull(oldItem, newItem)) return true;
-    if(!HelperUtilities.compareItemsNull(oldItem, newItem)) return false;
+    if(CompareUtilities.isBothNull(oldItem, newItem)) return true;
+    if(!CompareUtilities.compareItemsNull(oldItem, newItem)) return false;
 
     return (
       // @ts-ignore
@@ -213,23 +213,23 @@ export class CompareNavBarButtonBackItemConfig {
       oldItem.title      === newItem.title      && // @ts-ignore 
       oldItem.systemItem === newItem.systemItem &&
 
-      HelperUtilities.compareObject(CompareNavBarButtonBackItemConfig.propertyMap, oldItem, newItem)
+      CompareUtilities.compareObject(CompareNavBarButtonBackItemConfig.propertyMap, oldItem, newItem)
     );
   };
 };
 
 export class CompareNavBarItemsConfig {
   static compare(oldItem?: NavBarItemsConfig, newItem?: NavBarItemsConfig){
-    if(!HelperUtilities.compareArraySimple(oldItem, newItem)) return false;
+    if(!CompareUtilities.compareArraySimple(oldItem, newItem)) return false;
 
     for (let i = 0; i < oldItem?.length ?? 0; i++) {
       const oldNavBarItem = oldItem[i];
       const newBavBarItem = newItem[i];
 
-      if(HelperUtilities.isBothNull(oldNavBarItem, newBavBarItem)){
+      if(CompareUtilities.isBothNull(oldNavBarItem, newBavBarItem)){
         return true;
 
-      } else if (!HelperUtilities.compareItemsNull(oldNavBarItem, newBavBarItem)){
+      } else if (!CompareUtilities.compareItemsNull(oldNavBarItem, newBavBarItem)){
         return false;
         
       } else if(!CompareNavBarItemConfig.compare(
@@ -252,7 +252,7 @@ export class CompareRouteTransitionPushConfig {
   };
 
   static compare(oldItem?: RouteTransitionPushConfig, newItem?: RouteTransitionPushConfig){
-    return HelperUtilities.compareObject(CompareRouteTransitionPushConfig.propertyMap, oldItem, newItem);
+    return CompareUtilities.compareObject(CompareRouteTransitionPushConfig.propertyMap, oldItem, newItem);
   };
 };
 
@@ -264,7 +264,7 @@ export class CompareRouteTransitionPopConfig {
   };
 
   static compare(oldItem?: RouteTransitionPopConfig, newItem?: RouteTransitionPopConfig){
-    return HelperUtilities.compareObject(CompareRouteTransitionPopConfig.propertyMap, oldItem, newItem);
+    return CompareUtilities.compareObject(CompareRouteTransitionPopConfig.propertyMap, oldItem, newItem);
   };
 };
 
@@ -295,7 +295,7 @@ export class CompareNavBarAppearance {
   };
 
   static compare(oldItem?: NavBarAppearance, newItem?: NavBarAppearance){
-    return HelperUtilities.compareObject(CompareNavBarAppearance.propertyMap, oldItem, newItem);;
+    return CompareUtilities.compareObject(CompareNavBarAppearance.propertyMap, oldItem, newItem);;
   };
 };
 
@@ -319,7 +319,7 @@ export class CompareNavBarAppearanceConfig {
   };
 
   static compare(oldItem?: NavBarAppearanceConfig, newItem?: NavBarAppearanceConfig){
-    return HelperUtilities.compareObject(CompareNavBarAppearanceConfig.propertyMap, oldItem, newItem);
+    return CompareUtilities.compareObject(CompareNavBarAppearanceConfig.propertyMap, oldItem, newItem);
   };
 };
 
@@ -355,8 +355,8 @@ export class CompareLegacyAppearanceConfig {
     oldItem?: NavBarAppearanceLegacyConfig['backgroundImage'], 
     newItem?: NavBarAppearanceLegacyConfig['backgroundImage']
   ){
-    if(HelperUtilities.isBothNull(oldItem, newItem)) return true;
-    if(!HelperUtilities.compareItemsNull(oldItem, newItem)) return false;
+    if(CompareUtilities.isBothNull(oldItem, newItem)) return true;
+    if(!CompareUtilities.compareItemsNull(oldItem, newItem)) return false;
 
     return (
       CompareImageConfig.compare(oldItem.default      , newItem.default      ) &&
@@ -370,26 +370,26 @@ export class CompareLegacyAppearanceConfig {
     oldItem?: NavBarAppearanceLegacyConfig['titleVerticalPositionAdjustment'], 
     newItem?: NavBarAppearanceLegacyConfig['titleVerticalPositionAdjustment']
   ){
-    if(HelperUtilities.isBothNull(oldItem, newItem)) return true;
-    if(!HelperUtilities.compareItemsNull(oldItem, newItem)) return false;
+    if(CompareUtilities.isBothNull(oldItem, newItem)) return true;
+    if(!CompareUtilities.compareItemsNull(oldItem, newItem)) return false;
 
     return (
-      HelperUtilities.shallowCompareObject(oldItem.default      , newItem.default      ) &&
-      HelperUtilities.shallowCompareObject(oldItem.defaultPrompt, newItem.defaultPrompt) &&
-      HelperUtilities.shallowCompareObject(oldItem.compact      , newItem.compact      ) &&
-      HelperUtilities.shallowCompareObject(oldItem.compactPrompt, newItem.compactPrompt) 
+      CompareUtilities.shallowCompareObject(oldItem.default      , newItem.default      ) &&
+      CompareUtilities.shallowCompareObject(oldItem.defaultPrompt, newItem.defaultPrompt) &&
+      CompareUtilities.shallowCompareObject(oldItem.compact      , newItem.compact      ) &&
+      CompareUtilities.shallowCompareObject(oldItem.compactPrompt, newItem.compactPrompt) 
     );
   };
 
   static compare(oldItem?: NavBarAppearanceLegacyConfig, newItem?: NavBarAppearanceLegacyConfig){
-    return HelperUtilities.compareObject(CompareLegacyAppearanceConfig.propertyMap, oldItem, newItem);
+    return CompareUtilities.compareObject(CompareLegacyAppearanceConfig.propertyMap, oldItem, newItem);
   };
 };
 
 export class CompareNavBarAppearanceCombinedConfig {
   static compare(oldItem?: NavBarAppearanceCombinedConfig, newItem?: NavBarAppearanceCombinedConfig){
-    if(HelperUtilities.isBothNull(oldItem, newItem)) return true;
-    if(!HelperUtilities.compareItemsNull(oldItem, newItem)) return false;
+    if(CompareUtilities.isBothNull(oldItem, newItem)) return true;
+    if(!CompareUtilities.compareItemsNull(oldItem, newItem)) return false;
 
     return (
       oldItem.mode         === newItem.mode         &&
@@ -446,6 +446,6 @@ export class CompareRouteOptions {
   };
 
   static compare(oldItem?: RouteOptions, newItem?: RouteOptions){
-    return HelperUtilities.compareObject(CompareRouteOptions.propertyMap, oldItem, newItem);
+    return CompareUtilities.compareObject(CompareRouteOptions.propertyMap, oldItem, newItem);
   };
 };
