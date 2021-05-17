@@ -17,6 +17,7 @@ import type { OnNavRouteViewAddedPayload } from '../native_components/RNINavigat
 import type { RouteTransitionPopConfig, RouteTransitionPushConfig } from '../native_components/RNINavigatorRouteView';
 
 import * as Helpers from '../functions/Helpers';
+
 import { EventEmitter } from '../functions/EventEmitter';
 import { SimpleQueue } from '../functions/SimpleQueue';
 
