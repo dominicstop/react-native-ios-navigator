@@ -10,6 +10,11 @@
 
 ## In Progress
 
+- [ ] **Cleanup**: Example — Cleanup `NavigatorTest01`
+	- [x] (Commit: `0b69024`) **Refactor**: Extracted base UI components to separate files.
+	- [ ] **Refactor**: Use proper types, e.g. remove al `@ts-ignore`, add proper type annotations etc.
+	- [ ] **Cleanup**: Create utilities to cleanup code, e.g. `getNextItemFromCyclicArray` + TS generics to infer type, etc. 
+
 ---
 
 <br>
@@ -109,13 +114,6 @@
 - [ ] **Cleanup**: Swift — In property wrappers, replace all usage of `didSet` with `willSet` 
 - [ ] **Cleanup**: Swift — Replace all imports of `Foundation` with `UIKit`  
 - [ ] **Cleanup**: Types — Add JSDoc comments to types that shadow UIKit types.
-
-<br>
-
-- [ ] **Cleanup**: Example — Cleanup `NavigatorTest01`
-	- [ ] **Refactor**: Create shared/reusable components
-	- [ ] **Refactor**: Use proper types, e.g. remove al `@ts-ignore`, add proper type annotations etc.
-	- [ ] **Cleanup**: Create utilities to cleanup code, e.g. `getNextItemFromCyclicArray` + TS generics to infer type, etc. 
 
 <br>
 
@@ -316,7 +314,7 @@
 
 <br>
 
-- [ ] (Commit: `5f149e2`) **Fix**: Release version of example project not compiling.
+- [x] (Commit: `5f149e2`) **Fix**: Release version of example project not compiling.
 	- The debug build works, but the release build fails with 100+ errors.
 	- The console outputs the following warnings:
 		- `ld: warning: Could not find or use auto-linked library 'swiftDarwin'`
@@ -343,6 +341,11 @@
 
 - [x] (Commit: `0c19c5e`) **Implement**: Add main queue setup for `RNINavigatorRouteViewModule` and `RNINavigatorViewModule`.
 - [x] (Commit: `6564908`) **Fix**: Route header not updating size during rotate.
+
+<br>
+
+- [x] (Commit: `fa04c12`) **Implement**: `NavigatorView` - Impl.  `shouldSwizzleRootViewController` prop.
+	- Swizzle the root view controller to replace it's base `childForStatusBarStyle` impl. from `UIViewController` with `RNIRootViewController.childForStatusBarStyle`'.
 
 ---
 
