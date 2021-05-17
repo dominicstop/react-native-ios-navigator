@@ -1,10 +1,7 @@
 import * as React from 'react';
-
-import { StyleSheet, View, Text, ScrollView, TouchableOpacity, TextInput, Switch, Alert, ViewStyle, GestureResponderEvent } from 'react-native';
-import { RouteViewEvents, RouteViewPortal, RouteContentProps, NavigationObject, RouteConstantsObject, NavigatorConstantsObject, StatusBarStyle } from 'react-native-ios-navigator';
+import { StyleSheet, View, Text, TouchableOpacity, TextInput, Switch, GestureResponderEvent } from 'react-native';
 
 import * as Colors  from '../../constants/Colors';
-import * as Helpers from '../../functions/Helpers';
 
 
 export const CardBody: React.FC = (props) => {

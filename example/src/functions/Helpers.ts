@@ -13,3 +13,7 @@ export function timeout(ms: Number) {
     }, ms)
   });
 };
+
+export function nextItemInCyclicArray<T>(index: number, array: Array<T>): T {
+  return array[index % array.length];
+};
