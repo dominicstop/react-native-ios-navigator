@@ -621,6 +621,7 @@ extension RNINavigatorReactRouteViewController: RNINavigatorRouteViewDelegate {
   
   func didReceivePrompt(_ prompt: String?) {
     self.navigationItem.prompt = prompt;
+    self.navigationController?.navigationBar.setNeedsLayout();
   };
   
   func didReceiveLargeTitleDisplayMode(_ displayMode: UINavigationItem.LargeTitleDisplayMode) {
