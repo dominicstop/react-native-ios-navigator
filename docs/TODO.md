@@ -10,11 +10,6 @@
 
 ## In Progress
 
-- [ ] **Cleanup**: Example — Cleanup `NavigatorTest01`
-	- [x] (Commit: `0b69024`) **Refactor**: Extracted base UI components to separate files.
-	- [ ] **Refactor**: Use proper types, e.g. remove al `@ts-ignore`, add proper type annotations etc.
-	- [ ] **Cleanup**: Create utilities to cleanup code, e.g. `getNextItemFromCyclicArray` + TS generics to infer type, etc. 
-
 ---
 
 <br>
@@ -346,6 +341,12 @@
 
 - [x] (Commit: `fa04c12`) **Implement**: `NavigatorView` - Impl.  `shouldSwizzleRootViewController` prop.
 	- Swizzle the root view controller to replace it's base `childForStatusBarStyle` impl. from `UIViewController` with `RNIRootViewController.childForStatusBarStyle`'.
+
+<br>
+
+- [x] **Cleanup**: Example — Cleanup `NavigatorTest01`
+	- [x] (Commit: `0b69024`) **Refactor**: Extracted base UI components to separate files.
+	- [x] **Refactor**: Remove all `@ts-ignore`, add proper type annotations, create utilities to cleanup code, (e.g. `getNextItemFromCyclicArray` + TS generics to infer type, etc.), extract section components into separate files, and general cleanup.
 
 ---
 
