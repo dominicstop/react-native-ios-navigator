@@ -4,6 +4,9 @@ import type { NavBarBackItemConfig, NavBarItemsConfig } from '../types/NavBarIte
 import type { NavBarAppearanceCombinedConfig } from '../types/NavBarAppearanceConfig';
 
 
+// TODO: Rename types - Capitalize, e.g. rename `onXXX` to `OnXXX`.
+// TODO: Cleanup types - Replace `,` with `;` in object declaration.
+
 type RouteTransitionPushTypes = 
   "DefaultPush" | "FadePush" | "SlideLeftPush" | "SlideUpPush" | "GlideUpPush";
 
@@ -22,38 +25,36 @@ export type RouteTransitionPopConfig = RouteTransitionConfigBase & {
   type: RouteTransitionPopTypes
 };
 
-export type onRoutePushEvent = (event: {
-  nativeEvent: { 
-    routeID   : number ,
-    routeKey  : string ,
-    routeIndex: number ,
-    isAnimated: boolean,
+type BaseEventPayload = {
+  routeID: number;
+  routeKey: string;
+  routeIndex: number;
+};
+
+export type onRoutePushEvent = (event: BaseEventPayload & {
+  nativeEvent: BaseEventPayload & { 
+    isAnimated: boolean;
   }
 }) => void;
 
 export type onRouteFocusBlurEvent = (event: {
-  nativeEvent: { 
-    routeID   : number ,
-    routeKey  : string ,
-    routeIndex: number ,
-    isAnimated: boolean,
+  nativeEvent: BaseEventPayload & { 
+    isAnimated: boolean;
   }
 }) => void;
 
 export type onRoutePopEvent = (event: {
-  nativeEvent: { 
-    routeID        : number ,
-    routeKey       : string ,
-    routeIndex     : number ,
-    isUserInitiated: boolean,
+  nativeEvent: BaseEventPayload & {
+    isUserInitiated: boolean;
   }
 }) => void;
 
 export type onPressNavBarItem = (event: {
-  nativeEvent: { 
-    routeID: number,
-    key    : string, 
-    type   : string, 
+  nativeEvent: BaseEventPayload & { 
+    key : string;
+    type: string;
+  }
+}) => void;
   }
 }) => void;
 
@@ -114,7 +115,7 @@ export type RNINavigatorRouteViewProps = {
   // `NavigationConfigOverride`-related
   navBarAppearanceOverride?: NavBarAppearanceCombinedConfig;
   navigationBarVisibility?: NavigationBarVisibilityMode;
-  allowTouchEventsToPassThroughNavigationBar: Boolean;
+  allowTouchEventsToPassThroughNavigationBar: boolean;
 
   // Native Events: Push
   onRouteWillPush?: onRoutePushEvent;
