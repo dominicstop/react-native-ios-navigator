@@ -14,15 +14,15 @@ type RouteTransitionPopTypes =
   "DefaultPop" | "FadePop" | "SlideLeftPop" | "SlideUpPop" | "GlideUpPop";
 
 type RouteTransitionConfigBase = {
-  duration?: number
+  duration?: number;
 };
 
 export type RouteTransitionPushConfig = RouteTransitionConfigBase & {
-  type: RouteTransitionPushTypes
+  type: RouteTransitionPushTypes;
 };
 
 export type RouteTransitionPopConfig = RouteTransitionConfigBase & {
-  type: RouteTransitionPopTypes
+  type: RouteTransitionPopTypes;
 };
 
 type BaseEventPayload = {
@@ -34,19 +34,19 @@ type BaseEventPayload = {
 export type onRoutePushEvent = (event: BaseEventPayload & {
   nativeEvent: BaseEventPayload & { 
     isAnimated: boolean;
-  }
+  };
 }) => void;
 
 export type onRouteFocusBlurEvent = (event: {
   nativeEvent: BaseEventPayload & { 
     isAnimated: boolean;
-  }
+  };
 }) => void;
 
 export type onRoutePopEvent = (event: {
   nativeEvent: BaseEventPayload & {
     isUserInitiated: boolean;
-  }
+  };
 }) => void;
 
 export type onPressNavBarItem = (event: {
@@ -54,7 +54,7 @@ export type onPressNavBarItem = (event: {
     key  : string;
     type : string;
     index: string;
-  }
+  };
 }) => void;
   }
 }) => void;
