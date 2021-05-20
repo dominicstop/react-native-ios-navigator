@@ -249,10 +249,11 @@ export class NavigatorTest01 extends React.Component<RouteContentProps, Navigato
             );
           }}
           onPressNavBarLeftItem={({nativeEvent}) => {
-            Alert.alert(
-              'onPressNavBarLeftItem', 
-              `key: ${nativeEvent.key}`
-            );
+            Alert.alert('onPressNavBarLeftItem', (
+                `key: ${nativeEvent.key}`
+              + ` - index: ${nativeEvent.index}`
+              + ` - type: ${nativeEvent.type}`
+            ));
           }}
         />
         <ScrollView style={styles.rootContainer}>

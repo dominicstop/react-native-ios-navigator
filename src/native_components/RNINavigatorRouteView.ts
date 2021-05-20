@@ -51,8 +51,9 @@ export type onRoutePopEvent = (event: {
 
 export type onPressNavBarItem = (event: {
   nativeEvent: BaseEventPayload & { 
-    key : string;
-    type: string;
+    key  : string;
+    type : string;
+    index: string;
   }
 }) => void;
   }

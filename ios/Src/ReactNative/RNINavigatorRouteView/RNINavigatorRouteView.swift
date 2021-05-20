@@ -558,7 +558,7 @@ internal class RNINavigatorRouteView: UIView {
   
   override func reactSuperview() -> UIView! {
     return self.navigatorView;
-  }
+  };
 };
 
 // ------------------------------------
@@ -584,16 +584,19 @@ internal extension RNINavigatorRouteView {
     guard let leftConfigItems = self._navBarButtonLeftItemsConfig
     else { return nil };
     
-    return leftConfigItems.compactMap {
-      $0.createUIBarButtonItem { [unowned self] config in
+    return leftConfigItems.enumerated().compactMap { (index, item) in
+      item.createUIBarButtonItem { [unowned self] in
         #if DEBUG
         print("LOG - NativeView, RNINavigatorRouteView"
           + " - onPress: `leftBarButtonItem`"
         );
         #endif
         
-        var params = config.makeNavBarItemEventParams();
-        params["routeID"] = self.routeID;
+        var params      = self.createEventPayload();
+        let paramsExtra = $0.makeNavBarItemEventParams();
+        
+        params.merge(paramsExtra) { (current, _) in current };
+        params["index"] = index;
         
         self.onPressNavBarLeftItem?(params);
       };
@@ -605,16 +608,19 @@ internal extension RNINavigatorRouteView {
     guard let rightConfigItems = self._navBarButtonRightItemsConfig
     else { return nil };
     
-    return rightConfigItems.compactMap {
-      $0.createUIBarButtonItem { [unowned self] config in
+    return rightConfigItems.enumerated().compactMap { (index, item) in
+      item.createUIBarButtonItem { [unowned self] in
         #if DEBUG
         print("LOG - NativeView, RNINavigatorRouteView"
           + " - onPress: `rightBarButtonItem`"
         );
         #endif
         
-        var params = config.makeNavBarItemEventParams();
-        params["routeID"] = self.routeID;
+        var params      = self.createEventPayload();
+        let paramsExtra = $0.makeNavBarItemEventParams();
+        
+        params.merge(paramsExtra) { (current, _) in current };
+        params["index"] = index;
         
         self.onPressNavBarRightItem?(params);
       };

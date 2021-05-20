@@ -323,9 +323,9 @@ internal class RNINavBarItemConfig {
   };
   
   /// Makes a dict. you can pass as a param to `RCTBubblingEventBlock`
-  func makeNavBarItemEventParams() -> [AnyHashable: Any]{
+  func makeNavBarItemEventParams() -> [String: Any]{
     return [
-      "key" : self.key ?? "",
+      "key" : self.key ?? self.title ?? "",
       "type": self.type.rawValue
     ];
   };
