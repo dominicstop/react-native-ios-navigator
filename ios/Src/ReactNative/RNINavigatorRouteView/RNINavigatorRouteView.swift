@@ -216,11 +216,6 @@ internal class RNINavigatorRouteView: UIView {
     }
   };
   
-  //  MARK: Props - Navbar Item Config
-  /// * Specific props for config. the VC's `navigationItem` properties that are
-  ///   related to setting the various "nav bar button item(s)" properties.
-  /// -------------------------------------------------------------------------
-  
   private var _largeTitleDisplayMode: UINavigationItem.LargeTitleDisplayMode = .automatic;
   @objc var largeTitleDisplayMode: NSString? {
     didSet {
@@ -238,6 +233,12 @@ internal class RNINavigatorRouteView: UIView {
       self.delegate?.didReceiveLargeTitleDisplayMode(displayMode);
     }
   };
+  
+  
+  //  MARK: Props - Navbar Item Config
+  /// * Specific props for config. the VC's `navigationItem` properties that are
+  ///   related to setting the various "nav bar button item(s)" properties.
+  /// -------------------------------------------------------------------------
   
   private var _navBarButtonBackItemConfig: RNINavBarItemConfig?;
   @objc var navBarButtonBackItemConfig: NSDictionary? {
