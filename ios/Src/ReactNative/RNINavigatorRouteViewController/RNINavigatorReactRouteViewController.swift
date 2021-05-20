@@ -450,7 +450,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     /// update `routeView`'s size
     self.routeView?.notifyForBoundsChange(self.view.bounds);
     
-    /// update `routeView`'s size
+    /// update `routeView`'s header size
     if let reactRouteHeader = self.routeView?.reactRouteHeader {
       reactRouteHeader.notifyForBoundsChange(reactRouteHeader.bounds);
     };
@@ -470,26 +470,13 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated);
     
-    // by this point, it's already been set so force unwrap
-    let routeView = self.routeView!;
-    
     // send event: notify js nav. route is about to appear
-    routeView.notifyOnRouteFocus(
+    self.routeView!.notifyOnRouteFocus(
       isDone: false,
       isAnimated: animated
     );
     
-    // if back config was prev. overridden, then restore...
-    if self.shouldResetNavBarBackConfig {
-      self.resetRouteNavBarBackConfig();
-      self.shouldResetNavBarBackConfig = false;
-    };
-    
-    /// Override the nav. config based on the current `routeView` props
-    self.navigationConfigOverride.overrideIfNeeded(isAnimated: animated);
-    
-    /// Update status bar style
-    self.setNeedsStatusBarAppearanceUpdate();
+    self.prepareForViewWillAppear(animated);
   };
   
   override func viewDidAppear(_ animated: Bool) {
@@ -583,6 +570,21 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
         return displayMode;
       }();
     };
+  };
+  
+  func prepareForViewWillAppear(_ animated: Bool){
+    
+    // if back config was prev. overridden, then restore...
+    if self.shouldResetNavBarBackConfig {
+      self.resetRouteNavBarBackConfig();
+      self.shouldResetNavBarBackConfig = false;
+    };
+    
+    /// Override the nav. config based on the current `routeView` props
+    self.navigationConfigOverride.overrideIfNeeded(isAnimated: animated);
+    
+    /// Update status bar style
+    self.setNeedsStatusBarAppearanceUpdate();
   };
 };
 
