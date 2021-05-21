@@ -10,6 +10,33 @@
 
 ## In Progress
 
+- [ ] **Implement**: Add initial support for routes with `UISearchController`/`UISearchBar`.
+
+	- [x] (Commit `e59c4dd`) **Implement**: Minimal/Basic Implementation of `UISearchController`.
+
+		- Show a route with a `UISearchController`.
+		- Forward `UISearchResultsUpdating` delegate as events.
+		- Forward `UISearchBarDelegate` as events:
+			- `searchBarSearchButtonClicked`, `searchBarBookmarkButtonClicked`, `searchBarSearchButtonClicked`, 
+
+		- Support for setting the ff. `UISearchController` properties via route props:
+			- `UISearchController`: `hidesNavigationBarDuringPresentation`, `automaticallyShowsCancelButton`,  `obscuresBackgroundDuringPresentation`
+			- `UISearchBar`: `placeholder`
+			- `UISearchBar.searchTextField`: `textColor`.
+		- [ ] **Implement**: Add support for setting the `UISearchBar.searchTextField`'s text style using `RCTTextAttributes`.
+			- `attributedText`, `attributedPlaceholder`.
+			- Get the `defaultTextAttributes` and apply it  as the initial values for `attributedText` + `attributedPlaceholder`.
+
+		- [ ] **Implement**: Add support for programmatically clearing/dismissing the search bar.
+		- [ ] **Implement**: Add support for `showsBookmarkButton` and `searchBarBookmarkButtonClicked` event.
+			* Maybe also impl. `showsSearchResultsButton`
+		- [ ] **Implement**: Add support for showing a `searchResultsController` + react view
+			-  The react view will  be "provided" by the route via the route portal.
+		- [ ] **Implement**: Add support for configuring/setting the scope bar/`scopeButtonTitles`.
+			* Forward search bar event: `selectedScopeButtonIndexDidChange`
+		- [ ] **Implement**: Add support for search tokens.
+			* Impl. setting the `tokenBackgroundColor`.
+
 ---
 
 <br>
@@ -88,7 +115,11 @@
 - [ ] **Implement**: Support landscape orientation/screen rotate.
 	* Already seems to work, but there might be edge cases (especially regarding safe area layout).
 
+<br>
+
 - [ ] **Implement**: Navigator command error recovery - revert state to snapshot if command failed.
+
+
 
 ---
 
@@ -149,6 +180,11 @@
 	* Guess: It could have something to do with the fact that  `RouteHeaderView` is being rendered somewhere else. Also in `RouteViewPortal` it's being passed as function component, but the prop it's depending on is outside the component.
 	* Logging the props in `RouteHeaderView` render shows that the props aren't updating even though the component is updating. The props are frozen to the initial prop value.
 	* See `NavigatorTest06`.
+
+<br>
+
+- [ ] **Fix**: `RCTScrollView` indicator insets is wrong.
+	- It looks like it's doubled.
 
 ---
 
