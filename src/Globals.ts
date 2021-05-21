@@ -5,5 +5,5 @@ declare var LIB_GLOBAL: {
 };
 
 LIB_GLOBAL = {
-  debugLog: __DEV__ && true,
+  debugLog: __DEV__ && false,
 };

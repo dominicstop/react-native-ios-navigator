@@ -10,7 +10,7 @@ import type { RouteViewPortal } from './RouteViewPortal';
 
 import { RouteComponentsWrapper } from './RouteComponentsWrapper';
 
-import { RNINavigatorRouteView, RNINavigatorRouteViewProps, onPressNavBarItem, onRoutePushEvent, onRoutePopEvent, RouteTransitionPopConfig, RouteTransitionPushConfig, onRouteFocusBlurEvent } from '../native_components/RNINavigatorRouteView';
+import { RNINavigatorRouteView, RNINavigatorRouteViewProps, onPressNavBarItem, onRoutePushEvent, onRoutePopEvent, RouteTransitionPopConfig, RouteTransitionPushConfig, onRouteFocusBlurEvent, onUpdateSearchResults, onSearchBarCancelButtonClicked, onSearchBarSearchButtonClicked } from '../native_components/RNINavigatorRouteView';
 import { RNINavigatorRouteViewModule } from '../native_modules/RNINavigatorRouteViewModule';
 
 import * as Helpers from '../functions/Helpers';
@@ -38,6 +38,12 @@ export enum NavRouteEvents {
   // Navbar item `onPress` events
   onPressNavBarLeftItem  = "onPressNavBarLeftItem" ,
   onPressNavBarRightItem = "onPressNavBarRightItem",
+
+  // Search-related events
+  onUpdateSearchResults = "onUpdateSearchResults",
+  
+  onSearchBarCancelButtonClicked = "onSearchBarCancelButtonClicked",
+  onSearchBarSearchButtonClicked = "onSearchBarSearchButtonClicked",
 };
 
 export interface RouteContentProps {
@@ -211,6 +217,10 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
       largeTitleDisplayMode: (
         routeOptions       ?.largeTitleDisplayMode ??
         routeOptionsDefault?.largeTitleDisplayMode 
+      ),
+      searchBarConfig: (
+        routeOptions       ?.searchBarConfig ??
+        routeOptionsDefault?.searchBarConfig 
       ),
       // #endregion ----------------------------------*
       // #region - `NavigationConfigOverride`-related |
@@ -466,6 +476,25 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     this._emitter.emit(NavRouteEvents.onRouteDidBlur, event);
     this.routeStatus = RouteStatus.ROUTE_BLURRED;
   };
+  
+  private _handleOnUpdateSearchResults: onUpdateSearchResults = (event) => {
+    if(this.props.routeID != event.nativeEvent.routeID) return;
+
+    this._emitter.emit(NavRouteEvents.onUpdateSearchResults, event);
+  };
+
+  private _handleOnSearchBarCancelButtonClicked: onSearchBarCancelButtonClicked = (event) => {
+    if(this.props.routeID != event.nativeEvent.routeID) return;
+
+    this._emitter.emit(NavRouteEvents.onSearchBarCancelButtonClicked, event);
+  };
+
+  private _handleOnSearchBarSearchButtonClicked: onSearchBarSearchButtonClicked = (event) => {
+    if(this.props.routeID != event.nativeEvent.routeID) return;
+
+    this._emitter.emit(NavRouteEvents.onSearchBarSearchButtonClicked, event);
+  };
+
   //#endregion
   
   _renderRouteContents = () => {
@@ -522,6 +551,10 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
           // Route Native Events: Navbar Item `onPress`
           onPressNavBarLeftItem={this._handleOnPressNavBarLeftItem}
           onPressNavBarRightItem={this._handleOnPressNavBarRightItem}
+          // Route Native Events: Search
+          onUpdateSearchResults={this._handleOnUpdateSearchResults}
+          onSearchBarCancelButtonClicked={this._handleOnSearchBarCancelButtonClicked}
+          onSearchBarSearchButtonClicked={this._handleOnSearchBarSearchButtonClicked}
           // pass down navbar item config, back button item config, etc.
           {...routeOptions}
         >

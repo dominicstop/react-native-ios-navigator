@@ -96,6 +96,12 @@ internal class RNINavigatorRouteView: UIView {
   @objc var onPressNavBarLeftItem: RCTBubblingEventBlock?;
   @objc var onPressNavBarRightItem: RCTBubblingEventBlock?;
   
+  // MARK: Search Related Events
+  @objc var onUpdateSearchResults: RCTBubblingEventBlock?;
+  
+  @objc var onSearchBarCancelButtonClicked: RCTBubblingEventBlock?;
+  @objc var onSearchBarSearchButtonClicked: RCTBubblingEventBlock?;
+  
   // ------------------------
   // MARK:- RN Exported Props
   // ------------------------
@@ -240,6 +246,20 @@ internal class RNINavigatorRouteView: UIView {
     }
   };
   
+  var _searchBarConfig: RNISearchControllerConfig?;
+  @objc var searchBarConfig: NSDictionary? {
+    didSet {
+      guard let dict = self.searchBarConfig else {
+        self.delegate?.didReceiveSearchBarConfig(nil);
+        return;
+      };
+      
+      let config = RNISearchControllerConfig(from: dict);
+      self._searchBarConfig = config;
+      
+      self.delegate?.didReceiveSearchBarConfig(config);
+    }
+  };
   
   //  MARK: Props - Navbar Item Config
   /// * Specific props for config. the VC's `navigationItem` properties that are
@@ -833,7 +853,32 @@ internal extension RNINavigatorRouteView {
     // send event
     (isDone ? self.onRouteDidBlur : self.onRouteWillBlur)?(dict);
   };
+  
+  func notifyOnUpdateSearchResults(searchText: String?, isActive: Bool){
+    var dict = self.createEventPayload();
+    dict["isActive"] = isActive;
     
+    if let searchText = searchText {
+      dict["text"] = searchText;
+    };
+    
+    self.onUpdateSearchResults?(dict);
+  };
+  
+  func notifyOnSearchBarCancelButtonClicked(){
+    self.onSearchBarCancelButtonClicked?(self.createEventPayload());
+  };
+  
+  func notifyOnSearchBarSearchButtonClicked(searchText: String?){
+    var dict = self.createEventPayload();
+    
+    if let searchText = searchText {
+      dict["text"] = searchText;
+    };
+    
+    self.onSearchBarSearchButtonClicked?(dict);
+  };
+  
   /// Once we're done w/ this "route view" (e.g. it has been popped or removed),
   /// then we need to cleanup to prevent this instance from leaking.
   func cleanup(){

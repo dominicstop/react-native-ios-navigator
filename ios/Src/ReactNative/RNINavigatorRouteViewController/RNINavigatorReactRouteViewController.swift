@@ -442,6 +442,8 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       self.navigationController?.delegate = self;
       self.interactionController = LeftEdgeInteractionController(viewController: self);
     };
+    
+    self.setupSearchController();
   };
   
   override func viewWillLayoutSubviews() {
@@ -487,6 +489,14 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       isDone: true,
       isAnimated: animated
     );
+    
+    /// Search Controller Setup: Set the `hidesSearchBarWhenScrolling` value for the 1st time
+    if #available(iOS 11.0, *),
+       let searchConfig = self.routeView?._searchBarConfig,
+       let hidesSearchBarWhenScrolling = searchConfig.hidesSearchBarWhenScrolling {
+    
+      self.navigationItem.hidesSearchBarWhenScrolling = hidesSearchBarWhenScrolling;
+    };
   };
   
   override func viewWillDisappear(_ animated: Bool) {
@@ -580,11 +590,26 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       self.shouldResetNavBarBackConfig = false;
     };
     
-    /// Override the nav. config based on the current `routeView` props
+    /// Override the nav. config based on the current `routeView` `routeConfig`-related props
     self.navigationConfigOverride.overrideIfNeeded(isAnimated: animated);
     
     /// Update status bar style
     self.setNeedsStatusBarAppearanceUpdate();
+  };
+  
+  func setupSearchController(){
+    guard let searchConfig = self.routeView?._searchBarConfig else { return };
+    
+    let searchController = UISearchController(searchResultsController: nil);
+    searchConfig.updateSearchController(searchController);
+    
+    searchController.searchResultsUpdater = self;
+    searchController.searchBar.delegate = self;
+    
+    if #available(iOS 11.0, *) {
+      self.navigationItem.searchController = searchController;
+      self.navigationItem.hidesSearchBarWhenScrolling = false;
+    };
   };
 };
 
@@ -643,6 +668,19 @@ extension RNINavigatorReactRouteViewController: RNINavigatorRouteViewDelegate {
   func didReceiveAllowTouchEventsToPassThroughNavigationBar(_ flag: Bool) {
     self.navigationConfigOverride.overrideAllowTouchEventsToPassThroughNavigationBar(flag);
   };
+  
+  func didReceiveSearchBarConfig(_ config: RNISearchControllerConfig?){
+    guard #available(iOS 11.0, *) else { return };
+    
+    guard let config = config,
+          let searchController = self.navigationItem.searchController
+    else {
+      self.navigationItem.searchController = nil;
+      return;
+    };
+    
+    config.updateSearchController(searchController);
+    self.navigationItem.hidesSearchBarWhenScrolling = config.hidesSearchBarWhenScrolling ?? true;
   };
   
   // ----------------------------------
@@ -768,5 +806,47 @@ extension RNINavigatorReactRouteViewController:
     else { return nil };
     
     return interactionController;
+  };
+};
+
+// -----------------------------------------
+// MARK:- Extension: UISearchResultsUpdating
+// -----------------------------------------
+
+extension RNINavigatorReactRouteViewController: UISearchResultsUpdating {
+  func updateSearchResults(for searchController: UISearchController) {
+    print("LOG - RNINavigatorReactRouteViewController, UISearchResultsUpdating: updateSearchResults"
+      + " - searchBar.text: \(searchController.searchBar.text ?? "N/A")"
+      + " - isActive: \(searchController.isActive)"
+    );
+    
+    self.routeView?.notifyOnUpdateSearchResults(
+      searchText: searchController.searchBar.text,
+      isActive: searchController.isActive
+    );
+  };
+};
+
+// -------------------------------------
+// MARK:- Extension: UISearchBarDelegate
+// -------------------------------------
+
+extension RNINavigatorReactRouteViewController: UISearchBarDelegate {
+  func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+    print("LOG - RNINavigatorReactRouteViewController, UISearchBarDelegate: searchBarCancelButtonClicked"
+      + " - searchBar.text: \(searchBar.text ?? "N/A")"
+    );
+    
+    self.routeView?.notifyOnSearchBarCancelButtonClicked();
+  };
+  
+  func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+    print("LOG - RNINavigatorReactRouteViewController, UISearchBarDelegate: searchBarSearchButtonClicked"
+      + " - searchBar.text: \(searchBar.text ?? "N/A")"
+    );
+    
+    self.routeView?.notifyOnSearchBarSearchButtonClicked(
+      searchText: searchBar.text
+    );
   };
 };

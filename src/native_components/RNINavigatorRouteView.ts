@@ -2,6 +2,7 @@ import { requireNativeComponent, ViewStyle } from 'react-native';
 
 import type { NavBarBackItemConfig, NavBarItemsConfig } from '../types/NavBarItemConfig';
 import type { NavBarAppearanceCombinedConfig } from '../types/NavBarAppearanceConfig';
+import type { RouteSearchControllerConfig } from '../types/RouteSearchControllerConfig';
 
 
 // TODO: Rename types - Capitalize, e.g. rename `onXXX` to `OnXXX`.
@@ -56,7 +57,24 @@ export type onPressNavBarItem = (event: {
     index: string;
   };
 }) => void;
+
+export type onUpdateSearchResults = (event: {
+  nativeEvent: BaseEventPayload & { 
+    text?: string;
+    isActive: boolean;
+  };
 }) => void;
+
+export type onSearchBarCancelButtonClicked = (event: {
+  nativeEvent: BaseEventPayload;
+}) => void;
+
+export type onSearchBarSearchButtonClicked = (event: {
+  nativeEvent: BaseEventPayload & { 
+    text?: string;
+  };
+}) => void;
+
 
 export type BackButtonDisplayMode =
   /** The navigation item attempts to display a specific title, a generic title, or no title for the Back button, depending on the space available. */
@@ -100,6 +118,8 @@ export type RNINavigatorRouteViewProps = {
   routeTitle?: string;
   largeTitleDisplayMode?: LargeTitleDisplayMode;
 
+  searchBarConfig?: RouteSearchControllerConfig;
+
   // Navbar Item Config
   navBarButtonBackItemConfig  ?: NavBarBackItemConfig;
   navBarButtonLeftItemsConfig ?: NavBarItemsConfig;
@@ -136,6 +156,16 @@ export type RNINavigatorRouteViewProps = {
   // Native Events: Navbar Item `onPress`
   onPressNavBarLeftItem ?: onPressNavBarItem;
   onPressNavBarRightItem?: onPressNavBarItem;
+
+  // Native Events: Search
+  /** Request to update the search results based on the search text. */
+  onUpdateSearchResults?: onUpdateSearchResults;
+
+  /** The cancel button was tapped. */
+  onSearchBarCancelButtonClicked?: onSearchBarCancelButtonClicked;
+  
+  /** The search button (usually in the keyboard) was tapped. */
+  onSearchBarSearchButtonClicked?: onSearchBarSearchButtonClicked;
 };
 
 export const RNINavigatorRouteView = 

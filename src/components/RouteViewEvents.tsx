@@ -4,7 +4,7 @@ import React from 'react';
 import { NavRouteEvents } from '../components/NavigatorRouteView';
 
 import type { NavigatorRouteView } from '../components/NavigatorRouteView';
-import type { onRoutePopEvent, onRoutePushEvent, onRouteFocusBlurEvent, onPressNavBarItem } from 'src/native_components/RNINavigatorRouteView';
+import type { onRoutePopEvent, onRoutePushEvent, onRouteFocusBlurEvent, onPressNavBarItem, onUpdateSearchResults, onSearchBarCancelButtonClicked, onSearchBarSearchButtonClicked } from 'src/native_components/RNINavigatorRouteView';
 
 import type { EventEmitter } from '../functions/EventEmitter';
 import type { RouteOptions } from '../types/RouteOptions';
@@ -21,7 +21,7 @@ type RouteViewEventsProps = {
   onRouteWillPop ?: onRoutePopEvent ;
   onRouteDidPop  ?: onRoutePopEvent ;
 
-  // push/pop events
+  // focus/blur events
   onRouteWillFocus?: onRouteFocusBlurEvent;
   onRouteDidFocus ?: onRouteFocusBlurEvent;
   onRouteWillBlur ?: onRouteFocusBlurEvent;
@@ -30,6 +30,11 @@ type RouteViewEventsProps = {
   // onPress navbar item events
   onPressNavBarLeftItem ?: onPressNavBarItem;
   onPressNavBarRightItem?: onPressNavBarItem;
+
+  // search events
+  onUpdateSearchResults?: onUpdateSearchResults;
+  onSearchBarCancelButtonClicked?: onSearchBarCancelButtonClicked;
+  onSearchBarSearchButtonClicked?: onSearchBarSearchButtonClicked;
 };
 
 /** 
@@ -107,6 +112,21 @@ export class RouteViewEvents extends React.Component<RouteViewEventsProps> {
     routeEmitterRef.addListener(
       NavRouteEvents.onPressNavBarRightItem,
       this._handleOnPressNavBarRightItem
+    );
+
+    routeEmitterRef.addListener(
+      NavRouteEvents.onUpdateSearchResults,
+      this._handleOnUpdateSearchResults
+    );
+
+    routeEmitterRef.addListener(
+      NavRouteEvents.onSearchBarCancelButtonClicked,
+      this._handleOnSearchBarCancelButtonClicked
+    );
+
+    routeEmitterRef.addListener(
+      NavRouteEvents.onSearchBarSearchButtonClicked,
+      this._handleOnSearchBarSearchButtonClicked
     );
   };
 
@@ -206,6 +226,17 @@ export class RouteViewEvents extends React.Component<RouteViewEventsProps> {
     this.props.onPressNavBarRightItem?.(params);
   };
 
+  _handleOnUpdateSearchResults: onUpdateSearchResults = (params) => {
+    this.props.onUpdateSearchResults?.(params);
+  };
+
+  _handleOnSearchBarCancelButtonClicked: onSearchBarCancelButtonClicked = (params) => {
+    this.props.onSearchBarCancelButtonClicked?.(params);
+  };
+
+  _handleOnSearchBarSearchButtonClicked: onSearchBarSearchButtonClicked = (params) => {
+    this.props.onSearchBarSearchButtonClicked?.(params);
+  };
   //#endregion
 
   render(){

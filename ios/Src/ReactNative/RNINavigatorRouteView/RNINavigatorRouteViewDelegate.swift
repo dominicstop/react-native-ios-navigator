@@ -52,6 +52,8 @@ internal protocol RNINavigatorRouteViewDelegate: AnyObject {
   
   func didReceiveLargeTitleDisplayMode(_ displayMode: UINavigationItem.LargeTitleDisplayMode);
   
+  func didReceiveSearchBarConfig(_ config: RNISearchControllerConfig?);
+  
   // ---------------------------------
   // MARK: Receive Props: Navbar Items
   // ---------------------------------

@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Text, FlatList, TouchableOpacity, Image, Alert } from 'react-native';
-import { NavigatorView, RouteContentProps, RouteHeaderView, RouteViewPortal } from 'react-native-ios-navigator';
+import { NavigatorView, RouteContentProps, RouteHeaderView, RouteViewEvents, RouteViewPortal } from 'react-native-ios-navigator';
 
 import { NavigatorExample01 } from './components/NavigatorExample01';
 
@@ -141,13 +141,34 @@ function RouteItem(props: {
   );
 };
 
+type HomeRouteState = {
+  searchBarText?: string;
+};
 
-class HomeRoute extends React.PureComponent<RouteContentProps> {
+class HomeRoute extends React.PureComponent<RouteContentProps, HomeRouteState> {
   static styles = StyleSheet.create({
     rootContainer: {
       paddingBottom: 100,
     },
+    rootContainerEmpty: {
+      flex: 1,
+      marginTop: 15,
+      alignItems: 'center',
+    },
+    titleEmptyText: {
+      fontSize: 18,
+      fontWeight: '600',
+      color: Colors.PURPLE[300],
+    },
   });
+  
+  constructor(props: RouteContentProps){
+    super(props);
+
+    this.state = {
+      searchBarText: null,
+    };
+  };
 
   // @ts-ignore
   _handleOnPressItem = async (routeKey: string) => {
@@ -175,14 +196,50 @@ class HomeRoute extends React.PureComponent<RouteContentProps> {
 
   render(){
     const { styles } = HomeRoute;
+    const { searchBarText } = this.state;
+
+    const hasSearchBarText       = searchBarText != null;
+    const searchBarTextLowerCase = searchBarText?.toLowerCase();
+
+    const items = (hasSearchBarText
+      // true - filter `RouteItems` that matches `searchBarText`
+      ? RouteItems.filter(item => (
+          item.routeKey
+            .toLocaleLowerCase()
+            .includes(searchBarTextLowerCase)
+          || item.title
+            .toLocaleLowerCase()
+            .includes(searchBarTextLowerCase)
+          || item.desc
+            .toLocaleLowerCase()
+            .includes(searchBarTextLowerCase)
+        ))
+      // false - no filter
+      : RouteItems
+    );
 
     return (
       <React.Fragment>
+        <RouteViewEvents
+          onUpdateSearchResults={({nativeEvent}) => {
+            this.setState({ searchBarText: nativeEvent.text });
+          }}
+          onSearchBarSearchButtonClicked={({nativeEvent}) => {
+            this.setState({ searchBarText: nativeEvent.text });
+          }}
+        />
         <FlatList
           contentContainerStyle={styles.rootContainer}
-          data={RouteItems}
+          data={items}
           keyExtractor={(item) => item.routeKey}
           renderItem={this._renderItem}
+          ListEmptyComponent={(
+            <View style={styles.rootContainerEmpty}>
+              <Text style={styles.titleEmptyText}>
+                {'Nothing to Show 😔'}
+              </Text>
+            </View>
+          )}
         />
       </React.Fragment>
     );
@@ -207,6 +264,17 @@ export default function App() {
         routeKey: RouteKeys.Home,
         routeOptionsDefault: {
           routeTitle: "Home",
+          searchBarConfig: {
+            placeholder: "Search Routes",
+            tintColor: Colors.PURPLE.A700,
+            returnKeyType: 'done',
+            obscuresBackgroundDuringPresentation: false,
+            hidesSearchBarWhenScrolling: false,
+            // TODO: Fix - doesn't work
+            textColor: Colors.GREEN.A700, 
+            barTintColor: Colors.GREEN.A700,
+            searchBarStyle: 'prominent',
+          },
         },
         renderRoute: () => (
           <HomeRoute/>

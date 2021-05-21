@@ -180,3 +180,29 @@ export type Rect = {
     height: number;
     width : number;
 };
+
+export type ReturnKeyType =
+  /** Specifies that the visible title of the Return key is return. */
+  | 'default'
+  /** Specifies that the visible title of the Return key is Go. */
+  | 'go'
+  /** Specifies that the visible title of the Return key is Google. */
+  | 'google'
+  /** Specifies that the visible title of the Return key is Join. */
+  | 'join'
+  /** Specifies that the visible title of the Return key is Next. */
+  | 'next'
+  /** Specifies that the visible title of the Return key is Route. */
+  | 'route'
+  /** Specifies that the visible title of the Return key is Search. */
+  | 'search'
+  /** Specifies that the visible title of the Return key is Send. */
+  | 'send'
+  /** Specifies that the visible title of the Return key is Yahoo. */
+  | 'yahoo'
+  /** Specifies that the visible title of the Return key is Done. */
+  | 'done'
+  /** Specifies that the visible title of the Return key is Emergency Call. */
+  | 'emergencyCall'
+  /** Specifies that the visible title of the Return key is Continue. */
+  | 'continue'

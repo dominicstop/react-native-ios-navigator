@@ -4,6 +4,7 @@ import type { BackButtonDisplayMode, LargeTitleDisplayMode, NavigationBarVisibil
 
 import type { NavBarBackItemConfig, NavBarItemsConfig } from "./NavBarItemConfig";
 import type { NavBarAppearanceCombinedConfig } from "./NavBarAppearanceConfig";
+import type { RouteSearchControllerConfig } from "./RouteSearchControllerConfig";
 
 
 // TODO: Cleanup Types - Mirror from source (e.g. RNINavigatorRouteViewProps, etc.)
@@ -22,7 +23,9 @@ export type RouteOptions = {
 
   routeTitle?: string;
   prompt    ?: string;
+
   largeTitleDisplayMode?: LargeTitleDisplayMode;
+  searchBarConfig      ?: RouteSearchControllerConfig;
 
   // Navbar item config
   // ------------------

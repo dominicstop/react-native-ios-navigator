@@ -28,6 +28,11 @@ RCT_EXPORT_VIEW_PROPERTY(onRouteDidBlur , RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onPressNavBarLeftItem , RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onPressNavBarRightItem, RCTBubblingEventBlock);
 
+RCT_EXPORT_VIEW_PROPERTY(onUpdateSearchResults, RCTBubblingEventBlock);
+
+RCT_EXPORT_VIEW_PROPERTY(onSearchBarCancelButtonClicked, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onSearchBarSearchButtonClicked, RCTBubblingEventBlock);
+
 // ----------------------------
 // MARK:- Export Props - Values
 // ----------------------------
@@ -46,6 +51,7 @@ RCT_EXPORT_VIEW_PROPERTY(transitionConfigPop, NSDictionary);
 RCT_EXPORT_VIEW_PROPERTY(prompt, NSString);
 RCT_EXPORT_VIEW_PROPERTY(routeTitle, NSString);
 RCT_EXPORT_VIEW_PROPERTY(largeTitleDisplayMode, NSString);
+RCT_EXPORT_VIEW_PROPERTY(searchBarConfig, NSDictionary);
 
 // MARK: Props - Navbar item config
 RCT_EXPORT_VIEW_PROPERTY(navBarButtonBackItemConfig  , NSDictionary);
