@@ -62,8 +62,10 @@ internal class RNINavigatorRouteView: UIView {
   // MARK:- RN Exported Event Props
   // ------------------------------
   
+  // MARK: Push/Pop Related Events
   /// Fired when a route is *about to be* "pushed"
   @objc var onRouteWillPush: RCTBubblingEventBlock?;
+  
   /// Fired when a route *has been* "pushed"
   @objc var onRouteDidPush: RCTBubblingEventBlock?;
   
@@ -71,23 +73,27 @@ internal class RNINavigatorRouteView: UIView {
   /// pop (because the "back" button was pressed or it was swiped back via a
   /// gesture), or due to it being "popped" programmatically via the nav.
   @objc var onRouteWillPop: RCTBubblingEventBlock?;
+  
   /// Fired when a route *has been* "popped", either due to a "user intiated"
   /// pop (because the "back" button was pressed or it was swiped back via a
   /// gesture), or due to it being "popped" programmatically via the nav.
   @objc var onRouteDidPop: RCTBubblingEventBlock?;
   
+  // MARK: Focus/Blur Related Events
   /** Fired when the route is about to appear */
   @objc var onRouteWillFocus: RCTBubblingEventBlock?;
+  
   /** Fired when the route appears */
   @objc var onRouteDidFocus : RCTBubblingEventBlock?;
   
   /** Fired when the route is about to disappear */
   @objc var onRouteWillBlur: RCTBubblingEventBlock?;
+  
   /** Fired when the route disappear */
   @objc var onRouteDidBlur : RCTBubblingEventBlock?;
   
-  /// Fired when the nav bar's back item is pressed and is a custom nav bar item.
-  @objc var onPressNavBarLeftItem : RCTBubblingEventBlock?;
+  // MARK: NavBarItem Related Events
+  @objc var onPressNavBarLeftItem: RCTBubblingEventBlock?;
   @objc var onPressNavBarRightItem: RCTBubblingEventBlock?;
   
   // ------------------------

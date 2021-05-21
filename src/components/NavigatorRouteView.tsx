@@ -28,11 +28,13 @@ export enum NavRouteEvents {
   onRouteDidPush  = "onRouteDidPush" ,
   onRouteWillPop  = "onRouteWillPop" ,
   onRouteDidPop   = "onRouteDidPop"  ,
+
   // Navigator focus/blur events
   onRouteWillFocus = "onRouteWillFocus",
   onRouteDidFocus  = "onRouteDidFocus" ,
   onRouteWillBlur  = "onRouteWillBlur" ,
   onRouteDidBlur   = "onRouteDidBlur"  ,
+
   // Navbar item `onPress` events
   onPressNavBarLeftItem  = "onPressNavBarLeftItem" ,
   onPressNavBarRightItem = "onPressNavBarRightItem",
@@ -159,7 +161,10 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
 
   //#region - Public Functions
   /** Combines all the route configs into one */
-  public getRouteOptions = (): RouteOptions => {
+  public getRouteOptions = (): (RouteOptions &
+    // provide default value
+    Required<Pick<RouteOptions, 'allowTouchEventsToPassThroughNavigationBar'>>
+  ) => {
     const props = this.props;
     const portalProps = this._routeViewPortalRef?.props;
 
@@ -220,7 +225,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
       ),
       allowTouchEventsToPassThroughNavigationBar: (
         routeOptions       ?.allowTouchEventsToPassThroughNavigationBar ??
-        routeOptionsDefault?.allowTouchEventsToPassThroughNavigationBar 
+        routeOptionsDefault?.allowTouchEventsToPassThroughNavigationBar ?? false
       ),
       // #endregion ------------------*
       // #region - Navbar Item Config |
@@ -502,29 +507,23 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
           ref={r => this._nativeRef = r}
           routeID={props.routeID}
           nativeID={NativeIDKeys.NavRouteItem}
-          // route config
           routeKey={props.routeKey}
           routeIndex={props.routeIndex}
-          routeTitle={routeOptions.routeTitle}
-          // nav route events: push/pop
+          // Route Native Events: Push/Pop Events
           onRouteWillPop={this._handleOnNavRouteWillPop}
           onRouteDidPop={this._handleOnNavRouteDidPop}
           onRouteWillPush={this._handleOnNavRouteWillPush}
           onRouteDidPush={this._handleOnNavRouteDidPush}
-          // nav route events: focus/blur
+          // Route Native Events: Focus/Blur
           onRouteWillFocus={this._handleOnRouteWillFocus}
           onRouteDidFocus={this._handleOnRouteDidFocus}
           onRouteWillBlur={this._handleOnRouteWillBlur}
           onRouteDidBlur={this._handleOnRouteDidBlur}
-          // nav route events: navbar item `onPress`
+          // Route Native Events: Navbar Item `onPress`
           onPressNavBarLeftItem={this._handleOnPressNavBarLeftItem}
           onPressNavBarRightItem={this._handleOnPressNavBarRightItem}
-          // pass down: navbar item config + back button item config
+          // pass down navbar item config, back button item config, etc.
           {...routeOptions}
-          allowTouchEventsToPassThroughNavigationBar={
-            // required prop - provide default value if absent from `routeOptions`
-            routeOptions.allowTouchEventsToPassThroughNavigationBar ?? false
-          }
         >
           {this._renderRouteContents()}
           <RouteComponentsWrapper

@@ -641,8 +641,8 @@ extension RNINavigatorReactRouteViewController: RNINavigatorRouteViewDelegate {
   };
   
   func didReceiveAllowTouchEventsToPassThroughNavigationBar(_ flag: Bool) {
-    self.navigationConfigOverride
-      .overrideAllowTouchEventsToPassThroughNavigationBar(flag);
+    self.navigationConfigOverride.overrideAllowTouchEventsToPassThroughNavigationBar(flag);
+  };
   };
   
   // ----------------------------------

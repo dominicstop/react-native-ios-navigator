@@ -56,7 +56,6 @@ export type onPressNavBarItem = (event: {
     index: string;
   };
 }) => void;
-  }
 }) => void;
 
 export type BackButtonDisplayMode =
