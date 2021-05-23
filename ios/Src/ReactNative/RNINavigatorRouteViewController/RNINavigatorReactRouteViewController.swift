@@ -344,8 +344,8 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     return self.statusBarStyle ?? .default;
   };
   
-  private var searchBarTextField: UITextField?;
-  private var searchBaPlaceholderLabel: UILabel?;
+  private weak var searchBarTextField: UITextField?;
+  private weak var searchBaPlaceholderLabel: UILabel?;
   
   // -----------------------------------
   // MARK:- Convenient Property Wrappers
@@ -447,6 +447,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     };
     
     self.setupSearchController();
+    self.setupScrollView();
   };
   
   override func viewWillLayoutSubviews() {
@@ -617,9 +618,14 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     
     let searchBar = searchController.searchBar;
     
-    self.searchBarTextField       = searchBar.textField;
-    self.searchBaPlaceholderLabel = searchBar.placeholderLabel;
- 
+    if self.searchBarTextField == nil {
+      self.searchBarTextField = searchBar.textField;
+    };
+    
+    if self.searchBaPlaceholderLabel == nil {
+      self.searchBaPlaceholderLabel = searchBar.placeholderLabel;
+    };
+    
     searchConfig.updateSearchController(searchController,
       searchBarTextField: self.searchBarTextField,
       searchBarPlaceholderLabel: self.searchBaPlaceholderLabel
@@ -627,6 +633,15 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     
     self.navigationItem.hidesSearchBarWhenScrolling =
       searchConfig.hidesSearchBarWhenScrolling ?? true;
+  };
+  
+  func setupScrollView(){
+    guard #available(iOS 13.0, *),
+          case let .reactScrollView(view: reactScrollView) = self.wrapperView,
+          let scrollView = reactScrollView.scrollView
+    else { return };
+    
+    scrollView.automaticallyAdjustsScrollIndicatorInsets = false;
   };
 };
 
