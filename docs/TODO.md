@@ -10,32 +10,23 @@
 
 ## In Progress
 
-- [ ] **Implement**: Add initial support for routes with `UISearchController`/`UISearchBar`.
-
-	- [x] (Commit `e59c4dd`) **Implement**: Minimal/Basic Implementation of `UISearchController`.
-
-		- Show a route with a `UISearchController`.
-		- Forward `UISearchResultsUpdating` delegate as events.
-		- Forward `UISearchBarDelegate` as events:
-			- `searchBarSearchButtonClicked`, `searchBarBookmarkButtonClicked`, `searchBarSearchButtonClicked`, 
-
-		- Support for setting the ff. `UISearchController` properties via route props:
-			- `UISearchController`: `hidesNavigationBarDuringPresentation`, `automaticallyShowsCancelButton`,  `obscuresBackgroundDuringPresentation`
-			- `UISearchBar`: `placeholder`
-			- `UISearchBar.searchTextField`: `textColor`.
-		- [ ] **Implement**: Add support for setting the `UISearchBar.searchTextField`'s text style using `RCTTextAttributes`.
-			- `attributedText`, `attributedPlaceholder`.
-			- Get the `defaultTextAttributes` and apply it  as the initial values for `attributedText` + `attributedPlaceholder`.
-
-		- [ ] **Implement**: Add support for programmatically clearing/dismissing the search bar.
-		- [ ] **Implement**: Add support for `showsBookmarkButton` and `searchBarBookmarkButtonClicked` event.
-			* Maybe also impl. `showsSearchResultsButton`
-		- [ ] **Implement**: Add support for showing a `searchResultsController` + react view
-			-  The react view will  be "provided" by the route via the route portal.
-		- [ ] **Implement**: Add support for configuring/setting the scope bar/`scopeButtonTitles`.
-			* Forward search bar event: `selectedScopeButtonIndexDidChange`
-		- [ ] **Implement**: Add support for search tokens.
-			* Impl. setting the `tokenBackgroundColor`.
+* Add initial support for routes with `UISearchController`/`UISearchBar`.
+	- [ ] **Implement**: Add support for setting the `UISearchBar.searchTextField`'s text style using `RCTTextAttributes`.
+		- `attributedText`, `attributedPlaceholder`.
+		- Get the `defaultTextAttributes` and apply it  as the initial values for `attributedText` + `attributedPlaceholder`.
+		- It turns out `attributedText` and `attributedPlaceholder` accepts a `NSAttributedString` not a dict. of string attributes. So the `RCTTextAttributes` has to be applied during the text input event.
+	* [ ] **Implement**: Add support for programmatically clearing/dismissing the search bar.
+	* [ ] **Implement**: Add support for changing the Search Icon in a `UISearchBar`.
+		- Set via `searchBar.setRightImage` (i.e. the `textfield.rightView`  bookmark icon), and `searchBar.setLeftImage`.
+		- [Reference #1](https://betterprogramming.pub/how-to-change-the-search-icon-in-a-uisearchbar-150b775fb6c8), [Reference #2](https://medium.com/flawless-app-stories/customize-uisearchbar-for-different-ios-versions-6ee02f4d4419)
+	- [ ] **Implement**: Add support for `showsBookmarkButton` and `searchBarBookmarkButtonClicked` event.
+		* Maybe also impl. `showsSearchResultsButton`
+	* [ ] **Implement**: Add support for showing a `searchResultsController` + react view
+	  -  The react view will  be "provided" by the route via the route portal.
+	* [ ] **Implement**: Add support for configuring/setting the scope bar/`scopeButtonTitles`.
+	  * Forward search bar event: `selectedScopeButtonIndexDidChange`.
+	* [ ] **Implement**: Add support for search tokens.
+	  * Impl. setting the `tokenBackgroundColor`.
 
 ---
 
@@ -118,6 +109,7 @@
 <br>
 
 - [ ] **Implement**: Navigator command error recovery - revert state to snapshot if command failed.
+- [ ] **Implement**: Add support for setting the root view's background color.
 
 
 
@@ -382,7 +374,11 @@
 
 - [x] **Cleanup**: Example — Cleanup `NavigatorTest01`
 	- [x] (Commit: `0b69024`) **Refactor**: Extracted base UI components to separate files.
-	- [x] **Refactor**: Remove all `@ts-ignore`, add proper type annotations, create utilities to cleanup code, (e.g. `getNextItemFromCyclicArray` + TS generics to infer type, etc.), extract section components into separate files, and general cleanup.
+	- [x] (Commit: `fcbbd9a`) **Refactor**: Remove all `@ts-ignore`, add proper type annotations, create utilities to cleanup code, (e.g. `getNextItemFromCyclicArray` + TS generics to infer type, etc.), extract section components into separate files, and general cleanup.
+
+<br>
+
+- [x] (Commit: `0bb913a`) **Implement**: Update NavBar Item Events Payload - Add index and base event payload to `leftBarButtonItem` and `rightBarButtonItem` events.
 
 ---
 
@@ -552,7 +548,21 @@ DynamicColorIOS:  {"dynamic": {"dark": "blue", "light": "red"}}
 - [x] Support for native route as the init. route
 - [x] Remove optional properties from Navigation Object
 - [x] Implement weak dict for all the navigator instances `navigatorInstances[navigatorID]`
-- [x] Move `applyBackConfig` out of `BackItemConfig` into separate prop: `applyBackConfigToCurrentRoute`
+- [x] Move `applyBackConfig` out of `BackItemConfig` into separate prop: `applyBackConfigToCurrentRoute`.
+
+<br>
+
+* [x] (Commit `e59c4dd`) **Implement**: Minimal/Basic Implementation of `UISearchController`.
+
+	- Show a route with a `UISearchController`.
+	- Forward `UISearchResultsUpdating` delegate as events.
+	- Forward `UISearchBarDelegate` as events:
+		- `searchBarSearchButtonClicked`, `searchBarBookmarkButtonClicked`, `searchBarSearchButtonClicked`, 
+	- Support for setting the ff. `UISearchController` properties via route props:
+		- `UISearchController`: `hidesNavigationBarDuringPresentation`, `automaticallyShowsCancelButton`,  `obscuresBackgroundDuringPresentation`
+		- `UISearchBar`: `placeholder`
+		- `UISearchBar.searchTextField`: `textColor`.
+* [x] (Commit: `87668fc`) **Implement**: Update search config to support setting the `leftIconTintColor`, `placeholderTextColor`, and `searchTextFieldBackgroundColor`.
 
 ------
 
