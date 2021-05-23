@@ -74,10 +74,7 @@ export function CardButton(props: {
         <Text style={styles.cardButtonTitleText}>
           {props.title}
         </Text>
-        <Text style={{
-          color: 'white',
-          fontWeight: '400'
-        }}>
+        <Text style={styles.cardButtonSubtitleText}>
           {props.subtitle}
         </Text>
       </React.Fragment>
@@ -230,8 +227,12 @@ const styles = StyleSheet.create({
   },
   cardButtonTitleText: {
     color: 'white',
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '700'
+  },
+  cardButtonSubtitleText: {
+    color: 'white',
+    fontWeight: '400'
   },
   //#endregion
 
