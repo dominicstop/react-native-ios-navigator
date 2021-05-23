@@ -445,6 +445,8 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       self.navigationController?.delegate = self;
       self.interactionController = LeftEdgeInteractionController(viewController: self);
     };
+    
+    self.setupSearchController();
   };
   
   override func viewWillLayoutSubviews() {
@@ -480,7 +482,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     );
     
     self.prepareForViewWillAppear(animated);
-    self.setupSearchController();
   };
   
   override func viewDidAppear(_ animated: Bool) {
@@ -625,7 +626,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     );
     
     self.navigationItem.hidesSearchBarWhenScrolling =
-      searchConfig.hidesSearchBarWhenScrolling ?? false;
+      searchConfig.hidesSearchBarWhenScrolling ?? true;
   };
 };
 
@@ -701,7 +702,7 @@ extension RNINavigatorReactRouteViewController: RNINavigatorRouteViewDelegate {
     );
     
     self.navigationItem.hidesSearchBarWhenScrolling =
-      config.hidesSearchBarWhenScrolling ?? false;
+      config.hidesSearchBarWhenScrolling ?? true;
   };
   
   // ----------------------------------
