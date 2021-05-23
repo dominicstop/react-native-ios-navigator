@@ -474,9 +474,10 @@ fileprivate extension RNINavigatorView {
     guard let parentVC = RNIUtilities.getParent(responder: self, type: UIViewController.self)
     else { return };
     
+    let isParentVCTheRootVC = self.window!.rootViewController == parentVC;
+    
     #if DEBUG
-    let isParentVCTheRootVC     = self.window?.rootViewController == parentVC;
-    let isRootRNIViewController = self.window?.rootViewController is RNIRootViewController;
+    let isRootRNIViewController = self.window!.rootViewController is RNIRootViewController;
     
     print("LOG - NativeView, RNINavigatorView: setupEmbedNavigationControllerToClosestVC"
       + " - parentVC: \(parentVC)"
@@ -488,8 +489,12 @@ fileprivate extension RNINavigatorView {
     #endif
     
     // Needed to support "view controller based status bar style"
-    if self.shouldSwizzleRootViewController {
+    if self.shouldSwizzleRootViewController, isParentVCTheRootVC {
       RNINavigatorManager.sharedInstance.swizzleRootViewController(for: self.window!);
+    };
+    
+    if isParentVCTheRootVC {
+      RNINavigatorManager.sharedInstance.setRootViewControllerBackground(for: self.window!);
     };
     
     parentVC.addChild(self.navigationVC);

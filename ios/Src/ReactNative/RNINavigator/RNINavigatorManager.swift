@@ -23,6 +23,7 @@ public class RNINavigatorManager {
   );
   
   private var didSwizzleRootViewController = false;
+  private var didSetRootViewControllerBackground = false;
   
   // ---------------------
   // MARK:- Public Methods
@@ -75,13 +76,10 @@ public class RNINavigatorManager {
   };
   
   internal func swizzleRootViewController(for window: UIWindow){
-   
     guard !self.didSwizzleRootViewController,
           // don't swizzle if the root view controller is already a `RNIRootViewController`
           !(window.rootViewController is RNIRootViewController)
     else { return };
-    
-    self.didSwizzleRootViewController = true;
     
     let baseClass   : AnyClass = UIViewController.self;
     let baseSelector: Selector = #selector(getter: UIViewController.childForStatusBarStyle);
@@ -104,6 +102,18 @@ public class RNINavigatorManager {
       + " - has swizzledMethod: \(replacementMethod != nil)"
     );
     #endif
+  };
+  
+  internal func setRootViewControllerBackground(for window: UIWindow){
+    guard !self.didSetRootViewControllerBackground,
+          let rootVC = window.rootViewController
+    else { return };
+    
+    self.didSetRootViewControllerBackground = true;
+    
+    if #available(iOS 13.0, *) {
+      rootVC.view.backgroundColor = .systemBackground
+    };
   };
 };
 

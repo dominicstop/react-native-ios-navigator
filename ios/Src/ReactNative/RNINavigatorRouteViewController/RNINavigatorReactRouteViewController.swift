@@ -415,6 +415,16 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     let rootView = self.routeView!.reactRouteContent!;
     rootView.frame = self.view.frame;
     
+    // set the root view bg color
+    if rootView.backgroundColor == nil {
+      if #available(iOS 13.0, *) {
+        rootView.backgroundColor = .systemBackground;
+        
+      } else {
+        rootView.backgroundColor = .white;
+      };
+    };
+    
     /// update `routeView`'s size
     self.routeView!.notifyForBoundsChange(self.view.bounds);
     /// set/replace the view controller's view
