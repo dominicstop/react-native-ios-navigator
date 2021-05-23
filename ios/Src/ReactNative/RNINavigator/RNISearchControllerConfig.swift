@@ -20,6 +20,8 @@ struct RNISearchControllerConfig {
   
   let returnKeyType: UIReturnKeyType?;
   
+  let searchTextFieldBackgroundColor: UIColor?;
+  
   // MARK: SearchControllerConfig
   let hidesSearchBarWhenScrolling: Bool?;
   
@@ -27,6 +29,10 @@ struct RNISearchControllerConfig {
   let hidesNavigationBarDuringPresentation: Bool?;
   let automaticallyShowsCancelButton: Bool?;
   
+  // MARK: Custom
+  let leftIconTintColor: UIColor?;
+  let placeholderTextColor: UIColor?;
+
   init(from dict: NSDictionary) {
     // MARK: SearchBarConfig
     self.placeholder = dict["placeholder"] as? String;
@@ -73,6 +79,14 @@ struct RNISearchControllerConfig {
       return type;
     }();
     
+    self.searchTextFieldBackgroundColor = {
+      guard let value  = dict["searchTextFieldBackgroundColor"],
+            let color  = UIColor.parseColor(value: value)
+      else { return nil };
+      
+      return color;
+    }();
+    
     // MARK: SearchControllerConfig
     self.hidesSearchBarWhenScrolling =
       dict["hidesSearchBarWhenScrolling"] as? Bool;
@@ -85,9 +99,30 @@ struct RNISearchControllerConfig {
     
     self.automaticallyShowsCancelButton =
       dict["automaticallyShowsCancelButton"] as? Bool;
+    
+    // MARK: Custom
+    self.leftIconTintColor = {
+      guard let value  = dict["leftIconTintColor"],
+            let color  = UIColor.parseColor(value: value)
+      else { return nil };
+      
+      return color;
+    }();
+    
+    self.placeholderTextColor = {
+      guard let value  = dict["placeholderTextColor"],
+            let color  = UIColor.parseColor(value: value)
+      else { return nil };
+      
+      return color;
+    }();
   };
   
-  func updateSearchController(_ searchController: UISearchController) {
+  func updateSearchController(
+    _ searchController: UISearchController,
+    searchBarTextField: UITextField? = nil,
+    searchBarPlaceholderLabel: UILabel? = nil
+  ) {
     let searchBar = searchController.searchBar;
     
     // MARK: SearchBarConfig
@@ -97,31 +132,55 @@ struct RNISearchControllerConfig {
     searchBar.tintColor    = self.tintColor;
     searchBar.barTintColor = self.barTintColor;
     
-    if let flag = self.isTranslucent {
-      searchBar.isTranslucent = flag;
-    };
+    searchBar.isTranslucent = self.isTranslucent ?? true;
     
     if #available(iOS 13.0, *) {
       searchBar.searchTextField.textColor = self.textColor;
+      
+    } else if let searchBarTextField = searchBarTextField {
+      searchBarTextField.textColor = self.textColor;
     };
     
-    if let type = self.returnKeyType {
-      searchBar.returnKeyType = type;
+    searchBar.returnKeyType = self.returnKeyType ?? .search;
+    
+    if let color = self.searchTextFieldBackgroundColor {
+      if #available(iOS 13.0, *) {
+        searchBar.searchTextField.backgroundColor = color
+        
+      } else if let searchBarTextField = searchBarTextField {
+        // TODO: Handle reset to default...
+        searchBarTextField.backgroundColor = color;
+      };
     };
     
     // MARK: SearchControllerConfig
-    if let flag = self.obscuresBackgroundDuringPresentation {
-      searchController.obscuresBackgroundDuringPresentation = flag;
+    searchController.obscuresBackgroundDuringPresentation =
+      self.obscuresBackgroundDuringPresentation ?? false;
+    
+    searchController.hidesNavigationBarDuringPresentation =
+      self.hidesNavigationBarDuringPresentation ?? true;
+    
+    if #available(iOS 13.0, *) {
+      searchController.automaticallyShowsCancelButton =
+        self.automaticallyShowsCancelButton ?? true;
     };
     
-    if let flag = self.hidesNavigationBarDuringPresentation {
-      searchController.hidesNavigationBarDuringPresentation = flag;
-    };
-    
-    if #available(iOS 13.0, *),
-       let flag = self.automaticallyShowsCancelButton {
+    // MARK: Custom
+    if let searchBarTextField = searchBarTextField,
+       let searchBarPlaceholderLabel = searchBarPlaceholderLabel {
       
-      searchController.automaticallyShowsCancelButton = flag;
+      // TODO: Handle reset to default...
+      if let color = self.leftIconTintColor,
+         let searchIcon = searchBarTextField.leftView as? UIImageView {
+          
+        searchIcon.image = searchIcon.image?.withRenderingMode(.alwaysTemplate);
+        searchIcon.tintColor = color;
+      };
+      
+      // TODO: Handle reset to default...
+      if let color = self.placeholderTextColor {
+        searchBarPlaceholderLabel.textColor = color;
+      };
     };
   };
 };

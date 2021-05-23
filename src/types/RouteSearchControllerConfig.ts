@@ -1,3 +1,4 @@
+import type { TextStyle } from "react-native";
 import type { DynamicColor, ReturnKeyType } from "./MiscTypes";
 
 export type UISearchBarStyle = 
@@ -7,6 +8,11 @@ export type UISearchBarStyle =
   | 'prominent'
   /** The search bar has no background, and the search field is translucent. */
   | 'minimal';
+
+type CustomSearchBarConfig = {
+  leftIconTintColor?: string | DynamicColor;
+  placeholderTextColor?: string | DynamicColor;
+};
 
 type SearchBarConfig = {
   /** The string that is displayed when there is no other text in the text field. */
@@ -29,6 +35,8 @@ type SearchBarConfig = {
 
   /** Specify the text string that displays in the Return key of a keyboard. */
   returnKeyType?: ReturnKeyType;
+
+  searchTextFieldBackgroundColor?: string | DynamicColor;
 };
 
 type SearchControllerConfig = {
@@ -46,4 +54,4 @@ type SearchControllerConfig = {
 };
 
 export type RouteSearchControllerConfig = 
-  SearchBarConfig & SearchControllerConfig;
+  CustomSearchBarConfig & SearchBarConfig & SearchControllerConfig;

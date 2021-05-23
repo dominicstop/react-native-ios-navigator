@@ -344,6 +344,9 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     return self.statusBarStyle ?? .default;
   };
   
+  private var searchBarTextField: UITextField?;
+  private var searchBaPlaceholderLabel: UILabel?;
+  
   // -----------------------------------
   // MARK:- Convenient Property Wrappers
   // -----------------------------------
@@ -442,8 +445,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       self.navigationController?.delegate = self;
       self.interactionController = LeftEdgeInteractionController(viewController: self);
     };
-    
-    self.setupSearchController();
   };
   
   override func viewWillLayoutSubviews() {
@@ -479,6 +480,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     );
     
     self.prepareForViewWillAppear(animated);
+    self.setupSearchController();
   };
   
   override func viewDidAppear(_ animated: Bool) {
@@ -490,13 +492,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       isAnimated: animated
     );
     
-    /// Search Controller Setup: Set the `hidesSearchBarWhenScrolling` value for the 1st time
-    if #available(iOS 11.0, *),
-       let searchConfig = self.routeView?._searchBarConfig,
-       let hidesSearchBarWhenScrolling = searchConfig.hidesSearchBarWhenScrolling {
-    
-      self.navigationItem.hidesSearchBarWhenScrolling = hidesSearchBarWhenScrolling;
-    };
+    self.refreshSearchController();
   };
   
   override func viewWillDisappear(_ animated: Bool) {
@@ -598,7 +594,9 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
   };
   
   func setupSearchController(){
-    guard let searchConfig = self.routeView?._searchBarConfig else { return };
+    guard #available(iOS 11.0, *),
+          let searchConfig = self.routeView?._searchBarConfig
+    else { return };
     
     let searchController = UISearchController(searchResultsController: nil);
     searchConfig.updateSearchController(searchController);
@@ -606,10 +604,28 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     searchController.searchResultsUpdater = self;
     searchController.searchBar.delegate = self;
     
-    if #available(iOS 11.0, *) {
-      self.navigationItem.searchController = searchController;
-      self.navigationItem.hidesSearchBarWhenScrolling = false;
-    };
+    self.navigationItem.searchController = searchController;
+    self.navigationItem.hidesSearchBarWhenScrolling = false;
+  };
+  
+  func refreshSearchController(){
+    guard #available(iOS 11.0, *),
+          let searchConfig     = self.routeView?._searchBarConfig,
+          let searchController = self.navigationItem.searchController
+    else { return };
+    
+    let searchBar = searchController.searchBar;
+    
+    self.searchBarTextField       = searchBar.textField;
+    self.searchBaPlaceholderLabel = searchBar.placeholderLabel;
+ 
+    searchConfig.updateSearchController(searchController,
+      searchBarTextField: self.searchBarTextField,
+      searchBarPlaceholderLabel: self.searchBaPlaceholderLabel
+    );
+    
+    self.navigationItem.hidesSearchBarWhenScrolling =
+      searchConfig.hidesSearchBarWhenScrolling ?? false;
   };
 };
 
@@ -679,8 +695,13 @@ extension RNINavigatorReactRouteViewController: RNINavigatorRouteViewDelegate {
       return;
     };
     
-    config.updateSearchController(searchController);
-    self.navigationItem.hidesSearchBarWhenScrolling = config.hidesSearchBarWhenScrolling ?? true;
+    config.updateSearchController(searchController,
+      searchBarTextField: self.searchBarTextField,
+      searchBarPlaceholderLabel: self.searchBaPlaceholderLabel
+    );
+    
+    self.navigationItem.hidesSearchBarWhenScrolling =
+      config.hidesSearchBarWhenScrolling ?? false;
   };
   
   // ----------------------------------

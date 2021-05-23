@@ -16,7 +16,8 @@ import { NavigatorTest07 } from './components/NavigatorTest07';
 import { NavigatorDemo01 } from './components/NavigatorDemo01';
 import { NavigatorDemo02 } from './components/NavigatorDemo02';
 
-import * as Colors from './constants/Colors';
+import * as Colors  from './constants/Colors';
+import * as Helpers from './functions/Helpers';
 
 
 const RouteKeys = {
@@ -269,11 +270,11 @@ export default function App() {
             tintColor: Colors.PURPLE.A700,
             returnKeyType: 'done',
             obscuresBackgroundDuringPresentation: false,
-            hidesSearchBarWhenScrolling: false,
-            // TODO: Fix - doesn't work
-            textColor: Colors.GREEN.A700, 
-            barTintColor: Colors.GREEN.A700,
-            searchBarStyle: 'prominent',
+            hidesSearchBarWhenScrolling: true,
+            textColor: Colors.PURPLE.A700,
+            leftIconTintColor: Colors.PURPLE.A700,
+            placeholderTextColor: Colors.PURPLE[300],
+            searchTextFieldBackgroundColor: Helpers.hexToRGBA(Colors.PURPLE.A100, 0.1),
           },
         },
         renderRoute: () => (
