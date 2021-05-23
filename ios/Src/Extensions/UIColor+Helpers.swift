@@ -244,7 +244,7 @@ extension UIColor {
       // Link Color
       case "link": return .link;
 
-      // Nonadaptable Colors
+      // Non-adaptable Colors
       case "darkText": return .darkText;
       case "lightText": return .lightText;
       
@@ -281,6 +281,33 @@ extension UIColor {
           
         default: break;
       };
+    };
+    
+    return nil;
+  };
+  
+  /// Parse "react native" color to `UIColor`
+  /// Swift impl. `RCTConvert` color
+  static func parseColor(value: Any) -> UIColor? {
+    if let string = value as? String {
+      if #available(iOS 13.0, *),
+         let color = Self.elementColorFromString(string) {
+        
+        // a: iOS 13+ ui enum colors
+        return color;
+        
+      } else if let color = Self.systemColorFromString(string) {
+        // b: iOS system enum colors
+        return color;
+        
+      } else {
+        // c: react-native color string
+        return UIColor(cssColor: string);
+      };
+      
+    } else if let dict = value as? NSDictionary {
+      // d: react-native DynamicColor object
+      return UIColor(dynamicDict: dict);
     };
     
     return nil;
@@ -391,49 +418,29 @@ extension UIColor {
   };
   
   /// create color from `DynamicColorIOS` dictionary
-  @available(iOS 13.0, *)
-  convenience init?(dynamicDict: NSDictionary){
-    guard let dict = dynamicDict["dynamic"] as? NSDictionary,
-          
+  convenience init?(dynamicDict: NSDictionary) {
+    guard let dict        = dynamicDict["dynamic"] as? NSDictionary,
           let stringDark  = dict["dark" ] as? String,
-          let stringLight = dict["light"] as? String,
-          
-          let colorDark   = UIColor(cssColor: stringLight),
-          let colorLight  = UIColor(cssColor: stringDark )
+          let stringLight = dict["light"] as? String
     else { return nil };
     
-    self.init(dynamicProvider: { traitCollection in
-      switch traitCollection.userInterfaceStyle {
-        case .dark : return colorDark;
-        case .light: return colorLight;
-          
-        case .unspecified: fallthrough;
-        @unknown default : return .clear;
-      };
-    });
-  };
-  
-  /// Parse "react native" color to `UIColor`
-  static func parseColor(value: Any) -> UIColor? {
-    if let string = value as? String {
-      if #available(iOS 13.0, *),
-         let color = Self.elementColorFromString(string) {
-        
-        return color;
-        
-      } else if let color = Self.systemColorFromString(string) {
-        return color;
-        
-      } else {
-        return UIColor(cssColor: string);
-      };
+    if #available(iOS 13.0, *),
+       let colorDark  = UIColor(cssColor: stringDark ),
+       let colorLight = UIColor(cssColor: stringLight) {
       
-    } else if #available(iOS 13.0, *),
-              let dict = value as? NSDictionary {
+      self.init(dynamicProvider: { traitCollection in
+        switch traitCollection.userInterfaceStyle {
+          case .dark : return colorDark;
+          case .light: return colorLight;
+            
+          case .unspecified: fallthrough;
+          @unknown default : return .clear;
+        };
+      });
       
-      return UIColor(dynamicDict: dict);
+    } else {
+      self.init(cssColor: stringLight);
     };
-    
-    return nil;
   };
+
 };
