@@ -5,12 +5,14 @@ import type { BackButtonDisplayMode, LargeTitleDisplayMode, NavigationBarVisibil
 import type { NavBarBackItemConfig, NavBarItemsConfig } from "./NavBarItemConfig";
 import type { NavBarAppearanceCombinedConfig } from "./NavBarAppearanceConfig";
 import type { RouteSearchControllerConfig } from "./RouteSearchControllerConfig";
+import type { ViewStyle } from "react-native";
 
 
 // TODO: Cleanup Types - Mirror from source (e.g. RNINavigatorRouteViewProps, etc.)
 export type RouteOptions = {
 
   statusBarStyle?: StatusBarStyle;
+  routeContainerStyle?: ViewStyle;
 
   // Transition Config
   // -----------------
@@ -71,6 +73,7 @@ export type RouteOptions = {
    * **note**: Stick to one mode, switching between `appearance` and `legacy` is not supported.
    */
   navBarAppearanceOverride?: NavBarAppearanceCombinedConfig;
+
   navigationBarVisibility?: NavigationBarVisibilityMode;
   allowTouchEventsToPassThroughNavigationBar?: boolean;
 };

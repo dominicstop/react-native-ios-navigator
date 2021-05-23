@@ -1316,7 +1316,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         <NavigatorRouteView
           key={`routeID-${route.routeID}`}
           ref={r => this.routeRefMap[route.routeID] = r}
-          routeContainerStyle={props.routeContainerStyle}
           navigatorID={this.navigatorID}
           routeID={route.routeID}
           routeIndex={route.routeIndex}

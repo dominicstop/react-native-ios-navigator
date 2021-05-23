@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { StyleSheet, View, ViewStyle, findNodeHandle } from 'react-native';
+import { StyleSheet, View, findNodeHandle } from 'react-native';
 
 import type { NavigationObject } from '../types/NavigationObject';
 import type { RouteOptions } from '../types/RouteOptions';
@@ -63,7 +63,6 @@ enum RouteStatus {
   UNMOUNTED      = "UNMOUNTED"     ,
 };
 
-
 export type NavigatorRouteViewProps = Partial<Pick<RNINavigatorRouteViewProps,
   // mirror props from `RNINavigatorRouteViewProps`
   | 'routeID'
@@ -76,7 +75,6 @@ export type NavigatorRouteViewProps = Partial<Pick<RNINavigatorRouteViewProps,
   isRootRoute: boolean;
 
   routeOptionsDefault: RouteOptions;
-  routeContainerStyle: ViewStyle;
 
   transitionConfigPushOverride: RouteTransitionPushConfig;
   transitionConfigPopOverride: RouteTransitionPopConfig;
@@ -167,10 +165,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
 
   //#region - Public Functions
   /** Combines all the route configs into one */
-  public getRouteOptions = (): (RouteOptions &
-    // provide default value
-    Required<Pick<RouteOptions, 'allowTouchEventsToPassThroughNavigationBar'>>
-  ) => {
+  public getRouteOptions = (): RouteOptions => {
     const props = this.props;
     const portalProps = this._routeViewPortalRef?.props;
 
@@ -190,6 +185,10 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
       statusBarStyle: (
         routeOptions       ?.statusBarStyle ??
         routeOptionsDefault?.statusBarStyle
+      ),
+      routeContainerStyle: (
+        routeOptions       ?.routeContainerStyle ??
+        routeOptionsDefault?.routeContainerStyle
       ),
       // #region - Transition Config |
       // ----------------------------*
@@ -235,7 +234,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
       ),
       allowTouchEventsToPassThroughNavigationBar: (
         routeOptions       ?.allowTouchEventsToPassThroughNavigationBar ??
-        routeOptionsDefault?.allowTouchEventsToPassThroughNavigationBar ?? false
+        routeOptionsDefault?.allowTouchEventsToPassThroughNavigationBar
       ),
       // #endregion ------------------*
       // #region - Navbar Item Config |
@@ -497,12 +496,14 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
 
   //#endregion
   
-  _renderRouteContents = () => {
+  _renderRouteContents = (navigation: NavigationObject) => {
     const props = this.props;
     const routeContent = props.renderRouteContent();
 
+    const routeOptions = navigation.routeOptions;
+
     const routeContentWithProps = React.cloneElement<RouteContentProps>(routeContent, {
-      navigation: this.getRouteNavigationObject(),
+      navigation,
       // store a ref to this element
       ...(Helpers.isClassComponent(routeContent) && {
         ref: (node: any) => { this._routeContentRef = node }
@@ -511,7 +512,7 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
 
     return(
       <View
-        style={[styles.routeItem, props.routeContainerStyle]}
+        style={[styles.routeItem, routeOptions.routeContainerStyle]}
         nativeID={NativeIDKeys.RouteContent}
       >
         {routeContentWithProps}
@@ -522,8 +523,8 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
   render(){
     const props = this.props;
 
-    const navigation = this.getRouteNavigationObject();
-    const routeOptions = this.getRouteOptions();
+    const navigation   = this.getRouteNavigationObject();
+    const routeOptions = navigation.routeOptions;
 
     return(
       <NavRouteViewContext.Provider value={{
@@ -557,8 +558,11 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
           onSearchBarSearchButtonClicked={this._handleOnSearchBarSearchButtonClicked}
           // pass down navbar item config, back button item config, etc.
           {...routeOptions}
+          allowTouchEventsToPassThroughNavigationBar={
+            routeOptions.allowTouchEventsToPassThroughNavigationBar ?? false
+          }
         >
-          {this._renderRouteContents()}
+          {this._renderRouteContents(navigation)}
           <RouteComponentsWrapper
             ref={r => this._navBarItemsWrapperRef = r}
             navigation={navigation}
@@ -599,7 +603,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 0,
     height: 0,
-    backgroundColor: 'white',
   },
   navigatorRouteView: {
     // don't show on first mount
