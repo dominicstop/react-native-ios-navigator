@@ -418,6 +418,14 @@ export class CompareRouteOptions {
     applyBackButtonConfigToCurrentRoute       : { mode: 'shallow' },
     allowTouchEventsToPassThroughNavigationBar: { mode: 'shallow' },
 
+    // shallow object
+    routeContainerStyle: {
+      mode: 'shallowObject',
+    },
+    searchBarConfig: {
+      mode: 'shallowObject',
+    },
+
     // custom compare
     navBarAppearanceOverride: {
       mode: 'custom',
