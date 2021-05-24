@@ -267,12 +267,27 @@ export default function App() {
           routeTitle: "Home",
           searchBarConfig: {
             placeholder: "Search Routes",
-            tintColor: Colors.PURPLE.A700,
             returnKeyType: 'done',
             obscuresBackgroundDuringPresentation: false,
             hidesSearchBarWhenScrolling: true,
-            textColor: Colors.PURPLE.A700,
-            leftIconTintColor: Colors.PURPLE.A700,
+            textColor: {
+              dynamic: {
+                light: Colors.PURPLE.A700,
+                dark : Colors.PURPLE[100],
+              }
+            },
+            tintColor: {
+              dynamic: {
+                light: Colors.PURPLE.A700,
+                dark : Colors.PURPLE[100],
+              }
+            },
+            leftIconTintColor: {
+              dynamic: {
+                light: Colors.PURPLE.A700,
+                dark : Colors.PURPLE[100],
+              }
+            },
             placeholderTextColor: Colors.PURPLE[300],
             searchTextFieldBackgroundColor: Helpers.hexToRGBA(Colors.PURPLE.A100, 0.1),
           },
