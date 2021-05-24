@@ -391,6 +391,25 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     ]));
   };
 
+  private createStateSnapshot = () => {
+    let stateSnapshot: NavigatorViewState = null;
+
+    return {
+      save: () => {
+        stateSnapshot = { ...this.state };
+      },
+      restore: () => {
+        if(stateSnapshot != null){
+          this.setState(stateSnapshot);
+          stateSnapshot = null;
+        };
+      },
+      clear: () => {
+        stateSnapshot = null;
+      },
+    };
+  };
+
   /** Remove route from `state.activeRoutes` */
   private removeRouteBatchedFromState = async (params?: { routeKey: string, routeIndex: number }) => { 
     if(params){
@@ -465,8 +484,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     routeItem: NavRouteItem, 
     options?: NavCommandPushOptions
   ): Promise<void> => {
-
-    const routeConfig = this.getRouteConfig(routeItem.routeKey);
+    
+    const stateSnapshot = this.createStateSnapshot();
+    const routeConfig   = this.getRouteConfig(routeItem.routeKey);
 
     if(!routeConfig){
       // no matching route config found for `routeItem`
@@ -482,6 +502,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       const { activeRoutes } = this.state;
       this.setNavStatus(NavStatus.NAV_PUSHING);
+
+      stateSnapshot.save();
 
       const transitionConfig = this.configureTransitionOverride({
         isPushing: true,
@@ -540,9 +562,11 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       // finished, start next item
       this.setNavStatus(NavStatus.IDLE);
       this.queue.dequeue();
+      stateSnapshot.clear();
 
     } catch(error){
       const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
+      stateSnapshot.restore();
 
       this.setNavStatus(NavStatus.IDLE_ERROR);
       this.queue.dequeue();
@@ -555,6 +579,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
   public pop = async (options?: NavCommandPopOptions): Promise<void> => {
     const { activeRoutes } = this.state;
+    const stateSnapshot = this.createStateSnapshot();
 
     if(activeRoutes.length < 1){
       throw new Error(`'pop' failed, active route count must be > 1`);
@@ -566,6 +591,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       await queue.promise;
 
       this.setNavStatus(NavStatus.NAV_POPPING);
+      stateSnapshot.save();
 
       const transitionConfig = this.configureTransitionOverride({
         isPushing: false,
@@ -600,9 +626,11 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       this.setNavStatus(NavStatus.IDLE);
       this.queue.dequeue();
+      stateSnapshot.clear();
 
     } catch(error){
       const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
+      stateSnapshot.restore();
 
       this.setNavStatus(NavStatus.IDLE_ERROR);
       this.queue.dequeue();
@@ -615,6 +643,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
   public popToRoot = async (options?: NavCommandPopOptions): Promise<void> => {
     const { activeRoutes } = this.state;
+    const stateSnapshot = this.createStateSnapshot();
 
     if(activeRoutes.length < 1){
       throw new Error(`\`popToRoot\` failed, route count must be > 1`);
@@ -626,6 +655,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       await queue.promise;
 
       this.setNavStatus(NavStatus.NAV_POPPING);
+      stateSnapshot.save();
 
       const transitionConfig = this.configureTransitionOverride({
         isPushing: false,
@@ -658,9 +688,11 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       this.setNavStatus(NavStatus.IDLE);
       this.queue.dequeue();
+      stateSnapshot.clear();
 
     } catch(error){
       const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
+      stateSnapshot.restore();
 
       this.setNavStatus(NavStatus.IDLE_ERROR);
       this.queue.dequeue();
@@ -677,6 +709,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   ): Promise<void> => {
 
     const { activeRoutes } = this.state;
+    const stateSnapshot = this.createStateSnapshot();
+
     const routeToBeRemoved = activeRoutes[routeIndex];
 
     if(activeRoutes.length < 1){
@@ -693,6 +727,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       await queue.promise;
 
       this.setNavStatus(NavStatus.NAV_REMOVING);
+      stateSnapshot.save();
 
       await Helpers.promiseWithTimeout(TIMEOUT_COMMAND,
         RNINavigatorViewModule.removeRoute(
@@ -714,9 +749,11 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       this.setNavStatus(NavStatus.IDLE);
       this.queue.dequeue();
+      stateSnapshot.clear();
 
     } catch(error){
       const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
+      stateSnapshot.restore();
 
       this.setNavStatus(NavStatus.IDLE_ERROR);
       this.queue.dequeue();
@@ -733,6 +770,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   ): Promise<void> => {
     
     const { activeRoutes } = this.state;
+    const stateSnapshot = this.createStateSnapshot();
 
     if(routeIndexes.length == 0){
       throw new Error(`\`removeRoutes\` failed, \`routeIndexes\` is empty`);
@@ -753,6 +791,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       await queue.promise;
 
       this.setNavStatus(NavStatus.NAV_REMOVING);
+      stateSnapshot.save();
 
       await Helpers.promiseWithTimeout(TIMEOUT_COMMAND,
         RNINavigatorViewModule.removeRoutes(
@@ -777,9 +816,11 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       this.setNavStatus(NavStatus.IDLE);
       this.queue.dequeue();
+      stateSnapshot.clear();
 
     } catch(error){
       const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
+      stateSnapshot.restore();
 
       this.setNavStatus(NavStatus.IDLE_ERROR);
       this.queue.dequeue();
@@ -797,6 +838,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   ): Promise<void> => {
 
     const { activeRoutes } = this.state;
+    const stateSnapshot = this.createStateSnapshot();
 
     const routeToReplace         = activeRoutes[prevRouteIndex];
     const replacementRouteConfig = this.getRouteConfig(routeItem.routeKey);
@@ -824,6 +866,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       await queue.promise;
 
       this.setNavStatus(NavStatus.NAV_REPLACING);
+      stateSnapshot.save();
 
       await Promise.all([
         // 1. wait for replacement route to be added/init
@@ -854,9 +897,11 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       this.setNavStatus(NavStatus.IDLE);
       this.queue.dequeue();
+      stateSnapshot.clear();
 
     } catch(error){
       const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
+      stateSnapshot.restore();
 
       this.setNavStatus(NavStatus.IDLE_ERROR);
       this.queue.dequeue();
@@ -957,6 +1002,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     transform: (currentRoutes: Array<NavRouteItem & {routeID?: number}>) => typeof currentRoutes, 
     animated = false
   ): Promise<void> => {
+    const stateSnapshot = this.createStateSnapshot();
 
     try {
       // if busy, wait for prev. to finish
@@ -964,6 +1010,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       await queue.promise;
 
       this.setNavStatus(NavStatus.NAV_UPDATING);
+      stateSnapshot.save();
 
       const currentRoutes = [...this.state.activeRoutes];
       
@@ -1026,9 +1073,11 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       // finished, start next item
       this.setNavStatus(NavStatus.IDLE);
       this.queue.dequeue();
+      stateSnapshot.clear();
 
     } catch(error){
       const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
+      stateSnapshot.restore();
 
       this.setNavStatus(NavStatus.IDLE_ERROR);
       this.queue.dequeue();
