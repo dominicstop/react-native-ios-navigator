@@ -3,7 +3,9 @@ import React from 'react';
 import type { NavigatorRouteView, NavigatorRouteViewProps } from '../components/NavigatorRouteView';
 import type { RouteOptions } from '../types/RouteOptions';
 
-import { CompareRouteOptions, CompareUtilities } from '../functions/CompareObjects';
+import { CompareRouteOptions } from '../functions/CompareRouteOptions';
+import { CompareUtilities } from '../functions/CompareUtilities';
+
 import { NavRouteViewContext, NavRouteViewContextProps } from '../context/NavRouteViewContext';
 
 
