@@ -399,7 +399,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         stateSnapshot = { ...this.state };
       },
       restore: () => {
-        if(stateSnapshot != null){
+        const isMounted = this.navStatus !== NavStatus.UNMOUNTED;
+        if(stateSnapshot != null && isMounted){
           this.setState(stateSnapshot);
           stateSnapshot = null;
         };
@@ -1352,14 +1353,16 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     // * So this is a temp. workaround to prevent the unnecessary reordering of the
     //   comps., the downside is that the routes need to be sorted on every render...
     const activeRoutes = this.getRoutesToRender();
-    const activeRoutesCount = activeRoutes.length;
+
+    const activeRoutesCount     = activeRoutes.length;
+    const activeRoutesLastIndex = activeRoutesCount - 1;
 
     return activeRoutes.map(route => {
       // the routes from `activeRoutes` will only ever have js/react routes
       const routeConfig = this.getRouteConfig(route.routeKey) as NavRouteConfigItemJS;
 
-      const isLast         = route.routeIndex == (activeRoutesCount - 1);
-      const isSecondToLast = route.routeIndex == (activeRoutesCount - 2);
+      const isLast         = route.routeIndex == activeRoutesLastIndex;
+      const isSecondToLast = route.routeIndex == (activeRoutesLastIndex - 1);
 
       return (
         <NavigatorRouteView
@@ -1370,6 +1373,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
           routeIndex={route.routeIndex}
           routeKey={route.routeKey}
           isRootRoute={(route.routeIndex == 0)}
+          currentActiveRouteIndex={activeRoutesLastIndex}
           // merge routeProps
           routeProps={Helpers.shallowMergeObjects(
             routeConfig.initialRouteProps,

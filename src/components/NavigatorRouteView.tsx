@@ -15,6 +15,7 @@ import { RNINavigatorRouteViewModule } from '../native_modules/RNINavigatorRoute
 
 import * as Helpers from '../functions/Helpers';
 import { EventEmitter } from '../functions/EventEmitter';
+import { CompareRouteTransitionPushConfig } from '../functions/CompareRouteOptions';
 
 import { NavRouteViewContext } from '../context/NavRouteViewContext';
 import { NativeIDKeys } from '../constants/LibraryConstants';
@@ -74,6 +75,8 @@ export type NavigatorRouteViewProps = Partial<Pick<RNINavigatorRouteViewProps,
   routeProps: object;
   isRootRoute: boolean;
 
+  currentActiveRouteIndex: number;
+
   routeOptionsDefault: RouteOptions;
 
   transitionConfigPushOverride: RouteTransitionPushConfig;
@@ -92,13 +95,14 @@ export type NavigatorRouteViewProps = Partial<Pick<RNINavigatorRouteViewProps,
 
 /** `NavigatorView` comp. state */
 type NavigatorRouteViewState = {
+  updateIndex: number;
   routeOptions: RouteOptions;
   hasRoutePortal: boolean;
 };
 //#endregion
 
 
-export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewProps, NavigatorRouteViewState> {
+export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps, NavigatorRouteViewState> {
   //#region - Property Declarations
   state: NavigatorRouteViewState;
   routeContentRef: React.Component<RouteContentProps>;
@@ -123,9 +127,38 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
     this._navigatorRef = props.getRefToNavigator();
 
     this.state = {
+      updateIndex: 0,
       hasRoutePortal: false,
       routeOptions: {},
     };
+  };
+
+  shouldComponentUpdate(nextProps: NavigatorRouteViewProps, nextState: NavigatorRouteViewState){
+    const prevProps = this.props;
+    const prevState = this.state;
+
+    const routeIndex = prevProps.routeIndex;
+
+    return (
+      // props: compare `routeIndex` - routes were re-arranged/sorted
+         (prevProps.routeIndex !== nextProps.routeIndex)
+      // props: compare focus - topmost route <-> not topmost route
+      || (routeIndex === prevProps.currentActiveRouteIndex) !== (routeIndex === nextProps.currentActiveRouteIndex)
+      // props: compare "push transition config"
+      || CompareRouteTransitionPushConfig.compare(
+        prevProps.transitionConfigPushOverride,
+        nextProps.transitionConfigPushOverride
+      )
+      // props: compare "pop transition config"
+      || CompareRouteTransitionPushConfig.compare(
+        prevProps.transitionConfigPushOverride,
+        nextProps.transitionConfigPushOverride
+      )
+      // state: compare `hasRoutePortal` - portal comp. added/removed 
+      || (prevState.hasRoutePortal !== nextState.hasRoutePortal)
+      // state: compare `updateIndex` - force an update
+      || (prevState.updateIndex !== nextState.updateIndex)
+    );
   };
 
   componentWillUnmount(){
@@ -326,11 +359,8 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
   
   public setRouteOptions = async (routeOptions: RouteOptions) => {
     await Helpers.setStateAsync<NavigatorRouteViewState>(this, (prevState) => ({
-      ...prevState, 
-      routeOptions: {
-        ...prevState.routeOptions,
-        ...routeOptions,
-      },
+      ...prevState, routeOptions,
+      updateIndex: (prevState.updateIndex + 1),
     }));
   };
 
@@ -394,7 +424,6 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
       throw new Error("`NavigatorRouteView` failed to do: `getConstants` - " + error);
     };
   };
-
   // #endregion
   
   // #region - Handlers
@@ -525,6 +554,8 @@ export class NavigatorRouteView extends React.PureComponent<NavigatorRouteViewPr
 
     const navigation   = this.getRouteNavigationObject();
     const routeOptions = navigation.routeOptions;
+
+    console.log("re-render route: ", props.routeID);
 
     return(
       <NavRouteViewContext.Provider value={{
