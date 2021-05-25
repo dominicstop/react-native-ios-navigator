@@ -108,8 +108,16 @@
 
 <br>
 
-- [ ] **Implement**: Navigator command error recovery - revert state to snapshot if command failed.
 - [ ] **Implement**: Add support for setting the root view's background color.
+
+<br>
+
+- [ ] **Implement**: Impl. `RouteRootView` as a potential replacement for the `RoutePortal` component.
+	* Instead of a regular view, a `RouteRootView` will be the root component for a route.
+	* The `RouteRootView` is a dummy component, it doesn't actually render anything, but like the `RoutePortal` component, it will allow for setting the `RouteOptions` and receiving route-related events.
+		* The diff. is that instead of redirecting the `RouteOptions` + route events to the parent `NavigatorRouteView` using the `RoutePortal`, the `RouteRootView` will do it directly in the native side.
+		* Though, this complicates things because there are default route options that is declared in the `NavigatorView`'s route config.
+		* Idk maybe this isn't a good idea...
 
 
 
@@ -379,6 +387,9 @@
 <br>
 
 - [x] (Commit: `0bb913a`) **Implement**: Update NavBar Item Events Payload - Add index and base event payload to `leftBarButtonItem` and `rightBarButtonItem` events.
+
+- [x] (Commit: `fdaf81b`) **Implement**: Navigator command error recovery - revert state to snapshot if command failed.
+- [x] (Commit: `ead4f18`) **Implement**: `NavigatorRouteView`: Impl. `shouldComponentUpdate`
 
 ---
 
