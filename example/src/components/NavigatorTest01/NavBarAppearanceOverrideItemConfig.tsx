@@ -100,10 +100,7 @@ export function NavBarAppearanceOverrideItemConfig(props: SharedSectionProps & {
           title={'Push Route w/ Config'}
             subtitle={`Push a route with the current navbar appearance config`}
             onPress={() => {
-              const { isUsingLegacyConfig } = props.parentState;
-              const parentRef = props.getParentRef();
-
-              parentRef.props.navigation.push({
+              props.navigation.push({
                 routeKey: 'NavigatorTest01',
                 routeOptions: {
                   navBarAppearanceOverride: props.currentAppearanceOverrideConfig,
