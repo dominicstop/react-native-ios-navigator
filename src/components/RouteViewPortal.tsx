@@ -1,6 +1,7 @@
 import React from 'react';
 
 import type { NavigatorRouteView, NavigatorRouteViewProps } from '../components/NavigatorRouteView';
+import type { RouteComponentsWrapper } from './RouteComponentsWrapper';
 import type { RouteOptions } from '../types/RouteOptions';
 
 import { CompareRouteOptions } from '../functions/CompareRouteOptions';
@@ -50,6 +51,8 @@ export class RouteViewPortal extends React.Component<RouteViewPortalProps> {
   
   context: NavRouteViewContextProps;
   routeRef: NavigatorRouteView;
+
+  _routeComponentsWrapperRef?: RouteComponentsWrapper;
   
   constructor(props: RouteViewPortalProps, context: NavRouteViewContextProps){
     super(props);
@@ -60,6 +63,11 @@ export class RouteViewPortal extends React.Component<RouteViewPortalProps> {
 
     routeRef.setRouteViewPortalRef(this);
     routeRef.setRouteOptions(props.routeOptions);
+
+  };
+
+  componentDidMount(){
+    this._routeComponentsWrapperRef = this.routeRef.getRouteComponentsWrapper();
   };
 
   componentDidUpdate(prevProps: RouteViewPortalProps){
@@ -68,33 +76,15 @@ export class RouteViewPortal extends React.Component<RouteViewPortalProps> {
     const didRouteOptionsChange = 
       !CompareRouteOptions.compare(prevProps.routeOptions, nextProps.routeOptions);
 
-    const didChangeRenderItems = !(
-      CompareUtilities.compareItemsNull(
-        prevProps.renderNavBarLeftItem, 
-        nextProps.renderNavBarLeftItem
-      ) &&
-      CompareUtilities.compareItemsNull(
-        prevProps.renderNavBarRightItem, 
-        nextProps.renderNavBarRightItem
-      ) &&
-      CompareUtilities.compareItemsNull(
-        prevProps.renderNavBarTitleItem, 
-        nextProps.renderNavBarTitleItem
-      ) &&
-      CompareUtilities.compareItemsNull(
-        prevProps.renderRouteHeader, 
-        nextProps.renderRouteHeader
-      ) 
-    );
+    this._routeComponentsWrapperRef?.requestUpdate();
 
-    if(didRouteOptionsChange || didChangeRenderItems){
+    if(didRouteOptionsChange){
       this.routeRef.setRouteOptions(nextProps.routeOptions);
 
       //#region - 🐞 DEBUG 🐛
       LIB_GLOBAL.debugLog && console.log(
           `LOG/JS - RouteViewPortal, componentDidUpdate`
         + ` - didRouteOptionsChange: ${didRouteOptionsChange? 'true' : 'false'}`
-        + ` - didChangeRenderItems: ${didChangeRenderItems? 'true' : 'false'}`
       );
       //#endregion
     };

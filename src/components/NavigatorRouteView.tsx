@@ -110,12 +110,13 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
   routeStatus: RouteStatus;
 
   // references
-  private _emitter              : EventEmitter<NavRouteEvents>;
-  private _nativeRef            : React.Component<RNINavigatorRouteViewProps>;
-  private _navigatorRef         : NavigatorView;
-  private _routeContentRef      : ReactElement;
-  private _routeViewPortalRef   : RouteViewPortal;
-  private _navBarItemsWrapperRef: RouteComponentsWrapper;
+  private _emitter           : EventEmitter<NavRouteEvents>;
+  private _nativeRef         : React.Component<RNINavigatorRouteViewProps>;
+  private _navigatorRef      : NavigatorView;
+  private _routeContentRef   : ReactElement;
+  private _routeViewPortalRef: RouteViewPortal;
+  
+  private _routeComponentsWrapperRef: RouteComponentsWrapper;
   //#endregion
 
   constructor(props: NavigatorRouteViewProps){
@@ -190,9 +191,9 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
   public getPortalRef = () => {
     return this._routeViewPortalRef;
   };
-
-  public getNavBarItemsWrapperRef = () => {
-    return this._navBarItemsWrapperRef;
+  
+  public getRouteComponentsWrapper = () => {
+    return this._routeComponentsWrapperRef;
   };
   //#endregion
 
@@ -366,7 +367,7 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
 
   public setRouteViewPortalRef = (ref: RouteViewPortal) => {
     this._routeViewPortalRef = ref;
-    this._navBarItemsWrapperRef?.setPortalRef(ref);
+    this._routeComponentsWrapperRef?.setPortalRef(ref);
 
     this.setState({hasRoutePortal: true});
   };
@@ -595,7 +596,7 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
         >
           {this._renderRouteContents(navigation)}
           <RouteComponentsWrapper
-            ref={r => this._navBarItemsWrapperRef = r}
+            ref={r => this._routeComponentsWrapperRef = r}
             navigation={navigation}
             getPortalRef={this.getPortalRef}
             // render nav bar items
