@@ -22,8 +22,8 @@ public class RNINavigatorManager {
     valueOptions: .weakMemory
   );
   
-  private var didSwizzleRootViewController = false;
-  private var didSetRootViewControllerBackground = false;
+  private var didTriggerSwizzleRootViewController = false;
+  private var didTriggerSetRootViewControllerBackground = false;
   
   // ---------------------
   // MARK:- Public Methods
@@ -76,10 +76,12 @@ public class RNINavigatorManager {
   };
   
   internal func swizzleRootViewController(for window: UIWindow){
-    guard !self.didSwizzleRootViewController,
+    guard !self.didTriggerSwizzleRootViewController,
           // don't swizzle if the root view controller is already a `RNIRootViewController`
           !(window.rootViewController is RNIRootViewController)
     else { return };
+    
+    self.didTriggerSwizzleRootViewController = true;
     
     let baseClass   : AnyClass = UIViewController.self;
     let baseSelector: Selector = #selector(getter: UIViewController.childForStatusBarStyle);
@@ -105,11 +107,11 @@ public class RNINavigatorManager {
   };
   
   internal func setRootViewControllerBackground(for window: UIWindow){
-    guard !self.didSetRootViewControllerBackground,
+    guard !self.didTriggerSetRootViewControllerBackground,
           let rootVC = window.rootViewController
     else { return };
     
-    self.didSetRootViewControllerBackground = true;
+    self.didTriggerSetRootViewControllerBackground = true;
     
     if #available(iOS 13.0, *) {
       rootVC.view.backgroundColor = .systemBackground
