@@ -13,8 +13,9 @@ export * from './context/NavRouteViewContext';
 
 
 // Types
-export { HeaderHeightValue } from './native_components/RNINavigatorRouteHeaderView';
+export { RNINavigatorViewConstants as NavigatorViewConstants } from './native_components/RNINavigatorView';
 export { BackButtonDisplayMode, LargeTitleDisplayMode, NavigationBarVisibilityMode, StatusBarStyle } from './native_components/RNINavigatorRouteView';
+export { HeaderHeightValue } from './native_components/RNINavigatorRouteHeaderView';
 
 export { RouteConstantsObject } from './native_modules/RNINavigatorRouteViewModule';
 export { NavigatorConstantsObject } from './native_modules/RNINavigatorViewModule';

@@ -46,7 +46,7 @@ internal class RNINavigatorViewManager: RCTViewManager, RCTInvalidating {
 
   override static func requiresMainQueueSetup() -> Bool {
     // run init in bg thread
-    return false;
+    return true;
   };
   
   override func view() -> UIView! {
@@ -57,6 +57,15 @@ internal class RNINavigatorViewManager: RCTViewManager, RCTInvalidating {
     
     // send a ref to bridge instance
     return RNINavigatorView(bridge: self.bridge);
+  };
+  
+  override func constantsToExport() -> [AnyHashable : Any]! {
+    let navController = UINavigationController();
+    let navigationBar = navController.navigationBar;
+    
+    let navBarHeight = navigationBar.frame.height;
+    
+    return ["navigationBarHeight": navBarHeight];
   };
   
   // ----------------------

@@ -1,4 +1,4 @@
-import { ViewStyle, requireNativeComponent } from 'react-native';
+import { ViewStyle, requireNativeComponent, UIManager } from 'react-native';
 import type { NavBarAppearanceCombinedConfig } from 'src/types/NavBarAppearanceConfig';
 
 //#region - `RNINavigatorView` Event Payloads
@@ -94,5 +94,15 @@ export type RNINavigatorViewProps = {
   onCustomCommandFromNative?: (event: OnCustomCommandFromNativePayload) => void;
 };
 
+export type RNINavigatorViewConstantsObject = {
+  navigationBarHeight: number;
+};
+
+const viewName = "RNINavigatorView";
+
 export const RNINavigatorView = 
-  requireNativeComponent<RNINavigatorViewProps>('RNINavigatorView');
+  requireNativeComponent<RNINavigatorViewProps>(viewName);
+
+export const RNINavigatorViewConstants = 
+  ((UIManager as any)[viewName]).Constants as RNINavigatorViewConstantsObject;
+

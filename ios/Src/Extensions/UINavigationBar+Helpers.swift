@@ -9,10 +9,10 @@ import UIKit
 
 
 
-/// Passes through all touch events to views behind it, except when the
-/// touch occurs in a contained UIControl or view with a gesture
-/// recognizer attached
+
 extension UINavigationBar {
+
+  // MARK: `allowTouchEventsToPassThroughNavigationBar`-related
   
   var allowTouchEventsToPassThrough: Bool {
     guard let navigatorView = RNIUtilities.getParent(responder: self, type: RNINavigatorView.self)
@@ -25,6 +25,9 @@ extension UINavigationBar {
     self.backgroundColor != .clear;
   };
   
+  /// Passes through all touch events to the views behind it, except when the
+  /// touch occurs in a contained UIControl or view with a gesture
+  /// recognizer attached
   open override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
 
     if !self.allowTouchEventsToPassThrough ||
@@ -35,7 +38,7 @@ extension UINavigationBar {
     
     return false;
   };
-
+  
   private func nestedInteractiveViews(in view: UIView, contain point: CGPoint) -> Bool {
     if view.isPotentiallyInteractive,
        view.bounds.contains(convert(point, to: view)) {
