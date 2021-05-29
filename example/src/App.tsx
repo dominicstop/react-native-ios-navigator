@@ -1,7 +1,9 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Text, FlatList, TouchableOpacity, Image, Alert } from 'react-native';
-import { NavigatorView, RouteContentProps, RouteHeaderView, RouteViewEvents, RouteViewPortal } from 'react-native-ios-navigator';
+import { NavigatorView, RouteContentProps, NavRouteConfigItem, RouteViewEvents, RouteViewPortal } from 'react-native-ios-navigator';
+
+import { NavigatorShowcase01 } from './components/NavigatorShowcase01';
 
 import { NavigatorExample01 } from './components/NavigatorExample01';
 
@@ -34,9 +36,15 @@ const RouteKeys = {
 
   NavigatorDemo01: 'NavigatorDemo01',
   NavigatorDemo02: 'NavigatorDemo02',
+
+  NavigatorShowcase01: 'NavigatorShowcase01',
 };
 
 const RouteItems = [{ 
+  routeKey: RouteKeys.NavigatorShowcase01,
+  title: 'Music Playlist',
+  desc: 'A route showing a playlist with a list of tracks.'
+}, { 
   routeKey: RouteKeys.NavigatorExample01,
   title: 'Basic Nested',
   desc: 'Nested navigator example w/ basic navigation (e.g. push and pop).',
@@ -100,6 +108,104 @@ const RouteItems = [{
     + ` continuously stacked/nested on top of one another.`
     + ` This also tests functional usage + hooks.`
   )
+}];
+
+const ROUTES: Array<NavRouteConfigItem> = [{
+  routeKey: RouteKeys.Home,
+  routeOptionsDefault: {
+    routeTitle: "Home",
+    searchBarConfig: {
+      placeholder: "Search Routes",
+      returnKeyType: 'done',
+      obscuresBackgroundDuringPresentation: false,
+      hidesSearchBarWhenScrolling: true,
+      textColor: {
+        dynamic: {
+          light: Colors.PURPLE.A700,
+          dark : Colors.PURPLE[100],
+        }
+      },
+      tintColor: {
+        dynamic: {
+          light: Colors.PURPLE.A700,
+          dark : Colors.PURPLE[100],
+        }
+      },
+      leftIconTintColor: {
+        dynamic: {
+          light: Colors.PURPLE.A700,
+          dark : Colors.PURPLE[100],
+        }
+      },
+      placeholderTextColor: Colors.PURPLE[300],
+      searchTextFieldBackgroundColor: Helpers.hexToRGBA(Colors.PURPLE.A100, 0.1),
+    },
+  },
+  renderRoute: () => (
+    <HomeRoute/>
+  ),
+}, {
+  routeKey: RouteKeys.NavigatorShowcase01,
+  renderRoute: () => (
+    <NavigatorShowcase01/>
+  ),
+}, {
+  routeKey: RouteKeys.NavigatorExample01,
+  renderRoute: () => (
+    <NavigatorExample01/>
+  ),
+}, {
+  routeKey: RouteKeys.NavigatorTest01,
+  renderRoute: () => (
+    <NavigatorTest01/>
+  ),
+}, {
+  routeKey: RouteKeys.NavigatorTest02,
+  renderRoute: () => (
+    <NavigatorTest02/>
+  ),
+}, {
+  routeKey: RouteKeys.NavigatorTest03,
+  renderRoute: () => (
+    <NavigatorTest03/>
+  ),
+}, {
+  routeKey: RouteKeys.NavigatorTest04,
+  renderRoute: () => (
+    <NavigatorTest04/>
+  ),
+}, {
+  routeKey: RouteKeys.NavigatorTest05,
+  renderRoute: () => (
+    <NavigatorTest05/>
+  ),
+}, {
+  routeKey: RouteKeys.NavigatorTest06,
+  renderRoute: () => (
+    <NavigatorTest06/>
+  ),
+}, {
+  routeKey: RouteKeys.NavigatorTest07,
+  renderRoute: () => (
+    <NavigatorTest07/>
+  ),
+}, {
+  routeKey: RouteKeys.NavigatorDemo01,
+  routeOptionsDefault: {
+    largeTitleDisplayMode: 'never',
+  },
+  renderRoute: () => (
+    <NavigatorDemo01/>
+  ),
+}, {
+  routeKey: RouteKeys.NavigatorDemo02,
+  routeOptionsDefault: {
+    largeTitleDisplayMode: 'never',
+  },
+  renderRoute: () => (
+    // @ts-ignore
+    <NavigatorDemo02/>
+  ),
 }];
 
 
@@ -252,6 +358,7 @@ export default function App() {
     <NavigatorView
       ref={r => this.navRef = r}
       style={styles.container}
+      routes={ROUTES}
       initialRoutes={[{routeKey: RouteKeys.Home}]}
       isInteractivePopGestureEnabled={true}
       navBarPrefersLargeTitles={true}
@@ -261,98 +368,6 @@ export default function App() {
           JSON.stringify(nativeEvent.commandData)
         );
       }}
-      routes={[{
-        routeKey: RouteKeys.Home,
-        routeOptionsDefault: {
-          routeTitle: "Home",
-          searchBarConfig: {
-            placeholder: "Search Routes",
-            returnKeyType: 'done',
-            obscuresBackgroundDuringPresentation: false,
-            hidesSearchBarWhenScrolling: true,
-            textColor: {
-              dynamic: {
-                light: Colors.PURPLE.A700,
-                dark : Colors.PURPLE[100],
-              }
-            },
-            tintColor: {
-              dynamic: {
-                light: Colors.PURPLE.A700,
-                dark : Colors.PURPLE[100],
-              }
-            },
-            leftIconTintColor: {
-              dynamic: {
-                light: Colors.PURPLE.A700,
-                dark : Colors.PURPLE[100],
-              }
-            },
-            placeholderTextColor: Colors.PURPLE[300],
-            searchTextFieldBackgroundColor: Helpers.hexToRGBA(Colors.PURPLE.A100, 0.1),
-          },
-        },
-        renderRoute: () => (
-          <HomeRoute/>
-        ),
-      }, {
-        routeKey: RouteKeys.NavigatorExample01,
-        renderRoute: () => (
-          <NavigatorExample01/>
-        ),
-      }, {
-        routeKey: RouteKeys.NavigatorTest01,
-        renderRoute: () => (
-          <NavigatorTest01/>
-        ),
-      }, {
-        routeKey: RouteKeys.NavigatorTest02,
-        renderRoute: () => (
-          <NavigatorTest02/>
-        ),
-      }, {
-        routeKey: RouteKeys.NavigatorTest03,
-        renderRoute: () => (
-          <NavigatorTest03/>
-        ),
-      }, {
-        routeKey: RouteKeys.NavigatorTest04,
-        renderRoute: () => (
-          <NavigatorTest04/>
-        ),
-      }, {
-        routeKey: RouteKeys.NavigatorTest05,
-        renderRoute: () => (
-          <NavigatorTest05/>
-        ),
-      }, {
-        routeKey: RouteKeys.NavigatorTest06,
-        renderRoute: () => (
-          <NavigatorTest06/>
-        ),
-      }, {
-        routeKey: RouteKeys.NavigatorTest07,
-        renderRoute: () => (
-          <NavigatorTest07/>
-        ),
-      }, {
-        routeKey: RouteKeys.NavigatorDemo01,
-        routeOptionsDefault: {
-          largeTitleDisplayMode: 'never',
-        },
-        renderRoute: () => (
-          <NavigatorDemo01/>
-        ),
-      }, {
-        routeKey: RouteKeys.NavigatorDemo02,
-        routeOptionsDefault: {
-          largeTitleDisplayMode: 'never',
-        },
-        renderRoute: () => (
-          // @ts-ignore
-          <NavigatorDemo02/>
-        ),
-      }]}
     />
   );
 }
