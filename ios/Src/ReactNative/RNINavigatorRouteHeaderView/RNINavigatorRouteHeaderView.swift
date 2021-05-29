@@ -8,6 +8,8 @@
 import Foundation
 
 
+// TODO: Create new class `RNINativeManagedView` to replace `RNIWrapperView` w/
+//       `isWrapperView = false`.
 internal class RNINavigatorRouteHeaderView: RNIWrapperView {
   
   // ---------------------
@@ -192,7 +194,7 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
   // MARK:- Internal Functions
   // -------------------------
   
-  /// TODO: Refactor - uss view controller containment/child vc so that we don't
+  /// TODO: Refactor - use view controller containment/child vc so that we don't
   /// have to call `setup` on the parent vc's `loadView`, or perform layout updates
   /// on the parent vc's `willLayoutSubviews`
   func setup(rootView: UIView) {
