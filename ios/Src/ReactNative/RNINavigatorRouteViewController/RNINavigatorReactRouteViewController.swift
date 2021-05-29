@@ -564,6 +564,15 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     };
   };
   
+  override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+    super.viewWillTransition(to: size, with: coordinator);
+    guard let routeHeader = self.routeView?.reactRouteHeader else { return };
+    
+    coordinator.animate(alongsideTransition: nil){ _ in
+      routeHeader.refreshHeaderTopPadding();
+    };
+  };
+  
   // --------------------------
   // MARK:- Internal  Functions
   // --------------------------

@@ -18,6 +18,8 @@ extension UIViewController {
   };
   
   var statusBarHeight: CGFloat {
+    guard !UIApplication.shared.isStatusBarHidden else { return 0 };
+    
     if #available(iOS 13.0, *) {
       let window = self.view.window
         ?? UIApplication.shared.windows.filter { $0.isKeyWindow }.first;
