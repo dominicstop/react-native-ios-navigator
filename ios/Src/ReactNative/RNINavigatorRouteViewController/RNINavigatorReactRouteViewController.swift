@@ -492,7 +492,11 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       isAnimated: animated
     );
     
-    self.prepareForViewWillAppear(animated);
+    /// Override the nav. config based on the current `routeView` `routeConfig`-related props
+    self.navigationConfigOverride.overrideIfNeeded(isAnimated: animated);
+    
+    /// Update status bar style
+    self.setNeedsStatusBarAppearanceUpdate();
   };
   
   override func viewDidAppear(_ animated: Bool) {
@@ -503,6 +507,12 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       isDone: true,
       isAnimated: animated
     );
+    
+    // if back config was prev. overridden, then restore...
+    if self.shouldResetNavBarBackConfig {
+      self.resetRouteNavBarBackConfig();
+      self.shouldResetNavBarBackConfig = false;
+    };
     
     self.refreshSearchController();
   };
@@ -597,21 +607,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
         return displayMode;
       }();
     };
-  };
-  
-  func prepareForViewWillAppear(_ animated: Bool){
-    
-    // if back config was prev. overridden, then restore...
-    if self.shouldResetNavBarBackConfig {
-      self.resetRouteNavBarBackConfig();
-      self.shouldResetNavBarBackConfig = false;
-    };
-    
-    /// Override the nav. config based on the current `routeView` `routeConfig`-related props
-    self.navigationConfigOverride.overrideIfNeeded(isAnimated: animated);
-    
-    /// Update status bar style
-    self.setNeedsStatusBarAppearanceUpdate();
   };
   
   func setupSearchController(){
