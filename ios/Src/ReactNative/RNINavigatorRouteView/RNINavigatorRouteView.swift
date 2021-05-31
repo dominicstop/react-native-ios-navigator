@@ -823,6 +823,7 @@ internal extension RNINavigatorRouteView {
     else { return };
     
     // update react view's size
+    self.bounds = newBounds;
     bridge.uiManager.setSize(newBounds.size, for: reactView);
   };
   

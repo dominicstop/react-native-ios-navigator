@@ -340,11 +340,11 @@ public final class RNINavigatorView: UIView {
         }();
         
         // set the initial size of the view...
-        routeView.bounds = self.bounds;
-        routeView.frame  = self.frame;
-        
-        // and update react size.
-        routeView.notifyForBoundsChange(self.bounds);
+        if self.bounds.width  > 0,
+           self.bounds.height > 0 {
+          
+          routeView.notifyForBoundsChange(self.bounds);
+        };
         
         /// save a ref to `routeView`'s vc instance
         self.routeItemsMap[routeVC.routeID] = routeVC;
@@ -448,7 +448,7 @@ fileprivate extension RNINavigatorView {
     
     // add vc's view as subview
     self.addSubview(navigationVC.view);
-    navigationVC.view.frame = self.bounds;
+    navigationVC.view.frame = self.frame;
     
     // set with initial value for `navBarPrefersLargeTitles` prop
     if #available(iOS 11.0, *) {
