@@ -94,7 +94,6 @@ internal class RNIWrapperView: UIView {
       
     } else {
       bridge.uiManager.setSize(newBounds.size, for: self);
-      self.layoutSubviews();
     };
   };
   

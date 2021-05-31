@@ -458,6 +458,8 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     
     self.setupSearchController();
     self.setupScrollView();
+    
+    self.routeView.reactRouteHeader?.setInitialSize();
   };
   
   override func viewWillLayoutSubviews() {

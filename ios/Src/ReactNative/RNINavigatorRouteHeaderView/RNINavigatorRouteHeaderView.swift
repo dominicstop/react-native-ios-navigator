@@ -227,7 +227,7 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
         let navigationBarFrame = routeVC.navigationController!.navigationBar.frame;
         self.notifyForBoundsChange(
           CGRect(
-            origin: self.frame.origin,
+            origin: .zero,
             size: CGSize(width: navigationBarFrame.width, height: headerHeight)
           )
         );
@@ -270,7 +270,7 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
         let navigationBarFrame = routeVC.navigationController!.navigationBar.frame;
         self.notifyForBoundsChange(
           CGRect(
-            origin: self.frame.origin,
+            origin: .zero,
             size: CGSize(width: navigationBarFrame.width, height: headerHeightMax)
           )
         );
@@ -330,6 +330,22 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
             UIEdgeInsets(top: topInset, left: 0, bottom: 0, right: 0)
         };
     }
+  };
+  
+  func setInitialSize(){
+    guard let routeVC = self.routeViewController,
+          let navigationBar = routeVC.navigationController?.navigationBar,
+          let height =
+            self.headerConfig.headerHeightMax?.getHeight(viewController: routeVC) ??
+            self.headerConfig.headerHeight?   .getHeight(viewController: routeVC)
+    else { return };
+    
+    let navBarWidth = navigationBar.frame.width;
+    
+    self.notifyForBoundsChange(CGRect(
+      origin: .zero,
+      size: CGSize(width: navBarWidth, height: height)
+    ));
   };
 };
 
