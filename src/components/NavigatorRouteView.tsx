@@ -556,8 +556,6 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
     const navigation   = this.getRouteNavigationObject();
     const routeOptions = navigation.routeOptions;
 
-    console.log("re-render route: ", props.routeID);
-
     return(
       <NavRouteViewContext.Provider value={{
         navigation,
