@@ -148,7 +148,7 @@ export class NavigatorShowcase01 extends React.Component<RouteContentProps> {
   };
 
   _handleKeyExtractor = (item: TrackItem) => {
-    return item.id;
+    return `id:${item.id}`;
   };
 
   _renderRouteHeader = () => {
@@ -274,7 +274,7 @@ export class NavigatorShowcase01 extends React.Component<RouteContentProps> {
 
 const styles = StyleSheet.create({
   routeContainerStyle: {
-    backgroundColor: 'black',
+    backgroundColor: 'rgb(20, 20, 20)'
   },
   routeHeader: {
   },
@@ -319,6 +319,13 @@ const styles = StyleSheet.create({
     right: 0,
     padding: 15,
     backgroundColor: Colors.ORANGE[900],
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.75,
+    shadowRadius: 12,
+    shadowColor: "black",
   },
   routeHeaderCollapsedContainer: {
     overflow: 'visible',

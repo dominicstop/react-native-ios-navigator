@@ -4,6 +4,7 @@ import type { TrackItem } from './SharedTypes';
 
 import * as Colors  from '../../constants/Colors';
 import * as Helpers from '../../functions/Helpers';
+import { CircleView } from '../ui/ViewShapes';
 
 
 const AlbumColors = [
@@ -17,6 +18,8 @@ const AlbumColors = [
   Colors.PURPLE.A700,
   Colors.VIOLET.A700,
 ];
+
+const ALBUM_HEIGHT = 50;
 
 export function ListItemTrack(props: {
   trackItem: TrackItem;
@@ -62,7 +65,7 @@ const styles = StyleSheet.create({
   },
   leftTrackAlbumContainer: {
     aspectRatio: 1,
-    height: 50,
+    height: ALBUM_HEIGHT,
     alignItems: 'center',
     justifyContent: 'center',
   },
