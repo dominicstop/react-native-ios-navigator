@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import { CardBody, CardButton, CardRowLabelDisplay, CardTitle, CardRowTextInput, CardRowSwitch } from '../ui/Card';
-import { ObjectPropertyDisplay } from '../ui/ObjectPropertyDisplay';
-import { SpacerLine } from '../ui/Spacer';
+import { CardBody, CardButton, CardRowLabelDisplay, CardTitle, CardRowTextInput, CardRowSwitch } from '../../components/ui/Card';
+import { ObjectPropertyDisplay } from '../../components/ui/ObjectPropertyDisplay';
+import { SpacerLine } from '../../components/ui/Spacer';
 
 import { SharedSectionProps, backButtonItemConfigs, backButtonDisplayModes } from './Shared';
 

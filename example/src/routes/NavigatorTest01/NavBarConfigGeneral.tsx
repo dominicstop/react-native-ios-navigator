@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { CardBody, CardButton, CardRowLabelDisplay, CardTitle, CardRowTextInput } from '../ui/Card';
-import { SpacerLine } from '../ui/Spacer';
+import { CardBody, CardButton, CardRowLabelDisplay, CardTitle, CardRowTextInput } from '../../components/ui/Card';
+import { SpacerLine } from '../../components/ui/Spacer';
 
 import { SharedSectionProps, largeTitleDisplayModes } from './Shared';
 

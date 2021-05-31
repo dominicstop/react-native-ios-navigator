@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { StyleSheet, View, SafeAreaView, Text, Image, Animated, ScrollView, Alert, FlatList, ListRenderItem } from 'react-native';
-import { RouteViewEvents, RouteViewPortal, RouteContentProps, RouteHeaderView, NavigatorViewConstants } from 'react-native-ios-navigator';
+import { StyleSheet, View, SafeAreaView, Text, Image, Animated, ListRenderItem } from 'react-native';
+import { RouteViewPortal, RouteContentProps, RouteHeaderView, NavigatorViewConstants } from 'react-native-ios-navigator';
 import { ListItemTrack } from './ListItemTrack';
 
 import type { TrackItem } from './SharedTypes';
@@ -219,8 +219,10 @@ export class NavigatorShowcase01 extends React.Component<RouteContentProps> {
 
   _renderListFooter = () => {
     return (
-      <View style={{marginBottom: 200}}>
-        
+      <View style={styles.listFooterContainer}>
+        <Text style={styles.listFooterSymbolText}>
+          {'💚'}
+        </Text>
       </View>
     );
   };
@@ -355,5 +357,16 @@ const styles = StyleSheet.create({
   },
   listHeaderPlaylistDesc: {
     color: 'white',
+  },
+
+  listFooterContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 15,
+    marginBottom: 100,
+  },
+  listFooterSymbolText: {
+    fontSize: 24,
+    opacity: 0.75,
   },
 });

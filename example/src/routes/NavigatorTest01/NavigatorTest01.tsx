@@ -18,7 +18,7 @@ import { RouteViewConstants } from './RouteViewConstants';
 import { NavigatorViewConstants } from './NavigatorViewConstants';
 import { NavigationCommandsConfig } from './NavigationCommandsConfig';
 
-import { Spacer } from '../ui/Spacer';
+import { Spacer } from '../../components/ui/Spacer';
 
 import * as Colors  from '../../constants/Colors';
 import * as Helpers from '../../functions/Helpers';

@@ -4,8 +4,6 @@ import type { TrackItem } from './SharedTypes';
 
 import * as Colors  from '../../constants/Colors';
 import * as Helpers from '../../functions/Helpers';
-import { CircleView } from '../ui/ViewShapes';
-
 
 const AlbumColors = [
   Colors.PINK.A700,

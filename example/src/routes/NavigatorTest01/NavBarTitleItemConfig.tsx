@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { CardBody, CardRowSwitch, CardTitle } from '../ui/Card';
+import { CardBody, CardRowSwitch, CardTitle } from '../../components/ui/Card';
 
 import type { SharedSectionProps } from './Shared';
 

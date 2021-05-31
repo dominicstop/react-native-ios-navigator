@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import { ObjectPropertyDisplay } from '../ui/ObjectPropertyDisplay';
-import { CardBody, CardButton, CardRowLabelDisplay, CardTitle, CardRowSwitch } from '../ui/Card';
-import { SpacerLine } from '../ui/Spacer';
+import { ObjectPropertyDisplay } from '../../components/ui/ObjectPropertyDisplay';
+import { CardBody, CardButton, CardRowLabelDisplay, CardTitle, CardRowSwitch } from '../../components/ui/Card';
+import { SpacerLine } from '../../components/ui/Spacer';
 
 import { SharedSectionProps, navBarVisibilityModes } from './Shared';
 

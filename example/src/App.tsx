@@ -1,22 +1,22 @@
 import * as React from 'react';
 
-import { StyleSheet, View, Text, FlatList, TouchableOpacity, Image, Alert } from 'react-native';
+import { StyleSheet, View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
 import { NavigatorView, RouteContentProps, NavRouteConfigItem, RouteViewEvents, RouteViewPortal } from 'react-native-ios-navigator';
 
-import { NavigatorShowcase01 } from './components/NavigatorShowcase01';
+import { NavigatorShowcase01 } from './routes/NavigatorShowcase01';
 
-import { NavigatorExample01 } from './components/NavigatorExample01';
+import { NavigatorExample01 } from './routes/NavigatorExample01';
 
-import { NavigatorTest01 } from './components/NavigatorTest01';
-import { NavigatorTest02 } from './components/NavigatorTest02';
-import { NavigatorTest03 } from './components/NavigatorTest03';
-import { NavigatorTest04 } from './components/NavigatorTest04';
-import { NavigatorTest05 } from './components/NavigatorTest05';
-import { NavigatorTest06 } from './components/NavigatorTest06';
-import { NavigatorTest07 } from './components/NavigatorTest07';
+import { NavigatorTest01 } from './routes/NavigatorTest01';
+import { NavigatorTest02 } from './routes/NavigatorTest02';
+import { NavigatorTest03 } from './routes/NavigatorTest03';
+import { NavigatorTest04 } from './routes/NavigatorTest04';
+import { NavigatorTest05 } from './routes/NavigatorTest05';
+import { NavigatorTest06 } from './routes/NavigatorTest06';
+import { NavigatorTest07 } from './routes/NavigatorTest07';
 
-import { NavigatorDemo01 } from './components/NavigatorDemo01';
-import { NavigatorDemo02 } from './components/NavigatorDemo02';
+import { NavigatorDemo01 } from './routes/NavigatorDemo01';
+import { NavigatorDemo02 } from './routes/NavigatorDemo02';
 
 import * as Colors  from './constants/Colors';
 import * as Helpers from './functions/Helpers';

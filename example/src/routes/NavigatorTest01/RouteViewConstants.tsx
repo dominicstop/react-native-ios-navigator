@@ -2,8 +2,8 @@ import * as React from 'react';
 
 import type { RouteContentProps, RouteConstantsObject } from 'react-native-ios-navigator';
 
-import { CardBody, CardButton, CardTitle } from '../ui/Card';
-import { ObjectPropertyDisplay } from '../ui/ObjectPropertyDisplay';
+import { CardBody, CardButton, CardTitle } from '../../components/ui/Card';
+import { ObjectPropertyDisplay } from '../../components/ui/ObjectPropertyDisplay';
 
 
 export function RouteViewConstants(props: RouteContentProps){

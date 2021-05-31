@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import type { RouteContentProps } from 'react-native-ios-navigator';
 
-import { CardBody, CardButton, CardTitle } from '../ui/Card';
+import { CardBody, CardButton, CardTitle } from '../../components/ui/Card';
 
 
 export function NavigationCommandsConfig(props: RouteContentProps){

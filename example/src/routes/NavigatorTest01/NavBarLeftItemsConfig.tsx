@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { ObjectPropertyDisplay } from '../ui/ObjectPropertyDisplay';
-import { CardBody, CardButton, CardTitle } from '../ui/Card';
+import { ObjectPropertyDisplay } from '../../components/ui/ObjectPropertyDisplay';
+import { CardBody, CardButton, CardTitle } from '../../components/ui/Card';
 
 import { SharedSectionProps, navBarItemsConfigs } from './Shared';
 
