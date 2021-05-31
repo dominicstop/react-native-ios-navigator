@@ -204,16 +204,6 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
   
   override func reactSetFrame(_ frame: CGRect) {
     self.refreshLayoutSize();
-    // no-op
-    print("LOG -* reactSetFrame"
-      + " - frame height: \(self.frame.height)"
-      + " - frame width: \(self.frame.width)"
-      + " - bounds height: \(self.bounds.height)"
-      + " - bounds width: \(self.bounds.width)"
-      + " - reactSetFrame height: \(frame.height)"
-      + " - reactSetFrame width: \(frame.width)"
-      + " - reactSetFrame width: \(frame.width)"
-    );
   };
   
   // -------------------------
@@ -301,13 +291,6 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
           )
         );
     };
-    
-    print("LOG -* refreshLayoutSize: setup"
-      + " - frame height: \(self.frame.height)"
-      + " - frame width: \(self.frame.width)"
-      + " - bounds height: \(self.bounds.height)"
-      + " - bounds width: \(self.bounds.width)"
-    );
   };
 
   func refreshHeaderTopPadding(){
@@ -385,26 +368,7 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
       
       self.layoutSubviews();
       
-      print("LOG -* refreshLayoutSize: initial"
-        + " - height: \(height)"
-        + " - width: \(navBarWidth)"
-        + " - frame height: \(self.frame.height)"
-        + " - frame width: \(self.frame.width)"
-        + " - bounds height: \(self.bounds.height)"
-        + " - bounds width: \(self.bounds.width)"
-      );
-      
     } else {
-      
-      print("LOG -* refreshLayoutSize: post"
-        + " - height: \(self.bounds.height)"
-        + " - width: \(navigationBar.frame.width)"
-        + " - frame height: \(self.frame.height)"
-        + " - frame width: \(self.frame.width)"
-        + " - bounds height: \(self.bounds.height)"
-        + " - bounds width: \(self.bounds.width)"
-      );
-      
       self.notifyForBoundsChange(CGRect(
         origin: .zero,
         size: CGSize(
@@ -461,15 +425,6 @@ extension RNINavigatorRouteHeaderView: UIScrollViewDelegate {
     // update react layout
     self.notifyForBoundsChange(
       CGRect(origin: .zero, size: newHeaderSize)
-    );
-    
-    print("LOG -* scrollViewDidScroll"
-      + " - height: \(newHeaderHeight)"
-      + " - width: \(navBarWidth)"
-      + " - frame height: \(self.frame.height)"
-      + " - frame width: \(self.frame.width)"
-      + " - bounds height: \(self.bounds.height)"
-      + " - bounds width: \(self.bounds.width)"
     );
   };
 };
