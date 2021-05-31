@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, ScrollView, Alert, FlatList, ListRenderItem } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
+
 import type { TrackItem } from './SharedTypes';
 
 import * as Colors  from '../../constants/Colors';

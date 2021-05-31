@@ -252,10 +252,10 @@ export class NavigatorShowcase01 extends React.Component<RouteContentProps> {
               },
             },
             applyBackButtonConfigToCurrentRoute: true,
+            backButtonDisplayMode: 'minimal',
             navBarButtonBackItemConfig: {
-              type: 'TEXT',
+              type: 'IMAGE_EMPTY',
               tintColor: 'white',
-              title: '',
             },
           }}
           renderRouteHeader={this._renderRouteHeader}
