@@ -514,6 +514,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       self.shouldResetNavBarBackConfig = false;
     };
     
+    // update the search bar
     self.refreshSearchController();
   };
   
@@ -576,8 +577,9 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
   
   override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
     super.viewWillTransition(to: size, with: coordinator);
-    guard let routeHeader = self.routeView?.reactRouteHeader else { return };
     
+    // device rotation - update the route header's top padding
+    guard let routeHeader = self.routeView?.reactRouteHeader else { return };
     coordinator.animate(alongsideTransition: nil){ _ in
       routeHeader.refreshHeaderTopPadding();
     };
@@ -621,6 +623,8 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     searchController.searchBar.delegate = self;
     
     self.navigationItem.searchController = searchController;
+    
+    /// Temp. set this flag to false to fix search bar transitions
     self.navigationItem.hidesSearchBarWhenScrolling = false;
   };
   
@@ -631,6 +635,12 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     else { return };
     
     let searchBar = searchController.searchBar;
+    
+    /// Climb the search bar's view hierarchy to get it's `textField` and
+    /// `placeholderLabel`, then cache it for later use.
+    ///
+    /// * Note: Must be performed in `viewDidAppear` to guarantee that the
+    ///   search bar (and it's subviews) already exist.
     
     if self.searchBarTextField == nil {
       self.searchBarTextField = searchBar.textField;
@@ -826,6 +836,7 @@ extension RNINavigatorReactRouteViewController: RNINavigatorRouteViewDelegate {
 // MARK:- Extension: UINavigationControllerDelegate
 // ------------------------------------------------
 
+/// Handle custom view controller transitions
 extension RNINavigatorReactRouteViewController:
   UINavigationControllerDelegate, UIViewControllerTransitioningDelegate {
   
@@ -864,6 +875,7 @@ extension RNINavigatorReactRouteViewController:
 // MARK:- Extension: UISearchResultsUpdating
 // -----------------------------------------
 
+/// Handle search controller-related events
 extension RNINavigatorReactRouteViewController: UISearchResultsUpdating {
   func updateSearchResults(for searchController: UISearchController) {
     print("LOG - RNINavigatorReactRouteViewController, UISearchResultsUpdating: updateSearchResults"
@@ -882,6 +894,7 @@ extension RNINavigatorReactRouteViewController: UISearchResultsUpdating {
 // MARK:- Extension: UISearchBarDelegate
 // -------------------------------------
 
+/// Handle search bar-related events
 extension RNINavigatorReactRouteViewController: UISearchBarDelegate {
   func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
     print("LOG - RNINavigatorReactRouteViewController, UISearchBarDelegate: searchBarCancelButtonClicked"
