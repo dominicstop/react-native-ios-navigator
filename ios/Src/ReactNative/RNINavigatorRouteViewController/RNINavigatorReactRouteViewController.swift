@@ -445,6 +445,13 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       + " - preferredStatusBarStyle: \(self.preferredStatusBarStyle.rawValue)"
     );
     #endif
+    
+    print("LOG -* loadView"
+      + " - frame height: \(self.routeView.reactRouteHeader?.frame.height)"
+      + " - frame width: \(self.routeView.reactRouteHeader?.frame.width)"
+      + " - bounds height: \(self.routeView.reactRouteHeader?.bounds.height)"
+      + " - bounds width: \(self.routeView.reactRouteHeader?.bounds.width)"
+    );
   };
   
   override func viewDidLoad() {
@@ -459,19 +466,24 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     self.setupSearchController();
     self.setupScrollView();
     
-    self.routeView.reactRouteHeader?.setInitialSize();
+    print("LOG -* viewDidLoad"
+      + " - frame height: \(self.routeView.reactRouteHeader?.frame.height)"
+      + " - frame width: \(self.routeView.reactRouteHeader?.frame.width)"
+      + " - bounds height: \(self.routeView.reactRouteHeader?.bounds.height)"
+      + " - bounds width: \(self.routeView.reactRouteHeader?.bounds.width)"
+    );
   };
   
   override func viewWillLayoutSubviews() {
     super.viewWillLayoutSubviews();
     
+    guard let routeView = self.routeView else { return };
+    
     /// update `routeView`'s size
-    self.routeView?.notifyForBoundsChange(self.view.bounds);
+    routeView.notifyForBoundsChange(self.view.bounds);
     
     /// update `routeView`'s header size
-    if let reactRouteHeader = self.routeView?.reactRouteHeader {
-      reactRouteHeader.notifyForBoundsChange(reactRouteHeader.bounds);
-    };
+    routeView.reactRouteHeader?.refreshLayoutSize();
   };
   
   override func viewDidLayoutSubviews() {
@@ -499,6 +511,13 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     
     /// Update status bar style
     self.setNeedsStatusBarAppearanceUpdate();
+    
+    print("LOG -* viewWillAppear"
+      + " - frame height: \(self.routeView.reactRouteHeader?.frame.height)"
+      + " - frame width: \(self.routeView.reactRouteHeader?.frame.width)"
+      + " - bounds height: \(self.routeView.reactRouteHeader?.bounds.height)"
+      + " - bounds width: \(self.routeView.reactRouteHeader?.bounds.width)"
+    );
   };
   
   override func viewDidAppear(_ animated: Bool) {
@@ -518,6 +537,13 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     
     // update the search bar
     self.refreshSearchController();
+    
+    print("LOG -* viewDidAppear"
+      + " - frame height: \(self.routeView.reactRouteHeader?.frame.height)"
+      + " - frame width: \(self.routeView.reactRouteHeader?.frame.width)"
+      + " - bounds height: \(self.routeView.reactRouteHeader?.bounds.height)"
+      + " - bounds width: \(self.routeView.reactRouteHeader?.bounds.width)"
+    );
   };
   
   override func viewWillDisappear(_ animated: Bool) {

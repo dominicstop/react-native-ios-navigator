@@ -542,7 +542,7 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
 
     return(
       <View
-        style={[styles.routeItem, routeOptions.routeContainerStyle]}
+        style={[styles.routeContentContainer, routeOptions.routeContainerStyle]}
         nativeID={NativeIDKeys.RouteContent}
       >
         {routeContentWithProps}
@@ -642,5 +642,6 @@ const styles = StyleSheet.create({
   },
   routeContentContainer: {
     // can't add `flex: 1` else it disappears
+    overflow: 'hidden',
   },
 });

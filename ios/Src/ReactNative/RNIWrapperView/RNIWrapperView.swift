@@ -93,6 +93,11 @@ internal class RNIWrapperView: UIView {
       bridge.uiManager.setSize(newBounds.size, for: reactView);
       
     } else {
+      self.frame = CGRect(
+        origin: self.frame.origin,
+        size: newBounds.size
+      );
+      
       bridge.uiManager.setSize(newBounds.size, for: self);
     };
   };

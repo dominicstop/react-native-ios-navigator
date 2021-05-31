@@ -574,7 +574,13 @@ internal class RNINavigatorRouteView: UIView {
         self.delegate?.didReceiveNavBarButtonTitleView(subview);
         
       case .RouteHeader:
-        self.reactRouteHeader = wrapperView as? RNINavigatorRouteHeaderView;
+        guard let headerView = wrapperView as? RNINavigatorRouteHeaderView
+        else { return };
+        
+        self.reactRouteHeader = headerView;
+        
+        headerView.routeView = self;
+        headerView.routeViewController = self.routeVC;
     };
   };
   

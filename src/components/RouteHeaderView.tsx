@@ -20,7 +20,10 @@ export class RouteHeaderView extends React.PureComponent<RouteHeaderViewProps> {
         config={props.config}
         headerTopPadding={props.headerTopPadding}
         style={{
-          position: 'absolute', 
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
           ...props.style
         }}
       >

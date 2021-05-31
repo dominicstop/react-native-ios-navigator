@@ -121,6 +121,9 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
   // MARK:- Properties
   // -----------------
   
+  /// Ref. to the parent route view
+  weak var routeView: RNINavigatorRouteView?;
+  
   /// Ref. to the parent react route vc
   weak var routeViewController: RNINavigatorReactRouteViewController?;
   
@@ -130,7 +133,16 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
   
   var headerHeightConstraint: NSLayoutConstraint!;
   
+  var headerInitialHeight: CGFloat? {
+    guard let routeVC = self.routeViewController else { return nil };
+    
+    return
+      self.headerConfig.headerHeightMax?.getHeight(viewController: routeVC) ??
+      self.headerConfig.headerHeight?   .getHeight(viewController: routeVC)
+  };
+  
   private var didTriggerSetup = false;
+  private var didSetInitialSize = false;
   
   // ------------------------
   // MARK:- RN Exported Props
@@ -188,6 +200,20 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
   
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented");
+  };
+  
+  override func reactSetFrame(_ frame: CGRect) {
+    self.refreshLayoutSize();
+    // no-op
+    print("LOG -* reactSetFrame"
+      + " - frame height: \(self.frame.height)"
+      + " - frame width: \(self.frame.width)"
+      + " - bounds height: \(self.bounds.height)"
+      + " - bounds width: \(self.bounds.width)"
+      + " - reactSetFrame height: \(frame.height)"
+      + " - reactSetFrame width: \(frame.width)"
+      + " - reactSetFrame width: \(frame.width)"
+    );
   };
   
   // -------------------------
@@ -275,6 +301,13 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
           )
         );
     };
+    
+    print("LOG -* refreshLayoutSize: setup"
+      + " - frame height: \(self.frame.height)"
+      + " - frame width: \(self.frame.width)"
+      + " - bounds height: \(self.bounds.height)"
+      + " - bounds width: \(self.bounds.width)"
+    );
   };
 
   func refreshHeaderTopPadding(){
@@ -332,20 +365,54 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
     }
   };
   
-  func setInitialSize(){
+  func refreshLayoutSize(){
     guard let routeVC = self.routeViewController,
-          let navigationBar = routeVC.navigationController?.navigationBar,
-          let height =
-            self.headerConfig.headerHeightMax?.getHeight(viewController: routeVC) ??
-            self.headerConfig.headerHeight?   .getHeight(viewController: routeVC)
+          let navigationBar = routeVC.navigationController?.navigationBar
     else { return };
     
-    let navBarWidth = navigationBar.frame.width;
-    
-    self.notifyForBoundsChange(CGRect(
-      origin: .zero,
-      size: CGSize(width: navBarWidth, height: height)
-    ));
+    if !self.didSetInitialSize,
+        let height =
+          self.headerConfig.headerHeightMax?.getHeight(viewController: routeVC) ??
+          self.headerConfig.headerHeight?   .getHeight(viewController: routeVC) {
+      
+      self.didSetInitialSize = true;
+      let navBarWidth = navigationBar.frame.width;
+      
+      self.notifyForBoundsChange(CGRect(
+        origin: .zero,
+        size: CGSize(width: navBarWidth, height: height)
+      ));
+      
+      self.layoutSubviews();
+      
+      print("LOG -* refreshLayoutSize: initial"
+        + " - height: \(height)"
+        + " - width: \(navBarWidth)"
+        + " - frame height: \(self.frame.height)"
+        + " - frame width: \(self.frame.width)"
+        + " - bounds height: \(self.bounds.height)"
+        + " - bounds width: \(self.bounds.width)"
+      );
+      
+    } else {
+      
+      print("LOG -* refreshLayoutSize: post"
+        + " - height: \(self.bounds.height)"
+        + " - width: \(navigationBar.frame.width)"
+        + " - frame height: \(self.frame.height)"
+        + " - frame width: \(self.frame.width)"
+        + " - bounds height: \(self.bounds.height)"
+        + " - bounds width: \(self.bounds.width)"
+      );
+      
+      self.notifyForBoundsChange(CGRect(
+        origin: .zero,
+        size: CGSize(
+          width: navigationBar.frame.width,
+          height: self.bounds.height
+        )
+      ));
+    };
   };
 };
 
@@ -357,6 +424,7 @@ extension RNINavigatorRouteHeaderView: UIScrollViewDelegate {
   
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
     guard let routeVC = self.routeViewController,
+          let navigationBar = routeVC.navigationController?.navigationBar,
           let headerHeightMin = self.headerConfig.headerHeightMin?.getHeight(viewController: routeVC),
           let headerHeightMax = self.headerConfig.headerHeightMax?.getHeight(viewController: routeVC)
     else { return };
@@ -384,7 +452,8 @@ extension RNINavigatorRouteHeaderView: UIScrollViewDelegate {
       return headerHeightMin;
     }();
     
-    let newHeaderSize = CGSize(width: self.frame.width, height: newHeaderHeight);
+    let navBarWidth   = navigationBar.frame.width;
+    let newHeaderSize = CGSize(width: navBarWidth, height: newHeaderHeight);
     
     // adjust header height
     self.headerHeightConstraint?.constant = newHeaderHeight;
@@ -392,6 +461,15 @@ extension RNINavigatorRouteHeaderView: UIScrollViewDelegate {
     // update react layout
     self.notifyForBoundsChange(
       CGRect(origin: .zero, size: newHeaderSize)
+    );
+    
+    print("LOG -* scrollViewDidScroll"
+      + " - height: \(newHeaderHeight)"
+      + " - width: \(navBarWidth)"
+      + " - frame height: \(self.frame.height)"
+      + " - frame width: \(self.frame.width)"
+      + " - bounds height: \(self.bounds.height)"
+      + " - bounds width: \(self.bounds.width)"
     );
   };
 };
