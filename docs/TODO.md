@@ -390,6 +390,7 @@
 
 - [x] (Commit: `fdaf81b`) **Implement**: Navigator command error recovery - revert state to snapshot if command failed.
 - [x] (Commit: `ead4f18`) **Implement**: `NavigatorRouteView`: Impl. `shouldComponentUpdate`
+- [x]  (Commit: `59b5207`) **Implement**: `RNINavigatorViewConstants`
 
 ---
 
