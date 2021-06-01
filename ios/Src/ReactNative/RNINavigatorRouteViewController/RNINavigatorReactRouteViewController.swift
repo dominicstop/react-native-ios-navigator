@@ -430,6 +430,11 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     /// set/replace the view controller's view
     self.view = rootView;
     
+    if let headerView = self.routeView.reactRouteHeader {
+      headerView.routeViewController = self;
+      headerView.setup(rootView: rootView);
+    };
+    
     #if DEBUG
     let subviewCount = RNIUtilities.recursivelyGetAllSubviews(for: rootView).count;
     print("LOG - RNINavigatorReactRouteViewController: loadView"
@@ -453,7 +458,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     
     self.setupSearchController();
     self.setupScrollView();
-    self.setupRouteHeader();
   };
   
   override func viewWillLayoutSubviews() {
@@ -662,76 +666,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     else { return };
     
     scrollView.automaticallyAdjustsScrollIndicatorInsets = false;
-  };
-  
-  func setupRouteHeader(){
-    guard let headerView = self.routeView.reactRouteHeader,
-          let navigationBar = self.navigationController?.navigationBar
-    else { return };
-    
-    let headerVC = RNINavigatorRouteHeaderViewController();
-    headerVC.view = headerView;
-    
-    headerVC.headerView = headerView;
-    headerVC.routeVC = self;
-    
-    self.view.addSubview(headerVC.view);
-    self.addChild(headerVC);
-    
-    let navBarWidth = navigationBar.frame.width;
-    let headerConfig = headerView.headerConfig;
-    
-    switch headerConfig.headerMode {
-      case .fixed:
-        guard let headerHeightMode = headerConfig.headerHeight else { break };
-        
-        let headerHeight = headerHeightMode.getHeight(viewController: self);
-        headerVC.setWrapperViewInsets(headerHeight: headerHeight);
-        
-        headerView.translatesAutoresizingMaskIntoConstraints = false;
-        
-        NSLayoutConstraint.activate([
-          headerView.heightAnchor  .constraint(equalToConstant: headerHeight    ),
-          headerView.leadingAnchor .constraint(equalTo: self.view.leadingAnchor ),
-          headerView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-          headerView.topAnchor     .constraint(equalTo: self.view.topAnchor     ),
-        ]);
-        
-        headerView.notifyForBoundsChange(
-          CGRect(
-            origin: .zero,
-            size: CGSize(width: navBarWidth, height: headerHeight)
-          )
-        );
-        
-      case .resize:
-        guard let headerHeightMaxMode = headerConfig.headerHeightMax else { break };
-
-        let headerHeightMax = headerHeightMaxMode.getHeight(viewController: self);
-        headerVC.setWrapperViewInsets(headerHeight: headerHeightMax);
-        
-        // use auto layout
-        headerView.translatesAutoresizingMaskIntoConstraints = false;
-        
-        headerVC.headerHeightConstraint =
-          self.view.heightAnchor.constraint(equalToConstant: headerHeightMax);
-        
-        NSLayoutConstraint.activate([
-          headerVC.headerHeightConstraint,
-          headerView.leadingAnchor .constraint(equalTo: self.view.leadingAnchor ),
-          headerView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-          headerView.topAnchor     .constraint(equalTo: self.view.topAnchor     ),
-        ]);
-        
-        headerView.notifyForBoundsChange(
-          CGRect(
-            origin: .zero,
-            size: CGSize(width: navBarWidth, height: headerHeightMax)
-          )
-        );
-    };
-    
-    headerVC.didMove(toParent: self);
   };
 };
 
