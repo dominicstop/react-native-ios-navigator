@@ -635,13 +635,12 @@ const styles = StyleSheet.create({
     height: 0,
   },
   navigatorRouteView: {
-    // don't show on first mount
-    position: 'absolute',
-    width: 0,
-    height: 0,
+    ...StyleSheet.absoluteFillObject,
+    // don't show
+    opacity: 0,
   },
   routeContentContainer: {
-    // can't add `flex: 1` else it disappears
+    ...StyleSheet.absoluteFillObject,
     overflow: 'hidden',
   },
 });

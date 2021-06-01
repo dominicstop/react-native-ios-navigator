@@ -58,6 +58,8 @@ internal class RNINavigatorRouteView: UIView {
   
   private(set) var didTriggerCleanup = false;
   
+  private var didSetInitialHeight = false;
+  
   // ------------------------------
   // MARK:- RN Exported Event Props
   // ------------------------------
@@ -587,7 +589,22 @@ internal class RNINavigatorRouteView: UIView {
   };
   
   override func reactSetFrame(_ frame: CGRect) {
-    // noop - prevent layout updates from react
+    guard !self.didSetInitialHeight,
+          let navigatorView = self.navigatorView
+    else { return };
+    
+    self.didSetInitialHeight = true;
+    
+    super.reactSetFrame(
+      CGRect(origin: .zero, size: navigatorView.frame.size)
+    );
+    
+    print("LOG *- route view: reactSetFrame"
+      + " - self.navigatorView frame: - \(self.navigatorView?.frame)"
+      + " - frame: - \(frame)"
+      + " - next: - \(self.next)"
+      + " - superview: - \(self.superview)"
+    );
   };
   
   override func reactSuperview() -> UIView! {
