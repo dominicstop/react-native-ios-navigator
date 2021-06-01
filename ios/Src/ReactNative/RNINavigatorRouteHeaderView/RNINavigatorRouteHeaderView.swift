@@ -133,12 +133,18 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
   
   var headerHeightConstraint: NSLayoutConstraint!;
   
-  var headerInitialHeight: CGFloat? {
-    guard let routeVC = self.routeViewController else { return nil };
+  var headerInitialSize: CGSize? {
+    guard let routeVC = self.routeViewController,
+          let navigationBar = routeVC.navigationController?.navigationBar,
+          let height =
+            self.headerConfig.headerHeightMax?.getHeight(viewController: routeVC) ??
+            self.headerConfig.headerHeight?   .getHeight(viewController: routeVC)
+    else { return nil };
     
-    return
-      self.headerConfig.headerHeightMax?.getHeight(viewController: routeVC) ??
-      self.headerConfig.headerHeight?   .getHeight(viewController: routeVC)
+    return CGSize(
+      width: navigationBar.frame.width,
+      height: height
+    );
   };
   
   private var didTriggerSetup = false;
@@ -203,8 +209,17 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
   };
   
   override func reactSetFrame(_ frame: CGRect) {
-    self.refreshLayoutSize();
-  };
+     guard !self.didSetInitialSize,
+           let initialSize = self.headerInitialSize
+     else { return };
+       
+     self.didSetInitialSize = true;
+   
+     super.reactSetFrame(CGRect(
+        origin: .zero,
+        size: initialSize
+     ));
+   };
   
   // -------------------------
   // MARK:- Internal Functions
@@ -250,7 +265,6 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
         
       case .resize:
         guard case let .reactScrollView(reactScrollView) = wrapperView,
-              let scrollView = reactScrollView.scrollView,
               let headerHeightMaxMode = self.headerConfig.headerHeightMax
         else { break };
         
@@ -264,19 +278,12 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
         
         // use auto layout
         self.translatesAutoresizingMaskIntoConstraints = false;
-        scrollView.translatesAutoresizingMaskIntoConstraints = false;
+       
         
         self.headerHeightConstraint =
           self.heightAnchor.constraint(equalToConstant: headerHeightMax);
         
         NSLayoutConstraint.activate([
-          // pin
-          scrollView.topAnchor     .constraint(equalTo: rootView.topAnchor     ),
-          scrollView.bottomAnchor  .constraint(equalTo: rootView.bottomAnchor  ),
-          scrollView.leadingAnchor .constraint(equalTo: rootView.leadingAnchor ),
-          scrollView.trailingAnchor.constraint(equalTo: rootView.trailingAnchor),
-        
-          //
           self.headerHeightConstraint,
           self.leadingAnchor .constraint(equalTo: rootView.leadingAnchor ),
           self.trailingAnchor.constraint(equalTo: rootView.trailingAnchor),
@@ -346,6 +353,15 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
             UIEdgeInsets(top: topInset, left: 0, bottom: 0, right: 0)
         };
     }
+  };
+  
+  func setInitialLayoutSize(){
+    guard let initialSize = self.headerInitialSize else { return };
+  
+    self.notifyForBoundsChange(CGRect(
+      origin: .zero,
+      size: initialSize
+    ));
   };
   
   func refreshLayoutSize(){

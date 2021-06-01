@@ -581,6 +581,8 @@ internal class RNINavigatorRouteView: UIView {
         
         headerView.routeView = self;
         headerView.routeViewController = self.routeVC;
+        
+        headerView.setInitialLayoutSize();
     };
   };
   
