@@ -578,9 +578,7 @@ internal class RNINavigatorRouteView: UIView {
         else { return };
         
         self.reactRouteHeader = headerView;
-        
         headerView.routeView = self;
-        headerView.routeViewController = self.routeVC;
     };
   };
   
