@@ -19,7 +19,6 @@ internal class RNINavigatorRouteView: UIView {
     case NavBarLeftItem;
     case NavBarRightItem;
     case NavBarTitleItem;
-    case RouteHeader;
   };
   
   enum NavBarVisibility: String {
@@ -527,6 +526,29 @@ internal class RNINavigatorRouteView: UIView {
   // MARK:- RN Lifecycle
   // -------------------
   
+  override func reactSetFrame(_ frame: CGRect) {
+    guard !self.didSetInitialHeight,
+          let navigatorView = self.navigatorView
+    else { return };
+    
+    self.didSetInitialHeight = true;
+    
+    super.reactSetFrame(
+      CGRect(origin: .zero, size: navigatorView.frame.size)
+    );
+    
+    print("LOG *- route view: reactSetFrame"
+      + " - self.navigatorView frame: - \(self.navigatorView?.frame)"
+      + " - frame: - \(frame)"
+      + " - next: - \(self.next)"
+      + " - superview: - \(self.superview)"
+    );
+  };
+    
+  override func reactSuperview() -> UIView! {
+    return self.navigatorView;
+  };
+  
   override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
     super.insertSubview(subview, at: atIndex);
     
@@ -574,42 +596,9 @@ internal class RNINavigatorRouteView: UIView {
       case .NavBarTitleItem:
         self.reactNavBarTitleItem = wrapperView;
         self.delegate?.didReceiveNavBarButtonTitleView(subview);
-        
-      case .RouteHeader:
-        guard let headerView = wrapperView as? RNINavigatorRouteHeaderView
-        else { return };
-        
-        self.reactRouteHeader = headerView;
-        
-        headerView.routeView = self;
-        headerView.routeViewController = self.routeVC;
-        
-        headerView.setInitialLayoutSize();
     };
   };
   
-  override func reactSetFrame(_ frame: CGRect) {
-    guard !self.didSetInitialHeight,
-          let navigatorView = self.navigatorView
-    else { return };
-    
-    self.didSetInitialHeight = true;
-    
-    super.reactSetFrame(
-      CGRect(origin: .zero, size: navigatorView.frame.size)
-    );
-    
-    print("LOG *- route view: reactSetFrame"
-      + " - self.navigatorView frame: - \(self.navigatorView?.frame)"
-      + " - frame: - \(frame)"
-      + " - next: - \(self.next)"
-      + " - superview: - \(self.superview)"
-    );
-  };
-  
-  override func reactSuperview() -> UIView! {
-    return self.navigatorView;
-  };
 };
 
 // ------------------------------------
@@ -970,9 +959,6 @@ extension RNINavigatorRouteView: RNIWrapperViewDelegate {
       case .NavBarTitleItem:
         self.reactNavBarTitleItem = nil;
         self.delegate?.didReceiveNavBarButtonTitleView(nil);
-        
-      case .RouteHeader:
-        self.reactRouteHeader = nil;
         
       default: return;
     };

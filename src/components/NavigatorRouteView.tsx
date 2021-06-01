@@ -540,12 +540,20 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
       }),
     });
 
+    const portalProps = this._routeViewPortalRef?.props;
+
+    const routeHeader = (
+      portalProps?.renderRouteHeader?.(navigation) ??
+      props.renderRouteHeader?.(navigation)
+    );
+
     return(
       <View
         style={[styles.routeContentContainer, routeOptions.routeContainerStyle]}
         nativeID={NativeIDKeys.RouteContent}
       >
         {routeContentWithProps}
+        {routeHeader}
       </View>
     );
   };
@@ -601,8 +609,6 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
             renderNavBarLeftItem={props.renderNavBarLeftItem}
             renderNavBarRightItem={props.renderNavBarRightItem}
             renderNavBarTitleItem={props.renderNavBarTitleItem}
-            //
-            renderRouteHeader={props.renderRouteHeader}
           />
         </RNINavigatorRouteView>
       </NavRouteViewContext.Provider>

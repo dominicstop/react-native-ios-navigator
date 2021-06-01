@@ -431,8 +431,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     self.view = rootView;
     
     if let headerView = self.routeView.reactRouteHeader {
-      headerView.routeViewController = self;
-      headerView.setup(rootView: rootView);
+      headerView.setup();
     };
     
     #if DEBUG
@@ -445,8 +444,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       + " - preferredStatusBarStyle: \(self.preferredStatusBarStyle.rawValue)"
     );
     #endif
-    
-    print("LOG -* route VC: loadView");
   };
   
   override func viewDidLoad() {
@@ -460,8 +457,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     
     self.setupSearchController();
     self.setupScrollView();
-    
-    print("LOG -* route VC: viewDidLoad");
   };
   
   override func viewWillLayoutSubviews() {
@@ -474,8 +469,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     
     /// update `routeView`'s header size
     routeView.reactRouteHeader?.refreshLayoutSize();
-    
-    print("LOG -* route VC: viewWillLayoutSubviews");
   };
   
   override func viewDidLayoutSubviews() {
@@ -487,8 +480,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
         
       default: break;
     };
-    
-    print("LOG -* route VC: viewDidLayoutSubviews");
   };
   
   override func viewWillAppear(_ animated: Bool) {
@@ -505,8 +496,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     
     /// Update status bar style
     self.setNeedsStatusBarAppearanceUpdate();
-    
-    print("LOG -* route VC: viewWillAppear");
   };
   
   override func viewDidAppear(_ animated: Bool) {
@@ -526,8 +515,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     
     // update the search bar
     self.refreshSearchController();
-    
-    print("LOG -* route VC: viewDidAppear");
   };
   
   override func viewWillDisappear(_ animated: Bool) {
@@ -539,8 +526,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     
     // restore navigator config if prev. overridden
     self.navigationConfigOverride.restoreConfigIfNeeded();
-    
-    print("LOG -* route VC: viewWillDisappear");
   };
   
   override func viewDidDisappear(_ animated: Bool) {
@@ -549,8 +534,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       isDone: true,
       isAnimated: animated
     );
-    
-    print("LOG -* route VC: viewDidDisappear");
   };
   
   override func willMove(toParent parent: UIViewController?){
@@ -570,8 +553,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     } else {
       // TODO: View controller was moved, possibly due replacing a route?
     };
-    
-    print("LOG -* route VC: willMove");
   };
   
   override func didMove(toParent parent: UIViewController?) {
@@ -591,8 +572,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     } else {
       // TODO: View controller was moved, possibly due replacing a route?
     };
-    
-    print("LOG -* route VC: didMove");
   };
   
   override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -603,8 +582,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     coordinator.animate(alongsideTransition: nil){ _ in
       routeHeader.refreshHeaderTopPadding();
     };
-    
-    print("LOG -* route VC: viewWillTransition");
   };
   
   // --------------------------

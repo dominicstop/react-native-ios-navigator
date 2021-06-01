@@ -14,7 +14,6 @@ type RouteComponentsWrapperProps = Required<Pick<NavigatorRouteViewProps,
   | 'renderNavBarLeftItem'
   | 'renderNavBarRightItem'
   | 'renderNavBarTitleItem'
-  | 'renderRouteHeader'
 >> & {
   navigation: NavigationObject;
   getPortalRef: () => RouteViewPortal;
@@ -49,8 +48,7 @@ export class RouteComponentsWrapper extends React.Component<RouteComponentsWrapp
     const hasComponents = (
      (props.renderNavBarLeftItem  != null) || 
      (props.renderNavBarRightItem != null) || 
-     (props.renderNavBarTitleItem != null) || 
-     (props.renderRouteHeader     != null)
+     (props.renderNavBarTitleItem != null)
     );
 
     if(hasComponents){
@@ -79,11 +77,6 @@ export class RouteComponentsWrapper extends React.Component<RouteComponentsWrapp
       props.renderNavBarTitleItem?.(navigation)
     );
 
-    const routeHeader = (
-      portalProps?.renderRouteHeader?.(navigation) ??
-      props.renderRouteHeader?.(navigation)
-    );
-
     return(
       <React.Fragment>
         {navBarLeftItem && (
@@ -110,7 +103,6 @@ export class RouteComponentsWrapper extends React.Component<RouteComponentsWrapp
             {navBarTitleItem}
           </RNIWrapperView>
         )}
-        {routeHeader}
       </React.Fragment>
     );
   };
