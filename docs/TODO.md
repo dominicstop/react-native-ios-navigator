@@ -183,8 +183,9 @@
 
 <br>
 
-- [ ] **Fix**: `RCTScrollView` indicator insets is wrong.
-	- It looks like it's doubled.
+- [ ] **Fix**: `RCTScrollView` indicator bottom insets is wrong.
+
+  - For devices with notches, the scroll view insets for the left and right of the screen is wrong. The top and bottom insets are correct (e.g. the scroll indicator insets are insetted from the home indicator and navigation bar)
 
 ---
 
@@ -387,10 +388,13 @@
 <br>
 
 - [x] (Commit: `0bb913a`) **Implement**: Update NavBar Item Events Payload - Add index and base event payload to `leftBarButtonItem` and `rightBarButtonItem` events.
-
 - [x] (Commit: `fdaf81b`) **Implement**: Navigator command error recovery - revert state to snapshot if command failed.
 - [x] (Commit: `ead4f18`) **Implement**: `NavigatorRouteView`: Impl. `shouldComponentUpdate`
-- [x]  (Commit: `59b5207`) **Implement**: `RNINavigatorViewConstants`
+- [x]  (Commit: `43eb794`) **Implement**: `RNINavigatorViewConstants`.
+
+<br>
+
+- [x]  (Commit: `59b5207`) Fix: `RNINavigatorRouteView` Layout Bug  — Route view flickering in during the push transition.
 
 ---
 
