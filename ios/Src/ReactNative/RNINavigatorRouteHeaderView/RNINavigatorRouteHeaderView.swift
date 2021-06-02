@@ -229,18 +229,20 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
       self.headerConfig.headerHeightMax?.getHeight(viewController: parentRouteVC) ??
       self.headerConfig.headerHeight?   .getHeight(viewController: parentRouteVC);
     
-    print("LOG *- header view: reactSetFrame"
-      + " - routeVC: \(parentRouteVC)"
-      + " - initialWidth: \(initialWidth)"
-      + " - initialHeight: \(initialHeight)"
+    let newSize = CGSize(width: initialWidth, height: initialHeight);
+    
+    // set the initial size of the header view...
+    super.reactSetFrame(
+      CGRect(origin: frame.origin, size: newSize)
     );
     
-    super.reactSetFrame(
-      CGRect(
-        origin: .zero,
-        size: CGSize(width: initialWidth, height: initialHeight)
-      )
+    // notify ui manager that the bounds have changed...
+    self.notifyForBoundsChange(
+      CGRect(origin: .zero, size: newSize)
     );
+    
+    // and force "update".
+    self.layoutSubviews();
   };
   
   // -------------------------
@@ -339,45 +341,19 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
         };
     }
   };
-  
-  func setInitialLayoutSize(){
-    guard let initialSize = self.headerInitialSize else { return };
-  
-    self.notifyForBoundsChange(CGRect(
-      origin: .zero,
-      size: initialSize
-    ));
-  };
-  
+
   func refreshLayoutSize(){
     guard let routeVC = self.routeViewController,
           let navigationBar = routeVC.navigationController?.navigationBar
     else { return };
     
-    if !self.didSetInitialSize,
-        let height =
-          self.headerConfig.headerHeightMax?.getHeight(viewController: routeVC) ??
-          self.headerConfig.headerHeight?   .getHeight(viewController: routeVC) {
-      
-      self.didSetInitialSize = true;
-      let navBarWidth = navigationBar.frame.width;
-      
-      self.notifyForBoundsChange(CGRect(
-        origin: .zero,
-        size: CGSize(width: navBarWidth, height: height)
-      ));
-      
-      self.layoutSubviews();
-      
-    } else {
-      self.notifyForBoundsChange(CGRect(
-        origin: .zero,
-        size: CGSize(
-          width: navigationBar.frame.width,
-          height: self.bounds.height
-        )
-      ));
-    };
+    self.notifyForBoundsChange(CGRect(
+      origin: .zero,
+      size: CGSize(
+        width: navigationBar.frame.width,
+        height: self.bounds.height
+      )
+    ));
   };
 };
 
