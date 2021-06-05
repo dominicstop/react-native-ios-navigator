@@ -254,17 +254,22 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
   /// on the parent vc's `willLayoutSubviews`
   func setup() {
     guard !self.didTriggerSetup,
-          let routeVC = self.routeViewController,
+          let navController = self.routeViewController?.navigationController,
           let wrapperView = self.wrapperView
     else { return };
     
     self.didTriggerSetup = true;
     self.refreshHeaderTopPadding();
     
+    /// NOTE:
+    /// `setup` is called on `loadView` in the parent route vc, but during that
+    /// time the safe area insets haven't been set yet, so we'll use the nav.
+    /// controller for `getHeight` so it can get the safe area insets.
+    
     switch self.headerConfig.headerMode {
       case .fixed:
         guard let headerHeightMode = self.headerConfig.headerHeight else { break };
-        let headerHeight = headerHeightMode.getHeight(viewController: routeVC);
+        let headerHeight = headerHeightMode.getHeight(viewController: navController);
 
         self.setWrapperViewInsets(headerHeight: headerHeight);
         
@@ -275,7 +280,7 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
         
         reactScrollView.addScrollListener(self);
         
-        let headerHeightMax = headerHeightMaxMode.getHeight(viewController: routeVC);
+        let headerHeightMax = headerHeightMaxMode.getHeight(viewController: navController);
         self.setWrapperViewInsets(headerHeight: headerHeightMax);
     };
   };
@@ -300,10 +305,12 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
     self.bridge.uiManager.setLocalData(localData, for: self);
   };
   
-  func setWrapperViewInsets(headerHeight: CGFloat){
-    guard let routeVC = self.routeViewController else { return };
+  private func setWrapperViewInsets(headerHeight: CGFloat){
+    guard let routeVC = self.routeViewController,
+          let navigatorView = routeVC.routeView.navigatorView
+    else { return };
     
-    let safeAreaInsets = routeVC.synthesizedSafeAreaInsets;
+    let safeAreaInsets = navigatorView.navigationVC.synthesizedSafeAreaInsets;
     
     switch self.wrapperView  {
       case let .reactScrollView(reactScrollView):
