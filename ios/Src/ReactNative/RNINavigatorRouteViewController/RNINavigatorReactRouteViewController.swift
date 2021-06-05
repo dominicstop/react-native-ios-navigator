@@ -444,6 +444,10 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       + " - preferredStatusBarStyle: \(self.preferredStatusBarStyle.rawValue)"
     );
     #endif
+    
+    print("LOG *- route vc: loadView"
+      + " - synthesizedSafeAreaInsets: \(self.synthesizedSafeAreaInsets)"
+    );
   };
   
   override func viewDidLoad() {
@@ -457,18 +461,29 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     
     self.setupSearchController();
     self.setupScrollView();
+    
+    print("LOG *- route vc: viewDidLoad"
+      + " - synthesizedSafeAreaInsets: \(self.synthesizedSafeAreaInsets)"
+    );
   };
   
   override func viewWillLayoutSubviews() {
     super.viewWillLayoutSubviews();
     
-    guard let routeView = self.routeView else { return };
-    
     /// update `routeView`'s size
-    routeView.notifyForBoundsChange(self.view.bounds);
+    self.routeView!.notifyForBoundsChange(self.view.bounds);
     
     /// update `routeView`'s header size
-    routeView.reactRouteHeader?.refreshLayoutSize();
+    if let routeHeader = routeView.reactRouteHeader {
+      routeHeader.refreshLayoutSize();
+      routeHeader.setWrapperViewInsets();
+    };
+    
+    self.refreshWrapperViewInsets();
+    
+    print("LOG *- route vc: viewWillLayoutSubviews"
+      + " - synthesizedSafeAreaInsets: \(self.synthesizedSafeAreaInsets)"
+    );
   };
   
   override func viewDidLayoutSubviews() {
@@ -480,6 +495,10 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
         
       default: break;
     };
+    
+    print("LOG *- route vc: viewDidLayoutSubviews"
+      + " - synthesizedSafeAreaInsets: \(self.synthesizedSafeAreaInsets)"
+    );
   };
   
   override func viewWillAppear(_ animated: Bool) {
@@ -496,6 +515,10 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     
     /// Update status bar style
     self.setNeedsStatusBarAppearanceUpdate();
+    
+    print("LOG *- route vc: viewWillAppear"
+      + " - synthesizedSafeAreaInsets: \(self.synthesizedSafeAreaInsets)"
+    );
   };
   
   override func viewDidAppear(_ animated: Bool) {
@@ -515,6 +538,10 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     
     // update the search bar
     self.refreshSearchController();
+    
+    print("LOG *- route vc: viewDidAppear"
+      + " - synthesizedSafeAreaInsets: \(self.synthesizedSafeAreaInsets)"
+    );
   };
   
   override func viewWillDisappear(_ animated: Bool) {
@@ -577,10 +604,22 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
   override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
     super.viewWillTransition(to: size, with: coordinator);
     
-    // device rotation - update the route header's top padding
-    guard let routeHeader = self.routeView?.reactRouteHeader else { return };
-    coordinator.animate(alongsideTransition: nil){ _ in
-      routeHeader.refreshHeaderTopPadding();
+    print("LOG *- route vc: viewWillTransition"
+      + " - synthesizedSafeAreaInsets: \(self.synthesizedSafeAreaInsets)"
+    );
+    
+    if case let .reactScrollView(view: reactScrollView) = self.wrapperView {
+      //let safeAreaInsets = self.synthesizedSafeAreaInsets;
+      
+      // reactScrollView.contentInset = safeAreaInsets;
+      // reactScrollView.refreshContentInset();
+    };
+    
+    if let routeHeader = self.routeView?.reactRouteHeader {
+      // device rotation - update the route header's top padding
+      coordinator.animate(alongsideTransition: nil){ _ in
+        routeHeader.refreshHeaderTopPadding();
+      };
     };
   };
   
@@ -665,6 +704,57 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     else { return };
     
     scrollView.automaticallyAdjustsScrollIndicatorInsets = false;
+  };
+  
+  func refreshWrapperViewInsets(){
+    guard let bridge = self.routeView.bridge else { return };
+    
+    let safeAreaInsets = self.synthesizedSafeAreaInsets;
+    let horizontalInsets = safeAreaInsets.left + safeAreaInsets.right;
+    
+    guard case let .reactScrollView(view: reactScrollView) = self.wrapperView
+    else { return };
+    
+    let isHorizontal = horizontalInsets > 0;
+    
+    if isHorizontal {
+      reactScrollView.contentInset = safeAreaInsets;
+      reactScrollView.refreshContentInset();
+      
+      let currentContentSize = reactScrollView.contentSize;
+      
+      let newSize = CGSize(
+        width : currentContentSize.width - horizontalInsets,
+        height: currentContentSize.height
+      );
+      
+      reactScrollView.contentSize = newSize;
+      bridge.uiManager.setSize(newSize, for: reactScrollView.contentView);
+      
+      reactScrollView.contentView.layoutSubviews();
+      
+      reactScrollView.layoutSubviews();
+      reactScrollView.refreshContentInset();
+        
+    } else {
+      
+    };
+    
+    
+    
+    
+    
+    
+    
+    //reactScrollView.setNeedsLayout();
+    //reactScrollView.layoutSubviews();
+    
+    
+    
+    
+    
+    print("LOG *- refreshWrapperViewInsets - horizontalInsets: \(horizontalInsets)");
+    print("LOG *- refreshWrapperViewInsets - safe area insets: \(safeAreaInsets)");
   };
 };
 
