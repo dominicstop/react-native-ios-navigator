@@ -2,61 +2,64 @@ import { ViewStyle, requireNativeComponent, UIManager } from 'react-native';
 import type { NavBarAppearanceCombinedConfig } from 'src/types/NavBarAppearanceConfig';
 
 //#region - `RNINavigatorView` Event Payloads
-export type OnNavRouteViewAddedPayload = { nativeEvent: {
-  target       : number;
-  routeID      : number;
-  routeKey     : string;
-  routeIndex   : number;
-  isNativeRoute: boolean;
-  navigatorID  : number;
-}};
-
-export type OnNavRouteWillPopPayload = { nativeEvent: {
-  target         : number;
-  routeKey       : string;
-  routeIndex     : number;
-  navigatorID    : number;
-  isUserInitiated: boolean;
-}};
-
-export type OnNavRouteDidPopPayload = { nativeEvent: {
-  target         : number;
-  routeKey       : string;
-  routeIndex     : number;
-  navigatorID    : number;
-  isUserInitiated: boolean;
-}};
-
-export type OnSetNativeRouteDataPayload = { nativeEvent: {
-  target     : number;
-  navigatorID: number;
-}};
-
-export type OnNativeCommandRequestPayload = { nativeEvent: {
+type EventBasePayload = {
   target: number;
   navigatorID: number;
-  commandData: {
-    commandKey: 'pushViewController';
-    routeID: number;
-    routeKey: string;
-    isAnimated: boolean;
-  } | {
-    commandKey: 'push';
-    routeKey: string,
-    routeProps?: object;
-    isAnimated: boolean
-  } | {
-    commandKey: 'pop';
-    isAnimated: boolean;
+};
+
+export type OnNavRouteViewAddedPayload = { 
+  nativeEvent: EventBasePayload & {
+    routeID      : number;
+    routeKey     : string;
+    routeIndex   : number;
+    isNativeRoute: boolean;
   };
-}};
+};
 
-export type OnCustomCommandFromNativePayload = { nativeEvent: {
-  target: number;
-  navigatorID: number;
-  commandKey: string;
-  commandData: object;
-}};
+export type OnNavRouteWillPopPayload = { 
+  nativeEvent: EventBasePayload & {
+    routeKey       : string;
+    routeIndex     : number;
+    isUserInitiated: boolean;
+  };
+};
+
+export type OnNavRouteDidPopPayload = { 
+  nativeEvent: EventBasePayload & {
+    routeKey       : string;
+    routeIndex     : number;
+    isUserInitiated: boolean;
+  };
+};
+
+export type OnSetNativeRouteDataPayload = { nativeEvent: EventBasePayload };
+
+export type OnNativeCommandRequestPayload = { 
+  nativeEvent: EventBasePayload & {
+    commandData: {
+      commandKey: 'pushViewController';
+      routeID: number;
+      routeKey: string;
+      isAnimated: boolean;
+    } | {
+      commandKey: 'push';
+      routeKey: string,
+      routeProps?: object;
+      isAnimated: boolean
+    } | {
+      commandKey: 'pop';
+      isAnimated: boolean;
+    };
+  };
+};
+
+export type OnCustomCommandFromNativePayload = { 
+  nativeEvent: EventBasePayload & {
+    commandKey: string;
+    commandData: object;
+  };
+};
+
 //#endregion
 
 export type NativeRouteMap = {
@@ -86,10 +89,12 @@ export type RNINavigatorViewProps = {
   navBarAppearance: NavBarAppearanceCombinedConfig;
   
   // Native Events
-  onNavRouteViewAdded      ?: (event: OnNavRouteViewAddedPayload      ) => void;
-  onNavRouteWillPop        ?: (event: OnNavRouteWillPopPayload        ) => void;
-  onNavRouteDidPop         ?: (event: OnNavRouteDidPopPayload         ) => void;
-  onSetNativeRoutes        ?: (event: OnSetNativeRouteDataPayload     ) => void;
+  onNavRouteViewAdded?: (event: OnNavRouteViewAddedPayload ) => void;
+  onSetNativeRoutes  ?: (event: OnSetNativeRouteDataPayload) => void;
+
+  onNavRouteWillPop?: (event: OnNavRouteWillPopPayload) => void;
+  onNavRouteDidPop ?: (event: OnNavRouteDidPopPayload ) => void;
+
   onNativeCommandRequest   ?: (event: OnNativeCommandRequestPayload   ) => void;
   onCustomCommandFromNative?: (event: OnCustomCommandFromNativePayload) => void;
 };
