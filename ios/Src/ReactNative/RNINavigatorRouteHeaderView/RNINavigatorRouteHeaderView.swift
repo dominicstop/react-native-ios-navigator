@@ -145,8 +145,6 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
     );
   };
   
-  private var currentWrapperViewInsets: UIEdgeInsets?;
-  
   private var didTriggerSetup = false;
   private var didSetInitialSize = false;
   
@@ -256,16 +254,29 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
   /// on the parent vc's `willLayoutSubviews`
   func setup() {
     guard !self.didTriggerSetup,
+          let routeVC = self.routeViewController,
           let wrapperView = self.wrapperView
     else { return };
     
     self.didTriggerSetup = true;
     self.refreshHeaderTopPadding();
     
-    if self.headerConfig.headerMode == .resize,
-       case let .reactScrollView(reactScrollView) = wrapperView {
-      
-      reactScrollView.addScrollListener(self);
+    switch self.headerConfig.headerMode {
+      case .fixed:
+        guard let headerHeightMode = self.headerConfig.headerHeight else { break };
+        let headerHeight = headerHeightMode.getHeight(viewController: routeVC);
+
+        self.setWrapperViewInsets(headerHeight: headerHeight);
+        
+      case .resize:
+        guard case let .reactScrollView(reactScrollView) = wrapperView,
+              let headerHeightMaxMode = self.headerConfig.headerHeightMax
+        else { break };
+        
+        reactScrollView.addScrollListener(self);
+        
+        let headerHeightMax = headerHeightMaxMode.getHeight(viewController: routeVC);
+        self.setWrapperViewInsets(headerHeight: headerHeightMax);
     };
   };
 
@@ -289,14 +300,12 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
     self.bridge.uiManager.setLocalData(localData, for: self);
   };
   
-  func setWrapperViewInsets(){
+  func setWrapperViewInsets(headerHeight: CGFloat){
     guard let routeVC = self.routeViewController else { return };
     
-    let headerHeight = self.bounds.height;
     let safeAreaInsets = routeVC.synthesizedSafeAreaInsets;
     
-    guard self.currentWrapperViewInsets != safeAreaInsets else { return };
-    self.currentWrapperViewInsets = safeAreaInsets;
+    print("LOG *- header view, safeAreaInsets: \(safeAreaInsets)");
     
     switch self.wrapperView  {
       case let .reactScrollView(reactScrollView):
@@ -308,30 +317,19 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
         };
         
         if #available(iOS 13.0, *) {
-          scrollView.automaticallyAdjustsScrollIndicatorInsets = false;
+          scrollView.automaticallyAdjustsScrollIndicatorInsets = true;
         };
-        
-        print("LOG *- route header: setInitialWrapperViewInsets"
-          + " - synthesizedSafeAreaInsets: \(safeAreaInsets)"
-          + " - safeAreaInsets: \(safeAreaInsets)"
-        );
         
         reactScrollView.automaticallyAdjustContentInsets = false;
         
         let headerInset = UIEdgeInsets(
-          top   : headerHeight,
-          left  : safeAreaInsets.left,
-          bottom: safeAreaInsets.bottom,
-          right : safeAreaInsets.right
+          top: headerHeight, left: 0, bottom: safeAreaInsets.bottom, right: 0
         );
         
         reactScrollView.contentInset = headerInset;
+        
         scrollView.scrollIndicatorInsets = headerInset;
-        
         scrollView.contentOffset = CGPoint(x: 0, y: -headerHeight);
-        
-        reactScrollView.layoutSubviews();
-        reactScrollView.refreshContentInset();
         
       default:
         if #available(iOS 11.0, *) {

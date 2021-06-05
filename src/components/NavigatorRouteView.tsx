@@ -646,7 +646,6 @@ const styles = StyleSheet.create({
     opacity: 0,
   },
   routeContentContainer: {
-    // can't add `flex: 1` else it disappears
     ...StyleSheet.absoluteFillObject,
     overflow: 'hidden',
   },

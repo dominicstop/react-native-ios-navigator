@@ -536,6 +536,13 @@ internal class RNINavigatorRouteView: UIView {
     super.reactSetFrame(
       CGRect(origin: .zero, size: navigatorView.frame.size)
     );
+    
+    print("LOG *- route view: reactSetFrame"
+      + " - self.navigatorView frame: - \(self.navigatorView?.frame)"
+      + " - frame: - \(frame)"
+      + " - next: - \(self.next)"
+      + " - superview: - \(self.superview)"
+    );
   };
     
   override func reactSuperview() -> UIView! {
