@@ -776,37 +776,16 @@ internal extension RNINavigatorRouteView {
       );
     };
     
-    let safeAreaInsets: NSDictionary = {
-      let insets = routeVC.synthesizedSafeAreaInsets;
-      
-      return [
-        "top"   : insets.top,
-        "bottom": insets.bottom,
-        "left"  : insets.left,
-        "right" : insets.right,
-      ];
-    }();
-    
-    let bounds: NSDictionary = {
-      let bounds = routeVC.view.bounds;
-      
-      return [
-        "x"     : bounds.origin.x,
-        "y"     : bounds.origin.y,
-        "height": bounds.size.height,
-        "width" : bounds.size.width,
-      ];
-    }();
-    
     completion([
       "isCurrentlyInFocus": routeVC.isCurrentlyInFocus,
       
       // ui values
-      "navBarHeight"             : routeVC.navBarHeight,
-      "statusBarHeight"          : routeVC.statusBarHeight,
+      "navBarHeight"   : routeVC.navBarHeight,
+      "statusBarHeight": routeVC.statusBarHeight,
+      "safeAreaInsets" : routeVC.view.bounds.dictionary,
+      "bounds"         : routeVC.synthesizedSafeAreaInsets.dictionary,
+      
       "navBarWithStatusBarHeight": routeVC.navBarWithStatusBarHeight,
-      "safeAreaInsets"           : safeAreaInsets,
-      "bounds"                   : bounds,
     ]);
   };
 };
