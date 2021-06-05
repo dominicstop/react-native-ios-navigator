@@ -305,8 +305,6 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
     
     let safeAreaInsets = routeVC.synthesizedSafeAreaInsets;
     
-    print("LOG *- header view, safeAreaInsets: \(safeAreaInsets)");
-    
     switch self.wrapperView  {
       case let .reactScrollView(reactScrollView):
         guard let scrollView = reactScrollView.scrollView else { break };
