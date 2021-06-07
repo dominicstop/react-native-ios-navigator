@@ -287,18 +287,25 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
 
   func refreshHeaderTopPadding(){
     guard !self.didTriggerCleanup,
-          let routeVC = self.routeViewController
+          let navigatorVC = self.routeView?.navigatorView?.navigationVC
     else { return };
     
-    let height = self._headerTopPadding.getHeight(viewController: routeVC);
+    let insets = navigatorVC.synthesizedSafeAreaInsets;
+    let height = self._headerTopPadding.getHeight(viewController: navigatorVC);
     
     let localData = RNINavigatorRouteHeaderShadowView.RouteHeaderLocalData();
-    localData.insets = UIEdgeInsets(top: height, left: 0, bottom: 0, right: 0);
+    localData.insets = UIEdgeInsets(
+      top   : height,
+      left  : insets.left,
+      bottom: 0,
+      right : insets.right
+    );
     
     #if DEBUG
     print("LOG - RNINavigatorRouteHeaderView: refreshHeaderTopPadding"
       + " - headerTopPadding: \(self._headerTopPadding)"
       + " - height: \(height)"
+      + " - insets: \(insets)"
     );
     #endif
     
