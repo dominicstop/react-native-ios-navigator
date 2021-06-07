@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { StyleSheet, View, findNodeHandle } from 'react-native';
+import { StyleSheet, View, findNodeHandle, ViewStyle } from 'react-native';
 
 import type { NavigationObject } from '../types/NavigationObject';
 import type { RouteOptions } from '../types/RouteOptions';
@@ -14,23 +14,26 @@ import { RNINavigatorRouteView, RNINavigatorRouteViewProps, onPressNavBarItem, o
 import { RNINavigatorRouteViewModule } from '../native_modules/RNINavigatorRouteViewModule';
 
 import * as Helpers from '../functions/Helpers';
+
 import { EventEmitter } from '../functions/EventEmitter';
 import { CompareRouteTransitionPushConfig } from '../functions/CompareRouteOptions';
 
 import { NavRouteViewContext } from '../context/NavRouteViewContext';
+import { NavigatorUIConstantsContext, NavigatorUIConstantsContextProps } from '../context/NavigatorUIConstantsContext';
+
 import { NativeIDKeys } from '../constants/LibraryConstants';
 
 
 //#region - Type Definitions
 /** Event emitter keys for `NavigatorRouteView` */
 export enum NavRouteEvents {
-  // Navigator push/pop events
+  // Navigator Route - push/pop events
   onRouteWillPush = "onRouteWillPush",
   onRouteDidPush  = "onRouteDidPush" ,
   onRouteWillPop  = "onRouteWillPop" ,
   onRouteDidPop   = "onRouteDidPop"  ,
 
-  // Navigator focus/blur events
+  // Navigator Route - focus/blur events
   onRouteWillFocus = "onRouteWillFocus",
   onRouteDidFocus  = "onRouteDidFocus" ,
   onRouteWillBlur  = "onRouteWillBlur" ,
@@ -103,8 +106,12 @@ type NavigatorRouteViewState = {
 
 
 export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps, NavigatorRouteViewState> {
+  static contextType = NavigatorUIConstantsContext;
+  
   //#region - Property Declarations
   state: NavigatorRouteViewState;
+  context: NavigatorUIConstantsContextProps;
+
   routeContentRef: React.Component<RouteContentProps>;
 
   routeStatus: RouteStatus;
@@ -223,6 +230,10 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
       routeContainerStyle: (
         routeOptions       ?.routeContainerStyle ??
         routeOptionsDefault?.routeContainerStyle
+      ),
+      automaticallyAddHorizontalSafeAreaInsets: (
+        routeOptions       ?.automaticallyAddHorizontalSafeAreaInsets ??
+        routeOptionsDefault?.automaticallyAddHorizontalSafeAreaInsets ?? true
       ),
       // #region - Transition Config |
       // ----------------------------*
@@ -528,9 +539,12 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
   
   _renderRouteContents = (navigation: NavigationObject) => {
     const props = this.props;
+    const context = this.context;
+
     const routeContent = props.renderRouteContent();
 
     const routeOptions = navigation.routeOptions;
+    const safeAreaInsets = context.safeAreaInsets;
 
     const routeContentWithProps = React.cloneElement<RouteContentProps>(routeContent, {
       navigation,
@@ -547,9 +561,16 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
       props.renderRouteHeader?.(navigation)
     );
 
+    const routeContainerStyle: ViewStyle = {
+      ...(routeOptions.automaticallyAddHorizontalSafeAreaInsets && {
+        paddingLeft : safeAreaInsets?.left  ?? 0,
+        paddingRight: safeAreaInsets?.right ?? 0,
+      }),
+    };
+
     return(
       <View
-        style={[styles.routeContentContainer, routeOptions.routeContainerStyle]}
+        style={[styles.routeContentContainer, routeContainerStyle, routeOptions.routeContainerStyle]}
         nativeID={NativeIDKeys.RouteContent}
       >
         {routeContentWithProps}

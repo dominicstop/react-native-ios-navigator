@@ -9,8 +9,9 @@ export * from './components/RouteViewEvents';
 
 export * from './hoc/withRouteViewLifecycle';
 export * from './hooks/useNavRouteEvents';
-export * from './context/NavRouteViewContext';
 
+export * from './context/NavRouteViewContext';
+export * from './context/NavigatorUIConstantsContext';
 
 // Types
 export { RNINavigatorViewConstants as NavigatorViewConstants } from './native_components/RNINavigatorView';

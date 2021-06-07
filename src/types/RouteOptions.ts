@@ -13,6 +13,7 @@ export type RouteOptions = {
 
   statusBarStyle?: StatusBarStyle;
   routeContainerStyle?: ViewStyle;
+  automaticallyAddHorizontalSafeAreaInsets?: boolean;
 
   // Transition Config
   // -----------------

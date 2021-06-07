@@ -469,6 +469,9 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     
     /// update `routeView`'s header size
     routeView.reactRouteHeader?.refreshLayoutSize();
+    
+    /// trigger `onUIConstantsDidChange`
+    routeView.navigatorView!.navigatorConstants.refreshConstants();
   };
   
   override func viewDidLayoutSubviews() {
@@ -577,10 +580,17 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
   override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
     super.viewWillTransition(to: size, with: coordinator);
     
-    // device rotation - update the route header's top padding
-    guard let routeHeader = self.routeView?.reactRouteHeader else { return };
+    guard let routeView = self.routeView else { return };
+    
     coordinator.animate(alongsideTransition: nil){ _ in
-      routeHeader.refreshHeaderTopPadding();
+      if let navigatorView = routeView.navigatorView {
+        navigatorView.navigatorConstants.refreshConstants();
+      };
+      
+      if let routeHeader = self.routeView?.reactRouteHeader {
+        // rotation - update the route header's top padding
+        routeHeader.refreshHeaderTopPadding();
+      };
     };
   };
   

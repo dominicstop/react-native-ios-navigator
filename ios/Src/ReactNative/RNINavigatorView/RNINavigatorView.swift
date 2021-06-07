@@ -38,6 +38,8 @@ public final class RNINavigatorView: UIView {
   /// if set to `true`, views behind the navigation bar will receive touch events
   var allowTouchEventsToPassThroughNavigationBar = false;
   
+  var navigatorConstants: RNINavigatorUIConstants!;
+  
   // MARK: Properties - Private
   // --------------------------
 
@@ -116,6 +118,8 @@ public final class RNINavigatorView: UIView {
   /// pop (because the "back" button was pressed or it was swiped back via a
   /// gesture), or due to it being "popped" programmatically via the nav.
   @objc var onNavRouteDidPop: RCTBubblingEventBlock?;
+  
+  @objc var onUIConstantsDidChange: RCTBubblingEventBlock?;
   
   // ------------------------
   // MARK:- RN Exported Props
@@ -276,6 +280,8 @@ public final class RNINavigatorView: UIView {
     super.init(frame: CGRect());
     
     self.bridge = bridge;
+    
+    self.navigatorConstants = RNINavigatorUIConstants(navigatorView: self);
     self.setupNavigationController();
   };
   
@@ -290,6 +296,7 @@ public final class RNINavigatorView: UIView {
       
     } else {
       // B - this view has been "mounted"...
+      
       // add the custom RN navBar BG if any
       self.embedCustomNavBarBackground();
       
@@ -445,6 +452,8 @@ fileprivate extension RNINavigatorView {
     let navigationVC = RNINavigationController();
     // save a ref to this instance
     self.navigationVC = navigationVC;
+    
+    navigationVC.delegate = self;
     
     // add vc's view as subview
     self.addSubview(navigationVC.view);
@@ -1239,6 +1248,7 @@ extension RNINavigatorView: RNINavigatorRouteViewControllerDelegate {
 // --------------------------------------------
 
 extension RNINavigatorView: RNINavigatorNativeCommands {
+  
   public func pushViewController(
     _ viewController: RNINavigatorRouteBaseViewController,
     animated: Bool = true
@@ -1310,5 +1320,21 @@ extension RNINavigatorView: RNINavigatorNativeCommands {
       "commandKey" : key,
       "commandData": data
     ]);
+  };
+};
+
+// ------------------------------------------------
+// MARK:- Extension: UINavigationControllerDelegate
+// ------------------------------------------------
+
+extension RNINavigatorView: UINavigationControllerDelegate {
+  
+  public func navigationController(
+    _ navigationController: UINavigationController,
+    willShow viewController: UIViewController,
+    animated: Bool
+  ) {
+    // trigger `onUIConstantsDidChange`
+    self.navigatorConstants.refreshConstants();
   };
 };

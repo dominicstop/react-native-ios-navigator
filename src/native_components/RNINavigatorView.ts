@@ -1,4 +1,5 @@
 import { ViewStyle, requireNativeComponent, UIManager } from 'react-native';
+import type { EdgeInsets } from 'src/types/MiscTypes';
 import type { NavBarAppearanceCombinedConfig } from 'src/types/NavBarAppearanceConfig';
 
 //#region - `RNINavigatorView` Event Payloads
@@ -32,7 +33,9 @@ export type OnNavRouteDidPopPayload = {
   };
 };
 
-export type OnSetNativeRouteDataPayload = { nativeEvent: EventBasePayload };
+export type OnSetNativeRouteDataPayload = {
+  nativeEvent: EventBasePayload;
+};
 
 export type OnNativeCommandRequestPayload = { 
   nativeEvent: EventBasePayload & {
@@ -60,6 +63,12 @@ export type OnCustomCommandFromNativePayload = {
   };
 };
 
+export type OnUIConstantsDidChangePayload = { 
+  nativeEvent: EventBasePayload & {
+    statusBarHeight: number;
+    safeAreaInsets: EdgeInsets;
+  };
+};
 //#endregion
 
 export type NativeRouteMap = {
@@ -97,6 +106,8 @@ export type RNINavigatorViewProps = {
 
   onNativeCommandRequest   ?: (event: OnNativeCommandRequestPayload   ) => void;
   onCustomCommandFromNative?: (event: OnCustomCommandFromNativePayload) => void;
+
+  onUIConstantsDidChange?: (event: OnUIConstantsDidChangePayload) => void;
 };
 
 export type RNINavigatorViewConstantsObject = {

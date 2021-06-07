@@ -2,10 +2,12 @@ import React, { ReactElement } from 'react';
 import { StyleSheet, findNodeHandle, ViewStyle } from 'react-native';
 
 import { RNIWrapperView } from '../native_components/RNIWrapperView';
-import { NativeRouteMap, RNINavigatorView, RNINavigatorViewProps } from '../native_components/RNINavigatorView';
+import { NativeRouteMap, RNINavigatorView, RNINavigatorViewProps, OnNavRouteViewAddedPayload, OnUIConstantsDidChangePayload } from '../native_components/RNINavigatorView';
 import { RNINavigatorViewModule } from '../native_modules/RNINavigatorViewModule';
 
 import { NavigatorRouteView } from './NavigatorRouteView';
+
+import { NavigatorUIConstantsContext } from '../context/NavigatorUIConstantsContext';
 
 import type { RouteOptions } from '../types/RouteOptions';
 import type { NavRouteItem } from '../types/NavSharedTypes';
@@ -13,7 +15,6 @@ import type { NavCommandPushOptions, RenderNavBarItem, NavCommandPopOptions } fr
 
 import type { RouteContentProps } from '../components/NavigatorRouteView';
 
-import type { OnNavRouteViewAddedPayload } from '../native_components/RNINavigatorView';
 import type { RouteTransitionPopConfig, RouteTransitionPushConfig } from '../native_components/RNINavigatorRouteView';
 
 import * as Helpers from '../functions/Helpers';
@@ -31,6 +32,7 @@ type OnNavRouteWillPop      =  RNINavigatorViewProps['onNavRouteWillPop'];
 type OnNavRouteDidPop       =  RNINavigatorViewProps['onNavRouteDidPop'];
 type OnSetNativeRoutes      =  RNINavigatorViewProps['onSetNativeRoutes'];
 type OnNativeCommandRequest =  RNINavigatorViewProps['onNativeCommandRequest'];
+type OnUIConstantsDidChange =  RNINavigatorViewProps['onUIConstantsDidChange'];
 //#endregion
 
 export type OnCustomCommandFromNative = RNINavigatorViewProps['onCustomCommandFromNative'];
@@ -113,8 +115,13 @@ export type NavigatorViewProps = Partial<Pick<RNINavigatorViewProps,
 };
 
 /** `NavigatorView` comp. state */
-type NavigatorViewState = {
+type NavigatorViewState = Pick<OnUIConstantsDidChangePayload['nativeEvent'],
+  | 'statusBarHeight'
+  | 'safeAreaInsets'
+> & {
   activeRoutes: Array<NavRouteStateItem>;
+
+  // push/pop override config
   transitionConfigPushOverride?: RouteTransitionPushConfig;
   transitionConfigPopOverride ?: RouteTransitionPopConfig;
 };
@@ -165,8 +172,12 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
     this.state = {
       activeRoutes: this.getInitialRoutes(),
+
       transitionConfigPushOverride: null,
       transitionConfigPopOverride: null,
+
+      safeAreaInsets: null,
+      statusBarHeight: null,
     };
   };
 
@@ -454,14 +465,16 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       this.routesToRemove = [];
 
       // Remove `routesToRemove` from `activeRoutes`.
-      await Helpers.setStateAsync<NavigatorViewState>(this, ({activeRoutes: prevRoutes}) => ({
-        activeRoutes: prevRoutes.filter((prevRoute) => !(
-          toBeRemoved.some((removedRoute) => (
-            (removedRoute.routeKey   == prevRoute.routeKey  ) &&
-            (removedRoute.routeIndex == prevRoute.routeIndex) 
+      await Helpers.setStateAsync<Partial<NavigatorViewState>>(this, 
+        ({activeRoutes: prevRoutes}) => ({
+          activeRoutes: prevRoutes.filter((prevRoute) => !(
+            toBeRemoved.some((removedRoute) => (
+              (removedRoute.routeKey   == prevRoute.routeKey  ) &&
+              (removedRoute.routeIndex == prevRoute.routeIndex) 
+            ))
           ))
-        ))
-      }));
+        })
+      );
     };
 
     this.setNavStatus(NavStatus.IDLE);
@@ -542,9 +555,11 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         // 1. Wait for new route to be added/init
         this.waitForRoutes([nextRoute]),
         // 2. Append new route to `activeRoutes`
-        Helpers.setStateAsync<NavigatorViewState>(this, ({activeRoutes: prevRoutes}) => ({
-          activeRoutes: [...prevRoutes, nextRoute]
-        }))
+        Helpers.setStateAsync<Partial<NavigatorViewState>>(this, 
+          ({activeRoutes: prevRoutes}) => ({
+            activeRoutes: [...prevRoutes, nextRoute]
+          })
+        )
       ]);
 
       // forward "push" request to native module
@@ -615,12 +630,14 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       );
 
       // remove popped route from `activeRoutes`
-      await Helpers.setStateAsync<NavigatorViewState>(this, (prevState) => ({
-        activeRoutes: prevState.activeRoutes.filter((route) => !(
-          (route.routeIndex == result.routeIndex) &&
-          (route.routeKey   == result.routeKey  )
-        ))
-      }));
+      await Helpers.setStateAsync<Partial<NavigatorViewState>>(this, 
+        (prevState) => ({
+          activeRoutes: prevState.activeRoutes.filter((route) => !(
+            (route.routeIndex == result.routeIndex) &&
+            (route.routeKey   == result.routeKey  )
+          ))
+        })
+      );
 
       // reset transition override
       await transitionConfig.resetTransition();
@@ -959,10 +976,12 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         // 1. wait for next route to be added/init
         this.waitForRoutes([nextRoute]),
         // 2. append new route to `activeRoutes`
-        Helpers.setStateAsync<NavigatorViewState>(this, ({activeRoutes: prevRoutes}) => ({
-          activeRoutes: Helpers.arrayInsert(prevRoutes, atIndex, nextRoute)
-            .map((route, index) => ({...route, routeIndex: index}))
-        }))
+        Helpers.setStateAsync<Partial<NavigatorViewState>>(this, 
+          ({activeRoutes: prevRoutes}) => ({
+            activeRoutes: Helpers.arrayInsert(prevRoutes, atIndex, nextRoute)
+              .map((route, index) => ({...route, routeIndex: index}))
+          })
+        )
       ]);
 
       // forward command to native module
@@ -1057,9 +1076,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         // 1. wait for the new route items to mount (if any)
         this.waitForRoutes(nextRoutesNew),
         // 2. update the state route items
-        Helpers.setStateAsync<NavigatorViewState>(this, () => ({
-          activeRoutes: nextRoutes,
-        }))
+        Helpers.setStateAsync<Partial<NavigatorViewState>>(this, {
+          activeRoutes: nextRoutes
+        })
       ]);
 
       // forward command to native module
@@ -1247,9 +1266,11 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
             // 1. wait for the native route to be init
             this.waitForRoutes([nextRoute]),
             // 2. Append new route to `activeRoutes`
-            Helpers.setStateAsync<NavigatorViewState>(this, ({activeRoutes: prevRoutes}) => ({
-              activeRoutes: [...prevRoutes, nextRoute]
-            }))
+            Helpers.setStateAsync<Partial<NavigatorViewState>>(this,
+              ({activeRoutes: prevRoutes}) => ({
+                activeRoutes: [...prevRoutes, nextRoute]
+              })
+            )
           ]);
 
           // forward "push" request to native module
@@ -1331,6 +1352,15 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         routeIndex: nativeEvent.routeIndex
       });
     };
+  };
+
+  private _handleOnUIConstantsDidChange: OnUIConstantsDidChange = ({nativeEvent}) => {
+    if(this.navigatorID != nativeEvent.navigatorID) return;
+
+    this.setState({
+      safeAreaInsets : nativeEvent.safeAreaInsets,
+      statusBarHeight: nativeEvent.statusBarHeight,
+    });
   };
   //#endregion
 
@@ -1440,16 +1470,22 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         onSetNativeRoutes={this._handleOnSetNativeRoutes}
         onNativeCommandRequest={this._handleOnNativeCommandRequest}
         onCustomCommandFromNative={this._handleOnCustomCommandFromNative}
+        onUIConstantsDidChange={this._handleOnUIConstantsDidChange}
       >
-        {this._renderRoutes()}
-        {props.renderNavBarBackground && (
-          <RNIWrapperView
-            style={styles.navBarBackgroundContainer} 
-            nativeID={NativeIDKeys.NavBarBackground}
-          >
-            {props.renderNavBarBackground()}
-          </RNIWrapperView>
-        )}
+        <NavigatorUIConstantsContext.Provider value={{
+          safeAreaInsets: state.safeAreaInsets,
+          statusBarHeight: state.statusBarHeight,
+        }}>
+          {this._renderRoutes()}
+          {props.renderNavBarBackground && (
+            <RNIWrapperView
+              style={styles.navBarBackgroundContainer} 
+              nativeID={NativeIDKeys.NavBarBackground}
+            >
+              {props.renderNavBarBackground()}
+            </RNIWrapperView>
+          )}
+        </NavigatorUIConstantsContext.Provider>
       </RNINavigatorView>
     );
   };
