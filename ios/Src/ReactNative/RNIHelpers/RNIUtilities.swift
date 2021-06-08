@@ -33,36 +33,46 @@ internal class RNIUtilities {
   /// subviews) in the `_viewRegistry`.
   static func recursivelyRemoveFromViewRegistry(bridge: RCTBridge, reactView: UIView) {
     
-    /// Get a ref to the `_viewRegistry` ivar in the `RCTUIManager` instance.
-    /// Note: Unlike objc properties, ivars are "private" so they aren't
-    /// automagically exposed/bridged to swift.
-    guard let value = bridge.uiManager.value(forKey: "_viewRegistry"),
-          /// Note - key: `NSNumber` (the `reactTag`), and value: `UIView`
-          let viewRegistry = value as? NSMutableDictionary
+    func getRegistry(forKey key: String) -> NSMutableDictionary? {
+      return bridge.uiManager.value(forKey: key) as? NSMutableDictionary;
+    };
+    
+    /// Get a ref to the `_viewRegistry` and `_shadowViewRegistry` ivar in the
+    /// `RCTUIManager` instance.
+    /// * Note: Unlike objc properties, ivars are "private" so they aren't
+    ///   automagically exposed/bridged to swift.
+    /// * Note: key: `NSNumber` (the `reactTag`), and value: `UIView`
+    guard let viewRegistry       = getRegistry(forKey: "_viewRegistry"),
+          let shadowViewRegistry = getRegistry(forKey: "_shadowViewRegistry")
     else { return };
     
-    // recursively remove subviews
+    #if DEBUG
+    let prevCountViewRegistry       = viewRegistry      .allValues.count;
+    let prevCountShadowViewRegistry = shadowViewRegistry.allValues.count;
+    
+    var removedViews: [NSNumber] = [];
+    #endif
+    
     func removeView(_ v: UIView){
       /// if this really is a "react view" then it should have a `reactTag`
       if let reactTag = v.reactTag,
          viewRegistry[reactTag] != nil {
         
+        #if DEBUG
+        removedViews.append(reactTag);
+        #endif
+        
         /// remove from view hierarchy
         v.removeFromSuperview();
         
-        /// remove this "react view" from `_viewRegistry`
-        viewRegistry.removeObject(forKey: reactTag);
-        
-        #if DEBUG
-        print("LOG - RNIUtilities: recursivelyRemoveFromViewRegistry"
-          + " - for reactTag: \(reactTag)"
-        );
-        #endif
+        /// remove this "react view" from the registry
+        viewRegistry      .removeObject(forKey: reactTag);
+        shadowViewRegistry.removeObject(forKey: reactTag);
       };
       
       /// remove other subviews...
-      for subview in v.subviews {
-        removeView(subview);
+      v.subviews.forEach {
+        removeView($0);
       };
       
       /// remove other react subviews...
@@ -74,6 +84,19 @@ internal class RNIUtilities {
     DispatchQueue.main.async {
       // start recursively removing views...
       removeView(reactView);
+
+      #if DEBUG
+      let nextCountViewRegistry       = viewRegistry      .allValues.count;
+      let nextCountShadowViewRegistry = shadowViewRegistry.allValues.count;
+      
+      print("LOG - RNIUtilities: recursivelyRemoveFromViewRegistry"
+        + " - removedViews count: \(removedViews.count)"
+        + " - prevCountViewRegistry: \(prevCountViewRegistry)"
+        + " - prevCountShadowViewRegistry: \(prevCountShadowViewRegistry)"
+        + " - nextCountViewRegistry: \(nextCountViewRegistry)"
+        + " - nextCountShadowViewRegistry: \(nextCountShadowViewRegistry)"
+      );
+      #endif
     };
   };
   
