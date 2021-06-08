@@ -14,7 +14,11 @@ extension UIViewController {
   };
   
   var navBarHeight: CGFloat {
-    self.navigationController?.navigationBar.frame.height ?? 0;
+    guard let navigationController =
+            self.navigationController ?? self as? UINavigationController
+    else { return 0 };
+    
+    return navigationController.navigationBar.frame.height;
   };
   
   var statusBarHeight: CGFloat {
@@ -47,5 +51,4 @@ extension UIViewController {
       );
     };
   };
-  
 };
