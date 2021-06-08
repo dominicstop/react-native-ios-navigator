@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { StyleSheet, View, SafeAreaView, Text, Image, Animated, ListRenderItem } from 'react-native';
-import { RouteViewPortal, RouteContentProps, RouteHeaderView, NavigatorViewConstants } from 'react-native-ios-navigator';
+import { StyleSheet, Dimensions, View, SafeAreaView, Text, Image, Animated, ListRenderItem, StyleProp, ViewStyle } from 'react-native';
+import { RouteViewPortal, RouteContentProps, RouteHeaderView, NavigatorViewConstants, NavigatorUIConstantsContext } from 'react-native-ios-navigator';
 import { ListItemTrack } from './ListItemTrack';
 
 import type { TrackItem } from './SharedTypes';
@@ -10,8 +10,6 @@ import * as Colors  from '../../constants/Colors';
 
 
 const { navigationBarHeight } = NavigatorViewConstants;
-
-const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
 
 const AssetImageCoffee = require('../../../assets/images/unsplash_coffee.jpg');
 
@@ -104,6 +102,25 @@ const TRACK_ITEMS: Array<TrackItem> = [{
   artists: ['Valiant Vermin'],
 }];
 
+function NavigationBarContainer(props: {
+  children?: React.ReactNode;
+  backgroundStyle?: Animated.WithAnimatedValue<StyleProp<ViewStyle>>;
+}){
+  const { statusBarHeight } = React.useContext(NavigatorUIConstantsContext);
+
+  const contentContainerStyle: ViewStyle = {
+    paddingTop: statusBarHeight,
+  };
+
+  return (
+    <SafeAreaView style={styles.routeHeaderCollapsedContainer}>
+      <Animated.View style={[styles.routeHeaderCollapsedBG, props.backgroundStyle]}/>
+      <View style={[styles.routeHeaderCollapsedContentContainer, contentContainerStyle]}>
+        {props.children}
+      </View>
+    </SafeAreaView>
+  );
+};
 
 export class NavigatorShowcase01 extends React.Component<RouteContentProps> {
 
@@ -137,9 +154,15 @@ export class NavigatorShowcase01 extends React.Component<RouteContentProps> {
     extrapolate: 'clamp',
   });
 
+  routeHeaderCollapsedTitleOpacity = this.scrollY.interpolate({
+    inputRange: [-(ROUTE_HEADER_HEIGHT_MAX / 1.5), -(navigationBarHeight + 24)],
+    outputRange: [0, 1],
+    extrapolate: 'clamp',
+  });
+
   routeHeaderCollapsedTitleTranslateY = this.scrollY.interpolate({
-    inputRange: [-(ROUTE_HEADER_HEIGHT_MAX / 2), -(navigationBarHeight + 24)],
-    outputRange: [15, 0],
+    inputRange: [-(ROUTE_HEADER_HEIGHT_MAX / 1.5), -(navigationBarHeight + 24)],
+    outputRange: [20, 0],
     extrapolate: 'clamp',
   });
 
@@ -172,30 +195,28 @@ export class NavigatorShowcase01 extends React.Component<RouteContentProps> {
             resizeMode={'cover'}
           />
         </Animated.View>
-        <Animated.Text style={[
-          styles.routeHeaderExpandedLargeTitleText, 
-          { opacity: this.routeHeaderLargeTitleOpacity }
-        ]}>
-          {'Coffee Tunes'}
-        </Animated.Text>
-        <AnimatedSafeAreaView style={[
-          styles.routeHeaderCollapsedBG,
-          { opacity: this.routeHeaderCollapsedBGOpacity }
-        ]}/>
-        <View style={styles.routeHeaderCollapsedContainer}>
+        <NavigationBarContainer backgroundStyle={{ opacity: this.routeHeaderCollapsedBGOpacity }}>
           <Animated.Text style={[styles.routeHeaderCollapsedTitle, {
-            opacity: this.routeHeaderCollapsedBGOpacity,
+            opacity: this.routeHeaderCollapsedTitleOpacity,
             transform: [{ 
               translateY: this.routeHeaderCollapsedTitleTranslateY 
             },
           ]}]}>
             {'Coffee Tunes'}
           </Animated.Text>
-        </View>
-        <View style={styles.routeHeaderPlayButtonContainer}>
-          <Text style={styles.routeHeaderPlayButtonText}>
-            {'▶'}
-          </Text>
+        </NavigationBarContainer>
+        <View style={styles.routeHeaderContainer}>
+          <Animated.Text style={[
+            styles.routeHeaderExpandedLargeTitleText, 
+            { opacity: this.routeHeaderLargeTitleOpacity }
+          ]}>
+            {'Coffee Tunes'}
+          </Animated.Text>
+          <View style={styles.routeHeaderPlayButtonContainer}>
+            <Text style={styles.routeHeaderPlayButtonText}>
+              {'▶'}
+            </Text>
+          </View>
         </View>
       </RouteHeaderView>
     );
@@ -261,7 +282,11 @@ export class NavigatorShowcase01 extends React.Component<RouteContentProps> {
           renderRouteHeader={this._renderRouteHeader}
         />
         <Animated.FlatList
+          style={styles.list}
           data={TRACK_ITEMS}
+          horizontal={false}
+          indicatorStyle={'white'}
+          contentInsetAdjustmentBehavior={'always'}
           keyExtractor={this._handleKeyExtractor}
           renderItem={this._renderListItem}
           ListHeaderComponent={this._renderListHeader}
@@ -280,6 +305,9 @@ const styles = StyleSheet.create({
   },
   routeHeader: {
   },
+  routeHeaderContainer: {
+    flex: 1,
+  },
   routeHeaderPlayButtonContainer: {
     width: 50,
     aspectRatio: 1,
@@ -287,10 +315,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 0,
     bottom: -(50/2),
-    marginRight: 10,
     backgroundColor: Colors.GREEN.A700,
     alignItems: 'center',
     justifyContent: 'center',
+    marginRight: 10,
   },
   routeHeaderPlayButtonText: {
     color: 'white',
@@ -304,6 +332,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  
   routeHeaderExpandedLargeTitleText: {
     position: 'absolute',
     left: 0,
@@ -313,14 +342,18 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: '900',
   },
-
-  routeHeaderCollapsedBG: {
+  
+  routeHeaderCollapsedContainer: {
     position: 'absolute',
+    overflow: 'visible',
     top: 0,
     left: 0,
     right: 0,
-    padding: 15,
+  },
+  routeHeaderCollapsedBG: {
+    ...StyleSheet.absoluteFillObject,
     backgroundColor: Colors.ORANGE[900],
+    // shadow
     shadowOffset: {
       width: 0,
       height: 5,
@@ -329,11 +362,11 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     shadowColor: "black",
   },
-  routeHeaderCollapsedContainer: {
+  routeHeaderCollapsedContentContainer: {
+    ...StyleSheet.absoluteFillObject,
     overflow: 'visible',
     alignItems: 'center',
     justifyContent: 'center',
-    height: navigationBarHeight,
   },
   routeHeaderCollapsedTitle: {
     fontSize: 16,
@@ -368,5 +401,8 @@ const styles = StyleSheet.create({
   listFooterSymbolText: {
     fontSize: 24,
     opacity: 0.75,
+  },
+
+  list: {
   },
 });
