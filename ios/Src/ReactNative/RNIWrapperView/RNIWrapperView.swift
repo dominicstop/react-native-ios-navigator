@@ -30,8 +30,6 @@ internal class RNIWrapperView: UIView {
   
   var autoSetSizeOnLayout = true;
   
-  var isWrapperView = true;
-  
   private var touchHandler: RCTTouchHandler!;
   
   // ---------------------
@@ -43,10 +41,6 @@ internal class RNIWrapperView: UIView {
     
     self.bridge = bridge;
     self.touchHandler = RCTTouchHandler(bridge: self.bridge);
-    
-    if !self.isWrapperView {
-      self.touchHandler.attach(to: self);
-    };
   };
   
   required init?(coder: NSCoder) {
@@ -73,11 +67,10 @@ internal class RNIWrapperView: UIView {
   
   override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
     super.insertSubview(subview, at: atIndex);
+    subview.removeFromSuperview();
     
-    if self.isWrapperView {
-      self.reactContent = subview;
-      self.touchHandler.attach(to: subview);
-    };
+    self.reactContent = subview;
+    self.touchHandler.attach(to: subview);
   };
   
   // -------------------------
@@ -85,21 +78,11 @@ internal class RNIWrapperView: UIView {
   // -------------------------
   
   func notifyForBoundsChange(_ newBounds: CGRect){
-    guard let bridge = self.bridge else { return };
+    guard let bridge = self.bridge,
+          let reactView = self.reactContent
+    else { return };
     
-    if self.isWrapperView,
-       let reactView = self.reactContent {
-      
-      bridge.uiManager.setSize(newBounds.size, for: reactView);
-      
-    } else {
-      self.frame = CGRect(
-        origin: self.frame.origin,
-        size: newBounds.size
-      );
-      
-      bridge.uiManager.setSize(newBounds.size, for: self);
-    };
+    bridge.uiManager.setSize(newBounds.size, for: reactView);
   };
   
   func onJSComponentWillUnmount(isManuallyTriggered: Bool){
@@ -117,9 +100,7 @@ internal class RNIWrapperView: UIView {
     guard !self.didTriggerCleanup else { return };
     self.didTriggerCleanup = true;
     
-    if self.isWrapperView {
-      self.touchHandler.detach(from: self.reactContent);
-    };
+    self.touchHandler.detach(from: self.reactContent);
     
     RNIUtilities.recursivelyRemoveFromViewRegistry(
       bridge: self.bridge,

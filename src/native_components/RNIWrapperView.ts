@@ -35,10 +35,6 @@ export class RNIWrapperView extends React.PureComponent<RNIWrapperViewProps> {
     );
   };
 
-  componentWillUnmount(){
-    this.notifyComponentWillUnmount(false);
-  };
-
   render(){
     const props = this.props;
 
