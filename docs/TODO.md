@@ -109,6 +109,10 @@
 <br>
 
 - [ ] **Implement**: Add support for setting the root view's background color.
+- [ ] **Implement**: Create `RouteHeaderContainer` — a native component that will copy the navigation bar's current height.
+
+	- Basically the navigation bar can have varying heights depending on how big the screen (e.g. the safe area for iPhone 8 vs. iPhone X), the current screen orientation, and the current appearance of the navigation bar (e.g. "standard", "compact" and "scroll edge").
+		- For iPhone 8, the navigation bar height when on landscape is 33,
 
 <br>
 
@@ -183,9 +187,8 @@
 
 <br>
 
-- [ ] **Fix**: `RCTScrollView` indicator bottom insets is wrong.
-
-  - For devices with notches, the scroll view insets for the left and right of the screen is wrong. The top and bottom insets are correct (e.g. the scroll indicator insets are insetted from the home indicator and navigation bar)
+- [ ] **Fix**: `RCTScrollView` indicator insets is wrong.
+  - For devices with notches, the scroll view insets for the left and right of the screen is wrong. The top and bottom insets are correct (e.g. the scroll indicator insets are insetted from the home indicator and navigation bar).
 
 ---
 
@@ -394,7 +397,9 @@
 
 <br>
 
-- [x]  (Commit: `59b5207`) Fix: `RNINavigatorRouteView` Layout Bug  — Route view flickering in during the push transition.
+- [x]  (Commit: `59b5207`) **Fix**: `RNINavigatorRouteView` Layout Bug  — Route view flickering in during the push transition.
+
+- [x] (Commit: `fa90081`) **Implement**: Impl. "UI constants" context provider — Will provide the navigation bar height, safe area values, the status bar height, etc.
 
 ---
 
