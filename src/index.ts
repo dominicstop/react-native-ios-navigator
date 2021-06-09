@@ -24,5 +24,6 @@ export { NavigatorConstantsObject } from './native_modules/RNINavigatorViewModul
 export * from './types/RouteOptions';
 export * from './types/NavigationObject';
 export * from './types/RouteSearchControllerConfig';
+export * from './types/NavBarAppearanceConfig';
 
 export { ImageResolvedAssetSource, ImageRectConfig, ImageGradientConfig, DynamicColor, Offset, ImageTypes, ImageItemConfig } from './types/MiscTypes';
