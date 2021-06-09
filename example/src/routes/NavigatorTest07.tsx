@@ -3,6 +3,8 @@ import * as React from 'react';
 import { StyleSheet, View, Text, Image, ScrollView } from 'react-native';
 import { RouteHeaderView, RouteViewPortal } from 'react-native-ios-navigator';
 
+import { navBarAppearanceConfigHidden } from '../constants/Constants';
+
 const AssetImageCoffee = require('../../assets/images/unsplash_coffee.jpg');
 
 export function NavigatorTest07(){
@@ -17,13 +19,7 @@ export function NavigatorTest07(){
             title: '',
             tintColor: 'white',
           },
-          navBarAppearanceOverride: {
-            mode: 'legacy',
-            navBarPreset: 'clearBackground',
-            titleTextAttributes: { 
-              opacity: 0 
-            },
-          },
+          navBarAppearanceOverride: navBarAppearanceConfigHidden,
         }}
         renderRouteHeader={() => (
           <RouteHeaderView

@@ -1,19 +1,16 @@
 import * as React from 'react';
 
-import { StyleSheet, Dimensions, View, SafeAreaView, Text, Image, Animated, ListRenderItem, StyleProp, ViewStyle } from 'react-native';
-import { RouteViewPortal, RouteContentProps, RouteHeaderView, NavigatorViewConstants, NavigatorUIConstantsContext } from 'react-native-ios-navigator';
+import { StyleSheet, Platform, View, SafeAreaView, Text, Image, Animated, ListRenderItem, StyleProp, ViewStyle } from 'react-native';
+import { RouteViewPortal, RouteContentProps, RouteHeaderView, NavigatorViewConstants, NavigatorUIConstantsContext, NavBarAppearanceCombinedConfig } from 'react-native-ios-navigator';
+
+import { RouteHeader } from './RouteHeader';
 import { ListItemTrack } from './ListItemTrack';
 
 import type { TrackItem } from './SharedTypes';
 
 import * as Colors  from '../../constants/Colors';
+import { navBarAppearanceConfigHidden } from '../../constants/Constants';
 
-
-const { navigationBarHeight } = NavigatorViewConstants;
-
-const AssetImageCoffee = require('../../../assets/images/unsplash_coffee.jpg');
-
-const ROUTE_HEADER_HEIGHT_MAX = 300;
 
 let TRACK_ID_COUNTER = 0;
 const TRACK_ITEMS: Array<TrackItem> = [{
@@ -102,25 +99,6 @@ const TRACK_ITEMS: Array<TrackItem> = [{
   artists: ['Valiant Vermin'],
 }];
 
-function NavigationBarContainer(props: {
-  children?: React.ReactNode;
-  backgroundStyle?: Animated.WithAnimatedValue<StyleProp<ViewStyle>>;
-}){
-  const { statusBarHeight } = React.useContext(NavigatorUIConstantsContext);
-
-  const contentContainerStyle: ViewStyle = {
-    paddingTop: statusBarHeight,
-  };
-
-  return (
-    <SafeAreaView style={styles.routeHeaderCollapsedContainer}>
-      <Animated.View style={[styles.routeHeaderCollapsedBG, props.backgroundStyle]}/>
-      <View style={[styles.routeHeaderCollapsedContentContainer, contentContainerStyle]}>
-        {props.children}
-      </View>
-    </SafeAreaView>
-  );
-};
 
 export class NavigatorShowcase01 extends React.Component<RouteContentProps> {
 
@@ -133,37 +111,7 @@ export class NavigatorShowcase01 extends React.Component<RouteContentProps> {
       }
     }
   }], {
-    useNativeDriver: true
-  });
-
-  routeHeaderLargeTitleOpacity = this.scrollY.interpolate({
-    inputRange: [-ROUTE_HEADER_HEIGHT_MAX, -(ROUTE_HEADER_HEIGHT_MAX / 2)],
-    outputRange: [1, 0],
-    extrapolate: 'clamp',
-  });
-
-  routeHeaderBGOpacity = this.scrollY.interpolate({
-    inputRange: [-(ROUTE_HEADER_HEIGHT_MAX / 2), -(navigationBarHeight + 24)],
-    outputRange: [1, 0],
-    extrapolate: 'clamp',
-  });
-
-  routeHeaderCollapsedBGOpacity = this.scrollY.interpolate({
-    inputRange: [-(ROUTE_HEADER_HEIGHT_MAX / 2), -(navigationBarHeight + 24)],
-    outputRange: [0, 1],
-    extrapolate: 'clamp',
-  });
-
-  routeHeaderCollapsedTitleOpacity = this.scrollY.interpolate({
-    inputRange: [-(ROUTE_HEADER_HEIGHT_MAX / 1.5), -(navigationBarHeight + 24)],
-    outputRange: [0, 1],
-    extrapolate: 'clamp',
-  });
-
-  routeHeaderCollapsedTitleTranslateY = this.scrollY.interpolate({
-    inputRange: [-(ROUTE_HEADER_HEIGHT_MAX / 1.5), -(navigationBarHeight + 24)],
-    outputRange: [20, 0],
-    extrapolate: 'clamp',
+    useNativeDriver: true,
   });
 
   constructor(props: RouteContentProps){
@@ -172,54 +120,6 @@ export class NavigatorShowcase01 extends React.Component<RouteContentProps> {
 
   _handleKeyExtractor = (item: TrackItem) => {
     return `id:${item.id}`;
-  };
-
-  _renderRouteHeader = () => {
-    return (
-      <RouteHeaderView
-        style={styles.routeHeader}
-        headerTopPadding={'statusBar'}
-        config={{
-          headerMode: 'resize',
-          headerHeightMax: ROUTE_HEADER_HEIGHT_MAX,
-          headerHeightMin: 'navigationBarWithStatusBar',
-        }}
-      >
-        <Animated.View style={[
-          styles.routeHeaderExpandedBGImageContainer,
-          { opacity: this.routeHeaderBGOpacity }
-        ]}>
-          <Image
-            style={styles.routeHeaderBGImage}
-            source={AssetImageCoffee}
-            resizeMode={'cover'}
-          />
-        </Animated.View>
-        <NavigationBarContainer backgroundStyle={{ opacity: this.routeHeaderCollapsedBGOpacity }}>
-          <Animated.Text style={[styles.routeHeaderCollapsedTitle, {
-            opacity: this.routeHeaderCollapsedTitleOpacity,
-            transform: [{ 
-              translateY: this.routeHeaderCollapsedTitleTranslateY 
-            },
-          ]}]}>
-            {'Coffee Tunes'}
-          </Animated.Text>
-        </NavigationBarContainer>
-        <View style={styles.routeHeaderContainer}>
-          <Animated.Text style={[
-            styles.routeHeaderExpandedLargeTitleText, 
-            { opacity: this.routeHeaderLargeTitleOpacity }
-          ]}>
-            {'Coffee Tunes'}
-          </Animated.Text>
-          <View style={styles.routeHeaderPlayButtonContainer}>
-            <Text style={styles.routeHeaderPlayButtonText}>
-              {'▶'}
-            </Text>
-          </View>
-        </View>
-      </RouteHeaderView>
-    );
   };
 
   _renderListHeader  = () => {
@@ -265,13 +165,7 @@ export class NavigatorShowcase01 extends React.Component<RouteContentProps> {
             largeTitleDisplayMode: 'never',
             statusBarStyle: 'lightContent',
             routeContainerStyle: styles.routeContainerStyle,
-            navBarAppearanceOverride: {
-              mode: 'legacy',
-              navBarPreset: 'clearBackground',
-              titleTextAttributes: { 
-                opacity: 0,
-              },
-            },
+            navBarAppearanceOverride: navBarAppearanceConfigHidden,
             applyBackButtonConfigToCurrentRoute: true,
             backButtonDisplayMode: 'minimal',
             navBarButtonBackItemConfig: {
@@ -279,7 +173,11 @@ export class NavigatorShowcase01 extends React.Component<RouteContentProps> {
               tintColor: 'white',
             },
           }}
-          renderRouteHeader={this._renderRouteHeader}
+          renderRouteHeader={() => (
+            <RouteHeader
+              scrollY={this.scrollY}
+            />
+          )}
         />
         <Animated.FlatList
           style={styles.list}
@@ -303,77 +201,7 @@ const styles = StyleSheet.create({
   routeContainerStyle: {
     backgroundColor: 'rgb(20, 20, 20)'
   },
-  routeHeader: {
-  },
-  routeHeaderContainer: {
-    flex: 1,
-  },
-  routeHeaderPlayButtonContainer: {
-    width: 50,
-    aspectRatio: 1,
-    borderRadius: 50/2,
-    position: 'absolute',
-    right: 0,
-    bottom: -(50/2),
-    backgroundColor: Colors.GREEN.A700,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 10,
-  },
-  routeHeaderPlayButtonText: {
-    color: 'white',
-    fontSize: 26,
-    marginLeft: 4,
-  },
-  routeHeaderExpandedBGImageContainer: {
-    ...StyleSheet.absoluteFillObject,
-  },
-  routeHeaderBGImage: {
-    width: '100%',
-    height: '100%',
-  },
-  
-  routeHeaderExpandedLargeTitleText: {
-    position: 'absolute',
-    left: 0,
-    bottom: 0,
-    margin: 10,
-    fontSize: 42,
-    color: 'white',
-    fontWeight: '900',
-  },
-  
-  routeHeaderCollapsedContainer: {
-    position: 'absolute',
-    overflow: 'visible',
-    top: 0,
-    left: 0,
-    right: 0,
-  },
-  routeHeaderCollapsedBG: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: Colors.ORANGE[900],
-    // shadow
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 0.75,
-    shadowRadius: 12,
-    shadowColor: "black",
-  },
-  routeHeaderCollapsedContentContainer: {
-    ...StyleSheet.absoluteFillObject,
-    overflow: 'visible',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  routeHeaderCollapsedTitle: {
-    fontSize: 16,
-    color: 'white',
-    fontWeight: 'bold'
-  },
-  
+
   listHeaderContainer: {
     paddingTop: 15,
     paddingBottom: 15,

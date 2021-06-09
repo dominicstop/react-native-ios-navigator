@@ -3,6 +3,9 @@ import * as React from 'react';
 import { StyleSheet, View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { HeaderHeightValue, RouteHeaderView, RouteViewPortal } from 'react-native-ios-navigator';
 
+import { navBarAppearanceConfigHidden } from '../constants/Constants';
+
+
 const AssetImageCoffee = require('../../assets/images/unsplash_coffee.jpg');
 
 const headerHeightValues: Array<HeaderHeightValue> = [
@@ -72,13 +75,7 @@ export function NavigatorTest06(){
             title: '',
             tintColor: 'white',
           },
-          navBarAppearanceOverride: {
-            mode: 'legacy',
-            navBarPreset: 'clearBackground',
-            titleTextAttributes: { 
-              opacity: 0 
-            },
-          },
+          navBarAppearanceOverride: navBarAppearanceConfigHidden,
         }}
         renderRouteHeader={() => (
           <RouteHeaderWithButton/>
