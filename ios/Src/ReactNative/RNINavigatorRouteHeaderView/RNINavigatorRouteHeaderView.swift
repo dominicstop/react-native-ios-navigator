@@ -8,9 +8,7 @@
 import Foundation
 
 
-// TODO: Create new class `RNINativeManagedView` to replace `RNIWrapperView` w/
-//       `isWrapperView = false`.
-internal class RNINavigatorRouteHeaderView: RNIWrapperView {
+internal class RNINavigatorRouteHeaderView: RCTView {
   
   // ---------------------
   // MARK:- Embedded Types
@@ -121,11 +119,24 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
   // MARK:- Properties
   // -----------------
   
+  var bridge: RCTBridge!;
+  
   /// Ref. to the parent route view
   weak var routeView: RNINavigatorRouteView?;
   
   /// Ref. to the parent react route vc
   weak var routeViewController: RNINavigatorReactRouteViewController?;
+  
+  private var didTriggerSetup = false;
+  private var didSetInitialSize = false;
+  
+  // --------------------------
+  // MARK:- Computed Properties
+  // --------------------------
+  
+  var isMounted: Bool {
+    self.window != nil && self.superview != nil
+  };
   
   var wrapperView: RNINavigatorReactRouteViewController.RouteContentWrapper? {
     self.routeViewController?.wrapperView
@@ -144,9 +155,6 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
       height: height
     );
   };
-  
-  private var didTriggerSetup = false;
-  private var didSetInitialSize = false;
   
   // ------------------------
   // MARK:- RN Exported Props
@@ -194,12 +202,10 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
   // MARK:- Init/Lifecycle
   // ---------------------
   
-  override init(bridge: RCTBridge) {
-    super.init(bridge: bridge);
+  init(bridge: RCTBridge) {
+    super.init(frame: .zero);
     
-    self.isWrapperView = false;
-    self.autoSetSizeOnLayout = false;
-    self.autoCleanupOnJSUnmount = false;
+    self.bridge = bridge;
   };
   
   required init?(coder: NSCoder) {
@@ -248,14 +254,19 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
   // -------------------------
   // MARK:- Internal Functions
   // -------------------------
+
+  func notifyForBoundsChange(_ newBounds: CGRect){
+    guard let bridge = self.bridge else { return };
+    
+    bridge.uiManager.setSize(newBounds.size, for: self);
+  };
   
   /// TODO: Refactor - use view controller containment/child vc so that we don't
   /// have to call `setup` on the parent vc's `loadView`, or perform layout updates
   /// on the parent vc's `willLayoutSubviews`
   func setup() {
-    guard !self.didTriggerSetup,
-          let navController = self.routeViewController?.navigationController,
-          let wrapperView = self.wrapperView
+    guard let navController = self.routeViewController?.navigationController,
+          let wrapperView   = self.wrapperView
     else { return };
     
     self.didTriggerSetup = true;
@@ -286,8 +297,7 @@ internal class RNINavigatorRouteHeaderView: RNIWrapperView {
   };
 
   func refreshHeaderTopPadding(){
-    guard !self.didTriggerCleanup,
-          let navigatorVC = self.routeView?.navigatorView?.navigationVC
+    guard let navigatorVC = self.routeView?.navigatorView?.navigationVC
     else { return };
     
     let insets = navigatorVC.synthesizedSafeAreaInsets;
