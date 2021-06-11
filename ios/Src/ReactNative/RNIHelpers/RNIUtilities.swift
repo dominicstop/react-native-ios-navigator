@@ -84,6 +84,8 @@ internal class RNIUtilities {
     DispatchQueue.main.async {
       // start recursively removing views...
       removeView(reactView);
+      
+      RCTSharedApplication()
 
       #if DEBUG
       let nextCountViewRegistry       = viewRegistry      .allValues.count;
@@ -120,8 +122,11 @@ internal class RNIUtilities {
   static func loadImage(dict: NSDictionary, completion: @escaping RCTImageLoaderCompletionBlock){
     guard let imageLoader = RNISharedInstances.imageLoader,
           let imageSource = RCTConvert.rctImageSource(dict)
-    else { return };
-  
+    else {
+      completion(RCTErrorWithMessage("RNIUtilities.loadImage: Failed to load image"), nil);
+      return;
+    };
+    
     DispatchQueue.global(qos: .default).async {
       imageLoader.loadImage(with: imageSource.request, callback: completion);
     };

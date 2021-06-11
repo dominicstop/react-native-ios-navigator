@@ -229,14 +229,17 @@ internal class RNIImageItem {
   
   let type: ImageType;
   
-  var useImageCache = false;
-  var isImageRequireLoaded = false;
-  var onImageRequireDidLoad: ((_ image: UIImage?) -> ())?;
+  var useImageCache: Bool?;
   
   var defaultSize = CGSize(width: 100, height: 100);
   
   private let imageValue: Any?;
   private var imageRequire: UIImage?;
+  
+  var shouldUseImageCache: Bool {
+    // use cache if image require if `useImageCache` is not set
+    self.useImageCache ?? (self.type == .IMAGE_REQUIRE)
+  };
   
   var image: UIImage? {
     switch self.type {
@@ -254,7 +257,24 @@ internal class RNIImageItem {
         return image;
         
       case .IMAGE_REQUIRE:
-        return self.imageRequire;
+        guard let dict = self.imageValue as? NSDictionary,
+              let uri  = dict["uri"] as? String
+        else { return nil };
+        
+        if self.shouldUseImageCache,
+           let cachedImage = Self.imageCache[uri] {
+          
+          return cachedImage;
+        };
+        
+        // note: this will block the current thread
+        let image = RCTConvert.uiImage(self.imageValue);
+        
+        if self.shouldUseImageCache, let image = image {
+          Self.imageCache[uri] = image;
+        };
+        
+        return image;
       
       case .IMAGE_EMPTY:
         return UIImage();
@@ -279,11 +299,6 @@ internal class RNIImageItem {
   init?(type: ImageType, imageValue: Any?){
     self.type = type;
     self.imageValue = imageValue;
-    
-    // load "IMAGE_REQUIRE" image...
-    if type == .IMAGE_REQUIRE {
-      self.loadImageRequire();
-    };
   };
   
   convenience init?(dict: NSDictionary){
@@ -292,64 +307,5 @@ internal class RNIImageItem {
     else { return nil };
     
     self.init(type: type, imageValue: dict["imageValue"]);
-  };
-  
-  private func loadImageRequire(){
-    guard let dict = self.imageValue as? NSDictionary,
-          let uri  = dict["uri"] as? String
-    else { return };
-    
-    if self.useImageCache,
-       let cachedImage = Self.imageCache[uri] {
-      
-      self.isImageRequireLoaded = true;
-      self.onImageRequireDidLoad?(cachedImage);
-      self.imageRequire = cachedImage.withRenderingMode(.alwaysOriginal);
-      
-    } else {
-      RNIUtilities.loadImage(dict: dict){ error, image in
-        self.isImageRequireLoaded = true;
-        let image = image?.withRenderingMode(.alwaysOriginal);
-        
-        self.imageRequire = image;
-        self.onImageRequireDidLoad?(image);
-        
-        if self.useImageCache, let image = image {
-          // store loaded image in cache
-          Self.imageCache[uri] = image;
-        };
-      };
-    };
-  };
-};
-
-internal extension RNIImageItem {
-  
-  static func waitForAllImagesToLoad(
-    images    : [RNIImageItem],
-    completion: @escaping ([UIImage?]) -> ()
-  ){
-    
-    var loadedImages: [UIImage?] = [];
-    
-    for item in images {
-      let isImageRequire = item.type == .IMAGE_REQUIRE;
-      
-      if item.isImageRequireLoaded || !isImageRequire {
-        // item is not "IMAGE_REQUIRE", or the image has already loaded
-        loadedImages.insert(item.image, at: 0);
-      
-      } else {
-        item.onImageRequireDidLoad = { image in
-          // "require image" has loaded...
-          loadedImages.insert(image, at: 0);
-            
-          // all the image items have been loaded...
-          if loadedImages.count == images.count {
-            completion(loadedImages);
-          };
-        };
-      };
-    };
   };
 };
