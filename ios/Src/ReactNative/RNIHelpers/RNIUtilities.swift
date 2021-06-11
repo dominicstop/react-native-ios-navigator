@@ -7,15 +7,6 @@
 
 import Foundation;
 
-/// Refs to the shared/singleton instances.
-///
-/// Note: Getting a ref. to a particular `RCTModule` requires having a ref.
-/// to `RCTBridge`. So you either have to pass `RCTBridge` or the `RCTModule`
-/// around if you want to use it, which is a bit inconvenient, so we save a ref.
-/// to module.
-internal class RNISharedInstances {
-  static weak var imageLoader: RCTImageLoader?;
-};
 
 internal class RNIUtilities {
   
@@ -99,36 +90,6 @@ internal class RNIUtilities {
         + " - nextCountShadowViewRegistry: \(nextCountShadowViewRegistry)"
       );
       #endif
-    };
-  };
-  
-  /// Get a ref. to the shared/singleton `RCTImageLoader` module instance.
-  static func getImageLoader(bridge: RCTBridge) -> RCTImageLoader {
-    
-    if RNISharedInstances.imageLoader == nil,
-       let module      = bridge.module(for: RCTImageLoader.self),
-       let imageLoader = module as? RCTImageLoader {
-      
-      // init. `SharedInstance` for the first time
-      RNISharedInstances.imageLoader = imageLoader;
-      return imageLoader;
-    };
-    
-    return RNISharedInstances.imageLoader!;
-  };
-  
-  // Note: Before using this, make sure you have `getImageLoader` in your
-  // component/module's init.
-  static func loadImage(dict: NSDictionary, completion: @escaping RCTImageLoaderCompletionBlock){
-    guard let imageLoader = RNISharedInstances.imageLoader,
-          let imageSource = RCTConvert.rctImageSource(dict)
-    else {
-      completion(RCTErrorWithMessage("RNIUtilities.loadImage: Failed to load image"), nil);
-      return;
-    };
-    
-    DispatchQueue.global(qos: .default).async {
-      imageLoader.loadImage(with: imageSource.request, callback: completion);
     };
   };
   
