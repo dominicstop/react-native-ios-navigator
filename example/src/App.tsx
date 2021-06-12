@@ -1,9 +1,10 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
-import { NavigatorView, RouteContentProps, NavRouteConfigItem, RouteViewEvents, RouteViewPortal } from 'react-native-ios-navigator';
+import { NavigatorView, RouteContentProps, NavRouteConfigItem, RouteViewEvents } from 'react-native-ios-navigator';
 
 import { NavigatorShowcase01 } from './routes/NavigatorShowcase01';
+import { NavigatorShowcase02 } from './routes/NavigatorShowcase02';
 
 import { NavigatorExample01 } from './routes/NavigatorExample01';
 
@@ -38,12 +39,17 @@ const RouteKeys = {
   NavigatorDemo02: 'NavigatorDemo02',
 
   NavigatorShowcase01: 'NavigatorShowcase01',
+  NavigatorShowcase02: 'NavigatorShowcase02',
 };
 
 const RouteItems = [{ 
   routeKey: RouteKeys.NavigatorShowcase01,
   title: 'Music Playlist',
   desc: 'A route showing a playlist with a list of tracks.'
+}, { 
+  routeKey: RouteKeys.NavigatorShowcase02,
+  title: 'Profile',
+  desc: 'A route showing a generic profile layout.'
 }, { 
   routeKey: RouteKeys.NavigatorExample01,
   title: 'Basic Nested',
@@ -150,6 +156,11 @@ const ROUTES: Array<NavRouteConfigItem> = [{
     <NavigatorShowcase01/>
   ),
 }, {
+  routeKey: RouteKeys.NavigatorShowcase02,
+  renderRoute: () => (
+    <NavigatorShowcase02/>
+  ),
+}, {
   routeKey: RouteKeys.NavigatorExample01,
   renderRoute: () => (
     <NavigatorExample01/>
@@ -254,7 +265,7 @@ type HomeRouteState = {
 
 class HomeRoute extends React.PureComponent<RouteContentProps, HomeRouteState> {
   static styles = StyleSheet.create({
-    rootContainer: {
+    rootContentContainer: {
       paddingBottom: 100,
     },
     rootContainerEmpty: {
@@ -336,7 +347,7 @@ class HomeRoute extends React.PureComponent<RouteContentProps, HomeRouteState> {
           }}
         />
         <FlatList
-          contentContainerStyle={styles.rootContainer}
+          contentContainerStyle={styles.rootContentContainer}
           data={items}
           keyExtractor={(item) => item.routeKey}
           renderItem={this._renderItem}
