@@ -339,6 +339,7 @@ export class CompareRouteOptions {
 
     applyBackButtonConfigToCurrentRoute       : { mode: 'shallow' },
     allowTouchEventsToPassThroughNavigationBar: { mode: 'shallow' },
+    automaticallyAddHorizontalSafeAreaInsets  : { mode: 'shallow' },
 
     // shallow object
     routeContainerStyle: {
