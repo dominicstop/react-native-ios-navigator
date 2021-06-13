@@ -67,7 +67,6 @@ internal class RNIWrapperView: UIView {
   
   override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
     super.insertSubview(subview, at: atIndex);
-    subview.removeFromSuperview();
     
     self.reactContent = subview;
     self.touchHandler.attach(to: subview);
