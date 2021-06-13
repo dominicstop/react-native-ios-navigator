@@ -215,7 +215,11 @@
 
 ## Completed
 
-### Version: `N/A`
+### Version: `0.1.1`
+
+- [x] (Commit: `33fbc52`) Update bob config — Re-added `commonjs` target.
+
+### Version: `0.1.0`
 
 - [x] (Commit: `74ce764`) Update linter + bob config.
 - [x] (Commit: `3085c3d`) Fixed linter warnings/errors.
