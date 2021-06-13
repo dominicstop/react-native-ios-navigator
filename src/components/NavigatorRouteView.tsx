@@ -10,7 +10,7 @@ import type { RouteViewPortal } from './RouteViewPortal';
 
 import { RouteComponentsWrapper } from './RouteComponentsWrapper';
 
-import { RNINavigatorRouteView, RNINavigatorRouteViewProps, onPressNavBarItem, onRoutePushEvent, onRoutePopEvent, RouteTransitionPopConfig, RouteTransitionPushConfig, onRouteFocusBlurEvent, onUpdateSearchResults, onSearchBarCancelButtonClicked, onSearchBarSearchButtonClicked } from '../native_components/RNINavigatorRouteView';
+import { RNINavigatorRouteView, RNINavigatorRouteViewProps, onPressNavBarItem as OnPressNavBarItem, onRoutePushEvent as OnRoutePushEvent, onRoutePopEvent as OnRoutePopEvent, RouteTransitionPopConfig, RouteTransitionPushConfig, onRouteFocusBlurEvent as OnRouteFocusBlurEvent, onUpdateSearchResults as OnUpdateSearchResults, onSearchBarCancelButtonClicked as OnSearchBarCancelButtonClicked, onSearchBarSearchButtonClicked as OnSearchBarSearchButtonClicked } from '../native_components/RNINavigatorRouteView';
 import { RNINavigatorRouteViewModule } from '../native_modules/RNINavigatorRouteViewModule';
 
 import * as Helpers from '../functions/Helpers';
@@ -171,6 +171,7 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
 
   componentWillUnmount(){
     //#region - 🐞 DEBUG 🐛
+
     LIB_GLOBAL.debugLog && console.log(
         `LOG/JS - NavigatorRouteView, componentWillUnmount`
       + ` - routeID: ${this.props.routeID}`
@@ -451,86 +452,86 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
   // #region - Native Event Handlers
   // Native Event Handlers for `RNINavigatorRouteView`
 
-  private _handleOnNavRouteWillPop: onRoutePopEvent = (event) => {
-    if(this.props.routeID != event.nativeEvent.routeID) return;
+  private _handleOnNavRouteWillPop: OnRoutePopEvent = (event) => {
+    if(this.props.routeID !== event.nativeEvent.routeID) return;
 
     this._emitter.emit(NavRouteEvents.onRouteWillPop, event);
     this.routeStatus = RouteStatus.ROUTE_POPPING;
   };
 
-  private _handleOnNavRouteDidPop: onRoutePopEvent = (event) => {
-    if(this.props.routeID != event.nativeEvent.routeID) return;
+  private _handleOnNavRouteDidPop: OnRoutePopEvent = (event) => {
+    if(this.props.routeID !== event.nativeEvent.routeID) return;
 
     this._emitter.emit(NavRouteEvents.onRouteDidPop, event);
     this.routeStatus = RouteStatus.ROUTE_POPPED;
   };
 
-  private _handleOnNavRouteWillPush: onRoutePushEvent = (event) => {
-    if(this.props.routeID != event.nativeEvent.routeID) return;
+  private _handleOnNavRouteWillPush: OnRoutePushEvent = (event) => {
+    if(this.props.routeID !== event.nativeEvent.routeID) return;
 
     this._emitter.emit(NavRouteEvents.onRouteWillPush, event);
     this.routeStatus = RouteStatus.ROUTE_PUSHING;
   };
 
-  private _handleOnNavRouteDidPush: onRoutePushEvent = (event) => {
-    if(this.props.routeID != event.nativeEvent.routeID) return;
+  private _handleOnNavRouteDidPush: OnRoutePushEvent = (event) => {
+    if(this.props.routeID !== event.nativeEvent.routeID) return;
 
     this._emitter.emit(NavRouteEvents.onRouteDidPush, event);
     this.routeStatus = RouteStatus.ROUTE_PUSHED;
   };
 
-  private _handleOnPressNavBarLeftItem: onPressNavBarItem = (event) => {
-    if(this.props.routeID != event.nativeEvent.routeID) return;
+  private _handleOnPressNavBarLeftItem: OnPressNavBarItem = (event) => {
+    if(this.props.routeID !== event.nativeEvent.routeID) return;
     this._emitter.emit(NavRouteEvents.onPressNavBarLeftItem, event);
   };
 
-  private _handleOnPressNavBarRightItem: onPressNavBarItem = (event) => {
-    if(this.props.routeID != event.nativeEvent.routeID) return;
+  private _handleOnPressNavBarRightItem: OnPressNavBarItem = (event) => {
+    if(this.props.routeID !== event.nativeEvent.routeID) return;
     this._emitter.emit(NavRouteEvents.onPressNavBarRightItem, event);
   };
 
-  private _handleOnRouteWillFocus: onRouteFocusBlurEvent = (event)  => {
-    if(this.props.routeID != event.nativeEvent.routeID) return;
+  private _handleOnRouteWillFocus: OnRouteFocusBlurEvent = (event)  => {
+    if(this.props.routeID !== event.nativeEvent.routeID) return;
 
     this._emitter.emit(NavRouteEvents.onRouteWillFocus, event);
     this.routeStatus = RouteStatus.ROUTE_FOCUSING;
   };
 
-  private _handleOnRouteDidFocus: onRouteFocusBlurEvent = (event)  => {
-    if(this.props.routeID != event.nativeEvent.routeID) return;
+  private _handleOnRouteDidFocus: OnRouteFocusBlurEvent = (event)  => {
+    if(this.props.routeID !== event.nativeEvent.routeID) return;
 
     this._emitter.emit(NavRouteEvents.onRouteDidFocus, event);
     this.routeStatus = RouteStatus.ROUTE_FOCUSED;
   };
 
-  private _handleOnRouteWillBlur: onRouteFocusBlurEvent = (event)  => {
-    if(this.props.routeID != event.nativeEvent.routeID) return;
+  private _handleOnRouteWillBlur: OnRouteFocusBlurEvent = (event)  => {
+    if(this.props.routeID !== event.nativeEvent.routeID) return;
 
     this._emitter.emit(NavRouteEvents.onRouteWillBlur, event);
     this.routeStatus = RouteStatus.ROUTE_BLURRING;
   };
 
-  private _handleOnRouteDidBlur: onRouteFocusBlurEvent = (event)  => {
-    if(this.props.routeID != event.nativeEvent.routeID) return;
+  private _handleOnRouteDidBlur: OnRouteFocusBlurEvent = (event)  => {
+    if(this.props.routeID !== event.nativeEvent.routeID) return;
 
     this._emitter.emit(NavRouteEvents.onRouteDidBlur, event);
     this.routeStatus = RouteStatus.ROUTE_BLURRED;
   };
   
-  private _handleOnUpdateSearchResults: onUpdateSearchResults = (event) => {
-    if(this.props.routeID != event.nativeEvent.routeID) return;
+  private _handleOnUpdateSearchResults: OnUpdateSearchResults = (event) => {
+    if(this.props.routeID !== event.nativeEvent.routeID) return;
 
     this._emitter.emit(NavRouteEvents.onUpdateSearchResults, event);
   };
 
-  private _handleOnSearchBarCancelButtonClicked: onSearchBarCancelButtonClicked = (event) => {
-    if(this.props.routeID != event.nativeEvent.routeID) return;
+  private _handleOnSearchBarCancelButtonClicked: OnSearchBarCancelButtonClicked = (event) => {
+    if(this.props.routeID !== event.nativeEvent.routeID) return;
 
     this._emitter.emit(NavRouteEvents.onSearchBarCancelButtonClicked, event);
   };
 
-  private _handleOnSearchBarSearchButtonClicked: onSearchBarSearchButtonClicked = (event) => {
-    if(this.props.routeID != event.nativeEvent.routeID) return;
+  private _handleOnSearchBarSearchButtonClicked: OnSearchBarSearchButtonClicked = (event) => {
+    if(this.props.routeID !== event.nativeEvent.routeID) return;
 
     this._emitter.emit(NavRouteEvents.onSearchBarSearchButtonClicked, event);
   };
@@ -593,7 +594,7 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
       }}>
         <RNINavigatorRouteView
           style={styles.navigatorRouteView}
-          ref={r => this._nativeRef = r}
+          ref={r => { this._nativeRef = r }}
           routeID={props.routeID}
           nativeID={NativeIDKeys.NavRouteItem}
           routeKey={props.routeKey}
@@ -623,7 +624,7 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
         >
           {this._renderRouteContents(navigation)}
           <RouteComponentsWrapper
-            ref={r => this._routeComponentsWrapperRef = r}
+            ref={r => { this._routeComponentsWrapperRef = r }}
             navigation={navigation}
             getPortalRef={this.getPortalRef}
             // render nav bar items
@@ -640,17 +641,17 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
 class RouteViewUtils {
   static isRouteReady(routeStatus: RouteStatus){
     return (
-      routeStatus != RouteStatus.INIT &&
-      routeStatus != RouteStatus.UNMOUNTED
+      routeStatus !== RouteStatus.INIT &&
+      routeStatus !== RouteStatus.UNMOUNTED
     );
   };
 
   static isRouteFocusingOrFocused(routeStatus: RouteStatus){
     return (
-      routeStatus == RouteStatus.ROUTE_PUSHING  ||
-      routeStatus == RouteStatus.ROUTE_PUSHED   ||
-      routeStatus == RouteStatus.ROUTE_FOCUSING ||
-      routeStatus == RouteStatus.ROUTE_FOCUSED    
+      routeStatus === RouteStatus.ROUTE_PUSHING  ||
+      routeStatus === RouteStatus.ROUTE_PUSHED   ||
+      routeStatus === RouteStatus.ROUTE_FOCUSING ||
+      routeStatus === RouteStatus.ROUTE_FOCUSED    
     );
   };
 };

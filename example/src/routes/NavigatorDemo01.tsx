@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, View, Text, SafeAreaView } from 'react-native';
-import { NavigatorView, NavRouteEvents, RouteContentProps, RouteViewEvents } from 'react-native-ios-navigator';
+import { NavigatorView, RouteContentProps, RouteViewEvents } from 'react-native-ios-navigator';
 
 import * as Colors  from '../constants/Colors';
 import * as Helpers from '../functions/Helpers';
@@ -114,7 +114,7 @@ class NestTestA2 extends React.PureComponent<RouteContentProps & {
         />
         <SafeAreaView style={styles.rowContainer}>
           <NavigatorView
-            ref={r => this.navRefA = r}
+            ref={r => { this.navRefA = r }}
             initialRoutes={[{routeKey: 'BlankRoute'}]}
             routes={[{
               routeKey: 'BlankRoute',
@@ -130,7 +130,7 @@ class NestTestA2 extends React.PureComponent<RouteContentProps & {
             }]}
           />
           <NavigatorView
-            ref={r => this.navRefB = r}
+            ref={r => { this.navRefB = r }}
             initialRoutes={[{routeKey: 'BlankRoute'}]}
             routes={[{
               routeKey: 'BlankRoute',
@@ -227,7 +227,7 @@ class NestTestA1 extends React.PureComponent<{
         />
         <SafeAreaView style={styles.rootContainer}>
           <NavigatorView
-            ref={r => this.navRefA = r}
+            ref={r => { this.navRefA = r }}
             initialRoutes={[{routeKey: 'BlankRoute'}]}
             routes={[{
               routeKey: 'BlankRoute',
@@ -255,7 +255,7 @@ class NestTestA1 extends React.PureComponent<{
             }]}
           />
           <NavigatorView
-            ref={r => this.navRefB = r}
+            ref={r => { this.navRefB = r }}
             initialRoutes={[{routeKey: 'BlankRoute'}]}
             routes={[{
               routeKey: 'BlankRoute',
@@ -342,7 +342,7 @@ export class NavigatorDemo01 extends React.Component {
         />
         <SafeAreaView style={styles.rootContainer}>
           <NavigatorView
-            ref={r => this.navRef = r}
+            ref={r => { this.navRef = r }}
             initialRoutes={[{routeKey: 'BlankRoute'}]}
             routes={[{
               routeKey: 'BlankRoute',

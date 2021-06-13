@@ -2,8 +2,6 @@ import * as React from 'react';
 
 import { StyleSheet, View, Text, Image } from 'react-native';
 
-import * as Colors from '../../constants/Colors';
-
 import { ASSETS, COLOR_PRESETS, PostItem, UI_CONSTANTS } from './Constants';
 
 

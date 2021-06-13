@@ -194,47 +194,23 @@ export class NavigatorTest01 extends React.Component<RouteContentProps, Navigato
             ),
           }}
           renderNavBarLeftItem={() => (
-            <View style={{
-              paddingHorizontal: 10, 
-              paddingVertical: 5,
-              backgroundColor: Colors.PURPLE.A700,
-              borderRadius: 10,
-            }}>
-              <Text style={{
-                color: 'white',
-                fontWeight: 'bold'
-              }}>
+            <View style={styles.navBarItemContainer}>
+              <Text style={styles.navBarItemText}>
                 {'Custom Left'}
               </Text>
             </View>
           )}
           renderNavBarRightItem={() => (
-            <View style={{
-              paddingHorizontal: 10, 
-              paddingVertical: 5,
-              backgroundColor: Colors.PURPLE.A700,
-              borderRadius: 10,
-            }}>
-              <Text style={{
-                color: 'white',
-                fontWeight: 'bold'
-              }}>
+            <View style={styles.navBarItemContainer}>
+              <Text style={styles.navBarItemText}>
                 {'Custom Right'}
               </Text>
             </View>
           )}
           {...(state.renderNavBarTitleItem && ({
             renderNavBarTitleItem: (params) => (
-              <View style={{
-                paddingHorizontal: 10, 
-                paddingVertical: 5,
-                backgroundColor: Colors.PURPLE.A700,
-                borderRadius: 10,
-              }}>
-                <Text style={{
-                  color: 'white',
-                  fontWeight: 'bold'
-                }}>
+              <View style={styles.navBarTitleContainer}>
+                <Text style={styles.navBarTitleText}>
                   {`Custom: ${params.routeOptions?.routeTitle}`}
                 </Text>
               </View>
@@ -319,5 +295,27 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     color: 'white',
     fontSize: 64,
+  },
+
+  navBarItemContainer: {
+    paddingHorizontal: 10, 
+    paddingVertical: 5,
+    backgroundColor: Colors.PURPLE.A700,
+    borderRadius: 10,
+  },
+  navBarItemText: {
+    color: 'white',
+    fontWeight: 'bold'
+  },
+
+  navBarTitleContainer: {
+    paddingHorizontal: 10, 
+    paddingVertical: 5,
+    backgroundColor: Colors.PURPLE.A700,
+    borderRadius: 10,
+  },
+  navBarTitleText: {
+    color: 'white',
+    fontWeight: 'bold'
   },
 });

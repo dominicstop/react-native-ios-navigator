@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, TextInput, Switch, GestureResponderEvent, ViewStyle } from 'react-native';
+import { StyleSheet, View, ViewStyle } from 'react-native';
 
 export function TriangleView(props: {
   style?: ViewStyle;

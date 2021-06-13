@@ -20,7 +20,7 @@ export class SimpleQueue {
     const queueKey = this.queueKey++;
 
     const promise = new Promise<void>((resolve, reject) => {
-      if(this.queue.length == 0 && !this._isBusy){
+      if((this.queue.length === 0) && !this._isBusy){
         this._isBusy = true;
         resolve();
 
@@ -38,7 +38,7 @@ export class SimpleQueue {
 
   cancel(queueKey: number){
     const queueItem = this.queue.find(item => 
-      item.queueKey == queueKey
+      (item.queueKey === queueKey)
     );
 
     if(queueItem){

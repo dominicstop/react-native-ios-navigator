@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View, ScrollView, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, ScrollView, Text, TouchableOpacity, Alert } from 'react-native';
 
 import { RouteViewPortal, RouteContentProps, useNavBarItemEvents } from 'react-native-ios-navigator';
 import * as Colors from '../constants/Colors';
@@ -8,8 +8,7 @@ export function NavigatorTest02(props: RouteContentProps){
   const [index, setIndex] = React.useState(0);
 
   useNavBarItemEvents('onPressNavBarLeftItem', ({nativeEvent}) => {
-    // @ts-ignore
-    alert(`onPressNavBarLeftItem, key: ${nativeEvent.key}`);
+    Alert.alert('onPressNavBarLeftItem', `key: ${nativeEvent.key}`);
   });
 
   return (

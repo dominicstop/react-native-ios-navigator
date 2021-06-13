@@ -15,11 +15,14 @@ export function SpacerLine(props: {
   space?: number;
   lineThickness?: number;
 }){
+  
+  const spacerLineStyle = {
+    paddingTop: props.space ?? 12,
+    borderBottomWidth: props.lineThickness ?? 1,
+    borderBottomColor: 'rgba(0,0,0,0.15)',
+  };
+
   return(
-    <View style={{
-      paddingTop: props.space ?? 12,
-      borderBottomWidth: props.lineThickness ?? 1,
-      borderBottomColor: 'rgba(0,0,0,0.15)',
-    }}/>
+    <View style={spacerLineStyle}/>
   );
 };

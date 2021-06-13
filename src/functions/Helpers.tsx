@@ -1,6 +1,7 @@
 import type React from 'react';
 
-// wrapper func for setState that returns a promise
+/** wrapper func for setState that returns a promise */
+// eslint-disable-next-line consistent-this
 export function setStateAsync<T>(
   that: React.Component,
   newState: T | ((prevState: T) => T)
@@ -12,7 +13,7 @@ export function setStateAsync<T>(
   });
 };
 
-// wrapper for timeout that returns a promise
+/** wrapper for timeout that returns a promise */
 export function timeout(ms: Number) {
   return new Promise<void>(resolve => {
     const timeoutID = setTimeout(() => {

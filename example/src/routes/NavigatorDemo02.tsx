@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, SafeAreaView, Alert } from 'react-native';
-import { NavigatorView, NavRouteEvents, RouteContentProps, useNavRouteLifeCycle } from 'react-native-ios-navigator';
+import { View, Text, SafeAreaView, StyleSheet } from 'react-native';
+import { NavigatorView, RouteContentProps, useNavRouteLifeCycle } from 'react-native-ios-navigator';
 
 import * as Colors  from '../constants/Colors';
 import * as Helpers from '../functions/Helpers';
@@ -28,8 +28,7 @@ class DemoUtils {
 
 function BlankRoute(_: RouteContentProps){
   return(
-    <View>
-    </View>
+    <View/>
   );
 };
 
@@ -62,7 +61,7 @@ export function NavigatorDemo02(props: RouteContentProps & {
   ]);
 
   return(
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={styles.routeRootContainer}>
       <NavigatorView
         ref={navRef}
         initialRoutes={[{routeKey: 'BlankRoute'}]}
@@ -81,7 +80,7 @@ export function NavigatorDemo02(props: RouteContentProps & {
         routes={[{
           routeKey: 'BlankRoute',
           routeOptionsDefault: {
-            backButtonDisplayMode: ((currentIndex % 2 == 0)
+            backButtonDisplayMode: ((currentIndex % 2 === 0)
               ? 'default'
               : 'generic'
             )
@@ -94,7 +93,7 @@ export function NavigatorDemo02(props: RouteContentProps & {
           routeOptionsDefault: {
             navBarButtonRightItemsConfig: [{
               type: 'IMAGE_SYSTEM',
-              imageValue: ((currentIndex % 2 == 0)
+              imageValue: ((currentIndex % 2 === 0)
                 ? 'heart'
                 : 'heart.fill'
               )
@@ -113,17 +112,8 @@ export function NavigatorDemo02(props: RouteContentProps & {
             />
           ),
           renderNavBarTitleItem: () => (
-            <View style={{
-              backgroundColor: 'white',
-              borderRadius: 10,
-              paddingHorizontal: 10,
-              paddingVertical: 3
-            }}>
-              <Text style={{
-                fontSize: 16,
-                fontWeight: 'bold',
-                color: prevColor,
-              }}>
+            <View style={styles.navBarTitleContainer}>
+              <Text style={[styles.navBarTitleText, { color: prevColor }]}>
                 {`Nested: ${currentIndex + 1}`}
               </Text>
             </View>
@@ -133,3 +123,19 @@ export function NavigatorDemo02(props: RouteContentProps & {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  routeRootContainer: {
+    flex: 1,
+  },
+  navBarTitleContainer: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 3
+  },
+  navBarTitleText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+});

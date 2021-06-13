@@ -18,6 +18,8 @@ interface RNINavigatorRouteViewModule {
   getRouteConstants(node: number): Promise<RouteConstantsObject>;
 };
 
+const COMPONENT_NAME = 'RNINavigatorRouteViewModule';
+
 // Import native component
 export const RNINavigatorRouteViewModule: RNINavigatorRouteViewModule =
-  NativeModules["RNINavigatorRouteViewModule"];
+  NativeModules[COMPONENT_NAME];

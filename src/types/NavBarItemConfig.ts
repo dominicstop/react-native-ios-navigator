@@ -1,4 +1,4 @@
-import type { DynamicColor, ImageItemConfig, BarMetrics, ControlState, Offset, ImageTypes, ImageResolvedAssetSource } from "./MiscTypes";
+import type { DynamicColor, ImageItemConfig, BarMetrics, ControlState, Offset, ImageTypes } from "./MiscTypes";
 
 //#region - BarButtonItemSystemItem
 type BarButtonItemSystemItem =

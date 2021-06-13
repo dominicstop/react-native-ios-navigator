@@ -12,12 +12,14 @@ type NativeComponentCommands = {
   notifyComponentWillUnmount: any;
 };
 
+const COMPONENT_NAME = 'RNIWrapperView';
+
 const NativeComponent = 
-  requireNativeComponent<RNIWrapperViewProps>('RNIWrapperView');
+  requireNativeComponent<RNIWrapperViewProps>(COMPONENT_NAME);
 
 const NativeCommands: NativeComponentCommands = 
   // @ts-ignore
-  UIManager["RNIWrapperView"].Commands;
+  UIManager[COMPONENT_NAME].Commands;
 
 
 export class RNIWrapperView extends React.PureComponent<RNIWrapperViewProps> {

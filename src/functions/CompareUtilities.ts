@@ -23,7 +23,7 @@ export class CompareUtilities {
 
     return (
       CompareUtilities.compareItemsNull(itemA, itemB) && 
-      (itemA?.length == itemB?.length)
+      (itemA?.length === itemB?.length)
     );
   };
 

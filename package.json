@@ -94,6 +94,9 @@
           "useTabs": false
         }
       ]
+    },
+    "globals": {
+      "LIB_GLOBAL": true
     }
   },
   "eslintIgnore": [

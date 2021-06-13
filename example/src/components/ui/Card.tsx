@@ -125,12 +125,7 @@ export function CardRowSwitch(props: {
         <Text style={styles.cardRowSwitchLabelText}>
           {props.title ?? 'title'}
         </Text>
-        <Text style={{
-          flex: 1,
-          fontSize: 16,
-          opacity: 0.5,
-          color: Colors.PURPLE[1100],
-        }}>
+        <Text style={styles.cardRowSwitchSubtitleText}>
           {props.subtitle ?? 'Toggle the value'}
         </Text>
       </View>
@@ -275,6 +270,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     color: Colors.PURPLE[1200],
+  },
+  cardRowSwitchSubtitleText: {
+    flex: 1,
+    fontSize: 16,
+    opacity: 0.5,
+    color: Colors.PURPLE[1100],
   },
   //#endregion
 

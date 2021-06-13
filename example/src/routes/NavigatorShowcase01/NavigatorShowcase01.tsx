@@ -1,14 +1,14 @@
 import * as React from 'react';
 
-import { StyleSheet, Platform, View, SafeAreaView, Text, Image, Animated, ListRenderItem, StyleProp, ViewStyle } from 'react-native';
-import { RouteViewPortal, RouteContentProps, RouteHeaderView, NavigatorViewConstants, NavigatorUIConstantsContext, NavBarAppearanceCombinedConfig } from 'react-native-ios-navigator';
+import { StyleSheet, View, Text, Animated, ListRenderItem } from 'react-native';
+import { RouteViewPortal, RouteContentProps } from 'react-native-ios-navigator';
 
 import { RouteHeader } from './RouteHeader';
 import { ListItemTrack } from './ListItemTrack';
 
 import type { TrackItem } from './SharedTypes';
 
-import * as Colors  from '../../constants/Colors';
+import * as Colors from '../../constants/Colors';
 import { navBarAppearanceConfigHidden } from '../../constants/Constants';
 
 

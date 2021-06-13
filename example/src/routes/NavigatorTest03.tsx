@@ -1,95 +1,58 @@
 import * as React from 'react';
-import { StyleSheet, View, ScrollView, Text, TouchableOpacity, SafeAreaView } from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
 
-import { RouteViewPortal, RouteContentProps, useNavBarItemEvents } from 'react-native-ios-navigator';
-import * as Colors from '../constants/Colors';
+import { RouteViewPortal, RouteContentProps } from 'react-native-ios-navigator';
 
+import { CardButton } from '../components/ui/Card';
+import { Spacer } from '../components/ui/Spacer';
 
-function ButtonWithSubtitle(props: {
-  title: string,
-  subtitle: string,
-  onPress: () => void,
-}){
-  return(
-    <TouchableOpacity
-      onPress={props.onPress}
-      style={{
-        backgroundColor: Colors.PURPLE.A700,
-        borderRadius: 10,
-        overflow: 'hidden',
-        paddingHorizontal: 12,
-        paddingVertical: 7,
-        marginHorizontal: 15,
-        marginVertical: 10,
-      }}
-    >
-      <View>
-        <Text style={{
-          color: 'white',
-          fontSize: 16,
-          fontWeight: '500'
-        }}>
-          {props.title}
-        </Text>
-        <Text style={{
-          color: 'white',
-          fontSize: 16,
-          fontWeight: '300',
-          opacity: 0.8,
-        }}>
-          {props.subtitle}
-        </Text>
-      </View>
-    </TouchableOpacity>
-  );
-};
 
 export function NavigatorTest03(props: RouteContentProps){
   const [isNavBarHidden, setIsNavBarHidden] = React.useState(false);
 
   return (
-    <ScrollView contentContainerStyle={styles.testContainer}>
+    <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
       <RouteViewPortal
         routeOptions={{
           largeTitleDisplayMode: 'never',
         }}
       />
-      <ButtonWithSubtitle
+      <CardButton
         title={'Push `NavigatorTest03`'}
         subtitle={'Push a new route'}
         onPress={() => {
           props.navigation.push({routeKey: 'NavigatorTest03'});
         }}
       />
-      <ButtonWithSubtitle
+      <CardButton
         title={'Pop Current Route'}
         subtitle={'Go back to the previous route.'}
         onPress={() => {
           props.navigation.pop();
         }}
       />
-      <ButtonWithSubtitle
+      <CardButton
         title={'Pop to Root'}
         subtitle={'Go back to the first route.'}
         onPress={() => {
           props.navigation.popToRoot();
         }}
       />
-      <ButtonWithSubtitle
+      <CardButton
         title={'Remove Route: 01'}
         subtitle={'Remove route with `routeIndex: 1`'}
         onPress={() => {
           props.navigation.removeRoute(1);
         }}
       />
-      <ButtonWithSubtitle
+      <CardButton
         title={'Remove Route: 01, 02'}
         subtitle={'Remove route with `routeIndex: 1...2`'}
         onPress={() => {
           props.navigation.removeRoutes([1,2]);
         }}
       />
-      <ButtonWithSubtitle
+      <CardButton
         title={'Toggle `isNavBarHidden`'}
         subtitle={`Toggle the navigation bar visibility`}
         onPress={() => {
@@ -97,14 +60,14 @@ export function NavigatorTest03(props: RouteContentProps){
           setIsNavBarHidden(!isNavBarHidden);
         }}
       />
-      <ButtonWithSubtitle
+      <CardButton
         title={'Replace Route: 01'}
         subtitle={'Replace route with `routeIndex: 1` w/ `routeKey: Home`'}
         onPress={() => {
           props.navigation.replaceRoute(1, {routeKey: 'Home'});
         }}
       />
-      <ButtonWithSubtitle
+      <CardButton
         title={'Insert Route: 01'}
         subtitle={'Insert route at `routeIndex: 1` w/ `routeKey: NavigatorTest01`'}
         onPress={() => {
@@ -112,22 +75,22 @@ export function NavigatorTest03(props: RouteContentProps){
         }}
       />
 
-      <View style={{marginTop: 30}}/>
-      <ButtonWithSubtitle
+      <Spacer space={30}/>
+      <CardButton
         title={'Set Routes: Reverse Sort'}
         subtitle={'Sort the routes in reverse order'}
         onPress={() => {
           props.navigation.setRoutes((routes) => [...routes].reverse());
         }}
       />
-      <ButtonWithSubtitle
+      <CardButton
         title={'Set Routes: Insert Route Front'}
         subtitle={'Insert route w/ `routeKey: NavigatorTest01`'}
         onPress={() => {
           props.navigation.setRoutes((routes) => [...routes, {routeKey: 'NavigatorTest01'}]);
         }}
       />
-      <ButtonWithSubtitle
+      <CardButton
         title={'Set Routes: Remove Current'}
         subtitle={'Remove the topmost route'}
         onPress={() => {
@@ -135,22 +98,22 @@ export function NavigatorTest03(props: RouteContentProps){
         }}
       />
 
-      <View style={{marginTop: 30}}/>
-      <ButtonWithSubtitle
+      <Spacer space={30}/>
+      <CardButton
         title={'Replace Route: 0'}
         subtitle={'Replace the 1st route w/ `routeKey: NavigatorTest01`'}
         onPress={() => {
           props.navigation.replaceRoute(0,{routeKey: 'NavigatorTest01'});
         }}
       />
-      <ButtonWithSubtitle
+      <CardButton
         title={'Remove Route: 0'}
         subtitle={'Remove the first route'}
         onPress={() => {
           props.navigation.removeRoute(0);
         }}
       />
-      <ButtonWithSubtitle
+      <CardButton
         title={'Remove Route: 01'}
         subtitle={'Remove route with `routeIndex: 1`'}
         onPress={() => {
@@ -158,29 +121,29 @@ export function NavigatorTest03(props: RouteContentProps){
         }}
       />
 
-      <View style={{marginTop: 30}}/>
-      <ButtonWithSubtitle
+      <Spacer space={30}/>
+      <CardButton
         title={'Remove Prev. Route'}
         subtitle={'Remove prev. route'}
         onPress={() => {
           props.navigation.removePreviousRoute();
         }}
       />
-      <ButtonWithSubtitle
+      <CardButton
         title={'Remove All Prev. Routes'}
         subtitle={'Remove all the prev. routes'}
         onPress={() => {
           props.navigation.removeAllPrevRoutes();
         }}
       />
-      <ButtonWithSubtitle
+      <CardButton
         title={'Replace Current Route'}
         subtitle={'Replace current route w/ `routeKey: NavigatorTest01`'}
         onPress={() => {
           props.navigation.replaceCurrentRoute({routeKey: 'NavigatorTest01'});
         }}
       />
-      <ButtonWithSubtitle
+      <CardButton
         title={'Replace Prev. Route'}
         subtitle={'Replace prev. route w/ `routeKey: NavigatorTest01`'}
         onPress={() => {
@@ -188,8 +151,8 @@ export function NavigatorTest03(props: RouteContentProps){
         }}
       />
 
-      <View style={{marginTop: 30}}/>
-      <ButtonWithSubtitle
+      <Spacer space={30}/>
+      <CardButton
         title={'Push Native Route'}
         subtitle={'Push a native route: `TestNativeRoute`'}
         onPress={() => {
@@ -199,21 +162,21 @@ export function NavigatorTest03(props: RouteContentProps){
           });
         }}
       />
-      <ButtonWithSubtitle
+      <CardButton
         title={'Replace w/ Native Route`'}
         subtitle={'Replace current route with: `TestNativeRoute``'}
         onPress={() => {
           props.navigation.replaceCurrentRoute({routeKey: 'TestNativeRoute'});
         }}
       />
-      <ButtonWithSubtitle
+      <CardButton
         title={'Insert w/ Native Route`'}
         subtitle={'Insert native route `TestNativeRoute` at index 1'}
         onPress={() => {
           props.navigation.insertRoute({routeKey: 'TestNativeRoute'}, 1);
         }}
       />
-      <ButtonWithSubtitle
+      <CardButton
         title={'SetRoutes w/ Native Route`'}
         subtitle={'Insert native route `TestNativeRoute` in the front.'}
         onPress={() => {
@@ -223,8 +186,8 @@ export function NavigatorTest03(props: RouteContentProps){
         }}
       />
 
-      <View style={{marginTop: 30}}/>
-      <ButtonWithSubtitle
+      <Spacer space={30}/>
+      <CardButton
         title={'Trigger `sendCustomCommandToNative`'}
         subtitle={'Send custom command to the current navigator.'}
         onPress={() => {
@@ -237,11 +200,10 @@ export function NavigatorTest03(props: RouteContentProps){
   );
 };
 
-//
-
 const styles = StyleSheet.create({
-  testContainer: {
+  scrollViewContentContainer: {
     paddingTop: 25,
     paddingBottom: 100,
+    paddingHorizontal: 12,
   },
 });

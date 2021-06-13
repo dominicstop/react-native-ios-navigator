@@ -76,7 +76,7 @@ export function NavigatorTest05() {
         }}
       />
       <NavigatorView
-        ref={r => this.navRef = r}
+        ref={r => { this.navRef = r }}
         initialRoutes={[{ 
           routeKey: 'routeA',
           routeProps: { message: 'A' }

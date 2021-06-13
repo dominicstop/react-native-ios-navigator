@@ -50,7 +50,7 @@ function RouteHeaderWithButton(){
             cachedIndex = headerTopPaddingIndex + 1;
           }}
         >
-          <Text style={{color: 'white'}}>
+          <Text style={styles.headerButtonText}>
             {`headerTopPadding: ${currentHeaderTopPadding}`}
           </Text>
         </TouchableOpacity>
@@ -81,30 +81,21 @@ export function NavigatorTest06(){
           <RouteHeaderWithButton/>
         )}
       />
-      <ScrollView>
-        <View style={{
-          height: 1000, 
-          alignSelf: 'stretch',
-          alignItems: 'center',
-        }}>
-          <Text style={{fontSize: 64, fontWeight: '600', margin: 10}}>
-            Hello World
+      <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
+        <Image
+          style={styles.contentImageTest}
+          source={AssetImageCoffee}
+        />
+        <TouchableOpacity 
+          style={styles.headerButton}
+          onPress={() => {
+            setPassthroughTouchEvents(prevValue => !prevValue);
+          }}
+        >
+          <Text style={styles.headerButtonText}>
+            {`allowTouchEventsToPassThroughNavigationBar: ${passthroughTouchEvents}`}
           </Text>
-          <Image
-            style={{width: 100, height: 100, borderRadius: 10, margin: 10}}
-            source={AssetImageCoffee}
-          />
-          <TouchableOpacity 
-            style={styles.headerButton}
-            onPress={() => {
-              setPassthroughTouchEvents(prevValue => !prevValue);
-            }}
-          >
-            <Text style={{color: 'white'}}>
-              {`allowTouchEventsToPassThroughNavigationBar: ${passthroughTouchEvents}`}
-            </Text>
-          </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
       </ScrollView>
     </React.Fragment>
   );
@@ -136,5 +127,20 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     backgroundColor: 'purple',
     borderRadius: 10,
+  },
+  headerButtonText: {
+    color: 'white'
+  },
+
+  scrollViewContentContainer: {
+    minHeight: 1000,
+    alignSelf: 'stretch',
+    alignItems: 'center',
+  },
+  contentImageTest: {
+    width: 100, 
+    height: 100, 
+    borderRadius: 10, 
+    margin: 10,
   },
 });

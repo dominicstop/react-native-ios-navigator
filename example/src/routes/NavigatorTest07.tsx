@@ -20,6 +20,7 @@ export function NavigatorTest07(){
             tintColor: 'white',
           },
           navBarAppearanceOverride: navBarAppearanceConfigHidden,
+          statusBarStyle: 'lightContent',
         }}
         renderRouteHeader={() => (
           <RouteHeaderView
@@ -42,17 +43,10 @@ export function NavigatorTest07(){
           </RouteHeaderView>
         )}
       />
-      <ScrollView>
-        <View style={{
-          height: 1000, 
-          alignSelf: 'stretch',
-          alignItems: 'center',
-          paddingTop: 15,
-        }}>
-          <Text style={{fontSize: 64, fontWeight: '600'}}>
-            Hello World
-          </Text>
-        </View>
+      <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
+        <Text style={styles.contentTitleText}>
+          Hello World
+        </Text>
       </ScrollView>
     </React.Fragment>
   );
@@ -74,5 +68,15 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'white',
     fontWeight: '700',
+  },
+  scrollViewContentContainer: {
+    minHeight: 1000, 
+    alignSelf: 'stretch',
+    alignItems: 'center',
+    paddingTop: 15,
+  },
+  contentTitleText: {
+    fontSize: 64, 
+    fontWeight: '600'
   },
 });

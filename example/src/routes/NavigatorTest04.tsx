@@ -188,7 +188,7 @@ export function NavigatorTest04() {
         }}
       />
       <NavigatorView
-        ref={r => this.navRef = r}
+        ref={r => { this.navRef = r }}
         initialRoutes={[{routeKey: 'MainRoute'}]}
         navBarPrefersLargeTitles={false}
         routes={[{

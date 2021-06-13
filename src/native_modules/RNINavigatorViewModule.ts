@@ -1,6 +1,5 @@
 import { NativeModules } from 'react-native';
 
-import type { NavigatorRouteView } from 'src/components/NavigatorRouteView';
 import type { RNINavigatorRouteViewProps } from 'src/native_components/RNINavigatorRouteView';
 import type { EdgeInsets, Rect } from 'src/types/MiscTypes';
 
@@ -112,5 +111,7 @@ interface RNINavigatorViewModule {
   getNavigatorConstants(node: number): Promise<NavigatorConstantsObject>;
 };
 
+const MODULE_NAME = "RNINavigatorViewModule";
+
 export const RNINavigatorViewModule: RNINavigatorViewModule =
-  NativeModules["RNINavigatorViewModule"];
+  NativeModules[MODULE_NAME];

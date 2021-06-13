@@ -22,7 +22,7 @@ export function NavBarRightItemsConfig(props: SharedSectionProps & {
         pillTitle={'navBarButtonRightItemsConfig'}
         subtitle={`Current config for the nav bar right item: ${currentConfig?.description ?? 'N/A'}`}
       />
-      {(currentConfig.config.length == 0)?(
+      {(currentConfig.config.length === 0)?(
          <ObjectPropertyDisplay
             key={`config-NavBarRightItemsConfig`}
             object={null}

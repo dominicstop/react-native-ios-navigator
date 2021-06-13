@@ -298,7 +298,6 @@ class HomeRoute extends React.PureComponent<RouteContentProps, HomeRouteState> {
     item: typeof RouteItems[number];
     index: number;
   }) => {
-    const { styles } = HomeRoute;
 
     return (
       <RouteItem
@@ -367,7 +366,7 @@ class HomeRoute extends React.PureComponent<RouteContentProps, HomeRouteState> {
 export default function App() {
   return (
     <NavigatorView
-      ref={r => this.navRef = r}
+      ref={r => {this.navRef = r}}
       style={styles.container}
       routes={ROUTES}
       initialRoutes={[{routeKey: RouteKeys.Home}]}

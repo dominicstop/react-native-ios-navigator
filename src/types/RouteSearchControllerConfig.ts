@@ -1,4 +1,3 @@
-import type { TextStyle } from "react-native";
 import type { DynamicColor, ReturnKeyType } from "./MiscTypes";
 
 export type UISearchBarStyle = 

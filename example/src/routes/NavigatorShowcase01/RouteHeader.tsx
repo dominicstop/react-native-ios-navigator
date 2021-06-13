@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { StyleSheet, View, SafeAreaView, Text, Image, Animated, ListRenderItem, StyleProp, ViewStyle } from 'react-native';
-import { RouteViewPortal, RouteHeaderView, NavigatorViewConstants, NavigatorUIConstantsContext, NavigatorUIConstantsContextProps } from 'react-native-ios-navigator';
+import { StyleSheet, View, SafeAreaView, Text, Image, Animated, StyleProp, ViewStyle } from 'react-native';
+import { RouteHeaderView, NavigatorViewConstants, NavigatorUIConstantsContext } from 'react-native-ios-navigator';
 
 import * as Colors  from '../../constants/Colors';
 

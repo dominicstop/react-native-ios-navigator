@@ -5,7 +5,6 @@ import type { RouteComponentsWrapper } from './RouteComponentsWrapper';
 import type { RouteOptions } from '../types/RouteOptions';
 
 import { CompareRouteOptions } from '../functions/CompareRouteOptions';
-import { CompareUtilities } from '../functions/CompareUtilities';
 
 import { NavRouteViewContext, NavRouteViewContextProps } from '../context/NavRouteViewContext';
 

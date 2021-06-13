@@ -76,7 +76,7 @@ export function ObjectPropertyDisplay<T extends Object>(props: {
       styles.rootContainerWhenEmptyObject, 
       props.style
     ]}>
-      <Text style={{opacity: 0.75}}>
+      <Text style={styles.emptyObjectText}>
         {'Nothing to show'}
       </Text>
     </View>
@@ -119,5 +119,8 @@ const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  emptyObjectText: {
+    opacity: 0.75
   },
 });

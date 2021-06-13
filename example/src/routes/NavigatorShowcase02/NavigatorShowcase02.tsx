@@ -98,7 +98,6 @@ export class NavigatorShowcase02 extends React.Component<RouteContentProps> {
               type: 'IMAGE_EMPTY',
               tintColor: 'white',
             },
-            
           }}
           renderRouteHeader={() => (
             <RouteHeader
@@ -107,9 +106,7 @@ export class NavigatorShowcase02 extends React.Component<RouteContentProps> {
           )}
         />
         <Animated.FlatList
-          contentContainerStyle={{
-            minHeight: 1000,
-          }}
+          contentContainerStyle={styles.listContentContainer}
           data={POST_ITEMS}
           keyExtractor={this._handleKeyExtractor}
           renderItem={this._renderListItem}
@@ -117,7 +114,6 @@ export class NavigatorShowcase02 extends React.Component<RouteContentProps> {
           ListFooterComponent={this._renderListFooter}
           onScroll={this._handleScrollViewOnScroll}
           //onScroll={({nativeEvent}) => console.log('FlatList', nativeEvent)}
-
           scrollEventThrottle={1}
         />
       </React.Fragment>
@@ -133,6 +129,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'red',
   },
 
+  listContentContainer: {
+    minHeight: 1000,
+  },
   listFooterContainer: {
     alignItems: 'center',
     justifyContent: 'center',
