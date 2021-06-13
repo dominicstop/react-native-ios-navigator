@@ -215,6 +215,18 @@
 
 ## Completed
 
+### Version: `N/A`
+
+- [x] (Commit: `74ce764`) Update linter + bob config.
+- [x] (Commit: `3085c3d`) Fixed linter warnings/errors.
+- [x] (Commit: `e205b10`) **Fix**: Custom navigation bar items not showing up.
+
+### Version: `0.0.8`
+
+- [x] (Commit: `d10e0da`) Update bob config — remove `commonjs` target.
+
+### Version: `0.0.7`
+
 - [x]  **Implement**: `RouteHeaderView` — A component that is meant to be used to create a custom navigation bar without actually replacing it.
 	* Via `routeOptions` config, make the navigation bar transparent. Then add the `RouteHeaderView` component into the route.
 	* The navigation bar will still exists but now it's transparent, so you can use `RouteHeaderView` to show anything you want behind the navigation bar.
