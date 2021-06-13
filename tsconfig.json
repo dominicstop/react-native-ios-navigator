@@ -24,16 +24,5 @@
     "strict": false,
     "target": "esnext",
     "noImplicitAny": true,
-    "declaration": true
-  },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "node_modules",
-    "lib",
-    "babel.config.js", 
-    "metro.config.js"
-  ]
-  
+  }
 }
