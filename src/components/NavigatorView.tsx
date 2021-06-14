@@ -138,6 +138,7 @@ let nativeRouteKeys: Record<string, string> = null
 export class NavigatorView extends React.PureComponent<NavigatorViewProps, NavigatorViewState> {
   
   //#region - Property Declarations
+  // @ts-ignore
   state: NavigatorViewState;
 
   /** A ref to the `RNINavigatorView` native component. */
