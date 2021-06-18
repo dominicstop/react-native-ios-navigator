@@ -27,12 +27,13 @@ import { NativeIDKeys } from '../constants/LibraryConstants';
 
 //#region - Type Definitions
 //#region - Extract handlers from RNINavigatorView
-type OnNavRouteViewAdded    =  RNINavigatorViewProps['onNavRouteViewAdded'];
-type OnNavRouteWillPop      =  RNINavigatorViewProps['onNavRouteWillPop'];
-type OnNavRouteDidPop       =  RNINavigatorViewProps['onNavRouteDidPop'];
-type OnSetNativeRoutes      =  RNINavigatorViewProps['onSetNativeRoutes'];
-type OnNativeCommandRequest =  RNINavigatorViewProps['onNativeCommandRequest'];
-type OnUIConstantsDidChange =  RNINavigatorViewProps['onUIConstantsDidChange'];
+type OnNavRouteViewAdded    = RNINavigatorViewProps['onNavRouteViewAdded'];
+type OnSetNativeRoutes      = RNINavigatorViewProps['onSetNativeRoutes'];
+type OnNativeCommandRequest = RNINavigatorViewProps['onNativeCommandRequest'];
+type OnUIConstantsDidChange = RNINavigatorViewProps['onUIConstantsDidChange'];
+
+export type OnNavRouteWillPop = RNINavigatorViewProps['onNavRouteWillPop'];
+export type OnNavRouteDidPop  = RNINavigatorViewProps['onNavRouteDidPop'];
 //#endregion
 
 export type OnCustomCommandFromNative = RNINavigatorViewProps['onCustomCommandFromNative'];
@@ -91,13 +92,15 @@ export type NavRouteConfigItem =
 /** `NavigatorView` comp. props */
 export type NavigatorViewProps = Partial<Pick<RNINavigatorViewProps,
   // mirror props from `RNINavigatorViewProps`
-  | 'nativeID'
   | 'isInteractivePopGestureEnabled' 
   | 'shouldSwizzleRootViewController'
   | 'navBarPrefersLargeTitles' 
   | 'navBarAppearance' 
   | 'isNavBarTranslucent'
+  // events
   | 'onCustomCommandFromNative'
+  | 'onNavRouteWillPop'
+  | 'onNavRouteDidPop'
 >> & {
   style?: ViewStyle;
 
@@ -106,7 +109,7 @@ export type NavigatorViewProps = Partial<Pick<RNINavigatorViewProps,
   initialRoutes: Array<NavRouteItem>;
   routeContainerStyle?: ViewStyle;
   
-  // `RNINavigatorView` - Global/Default Navbar items
+  // `RNINavigatorView` - Default Navbar items
   renderNavBarLeftItem ?: RenderNavBarItem;
   renderNavBarRightItem?: RenderNavBarItem;
   renderNavBarTitleItem?: RenderNavBarItem;
@@ -1329,6 +1332,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   private _handleOnNavRouteWillPop: OnNavRouteWillPop = ({nativeEvent}) => {
     if(this.navigatorID !== nativeEvent.navigatorID) return;
 
+    const { onNavRouteWillPop } = this.props;
+    onNavRouteWillPop && onNavRouteWillPop({nativeEvent});
+
     if(!NavigatorViewUtils.isNavStateIdle(this.navStatus)){
       this.setNavStatus(NavStatus.NAV_ABORT);
     };
@@ -1336,6 +1342,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
   private _handleOnNavRouteDidPop: OnNavRouteDidPop = ({nativeEvent}) => {
     if(this.navigatorID !== nativeEvent.navigatorID) return;
+
+    const { onNavRouteDidPop } = this.props;
+    onNavRouteDidPop && onNavRouteDidPop({nativeEvent});
 
     //#region - 🐞 DEBUG 🐛
     LIB_GLOBAL.debugLog && console.log(
