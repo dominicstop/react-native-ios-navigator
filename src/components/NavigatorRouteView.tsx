@@ -19,7 +19,7 @@ import { EventEmitter } from '../functions/EventEmitter';
 import { CompareRouteTransitionPushConfig } from '../functions/CompareRouteOptions';
 
 import { NavRouteViewContext } from '../context/NavRouteViewContext';
-import { NavigatorUIConstantsContext, NavigatorUIConstantsContextProps } from '../context/NavigatorUIConstantsContext';
+import { NavigatorUIConstantsContext } from '../context/NavigatorUIConstantsContext';
 
 import { NativeIDKeys } from '../constants/LibraryConstants';
 
@@ -109,9 +109,6 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
   static contextType = NavigatorUIConstantsContext;
   
   //#region - Property Declarations
-  state: NavigatorRouteViewState;
-  context: NavigatorUIConstantsContextProps;
-
   routeContentRef: React.Component<RouteContentProps>;
 
   routeStatus: RouteStatus;

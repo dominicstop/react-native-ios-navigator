@@ -50,7 +50,6 @@ type RouteViewEventsProps = {
 export class RouteViewEvents extends React.Component<RouteViewEventsProps> {
   static contextType = NavRouteViewContext;
   
-  context: NavRouteViewContextProps;
   routerRef: NavigatorRouteView;
   emitterRef: EventEmitter<NavRouteEvents>;
   

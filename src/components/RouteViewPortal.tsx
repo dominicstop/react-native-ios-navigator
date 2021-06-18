@@ -48,13 +48,13 @@ type RouteViewPortalProps = Partial<Pick<NavigatorRouteViewProps,
 export class RouteViewPortal extends React.Component<RouteViewPortalProps> {
   static contextType = NavRouteViewContext;
   
-  context: NavRouteViewContextProps;
   routeRef: NavigatorRouteView;
 
   _routeComponentsWrapperRef?: RouteComponentsWrapper;
   
   constructor(props: RouteViewPortalProps, context: NavRouteViewContextProps){
     super(props);
+
     const { navigation } = context;
 
     const routeRef = navigation.getRefToRoute();
@@ -62,7 +62,6 @@ export class RouteViewPortal extends React.Component<RouteViewPortalProps> {
 
     routeRef.setRouteViewPortalRef(this);
     routeRef.setRouteOptions(props.routeOptions);
-
   };
 
   componentDidMount(){

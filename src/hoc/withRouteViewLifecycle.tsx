@@ -8,7 +8,6 @@ export function withRouteViewLifecycle(WrappedComponent: any){
   return class extends React.PureComponent {
     static contextType = NavRouteViewContext;
 
-    context: React.ContextType<typeof NavRouteViewContext>;
     childRef: any;
 
     componentDidMount(){
