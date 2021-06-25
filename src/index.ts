@@ -25,5 +25,6 @@ export * from './types/RouteOptions';
 export * from './types/NavigationObject';
 export * from './types/RouteSearchControllerConfig';
 export * from './types/NavBarAppearanceConfig';
+export * from './types/NavRouteItem';
 
 export { ImageResolvedAssetSource, ImageRectConfig, ImageGradientConfig, DynamicColor, Offset, ImageTypes, ImageItemConfig } from './types/MiscTypes';
