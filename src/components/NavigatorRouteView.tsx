@@ -535,7 +535,7 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
 
   //#endregion
   
-  _renderRouteContents = (navigation: NavigationObject) => {
+  private _renderRouteContents = (navigation: NavigationObject) => {
     const props = this.props;
     const context = this.context;
 

@@ -1375,7 +1375,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   };
   //#endregion
 
-  _renderRoutes(){
+  private _renderRoutes(){
     const props = this.props;
     const state = this.state;
 
