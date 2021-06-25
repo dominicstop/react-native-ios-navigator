@@ -10,7 +10,7 @@ import { NavigatorRouteView } from './NavigatorRouteView';
 import { NavigatorUIConstantsContext } from '../context/NavigatorUIConstantsContext';
 
 import type { RouteOptions } from '../types/RouteOptions';
-import type { NavRouteItem } from '../types/NavSharedTypes';
+import type { NavRouteItem, NavRouteStackItem } from '../types/NavRouteItem';
 import type { NavCommandPushOptions, RenderNavBarItem, NavCommandPopOptions } from '../types/NavTypes';
 
 import type { RouteContentProps } from '../components/NavigatorRouteView';
@@ -56,13 +56,6 @@ enum NavStatus {
 enum NavEvents {
   onNavRouteViewAdded = "onNavRouteViewAdded",
   onSetNativeRoutes   = "onSetNativeRoutes"  ,
-};
-
-/** Represents a route in the nav. `state.activeRoutes` */
-type NavRouteStateItem = NavRouteItem & {
-  routeID: number;
-  routeIndex: number;
-  isNativeRoute: boolean;
 };
 
 type NavRouteConfigItemBase = {
@@ -122,7 +115,7 @@ type NavigatorViewState = Pick<OnUIConstantsDidChangePayload['nativeEvent'],
   | 'statusBarHeight'
   | 'safeAreaInsets'
 > & {
-  activeRoutes: Array<NavRouteStateItem>;
+  activeRoutes: Array<NavRouteStackItem>;
 
   // push/pop override config
   transitionConfigPushOverride?: RouteTransitionPushConfig;
@@ -200,7 +193,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     ));
   };
 
-  private getInitialRoutes = (): Array<NavRouteStateItem> => {
+  private getInitialRoutes = (): Array<NavRouteStackItem> => {
     const { initialRoutes } = this.props;
 
     // guard: initial validation for `initialRoutes`
@@ -225,7 +218,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         );
       };
 
-      const routeItem: NavRouteStateItem = {
+      const routeItem: NavRouteStackItem = {
         isNativeRoute: config.isNativeRoute,
         routeID: ROUTE_ID_COUNTER++,
         routeIndex: index,
@@ -379,7 +372,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
    * Wait for the react routes to be added as a subview in the native side, and wait fot
    * native routes to be created/init. w/ data.
    * note: This promise will reject if the events fail to fire within `TIMEOUT_MOUNT` ms. */
-  private waitForRoutes = (routeItems: Array<NavRouteStateItem>) => {
+  private waitForRoutes = (routeItems: Array<NavRouteStackItem>) => {
     // filter out/separate react and native routes
     const [nativeRoutes, reactRoutes] = routeItems.reduce((acc, curr) => {
       acc[curr.isNativeRoute? 0 : 1].push(curr.routeID);
@@ -546,7 +539,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       
       const nextRouteIndex = activeRoutes.length;
 
-      const nextRoute: NavRouteStateItem = {
+      const nextRoute: NavRouteStackItem = {
         routeID: ROUTE_ID_COUNTER++,
         routeIndex: nextRouteIndex,
         routeKey: routeItem.routeKey,
@@ -873,7 +866,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       throw new Error(`\`replaceRoute\` failed, no route found for the given \`routeKey\`: ${routeItem?.routeKey}`);
     };
 
-    const replacementRoute: NavRouteStateItem = {
+    const replacementRoute: NavRouteStackItem = {
       routeID: ROUTE_ID_COUNTER++,
       routeKey: routeItem.routeKey,
       routeIndex: prevRouteIndex,
@@ -952,7 +945,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       throw new Error("`NavigatorView` failed to do: `insertRoute`: Invalid `atIndex` (out of bounds)");
     };
 
-    const nextRoute: NavRouteStateItem = {
+    const nextRoute: NavRouteStackItem = {
       routeID: ROUTE_ID_COUNTER++,
       routeKey: routeItem.routeKey,
       routeIndex: atIndex,
@@ -1039,10 +1032,10 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       const currentRoutes = [...this.state.activeRoutes];
       
-      const currentRoutesMap = currentRoutes.reduce<Record<number, NavRouteStateItem>>((acc, curr) => {
+      const currentRoutesMap = currentRoutes.reduce<Record<number, NavRouteStackItem>>((acc, curr) => {
         acc[curr.routeID] = {...curr};
         return acc;
-      }, {} as {[key: number]: NavRouteStateItem});
+      }, {} as {[key: number]: NavRouteStackItem});
 
       const transformResult = transform(
         currentRoutes.map(route => ({
@@ -1051,7 +1044,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         }))
       );
 
-      const nextRoutes: Array<NavRouteStateItem> = transformResult.map((route, index) => ({
+      const nextRoutes: Array<NavRouteStackItem> = transformResult.map((route, index) => ({
         routeProps: route.routeProps,
         // merge old + new route items
         ...currentRoutesMap[route.routeID], ...route,
@@ -1260,7 +1253,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
           const nextRouteIndex = activeRoutes.length;
           this.setNavStatus(NavStatus.NAV_PUSHING);
 
-          const nextRoute: NavRouteStateItem = {
+          const nextRoute: NavRouteStackItem = {
             routeID: commandData.routeID,
             routeKey: commandData.routeKey,
             routeIndex: nextRouteIndex,
