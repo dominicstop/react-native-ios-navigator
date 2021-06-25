@@ -3,7 +3,7 @@ import { StyleSheet, View, findNodeHandle, ViewStyle } from 'react-native';
 
 import type { NavigationObject } from '../types/NavigationObject';
 import type { RouteOptions } from '../types/RouteOptions';
-import type { RenderNavBarItem, RenderRouteHeader } from '../types/NavTypes';
+import type { RenderNavItem } from '../types/NavTypes';
 
 import type { NavigatorView } from './NavigatorView';
 import type { RouteViewPortal } from './RouteViewPortal';
@@ -89,11 +89,11 @@ export type NavigatorRouteViewProps = Partial<Pick<RNINavigatorRouteViewProps,
   renderRouteContent: () => ReactElement<RouteContentProps>;
 
   // render nav bar items
-  renderNavBarLeftItem ?: RenderNavBarItem;
-  renderNavBarRightItem?: RenderNavBarItem;
-  renderNavBarTitleItem?: RenderNavBarItem;
+  renderNavBarLeftItem ?: RenderNavItem;
+  renderNavBarRightItem?: RenderNavItem;
+  renderNavBarTitleItem?: RenderNavItem;
 
-  renderRouteHeader?: RenderRouteHeader;
+  renderRouteHeader?: RenderNavItem;
 };
 
 /** `NavigatorView` comp. state */

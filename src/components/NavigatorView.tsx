@@ -11,7 +11,7 @@ import { NavigatorUIConstantsContext } from '../context/NavigatorUIConstantsCont
 
 import type { RouteOptions } from '../types/RouteOptions';
 import type { NavRouteItem, NavRouteStackItem } from '../types/NavRouteItem';
-import type { NavCommandPushOptions, RenderNavBarItem, NavCommandPopOptions } from '../types/NavTypes';
+import type { NavCommandPushOptions, RenderNavItem, NavCommandPopOptions } from '../types/NavTypes';
 
 import type { RouteContentProps } from '../components/NavigatorRouteView';
 
@@ -74,9 +74,9 @@ export type NavRouteConfigItemJS = NavRouteConfigItemBase & {
   routeOptionsDefault?: RouteOptions;
   renderRoute: (routeItem: NavRouteItem) => ReactElement<RouteContentProps>;
   // render nav bar items
-  renderNavBarLeftItem ?: RenderNavBarItem;
-  renderNavBarRightItem?: RenderNavBarItem;
-  renderNavBarTitleItem?: RenderNavBarItem;
+  renderNavBarLeftItem ?: RenderNavItem;
+  renderNavBarRightItem?: RenderNavItem;
+  renderNavBarTitleItem?: RenderNavItem;
 };
 
 export type NavRouteConfigItem = 
@@ -103,9 +103,9 @@ export type NavigatorViewProps = Partial<Pick<RNINavigatorViewProps,
   routeContainerStyle?: ViewStyle;
   
   // `RNINavigatorView` - Default Navbar items
-  renderNavBarLeftItem ?: RenderNavBarItem;
-  renderNavBarRightItem?: RenderNavBarItem;
-  renderNavBarTitleItem?: RenderNavBarItem;
+  renderNavBarLeftItem ?: RenderNavItem;
+  renderNavBarRightItem?: RenderNavItem;
+  renderNavBarTitleItem?: RenderNavItem;
 
   renderNavBarBackground?: () => ReactElement;
 };

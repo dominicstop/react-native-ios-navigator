@@ -16,6 +16,4 @@ export type NavCommandPopOptions = NativePushPopOptions & {
   transitionConfig?: RouteTransitionPopConfig;
 };
 
-export type RenderNavBarItem = (navigation: NavigationObject) => ReactElement;
-
-export type RenderRouteHeader = (navigation: NavigationObject) => ReactElement;
+export type RenderNavItem = (navigation: NavigationObject) => ReactElement;
