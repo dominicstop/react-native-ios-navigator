@@ -123,7 +123,18 @@
 		* Though, this complicates things because there are default route options that is declared in the `NavigatorView`'s route config.
 		* Idk maybe this isn't a good idea...
 
+<br>
 
+- [ ] **Implement**: Impl. navigation command for `NavigationObject`  to get the current navigation stack. One use case could be for it to be called inside a navbar render item and read the current navigation stack to display the prev. routes's title, etc.
+	- Note: `NavigatorView.getActiveRoutes` already exist so maybe just expose that to the navigation object.
+	- Maybe also add get prev. route and get current route for convenience.
+
+<br>
+
+- [ ] **Implement**: `NavigatorView` event: `onRouteFocusWillChange` and `onRouteFocusDidChange`.
+	- `nativeEvent.prevInFocus`, and `nativeEvent.nextInFocus`.
+
+<br>
 
 ---
 
@@ -214,6 +225,10 @@
 <br>
 
 ## Completed
+
+### Version: `0.1.4`
+
+- [x] (Commit: `a643f1f`) Updated dev dependencies.
 
 ### Version: `0.1.1`
 
