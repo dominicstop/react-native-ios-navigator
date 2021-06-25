@@ -57,8 +57,6 @@ const ScrollOffsets = (() => {
 export class RouteHeader extends React.Component<RouteHeaderProps> {
   static contextType = NavigatorUIConstantsContext;
 
-  context!: React.ContextType<typeof NavigatorUIConstantsContext>;
-
   headerBGOpacity        : Animated.AnimatedInterpolation;
   headerLargeTitleOpacity: Animated.AnimatedInterpolation;
 
