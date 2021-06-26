@@ -19,7 +19,7 @@ export { BackButtonDisplayMode, LargeTitleDisplayMode, NavigationBarVisibilityMo
 export { HeaderHeightValue } from './native_components/RNINavigatorRouteHeaderView';
 
 export { RouteConstantsObject } from './native_modules/RNINavigatorRouteViewModule';
-export { NavigatorConstantsObject } from './native_modules/RNINavigatorViewModule';
+export { NavigatorConstantsObject, NativeRouteData } from './native_modules/RNINavigatorViewModule';
 
 export * from './types/RouteOptions';
 export * from './types/NavigationObject';

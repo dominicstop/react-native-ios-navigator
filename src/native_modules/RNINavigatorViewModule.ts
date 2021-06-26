@@ -7,7 +7,7 @@ export type NativePushPopOptions = {
   isAnimated?: boolean;
 };
 
-type RouteData = {
+export type NativeRouteData = {
   type: 'viewController'
 } | ({
   type: 'reactRoute' | 'nativeRoute'
@@ -26,10 +26,10 @@ export type NavigatorConstantsObject = {
   bounds: Rect;
 
   isPresenting: boolean;
-  activeRoutes: Array<RouteData>;
+  activeRoutes: Array<NativeRouteData>;
 
-  topViewController    ?: RouteData;
-  visibleViewController?: RouteData;
+  topViewController    ?: NativeRouteData;
+  visibleViewController?: NativeRouteData;
 };
 
 interface RNINavigatorViewModule {

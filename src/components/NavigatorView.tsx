@@ -3,7 +3,7 @@ import { StyleSheet, findNodeHandle, ViewStyle } from 'react-native';
 
 import { RNIWrapperView } from '../native_components/RNIWrapperView';
 import { NativeRouteMap, RNINavigatorView, RNINavigatorViewProps, OnNavRouteViewAddedPayload, OnUIConstantsDidChangePayload } from '../native_components/RNINavigatorView';
-import { RNINavigatorViewModule } from '../native_modules/RNINavigatorViewModule';
+import { NavigatorConstantsObject, RNINavigatorViewModule } from '../native_modules/RNINavigatorViewModule';
 
 import { NavigatorRouteView } from './NavigatorRouteView';
 
@@ -81,6 +81,10 @@ export type NavRouteConfigItemJS = NavRouteConfigItemBase & {
 
 export type NavRouteConfigItem = 
   NavRouteConfigItemNative | NavRouteConfigItemJS;
+
+export type SetRoutesTransformCallback = 
+  // eslint-disable-next-line no-undef
+  (currentRoutes: Array<NavRouteItem & {routeID?: number}>) => typeof currentRoutes;
 
 /** `NavigatorView` comp. props */
 export type NavigatorViewProps = Partial<Pick<RNINavigatorViewProps,
@@ -1016,8 +1020,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   //        the native commands.
   //     3. convenience nav commands: preset nav. commands.
   public setRoutes = async (
-    // eslint-disable-next-line no-undef
-    transform: (currentRoutes: Array<NavRouteItem & {routeID?: number}>) => typeof currentRoutes, 
+    transform: SetRoutesTransformCallback, 
     animated = false
   ): Promise<void> => {
     const stateSnapshot = this.createStateSnapshot();
@@ -1189,7 +1192,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     );
   };
 
-  public getNavigatorConstants = async () => {
+  public getNavigatorConstants = async (): Promise<NavigatorConstantsObject> => {
     try {
       const result = await Helpers.promiseWithTimeout(1000,
         RNINavigatorViewModule.getNavigatorConstants(
