@@ -780,19 +780,19 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   };
 
   public removeRoutes = async (
-    routeIndexes: Array<number>,
+    routeIndices: Array<number>,
     animated = false
   ): Promise<void> => {
     
     const { activeRoutes } = this.state;
     const stateSnapshot = this.createStateSnapshot();
 
-    if(routeIndexes.length === 0){
+    if(routeIndices.length === 0){
       throw new Error(`\`removeRoutes\` failed, \`routeIndexes\` is empty`);
     };
 
     // check if `routeIndexes` are valid
-    for (const routeIndex of routeIndexes) {
+    for (const routeIndex of routeIndices) {
       const item = activeRoutes[routeIndex];
 
       if(item == null){
@@ -812,7 +812,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         RNINavigatorViewModule.removeRoutes(
           findNodeHandle(this.nativeRef),
           // routes to remove,
-          routeIndexes.map(routeIndex => ({
+          routeIndices.map(routeIndex => ({
             routeIndex,
             routeID: activeRoutes[routeIndex].routeID,
           })),
@@ -824,7 +824,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         ...prevState,
         activeRoutes: prevState.activeRoutes
           // remove routes from `activeRoutes`
-          .filter((_, index) => !routeIndexes.some(routeIndex => routeIndex === index))
+          .filter((_, index) => !routeIndices.some(routeIndex => routeIndex === index))
           // update the route indexes
           .map((route, index) => ({...route, routeIndex: index}))
       }));
