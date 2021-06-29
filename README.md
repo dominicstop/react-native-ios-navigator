@@ -4,9 +4,23 @@ A native wrapper component around `UINavigationController` for react-native
 ## 🚧⚠️ **Library WIP** ⚠️🚧
 Currently in development... 😅 (See [TODO.md](https://github.com/dominicstop/react-native-ios-navigator/blob/master/docs/TODO.md) for current progress).
 
+
+
+[TOC]
+
+
+
 ---
 
-## Installation
+<br><br>
+
+## A. Introduction
+
+------
+
+<br><br>
+
+## B. Installation
 
 ```sh
 # install via npm
@@ -19,9 +33,16 @@ yarn add react-native-ios-navigator
 cd ios && pod install
 ```
 
-## Usage
 
-```js
+
+------
+
+<br><br>
+
+## C. Basic Usage
+
+```react
+import { SafeAreaView, TouchableOpacity, Text } from 'react-native-ios-navigator';
 import { NavigatorView } from 'react-native-ios-navigator';
 
 function ExampleRoute(props){
@@ -38,7 +59,7 @@ function ExampleRoute(props){
   );
 };
 
-export function HelloWorld() {
+export function App() {
   return(
     <NavigatorView
       initialRoutes={[{routeKey: 'routeA'}]}
@@ -57,10 +78,46 @@ export function HelloWorld() {
 
 ```
 
-## Contributing
+------
 
-See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
+<br><br>
 
-## License
+## D. Documentation
+
+<br><br>
+
+## E. Getting Started Guide
+
+Lorum ipsum
+
+------
+
+<br><br>
+
+## F. Usage and Examples
+
+Lorum ipsum
+
+------
+
+<br><br>
+
+## G. Tests and Demos
+
+Lorum ipsum
+
+------
+
+<br><br>
+
+## H. Meta
+
+Lorum ipsum
+
+------
+
+<br><br>
+
+## I. License
 
 MIT
