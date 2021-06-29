@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { StyleSheet, findNodeHandle, ViewStyle } from 'react-native';
+import { Platform, StyleSheet, findNodeHandle, ViewStyle } from 'react-native';
 
 import { RNIWrapperView } from '../native_components/RNIWrapperView';
 import { NativeRouteMap, RNINavigatorView, RNINavigatorViewProps, OnNavRouteViewAddedPayload, OnUIConstantsDidChangePayload } from '../native_components/RNINavigatorView';
@@ -129,10 +129,12 @@ type NavigatorViewState = Pick<OnUIConstantsDidChangePayload['nativeEvent'],
 const TIMEOUT_MOUNT   = 750;
 const TIMEOUT_COMMAND = 1500;
 
+const iOSVersion = parseInt(Platform.Version as string, 10);
+
 let NAVIGATOR_ID_COUNTER = 0;
 let ROUTE_ID_COUNTER     = 0;
 
-let nativeRouteKeys: Record<string, string> = null
+let nativeRouteKeys: Record<string, string> = null;
 
 export class NavigatorView extends React.PureComponent<NavigatorViewProps, NavigatorViewState> {
   
@@ -422,7 +424,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
   };
 
-  /** Remove route from `state.activeRoutes` */
+  /** Remove route from `state.activeRoutes` in batches a few ms apart. */
   private removeRouteBatchedFromState = async (params?: { routeKey: string, routeIndex: number }) => { 
     if(params){
       // To prevent too many state updates, the routes to be removed
@@ -444,7 +446,14 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
     this.setNavStatus(NavStatus.NAV_POPPING);
     
-    while(shouldRemove()){
+    while(shouldRemove()){      
+      // delay, so `routesToRemove` queue gets filled first
+      await Helpers.timeout(200);
+
+      // make a copy of `routesToRemove` and then clear original
+      const toBeRemoved = [...this.routesToRemove];
+      this.routesToRemove = [];
+
       //#region - 🐞 DEBUG 🐛
       LIB_GLOBAL.debugLog && console.log(
           `LOG/JS - NavigatorView, removeRouteBatchedFromState`
@@ -452,17 +461,10 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         + ` - routeIndex: ${params.routeIndex}`
         + ` - navStatus: ${this.navStatus}`
         + ` - current activeRoutes: ${this.state.activeRoutes.length}`
-        + ` - current routesToRemove: ${this.routesToRemove.length}`
+        + ` - current routesToRemove: ${toBeRemoved.length}`
         + ` - activeRoutes: ${JSON.stringify(this.state.activeRoutes)}`
       );
       //#endregion
-      
-      // delay, so `routesToRemove` queue gets filled first
-      await Helpers.timeout(200);
-
-      // make a copy of `routesToRemove` and then clear original
-      const toBeRemoved = [...this.routesToRemove];
-      this.routesToRemove = [];
 
       // Remove `routesToRemove` from `activeRoutes`.
       await Helpers.setStateAsync<Partial<NavigatorViewState>>(this, 
@@ -1349,14 +1351,23 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     );
     //#endregion
 
-    // A route has been removed either through a tap on the "back" 
-    // button, or through a swipe back gesture.
+    // * A route has been removed either through a tap on the "back" 
+    //   button, or through a swipe back gesture.
+    // * As such, the route has to be removed from `state.activeRoutes`.
     if(nativeEvent.isUserInitiated){
-      // cleanup - remove route
-      this.removeRouteBatchedFromState({
-        routeKey  : nativeEvent.routeKey,
-        routeIndex: nativeEvent.routeIndex
-      });
+
+      // * In iOS 13+, multiple routes can be removed at once via the back button context menu.
+      // * This results in multiple calls to `_handleOnNavRouteDidPop`.
+      // * To fix this, there's a special version of `removeRoute` that removes routes in batches.
+      if(iOSVersion >= 13){
+        this.removeRouteBatchedFromState({
+          routeKey  : nativeEvent.routeKey,
+          routeIndex: nativeEvent.routeIndex
+        });
+
+      } else {
+        this.removeRoute(nativeEvent.routeIndex);
+      };
     };
   };
 
