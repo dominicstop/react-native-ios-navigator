@@ -10,7 +10,7 @@ import { NavigatorRouteView } from './NavigatorRouteView';
 import { NavigatorUIConstantsContext } from '../context/NavigatorUIConstantsContext';
 
 import type { RouteOptions } from '../types/RouteOptions';
-import type { NavRouteItem, NavRouteStackItem } from '../types/NavRouteItem';
+import type { NavRouteItem, NavRouteStackItem, NavRouteStackPartialItem } from '../types/NavRouteItem';
 import type { NavCommandPushOptions, RenderNavItem, NavCommandPopOptions } from '../types/NavTypes';
 
 import type { RouteContentProps } from '../components/NavigatorRouteView';
@@ -83,8 +83,7 @@ export type NavRouteConfigItem =
   NavRouteConfigItemNative | NavRouteConfigItemJS;
 
 export type SetRoutesTransformCallback = 
-  // eslint-disable-next-line no-undef
-  (currentRoutes: Array<NavRouteItem & {routeID?: number}>) => typeof currentRoutes;
+  (currentRoutes: Array<NavRouteStackPartialItem>) => Array<NavRouteStackPartialItem>;
 
 /** `NavigatorView` comp. props */
 export type NavigatorViewProps = Partial<Pick<RNINavigatorViewProps,
