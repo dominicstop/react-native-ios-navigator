@@ -9,11 +9,9 @@ import { NavigatorRouteView } from './NavigatorRouteView';
 
 import { NavigatorUIConstantsContext } from '../context/NavigatorUIConstantsContext';
 
-import type { RouteOptions } from '../types/RouteOptions';
 import type { NavRouteItem, NavRouteStackItem, NavRouteStackPartialItem } from '../types/NavRouteItem';
 import type { NavCommandPushOptions, RenderNavItem, NavCommandPopOptions } from '../types/NavTypes';
-
-import type { RouteContentProps } from '../components/NavigatorRouteView';
+import type { NavRouteConfigItem, NavRouteConfigItemJS } from '../types/NavRouteConfigItem';
 
 import type { RouteTransitionPopConfig, RouteTransitionPushConfig } from '../native_components/RNINavigatorRouteView';
 
@@ -57,30 +55,6 @@ enum NavEvents {
   onNavRouteViewAdded = "onNavRouteViewAdded",
   onSetNativeRoutes   = "onSetNativeRoutes"  ,
 };
-
-type NavRouteConfigItemBase = {
-  routeKey: NavRouteItem['routeKey'];
-  initialRouteProps?: object;
-};
-
-/** Native route config */
-export type NavRouteConfigItemNative = NavRouteConfigItemBase & {
-  isNativeRoute: true;
-};
-
-/** JS/React route config */
-export type NavRouteConfigItemJS = NavRouteConfigItemBase & {
-  isNativeRoute?: false;
-  routeOptionsDefault?: RouteOptions;
-  renderRoute: (routeItem: NavRouteItem) => ReactElement<RouteContentProps>;
-  // render nav bar items
-  renderNavBarLeftItem ?: RenderNavItem;
-  renderNavBarRightItem?: RenderNavItem;
-  renderNavBarTitleItem?: RenderNavItem;
-};
-
-export type NavRouteConfigItem = 
-  NavRouteConfigItemNative | NavRouteConfigItemJS;
 
 export type SetRoutesTransformCallback = 
   (currentRoutes: Array<NavRouteStackPartialItem>) => Array<NavRouteStackPartialItem>;
