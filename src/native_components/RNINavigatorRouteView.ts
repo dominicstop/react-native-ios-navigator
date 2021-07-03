@@ -3,7 +3,7 @@ import { requireNativeComponent, ViewStyle } from 'react-native';
 import type { NavBarBackItemConfig, NavBarItemsConfig } from '../types/NavBarItemConfig';
 import type { NavBarAppearanceCombinedConfig } from '../types/NavBarAppearanceConfig';
 import type { RouteSearchControllerConfig } from '../types/RouteSearchControllerConfig';
-import type { OnPressNavBarItemEvent, OnRouteFocusBlurEvent, OnRoutePopEvent, OnRoutePushEvent, OnSearchBarCancelButtonClickedEvent, OnSearchBarSearchButtonClickedEvent, OnUpdateSearchResultsEvent } from '../types/NavRouteViewEvents';
+import type { OnPressNavBarItemEvent, OnRouteFocusBlurEvent, OnRoutePopEvent, OnRoutePushEvent, OnSearchBarCancelButtonClickedEvent, OnSearchBarSearchButtonClickedEvent, OnUpdateSearchResultsEvent } from '../types/RNINavigatorViewEvents';
 
 
 type RouteTransitionPushTypes = 
