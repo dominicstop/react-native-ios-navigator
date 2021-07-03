@@ -1,4 +1,4 @@
-/// `RNINavigatorView` Events
+/// `RNINavigatorRouteView` Events
 
 //#region - Event Objects
 type BaseEventObject = {

@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef } from 'react';
-import type { OnPressNavBarItemEvent, OnRoutePopEvent, OnRoutePushEvent } from '../types/RNINavigatorViewEvents';
+import type { OnPressNavBarItemEvent, OnRoutePopEvent, OnRoutePushEvent } from '../types/RNINavigatorRouteViewEvents';
 
 import type { NavRouteEvents } from '../components/NavigatorRouteView';
 import { NavRouteViewContext } from '../context/NavRouteViewContext';
