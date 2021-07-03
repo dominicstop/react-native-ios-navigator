@@ -4,7 +4,7 @@ import React from 'react';
 import { NavRouteEvents } from '../components/NavigatorRouteView';
 
 import type { NavigatorRouteView } from '../components/NavigatorRouteView';
-import type { OnRoutePopEvent, OnRoutePushEvent, OnRouteFocusBlurEvent, OnPressNavBarItem, OnUpdateSearchResults, OnSearchBarCancelButtonClicked, OnSearchBarSearchButtonClicked } from 'src/native_components/RNINavigatorRouteView';
+import type { OnRoutePopEvent, OnRoutePushEvent, OnRouteFocusBlurEvent, OnPressNavBarItem, OnUpdateSearchResults, OnSearchBarCancelButtonClicked, OnSearchBarSearchButtonClicked } from '../types/NavRouteViewEvents';
 
 import type { EventEmitter } from '../functions/EventEmitter';
 

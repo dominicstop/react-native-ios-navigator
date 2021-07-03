@@ -4,13 +4,14 @@ import { StyleSheet, View, findNodeHandle, ViewStyle } from 'react-native';
 import type { NavigationObject } from '../types/NavigationObject';
 import type { RouteOptions } from '../types/RouteOptions';
 import type { RenderNavItem } from '../types/NavTypes';
+import type { OnRoutePopEvent, OnRoutePushEvent, OnPressNavBarItem, OnRouteFocusBlurEvent, OnUpdateSearchResults, OnSearchBarCancelButtonClicked, OnSearchBarSearchButtonClicked } from 'src/types/NavRouteViewEvents';
 
 import type { NavigatorView } from './NavigatorView';
 import type { RouteViewPortal } from './RouteViewPortal';
 
 import { RouteComponentsWrapper } from './RouteComponentsWrapper';
 
-import { RNINavigatorRouteView, RNINavigatorRouteViewProps, OnPressNavBarItem as OnPressNavBarItem, OnRoutePushEvent as OnRoutePushEvent, OnRoutePopEvent as OnRoutePopEvent, RouteTransitionPopConfig, RouteTransitionPushConfig, OnRouteFocusBlurEvent as OnRouteFocusBlurEvent, OnUpdateSearchResults as OnUpdateSearchResults, OnSearchBarCancelButtonClicked as OnSearchBarCancelButtonClicked, OnSearchBarSearchButtonClicked as OnSearchBarSearchButtonClicked } from '../native_components/RNINavigatorRouteView';
+import { RNINavigatorRouteView, RNINavigatorRouteViewProps, RouteTransitionPopConfig, RouteTransitionPushConfig, } from '../native_components/RNINavigatorRouteView';
 import { RNINavigatorRouteViewModule } from '../native_modules/RNINavigatorRouteViewModule';
 
 import * as Helpers from '../functions/Helpers';
