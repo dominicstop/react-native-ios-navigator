@@ -1,6 +1,6 @@
 import { ViewStyle, requireNativeComponent, UIManager } from 'react-native';
 
-import type { OnCustomCommandFromNativePayload, OnNativeCommandRequestPayload, OnNavRouteDidPopPayload, OnNavRouteViewAddedPayload, OnNavRouteWillPopPayload, OnSetNativeRouteDataPayload, OnUIConstantsDidChangePayload } from '../types/RNINavigatorViewEvents';
+import type { OnCustomCommandFromNativeEvent, OnNativeCommandRequestEvent, OnNavRoutePopEvent, OnNavRouteViewAddedEvent, OnSetNativeRouteDataEvent, OnUIConstantsDidChangeEvent } from '../types/RNINavigatorViewEvents';
 import type { NavBarAppearanceCombinedConfig } from '../types/NavBarAppearanceConfig';
 
 
@@ -31,16 +31,16 @@ export type RNINavigatorViewProps = {
   navBarAppearance: NavBarAppearanceCombinedConfig;
   
   // Native Events
-  onNavRouteViewAdded?: (event: OnNavRouteViewAddedPayload ) => void;
-  onSetNativeRoutes  ?: (event: OnSetNativeRouteDataPayload) => void;
+  onNavRouteViewAdded?: OnNavRouteViewAddedEvent;
+  onSetNativeRoutes  ?: OnSetNativeRouteDataEvent;
 
-  onNavRouteWillPop?: (event: OnNavRouteWillPopPayload) => void;
-  onNavRouteDidPop ?: (event: OnNavRouteDidPopPayload ) => void;
+  onNavRouteWillPop?: OnNavRoutePopEvent;
+  onNavRouteDidPop ?: OnNavRoutePopEvent;
 
-  onNativeCommandRequest   ?: (event: OnNativeCommandRequestPayload   ) => void;
-  onCustomCommandFromNative?: (event: OnCustomCommandFromNativePayload) => void;
+  onNativeCommandRequest   ?: OnNativeCommandRequestEvent;
+  onCustomCommandFromNative?: OnCustomCommandFromNativeEvent;
 
-  onUIConstantsDidChange?: (event: OnUIConstantsDidChangePayload) => void;
+  onUIConstantsDidChange?: OnUIConstantsDidChangeEvent;
 };
 
 export type RNINavigatorViewConstantsObject = {

@@ -1,13 +1,13 @@
 import type { EdgeInsets } from './MiscTypes';
 
-
-type EventBasePayload = {
+//#region - Event Objects
+type EventBaseEventObject = {
   target: number;
   navigatorID: number;
 };
 
-export type OnNavRouteViewAddedPayload = { 
-  nativeEvent: EventBasePayload & {
+export type OnNavRouteViewAddedEventObject = { 
+  nativeEvent: EventBaseEventObject & {
     routeID      : number;
     routeKey     : string;
     routeIndex   : number;
@@ -15,28 +15,20 @@ export type OnNavRouteViewAddedPayload = {
   };
 };
 
-export type OnNavRouteWillPopPayload = { 
-  nativeEvent: EventBasePayload & {
+export type OnNavRoutePopEventObject = { 
+  nativeEvent: EventBaseEventObject & {
     routeKey       : string;
     routeIndex     : number;
     isUserInitiated: boolean;
   };
 };
 
-export type OnNavRouteDidPopPayload = { 
-  nativeEvent: EventBasePayload & {
-    routeKey       : string;
-    routeIndex     : number;
-    isUserInitiated: boolean;
-  };
+export type OnSetNativeRouteDataEventObject = {
+  nativeEvent: EventBaseEventObject;
 };
 
-export type OnSetNativeRouteDataPayload = {
-  nativeEvent: EventBasePayload;
-};
-
-export type OnNativeCommandRequestPayload = { 
-  nativeEvent: EventBasePayload & {
+export type OnNativeCommandRequestEventObject = { 
+  nativeEvent: EventBaseEventObject & {
     commandData: {
       commandKey: 'pushViewController';
       routeID: number;
@@ -54,16 +46,43 @@ export type OnNativeCommandRequestPayload = {
   };
 };
 
-export type OnCustomCommandFromNativePayload = { 
-  nativeEvent: EventBasePayload & {
+export type OnCustomCommandFromNativeEventObject = { 
+  nativeEvent: EventBaseEventObject & {
     commandKey: string;
     commandData: object;
   };
 };
 
-export type OnUIConstantsDidChangePayload = { 
-  nativeEvent: EventBasePayload & {
+export type OnUIConstantsDidChangeEventObject = { 
+  nativeEvent: EventBaseEventObject & {
     statusBarHeight: number;
     safeAreaInsets: EdgeInsets;
   };
 };
+//#endregion
+
+//#region - Event Handlers
+export type OnNavRouteViewAddedEvent = (
+  event: OnNavRouteViewAddedEventObject
+) => void;
+
+export type OnNavRoutePopEvent = (
+  event: OnNavRoutePopEventObject
+) => void;
+
+export type OnSetNativeRouteDataEvent = (
+  event: OnSetNativeRouteDataEventObject
+) => void;
+
+export type OnNativeCommandRequestEvent = (
+  event: OnNativeCommandRequestEventObject
+) => void;
+
+export type OnCustomCommandFromNativeEvent = (
+  event: OnCustomCommandFromNativeEventObject
+) => void;
+
+export type OnUIConstantsDidChangeEvent = (
+  event: OnUIConstantsDidChangeEventObject
+) => void;
+//#endregion

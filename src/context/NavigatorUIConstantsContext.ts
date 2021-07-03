@@ -1,8 +1,8 @@
 import React from 'react';
 
-import type { OnUIConstantsDidChangePayload } from '../types/RNINavigatorViewEvents';
+import type { OnUIConstantsDidChangeEventObject } from '../types/RNINavigatorViewEvents';
 
-export type NavigatorUIConstantsContextProps = Pick<OnUIConstantsDidChangePayload['nativeEvent'],
+export type NavigatorUIConstantsContextProps = Pick<OnUIConstantsDidChangeEventObject['nativeEvent'],
   | 'navigatorID'
   | 'safeAreaInsets'
   | 'statusBarHeight'

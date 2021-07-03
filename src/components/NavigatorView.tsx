@@ -14,7 +14,7 @@ import type { RouteTransitionPopConfig, RouteTransitionPushConfig } from '../nat
 import type { NavRouteItem, NavRouteStackItem, NavRouteStackPartialItem } from '../types/NavRouteItem';
 import type { NavCommandPushOptions, RenderNavItem, NavCommandPopOptions } from '../types/NavTypes';
 import type { NavRouteConfigItem, NavRouteConfigItemJS } from '../types/NavRouteConfigItem';
-import type { OnUIConstantsDidChangePayload, OnNavRouteViewAddedPayload } from 'src/types/RNINavigatorViewEvents';
+import type { OnUIConstantsDidChangeEventObject, OnNavRouteViewAddedEventObject } from '../types/RNINavigatorViewEvents';
 
 import * as Helpers from '../functions/Helpers';
 
@@ -89,7 +89,7 @@ export type NavigatorViewProps = Partial<Pick<RNINavigatorViewProps,
 };
 
 /** `NavigatorView` comp. state */
-type NavigatorViewState = Pick<OnUIConstantsDidChangePayload['nativeEvent'],
+type NavigatorViewState = Pick<OnUIConstantsDidChangeEventObject['nativeEvent'],
   | 'statusBarHeight'
   | 'safeAreaInsets'
 > & {
@@ -370,7 +370,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       }),
       // 2. wait for react routes to be "received" from native
       ...reactRoutes.map(routeID => new Promise<void>(resolve => {
-        this.emitter.once(NavEvents.onNavRouteViewAdded, ({nativeEvent}: OnNavRouteViewAddedPayload) => {
+        this.emitter.once(NavEvents.onNavRouteViewAdded, ({nativeEvent}: OnNavRouteViewAddedEventObject) => {
           if(nativeEvent.routeID === routeID){
             resolve();
           };
