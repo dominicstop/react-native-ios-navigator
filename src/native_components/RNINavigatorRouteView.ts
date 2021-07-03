@@ -32,7 +32,7 @@ type BaseEventPayload = {
   routeIndex: number;
 };
 
-export type onRoutePushEvent = (event: BaseEventPayload & {
+export type onRoutePushEvent = (event: {
   nativeEvent: BaseEventPayload & { 
     isAnimated: boolean;
   };
