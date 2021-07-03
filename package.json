@@ -28,7 +28,8 @@
     "release": "release-it",
     "example": "yarn --cwd example",
     "pods": "cd example && pod-install --quiet",
-    "bootstrap": "yarn example && yarn && yarn pods"
+    "bootstrap": "yarn example && yarn && yarn pods",
+    "buildAndRun": "pwd | { read rootDIR; echo \"root directory: $rootDIR\" && yarn run lint && yarn run bob build && cd example/ios && pod install && cd .. && npx react-native run-ios --simulator \"iPhone 8 (iOS 14.3)\" ; } ; { cd $(echo \"$rootDIR\") ; }"
   },
   "keywords": [
     "react-native",
