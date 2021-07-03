@@ -3,7 +3,7 @@ import { requireNativeComponent, ViewStyle } from 'react-native';
 import type { NavBarBackItemConfig, NavBarItemsConfig } from '../types/NavBarItemConfig';
 import type { NavBarAppearanceCombinedConfig } from '../types/NavBarAppearanceConfig';
 import type { RouteSearchControllerConfig } from '../types/RouteSearchControllerConfig';
-import type { OnPressNavBarItem, OnRouteFocusBlurEvent, OnRoutePopEvent, OnRoutePushEvent, OnSearchBarCancelButtonClicked, OnSearchBarSearchButtonClicked, OnUpdateSearchResults } from '../types/NavRouteViewEvents';
+import type { OnPressNavBarItemEvent, OnRouteFocusBlurEvent, OnRoutePopEvent, OnRoutePushEvent, OnSearchBarCancelButtonClickedEvent, OnSearchBarSearchButtonClickedEvent, OnUpdateSearchResultsEvent } from '../types/NavRouteViewEvents';
 
 
 type RouteTransitionPushTypes = 
@@ -105,18 +105,18 @@ export type RNINavigatorRouteViewProps = {
   onRouteDidBlur ?: OnRouteFocusBlurEvent;
 
   // Native Events: Navbar Item `onPress`
-  onPressNavBarLeftItem ?: OnPressNavBarItem;
-  onPressNavBarRightItem?: OnPressNavBarItem;
+  onPressNavBarLeftItem ?: OnPressNavBarItemEvent;
+  onPressNavBarRightItem?: OnPressNavBarItemEvent;
 
   // Native Events: Search
   /** Request to update the search results based on the search text. */
-  onUpdateSearchResults?: OnUpdateSearchResults;
+  onUpdateSearchResults?: OnUpdateSearchResultsEvent;
 
   /** The cancel button was tapped. */
-  onSearchBarCancelButtonClicked?: OnSearchBarCancelButtonClicked;
+  onSearchBarCancelButtonClicked?: OnSearchBarCancelButtonClickedEvent;
   
   /** The search button (usually in the keyboard) was tapped. */
-  onSearchBarSearchButtonClicked?: OnSearchBarSearchButtonClicked;
+  onSearchBarSearchButtonClicked?: OnSearchBarSearchButtonClickedEvent;
 };
 
 export const RNINavigatorRouteView = 

@@ -4,7 +4,7 @@ import React from 'react';
 import { NavRouteEvents } from '../components/NavigatorRouteView';
 
 import type { NavigatorRouteView } from '../components/NavigatorRouteView';
-import type { OnRoutePopEvent, OnRoutePushEvent, OnRouteFocusBlurEvent, OnPressNavBarItem, OnUpdateSearchResults, OnSearchBarCancelButtonClicked, OnSearchBarSearchButtonClicked } from '../types/NavRouteViewEvents';
+import type { OnRoutePopEvent, OnRoutePushEvent, OnRouteFocusBlurEvent, OnPressNavBarItemEvent, OnUpdateSearchResultsEvent, OnSearchBarCancelButtonClickedEvent, OnSearchBarSearchButtonClickedEvent } from '../types/NavRouteViewEvents';
 
 import type { EventEmitter } from '../functions/EventEmitter';
 
@@ -25,13 +25,13 @@ type RouteViewEventsProps = {
   onRouteDidBlur  ?: OnRouteFocusBlurEvent;
 
   // onPress navbar item events
-  onPressNavBarLeftItem ?: OnPressNavBarItem;
-  onPressNavBarRightItem?: OnPressNavBarItem;
+  onPressNavBarLeftItem ?: OnPressNavBarItemEvent;
+  onPressNavBarRightItem?: OnPressNavBarItemEvent;
 
   // search events
-  onUpdateSearchResults?: OnUpdateSearchResults;
-  onSearchBarCancelButtonClicked?: OnSearchBarCancelButtonClicked;
-  onSearchBarSearchButtonClicked?: OnSearchBarSearchButtonClicked;
+  onUpdateSearchResults?: OnUpdateSearchResultsEvent;
+  onSearchBarCancelButtonClicked?: OnSearchBarCancelButtonClickedEvent;
+  onSearchBarSearchButtonClicked?: OnSearchBarSearchButtonClickedEvent;
 };
 
 /** 
@@ -214,23 +214,23 @@ export class RouteViewEvents extends React.Component<RouteViewEventsProps> {
     this.props.onRouteDidBlur?.(params);
   };
 
-  _handleOnPressNavBarLeftItem: OnPressNavBarItem = (params) => {
+  _handleOnPressNavBarLeftItem: OnPressNavBarItemEvent = (params) => {
     this.props.onPressNavBarLeftItem?.(params);
   };
 
-  _handleOnPressNavBarRightItem: OnPressNavBarItem = (params) => {
+  _handleOnPressNavBarRightItem: OnPressNavBarItemEvent = (params) => {
     this.props.onPressNavBarRightItem?.(params);
   };
 
-  _handleOnUpdateSearchResults: OnUpdateSearchResults = (params) => {
+  _handleOnUpdateSearchResults: OnUpdateSearchResultsEvent = (params) => {
     this.props.onUpdateSearchResults?.(params);
   };
 
-  _handleOnSearchBarCancelButtonClicked: OnSearchBarCancelButtonClicked = (params) => {
+  _handleOnSearchBarCancelButtonClicked: OnSearchBarCancelButtonClickedEvent = (params) => {
     this.props.onSearchBarCancelButtonClicked?.(params);
   };
 
-  _handleOnSearchBarSearchButtonClicked: OnSearchBarSearchButtonClicked = (params) => {
+  _handleOnSearchBarSearchButtonClicked: OnSearchBarSearchButtonClickedEvent = (params) => {
     this.props.onSearchBarSearchButtonClicked?.(params);
   };
   //#endregion

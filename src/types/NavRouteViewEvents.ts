@@ -1,49 +1,83 @@
-type BaseEventPayload = {
+/// `RNINavigatorView` Events
+
+//#region - Event Objects
+type BaseEventObject = {
   routeID: number;
   routeKey: string;
   routeIndex: number;
 };
 
-export type OnRoutePushEvent = (event: {
-  nativeEvent: BaseEventPayload & { 
+export type OnRoutePushEventObject = {
+  nativeEvent: BaseEventObject & { 
     isAnimated: boolean;
   };
-}) => void;
+};
 
-export type OnRouteFocusBlurEvent = (event: {
-  nativeEvent: BaseEventPayload & { 
+export type OnRouteFocusBlurEventObject = {
+  nativeEvent: BaseEventObject & { 
     isAnimated: boolean;
   };
-}) => void;
+};
 
 // TODO: Add `isAnimated` param 
-export type OnRoutePopEvent = (event: {
-  nativeEvent: BaseEventPayload & {
+export type OnRoutePopEventObject = {
+  nativeEvent: BaseEventObject & {
     isUserInitiated: boolean;
   };
-}) => void;
+};
 
-export type OnPressNavBarItem = (event: {
-  nativeEvent: BaseEventPayload & { 
+export type OnPressNavBarItemEventObject = {
+  nativeEvent: BaseEventObject & { 
     key  : string;
     type : string;
     index: string;
   };
-}) => void;
+}; 
 
-export type OnUpdateSearchResults = (event: {
-  nativeEvent: BaseEventPayload & { 
+export type OnUpdateSearchResultsEventObject = {
+  nativeEvent: BaseEventObject & { 
     text?: string;
     isActive: boolean;
   };
-}) => void;
+}; 
 
-export type OnSearchBarCancelButtonClicked = (event: {
-  nativeEvent: BaseEventPayload;
-}) => void;
+export type OnSearchBarCancelButtonClickedEventObject = {
+  nativeEvent: BaseEventObject;
+}; 
 
-export type OnSearchBarSearchButtonClicked = (event: {
-  nativeEvent: BaseEventPayload & { 
+export type OnSearchBarSearchButtonClickedEventObject = {
+  nativeEvent: BaseEventObject & { 
     text?: string;
   };
-}) => void;
+};
+//#endregion
+
+//#region - Event Handler Types
+export type OnRoutePushEvent = (
+  event: OnRoutePushEventObject
+) => void;
+
+export type OnRouteFocusBlurEvent = (
+  event: OnRouteFocusBlurEventObject
+) => void;
+
+export type OnRoutePopEvent = (
+  event: OnRoutePopEventObject
+) => void;
+
+export type OnPressNavBarItemEvent = (
+  event: OnPressNavBarItemEventObject
+) => void;
+
+export type OnUpdateSearchResultsEvent = (
+  event: OnUpdateSearchResultsEventObject
+) => void;
+
+export type OnSearchBarCancelButtonClickedEvent = (
+  event: OnSearchBarCancelButtonClickedEventObject
+) => void;
+
+export type OnSearchBarSearchButtonClickedEvent = (
+  event: OnSearchBarSearchButtonClickedEventObject
+) => void;
+//#endregion
