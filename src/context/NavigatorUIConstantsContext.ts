@@ -1,6 +1,6 @@
 import React from 'react';
 
-import type { OnUIConstantsDidChangePayload } from 'src/native_components/RNINavigatorView';
+import type { OnUIConstantsDidChangePayload } from '../types/RNINavigatorViewEvents';
 
 export type NavigatorUIConstantsContextProps = Pick<OnUIConstantsDidChangePayload['nativeEvent'],
   | 'navigatorID'
