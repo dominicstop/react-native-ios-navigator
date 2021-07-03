@@ -5,7 +5,6 @@ import type { NavBarAppearanceCombinedConfig } from '../types/NavBarAppearanceCo
 import type { RouteSearchControllerConfig } from '../types/RouteSearchControllerConfig';
 
 
-// TODO: Rename types - Capitalize, e.g. rename `onXXX` to `OnXXX`.
 // TODO: Cleanup types - Replace `,` with `;` in object declaration.
 
 type RouteTransitionPushTypes = 
@@ -32,25 +31,25 @@ type BaseEventPayload = {
   routeIndex: number;
 };
 
-export type onRoutePushEvent = (event: {
+export type OnRoutePushEvent = (event: {
   nativeEvent: BaseEventPayload & { 
     isAnimated: boolean;
   };
 }) => void;
 
-export type onRouteFocusBlurEvent = (event: {
+export type OnRouteFocusBlurEvent = (event: {
   nativeEvent: BaseEventPayload & { 
     isAnimated: boolean;
   };
 }) => void;
 
-export type onRoutePopEvent = (event: {
+export type OnRoutePopEvent = (event: {
   nativeEvent: BaseEventPayload & {
     isUserInitiated: boolean;
   };
 }) => void;
 
-export type onPressNavBarItem = (event: {
+export type OnPressNavBarItem = (event: {
   nativeEvent: BaseEventPayload & { 
     key  : string;
     type : string;
@@ -58,18 +57,18 @@ export type onPressNavBarItem = (event: {
   };
 }) => void;
 
-export type onUpdateSearchResults = (event: {
+export type OnUpdateSearchResults = (event: {
   nativeEvent: BaseEventPayload & { 
     text?: string;
     isActive: boolean;
   };
 }) => void;
 
-export type onSearchBarCancelButtonClicked = (event: {
+export type OnSearchBarCancelButtonClicked = (event: {
   nativeEvent: BaseEventPayload;
 }) => void;
 
-export type onSearchBarSearchButtonClicked = (event: {
+export type OnSearchBarSearchButtonClicked = (event: {
   nativeEvent: BaseEventPayload & { 
     text?: string;
   };
@@ -138,34 +137,34 @@ export type RNINavigatorRouteViewProps = {
   allowTouchEventsToPassThroughNavigationBar: boolean;
 
   // Native Events: Push
-  onRouteWillPush?: onRoutePushEvent;
-  onRouteDidPush ?: onRoutePushEvent;
+  onRouteWillPush?: OnRoutePushEvent;
+  onRouteDidPush ?: OnRoutePushEvent;
 
   // Native Events: Pop
-  onRouteWillPop?: onRoutePopEvent;
-  onRouteDidPop ?: onRoutePopEvent;
+  onRouteWillPop?: OnRoutePopEvent;
+  onRouteDidPop ?: OnRoutePopEvent;
 
   // Native Events: Focus
-  onRouteWillFocus?: onRouteFocusBlurEvent;
-  onRouteDidFocus ?: onRouteFocusBlurEvent;
+  onRouteWillFocus?: OnRouteFocusBlurEvent;
+  onRouteDidFocus ?: OnRouteFocusBlurEvent;
 
   // Native Events: Blur
-  onRouteWillBlur?: onRouteFocusBlurEvent;
-  onRouteDidBlur ?: onRouteFocusBlurEvent;
+  onRouteWillBlur?: OnRouteFocusBlurEvent;
+  onRouteDidBlur ?: OnRouteFocusBlurEvent;
 
   // Native Events: Navbar Item `onPress`
-  onPressNavBarLeftItem ?: onPressNavBarItem;
-  onPressNavBarRightItem?: onPressNavBarItem;
+  onPressNavBarLeftItem ?: OnPressNavBarItem;
+  onPressNavBarRightItem?: OnPressNavBarItem;
 
   // Native Events: Search
   /** Request to update the search results based on the search text. */
-  onUpdateSearchResults?: onUpdateSearchResults;
+  onUpdateSearchResults?: OnUpdateSearchResults;
 
   /** The cancel button was tapped. */
-  onSearchBarCancelButtonClicked?: onSearchBarCancelButtonClicked;
+  onSearchBarCancelButtonClicked?: OnSearchBarCancelButtonClicked;
   
   /** The search button (usually in the keyboard) was tapped. */
-  onSearchBarSearchButtonClicked?: onSearchBarSearchButtonClicked;
+  onSearchBarSearchButtonClicked?: OnSearchBarSearchButtonClicked;
 };
 
 export const RNINavigatorRouteView = 

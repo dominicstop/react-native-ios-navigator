@@ -10,7 +10,7 @@ import type { RouteViewPortal } from './RouteViewPortal';
 
 import { RouteComponentsWrapper } from './RouteComponentsWrapper';
 
-import { RNINavigatorRouteView, RNINavigatorRouteViewProps, onPressNavBarItem as OnPressNavBarItem, onRoutePushEvent as OnRoutePushEvent, onRoutePopEvent as OnRoutePopEvent, RouteTransitionPopConfig, RouteTransitionPushConfig, onRouteFocusBlurEvent as OnRouteFocusBlurEvent, onUpdateSearchResults as OnUpdateSearchResults, onSearchBarCancelButtonClicked as OnSearchBarCancelButtonClicked, onSearchBarSearchButtonClicked as OnSearchBarSearchButtonClicked } from '../native_components/RNINavigatorRouteView';
+import { RNINavigatorRouteView, RNINavigatorRouteViewProps, OnPressNavBarItem as OnPressNavBarItem, OnRoutePushEvent as OnRoutePushEvent, OnRoutePopEvent as OnRoutePopEvent, RouteTransitionPopConfig, RouteTransitionPushConfig, OnRouteFocusBlurEvent as OnRouteFocusBlurEvent, OnUpdateSearchResults as OnUpdateSearchResults, OnSearchBarCancelButtonClicked as OnSearchBarCancelButtonClicked, OnSearchBarSearchButtonClicked as OnSearchBarSearchButtonClicked } from '../native_components/RNINavigatorRouteView';
 import { RNINavigatorRouteViewModule } from '../native_modules/RNINavigatorRouteViewModule';
 
 import * as Helpers from '../functions/Helpers';

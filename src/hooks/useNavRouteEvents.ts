@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef } from 'react';
-import type { onPressNavBarItem, onRoutePopEvent, onRoutePushEvent } from 'src/native_components/RNINavigatorRouteView';
+import type { OnPressNavBarItem, OnRoutePopEvent, OnRoutePushEvent } from 'src/native_components/RNINavigatorRouteView';
 
 import type { NavRouteEvents } from '../components/NavigatorRouteView';
 import { NavRouteViewContext } from '../context/NavRouteViewContext';
@@ -55,14 +55,14 @@ function useNavRouteEvents(
 
 export function useNavRouteLifeCycle(
   eventName: NavRouteLifeCycleEvents, 
-  handler: onRoutePushEvent | onRoutePopEvent
+  handler: OnRoutePushEvent | OnRoutePopEvent
 ){
   useNavRouteEvents(eventName, handler);
 };
 
 export function useNavBarItemEvents(
   eventName: NavBarItemEvents, 
-  handler: onPressNavBarItem
+  handler: OnPressNavBarItem
 ){
   useNavRouteEvents(eventName, handler);
 };
