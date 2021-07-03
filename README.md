@@ -99,7 +99,7 @@ Internally, the route components (i.e. the react view returned from `renderRoute
 
 ##### D.1.1.1. `NavigatorView`: Props
 
-**`NavigatorView` Component Props**
+###### `NavigatorView` General Props
 
 | Prop Name and Type                                           | Description                                                  |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
@@ -115,7 +115,7 @@ Internally, the route components (i.e. the react view returned from `renderRoute
 
 <br>
 
-**`NavigatorView` Render Props**
+###### `NavigatorView` Render Props
 
 | Prop Name and Type                                           | Description                                                  |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
@@ -125,7 +125,7 @@ Internally, the route components (i.e. the react view returned from `renderRoute
 
 <br>
 
-**`NavigatorView` Event Props**
+###### `NavigatorView` Event Props
 
 | Prop Name and Type                                           | Description                                                  |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
@@ -137,7 +137,7 @@ Internally, the route components (i.e. the react view returned from `renderRoute
 
 ##### D.1.1.2. `NavigatorView`: Properties/Methods
 
-**`NavigatorView` General/Misc. Methods**
+###### `NavigatorView` General/Misc. Methods
 
 | Name                                                         | Description                                                  |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
@@ -147,7 +147,7 @@ Internally, the route components (i.e. the react view returned from `renderRoute
 
 <br>
 
-**`NavigatorView` Navigation Commands**
+###### `NavigatorView` Navigation Commands
 
 Commands you can call to control the navigator, e.g. like showing or hiding a route, replacing a route in the navigation stack, etc. Unless specified otherwise, the commands listed here are really just invoking [`setViewControllers`](https://developer.apple.com/documentation/uikit/uinavigationcontroller/1621861-setviewcontrollers) internally in the native side. <br><br>The navigation commands are asynchronous; they will return a promise that resolves once the command is complete. Due to timing related issues, the `NavigatorView` internally has a command queue, as such, only one command can be executed at a given time. For example if you call `push`, then call `pop` immediately (i.e. not waiting for `push` to complete first before calling `pop`), they will always be executed in that order (i.e. it will always wait for the previous command to complete).
 
@@ -165,14 +165,14 @@ Commands you can call to control the navigator, e.g. like showing or hiding a ro
 
 <br>
 
-**`NavigatorView` Convenience Navigation Commands**
+###### `NavigatorView` Convenience Navigation Commands
 
 These are basically "presets" to existing navigation commands i.e. it uses the existing navigation commands available to provide shortcuts to common navigation actions for convenience.
 
 | Name and Type                                                | Description                                                  |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | 🔤 `replacePreviousRoute(routeItem: NavRouteItem, animated?: boolean = false) => Promise<void>`<br/><br/>⚛️ [`routeItem: NavRouteItem`](PLACE_HOLDER_LINK) | Replaces the previous route in the navigation stack with a new route. |
-| 🔤 `replaceCurrentRoute(routeItem: NavRouteItem, animated?: boolean = false) => Promise<void>`<br/><br/>⚛️ [`routeItem: NavRouteItem`]( | Replaces the current route (i.e. the topmost route) in the navigation stack with a new route. |
+| 🔤 `replaceCurrentRoute(routeItem: NavRouteItem, animated?: boolean = false) => Promise<void>`<br/><br/>⚛️ [`routeItem: NavRouteItem`](PLACE_HOLDER_LINK) | Replaces the current route (i.e. the topmost route) in the navigation stack with a new route. |
 | 🔤 `removePreviousRoute`<br/><br/>⚛️ `(animated?: boolean = false) => Promise<void>` | Removes the previous route in the navigation stack.          |
 | 🔤 `removeAllPrevRoutes`<br/><br/>⚛️ `(animated?: boolean = false) => Promise<void>` | Removes all of the previous routes in the navigation stack.  |
 
@@ -190,7 +190,7 @@ The purpose of this component is to allow for customization of a route at run-ti
 | 🔤 `renderNavBarLeftItem`<br/><br/>⚛️ [`(navigation: NavigationObject) => ReactElement`](PLACE_HOLDER_LINK) | This prop is used for rendering a custom left item component in the navigation bar. If `leftItemsSupplementBackButton` in `routeOptions`  is set to `true` (which it is by default), then it will replace the back button (i.e. the back button will not be shown).<br><br>📝 **Note**: If this prop is used, it'll implicitly set `navBarButtonLeftItemsConfig` to `{ type: 'CUSTOM' }` for a route's  `routeOptions`. So if the `navBarButtonLeftItemsConfig` is explicitly set to anything other than "custom", then this prop will not do anything. |
 | 🔤 `renderNavBarRightItem`<br/><br/>⚛️ [`(navigation: NavigationObject) => ReactElement`](PLACE_HOLDER_LINK) | This prop is used for rendering a custom right item component in the navigation bar.<br/><br/>📝 **Note**: If this prop is used, it'll implicitly set `navBarButtonRightItemsConfig` to `{ type: 'CUSTOM' }` for a route's  `routeOptions`. So if the `navBarButtonRightItemsConfig` is explicitly set to anything other than "custom", then this prop will not do anything. |
 | 🔤 `renderNavBarTitleItem`<br/><br/>⚛️ [`(navigation: NavigationObject) => ReactElement`](PLACE_HOLDER_LINK) | This prop is used for rendering a custom title item component in the navigation bar.<br><br>💡 **Tip**: You can access the route's `routeTitle` via the `navigation` object (i.e. `navigation.routeOptions.routeTitle`). |
-| 🔤 `renderRouteHeader`<br/><br/>⚛️ [`(navigation: NavigationObject) => ReactElement`](PLACE_HOLDER_LINK) | A popular UI navigation pattern is having a large header at the very top of the screen that acts as the center piece for a route. That header will either remain at a fixed size, or expand and collapse during scrolling (check out [`NavigatorShowcase01`](PLACE_HOLDER_LINK) and [`NavigatorShowcase02`](PLACE_HOLDER_LINK) for examples).<br><br>This prop accepts a function that must return a [`RouteHeaderView`](PLACE_HOLDER_LINK) as the root element. This component integrates with the route in the native side to enable the header behavior. Check the documentation for [`RouteHeaderView`](PLACE_HOLDER_LINK) for more details. |
+| 🔤 `renderRouteHeader`<br/><br/>⚛️ [`(navigation: NavigationObject) => ReactElement`](PLACE_HOLDER_LINK) | A common UI navigation pattern is having a large header at the very top of the screen that acts as the centerpiece for a route. That header will either remain at a fixed size, or expand and collapse during scrolling (check out [`NavigatorShowcase01`](PLACE_HOLDER_LINK) and [`NavigatorShowcase02`](PLACE_HOLDER_LINK) for examples). This prop allows you to render a header at the top of the screen.<br><br>This prop accepts a function that must return a [`RouteHeaderView`](PLACE_HOLDER_LINK) as the root element. This component integrates with the route in the native side to enable the header behavior. Check the documentation for [`RouteHeaderView`](PLACE_HOLDER_LINK) for more details. |
 
 <br>
 
