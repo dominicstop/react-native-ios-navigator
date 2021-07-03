@@ -7,14 +7,11 @@ import type { NavigatorRouteView } from '../components/NavigatorRouteView';
 import type { onRoutePopEvent, onRoutePushEvent, onRouteFocusBlurEvent, onPressNavBarItem, onUpdateSearchResults, onSearchBarCancelButtonClicked, onSearchBarSearchButtonClicked } from 'src/native_components/RNINavigatorRouteView';
 
 import type { EventEmitter } from '../functions/EventEmitter';
-import type { RouteOptions } from '../types/RouteOptions';
 
 import { NavRouteViewContext, NavRouteViewContextProps } from '../context/NavRouteViewContext';
 
 
 type RouteViewEventsProps = {
-  routeOptions?: RouteOptions;
-
   // push/pop events
   onRouteWillPush?: onRoutePushEvent;
   onRouteDidPush ?: onRoutePushEvent;
