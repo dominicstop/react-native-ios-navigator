@@ -247,6 +247,56 @@ These events are related to the route's search bar. A route can be configured to
 | 🔤 `onSearchBarCancelButtonClicked`<br/><br/>⚛️ [`OnSearchBarCancelButtonClicked`](PLACE_HOLDER_LINK) | An event that is triggered when the search bar's cancel button is pressed. When the cancel button is pressed, the search bar's text field will be cleared (this will trigger `onUpdateSearchResults`).<br/><br/>📝 **Note**: The search bar's cancel button will only appear when the search bar is in focus (unless specified otherwise via the `RouteSearchControllerConfig.automaticallyShowsCancelButton` property in the route's search config). |
 | 🔤 `onSearchBarSearchButtonClicked`<br/><br/>⚛️ [`onSearchBarSearchButtonClicked`](PLACE_HOLDER_LINK) | An event that is triggered when the search button (i.e the return key) is pressed in the iOS keyboard while the search bar is in focus. |
 
+<br>
+
+### D.2. Context
+
+Lorum Ipsum
+
+<br>
+
+### D.3. Hooks
+
+Lorum Ipsum
+
+<br>
+
+### D.4. Objects
+
+Lorum Ipsum
+
+<br>
+
+### D.5. Types
+
+Lorum Ipsum
+
+<br>
+
+#### D.5.1. Event Types
+
+Lorum Ipsum
+
+<br>
+
+#### D.5.2. Function and Callback Types
+
+Lorum Ipsum
+
+<br>
+
+#### D.5.3. Enums and Unions
+
+Lorum Ipsum
+
+<br>
+
+### D.6. Native-Related
+
+Native/Swift Integration
+
+
+
 ------
 
 <br><br>
