@@ -4,7 +4,7 @@ import { StyleSheet, View, findNodeHandle, ViewStyle } from 'react-native';
 import type { NavigationObject } from '../types/NavigationObject';
 import type { RouteOptions } from '../types/RouteOptions';
 import type { RenderNavItem } from '../types/NavTypes';
-import type { OnRoutePopEvent, OnRoutePushEvent, OnPressNavBarItemEvent, OnRouteFocusBlurEvent, OnUpdateSearchResultsEvent, OnSearchBarCancelButtonClickedEvent, OnSearchBarSearchButtonClickedEvent } from 'src/types/RNINavigatorRouteViewEvents';
+import type { OnRoutePopEvent, OnRoutePushEvent, OnPressNavBarItemEvent, OnRouteFocusBlurEvent, OnUpdateSearchResultsEvent, OnSearchBarCancelButtonClickedEvent, OnSearchBarSearchButtonClickedEvent } from '../types/RNINavigatorRouteViewEvents';
 
 import type { NavigatorView } from './NavigatorView';
 import type { RouteViewPortal } from './RouteViewPortal';
