@@ -1,6 +1,6 @@
 import { ViewStyle, requireNativeComponent, UIManager } from 'react-native';
 
-import type { OnCustomCommandFromNativeEvent, OnNativeCommandRequestEvent, OnNavRoutePopEvent, OnNavRouteViewAddedEvent, OnSetNativeRouteDataEvent, OnUIConstantsDidChangeEvent } from '../types/RNINavigatorViewEvents';
+import type { OnCustomCommandFromNativeEvent, OnNativeCommandRequestEvent, OnNavRoutePopEvent, OnNavRouteViewAddedEvent, OnSetNativeRoutesEvent, OnUIConstantsDidChangeEvent } from '../types/RNINavigatorViewEvents';
 import type { NavBarAppearanceCombinedConfig } from '../types/NavBarAppearanceConfig';
 
 
@@ -32,7 +32,7 @@ export type RNINavigatorViewProps = {
   
   // Native Events
   onNavRouteViewAdded?: OnNavRouteViewAddedEvent;
-  onSetNativeRoutes  ?: OnSetNativeRouteDataEvent;
+  onSetNativeRoutes  ?: OnSetNativeRoutesEvent;
 
   onNavRouteWillPop?: OnNavRoutePopEvent;
   onNavRouteDidPop ?: OnNavRoutePopEvent;

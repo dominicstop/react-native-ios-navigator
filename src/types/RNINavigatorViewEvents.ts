@@ -23,7 +23,7 @@ export type OnNavRoutePopEventObject = {
   };
 };
 
-export type OnSetNativeRouteDataEventObject = {
+export type OnSetNativeRoutesEventObject = {
   nativeEvent: EventBaseEventObject;
 };
 
@@ -70,8 +70,8 @@ export type OnNavRoutePopEvent = (
   event: OnNavRoutePopEventObject
 ) => void;
 
-export type OnSetNativeRouteDataEvent = (
-  event: OnSetNativeRouteDataEventObject
+export type OnSetNativeRoutesEvent = (
+  event: OnSetNativeRoutesEventObject
 ) => void;
 
 export type OnNativeCommandRequestEvent = (
