@@ -226,6 +226,8 @@
 
 - [ ] **Example**: Add test for multiple initial routes + test for initial native route.
 - [ ] **Test**: Scroll view with headers and footers, snapping, etc.
+- [ ] **Example**: Add new showcase for `RouteHeaderView` — An article screen with a large header that snaps into place.
+- [ ] **Example**: Add new showcase for `RouteHeaderView` — A header that has complex controls when expanded (e.g. kinda like [this](https://uptech.team/blog/implement-airbnb-like-expandable-menu-on-ios)).
 
 ---
 
