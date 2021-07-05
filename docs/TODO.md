@@ -10,24 +10,6 @@
 
 ## In Progress
 
-* Add initial support for routes with `UISearchController`/`UISearchBar`.
-	- [ ] **Implement**: Add support for setting the `UISearchBar.searchTextField`'s text style using `RCTTextAttributes`.
-		- `attributedText`, `attributedPlaceholder`.
-		- Get the `defaultTextAttributes` and apply it  as the initial values for `attributedText` + `attributedPlaceholder`.
-		- It turns out `attributedText` and `attributedPlaceholder` accepts a `NSAttributedString` not a dict. of string attributes. So the `RCTTextAttributes` has to be applied during the text input event.
-	* [ ] **Implement**: Add support for programmatically clearing/dismissing the search bar.
-	* [ ] **Implement**: Add support for changing the Search Icon in a `UISearchBar`.
-		- Set via `searchBar.setRightImage` (i.e. the `textfield.rightView`  bookmark icon), and `searchBar.setLeftImage`.
-		- [Reference #1](https://betterprogramming.pub/how-to-change-the-search-icon-in-a-uisearchbar-150b775fb6c8), [Reference #2](https://medium.com/flawless-app-stories/customize-uisearchbar-for-different-ios-versions-6ee02f4d4419)
-	- [ ] **Implement**: Add support for `showsBookmarkButton` and `searchBarBookmarkButtonClicked` event.
-		* Maybe also impl. `showsSearchResultsButton`
-	* [ ] **Implement**: Add support for showing a `searchResultsController` + react view
-	  -  The react view will  be "provided" by the route via the route portal.
-	* [ ] **Implement**: Add support for configuring/setting the scope bar/`scopeButtonTitles`.
-	  * Forward search bar event: `selectedScopeButtonIndexDidChange`.
-	* [ ] **Implement**: Add support for search tokens.
-	  * Impl. setting the `tokenBackgroundColor`.
-
 ---
 
 <br>
@@ -135,6 +117,30 @@
 	- `nativeEvent.prevInFocus`, and `nativeEvent.nextInFocus`.
 
 <br>
+
+* `UISearchController`/`UISearchBar`-Related.
+
+	- [ ] **Implement**: Add support for setting the `UISearchBar.searchTextField`'s text style using `RCTTextAttributes`.
+		- `attributedText`, `attributedPlaceholder`.
+		- Get the `defaultTextAttributes` and apply it  as the initial values for `attributedText` + `attributedPlaceholder`.
+		- It turns out `attributedText` and `attributedPlaceholder` accepts a `NSAttributedString` not a dict. of string attributes. So the `RCTTextAttributes` has to be applied during the text input event.
+
+	* [ ] **Implement**: Add support for programmatically showing/dismissing the search bar.
+		* This can implemented via the [`UISearchController.isActive`](https://developer.apple.com/documentation/uikit/uisearchcontroller/1618659-isactive) property.
+	* [ ] **Implement**: Add support for changing the Search Icon in a `UISearchBar`.
+		- Set via `searchBar.setRightImage` (i.e. the `textfield.rightView`  bookmark icon), and `searchBar.setLeftImage`.
+		- [Reference #1](https://betterprogramming.pub/how-to-change-the-search-icon-in-a-uisearchbar-150b775fb6c8), [Reference #2](https://medium.com/flawless-app-stories/customize-uisearchbar-for-different-ios-versions-6ee02f4d4419)
+
+	- [ ] **Implement**: Add support for `showsBookmarkButton` and `searchBarBookmarkButtonClicked` event.
+		* Maybe also impl. `showsSearchResultsButton`
+
+	* [ ] **Implement**: Add support for showing a `searchResultsController` + react view
+		-  The react view will  be "provided" by the route via the route portal.
+	* [ ] **Implement**: Add support for configuring/setting the scope bar/`scopeButtonTitles`.
+		* Forward search bar event: `selectedScopeButtonIndexDidChange`.
+	* [ ] **Implement**: Add support for search tokens.
+		* Impl. setting the `tokenBackgroundColor`.
+	* [ ] **Implement**: Expose remaining `UISearchController` events to react e.g. `willDismissSearchController`, `didDismissSearchController`, `willPresentSearchController`, and `didPresentSearchController`.
 
 ---
 
