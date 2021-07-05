@@ -115,6 +115,7 @@
 
 - [ ] **Implement**: `NavigatorView` event: `onRouteFocusWillChange` and `onRouteFocusDidChange`.
 	- `nativeEvent.prevInFocus`, and `nativeEvent.nextInFocus`.
+- [ ] **Implement**: Update route config (i.e. `NavRouteConfigItemJS`) to accept `renderRouteHeader`.
 
 <br>
 
