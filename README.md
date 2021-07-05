@@ -194,6 +194,58 @@ The purpose of this component is to allow for customization of a route at run-ti
 
 <br>
 
+#### D.1.3. `RouteViewEvents` Component
+
+This component allows you to subscribe/listen to route-related events (e.g. when a route is about to be popped, or when a navigation bar item has been pressed, etc).<br><br>Similar to the `RouteViewPortal` component, 1) this component doesn't actually render anything, and 2) this component is also required to be used inside a route. This is because, like the `RouteViewPortal` component, this component also relies on react context to communicate to the parent `NavigatorRouteView` component to receive the route-related events.<br><br>Internally, every route has an associated event emitter. That route event emitter can be accessed via the route's navigation object (e.g.   `NavigationObject.getRefToNavRouteEmitter`). You can then use that emitter object to manually attach event handlers, and then listen for events. Internally, this component uses the same mechanism to subscribe and listen to the route events. In other words, this component is simply one of the alternate ways to subscribe to the events emitted by route event emitter.<br><br>
+
+##### D.1.3.1.`RouteViewEvents` Component Props
+
+###### `RouteViewEvents` Push/Pop Event Props
+
+These events are triggered when the current route is about to be pushed or popped from the navigation stack.
+
+| Prop Name and Type                                           | Description                                                  |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 🔤 `onRouteWillPush`<br/><br/>⚛️ [`OnRoutePushEvent`](PLACE_HOLDER_LINK) | An event that is triggered when the current route is about to be pushed into the navigation stack (i.e. the push transition has begun). Internally, this event is triggered just before the [`UINavigationController.pushViewController`](https://developer.apple.com/documentation/uikit/uinavigationcontroller/1621887-pushviewcontroller) method is called. |
+| 🔤 `onRouteDidPush`<br/><br/>⚛️ [`OnRoutePushEvent`](PLACE_HOLDER_LINK) | An event that is triggered when the current route has been pushed into the navigation stack (i.e. the push transition has ended). This event fires after `onRouteWillPush`. Internally, this event is triggered inside the completion block of the  [`UINavigationController.pushViewController`](https://developer.apple.com/documentation/uikit/uinavigationcontroller/1621887-pushviewcontroller) method. |
+| 🔤 `onRouteWillPop`<br/><br/>⚛️ [`OnRoutePopEvent`](PLACE_HOLDER_LINK) | An event that is triggered when a route is about to be popped from the navigation stack (i.e. the pop transition has begun). Internally, this event is triggered by the [`UIViewController.willMove`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621381-willmove) lifecycle method.<br><br>💡 **Tip**: The `event.nativeEvent` object has a property called `isUserInitiated`. This property specifies whether the pop transition was initiated by the navigation command (`false`), or if it was initiated by the user (e.g. via the back button or swipe back gesture) (`true`). |
+| 🔤 `onRouteDidPop`<br/><br/>⚛️ [`OnRoutePopEvent`](PLACE_HOLDER_LINK) | An event that is triggered when a route has been popped from the navigation stack (i.e. the pop transition has ended). This event fires after `onRouteWillPop`.  Internally, this event is triggered by the [`UIViewController.didMove`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621405-didmove) lifecycle method.<br/><br/>💡 **Tip**: The `event.nativeEvent` object has a property called `isUserInitiated`. This property specifies whether the pop transition was initiated by the navigation command (`false`), or if it was initiated by the user (e.g. via the back button or swipe back gesture) (`true`). |
+
+<br>
+
+###### `RouteViewEvents` Focus/Blur Event Props
+
+These events are triggered whenever the current route will receive or lose focus (this usually occurs whenever a route is pushed and popped from the navigation stack).
+
+| Prop Name and Type                                           | Description                                                  |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 🔤 `onRouteWillFocus`<br/><br/>⚛️ [`OnRouteFocusBlurEvent`](PLACE_HOLDER_LINK) | An event that is triggered when the current route is about to become in focus (i.e. the pop transition for the topmost route item has begun). Internally, this event is triggered by the  [`UIViewController.viewWillAppear`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621510-viewwillappear) lifecycle method.<br><br>📝 **Note**: This event will also fire alongside `onRouteWillPush` (i.e. when the current route is about to become visible for the first time). |
+| 🔤 `onRouteDidFocus`<br/><br/>⚛️ [`OnRouteFocusBlurEvent`](PLACE_HOLDER_LINK) | An event that is triggered when the current route has received focus (i.e. the pop transition for the topmost route item has ended). This event is triggered by the  [`UIViewController.viewDidAppear`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621423-viewdidappear) lifecycle method.<br/><br/>📝 **Note**: This event will also fire alongside `onRouteDidPush` (i.e. when the current route has become visible for the first time). |
+| 🔤 `onRouteWillBlur`<br/><br/>⚛️ [`OnRouteFocusBlurEvent`](PLACE_HOLDER_LINK) | An event that is triggered when the current route is about to lose focus (i.e. a new route is about to be pushed into the navigation stack). This event is triggered by the  [`UIViewController.viewWillDisappear`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621485-viewwilldisappear)  lifecycle method.<br/><br/>📝 **Note**: This event will fire alongside `onRouteWillPop` (i.e. when the current route is about to be popped from the navigation stack). |
+| 🔤 `onRouteDidBlur`<br/><br/>⚛️ [`OnRouteFocusBlurEvent`](PLACE_HOLDER_LINK) | An event that is triggered when the current route has lost focus (i.e. a new route has been pushed into the navigation stack). This event is triggered by the  [`UIViewController.viewDidDisappear`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621477-viewdiddisappear)  lifecycle method.<br/><br/>📝 **Note**: This event will fire alongside `onRouteDidPop` (i.e. when the current route has been popped from the navigation stack). |
+
+<br>
+
+###### `RouteViewEvents` Navigation Bar Item Event Props
+
+📝 **Note**: When using custom navigation bar items (e.g. `renderNavBarLeftItem`, etc.), the `onPressNavBar` events will not be triggered. Instead, use a button component  (e.g. `TouchableOpacity`), and then put your custom navigation bar item inside it.<br><br>💡 **Tip:** It's possible to have more than one navigation bar item, as such, to differentiate which item is pressed, you can use the properties provided by `event.nativeEvent` object that you'll receive from the `OnPressNavBarItemEvent`. Some of those properties are `nativeEvent.key` (an optional user-defined string), and `nativeEvent.index` (the item's placement in the group).
+
+| Prop Name and Type                                           | Description                                                  |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 🔤 `onPressNavBarLeftItem`<br/><br/>⚛️ [`OnPressNavBarItemEvent`](PLACE_HOLDER_LINK) | An event that is triggered when a navigation bar left item is pressed. |
+| 🔤 `onPressNavBarRightItem`<br/><br/>⚛️ [`OnPressNavBarItemEvent`](PLACE_HOLDER_LINK) | An event that is triggered when a navigation bar right item is pressed. |
+
+<br>
+
+###### `RouteViewEvents` Search Bar-Related Event Props
+
+These events are related to the route's search bar. A route can be configured to have a [`UISearchBar`](https://developer.apple.com/documentation/uikit/uisearchbar) in the navigation bar via the `RouteOptions.searchBarConfig` property.
+
+| Prop Name and Type                                           | Description                                                  |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 🔤 `onUpdateSearchResults`<br/><br/>⚛️ [`OnUpdateSearchResults`](PLACE_HOLDER_LINK) | An event that is triggered whenever the search bar's text changes. Internally, this event is triggered by the [`UISearchResultsUpdating.updateSearchResults`](https://developer.apple.com/documentation/uikit/uisearchresultsupdating/1618658-updatesearchresults) method.<br><br>💡 **Tip**: This event is useful for updating a list of results. The `event.nativeEvent` object will contain the search bar's current text value. Use the search text value to update the list accordingly. |
+| 🔤 `onSearchBarCancelButtonClicked`<br/><br/>⚛️ [`OnSearchBarCancelButtonClicked`](PLACE_HOLDER_LINK) | An event that is triggered when the search bar's cancel button is pressed. When the cancel button is pressed, the search bar's text field will be cleared (this will trigger `onUpdateSearchResults`).<br/><br/>📝 **Note**: The search bar's cancel button will only appear when the search bar is in focus (unless specified otherwise via the `RouteSearchControllerConfig.automaticallyShowsCancelButton` property in the route's search config). |
+| 🔤 `onSearchBarSearchButtonClicked`<br/><br/>⚛️ [`onSearchBarSearchButtonClicked`](PLACE_HOLDER_LINK) | An event that is triggered when the search button (i.e the return key) is pressed in the iOS keyboard while the search bar is in focus. |
 
 ------
 
