@@ -16,7 +16,6 @@ export * from './context/NavigatorUIConstantsContext';
 // Types
 export { RNINavigatorViewConstants as NavigatorViewConstants } from './native_components/RNINavigatorView';
 export { BackButtonDisplayMode, LargeTitleDisplayMode, NavigationBarVisibilityMode, StatusBarStyle } from './native_components/RNINavigatorRouteView';
-export { HeaderHeightValue } from './native_components/RNINavigatorRouteHeaderView';
 
 export { RouteConstantsObject } from './native_modules/RNINavigatorRouteViewModule';
 export { NavigatorConstantsObject, NativeRouteData } from './native_modules/RNINavigatorViewModule';
@@ -29,5 +28,6 @@ export * from './types/NavRouteItem';
 export * from './types/NavRouteConfigItem';
 export * from './types/RNINavigatorRouteViewEvents';
 export * from './types/RNINavigatorViewEvents';
+export * from './types/RouteHeaderConfig';
 
 export { ImageResolvedAssetSource, ImageRectConfig, ImageGradientConfig, DynamicColor, Offset, ImageTypes, ImageItemConfig } from './types/MiscTypes';
