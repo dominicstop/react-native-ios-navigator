@@ -143,9 +143,9 @@ Internally, the route components (i.e. the component returned from `renderRoute`
 
 | Prop Name and Type                                           | Description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
-| 🔤 `onNavRouteWillPop`<br/><br/>⚛️ [`OnNavRoutePopEvent`](PLACE_HOLDER_LINK) | Event that is triggered when a route is about to be "popped" from the navigation stack (i.e. the pop transition has started). |
-| 🔤 `onNavRouteDidPop`<br/><br/>⚛️ [`OnNavRoutePopEvent`](PLACE_HOLDER_LINK) | Event that is triggered when a route has been "popped" from the navigation stack (i.e. the pop transition has already been completed). |
-| 🔤 `onCustomCommandFromNative`<br/><br/>⚛️ [`OnCustomCommandFromNativeEvent`](PLACE_HOLDER_LINK) | Event that is triggered from the native-side via the `RNINavigatorNativeCommands.sendCustomCommandToJS` delegate method. This event exists to receive custom user-defined commands from a `RNINavigatorView` (i.e. for custom native code integration). |
+| 🔤 `onNavRouteWillPop`<br/><br/>⚛️ [`OnNavRoutePopEvent`](PLACE_HOLDER_LINK)<br><br>📌 [`OnNavRoutePopEventObject`](PLACE_HOLDER_LINK) | Event that is triggered when a route is about to be "popped" from the navigation stack (i.e. the pop transition has started). |
+| 🔤 `onNavRouteDidPop`<br/><br/>⚛️ [`OnNavRoutePopEvent`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnNavRoutePopEventObject`](src/types/RNINavigatorViewEvents.ts) | Event that is triggered when a route has been "popped" from the navigation stack (i.e. the pop transition has already been completed). |
+| 🔤 `onCustomCommandFromNative`<br/><br/>⚛️ [`OnCustomCommandFromNativeEvent`](PLACE_HOLDER_LINK)<br/><br/>📌 [`abc`](PLACE_HOLDER_LINK) | Event that is triggered from the native-side via the `RNINavigatorNativeCommands.sendCustomCommandToJS` delegate method. This event exists to receive custom user-defined commands from a `RNINavigatorView` (i.e. for custom native code integration). |
 
 <br>
 
@@ -260,16 +260,48 @@ These events are related to the route's search bar. A route can be configured to
 | 🔤 `onUpdateSearchResults`<br/><br/>⚛️ [`OnUpdateSearchResults`](PLACE_HOLDER_LINK) | An event that is triggered whenever the search bar's text changes. Internally, this event is triggered by the [`UISearchResultsUpdating.updateSearchResults`](https://developer.apple.com/documentation/uikit/uisearchresultsupdating/1618658-updatesearchresults) method.<br><br>💡 **Tip**: This event is useful for updating a list of results. The `event.nativeEvent` object will contain the search bar's current text value. Use the search text value to update the list accordingly. |
 | 🔤 `onSearchBarCancelButtonClicked`<br/><br/>⚛️ [`OnSearchBarCancelButtonClicked`](PLACE_HOLDER_LINK) | An event that is triggered when the search bar's cancel button is pressed. When the cancel button is pressed, the search bar's text field will be cleared (this will trigger `onUpdateSearchResults`). Internally, this event is triggered by [`UISearchBarDelegate.searchBarCancelButtonClicked`](https://developer.apple.com/documentation/uikit/uisearchbardelegate/1624314-searchbarcancelbuttonclicked) method.<br/><br/>📝 **Note**: The search bar's cancel button will only appear when the search bar is in focus (unless specified otherwise via the `RouteSearchControllerConfig.automaticallyShowsCancelButton` property in the route's search config). |
 | 🔤 `onSearchBarSearchButtonClicked`<br/><br/>⚛️ [`onSearchBarSearchButtonClicked`](PLACE_HOLDER_LINK) | An event that is triggered when the search button (i.e the return key) is pressed in the iOS keyboard while the search bar is in focus. Internally, this event is triggered by [`UISearchBarDelegate.searchBarSearchButtonClicked`](https://developer.apple.com/documentation/uikit/uisearchbardelegate/1624294-searchbarsearchbuttonclicked) method.<br/><br/>💡 **Tip**: The keyboard's return key label can modified via the search config (i.e. `  RouteSearchControllerConfig.returnKeyType`). |
+
+<br>
+
+#### D.1.4. `RouteHeaderView` Component
+
+A common UI navigation pattern is having a large header at the very top of the screen that acts as the centerpiece for a route. That header will either remain at a fixed size, or expand and collapse during scrolling (check out [`NavigatorShowcase01`](PLACE_HOLDER_LINK) and [`NavigatorShowcase02`](PLACE_HOLDER_LINK) for examples).<br><br>The navigation bar cannot be easily customized (this is especially true for its height). As such, this makes things like extending the navigation bar's height to show some custom UI elements underneath the title bar very difficult. It's also undesirable to create a custom built solution because the built-in navigation bar has a lot of built-in behaviors/functionality that will be hard to re-create (transitions, the back button, etc). To workaround this, some apps (e.g. twitter's profile screen, spotify's album/playlist screen, etc.) will just make the navigation bar's background transparent, and then show their custom UI elements underneath it. This component uses that same approach.<br><br>When in use, this component is displayed behind the navigation bar, and is anchored to the top of the screen. The header can either have a fixed height, or it can be paired with a scroll view so that the header will expand or collapse as the user scrolls.<br><br>
+
+##### D.1.2.1. `RouteViewPortal` Component Props
+
 | Prop Name and Type                                           | Description |
 | :----------------------------------------------------------- | ----------- |
+| 🔤 **Required**: `config`<br/><br/>⚛️ [`RouteHeaderConfig`](PLACE_HOLDER_LINK) |             |
+| 🔤 `headerTopPadding`<br/><br/>⚛️ [`HeaderHeightValue`](PLACE_HOLDER_LINK) |             |
+| 🔤 `style`<br/><br/>⚛️  `ViewStyle`                            |             |
 
 <br>
 
 ### D.2. Context
 
+#### D.2.1. `NavRouteViewContext`
+
+Lorum Ipsum<br>
+
+| Name and Type                                                | Description |
+| :----------------------------------------------------------- | ----------- |
+| 🔤 `routeID`<br/><br/>⚛️ [`HeaderHeightValue`](PLACE_HOLDER_LINK) |             |
 |                                                              |             |
 |                                                              |             |
 
+<br>
+
+#### D.2.2. `NavigatorUIConstantsContext`
+
+Lorum Ipsum<br>
+
+| Name and Type | Description |
+| :------------ | ----------- |
+|               |             |
+|               |             |
+|               |             |
+
+<br>
 
 <br>
 
@@ -281,7 +313,174 @@ Lorum Ipsum
 
 ### D.4. Objects
 
-Lorum Ipsum
+This library is written using typescript. As such, all of the objects mentioned in the documentation (and all of the object types exported by the library) will have a corresponding type declaration. Those type declaration can usually be found in the `src/types` directory. If a particular object is not documented here, please refer to those type declaration files instead. <br><br>
+
+#### D.4.1. `RouteOptions`
+
+The properties that are related to each other are grouped together into their own sections.<br>
+
+<br>
+
+##### `RouteOptions`: General
+
+| Name and Type                                                | Description |
+| :----------------------------------------------------------- | ----------- |
+| 🔤 `statusBarStyle`<br/><br/>⚛️ `abc`                          |             |
+| 🔤 `routeContainerStyle`<br/><br/>⚛️ `abc`                     |             |
+| 🔤 `automaticallyAddHorizontalSafeAreaInsets`<br/><br/>⚛️ `abc` |             |
+
+<br>
+
+##### `RouteOptions`: Transition Config
+
+| Name and Type                             | Description |
+| :---------------------------------------- | ----------- |
+| 🔤 `transitionConfigPush`<br/><br/>⚛️ `abc` |             |
+| 🔤 `transitionConfigPop`<br/><br/>⚛️ `abc`  |             |
+
+<br>
+
+##### `RouteOptions`: Navigation Bar Config
+
+| Name and Type                              | Description |
+| :----------------------------------------- | ----------- |
+| 🔤 `routeTitle`<br/><br/>⚛️ `abc`            |             |
+| 🔤 `prompt`<br/><br/>⚛️ `abc`                |             |
+| 🔤 `largeTitleDisplayMode`<br/><br/>⚛️ `abc` |             |
+| 🔤 `searchBarConfig`<br/><br/>⚛️ `abc`       |             |
+
+<br>
+
+##### `RouteOptions`: Navigation Bar Item Config
+
+| Name and Type                                     | Description |
+| :------------------------------------------------ | ----------- |
+| 🔤 `navBarButtonBackItemConfig`<br/><br/>⚛️ `abc`   |             |
+| 🔤 `navBarButtonLeftItemsConfig`<br/><br/>⚛️ `abc`  |             |
+| 🔤 `navBarButtonRightItemsConfig`<br/><br/>⚛️ `abc` |             |
+
+<br>
+
+##### `RouteOptions`: Navigation Bar Back Item Config
+
+| Name and Type                                            | Description |
+| :------------------------------------------------------- | ----------- |
+| 🔤 `backButtonTitle`<br/><br/>⚛️ `abc`                     |             |
+| 🔤 `hidesBackButton`<br/><br/>⚛️ `abc`                     |             |
+| 🔤 `backButtonDisplayMode`<br/><br/>⚛️ `abc`               |             |
+| 🔤 `leftItemsSupplementBackButton`<br/><br/>⚛️ `abc`       |             |
+| 🔤 `applyBackButtonConfigToCurrentRoute`<br/><br/>⚛️ `abc` |             |
+
+<br>
+
+##### `RouteOptions`: Override-related
+
+| Name and Type                                                | Description |
+| :----------------------------------------------------------- | ----------- |
+| 🔤 `navBarAppearanceOverride`<br/><br/>⚛️ `abc`                |             |
+| 🔤 `navigationBarVisibility`<br/><br/>⚛️ `abc`                 |             |
+| 🔤 `allowTouchEventsToPassThroughNavigationBar`<br/><br/>⚛️ `abc` |             |
+
+<br>
+
+#### D.4.2. `NavigationObject`
+
+Lorum Ipsum<br>
+
+| Name and Type            | Description |
+| :----------------------- | ----------- |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+
+<br>
+
+#### D.4.3. `NavRouteItem`-related
+
+Lorum Ipsum<br>
+
+| Name and Type            | Description |
+| :----------------------- | ----------- |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+
+<br>
+
+#### D.4.4. `NavBarAppearanceCombinedConfig`
+
+The `NavBarAppearanceCombinedConfig` union object type is used to customize the appearance of the navigation bar. This object is a union of two objects, namely: `NavBarAppearanceConfig`, and `NavBarAppearanceLegacyConfig`. The former can be used if the  `mode` property is set to `appearance`, and the latter can be used if `mode` is set to `legacy`.
+
+The navigation bar can be customized either via the "legacy" mode (i.e. using the [legacy customizations](https://developer.apple.com/documentation/uikit/uinavigationbar/legacy_customizations)-related API), or via the "appearance" mode (using the iOS 13+ [`UINavigationBarAppearance`](https://developer.apple.com/documentation/uikit/uinavigationbarappearance) API). <br>
+
+| Name and Type                                                | Description                                                  |
+| :----------------------------------------------------------- | ------------------------------------------------------------ |
+| 🔤 **Required**: `mode`<br/><br/>⚛️  `'appearance' | 'legacy'` | Specifies which API to use when customizing the navigation bar.<br><br>If this property is set to `appearance`, then only the `NavBarAppearanceConfig`-related properties can be used. Conversely if this property is set to `legacy`, then only `NavBarAppearanceLegacyConfig`-related properties can be used. |
+
+<br>
+
+**Example Snippet**
+
+```javascript
+const navBarAppearancLegacy = {
+	mode: 'appearance',
+	// `NavBarAppearanceConfig`-related properties
+  // ...
+};
+
+const navBarAppearanc = {
+  mode: 'legacy',
+  // `NavBarAppearanceLegacyConfig`-related properties
+  // ...
+};
+```
+
+<br>
+
+##### `NavBarAppearanceLegacyConfig`
+
+| Name and Type                                                | Description |
+| :----------------------------------------------------------- | ----------- |
+| 🔤 `navBarPreset`<br/><br/>⚛️  `NavBarPreset` e.g. `'none' | 'noShadow' | 'clearBackground'`<br><br>✳️ **Default**: `none` |             |
+| 🔤 `barStyle`<br/><br/>⚛️  `'default' | 'black'`               |             |
+| 🔤 `titleTextAttributes`<br/><br/>⚛️  `TextStyle`              |             |
+| 🔤 `largeTitleTextAttributes`<br/><br/>⚛️  `TextStyle`         |             |
+| 🔤 `titleVerticalPositionAdjustment`<br/><br/>⚛️ `{ [key in BarMetrics]?: number }`<br><br>📌 [`BarMetrics`](PLACE_HOLDER_LINK) |             |
+| 🔤 `tintColor`<br/><br/>⚛️  `string | DynamicColor`            |             |
+| 🔤 `barTintColor`<br/><br/>⚛️  `string | DynamicColor`         |             |
+| 🔤 `backIndicatorImage`<br/><br/>⚛️  [`ImageItemConfig`](PLACE_HOLDER_LINK) |             |
+| 🔤 `backgroundImage`<br/><br/>⚛️  `{ [key in BarMetrics]?: ImageItemConfig }`<br><br>📌 [`BarMetrics`](PLACE_HOLDER_LINK)<br>📌 [`ImageItemConfig`](PLACE_HOLDER_LINK) |             |
+| 🔤 `shadowImage`<br/><br/>⚛️  [`ImageItemConfig`](PLACE_HOLDER_LINK) |             |
+
+<br>
+
+##### `NavBarAppearanceConfig`
+
+Lorum ipsum<br>
+
+| Name and Type                                                | Description |
+| :----------------------------------------------------------- | ----------- |
+| 🔤 `navBarPreset`<br/><br/>⚛️  `NavBarPreset` e.g. `'none' | 'noShadow' | 'clearBackground'`<br><br>✳️ **Default**: `none` |             |
+| 🔤 `standardAppearance`<br/><br/>⚛️  [`NavBarAppearance`](PLACE_HOLDER_LINK) |             |
+| 🔤 `compactAppearance`<br/><br/>⚛️  [`NavBarAppearance`](PLACE_HOLDER_LINK) |             |
+| 🔤 `scrollEdgeAppearance`<br/><br/>⚛️  [`NavBarAppearance`](PLACE_HOLDER_LINK) |             |
+
+<br>
+
+##### `NavBarAppearance`
+
+Lorum ipsum<br>
+
+| Name and Type                                     | Description |
+| ------------------------------------------------- | ----------- |
+| 🔤 `baseConfig`<br/><br/>⚛️  `abc`                 |             |
+| 🔤 `backgroundEffect`<br/><br/>⚛️  `abc`           |             |
+| 🔤 `backgroundColor`<br/><br/>⚛️  `abc`            |             |
+| 🔤 `backgroundImage`<br/><br/>⚛️  `abc`            |             |
+| 🔤 `backgroundImageContentMode`<br/><br/>⚛️  `abc` |             |
+| 🔤 `shadowColor`<br/><br/>⚛️  `abc`                |             |
+| 🔤 `titleTextAttributes`<br/><br/>⚛️  `abc`        |             |
+| 🔤 `largeTitleTextAttributes`<br/><br/>⚛️  `abc`   |             |
+| 🔤 `titlePositionAdjustment`<br/><br/>⚛️  `abc`    |             |
+| 🔤 `backIndicatorImage`<br/><br/>⚛️  `abc`         |             |
 
 <br>
 
