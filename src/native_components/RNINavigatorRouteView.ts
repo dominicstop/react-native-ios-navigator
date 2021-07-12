@@ -6,10 +6,10 @@ import type { RouteSearchControllerConfig } from '../types/RouteSearchController
 import type { OnPressNavBarItemEvent, OnRouteFocusBlurEvent, OnRoutePopEvent, OnRoutePushEvent, OnSearchBarCancelButtonClickedEvent, OnSearchBarSearchButtonClickedEvent, OnUpdateSearchResultsEvent } from '../types/RNINavigatorRouteViewEvents';
 
 
-type RouteTransitionPushTypes = 
+export type RouteTransitionPushTypes = 
   "DefaultPush" | "FadePush" | "SlideLeftPush" | "SlideUpPush" | "GlideUpPush";
 
-type RouteTransitionPopTypes = 
+export type RouteTransitionPopTypes = 
   "DefaultPop" | "FadePop" | "SlideLeftPop" | "SlideUpPop" | "GlideUpPop";
 
 type RouteTransitionConfigBase = {

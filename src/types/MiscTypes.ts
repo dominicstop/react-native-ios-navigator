@@ -168,17 +168,17 @@ export type ControlState =
   | 'focused';
 
 export type EdgeInsets = {
-    top   : number;
-    bottom: number;
-    left  : number;
-    right : number;
+  top   : number;
+  bottom: number;
+  left  : number;
+  right : number;
 };
 
 export type Rect = {
-    x     : number;
-    y     : number;
-    height: number;
-    width : number;
+  x     : number;
+  y     : number;
+  height: number;
+  width : number;
 };
 
 export type ReturnKeyType =
