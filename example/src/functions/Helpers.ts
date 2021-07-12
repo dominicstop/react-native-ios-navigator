@@ -5,7 +5,7 @@ export function randomElement<T = any>(items: Array<T>){
 };
 
 // wrapper for timeout that returns a promise
-export function timeout(ms: Number) {
+export function timeout(ms: number) {
   return new Promise<void>(resolve => {
     const timeoutID = setTimeout(() => {
       clearTimeout(timeoutID);

@@ -142,4 +142,4 @@ export type ReturnKeyType =
   /** Specifies that the visible title of the Return key is Emergency Call. */
   | 'emergencyCall'
   /** Specifies that the visible title of the Return key is Continue. */
-  | 'continue'
+  | 'continue';

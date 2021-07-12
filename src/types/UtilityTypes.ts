@@ -10,10 +10,11 @@ export type EnumString = Readonly<{ [key: string]: string }>;
  * 
  * ### Example
  * ```
- * let x: EnumValuesLiteral<Enum>;
+ * enum E { Foo, Bar }
+ * let x: EnumValuesLiteral<E>;
  * 
- * x = Enum.Foo;
- * x = Enum.Bar;
+ * x = E.Foo;
+ * x = E.Bar;
  * 
  * x = 'Foo';
  * x = 'Bar';
@@ -23,18 +24,24 @@ export type EnumValuesLiteral
   <TEnum extends string> = TEnum | `${TEnum}`;
 
 /**
- * Accepts a specific key from `TEnum` (e.g. `Enum.Foo | 'Foo'`) either as a enum key (e.g. `Enum.Foo`), 
- * or as a string literal (e.g. 'Foo').
+ * Accepts a specific key from `TEnum` either as a enum key (e.g. `Enum.Foo`), 
+ * or as a string literal (e.g. 'Foo'). 
+ * 
+ * A less brittle way of writing `Enum.Foo | 'Foo'` (i.e. because the keys will be in sync
+ * when renaming an enum entry, or error when given an invalid key). 
  * 
  * ### Example
  * ```
- * let x: EnumValueLiteral<typeof Enum, 'Foo'>;
+ * enum E { Foo, Bar }
+ * let x: EnumValueLiteral<typeof E, 'Foo'>;
  * 
- * x = Enum.Foo;
+ * x = E.Foo;
  * x = 'Foo';
  * 
- * x = Enum.Bar // error
+ * x = E.Bar // error
  * x = 'Bar' // error
+ * 
+ * let z: EnumValueLiteral<typeof E, 'Baz'>; // error
  * ```
  */
 export type EnumValueLiteral
