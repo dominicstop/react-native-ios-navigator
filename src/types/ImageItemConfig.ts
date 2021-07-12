@@ -1,4 +1,5 @@
 import type { Point, PointPreset } from "./MiscTypes";
+import type { EnumValueLiteral } from "./UtilityTypes";
 
 
 /** Object returned by `Image.resolveAssetSource()` */
@@ -42,25 +43,25 @@ export type ImageGradientConfig = Partial<Pick<ImageRectConfig,
   type?: 'axial' | 'conic' | 'radial'
 };
 
+
 export type ImageItemConfig = {
-  type: ImageTypes.IMAGE_ASSET | "IMAGE_ASSET";
+  type: EnumValueLiteral<typeof ImageTypes, 'IMAGE_ASSET'>;
   /** The corresponding key of asset item in the asset catalog */
   imageValue: string;
 } | {
-  type: ImageTypes.IMAGE_SYSTEM | "IMAGE_SYSTEM";
+  type: EnumValueLiteral<typeof ImageTypes, 'IMAGE_SYSTEM'>;
   /** The key/name of the SF Symbols system icon */
   imageValue: string;
 } | {
-  type: ImageTypes.IMAGE_REQUIRE | "IMAGE_REQUIRE";
+  type: EnumValueLiteral<typeof ImageTypes, 'IMAGE_REQUIRE'>;
   /** Object returned by `Image.resolveAssetSource()` */
   imageValue: ImageResolvedAssetSource;
 } | {
-  type: ImageTypes.IMAGE_EMPTY | "IMAGE_EMPTY";
+  type: EnumValueLiteral<typeof ImageTypes, 'IMAGE_EMPTY'>;
 } | {
-  type: ImageTypes.IMAGE_RECT | "IMAGE_RECT";
+  type: EnumValueLiteral<typeof ImageTypes, 'IMAGE_RECT'>;
   imageValue: ImageRectConfig;
 } | {
-  type: ImageTypes.IMAGE_GRADIENT | "IMAGE_GRADIENT";
+  type: EnumValueLiteral<typeof ImageTypes, 'IMAGE_GRADIENT'>;
   imageValue: ImageGradientConfig;
 };
-
