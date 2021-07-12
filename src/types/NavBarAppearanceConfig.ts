@@ -1,5 +1,7 @@
 import type { TextStyle } from "react-native";
-import type { BlurEffectStyle, DynamicColor, ImageItemConfig, Offset, BarMetrics } from "./MiscTypes";
+import type { BlurEffectStyle, DynamicColor, Offset, BarMetrics } from "./MiscTypes";
+import type { ImageItemConfig } from "./ImageItemConfig";
+
 
 /** `UIBarStyle`: Defines the stylistic appearance of different types of views */
 type BarStyle = 'default' | 'black';

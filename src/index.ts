@@ -29,5 +29,6 @@ export * from './types/NavRouteConfigItem';
 export * from './types/RNINavigatorRouteViewEvents';
 export * from './types/RNINavigatorViewEvents';
 export * from './types/RouteHeaderConfig';
+export * from './types/ImageItemConfig';
 
-export { ImageResolvedAssetSource, ImageRectConfig, ImageGradientConfig, DynamicColor, Offset, ImageTypes, ImageItemConfig } from './types/MiscTypes';
+export { DynamicColor, Offset } from './types/MiscTypes';
