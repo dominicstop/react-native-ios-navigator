@@ -337,13 +337,15 @@ This library is written using typescript. As such, all of the objects mentioned 
 
 <br>
 
-#### D.4.1. `RouteOptions`
+#### Object Type: `RouteOptions`
+
+📌 **Declaration**: [`RouteOptions.ts`](src/types/RouteOptions.ts)
 
 The properties that are related to each other are grouped together into their own sections.<br>
 
 <br>
 
-##### `RouteOptions`: General
+##### `RouteOptions`: General Properties
 
 | Name and Type                                                | Description |
 | :----------------------------------------------------------- | ----------- |
@@ -353,7 +355,7 @@ The properties that are related to each other are grouped together into their ow
 
 <br>
 
-##### `RouteOptions`: Transition Config
+##### `RouteOptions`: Transition Config-Related Properties
 
 | Name and Type                             | Description |
 | :---------------------------------------- | ----------- |
@@ -362,7 +364,7 @@ The properties that are related to each other are grouped together into their ow
 
 <br>
 
-##### `RouteOptions`: Navigation Bar Config
+##### `RouteOptions`: Navigation Bar Config-Related Properties
 
 | Name and Type                              | Description |
 | :----------------------------------------- | ----------- |
@@ -373,7 +375,7 @@ The properties that are related to each other are grouped together into their ow
 
 <br>
 
-##### `RouteOptions`: Navigation Bar Item Config
+##### `RouteOptions`: Navigation Bar Item Config-Related Properties
 
 | Name and Type                                     | Description |
 | :------------------------------------------------ | ----------- |
@@ -383,7 +385,7 @@ The properties that are related to each other are grouped together into their ow
 
 <br>
 
-##### `RouteOptions`: Navigation Bar Back Item Config
+##### `RouteOptions`: Navigation Bar Back Item Config-Related Properties
 
 | Name and Type                                            | Description |
 | :------------------------------------------------------- | ----------- |
@@ -395,7 +397,7 @@ The properties that are related to each other are grouped together into their ow
 
 <br>
 
-##### `RouteOptions`: Override-related
+##### `RouteOptions`: Override-related Properties
 
 | Name and Type                                                | Description |
 | :----------------------------------------------------------- | ----------- |
@@ -405,7 +407,9 @@ The properties that are related to each other are grouped together into their ow
 
 <br>
 
-#### D.4.2. `NavigationObject`
+#### Object Type: `NavigationObject`
+
+📌 **Declaration**: [`NavigationObject.ts`](src/types/NavigationObject.ts)
 
 Lorum Ipsum<br>
 
@@ -416,7 +420,9 @@ Lorum Ipsum<br>
 
 <br>
 
-#### D.4.3. `NavRouteItem`-related
+#### Object Type: `NavRouteItem`
+
+📌 **Declaration**: [`NavRouteItem.ts`](src/types/NavRouteItem.ts)
 
 Lorum Ipsum<br>
 
@@ -427,9 +433,11 @@ Lorum Ipsum<br>
 
 <br>
 
-#### D.4.4. `NavBarAppearanceCombinedConfig`
+#### Object Type: `NavBarAppearanceCombinedConfig`
 
-The `NavBarAppearanceCombinedConfig` union object type is used to customize the appearance of the navigation bar. This object is a union of two objects, namely: `NavBarAppearanceConfig`, and `NavBarAppearanceLegacyConfig`. The former can be used if the  `mode` property is set to `appearance`, and the latter can be used if `mode` is set to `legacy`.
+📌 **Declaration**: [`NavBarAppearanceConfig.ts`](src/types/NavBarAppearanceConfig.ts)
+
+The `NavBarAppearanceCombinedConfig` tagged/discriminated union object type is used to customize the appearance of the navigation bar. This object is a union of two objects, namely: `NavBarAppearanceConfig`, and `NavBarAppearanceLegacyConfig` that is separated via the shared  `mode` property. The former can be used if the  `mode` property is set to `appearance`, and the latter can be used if `mode` is set to `legacy`.
 
 The navigation bar can be customized either via the "legacy" mode (i.e. using the [legacy customizations](https://developer.apple.com/documentation/uikit/uinavigationbar/legacy_customizations)-related API), or via the "appearance" mode (using the iOS 13+ [`UINavigationBarAppearance`](https://developer.apple.com/documentation/uikit/uinavigationbarappearance) API). <br>
 
