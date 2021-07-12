@@ -4,27 +4,7 @@ import type { NavBarBackItemConfig, NavBarItemsConfig } from '../types/NavBarIte
 import type { NavBarAppearanceCombinedConfig } from '../types/NavBarAppearanceConfig';
 import type { RouteSearchControllerConfig } from '../types/RouteSearchControllerConfig';
 import type { OnPressNavBarItemEvent, OnRouteFocusBlurEvent, OnRoutePopEvent, OnRoutePushEvent, OnSearchBarCancelButtonClickedEvent, OnSearchBarSearchButtonClickedEvent, OnUpdateSearchResultsEvent } from '../types/RNINavigatorRouteViewEvents';
-
-
-export type RouteTransitionPushTypes = 
-  "DefaultPush" | "FadePush" | "SlideLeftPush" | "SlideUpPush" | "GlideUpPush";
-
-export type RouteTransitionPopTypes = 
-  "DefaultPop" | "FadePop" | "SlideLeftPop" | "SlideUpPop" | "GlideUpPop";
-
-type RouteTransitionConfigBase = {
-  duration?: number;
-};
-
-export type RouteTransitionPushConfig = RouteTransitionConfigBase & {
-  type: RouteTransitionPushTypes;
-};
-
-export type RouteTransitionPopConfig = RouteTransitionConfigBase & {
-  type: RouteTransitionPopTypes;
-};
-
-
+import type { RouteTransitionPushConfig, RouteTransitionPopConfig } from '../types/NavigationCommands';
 
 
 export type BackButtonDisplayMode =

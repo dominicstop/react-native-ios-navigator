@@ -1,11 +1,13 @@
 
 
-import type { BackButtonDisplayMode, LargeTitleDisplayMode, NavigationBarVisibilityMode, RouteTransitionPopConfig, RouteTransitionPushConfig, StatusBarStyle } from "../native_components/RNINavigatorRouteView";
+import type { ViewStyle } from "react-native";
+
+import type { BackButtonDisplayMode, LargeTitleDisplayMode, NavigationBarVisibilityMode, StatusBarStyle } from "../native_components/RNINavigatorRouteView";
 
 import type { NavBarBackItemConfig, NavBarItemsConfig } from "./NavBarItemConfig";
 import type { NavBarAppearanceCombinedConfig } from "./NavBarAppearanceConfig";
 import type { RouteSearchControllerConfig } from "./RouteSearchControllerConfig";
-import type { ViewStyle } from "react-native";
+import type { RouteTransitionPushConfig, RouteTransitionPopConfig } from "./NavigationCommands";
 
 
 // TODO: Cleanup Types - Mirror from source (e.g. RNINavigatorRouteViewProps, etc.)

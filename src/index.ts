@@ -30,5 +30,6 @@ export * from './types/RNINavigatorRouteViewEvents';
 export * from './types/RNINavigatorViewEvents';
 export * from './types/RouteHeaderConfig';
 export * from './types/ImageItemConfig';
+export * from './types/NavigationCommands';
 
 export { DynamicColor, Offset } from './types/MiscTypes';

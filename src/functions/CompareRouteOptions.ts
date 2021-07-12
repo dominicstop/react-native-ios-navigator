@@ -1,7 +1,7 @@
 
 import { CompareUtilities, ComparisonConfig } from './CompareUtilities';
 
-import type { RouteTransitionPushConfig, RouteTransitionPopConfig } from "src/native_components/RNINavigatorRouteView";
+import type { RouteTransitionPushConfig, RouteTransitionPopConfig } from "../types/NavigationCommands";
 
 import type { NavBarItemConfig, NavBarItemsConfig, NavBarBackItemConfig } from "../types/NavBarItemConfig";
 import type { NavBarAppearance, NavBarAppearanceCombinedConfig, NavBarAppearanceConfig, NavBarAppearanceLegacyConfig } from '../types/NavBarAppearanceConfig';

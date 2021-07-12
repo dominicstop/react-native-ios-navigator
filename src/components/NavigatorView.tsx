@@ -9,10 +9,9 @@ import { NavigatorRouteView } from './NavigatorRouteView';
 
 import { NavigatorUIConstantsContext } from '../context/NavigatorUIConstantsContext';
 
-import type { RouteTransitionPopConfig, RouteTransitionPushConfig } from '../native_components/RNINavigatorRouteView';
-
+import type { NavCommandPopOptions, NavCommandPushOptions, RouteTransitionPopConfig, RouteTransitionPushConfig } from '../types/NavigationCommands';
 import type { NavRouteItem, NavRouteStackItem, NavRouteStackPartialItem } from '../types/NavRouteItem';
-import type { NavCommandPushOptions, RenderNavItem, NavCommandPopOptions } from '../types/NavTypes';
+import type { RenderNavItem } from '../types/NavTypes';
 import type { NavRouteConfigItem, NavRouteConfigItemJS } from '../types/NavRouteConfigItem';
 import type { OnUIConstantsDidChangeEventObject, OnNavRouteViewAddedEventObject, OnNavRouteViewAddedEvent, OnSetNativeRoutesEvent, OnNativeCommandRequestEvent, OnNavRoutePopEvent, OnUIConstantsDidChangeEvent, OnCustomCommandFromNativeEvent } from '../types/RNINavigatorViewEvents';
 

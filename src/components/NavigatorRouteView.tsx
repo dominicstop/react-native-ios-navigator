@@ -5,13 +5,14 @@ import type { NavigationObject } from '../types/NavigationObject';
 import type { RouteOptions } from '../types/RouteOptions';
 import type { RenderNavItem } from '../types/NavTypes';
 import type { OnRoutePopEvent, OnRoutePushEvent, OnPressNavBarItemEvent, OnRouteFocusBlurEvent, OnUpdateSearchResultsEvent, OnSearchBarCancelButtonClickedEvent, OnSearchBarSearchButtonClickedEvent } from '../types/RNINavigatorRouteViewEvents';
+import type { RouteTransitionPushConfig, RouteTransitionPopConfig } from '../types/NavigationCommands';
 
 import type { NavigatorView } from './NavigatorView';
 import type { RouteViewPortal } from './RouteViewPortal';
 
 import { RouteComponentsWrapper } from './RouteComponentsWrapper';
 
-import { RNINavigatorRouteView, RNINavigatorRouteViewProps, RouteTransitionPopConfig, RouteTransitionPushConfig, } from '../native_components/RNINavigatorRouteView';
+import { RNINavigatorRouteView, RNINavigatorRouteViewProps } from '../native_components/RNINavigatorRouteView';
 import { RNINavigatorRouteViewModule } from '../native_modules/RNINavigatorRouteViewModule';
 
 import * as Helpers from '../functions/Helpers';
