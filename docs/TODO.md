@@ -116,6 +116,8 @@
 - [ ] **Implement**: `NavigatorView` event: `onRouteFocusWillChange` and `onRouteFocusDidChange`.
 	- `nativeEvent.prevInFocus`, and `nativeEvent.nextInFocus`.
 - [ ] **Implement**: Update route config (i.e. `NavRouteConfigItemJS`) to accept `renderRouteHeader`.
+- [ ] **Implement**: Shallow merge route options and route props (e.g. `initialRouteOptions`, `routeOptionsDefault`, etc).
+- [ ] make func readonly
 
 <br>
 
@@ -228,6 +230,11 @@
 - [ ] **Test**: Scroll view with headers and footers, snapping, etc.
 - [ ] **Example**: Add new showcase for `RouteHeaderView` — An article screen with a large header that snaps into place.
 - [ ] **Example**: Add new showcase for `RouteHeaderView` — A header that has complex controls when expanded (e.g. kinda like [this](https://uptech.team/blog/implement-airbnb-like-expandable-menu-on-ios)).
+- [ ] **Example**: Update `NavigatorTest02`
+- [ ] **Example**: Create "item picker" example.
+
+	- A new route is pushed that will present a list of options. When an item is selected, the selected item should be sent back to the previous route.
+	- Send a function via route props to the "sub" route that will call set state on the "main" route. 
 
 ---
 
