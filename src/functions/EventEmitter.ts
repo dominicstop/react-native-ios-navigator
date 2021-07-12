@@ -1,11 +1,8 @@
-//#region - Type Definitions
+import type { EnumString } from "../types/UtilityTypes";
+
 type EventListener = (data?: any) => void;
 
-/** shim that tries to match the ts's builtin `enum` type */
-export type Enum = {[key: string]: string};
-//#endregion
-
-export class EventEmitter<EventsT extends keyof Enum> {
+export class EventEmitter<EventsT extends keyof EnumString> {
   // Properties
   /** Store the event listeners */
   private events: { [key: string]: Array<EventListener> };
