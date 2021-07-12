@@ -182,6 +182,10 @@
 - [ ] **Cleanup**: Add JSDoc comments to `NavigationObject`
 - [ ] **Cleanup**: Replace back tick usage in print/error logs with comma's.
 
+<br>
+
+- [ ] **Refactor**: Types — Update `EventEmitter` to use mapped types i.e. each event will be mapped to an event handler. Then via generics the "event map" will be used to inject the type to the listener parameter depending on the event key.
+
 ------
 
 <br>
