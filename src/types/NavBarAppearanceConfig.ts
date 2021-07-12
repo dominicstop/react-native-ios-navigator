@@ -1,4 +1,4 @@
-import type { TextStyle, TextStyleIOS } from "react-native";
+import type { TextStyle } from "react-native";
 import type { BlurEffectStyle, DynamicColor, ImageItemConfig, Offset, BarMetrics } from "./MiscTypes";
 
 /** `UIBarStyle`: Defines the stylistic appearance of different types of views */
@@ -64,10 +64,10 @@ type BarAppearance = {
 export type NavBarAppearance = BarAppearance & {
 
   /** String attributes to apply to the text of a standard-size title. */
-  titleTextAttributes?: TextStyle & TextStyleIOS;
+  titleTextAttributes?: TextStyle;
   
   /** String attributes to apply to the text of a large-size title. */
-  largeTitleTextAttributes?: TextStyle & TextStyleIOS;
+  largeTitleTextAttributes?: TextStyle;
 
   /** The distance, in points, by which to offset the title horizontally and vertically. */
   titlePositionAdjustment?: Offset;
@@ -88,10 +88,10 @@ export type NavBarAppearanceLegacyConfig = NavBarAppearanceConfigBase & {
   barStyle?: BarStyle;
 
   /** Display attributes for the bar’s title text. */
-  titleTextAttributes?: TextStyle & TextStyleIOS;
+  titleTextAttributes?: TextStyle;
 
   /** Display attributes for the bar's large title text. */
-  largeTitleTextAttributes?: TextStyle & TextStyleIOS;
+  largeTitleTextAttributes?: TextStyle;
 
   /** Sets the title’s vertical position adjustment for the given bar metrics. */
   titleVerticalPositionAdjustment?: { [key in BarMetrics]?: number };
