@@ -12,7 +12,7 @@ Currently in development... 😅 (See [TODO.md](https://github.com/dominicstop/r
 
 ## A. Introduction
 
-Before you use this library, please consider looking at `react-navigation` and `react-native-navigation` first. They offer more features, battle-tested, well maintained, and most importantly: cross-platform.
+Before you use this library, please consider looking at `react-navigation` and `react-native-navigation` first. They offer more features, are battle-tested, well maintained, and most importantly: cross-platform.
 
 <br>
 
@@ -51,7 +51,7 @@ cd ios && pod install
 
 ## C. Basic Usage
 
-```react
+```jsx
 import { SafeAreaView, TouchableOpacity, Text } from 'react-native-ios-navigator';
 import { NavigatorView } from 'react-native-ios-navigator';
 
@@ -111,13 +111,13 @@ Internally, the route components (i.e. the component returned from `renderRoute`
 
 <br>
 
-##### D.1.1.1. `NavigatorView`: Props
+##### `NavigatorView` Component: Props
 
 ###### `NavigatorView` General Props
 
 | Prop Name and Type                                           | Description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
-| 🔤 **Required**: `routes`<br><br>⚛️ [`Array<NavRouteConfigItem>`](PLACE_HOLDER_LINK) | Configures which routes can be used inside the navigator. Accepts an array of `NavRouteConfigItem` objects. These objects are used to create and configure the routes. Those "route config" objects include things like what component to show when the route becomes active (`renderRoute`), the initial `routeProps` that the route will receive (`initialRouteProps`), and other options that'll determine the look of the navigation bar, the route's transitions, etc. (`routeOptionsDefault`). <br><br>📝 **Note**: The `routeKey` in the route config object must be unique for each route item.<br><br>There are actually two types of routes, the first one is a "js route" (a route defined in react/js-side), and the second one is a "native route" (a route defined in the native-side). In other words, it's possible to use routes that are created using standard react components, or routes that were created using native code (i.e. `UIViewController` + storyboards, auto layout, etc).<br><br>📌 For more details check out the [`NavRouteConfigItem`](PLACE_HOLDER_LINK) type, and the [guides](PLACE_HOLDER_LINK) section. |
+| 🔤 **Required**: `routes`<br><br>⚛️ [`Array<NavRouteConfigItem>`](PLACE_HOLDER_LINK) | Configures which routes can be used inside the navigator.<br><br>This prop accepts an array of `NavRouteConfigItem` objects. These objects are used to create and configure the routes. Those "route config" objects include things like: **A**, what component to show when the route becomes active (`NavRouteConfigItem.renderRoute`), **B**. the initial `routeProps` that the route will receive (`NavRouteConfigItem.initialRouteProps`), and **C**. other options that'll determine the look of the navigation bar, the route's transitions, etc. (`NavRouteConfigItem.routeOptionsDefault`). <br><br>📝 **Note**: The `routeKey` in the route config object must be unique for each route item.<br><br>There are actually two types of routes, the first one is a "JS route" (i.e. a route defined in react/js-side), and the second one is a "native route" (i.e. a route defined in the native-side). In other words, it's possible to use routes that are created using standard react components, or routes that were created using native code (i.e. `UIViewController` + storyboards, auto layout, etc).<br><br>📌 For more details check out the [`NavRouteConfigItem`](PLACE_HOLDER_LINK) type, and the [guides](PLACE_HOLDER_LINK) section. |
 | 🔤 [**Required**: `initialRoutes`<br><br>⚛️ `Array<NavRouteItem>`](PLACE_HOLDER_LINK) | Used by the navigator to determine which routes to show when the navigator first mounts. Accepts an array of `NavRouteItem` objects. The `routeKey` values in the objects must match with a route configured in the `routes` prop. <br><br>This prop basically represents the navigation stack during the first mount; with the first item being the root route, and the last item being the topmost active route. <br><br>For example, if you pass `[[{routeKey: 'A'}, {routeKey: 'B'}]]` as the initial routes, then route "A" will become the root route, and route "B" will become the topmost route. Thus, on first mount  route "B" will first be shown, and then pressing the back button will then pop route "B" and then show route "A"). <br><br>💡 **Tip**: This behavior of being able to set the initial routes is useful for state-restoration, or for when you want to show a different initial route based on some condition. |
 | 🔤 `style`<br/><br>⚛️ `ViewStyle`                              | The style applied to the the `NavigatorView` component itself. The layout size of the `NavigatorView` will also determine the layout size of the routes, so if the size of the navigator is 100 x 100, then the route will also be 100 x 100. |
 | 🔤 `routeContainerStyle`<br><br>⚛️ `ViewStyle`                 | The default style that is applied to all the routes. Whatever component you return from `renderRoutes` will be wrapped inside a "route container" view. This prop allows you to set the style of the "route container" view.<br><br>📝 **Note**: This prop can be overridden/replaced on a per route basis either via `RouteOptions.routeContainerStyle` in the `NavigatorView.routes` prop, or via the `RouteViewPortal.routeOptions` prop.<br><br>💡 **Tip**: You can use this prop to provide a default background color for all the routes. |
@@ -149,7 +149,7 @@ Internally, the route components (i.e. the component returned from `renderRoute`
 
 <br>
 
-##### D.1.1.2. `NavigatorView`: Properties/Methods
+##### `NavigatorView` Component: Properties/Methods
 
 ###### `NavigatorView` General/Misc. Methods
 
@@ -204,7 +204,7 @@ As such this component doesn't actually render anything directly, it's merely an
 
 <br>
 
-##### D.1.2.1. `RouteViewPortal` Component Props
+#####  `RouteViewPortal` Component: Props
 
 | Prop Name and Type                                           | Description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
@@ -226,7 +226,7 @@ Internally, every route has an associated event emitter. That route event emitte
 
 <br>
 
-##### D.1.3.1.`RouteViewEvents` Component Props
+##### `RouteViewEvents` Component: Props
 
 ###### `RouteViewEvents` Push/Pop Event Props
 
@@ -287,7 +287,7 @@ When in use, this component is displayed behind the navigation bar, and is ancho
 
 <br>
 
-##### D.1.2.1. `RouteViewPortal` Component Props
+##### D.1.4.1. `RouteViewPortal` Component Props
 
 | Prop Name and Type                                           | Description |
 | :----------------------------------------------------------- | ----------- |
@@ -323,8 +323,6 @@ Lorum Ipsum<br>
 
 <br>
 
-<br>
-
 ### D.3. Hooks
 
 Lorum Ipsum
@@ -333,7 +331,7 @@ Lorum Ipsum
 
 ### D.4. Objects
 
-This library is written using typescript. As such, all of the objects mentioned in the documentation (and all of the object types exported by the library) will have a corresponding type declaration. Those type declaration can usually be found in the `src/types` directory. If a particular object is not documented here, please refer to those type declaration files instead. 
+This library is written using typescript. As such, all of the objects mentioned in the documentation (and all of the object types exported by the library) will have a corresponding type declaration. Those type declaration can usually be found in the [`src/types`](src/types) directory. If a particular object is not documented here, please refer to those type declaration files instead. 
 
 <br>
 
