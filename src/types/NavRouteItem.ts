@@ -14,8 +14,11 @@ export type NavRouteStackItem = NavRouteItem & {
   isNativeRoute: boolean;
 };
 
-/** Used in the `SetRoutesTransformCallback` function. 
- * Represents an active route or a route that is about to be created. */
+/** 
+ * Used in the `SetRoutesTransformCallback` function. 
+ * Represents either an active route in the navigation stack, or a route that is about 
+ * to be created and added to the navigation stack. 
+ */
 export type NavRouteStackPartialItem = NavRouteItem & {
   routeID?: number;
 };
