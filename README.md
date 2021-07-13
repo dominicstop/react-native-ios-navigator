@@ -335,11 +335,35 @@ This library is written using typescript. As such, all of the objects mentioned 
 
 <br>
 
+#### Object Type: `NavRouteConfigItem`
+
+📌 **Declaration**: [`NavRouteConfigItem,ts`](src/types/NavRouteConfigItem.ts)
+
+Lorum Ipsum<br>
+
+| Name and Type            | Description |
+| :----------------------- | ----------- |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+
+<br>
+
+#####  `NavRouteConfigItemNative`
+
+Lorum Ipsum<br>
+
+| Name and Type            | Description |
+| :----------------------- | ----------- |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+
+<br>
+
 #### Object Type: `RouteOptions`
 
 📌 **Declaration**: [`RouteOptions.ts`](src/types/RouteOptions.ts)
 
-The properties that are related to each other are grouped together into their own sections.<br>
+The properties that are related to each other are grouped together into their own sections.
 
 <br>
 
@@ -431,6 +455,28 @@ Lorum Ipsum<br>
 
 <br>
 
+##### `NavRouteStackItem`
+
+Represents an active  route item in the navigation stack.<br>
+
+| Name and Type            | Description |
+| ------------------------ | ----------- |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+
+<br>
+
+##### `NavRouteStackPartialItem`
+
+Used in the `NavigatorView.SetRoutesTransformCallback` function. Represents either an active route in the navigation stack, or a route that is about to be created and added to the navigation stack. <br>
+
+| Name and Type            | Description |
+| ------------------------ | ----------- |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+
+<br>
+
 #### Object Type: `NavBarAppearanceCombinedConfig`
 
 📌 **Declaration**: [`NavBarAppearanceConfig.ts`](src/types/NavBarAppearanceConfig.ts)
@@ -448,13 +494,13 @@ The navigation bar can be customized either via the "legacy" mode (i.e. using th
 **Example Snippet**
 
 ```javascript
-const navBarAppearancLegacy = {
+const navBarAppearanceLegacy = {
 	mode: 'appearance',
 	// `NavBarAppearanceConfig`-related properties
   // ...
 };
 
-const navBarAppearanc = {
+const navBarAppearance = {
   mode: 'legacy',
   // `NavBarAppearanceLegacyConfig`-related properties
   // ...
@@ -509,6 +555,200 @@ Lorum ipsum<br>
 | 🔤 `largeTitleTextAttributes`<br/><br/>⚛️  `abc`   |             |
 | 🔤 `titlePositionAdjustment`<br/><br/>⚛️  `abc`    |             |
 | 🔤 `backIndicatorImage`<br/><br/>⚛️  `abc`         |             |
+
+<br>
+
+#### Object Type: `NavBarItemConfig`
+
+📌 **Declaration**: [`NavBarItemConfig.ts`](src/types/NavBarItemConfig.ts)
+
+Lorum Ipsum<br>
+
+| Name and Type            | Description |
+| :----------------------- | ----------- |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+
+<br>
+
+#####  `NavBarBackItemConfig`
+
+Lorum Ipsum<br>
+
+| Name and Type            | Description |
+| :----------------------- | ----------- |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+
+<br>
+
+#####  `NavBarItemConfig`
+
+Lorum Ipsum<br>
+
+| Name and Type            | Description |
+| :----------------------- | ----------- |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+
+<br>
+
+#####  `NavBarItemConfigCustom`
+
+Lorum Ipsum<br>
+
+| Name and Type            | Description |
+| :----------------------- | ----------- |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+
+<br>
+
+#### Object Type: `RouteHeaderConfig`
+
+📌 **Declaration**: [`RouteHeaderConfig`](src/types/RouteHeaderConfig.ts)
+
+Lorum Ipsum<br>
+
+| Name and Type            | Description |
+| :----------------------- | ----------- |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+
+<br>
+
+#### Object Type: `RouteSearchControllerConfig`
+
+📌 **Declaration**: [`RouteSearchControllerConfig`](src/types/RouteSearchControllerConfig.ts)
+
+Lorum Ipsum<br>
+
+| Name and Type            | Description |
+| :----------------------- | ----------- |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+
+<br>
+
+#### Object Interface: `RouteContentProps`
+
+📌 **Declaration**: [`abc`](src/types/abc)
+
+Lorum Ipsum<br>
+
+| Name and Type            | Description |
+| :----------------------- | ----------- |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+
+<br>
+
+#### Object Type: `RouteConstantsObject`
+
+📌 **Declaration**: [`abc`](src/types/abc)
+
+Lorum Ipsum<br>
+
+| Name and Type            | Description |
+| :----------------------- | ----------- |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+
+<br>
+
+#### Object Type: `NavigatorConstantsObject`
+
+📌 **Declaration**: [`abc`](src/types/abc)
+
+Lorum Ipsum<br>
+
+| Name and Type            | Description |
+| :----------------------- | ----------- |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+
+<br>
+
+#####  `NativeRouteData`
+
+Lorum Ipsum<br>
+
+| Name and Type            | Description |
+| :----------------------- | ----------- |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+
+<br>
+
+#### Object Type: `ImageItemConfig`
+
+📌 **Declaration**: [`ImageItemConfig.ts`](src/types/ImageItemConfig.ts)
+
+Lorum Ipsum<br>
+
+| Name and Type            | Description |
+| :----------------------- | ----------- |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+
+<br>
+
+#####  `ImageResolvedAssetSource`
+
+Lorum Ipsum<br>
+
+| Name and Type            | Description |
+| :----------------------- | ----------- |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+
+<br>
+
+#####  `ImageRectConfig`
+
+Lorum Ipsum<br>
+
+| Name and Type            | Description |
+| :----------------------- | ----------- |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+
+<br>
+
+#####  `ImageGradientConfig`
+
+Lorum Ipsum<br>
+
+| Name and Type            | Description |
+| :----------------------- | ----------- |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+
+<br>
+
+#### Object Type: `abc`
+
+📌 **Declaration**: [`abc`](src/types/abc)
+
+Lorum Ipsum<br>
+
+| Name and Type            | Description |
+| :----------------------- | ----------- |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+
+<br>
+
+#### Object Type: `abc`
+
+📌 **Declaration**: [`abc`](src/types/abc)
+
+Lorum Ipsum<br>
+
+| Name and Type            | Description |
+| :----------------------- | ----------- |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
 
 <br>
 
