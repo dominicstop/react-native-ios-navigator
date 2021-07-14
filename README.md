@@ -329,15 +329,17 @@ Lorum Ipsum
 
 <br>
 
-### D.4. Objects
+### D.4. Objects and Types
 
-This library is written using typescript. As such, all of the objects mentioned in the documentation (and all of the object types exported by the library) will have a corresponding type declaration. Those type declaration can usually be found in the [`src/types`](src/types) directory. If a particular object is not documented here, please refer to those type declaration files instead. 
+This library is written using typescript. As such, all of the objects/types mentioned in the documentation (and all of the types exported by the library) will have a corresponding type declaration. Those type declaration can usually be found in the [`src/types`](src/types) directory. If a particular object is not documented here, please refer to those type declaration files instead.
 
 <br>
 
-#### Object Type: `NavRouteConfigItem`
+#### 📄 `NavRouteConfigItem.ts`
 
-📌 **Declaration**: [`NavRouteConfigItem,ts`](src/types/NavRouteConfigItem.ts)
+* 📌 **Declaration**: [`NavRouteConfigItem.ts`](src/types/NavRouteConfigItem.ts)
+
+#####  Object Type: `NavRouteConfigItem`
 
 Lorum Ipsum<br>
 
@@ -348,7 +350,7 @@ Lorum Ipsum<br>
 
 <br>
 
-#####  `NavRouteConfigItemNative`
+#####  Object Type: `NavRouteConfigItemNative`
 
 Lorum Ipsum<br>
 
@@ -359,9 +361,11 @@ Lorum Ipsum<br>
 
 <br>
 
-#### Object Type: `RouteOptions`
+#### 📄 `RouteOptions.ts`
 
-📌 **Declaration**: [`RouteOptions.ts`](src/types/RouteOptions.ts)
+* 📌 **Declaration**: [`RouteOptions.ts`](src/types/RouteOptions.ts)
+
+##### Object Type: `RouteOptions`
 
 The properties that are related to each other are grouped together into their own sections.
 
@@ -429,22 +433,11 @@ The properties that are related to each other are grouped together into their ow
 
 <br>
 
-#### Object Type: `NavigationObject`
+#### 📄 `NavigationObject.ts`
 
-📌 **Declaration**: [`NavigationObject.ts`](src/types/NavigationObject.ts)
+* 📌 **Declaration**: [`NavigationObject.ts`](src/types/NavigationObject.ts)
 
-Lorum Ipsum<br>
-
-| Name and Type            | Description |
-| :----------------------- | ----------- |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
-
-<br>
-
-#### Object Type: `NavRouteItem`
-
-📌 **Declaration**: [`NavRouteItem.ts`](src/types/NavRouteItem.ts)
+##### Object Type: `NavigationObject`
 
 Lorum Ipsum<br>
 
@@ -455,7 +448,22 @@ Lorum Ipsum<br>
 
 <br>
 
-##### `NavRouteStackItem`
+#### 📄 `NavRouteItem.ts`
+
+* 📌 **Declaration**: [`NavRouteItem.ts`](src/types/NavRouteItem.ts)
+
+##### Object Type: `NavRouteItem`
+
+Lorum Ipsum<br>
+
+| Name and Type            | Description |
+| :----------------------- | ----------- |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+
+<br>
+
+##### Object Type: `NavRouteStackItem`
 
 Represents an active  route item in the navigation stack.<br>
 
@@ -466,7 +474,7 @@ Represents an active  route item in the navigation stack.<br>
 
 <br>
 
-##### `NavRouteStackPartialItem`
+##### Object Type: `NavRouteStackPartialItem`
 
 Used in the `NavigatorView.SetRoutesTransformCallback` function. Represents either an active route in the navigation stack, or a route that is about to be created and added to the navigation stack. <br>
 
@@ -477,13 +485,15 @@ Used in the `NavigatorView.SetRoutesTransformCallback` function. Represents eith
 
 <br>
 
-#### Object Type: `NavBarAppearanceCombinedConfig`
+#### 📄 `NavBarAppearanceConfig.ts`
 
-📌 **Declaration**: [`NavBarAppearanceConfig.ts`](src/types/NavBarAppearanceConfig.ts)
+* 📌 **Declaration**: [`NavBarAppearanceConfig.ts`](src/types/NavBarAppearanceConfig.ts)
 
-The `NavBarAppearanceCombinedConfig` tagged/discriminated union object type is used to customize the appearance of the navigation bar. This object is a union of two objects, namely: `NavBarAppearanceConfig`, and `NavBarAppearanceLegacyConfig` that is separated via the shared  `mode` property. The former can be used if the  `mode` property is set to `appearance`, and the latter can be used if `mode` is set to `legacy`.
+##### Object Type: `NavBarAppearanceCombinedConfig`
 
-The navigation bar can be customized either via the "legacy" mode (i.e. using the [legacy customizations](https://developer.apple.com/documentation/uikit/uinavigationbar/legacy_customizations)-related API), or via the "appearance" mode (using the iOS 13+ [`UINavigationBarAppearance`](https://developer.apple.com/documentation/uikit/uinavigationbarappearance) API). <br>
+The `NavBarAppearanceCombinedConfig` tagged/discriminated union object type is used to customize the appearance of the navigation bar. This object is a union of two objects, namely: `NavBarAppearanceConfig`, and `NavBarAppearanceLegacyConfig` and it's separated via the shared  `mode` property. The former can be used if the  `mode` property is set to `appearance`, and the latter can be used if `mode` is set to `legacy`.
+
+The navigation bar can be customized either via the "legacy" mode (i.e. using the [legacy customizations](https://developer.apple.com/documentation/uikit/uinavigationbar/legacy_customizations)-related API), or via the "appearance" mode (i.e. using the iOS 13+ [`UINavigationBarAppearance`](https://developer.apple.com/documentation/uikit/uinavigationbarappearance) API). <br>
 
 | Name and Type                                                | Description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
@@ -509,7 +519,7 @@ const navBarAppearance = {
 
 <br>
 
-##### `NavBarAppearanceLegacyConfig`
+##### Object Type: `NavBarAppearanceLegacyConfig`
 
 | Name and Type                                                | Description |
 | :----------------------------------------------------------- | ----------- |
@@ -526,7 +536,7 @@ const navBarAppearance = {
 
 <br>
 
-##### `NavBarAppearanceConfig`
+##### Object Type: `NavBarAppearanceConfig`
 
 Lorum ipsum<br>
 
@@ -539,7 +549,7 @@ Lorum ipsum<br>
 
 <br>
 
-##### `NavBarAppearance`
+##### Object Type: `NavBarAppearance`
 
 Lorum ipsum<br>
 
@@ -558,20 +568,11 @@ Lorum ipsum<br>
 
 <br>
 
-#### Object Type: `NavBarItemConfig`
+#### 📄 `NavBarItemConfig.ts`
 
-📌 **Declaration**: [`NavBarItemConfig.ts`](src/types/NavBarItemConfig.ts)
+* 📌 **Declaration**: [`NavBarItemConfig.ts`](src/types/NavBarItemConfig.ts)
 
-Lorum Ipsum<br>
-
-| Name and Type            | Description |
-| :----------------------- | ----------- |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
-
-<br>
-
-#####  `NavBarBackItemConfig`
+##### Object Type: `NavBarItemConfig`
 
 Lorum Ipsum<br>
 
@@ -582,7 +583,7 @@ Lorum Ipsum<br>
 
 <br>
 
-#####  `NavBarItemConfig`
+#####  Object Type: `NavBarBackItemConfig`
 
 Lorum Ipsum<br>
 
@@ -593,7 +594,7 @@ Lorum Ipsum<br>
 
 <br>
 
-#####  `NavBarItemConfigCustom`
+#####  Object Type: `NavBarItemConfig`
 
 Lorum Ipsum<br>
 
@@ -604,9 +605,7 @@ Lorum Ipsum<br>
 
 <br>
 
-#### Object Type: `RouteHeaderConfig`
-
-📌 **Declaration**: [`RouteHeaderConfig`](src/types/RouteHeaderConfig.ts)
+#####  Object Type: `NavBarItemConfigCustom`
 
 Lorum Ipsum<br>
 
@@ -617,9 +616,26 @@ Lorum Ipsum<br>
 
 <br>
 
-#### Object Type: `RouteSearchControllerConfig`
+#### 📄 `RouteHeaderConfig.ts`
 
-📌 **Declaration**: [`RouteSearchControllerConfig`](src/types/RouteSearchControllerConfig.ts)
+* 📌 **Declaration**: [`RouteHeaderConfig.ts`](src/types/RouteHeaderConfig.ts)
+
+##### Object Type: `RouteHeaderConfig`
+
+Lorum Ipsum<br>
+
+| Name and Type            | Description |
+| :----------------------- | ----------- |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+
+<br>
+
+#### 📄 `RouteSearchControllerConfig`
+
+* 📌 **Declaration**: [`RouteSearchControllerConfig`](src/types/RouteSearchControllerConfig.ts)
+
+##### Object Type: `RouteSearchControllerConfig`
 
 Lorum Ipsum<br>
 
@@ -632,7 +648,7 @@ Lorum Ipsum<br>
 
 #### Object Interface: `RouteContentProps`
 
-📌 **Declaration**: [`abc`](src/types/abc)
+* 📌 **Declaration**: [`abc`](src/types/abc)
 
 Lorum Ipsum<br>
 
@@ -645,7 +661,7 @@ Lorum Ipsum<br>
 
 #### Object Type: `RouteConstantsObject`
 
-📌 **Declaration**: [`abc`](src/types/abc)
+* 📌 **Declaration**: [`abc`](src/types/abc)
 
 Lorum Ipsum<br>
 
@@ -658,7 +674,7 @@ Lorum Ipsum<br>
 
 #### Object Type: `NavigatorConstantsObject`
 
-📌 **Declaration**: [`abc`](src/types/abc)
+* 📌 **Declaration**: [`abc`](src/types/abc)
 
 Lorum Ipsum<br>
 
@@ -669,7 +685,7 @@ Lorum Ipsum<br>
 
 <br>
 
-#####  `NativeRouteData`
+#####  Object Type:  `NativeRouteData`
 
 Lorum Ipsum<br>
 
@@ -680,20 +696,11 @@ Lorum Ipsum<br>
 
 <br>
 
-#### Object Type: `ImageItemConfig`
+#### 📄 `ImageItemConfig.ts`
 
-📌 **Declaration**: [`ImageItemConfig.ts`](src/types/ImageItemConfig.ts)
+* 📌 **Declaration**: [`ImageItemConfig.ts`](src/types/ImageItemConfig.ts)
 
-Lorum Ipsum<br>
-
-| Name and Type            | Description |
-| :----------------------- | ----------- |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
-
-<br>
-
-#####  `ImageResolvedAssetSource`
+##### Object Type: `ImageItemConfig`
 
 Lorum Ipsum<br>
 
@@ -704,7 +711,7 @@ Lorum Ipsum<br>
 
 <br>
 
-#####  `ImageRectConfig`
+#####  Object Type: `ImageResolvedAssetSource`
 
 Lorum Ipsum<br>
 
@@ -715,7 +722,7 @@ Lorum Ipsum<br>
 
 <br>
 
-#####  `ImageGradientConfig`
+#####  Object Type: `ImageRectConfig`
 
 Lorum Ipsum<br>
 
@@ -726,9 +733,7 @@ Lorum Ipsum<br>
 
 <br>
 
-#### Object Type: `abc`
-
-📌 **Declaration**: [`abc`](src/types/abc)
+#####  Object Type: `ImageGradientConfig`
 
 Lorum Ipsum<br>
 
@@ -739,9 +744,11 @@ Lorum Ipsum<br>
 
 <br>
 
-#### Object Type: `abc`
+####  `abc`
 
-📌 **Declaration**: [`abc`](src/types/abc)
+* 📌 **Declaration**: [`abc`](src/types/abc)
+
+##### Object Type: `abc`
 
 Lorum Ipsum<br>
 
@@ -752,27 +759,16 @@ Lorum Ipsum<br>
 
 <br>
 
-### D.5. Types
+#### Undocumented Types
 
-Lorum Ipsum
+Lorum Ipsum<br>
 
-<br>
-
-#### D.5.1. Event Types
-
-Lorum Ipsum
-
-<br>
-
-#### D.5.2. Function and Callback Types
-
-Lorum Ipsum
-
-<br>
-
-#### D.5.3. Enum and Union Types
-
-Lorum Ipsum
+| Type                                                         | Description                                                  |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 📌 **Declaration**: [`RNINavigatorRouteView.ts`](src/types/RNINavigatorRouteView.ts) | This file contains all the route-related events and event objects (e.g. push, pop, blur, focus, search, etc). |
+| 📌 **Declaration**: [`RNINavigatorViewEvents.ts`](src/types/RNINavigatorViewEvents.ts) | This file contains all the events and event objects related to the `NavigatorView` component. |
+| 📌 **Declaration**: [`MiscTypes.ts`](src/types/MiscTypes.ts)  | This file contains a bunch of types that haven't been categorized yet.<br><br>Contains: `PointPreset`, `Point`, `DynamicColor`, `Offset`, `BlurEffectStyle`, `EdgeInsets`, `Rect`, `ReturnKeyType`, etc. |
+| 📌 **Declaration**: [`NavigationCommands.ts`](src/types/NavigationCommands.ts) | This file contains types related to the `NavigationView` component's navigation commands.<br/><br/>Contains: `RouteTransitionPushTypes`, `RouteTransitionPopTypes`, `RouteTransitionPushConfig`, `RouteTransitionPopConfig`, `NavCommandPushOptions`, `NavCommandPopOptions`, etc. |
 
 <br>
 
