@@ -103,11 +103,11 @@ export function App() {
 
 #### D.1.1. `NavigatorView` Component
 
-This component is a wrapper around [`UINavigationController`](https://developer.apple.com/documentation/uikit/uinavigationcontroller), and it facilitates navigation in a stack-like manner where routes are "pushed" and "popped" in and out of the navigation stack. Only one route can be shown at a given time, however it is possible to have multiple `NavigatorView` instances at the same (and each instance will have their own separate navigation stack, allowing you to show multiple routes at the same time). But do note that the 1st instance will become the "root" navigation controller (and subsequently will become responsible for things like handling the color of the status bar, etc).<br>
+This component is a wrapper around [`UINavigationController`](https://developer.apple.com/documentation/uikit/uinavigationcontroller), and it facilitates navigation in a stack-like manner where routes are "pushed" and "popped" in and out of the navigation stack. 
 
-<br>
+Only one route can be shown at a given time, however it is possible to have multiple `NavigatorView` instances at the same (and each instance will have their own separate navigation stack, allowing you to show multiple routes at the same time). But do note that the 1st instance will become the "root" navigation controller (and subsequently will become responsible for things like handling the color of the status bar, etc).
 
-Internally, the route components (i.e. the component returned from `renderRoute`) are wrapped inside a view controller. Those view controllers are then managed by the `UINavigationController` instance. Each route will have a corresponding `RouteOptions` object that's used internally to configure aspects of the `UINavigationController`, `UINavigationBar`, `UINavigationItem`, `UIViewController`, etc.<br>
+Internally, the route components (i.e. the component returned from `renderRoute`) are wrapped inside a view controller. Those view controllers are then managed by the `UINavigationController` instance. Each route will have a corresponding `RouteOptions` object that's used internally to configure aspects of the `UINavigationController`, `UINavigationBar`, `UINavigationItem`, `UIViewController`, etc.
 
 <br>
 
@@ -306,8 +306,8 @@ Lorum Ipsum<br>
 | Name and Type                                                | Description |
 | :----------------------------------------------------------- | ----------- |
 | 🔤 `routeID`<br/><br/>⚛️ [`HeaderHeightValue`](PLACE_HOLDER_LINK) |             |
-|                                                              |             |
-|                                                              |             |
+| 🔤 `abc`<br/><br/>⚛️ `abc`                                     |             |
+| 🔤 `abc`<br/><br/>⚛️ `abc`                                     |             |
 
 <br>
 
@@ -315,11 +315,11 @@ Lorum Ipsum<br>
 
 Lorum Ipsum<br>
 
-| Name and Type | Description |
-| :------------ | ----------- |
-|               |             |
-|               |             |
-|               |             |
+| Name and Type            | Description |
+| :----------------------- | ----------- |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
 
 <br>
 
