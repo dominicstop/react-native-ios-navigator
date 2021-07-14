@@ -1,8 +1,10 @@
 import React from 'react';
 
-import { NavRouteEvents } from '../components/NavigatorRouteView';
 import { NavRouteViewContext } from '../context/NavRouteViewContext';
 
+import { NavigatorRouteViewEvents } from '../types/NavigatorRouteViewEventEmitter';
+
+// TODO: Delete this
 
 export function withRouteViewLifecycle(WrappedComponent: any){
   return class extends React.PureComponent {
@@ -14,7 +16,7 @@ export function withRouteViewLifecycle(WrappedComponent: any){
       const { navigation } = this.context;
       const routeViewEmitter = navigation.getRefToNavRouteEmitter();
 
-      for (const eventKey in NavRouteEvents) {
+      for (const eventKey in NavigatorRouteViewEvents) {
         const functionName = `handle-${eventKey}`;
         
         // @ts-ignore
@@ -32,7 +34,7 @@ export function withRouteViewLifecycle(WrappedComponent: any){
       const { navigation } = this.context;
       const routeViewEmitter = navigation.getRefToNavRouteEmitter();
 
-      for (const eventKey in NavRouteEvents) {
+      for (const eventKey in NavigatorRouteViewEvents) {
         const functionName = `handle-${eventKey}`;
         // @ts-ignore
         routeViewEmitter.removeListener(eventKey, this[functionName]);

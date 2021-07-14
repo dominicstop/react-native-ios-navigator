@@ -13,7 +13,9 @@ import type { NavCommandPopOptions, NavCommandPushOptions, RouteTransitionPopCon
 import type { NavRouteItem, NavRouteStackItem, NavRouteStackPartialItem } from '../types/NavRouteItem';
 import type { RenderNavItem } from '../types/NavTypes';
 import type { NavRouteConfigItem, NavRouteConfigItemJS } from '../types/NavRouteConfigItem';
-import type { OnUIConstantsDidChangeEventObject, OnNavRouteViewAddedEventObject, OnNavRouteViewAddedEvent, OnSetNativeRoutesEvent, OnNativeCommandRequestEvent, OnNavRoutePopEvent, OnUIConstantsDidChangeEvent, OnCustomCommandFromNativeEvent } from '../types/RNINavigatorViewEvents';
+import { NavigatorViewEventEmitter, NavigatorViewEvents } from '../types/NavigatorViewEventEmitter';
+
+import type { OnUIConstantsDidChangeEventObject, OnNavRouteViewAddedEvent, OnSetNativeRoutesEvent, OnNativeCommandRequestEvent, OnNavRoutePopEvent, OnUIConstantsDidChangeEvent, OnCustomCommandFromNativeEvent } from '../types/RNINavigatorViewEvents';
 
 import * as Helpers from '../functions/Helpers';
 
@@ -37,11 +39,6 @@ enum NavStatus {
   NAV_UPDATING   = "NAV_UPDATING"  , // nav. is busy updating the routes
   UNMOUNTED      = "UNMOUNTED"     , // nav. comp. has been unmounted
   NAV_ABORT      = "NAV_ABORT"     , // nav. has been popped before push completed
-};
-
-enum NavEvents {
-  onNavRouteViewAdded = "onNavRouteViewAdded",
-  onSetNativeRoutes   = "onSetNativeRoutes"  ,
 };
 
 export type SetRoutesTransformCallback = 
@@ -111,7 +108,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   private navigatorID: number;
   
   private navStatus: NavStatus;
-  private emitter: EventEmitter<NavEvents>;
+  private emitter: NavigatorViewEventEmitter;
 
   /** Used for `removeRouteBatchedFromState`*/
   private routesToRemove: Array<{routeKey: string, routeIndex: number}>;
@@ -131,7 +128,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     this.navStatus = NavStatus.IDLE_INIT;
     this.routesToRemove = [];
 
-    this.emitter = new EventEmitter<NavEvents>();
+    this.emitter = new EventEmitter();
     this.queue = new SimpleQueue();
 
     this.state = {
@@ -351,13 +348,13 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     return Helpers.promiseWithTimeout(TIMEOUT_MOUNT, Promise.all([
       // 1. wait for native routes to be init.
       hasNativeRoutes && new Promise<void>(resolve => {
-        this.emitter.once(NavEvents.onSetNativeRoutes, () => {
+        this.emitter.once(NavigatorViewEvents.onSetNativeRoutes, () => {
           resolve();
         });
       }),
       // 2. wait for react routes to be "received" from native
       ...reactRoutes.map(routeID => new Promise<void>(resolve => {
-        this.emitter.once(NavEvents.onNavRouteViewAdded, ({nativeEvent}: OnNavRouteViewAddedEventObject) => {
+        this.emitter.once(NavigatorViewEvents.onNavRouteViewAdded, ({nativeEvent}) => {
           if(nativeEvent.routeID === routeID){
             resolve();
           };
@@ -1183,14 +1180,14 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     if(this.navigatorID !== event.nativeEvent.navigatorID) return;
 
     // emit event: nav. route was added to `RNINavigatorView`'s subviews
-    this.emitter.emit(NavEvents.onNavRouteViewAdded, event);
+    this.emitter.emit(NavigatorViewEvents.onNavRouteViewAdded, event);
   };
 
   private _handleOnSetNativeRoutes: OnSetNativeRoutesEvent = (event) => {
     if(this.navigatorID !== event.nativeEvent.navigatorID) return;
 
     // emit event: route data was set for the native routes
-    this.emitter.emit(NavEvents.onSetNativeRoutes, event);
+    this.emitter.emit(NavigatorViewEvents.onSetNativeRoutes, event);
   };
 
   private _handleOnNativeCommandRequest: OnNativeCommandRequestEvent = async ({nativeEvent}) => {

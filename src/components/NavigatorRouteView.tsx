@@ -7,6 +7,8 @@ import type { RenderNavItem } from '../types/NavTypes';
 import type { OnRoutePopEvent, OnRoutePushEvent, OnPressNavBarItemEvent, OnRouteFocusBlurEvent, OnUpdateSearchResultsEvent, OnSearchBarCancelButtonClickedEvent, OnSearchBarSearchButtonClickedEvent } from '../types/RNINavigatorRouteViewEvents';
 import type { RouteTransitionPushConfig, RouteTransitionPopConfig } from '../types/NavigationCommands';
 
+import { NavigatorRouteViewEventEmitter, NavigatorRouteViewEvents } from '../types/NavigatorRouteViewEventEmitter';
+
 import type { NavigatorView } from './NavigatorView';
 import type { RouteViewPortal } from './RouteViewPortal';
 
@@ -28,29 +30,9 @@ import { NativeIDKeys } from '../constants/LibraryConstants';
 
 //#region - Type Definitions
 /** Event emitter keys for `NavigatorRouteView` */
-export enum NavRouteEvents {
-  // Navigator Route - push/pop events
-  onRouteWillPush = "onRouteWillPush",
-  onRouteDidPush  = "onRouteDidPush" ,
-  onRouteWillPop  = "onRouteWillPop" ,
-  onRouteDidPop   = "onRouteDidPop"  ,
 
-  // Navigator Route - focus/blur events
-  onRouteWillFocus = "onRouteWillFocus",
-  onRouteDidFocus  = "onRouteDidFocus" ,
-  onRouteWillBlur  = "onRouteWillBlur" ,
-  onRouteDidBlur   = "onRouteDidBlur"  ,
 
-  // Navbar item `onPress` events
-  onPressNavBarLeftItem  = "onPressNavBarLeftItem" ,
-  onPressNavBarRightItem = "onPressNavBarRightItem",
 
-  // Search-related events
-  onUpdateSearchResults = "onUpdateSearchResults",
-  
-  onSearchBarCancelButtonClicked = "onSearchBarCancelButtonClicked",
-  onSearchBarSearchButtonClicked = "onSearchBarSearchButtonClicked",
-};
 
 export interface RouteContentProps {
   navigation?: NavigationObject;
@@ -116,7 +98,7 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
   routeStatus: RouteStatus;
 
   // references
-  private _emitter           : EventEmitter<NavRouteEvents>;
+  private _emitter           : NavigatorRouteViewEventEmitter;
   private _nativeRef         : React.Component<RNINavigatorRouteViewProps>;
   private _navigatorRef      : NavigatorView;
   private _routeContentRef   : ReactElement;
@@ -128,9 +110,8 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
   constructor(props: NavigatorRouteViewProps){
     super(props);
 
-    this.routeStatus = RouteStatus.INIT;
-
-    this._emitter = new EventEmitter<NavRouteEvents>();
+    this.routeStatus   = RouteStatus.INIT;
+    this._emitter      = new EventEmitter();
     this._navigatorRef = props.getRefToNavigator();
 
     this.state = {
@@ -454,85 +435,85 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
   private _handleOnNavRouteWillPop: OnRoutePopEvent = (event) => {
     if(this.props.routeID !== event.nativeEvent.routeID) return;
 
-    this._emitter.emit(NavRouteEvents.onRouteWillPop, event);
+    this._emitter.emit(NavigatorRouteViewEvents.onRouteWillPop, event);
     this.routeStatus = RouteStatus.ROUTE_POPPING;
   };
 
   private _handleOnNavRouteDidPop: OnRoutePopEvent = (event) => {
     if(this.props.routeID !== event.nativeEvent.routeID) return;
 
-    this._emitter.emit(NavRouteEvents.onRouteDidPop, event);
+    this._emitter.emit(NavigatorRouteViewEvents.onRouteDidPop, event);
     this.routeStatus = RouteStatus.ROUTE_POPPED;
   };
 
   private _handleOnNavRouteWillPush: OnRoutePushEvent = (event) => {
     if(this.props.routeID !== event.nativeEvent.routeID) return;
 
-    this._emitter.emit(NavRouteEvents.onRouteWillPush, event);
+    this._emitter.emit(NavigatorRouteViewEvents.onRouteWillPush, event);
     this.routeStatus = RouteStatus.ROUTE_PUSHING;
   };
 
   private _handleOnNavRouteDidPush: OnRoutePushEvent = (event) => {
     if(this.props.routeID !== event.nativeEvent.routeID) return;
 
-    this._emitter.emit(NavRouteEvents.onRouteDidPush, event);
+    this._emitter.emit(NavigatorRouteViewEvents.onRouteDidPush, event);
     this.routeStatus = RouteStatus.ROUTE_PUSHED;
   };
 
   private _handleOnPressNavBarLeftItem: OnPressNavBarItemEvent = (event) => {
     if(this.props.routeID !== event.nativeEvent.routeID) return;
-    this._emitter.emit(NavRouteEvents.onPressNavBarLeftItem, event);
+    this._emitter.emit(NavigatorRouteViewEvents.onPressNavBarLeftItem, event);
   };
 
   private _handleOnPressNavBarRightItem: OnPressNavBarItemEvent = (event) => {
     if(this.props.routeID !== event.nativeEvent.routeID) return;
-    this._emitter.emit(NavRouteEvents.onPressNavBarRightItem, event);
+    this._emitter.emit(NavigatorRouteViewEvents.onPressNavBarRightItem, event);
   };
 
   private _handleOnRouteWillFocus: OnRouteFocusBlurEvent = (event)  => {
     if(this.props.routeID !== event.nativeEvent.routeID) return;
 
-    this._emitter.emit(NavRouteEvents.onRouteWillFocus, event);
+    this._emitter.emit(NavigatorRouteViewEvents.onRouteWillFocus, event);
     this.routeStatus = RouteStatus.ROUTE_FOCUSING;
   };
 
   private _handleOnRouteDidFocus: OnRouteFocusBlurEvent = (event)  => {
     if(this.props.routeID !== event.nativeEvent.routeID) return;
 
-    this._emitter.emit(NavRouteEvents.onRouteDidFocus, event);
+    this._emitter.emit(NavigatorRouteViewEvents.onRouteDidFocus, event);
     this.routeStatus = RouteStatus.ROUTE_FOCUSED;
   };
 
   private _handleOnRouteWillBlur: OnRouteFocusBlurEvent = (event)  => {
     if(this.props.routeID !== event.nativeEvent.routeID) return;
 
-    this._emitter.emit(NavRouteEvents.onRouteWillBlur, event);
+    this._emitter.emit(NavigatorRouteViewEvents.onRouteWillBlur, event);
     this.routeStatus = RouteStatus.ROUTE_BLURRING;
   };
 
   private _handleOnRouteDidBlur: OnRouteFocusBlurEvent = (event)  => {
     if(this.props.routeID !== event.nativeEvent.routeID) return;
 
-    this._emitter.emit(NavRouteEvents.onRouteDidBlur, event);
+    this._emitter.emit(NavigatorRouteViewEvents.onRouteDidBlur, event);
     this.routeStatus = RouteStatus.ROUTE_BLURRED;
   };
   
   private _handleOnUpdateSearchResults: OnUpdateSearchResultsEvent = (event) => {
     if(this.props.routeID !== event.nativeEvent.routeID) return;
 
-    this._emitter.emit(NavRouteEvents.onUpdateSearchResults, event);
+    this._emitter.emit(NavigatorRouteViewEvents.onUpdateSearchResults, event);
   };
 
   private _handleOnSearchBarCancelButtonClicked: OnSearchBarCancelButtonClickedEvent = (event) => {
     if(this.props.routeID !== event.nativeEvent.routeID) return;
 
-    this._emitter.emit(NavRouteEvents.onSearchBarCancelButtonClicked, event);
+    this._emitter.emit(NavigatorRouteViewEvents.onSearchBarCancelButtonClicked, event);
   };
 
   private _handleOnSearchBarSearchButtonClicked: OnSearchBarSearchButtonClickedEvent = (event) => {
     if(this.props.routeID !== event.nativeEvent.routeID) return;
 
-    this._emitter.emit(NavRouteEvents.onSearchBarSearchButtonClicked, event);
+    this._emitter.emit(NavigatorRouteViewEvents.onSearchBarSearchButtonClicked, event);
   };
 
   //#endregion

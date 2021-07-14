@@ -1,10 +1,11 @@
 
 
 import type { NavigatorView } from "../components/NavigatorView";
-import type { NavigatorRouteView, NavRouteEvents } from "../components/NavigatorRouteView";
+import type { NavigatorRouteView } from "../components/NavigatorRouteView";
 
-import type { EventEmitter } from "../functions/EventEmitter";
 import type { RouteOptions } from "./RouteOptions";
+
+import type { NavigatorRouteViewEventEmitter } from "./NavigatorRouteViewEventEmitter";
 
 export type NavigationObject = {
   routeKey    : string;
@@ -44,5 +45,5 @@ export type NavigationObject = {
   // get ref functions
   getRefToRoute          : () => NavigatorRouteView;
   getRefToNavigator      : () => NavigatorView;
-  getRefToNavRouteEmitter: () => EventEmitter<NavRouteEvents>;
+  getRefToNavRouteEmitter: () => NavigatorRouteViewEventEmitter;
 };

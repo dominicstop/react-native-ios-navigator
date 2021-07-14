@@ -1,41 +1,84 @@
 import type { EnumString } from "../types/UtilityTypes";
 
-type EventListener = (data?: any) => void;
+type EventListener<T> = T extends (null | undefined) 
+  ? () => void : (data: T) => void;
 
-export class EventEmitter<EventsT extends keyof EnumString> {
+/**
+ * ```
+ * // Create a string enum
+ * enum TestEnum { Foo = 'Foo', Bar = 'Bar' };
+ * 
+ * // For each key in the event enum, create a map that defines 
+ * // the type of event param. the event listener will receive...
+ * export const emitter: EventEmitter<typeof TestEnum, {
+ * 
+ *  // For the event `TestEnum.Foo`, it will receive this type.
+ *  Foo: { name: string },
+ * 
+ *  // `null` or `undefined` means event listener receives no params
+ *  Bar: null, 
+ *  
+ *  // alt. you can directly use the enum as a key...
+ *  // TS will infer (and suggest) all the possible keys whichever 
+ *  // way you choose.
+ *  [TestEnum.Baz]: Array<number>,
+ * }> = new EventEmitter();
+ * 
+ * // `event` will be inferred as `(event: { name: string }) => void`
+ * emitter.once('Foo', (event) => { console.log(event.name) });
+ * 
+ * // `event` will be inferred as `() => void`
+ * emitter.once('Bar', () => { ... });
+ * 
+ * // `event` will be inferred as `(event: number[]) => void`
+ * emitter.once(TestEnum.Baz, (event) => { console.log(number) });
+ * ```
+ */
+export class EventEmitter<
+  TEnum extends EnumString, 
+  TEventMap extends { [K in keyof Required<TEnum>]: any }
+> {
   // Properties
   /** Store the event listeners */
-  private events: { [key: string]: Array<EventListener> };
+  private listeners: { 
+    [K in keyof TEnum]?: Array<EventListener<TEventMap[K]>> 
+  };
   
   constructor() {
-    this.events = {};
+    this.listeners = {};
   };
 
-  addListener(eventKey: EventsT | string, listener: EventListener) {
-    const hasEvents = this.events[eventKey] != null;
+  addListener<K extends keyof TEnum>(eventKey: K, listener: EventListener<TEventMap[K]>) {
+    const hasListener = this.listeners[eventKey] != null;
     
-    if (!hasEvents) {
+    if (!hasListener) {
       // initialize with empty array...
       // The array will be used to store the event listeners
-      this.events[eventKey] = [];
+      this.listeners[eventKey] = [];
     };
 
-    this.events[eventKey].push(listener);
+    this.listeners[eventKey].push(listener);
+
+    return {
+      unsubscribe: () => {
+        this.removeListener(eventKey, listener);
+      }
+    };
   };
 
-  removeListener(eventKey: EventsT | string, listenerToRemove: EventListener) {
-    const hasEvents = this.events[eventKey] != null;
+  removeListener<K extends keyof TEnum>(eventKey: K, listenerToRemove: EventListener<TEventMap[K]>) {
+    const hasListener = this.listeners[eventKey] != null;
 
     // event does not exist (maybe: throw an error?)
-    if (!hasEvents) return;
+    if (!hasListener) return;
 
-    this.events[eventKey] = this.events[eventKey].filter(listener => (
+    this.listeners[eventKey] = this.listeners[eventKey].filter(listener => (
       listener !== listenerToRemove
     ));
   };
 
-  once(eventKey: EventsT | string, listener: EventListener){
-    const tempListener: EventListener = (data) => {
+  once<K extends keyof TEnum>(eventKey: K, listener: EventListener<TEventMap[K]>){
+    const tempListener = (data?: any) => {
       listener(data);
       this.removeListener(eventKey, tempListener);
     };
@@ -44,17 +87,18 @@ export class EventEmitter<EventsT extends keyof EnumString> {
   };
 
   removeAllListeners(){
-    this.events = {};
+    this.listeners = {};
   };
 
-  emit(eventKey: EventsT | string, data: any) {
-    const hasEvents = this.events[eventKey] != null;
+  emit<K extends keyof TEnum>(eventKey: K, data: TEventMap[K]) {
+    const hasListener = this.listeners[eventKey] != null;
 
     // event does not exist
-    if (!hasEvents) return;
+    if (!hasListener) return;
 
-    this.events[eventKey].forEach(callback => {
+    this.listeners[eventKey].forEach(callback => {
       callback(data);
     });
   };
 };
+

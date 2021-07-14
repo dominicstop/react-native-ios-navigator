@@ -1,4 +1,7 @@
-/// `RNINavigatorRouteView` Events
+/**
+ * `RNINavigatorRouteView` Events
+ * This file contains all the route-related events and event objects (e.g. push, pop, blur, focus, search, etc).
+ */
 
 //#region - Event Objects
 type BaseEventObject = {
@@ -13,16 +16,16 @@ export type OnRoutePushEventObject = {
   };
 };
 
-export type OnRouteFocusBlurEventObject = {
-  nativeEvent: BaseEventObject & { 
-    isAnimated: boolean;
-  };
-};
-
 // TODO: Add `isAnimated` param 
 export type OnRoutePopEventObject = {
   nativeEvent: BaseEventObject & {
     isUserInitiated: boolean;
+  };
+};
+
+export type OnRouteFocusBlurEventObject = {
+  nativeEvent: BaseEventObject & { 
+    isAnimated: boolean;
   };
 };
 

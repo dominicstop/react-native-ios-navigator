@@ -1,12 +1,11 @@
 
 import React from 'react';
 
-import { NavRouteEvents } from '../components/NavigatorRouteView';
 
 import type { NavigatorRouteView } from '../components/NavigatorRouteView';
 import type { OnRoutePopEvent, OnRoutePushEvent, OnRouteFocusBlurEvent, OnPressNavBarItemEvent, OnUpdateSearchResultsEvent, OnSearchBarCancelButtonClickedEvent, OnSearchBarSearchButtonClickedEvent } from '../types/RNINavigatorRouteViewEvents';
 
-import type { EventEmitter } from '../functions/EventEmitter';
+import { NavigatorRouteViewEventEmitter, NavigatorRouteViewEvents } from '../types/NavigatorRouteViewEventEmitter';
 
 import { NavRouteViewContext, NavRouteViewContextProps } from '../context/NavRouteViewContext';
 
@@ -48,7 +47,7 @@ export class RouteViewEvents extends React.Component<RouteViewEventsProps> {
   static contextType = NavRouteViewContext;
   
   routerRef: NavigatorRouteView;
-  emitterRef: EventEmitter<NavRouteEvents>;
+  emitterRef: NavigatorRouteViewEventEmitter;
   
   constructor(props: RouteViewEventsProps, context: NavRouteViewContextProps){
     super(props);
@@ -61,67 +60,67 @@ export class RouteViewEvents extends React.Component<RouteViewEventsProps> {
     this.emitterRef = routeEmitterRef;
 
     routeEmitterRef.addListener(
-      NavRouteEvents.onRouteWillPush,
+      NavigatorRouteViewEvents.onRouteWillPush,
       this._handleOnRouteWillPush
     );
 
     routeEmitterRef.addListener(
-      NavRouteEvents.onRouteDidPush,
+      NavigatorRouteViewEvents.onRouteDidPush,
       this._handleOnRouteDidPush
     );
 
     routeEmitterRef.addListener(
-      NavRouteEvents.onRouteWillPop,
+      NavigatorRouteViewEvents.onRouteWillPop,
       this._handleOnRouteWillPop
     );
 
     routeEmitterRef.addListener(
-      NavRouteEvents.onRouteDidPop,
+      NavigatorRouteViewEvents.onRouteDidPop,
       this._handleOnRouteDidPop
     );
 
     routeEmitterRef.addListener(
-      NavRouteEvents.onRouteWillFocus,
+      NavigatorRouteViewEvents.onRouteWillFocus,
       this._handleOnRouteWillFocus
     );
 
     routeEmitterRef.addListener(
-      NavRouteEvents.onRouteDidFocus,
+      NavigatorRouteViewEvents.onRouteDidFocus,
       this._handleOnRouteDidFocus
     );
 
     routeEmitterRef.addListener(
-      NavRouteEvents.onRouteWillBlur,
+      NavigatorRouteViewEvents.onRouteWillBlur,
       this._handleOnRouteWillBlur
     );
 
     routeEmitterRef.addListener(
-      NavRouteEvents.onRouteDidBlur,
+      NavigatorRouteViewEvents.onRouteDidBlur,
       this._handleOnRouteDidBlur
     );
 
     routeEmitterRef.addListener(
-      NavRouteEvents.onPressNavBarLeftItem,
+      NavigatorRouteViewEvents.onPressNavBarLeftItem,
       this._handleOnPressNavBarLeftItem
     );
 
     routeEmitterRef.addListener(
-      NavRouteEvents.onPressNavBarRightItem,
+      NavigatorRouteViewEvents.onPressNavBarRightItem,
       this._handleOnPressNavBarRightItem
     );
 
     routeEmitterRef.addListener(
-      NavRouteEvents.onUpdateSearchResults,
+      NavigatorRouteViewEvents.onUpdateSearchResults,
       this._handleOnUpdateSearchResults
     );
 
     routeEmitterRef.addListener(
-      NavRouteEvents.onSearchBarCancelButtonClicked,
+      NavigatorRouteViewEvents.onSearchBarCancelButtonClicked,
       this._handleOnSearchBarCancelButtonClicked
     );
 
     routeEmitterRef.addListener(
-      NavRouteEvents.onSearchBarSearchButtonClicked,
+      NavigatorRouteViewEvents.onSearchBarSearchButtonClicked,
       this._handleOnSearchBarSearchButtonClicked
     );
   };
@@ -130,52 +129,52 @@ export class RouteViewEvents extends React.Component<RouteViewEventsProps> {
     const routeEmitterRef = this.emitterRef;
 
     routeEmitterRef.removeListener(
-      NavRouteEvents.onRouteWillPush,
+      NavigatorRouteViewEvents.onRouteWillPush,
       this._handleOnRouteWillPush
     );
 
     routeEmitterRef.removeListener(
-      NavRouteEvents.onRouteDidPush,
+      NavigatorRouteViewEvents.onRouteDidPush,
       this._handleOnRouteDidPush
     );
 
     routeEmitterRef.removeListener(
-      NavRouteEvents.onRouteWillPop,
+      NavigatorRouteViewEvents.onRouteWillPop,
       this._handleOnRouteWillPop
     );
 
     routeEmitterRef.removeListener(
-      NavRouteEvents.onRouteDidPop,
+      NavigatorRouteViewEvents.onRouteDidPop,
       this._handleOnRouteDidPop
     );
 
     routeEmitterRef.removeListener(
-      NavRouteEvents.onRouteWillFocus,
+      NavigatorRouteViewEvents.onRouteWillFocus,
       this._handleOnRouteWillFocus
     );
 
     routeEmitterRef.removeListener(
-      NavRouteEvents.onRouteDidFocus,
+      NavigatorRouteViewEvents.onRouteDidFocus,
       this._handleOnRouteDidFocus
     );
 
     routeEmitterRef.removeListener(
-      NavRouteEvents.onRouteWillBlur,
+      NavigatorRouteViewEvents.onRouteWillBlur,
       this._handleOnRouteWillBlur
     );
 
     routeEmitterRef.removeListener(
-      NavRouteEvents.onRouteDidBlur,
+      NavigatorRouteViewEvents.onRouteDidBlur,
       this._handleOnRouteDidBlur
     );
 
     routeEmitterRef.removeListener(
-      NavRouteEvents.onPressNavBarLeftItem,
+      NavigatorRouteViewEvents.onPressNavBarLeftItem,
       this._handleOnPressNavBarLeftItem
     );
 
     routeEmitterRef.removeListener(
-      NavRouteEvents.onPressNavBarRightItem,
+      NavigatorRouteViewEvents.onPressNavBarRightItem,
       this._handleOnPressNavBarRightItem
     );
   };

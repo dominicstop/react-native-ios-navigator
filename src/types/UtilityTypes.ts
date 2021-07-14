@@ -2,7 +2,9 @@
 
 
 /** Tries to match the TS's builtin string `enum` type (e.g. `typeof Enum`) */
-export type EnumString = Readonly<{ [key: string]: string }>;
+export type EnumString = { [key: string]: string };
+
+export type KeysOfUnion<T> = T extends T ? keyof T: never;
 
 /** 
  * Accepts a value from `TEnum` as an enum key (e.g. `Enum.Foo`), 

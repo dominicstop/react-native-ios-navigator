@@ -1,24 +1,26 @@
 import { useContext, useEffect, useRef } from 'react';
-import type { OnPressNavBarItemEvent, OnRoutePopEvent, OnRoutePushEvent } from '../types/RNINavigatorRouteViewEvents';
 
-import type { NavRouteEvents } from '../components/NavigatorRouteView';
+import type { OnPressNavBarItemEvent, OnRoutePopEvent, OnRoutePushEvent } from '../types/RNINavigatorRouteViewEvents';
+import type { NavigatorRouteViewEvents } from '../types/NavigatorRouteViewEventEmitter';
+
 import { NavRouteViewContext } from '../context/NavRouteViewContext';
+
 
 /** Route push/pop events */
 type NavRouteLifeCycleEvents = 
-  | (NavRouteEvents.onRouteWillPush  | 'onRouteWillPush' )
-  | (NavRouteEvents.onRouteDidPush   | 'onRouteDidPush'  )
-  | (NavRouteEvents.onRouteWillPop   | 'onRouteWillPop'  )
-  | (NavRouteEvents.onRouteDidPop    | 'onRouteDidPop'   )
-  | (NavRouteEvents.onRouteWillFocus | 'onRouteWillFocus')
-  | (NavRouteEvents.onRouteDidFocus  | 'onRouteDidFocus' )
-  | (NavRouteEvents.onRouteWillBlur  | 'onRouteWillBlur' )
-  | (NavRouteEvents.onRouteDidBlur   | 'onRouteDidBlur'  )
+  | (NavigatorRouteViewEvents.onRouteWillPush  | 'onRouteWillPush' )
+  | (NavigatorRouteViewEvents.onRouteDidPush   | 'onRouteDidPush'  )
+  | (NavigatorRouteViewEvents.onRouteWillPop   | 'onRouteWillPop'  )
+  | (NavigatorRouteViewEvents.onRouteDidPop    | 'onRouteDidPop'   )
+  | (NavigatorRouteViewEvents.onRouteWillFocus | 'onRouteWillFocus')
+  | (NavigatorRouteViewEvents.onRouteDidFocus  | 'onRouteDidFocus' )
+  | (NavigatorRouteViewEvents.onRouteWillBlur  | 'onRouteWillBlur' )
+  | (NavigatorRouteViewEvents.onRouteDidBlur   | 'onRouteDidBlur'  )
 
 /** Route navigation bar item events */
 type NavBarItemEvents = 
-  | (NavRouteEvents.onPressNavBarLeftItem  | 'onPressNavBarLeftItem' )
-  | (NavRouteEvents.onPressNavBarRightItem | 'onPressNavBarRightItem')
+  | (NavigatorRouteViewEvents.onPressNavBarLeftItem  | 'onPressNavBarLeftItem' )
+  | (NavigatorRouteViewEvents.onPressNavBarRightItem | 'onPressNavBarRightItem')
 
 function useNavRouteEvents(
   eventName: NavRouteLifeCycleEvents | NavBarItemEvents,
