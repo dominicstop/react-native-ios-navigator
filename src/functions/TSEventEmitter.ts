@@ -34,7 +34,7 @@ type EventListener<T> = T extends (null | undefined)
  * emitter.once(TestEnum.Baz, (event) => { console.log(number) });
  * ```
  */
-export class EventEmitter<
+export class TSEventEmitter<
   TEnum extends EnumString, 
   TEventMap extends { [K in keyof Required<TEnum>]: any }
 > {

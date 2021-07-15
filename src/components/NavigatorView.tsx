@@ -19,7 +19,7 @@ import type { OnUIConstantsDidChangeEventObject, OnNavRouteViewAddedEvent, OnSet
 
 import * as Helpers from '../functions/Helpers';
 
-import { EventEmitter } from '../functions/EventEmitter';
+import { TSEventEmitter } from '../functions/TSEventEmitter';
 import { SimpleQueue } from '../functions/SimpleQueue';
 
 import { NativeIDKeys } from '../constants/LibraryConstants';
@@ -128,7 +128,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     this.navStatus = NavStatus.IDLE_INIT;
     this.routesToRemove = [];
 
-    this.emitter = new EventEmitter();
+    this.emitter = new TSEventEmitter();
     this.queue = new SimpleQueue();
 
     this.state = {

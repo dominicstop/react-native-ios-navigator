@@ -1,4 +1,4 @@
-import type { EventEmitter } from "../functions/EventEmitter";
+import type { TSEventEmitter } from "../functions/TSEventEmitter";
 import type { OnNavRouteViewAddedEventObject, OnSetNativeRoutesEventObject } from "./RNINavigatorViewEvents";
 
 export enum NavigatorViewEvents {
@@ -6,7 +6,7 @@ export enum NavigatorViewEvents {
   onSetNativeRoutes   = "onSetNativeRoutes"  ,
 };
 
-export type NavigatorViewEventEmitter = EventEmitter<typeof NavigatorViewEvents, {
+export type NavigatorViewEventEmitter = TSEventEmitter<typeof NavigatorViewEvents, {
   onNavRouteViewAdded: OnNavRouteViewAddedEventObject,
   onSetNativeRoutes  : OnSetNativeRoutesEventObject,
 }>;

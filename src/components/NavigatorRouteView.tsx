@@ -19,7 +19,7 @@ import { RNINavigatorRouteViewModule } from '../native_modules/RNINavigatorRoute
 
 import * as Helpers from '../functions/Helpers';
 
-import { EventEmitter } from '../functions/EventEmitter';
+import { TSEventEmitter } from '../functions/TSEventEmitter';
 import { CompareRouteTransitionPushConfig } from '../functions/CompareRouteOptions';
 
 import { NavRouteViewContext } from '../context/NavRouteViewContext';
@@ -111,7 +111,7 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
     super(props);
 
     this.routeStatus   = RouteStatus.INIT;
-    this._emitter      = new EventEmitter();
+    this._emitter      = new TSEventEmitter();
     this._navigatorRef = props.getRefToNavigator();
 
     this.state = {

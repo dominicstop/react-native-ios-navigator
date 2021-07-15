@@ -1,6 +1,6 @@
 
 
-import type { EventEmitter } from "../functions/EventEmitter";
+import type { TSEventEmitter } from "../functions/TSEventEmitter";
 import type { OnPressNavBarItemEventObject, OnRouteFocusBlurEventObject, OnRoutePopEventObject, OnRoutePushEventObject, OnSearchBarCancelButtonClickedEventObject, OnSearchBarSearchButtonClickedEventObject, OnUpdateSearchResultsEventObject } from "./RNINavigatorRouteViewEvents";
 
 export enum NavigatorRouteViewEvents {
@@ -27,7 +27,7 @@ export enum NavigatorRouteViewEvents {
   onSearchBarSearchButtonClicked = "onSearchBarSearchButtonClicked",
 };
 
-export type NavigatorRouteViewEventEmitter = EventEmitter<typeof NavigatorRouteViewEvents, {
+export type NavigatorRouteViewEventEmitter = TSEventEmitter<typeof NavigatorRouteViewEvents, {
   onRouteWillPush: OnRoutePushEventObject,
   onRouteDidPush : OnRoutePushEventObject,
   onRouteWillPop : OnRoutePopEventObject ,
