@@ -216,6 +216,90 @@ As such this component doesn't actually render anything directly, it's merely an
 
 <br>
 
+##### `RouteViewPortal` Example
+
+* 📌 **Declaration**: [`RouteViewPortalExample01.tsx`](example/src/routes/RouteViewPortalExample01.tsx)
+
+![RouteViewPortalExample01](docs/assets/RouteViewPortalExample01-00.gif)
+
+```jsx
+export function RouteViewPortalExample01(){
+  const [index, setIndex] = React.useState(0);
+
+  return (
+    <SafeAreaView style={styles.routeContainer}>
+      <RouteViewPortal
+        routeOptions={{
+          // Change the navigation bar title text
+          routeTitle: `index: ${index}`,
+          // Disable large tile
+          largeTitleDisplayMode: 'never',
+          // Set the navigation bar tint to red
+          navBarAppearanceOverride: {
+            mode: 'legacy',
+            barTintColor: Colors.RED.A700,
+            tintColor: 'white',
+          },
+          // Set the status bar tint to 'white'
+          statusBarStyle: 'lightContent',
+        }}
+        // Use a custom component for navigation bar title
+        renderNavBarTitleItem={({routeOptions}) => (
+          <TouchableOpacity 
+            style={styles.buttonContainer}
+            onPress={() => {
+              setIndex(0);
+              Alert.alert('Index Reset', `Index was reset to 0.`);
+            }}
+          >
+            <Text style={styles.buttonLabel}>
+              {routeOptions.routeTitle ?? 'N/A'}
+            </Text>
+          </TouchableOpacity>
+        )}
+
+        // Use a custom component for navigation bar right item
+        renderNavBarRightItem={() => (
+          <View style={styles.navBarLeftItemContainer}>
+            <TouchableOpacity
+              style={[styles.buttonContainer, styles.buttonRightSpace]}
+              onPress={() => {
+                // Decrement the index when pressed
+                setIndex(prevIndex => (prevIndex - 1));
+              }}
+            >
+              <Text style={styles.buttonLabel}>
+                {`--`}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+            style={styles.buttonContainer}
+            onPress={() => {
+              // Increment the index when pressed
+              setIndex(prevIndex => (prevIndex + 1));
+            }}
+          >
+            <Text style={styles.buttonLabel}>
+              {`++`}
+            </Text>
+          </TouchableOpacity>
+          </View>
+        )}
+      />
+      <View style={styles.rootContainer}>
+        <Text style={styles.textTitle}>
+          {`Current Index: ${index}`}
+        </Text>
+      </View>
+    </SafeAreaView>
+  );
+};
+```
+
+
+
+<br>
+
 #### D.1.3. `RouteViewEvents` Component
 
 This component allows you to subscribe/listen to route-related events for the current route (e.g. when a route is about to be popped, or when a navigation bar item has been pressed, etc).
