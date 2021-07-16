@@ -19,6 +19,8 @@ import { NavigatorTest07 } from './routes/NavigatorTest07';
 import { NavigatorDemo01 } from './routes/NavigatorDemo01';
 import { NavigatorDemo02 } from './routes/NavigatorDemo02';
 
+import { RouteViewPortalExample01 } from './routes/RouteViewPortalExample01';
+
 import * as Colors  from './constants/Colors';
 import * as Helpers from './functions/Helpers';
 
@@ -40,6 +42,8 @@ const RouteKeys = {
 
   NavigatorShowcase01: 'NavigatorShowcase01',
   NavigatorShowcase02: 'NavigatorShowcase02',
+
+  RouteViewPortalExample01: 'RouteViewPortalExample01',
 };
 
 const RouteItems = [{ 
@@ -114,6 +118,9 @@ const RouteItems = [{
     + ` continuously stacked/nested on top of one another.`
     + ` This also tests functional usage + hooks.`
   )
+}, { 
+  routeKey: RouteKeys.RouteViewPortalExample01,
+  title: 'RouteViewPortal Example'
 }];
 
 const ROUTES: Array<NavRouteConfigItem> = [{
@@ -216,6 +223,11 @@ const ROUTES: Array<NavRouteConfigItem> = [{
   renderRoute: () => (
     // @ts-ignore
     <NavigatorDemo02/>
+  ),
+}, {
+  routeKey: RouteKeys.RouteViewPortalExample01,
+  renderRoute: () => (
+    <RouteViewPortalExample01/>
   ),
 }];
 
