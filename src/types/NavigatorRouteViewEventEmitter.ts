@@ -2,6 +2,7 @@
 
 import type { TSEventEmitter } from "../functions/TSEventEmitter";
 import type { OnPressNavBarItemEventObject, OnRouteFocusBlurEventObject, OnRoutePopEventObject, OnRoutePushEventObject, OnSearchBarCancelButtonClickedEventObject, OnSearchBarSearchButtonClickedEventObject, OnUpdateSearchResultsEventObject } from "./RNINavigatorRouteViewEvents";
+import type { KeyMapType } from "./UtilityTypes";
 
 export enum NavigatorRouteViewEvents {
   // Navigator Route - push/pop events
@@ -27,21 +28,24 @@ export enum NavigatorRouteViewEvents {
   onSearchBarSearchButtonClicked = "onSearchBarSearchButtonClicked",
 };
 
-export type NavigatorRouteViewEventEmitter = TSEventEmitter<typeof NavigatorRouteViewEvents, {
-  onRouteWillPush: OnRoutePushEventObject,
-  onRouteDidPush : OnRoutePushEventObject,
-  onRouteWillPop : OnRoutePopEventObject ,
-  onRouteDidPop  : OnRoutePopEventObject ,
+export type NavigatorRouteViewEventMap = KeyMapType<NavigatorRouteViewEvents, {
+  onRouteWillPush: OnRoutePushEventObject;
+  onRouteDidPush : OnRoutePushEventObject;
+  onRouteWillPop : OnRoutePopEventObject ;
+  onRouteDidPop  : OnRoutePopEventObject ;
 
-  onRouteWillFocus: OnRouteFocusBlurEventObject,
-  onRouteDidFocus : OnRouteFocusBlurEventObject,
-  onRouteWillBlur : OnRouteFocusBlurEventObject,
-  onRouteDidBlur  : OnRouteFocusBlurEventObject,
+  onRouteWillFocus: OnRouteFocusBlurEventObject;
+  onRouteDidFocus : OnRouteFocusBlurEventObject;
+  onRouteWillBlur : OnRouteFocusBlurEventObject;
+  onRouteDidBlur  : OnRouteFocusBlurEventObject;
 
-  onPressNavBarLeftItem : OnPressNavBarItemEventObject,
-  onPressNavBarRightItem: OnPressNavBarItemEventObject,
+  onPressNavBarLeftItem : OnPressNavBarItemEventObject;
+  onPressNavBarRightItem: OnPressNavBarItemEventObject;
 
-  onUpdateSearchResults         : OnUpdateSearchResultsEventObject,
-  onSearchBarCancelButtonClicked: OnSearchBarCancelButtonClickedEventObject,
-  onSearchBarSearchButtonClicked: OnSearchBarSearchButtonClickedEventObject,
+  onUpdateSearchResults         : OnUpdateSearchResultsEventObject;
+  onSearchBarCancelButtonClicked: OnSearchBarCancelButtonClickedEventObject;
+  onSearchBarSearchButtonClicked: OnSearchBarSearchButtonClickedEventObject;
 }>;
+
+export type NavigatorRouteViewEventEmitter = 
+  TSEventEmitter<NavigatorRouteViewEvents, NavigatorRouteViewEventMap>;

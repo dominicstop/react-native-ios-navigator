@@ -48,3 +48,6 @@ export type EnumValuesLiteral
  */
 export type EnumValueLiteral
   <TEnum extends EnumString, TKey extends keyof TEnum> = TKey | TEnum[TKey];
+
+export type KeyMapType
+  <T extends string, K extends { [k in `${T}`]: any }> = K;
