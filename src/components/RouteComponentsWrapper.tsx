@@ -63,9 +63,6 @@ export class RouteComponentsWrapper extends React.Component<RouteComponentsWrapp
       props.renderNavBarTitleItem?.(navigation)
     );
 
-    console.log('navBarTitleItem: ', navBarTitleItem != null);
-    
-
     return(
       <React.Fragment>
         {navBarLeftItem && (
