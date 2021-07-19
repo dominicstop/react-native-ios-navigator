@@ -28,7 +28,9 @@ export class CompareRouteTransitionPushConfig {
   };
 
   static compare<T extends RouteTransitionPushConfig>(oldItem: T, newItem: T){
-    return CompareUtilities.compareObject(this.propertyMap, oldItem, newItem);
+    return CompareUtilities.compareObject(
+      CompareRouteTransitionPushConfig.propertyMap, oldItem, newItem
+    );
   };
 
   static unwrapAndCompare<T extends RouteTransitionPushConfig>(
@@ -94,7 +96,9 @@ export class CompareNavBarAppearance {
   };
 
   static compare<T extends NavBarAppearance>(oldItem: T, newItem: T){
-    return CompareUtilities.compareObject(this.propertyMap, oldItem, newItem, true);;
+    return CompareUtilities.compareObject(
+      CompareNavBarAppearance.propertyMap, oldItem, newItem, true
+    );;
   };
 };
 
@@ -102,6 +106,7 @@ export class CompareNavBarAppearanceConfig {
   static propertyMap: ComparisonConfig<NavBarAppearanceConfig> = {
     // shallow compare 
     navBarPreset: { mode: 'shallow' },
+
     // custom compare
     standardAppearance: {
       mode: 'custom',
@@ -152,7 +157,9 @@ export class CompareLegacyAppearanceConfig {
   };
 
   static compare<T extends NavBarAppearanceLegacyConfig>(oldItem: T, newItem: T){
-    return CompareUtilities.compareObject(this.propertyMap, oldItem, newItem, true);
+    return CompareUtilities.compareObject(
+      CompareLegacyAppearanceConfig.propertyMap, oldItem, newItem, true
+    );
   };
 };
 

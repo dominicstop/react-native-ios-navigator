@@ -33,7 +33,9 @@ export class CompareImageGradientConfig {
   };
   
   static compare<T extends ImageGradientConfig>(oldItem: T, newItem: T){
-    return CompareUtilities.compareObject(this.propertyMap, oldItem, newItem);
+    return CompareUtilities.compareObject(
+      CompareImageGradientConfig.propertyMap, oldItem, newItem
+    );
   };
 };
 
