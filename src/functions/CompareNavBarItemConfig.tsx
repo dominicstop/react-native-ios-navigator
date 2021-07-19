@@ -47,20 +47,12 @@ class CompareNavBarItemConfigShared {
   };
   
   static compare<T extends NavBarItemConfigShared>(oldItem: T, newItem: T) {
-    console.log(
-      'CompareNavBarItemConfigShared - compareObject: ', CompareUtilities.compareObject(CompareNavBarItemConfigShared.propertyMap, oldItem, newItem, true),
-      ' - oldItem: ', oldItem,
-      ' - newItem: ', newItem,
-    );
-    return CompareUtilities.compareObject(CompareNavBarItemConfigShared.propertyMap, oldItem, newItem, true, true);
+    return CompareUtilities.compareObject(CompareNavBarItemConfigShared.propertyMap, oldItem, newItem, true);
   };
 };
 
 export class CompareNavBarItemConfig {
   static compare<T extends NavBarItemConfig>(oldItem: T, newItem: T){
-    console.log('CompareNavBarItemConfigBase: '  , CompareNavBarItemConfigBase  .compare(oldItem, newItem));
-    console.log('CompareNavBarItemConfigShared: ', CompareNavBarItemConfigShared.compare(oldItem, newItem));
-    
     return(
       CompareNavBarItemConfigBase  .compare(oldItem, newItem) &&
       CompareNavBarItemConfigShared.compare(oldItem, newItem) 

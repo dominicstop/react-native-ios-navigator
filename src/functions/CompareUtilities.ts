@@ -7,7 +7,8 @@ export type ComparisonConfig<T> = {[K in keyof Required<T>]: {
   mode: "shallow" | "shallowObject" | "shallowArray" | "deep" | "ignore";
 } | {
   mode: "custom";
-  // `compareObject` won't ever pass an `undefined` (i.e. so `T` will never be `undefined`).
+  // `compareObject` won't ever pass an `undefined` value
+  // (i.e. so `T` will never be `undefined`).
   customCompare: <V extends NeverUndefined<T[K]>>(itemA: V, itemB: V) => boolean;
 }};
 
@@ -40,21 +41,13 @@ export class CompareUtilities {
     return true;
   };
 
-
   static compareObject<T extends {[k: string]: any}>(
     propertyMap: ComparisonConfig<T>,
     oldItem: T, newItem: T,
     /** Skip checking properties with no matching config */
-    skipIfNoConfig: boolean = false,
-    log: boolean = false
+    skipIfNoConfig: boolean = false
   ): boolean {
 
-    log && console.log('compareObject #1',
-      ' - skipIfNoConfig: ', skipIfNoConfig,
-      ' - log: ', log,
-      ' - oldItem: ', oldItem,
-      ' - newItem: ', newItem,
-    );
 
     // * `object.keys` is o(n) i.e. it'll iterate through all the keys of the objects
     // * so `const keys = [...object.keys(oldItem), ...object.keys(newItem)]` and 
@@ -73,7 +66,6 @@ export class CompareUtilities {
     //
     // 3. if all the comparison passes, then `oldItem === newItem`
     function compare(items: T){
-      log && console.log('\n\ncompare - comparedKeys: ', comparedKeys);
 
       let key: keyof T;
       for(key in items){
@@ -82,13 +74,6 @@ export class CompareUtilities {
         // already prev. compared, skip...
         if(comparedKeys[key] === true) continue;
         comparedKeys[key] = true;
-
-        log && console.log('compareObject #2',
-          ' - key: ', key,
-          ' - propertyMap[key]: ', config,
-          ' - oldItem[key]: ', oldItem[key],
-          ' - newItem[key]: ', newItem[key],
-        );
 
         if(config == null){
           // no comparison config found for current property, skipping...
@@ -100,44 +85,36 @@ export class CompareUtilities {
 
         // both properties are null/undefined, skip...
         if((oldItem[key] == null) && (newItem[key] == null)){
-          log && console.log('a');
           continue;
         };
 
         // one of the properties are null/undefined, so `oldItem !== newItem`.
         if((oldItem[key] == null) || (newItem[key] == null)){
-          log && console.log('b');
           return false
         };
 
         switch (config.mode) {
           case 'shallow':
-            log && console.log('c - shallow');
             if(oldItem[key] !== newItem[key]) return false;
             break;
 
           case 'custom':
-            log && console.log('d - shallow');
             if(!config.customCompare(oldItem[key], newItem[key])) return false;
             break;
 
           case 'shallowObject':
-            log && console.log('e - shallow');
             if(!CompareUtilities.shallowCompareObject(oldItem[key], newItem[key])) return false;
             break;
 
           case 'shallowArray':
-            log && console.log('f - shallow');
             if(!CompareUtilities.shallowCompareArray(oldItem[key], newItem[key])) return false;
             break;
 
           case 'deep':
-            log && console.log('g - shallow');
             if(!fastDeepEqual(oldItem[key], newItem[key])) return false;
             break;
 
           case 'ignore':
-            log && console.log('h - shallow');
             break;
         };
       };
@@ -148,8 +125,7 @@ export class CompareUtilities {
     if(!compare(oldItem)) return false;
     if(!compare(newItem)) return false;
     
-    // all of the comparisons passes, so `oldItem === newItem`
-    log && console.log('i - true');
+    // all of the comparisons passed, so `oldItem === newItem`
     return true;
   };
 };
