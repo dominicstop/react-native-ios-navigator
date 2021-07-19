@@ -214,6 +214,10 @@
 - [ ] **Fix**: `RCTScrollView` indicator insets is wrong.
   - For devices with notches, the scroll view insets for the left and right of the screen is wrong. The top and bottom insets are correct (e.g. the scroll indicator insets are insetted from the home indicator and navigation bar).
 
+<br>
+
+- [ ] **Fix**: `RouteViewPortal.renderNavBarTitleItem` not updating.
+
 ---
 
 <br>
