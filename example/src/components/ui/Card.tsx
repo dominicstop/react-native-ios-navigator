@@ -29,6 +29,13 @@ export function CardTitle(props: {
   pillTitle?: string;
   subtitle?: string;
 }){
+
+  const hasTitle = (props.title != null);
+
+  const cardPillWrapper = {
+    marginLeft: (hasTitle? 10 : 0)
+  };
+
   return (
     <React.Fragment>
       <View style={[styles.cardTitleContainer, { marginTop: props.extraMarginTop ?? 0 }]}>
@@ -36,10 +43,12 @@ export function CardTitle(props: {
           {props.title ?? ''}
         </Text>
         {props.pillTitle && (
-          <View style={styles.cardPillContainer}>
-            <Text style={styles.cardPillTitleText}>
-              {props.pillTitle}
-            </Text>
+          <View style={[styles.cardPillWrapper, cardPillWrapper]}>
+            <View style={styles.cardPillContainer}>
+              <Text style={styles.cardPillTitleText}>
+                {props.pillTitle}
+              </Text>
+            </View>
           </View>
         )}
       </View>
@@ -192,12 +201,15 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
   },
+  cardPillWrapper: {
+    flex: 1,
+    alignItems: 'flex-start',
+  },
   cardPillContainer: {
     backgroundColor: Colors.BLUE.A400,
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 10,
-    marginLeft: 10,
   },
   cardPillTitleText: {
     color: 'white',
