@@ -29,6 +29,10 @@ export class RNIWrapperView extends React.PureComponent<RNIWrapperViewProps> {
     this.nativeRef = ref;
   };
 
+  componentWillUnmount(){
+    this.notifyComponentWillUnmount(false);
+  };
+
   notifyComponentWillUnmount = (isManuallyTriggered: boolean) => {
     UIManager.dispatchViewManagerCommand(
       findNodeHandle(this.nativeRef),

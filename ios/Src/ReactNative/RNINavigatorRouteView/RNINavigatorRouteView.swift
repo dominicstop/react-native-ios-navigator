@@ -572,6 +572,7 @@ internal class RNINavigatorRouteView: UIView {
     let wrapperView = subview as? RNIWrapperView;
     wrapperView?.delegate = self;
     wrapperView?.autoSetSizeOnLayout = false;
+    wrapperView?.autoCleanupOnWindowNil = true;
     
     /// receive child comps. from `RNINavigatorRouteView`.
     /// note: the child comp. can be identified based on their `nativeID`
@@ -581,13 +582,13 @@ internal class RNINavigatorRouteView: UIView {
         self.touchHandlerRouteContent.attach(to: subview);
         
       case .NavBarLeftItem:
-        self.reactNavBarLeftItem = wrapperView;
+        self.reactNavBarLeftItem = wrapperView!;
         
       case .NavBarRightItem:
-        self.reactNavBarRightItem = wrapperView;
+        self.reactNavBarRightItem = wrapperView!;
         
       case .NavBarTitleItem:
-        self.reactNavBarTitleItem = wrapperView;
+        self.reactNavBarTitleItem = wrapperView!;
         self.delegate?.didReceiveNavBarButtonTitleView(subview);
     };
   };

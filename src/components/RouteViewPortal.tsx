@@ -67,17 +67,14 @@ export class RouteViewPortal extends React.Component<RouteViewPortalProps> {
     };
   };
 
-  componentDidMount(){
-    this._routeComponentsWrapperRef = this.routeRef.getRouteComponentsWrapper();
+  componentDidMount = () => {
   };
 
-  componentDidUpdate(prevProps: RouteViewPortalProps){
+  componentDidUpdate = (prevProps: RouteViewPortalProps) => {
     const nextProps = this.props;
 
     const didRouteOptionsChange = 
       !CompareRouteOptions.unwrapAndCompare(prevProps.routeOptions, nextProps.routeOptions);
-
-    this._routeComponentsWrapperRef?.requestUpdate();
 
     if(didRouteOptionsChange){
       this.routeRef.setRouteOptions(nextProps.routeOptions);
@@ -88,6 +85,20 @@ export class RouteViewPortal extends React.Component<RouteViewPortalProps> {
         + ` - didRouteOptionsChange: ${didRouteOptionsChange? 'true' : 'false'}`
       );
       //#endregion
+    };
+
+    const didNavBarItemsChange = (
+      (prevProps.renderNavBarLeftItem  != null) === (nextProps.renderNavBarLeftItem  != null) ||
+      (prevProps.renderNavBarRightItem != null) === (nextProps.renderNavBarRightItem != null) ||
+      (prevProps.renderNavBarTitleItem != null) === (nextProps.renderNavBarTitleItem != null)
+    );
+
+    if(this._routeComponentsWrapperRef == null){
+      this._routeComponentsWrapperRef = this.routeRef.getRouteComponentsWrapper();
+    };
+
+    if(didNavBarItemsChange && this._routeComponentsWrapperRef != null){
+      this._routeComponentsWrapperRef.forceUpdate();
     };
   };
 

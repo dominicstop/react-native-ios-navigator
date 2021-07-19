@@ -57,6 +57,14 @@ internal class RNIWrapperView: UIView {
   
   override func didMoveToWindow() {
     if self.window == nil && self.autoCleanupOnWindowNil {
+      #if DEBUG
+      print("LOG - RNIWrapperView, didMoveToWindow"
+        + " - for nativeID: \(self.nativeID ?? "N/A")"
+        + " - trigger cleanup"
+        + " - autoCleanupOnJSUnmount == nil: \(self.autoCleanupOnJSUnmount)"
+      );
+      #endif
+      
       self.cleanup();
     };
   };
@@ -86,6 +94,14 @@ internal class RNIWrapperView: UIView {
   
   func onJSComponentWillUnmount(isManuallyTriggered: Bool){
     if self.window != nil && self.autoCleanupOnJSUnmount {
+      #if DEBUG
+      print("LOG - RNIWrapperView, onJSComponentWillUnmount"
+        + " - for nativeID: \(self.nativeID ?? "N/A")"
+        + " - trigger cleanup"
+        + " - autoCleanupOnWindowNil == nil: \(self.autoCleanupOnWindowNil)"
+      );
+      #endif
+      
       self.cleanup();
     };
     

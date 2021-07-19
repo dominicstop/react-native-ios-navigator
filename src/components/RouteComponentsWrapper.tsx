@@ -42,20 +42,6 @@ export class RouteComponentsWrapper extends React.Component<RouteComponentsWrapp
     this._routeViewPortalRef = portalRef;
   };
 
-  requestUpdate(){
-    const props = this.props;
-
-    const hasComponents = (
-     (props.renderNavBarLeftItem  != null) || 
-     (props.renderNavBarRightItem != null) || 
-     (props.renderNavBarTitleItem != null)
-    );
-
-    if(hasComponents){
-      this.forceUpdate();
-    };
-  };
-
   render(){
     const props = this.props;
     const portalProps = this._routeViewPortalRef?.props;
@@ -76,6 +62,9 @@ export class RouteComponentsWrapper extends React.Component<RouteComponentsWrapp
       portalProps?.renderNavBarTitleItem?.(navigation) ??
       props.renderNavBarTitleItem?.(navigation)
     );
+
+    console.log('navBarTitleItem: ', navBarTitleItem != null);
+    
 
     return(
       <React.Fragment>
