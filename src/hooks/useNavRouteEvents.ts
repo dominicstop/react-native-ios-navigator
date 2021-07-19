@@ -27,9 +27,13 @@ function useNavRouteEvents(
   handler: Function
 ){
   const { navigation } = useContext(NavRouteViewContext);
+
+  if(navigation == null) throw new Error(
+    "Unable to get navigation object via context"
+  );
   
   // Create a ref that stores handler
-  const savedHandler = useRef(null);
+  const savedHandler = useRef<Function | null>(null);
 
   // Update ref.current value if handler changes.
   // This allows our effect below to always get latest handler ...
@@ -42,8 +46,12 @@ function useNavRouteEvents(
   useEffect(() => {
     const emitterRef = navigation.getRefToNavRouteEmitter();
 
+    if(emitterRef == null) throw new Error(
+      "Unable to get ref. to the route event emitter."
+    );
+
     // create event listener that calls handler function stored in ref
-    const eventListener = (params: any) => savedHandler.current(params);
+    const eventListener = (params: any) => savedHandler.current!(params);
 
     // subscribe to events
     emitterRef.addListener(eventName, eventListener);

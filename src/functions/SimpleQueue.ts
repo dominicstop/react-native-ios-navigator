@@ -1,4 +1,5 @@
-/** Very naive impl. of a async operation queue.
+/** 
+ * Very naive impl. of a async operation queue.
  * * For every call of `schedule`, `dequeue` must be called at the end
  *   to start the next operation in the queue.
  * * As such, the length of the queue is not enough by itself to diff. if
@@ -41,7 +42,7 @@ export class SimpleQueue {
       (item.queueKey === queueKey)
     );
 
-    if(queueItem){
+    if(queueItem != null){
       queueItem.reject();
 
     } else {
@@ -64,7 +65,7 @@ export class SimpleQueue {
   clear(){
     while (this.queue.length > 0) {
       const queueItem = this.queue.pop();
-      queueItem.reject("Queue was cleared before completion.");
+      queueItem && queueItem.reject("Queue was cleared before completion.");
     };
 
     this._isBusy = false;

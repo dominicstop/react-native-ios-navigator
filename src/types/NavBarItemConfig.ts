@@ -64,7 +64,7 @@ type SupportedImageTypes = {
   type: ImageTypes.IMAGE_EMPTY | "IMAGE_EMPTY";
 };
 
-type NavBarItemConfigBase = SupportedImageTypes | {
+export type NavBarItemConfigBase = SupportedImageTypes | {
   type: "TEXT";
   title: string;
 } | {
@@ -73,7 +73,7 @@ type NavBarItemConfigBase = SupportedImageTypes | {
   systemItem: BarButtonItemSystemItem;
 };
 
-type NavBarItemConfigCustomBase = {
+export type NavBarItemConfigCustomBase = {
   type: "CUSTOM";
 };
 
@@ -84,7 +84,7 @@ type BarButtonItemStyle =
   | 'done';
 
 /** Specifies the style of an item. */
-type NavBarItemConfigShared = {
+export type NavBarItemConfigShared = {
   /** Used for `onPressBarButtonItem` to distinguish item triggered the event */
   key?: String;
 
@@ -122,6 +122,7 @@ type NavBarItemConfigShared = {
 
 type ArrayWithOneElement<T> = { 0: T } & Array<T>;
 
+// TODO: Incomplete... missing back-button relate properties + Impl.
 export type NavBarBackItemConfig =
   & NavBarItemConfigBase
   & NavBarItemConfigShared

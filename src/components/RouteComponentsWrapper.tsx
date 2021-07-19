@@ -9,12 +9,12 @@ import { NativeIDKeys } from '../constants/LibraryConstants';
 import { RNIWrapperView } from '../native_components/RNIWrapperView';
 
 
-type RouteComponentsWrapperProps = Required<Pick<NavigatorRouteViewProps,
+type RouteComponentsWrapperProps = Pick<NavigatorRouteViewProps,
   // mirror props from `NavigatorRouteViewProps`
   | 'renderNavBarLeftItem'
   | 'renderNavBarRightItem'
   | 'renderNavBarTitleItem'
->> & {
+> & {
   navigation: NavigationObject;
   getPortalRef: () => RouteViewPortal;
 };

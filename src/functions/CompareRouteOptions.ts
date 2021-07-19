@@ -1,12 +1,12 @@
 
 import { CompareUtilities, ComparisonConfig } from './CompareUtilities';
+import { CompareNavBarBackItemConfig, CompareNavBarItemsConfig } from './CompareNavBarItemConfig';
+import { CompareImageConfig } from './CompareImageConfig';
 
 import type { RouteTransitionPushConfig, RouteTransitionPopConfig } from "../types/NavigationCommands";
-
-import type { NavBarItemConfig, NavBarItemsConfig, NavBarBackItemConfig } from "../types/NavBarItemConfig";
 import type { NavBarAppearance, NavBarAppearanceCombinedConfig, NavBarAppearanceConfig, NavBarAppearanceLegacyConfig } from '../types/NavBarAppearanceConfig';
 import type { RouteOptions } from "../types/RouteOptions";
-import type { ImageItemConfig } from "../types/ImageItemConfig";
+import { compareColor } from './CompareMisc';
 
 
 // Note: These functions are used to compare objects and decide whether or not to
@@ -20,152 +20,6 @@ import type { ImageItemConfig } from "../types/ImageItemConfig";
 // it'll do for now.
 
 
-export class CompareImageConfig {
-  static compare(oldItem?: ImageItemConfig, newItem?: ImageItemConfig){
-    if(CompareUtilities.isBothNull(oldItem, newItem)) return true;
-    if(!CompareUtilities.compareItemsNull(oldItem, newItem)) return false;
-
-    if(oldItem.type !== newItem.type) return false;
-    
-    switch (oldItem.type) {
-      case 'IMAGE_ASSET' :
-      case 'IMAGE_SYSTEM':
-        return (oldItem.imageValue !== (newItem as any).imageValue);
-
-      case 'IMAGE_REQUIRE':
-      case 'IMAGE_RECT':
-      case 'IMAGE_GRADIENT':
-        return CompareUtilities.shallowCompareObject(oldItem.imageValue, (newItem as any).imageValue);
-    };
-
-    return true;
-  };
-};
-
-export class CompareNavBarItemConfig {
-  static propertyMap: ComparisonConfig<NavBarItemConfig> = {
-    // shallow compare 
-    key  : { mode: 'shallow' },
-    type : { mode: 'shallow' },
-    width: { mode: 'shallow' },
-
-    barButtonItemStyle: { mode: 'shallow' },
-
-    // shallow compare object
-    tintColor      : { mode: 'shallowObject' },
-    possibleTitles : { mode: 'shallowObject' },
-
-    // custom compare
-    titlePositionAdjustment: {
-      mode: 'custom',
-      customCompare: CompareNavBarItemConfig.compareTitlePositionAdjustment,
-    },
-    backgroundImage: {
-      mode: 'custom',
-      customCompare: CompareNavBarItemConfig.compareBackgroundImage,
-    },
-  };
-
-  private static compareTitlePositionAdjustment(
-    oldItem: NavBarItemConfig['titlePositionAdjustment'], 
-    newItem: NavBarItemConfig['titlePositionAdjustment']
-  ): boolean {
-    if(!CompareUtilities.shallowCompareObject(oldItem, newItem)){
-      return false;
-    };
-
-    let key: keyof typeof oldItem;
-    for (key in oldItem) {
-      // compare each Offset object
-      if(!CompareUtilities.shallowCompareObject(oldItem[key], newItem[key])){
-        return false;
-      };
-    };
-
-    return true;
-  };
-
-  private static compareBackgroundImage(
-    oldItem: NavBarItemConfig['backgroundImage'], 
-    newItem: NavBarItemConfig['backgroundImage']
-  ): boolean {
-    if(!CompareUtilities.shallowCompareObject(oldItem, newItem)){
-      return false;
-    };
-
-    let key: keyof typeof oldItem;
-    for (key in oldItem) {
-      // compare each background image
-      if(!CompareUtilities.shallowCompareObject(oldItem[key], newItem[key])){
-        return false;
-      };
-    };
-
-    return true;
-  };
-
-  static compare(oldItem?: NavBarItemConfig, newItem?: NavBarItemConfig){
-    return (
-      CompareUtilities.compareObject(CompareNavBarItemConfig.propertyMap, oldItem, newItem) &&
-
-      // @ts-ignore
-      // compare `SupportedImageTypes`
-      oldItem.imageValue === newItem.imageValue && // @ts-ignore
-      // compare `NavBarItemConfigBase`
-      oldItem.title      === newItem.title      && // @ts-ignore 
-      oldItem.systemItem === newItem.systemItem 
-    );
-  };
-};
-
-export class CompareNavBarButtonBackItemConfig {
-  static propertyMap: ComparisonConfig<NavBarBackItemConfig> = {
-    ...CompareNavBarItemConfig.propertyMap,
-  };
-
-  static compare(oldItem?: NavBarBackItemConfig, newItem?: NavBarBackItemConfig){
-    if(CompareUtilities.isBothNull(oldItem, newItem)) return true;
-    if(!CompareUtilities.compareItemsNull(oldItem, newItem)) return false;
-
-    return (
-      // @ts-ignore
-      // compare `SupportedImageTypes`
-      oldItem.imageValue === newItem.imageValue && // @ts-ignore
-      // compare `NavBarItemConfigBase`
-      oldItem.title      === newItem.title      && // @ts-ignore 
-      oldItem.systemItem === newItem.systemItem &&
-
-      CompareUtilities.compareObject(CompareNavBarButtonBackItemConfig.propertyMap, oldItem, newItem)
-    );
-  };
-};
-
-export class CompareNavBarItemsConfig {
-  static compare(oldItem?: NavBarItemsConfig, newItem?: NavBarItemsConfig){
-    if(!CompareUtilities.compareArraySimple(oldItem, newItem)) return false;
-
-    for (let i = 0; i < oldItem?.length ?? 0; i++) {
-      const oldNavBarItem = oldItem[i];
-      const newBavBarItem = newItem[i];
-
-      if(CompareUtilities.isBothNull(oldNavBarItem, newBavBarItem)){
-        return true;
-
-      } else if (!CompareUtilities.compareItemsNull(oldNavBarItem, newBavBarItem)){
-        return false;
-        
-      } else if(!CompareNavBarItemConfig.compare(
-        oldNavBarItem as NavBarItemConfig, 
-        newBavBarItem as NavBarItemConfig
-      )){
-        return false;
-      };
-    };
-
-    return true;
-  };
-};
-
 export class CompareRouteTransitionPushConfig {
   static propertyMap: ComparisonConfig<RouteTransitionPushConfig> = {
     // shallow compare
@@ -173,8 +27,18 @@ export class CompareRouteTransitionPushConfig {
     duration: { mode: 'shallow' },
   };
 
-  static compare(oldItem?: RouteTransitionPushConfig, newItem?: RouteTransitionPushConfig){
-    return CompareUtilities.compareObject(CompareRouteTransitionPushConfig.propertyMap, oldItem, newItem);
+  static compare<T extends RouteTransitionPushConfig>(oldItem: T, newItem: T){
+    return CompareUtilities.compareObject(this.propertyMap, oldItem, newItem);
+  };
+
+  static unwrapAndCompare<T extends RouteTransitionPushConfig>(
+    oldItem: T | null | undefined, 
+    newItem: T | null | undefined
+  ){
+    if((oldItem == null) && (newItem == null)) return true;
+    if((oldItem == null) || (newItem == null)) return false;
+
+    return this.compare(oldItem, newItem);
   };
 };
 
@@ -185,8 +49,18 @@ export class CompareRouteTransitionPopConfig {
     duration: { mode: 'shallow' },
   };
 
-  static compare(oldItem?: RouteTransitionPopConfig, newItem?: RouteTransitionPopConfig){
+  static compare(oldItem: RouteTransitionPopConfig, newItem: RouteTransitionPopConfig){
     return CompareUtilities.compareObject(CompareRouteTransitionPopConfig.propertyMap, oldItem, newItem);
+  };
+
+  static unwrapAndCompare<T extends RouteTransitionPopConfig>(
+    oldItem: T | null | undefined, 
+    newItem: T | null | undefined
+  ){
+    if((oldItem == null) && (newItem == null)) return true;
+    if((oldItem == null) || (newItem == null)) return false;
+
+    return this.compare(oldItem, newItem);
   };
 };
 
@@ -203,8 +77,11 @@ export class CompareNavBarAppearance {
     // shallow compare object
     titleTextAttributes     : { mode: 'shallowObject' },
     largeTitleTextAttributes: { mode: 'shallowObject' },
-    backIndicatorImage      : { mode: 'shallowObject' },
 
+    backIndicatorImage: {
+      mode: 'custom',
+      customCompare: CompareImageConfig.compare,
+    },
     // custom compare
     backgroundImage: {
       mode: 'custom',
@@ -216,8 +93,8 @@ export class CompareNavBarAppearance {
     },
   };
 
-  static compare(oldItem?: NavBarAppearance, newItem?: NavBarAppearance){
-    return CompareUtilities.compareObject(CompareNavBarAppearance.propertyMap, oldItem, newItem);;
+  static compare<T extends NavBarAppearance>(oldItem: T, newItem: T){
+    return CompareUtilities.compareObject(this.propertyMap, oldItem, newItem, true);;
   };
 };
 
@@ -240,8 +117,8 @@ export class CompareNavBarAppearanceConfig {
     },
   };
 
-  static compare(oldItem?: NavBarAppearanceConfig, newItem?: NavBarAppearanceConfig){
-    return CompareUtilities.compareObject(CompareNavBarAppearanceConfig.propertyMap, oldItem, newItem);
+  static compare<T extends NavBarAppearanceConfig>(oldItem: T, newItem: T){
+    return CompareUtilities.compareObject(this.propertyMap, oldItem, newItem, true);
   };
 };
 
@@ -252,67 +129,36 @@ export class CompareLegacyAppearanceConfig {
     navBarPreset: { mode: 'shallow' },
 
     // shallow object compare
-    tintColor               : { mode: 'shallowObject'  },
-    barTintColor            : { mode: 'shallowObject'  },
-    backIndicatorImage      : { mode: 'shallowObject'  },
-    titleTextAttributes     : { mode: 'shallowObject'  },
-    largeTitleTextAttributes: { mode: 'shallowObject'  },
+    barTintColor            : { mode: 'shallowObject' },
+    titleTextAttributes     : { mode: 'shallowObject' },
+    largeTitleTextAttributes: { mode: 'shallowObject' },
+
+    backgroundImage                : { mode: 'deep' },
+    titleVerticalPositionAdjustment: { mode: 'deep' },
 
     // custom compare
-    backgroundImage: {
+    backIndicatorImage: {
       mode: 'custom',
-      customCompare: CompareLegacyAppearanceConfig.compareBackgroundImage,
+      customCompare: CompareImageConfig.compare,
     },
     shadowImage: {
       mode: 'custom',
       customCompare: CompareImageConfig.compare,
     },
-    titleVerticalPositionAdjustment: {
-      mode: 'custom',
-      customCompare: CompareLegacyAppearanceConfig.compareTitleVerticalPositionAdjustment
+    tintColor : { 
+      mode: 'custom', 
+      customCompare: compareColor,
     },
   };
 
-  static compareBackgroundImage(
-    oldItem?: NavBarAppearanceLegacyConfig['backgroundImage'], 
-    newItem?: NavBarAppearanceLegacyConfig['backgroundImage']
-  ){
-    if(CompareUtilities.isBothNull(oldItem, newItem)) return true;
-    if(!CompareUtilities.compareItemsNull(oldItem, newItem)) return false;
-
-    return (
-      CompareImageConfig.compare(oldItem.default      , newItem.default      ) &&
-      CompareImageConfig.compare(oldItem.defaultPrompt, newItem.defaultPrompt) &&
-      CompareImageConfig.compare(oldItem.compact      , newItem.compact      ) &&
-      CompareImageConfig.compare(oldItem.compactPrompt, newItem.compactPrompt) 
-    );
-  };
-
-  static compareTitleVerticalPositionAdjustment(
-    oldItem?: NavBarAppearanceLegacyConfig['titleVerticalPositionAdjustment'], 
-    newItem?: NavBarAppearanceLegacyConfig['titleVerticalPositionAdjustment']
-  ){
-    if(CompareUtilities.isBothNull(oldItem, newItem)) return true;
-    if(!CompareUtilities.compareItemsNull(oldItem, newItem)) return false;
-
-    return (
-      CompareUtilities.shallowCompareObject(oldItem.default      , newItem.default      ) &&
-      CompareUtilities.shallowCompareObject(oldItem.defaultPrompt, newItem.defaultPrompt) &&
-      CompareUtilities.shallowCompareObject(oldItem.compact      , newItem.compact      ) &&
-      CompareUtilities.shallowCompareObject(oldItem.compactPrompt, newItem.compactPrompt) 
-    );
-  };
-
-  static compare(oldItem?: NavBarAppearanceLegacyConfig, newItem?: NavBarAppearanceLegacyConfig){
-    return CompareUtilities.compareObject(CompareLegacyAppearanceConfig.propertyMap, oldItem, newItem);
+  static compare<T extends NavBarAppearanceLegacyConfig>(oldItem: T, newItem: T){
+    return CompareUtilities.compareObject(this.propertyMap, oldItem, newItem, true);
   };
 };
 
 export class CompareNavBarAppearanceCombinedConfig {
-  static compare(oldItem?: NavBarAppearanceCombinedConfig, newItem?: NavBarAppearanceCombinedConfig){
-    if(CompareUtilities.isBothNull(oldItem, newItem)) return true;
-    if(!CompareUtilities.compareItemsNull(oldItem, newItem)) return false;
 
+  static compare<T extends NavBarAppearanceCombinedConfig>(oldItem: T, newItem: T){
     return (
       oldItem.mode         === newItem.mode         &&
       oldItem.navBarPreset === newItem.navBarPreset && (
@@ -341,7 +187,6 @@ export class CompareRouteOptions {
     allowTouchEventsToPassThroughNavigationBar: { mode: 'shallow' },
     automaticallyAddHorizontalSafeAreaInsets  : { mode: 'shallow' },
 
-    // shallow object
     routeContainerStyle: {
       mode: 'shallowObject',
     },
@@ -349,14 +194,15 @@ export class CompareRouteOptions {
       mode: 'shallowObject',
     },
 
+    transitionConfigPush: {
+      mode: 'custom',
+      customCompare: CompareRouteTransitionPushConfig.compare,
+    },
+
     // custom compare
     navBarAppearanceOverride: {
       mode: 'custom',
       customCompare: CompareNavBarAppearanceCombinedConfig.compare,
-    },
-    transitionConfigPush: {
-      mode: 'custom',
-      customCompare: CompareRouteTransitionPushConfig.compare,
     },
     transitionConfigPop: {
       mode: 'custom',
@@ -372,11 +218,24 @@ export class CompareRouteOptions {
     },
     navBarButtonBackItemConfig: {
       mode: 'custom',
-      customCompare: CompareNavBarButtonBackItemConfig.compare,
+      customCompare: CompareNavBarBackItemConfig.compare,
     },
   };
 
-  static compare(oldItem?: RouteOptions, newItem?: RouteOptions){
-    return CompareUtilities.compareObject(CompareRouteOptions.propertyMap, oldItem, newItem);
+  static compare<T extends RouteOptions>(oldItem: T, newItem: T){
+    if((oldItem == null) && (newItem == null)) return true;
+    if((oldItem == null) || (newItem == null)) return false;
+
+    return CompareUtilities.compareObject(this.propertyMap, oldItem, newItem);
+  };
+
+  static unwrapAndCompare<T extends RouteOptions>(
+    oldItem: T | null | undefined, 
+    newItem: T | null | undefined
+  ){
+    if((oldItem == null) && (newItem == null)) return true;
+    if((oldItem == null) || (newItem == null)) return false;
+
+    return this.compare(oldItem, newItem);
   };
 };

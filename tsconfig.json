@@ -24,5 +24,6 @@
     "strict": false,
     "target": "esnext",
     "noImplicitAny": true,
+    "strictNullChecks": true,
   }
 }

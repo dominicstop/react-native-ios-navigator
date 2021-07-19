@@ -51,3 +51,5 @@ export type EnumValueLiteral
 
 export type KeyMapType
   <T extends string, K extends { [k in `${T}`]: any }> = K;
+
+export type NeverUndefined<T> = T extends undefined | null ? never : T;

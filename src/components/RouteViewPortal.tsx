@@ -61,7 +61,10 @@ export class RouteViewPortal extends React.Component<RouteViewPortalProps> {
     this.routeRef = routeRef;
 
     routeRef.setRouteViewPortalRef(this);
-    routeRef.setRouteOptions(props.routeOptions);
+
+    if(props.routeOptions != null){
+      routeRef.setRouteOptions(props.routeOptions);
+    };
   };
 
   componentDidMount(){
@@ -72,7 +75,7 @@ export class RouteViewPortal extends React.Component<RouteViewPortalProps> {
     const nextProps = this.props;
 
     const didRouteOptionsChange = 
-      !CompareRouteOptions.compare(prevProps.routeOptions, nextProps.routeOptions);
+      !CompareRouteOptions.unwrapAndCompare(prevProps.routeOptions, nextProps.routeOptions);
 
     this._routeComponentsWrapperRef?.requestUpdate();
 

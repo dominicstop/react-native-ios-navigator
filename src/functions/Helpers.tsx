@@ -1,4 +1,5 @@
 import type React from 'react';
+import { findNodeHandle } from 'react-native';
 
 /** wrapper func for setState that returns a promise */
 // eslint-disable-next-line consistent-this
@@ -66,7 +67,19 @@ export function addOptional
   return {...a, ...b};
 };
 
-export function shallowMergeObjects<T extends object | null>(a: T, b: T): T {
-  if(a == null && b == null) return null;
-  return { ...a, ...b };
+export function shallowMergeObjects<T extends object>(a: T | null | undefined, b: T | null | undefined): T | null {
+  if     (a == null && b == null) return null;
+  else if(a != null && b == null) return a;
+  else if(a == null && b != null) return b;
+  else return { ...a, ...b } as T;
+};
+
+export function getNativeNodeHandle(nativeRef: React.Component){
+  const nodeHandle = findNodeHandle(nativeRef);
+
+  if(nodeHandle == null){
+    throw new Error('Unable to get the node handle for the native ref.');
+  };
+
+  return nodeHandle;
 };

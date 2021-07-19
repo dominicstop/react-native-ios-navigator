@@ -10,7 +10,7 @@ import type { NavigatorRouteViewEventEmitter } from "./NavigatorRouteViewEventEm
 export type NavigationObject = {
   routeKey    : string;
   routeIndex  : number;
-  routeProps ?: object;
+  routeProps  : object | null;
   routeOptions: RouteOptions;
 
   // navigator commands

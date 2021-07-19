@@ -45,28 +45,53 @@ export type RNINavigatorRouteViewProps = {
   transitionConfigPop ?: RouteTransitionPopConfig;
 
   // Navbar Config
-  prompt?: String;
-  routeTitle?: string;
-  largeTitleDisplayMode?: LargeTitleDisplayMode;
+  prompt    ?: string | null;
+  routeTitle?: string | null;
+  largeTitleDisplayMode?: LargeTitleDisplayMode | null;
 
-  searchBarConfig?: RouteSearchControllerConfig;
+  searchBarConfig?: RouteSearchControllerConfig | null;
 
   // Navbar Item Config
-  navBarButtonBackItemConfig  ?: NavBarBackItemConfig;
-  navBarButtonLeftItemsConfig ?: NavBarItemsConfig;
-  navBarButtonRightItemsConfig?: NavBarItemsConfig;
+  navBarButtonBackItemConfig  ?: NavBarBackItemConfig | null;
+  navBarButtonLeftItemsConfig ?: NavBarItemsConfig    | null;
+  navBarButtonRightItemsConfig?: NavBarItemsConfig    | null;
 
   // Navbar back button item config
-  hidesBackButton?: boolean;
-  backButtonTitle?: string;
-  backButtonDisplayMode?: BackButtonDisplayMode;
-  leftItemsSupplementBackButton?: boolean;
-  applyBackButtonConfigToCurrentRoute?: boolean;
+  hidesBackButton              ?: boolean | null;
+  backButtonTitle              ?: string  | null;
+  backButtonDisplayMode        ?: BackButtonDisplayMode | null;
+  leftItemsSupplementBackButton?: boolean | null
+
+  /** 
+   * By default, the `navBarButtonBackItemConfig` and related properties (e.g. `backButtonDisplayMode`) 
+   * by default, does not affect the current route, but instead is applied to the next route
+   * that is pushed. 
+   * 
+   * As such, setting the back button config will not affect the current route unless this
+   * flag is set to `true`.
+   * 
+   * In other words, if this is set to true, the back button config will be applied to the prev.
+   * route so that the config will be applied to the current route (confusing, i know but this
+   * is how the `backItem` API works by default.)
+  **/
+  applyBackButtonConfigToCurrentRoute?: boolean | null;
   
   // `NavigationConfigOverride`-related
-  navBarAppearanceOverride?: NavBarAppearanceCombinedConfig;
-  navigationBarVisibility?: NavigationBarVisibilityMode;
-  allowTouchEventsToPassThroughNavigationBar: boolean;
+  /**
+   * If you are using the iOS 13+ appearance API (i.e. `mode: 'appearance'`), then it will use
+   * the appearance-related properties from `UINavigationItem` (e.g. `standardAppearance`, etc.)
+   * to override the current navigation bar customizations. 
+   * 
+   * Otherwise, if `legacy` mode is used, then it will override the current navigation bar 
+   * customizations via temp. changing the navigation bar properties when a route is focused, 
+   * and resetting it back to it's prev. values it's blurred.
+   * 
+   * **note**: Stick to one mode, switching between `appearance` and `legacy` is not supported.
+   */
+  navBarAppearanceOverride?: NavBarAppearanceCombinedConfig | null;
+  navigationBarVisibility ?: NavigationBarVisibilityMode    | null;
+
+  allowTouchEventsToPassThroughNavigationBar: boolean | null;
 
   // Native Events: Push
   onRouteWillPush?: OnRoutePushEvent;

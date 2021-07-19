@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { StyleSheet, View, findNodeHandle, ViewStyle } from 'react-native';
+import { StyleSheet, View, ViewStyle } from 'react-native';
 
 import type { NavigationObject } from '../types/NavigationObject';
 import type { RouteOptions } from '../types/RouteOptions';
@@ -20,7 +20,7 @@ import { RNINavigatorRouteViewModule } from '../native_modules/RNINavigatorRoute
 import * as Helpers from '../functions/Helpers';
 
 import { TSEventEmitter } from '../functions/TSEventEmitter';
-import { CompareRouteTransitionPushConfig } from '../functions/CompareRouteOptions';
+import { CompareRouteTransitionPopConfig, CompareRouteTransitionPushConfig } from '../functions/CompareRouteOptions';
 
 import { NavRouteViewContext } from '../context/NavRouteViewContext';
 import { NavigatorUIConstantsContext } from '../context/NavigatorUIConstantsContext';
@@ -35,7 +35,7 @@ import { NativeIDKeys } from '../constants/LibraryConstants';
 
 
 export interface RouteContentProps {
-  navigation?: NavigationObject;
+  navigation: NavigationObject;
 };
 
 enum RouteStatus {
@@ -51,31 +51,31 @@ enum RouteStatus {
   UNMOUNTED      = "UNMOUNTED"     ,
 };
 
-export type NavigatorRouteViewProps = Partial<Pick<RNINavigatorRouteViewProps,
+export type NavigatorRouteViewProps = Pick<RNINavigatorRouteViewProps,
   // mirror props from `RNINavigatorRouteViewProps`
   | 'routeID'
   | 'routeKey'
   | 'routeIndex'
->> & {
+> & {
   navigatorID: number;
 
-  routeProps: object;
+  routeProps: object | null;
   isRootRoute: boolean;
 
   currentActiveRouteIndex: number;
 
-  routeOptionsDefault: RouteOptions;
+  routeOptionsDefault: RouteOptions | null;
 
-  transitionConfigPushOverride: RouteTransitionPushConfig;
-  transitionConfigPopOverride: RouteTransitionPopConfig;
+  transitionConfigPushOverride: RouteTransitionPushConfig | null | undefined;
+  transitionConfigPopOverride : RouteTransitionPopConfig  | null | undefined;
 
   getRefToNavigator: () => NavigatorView;
   renderRouteContent: () => ReactElement<RouteContentProps>;
 
   // render nav bar items
-  renderNavBarLeftItem ?: RenderNavItem;
-  renderNavBarRightItem?: RenderNavItem;
-  renderNavBarTitleItem?: RenderNavItem;
+  renderNavBarLeftItem : RenderNavItem | null;
+  renderNavBarRightItem: RenderNavItem | null;
+  renderNavBarTitleItem: RenderNavItem | null;
 
   renderRouteHeader?: RenderNavItem;
 };
@@ -83,7 +83,7 @@ export type NavigatorRouteViewProps = Partial<Pick<RNINavigatorRouteViewProps,
 /** `NavigatorView` comp. state */
 type NavigatorRouteViewState = {
   updateIndex: number;
-  routeOptions: RouteOptions;
+  routeOptions: RouteOptions | null | undefined;
   hasRoutePortal: boolean;
 };
 //#endregion
@@ -133,14 +133,14 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
       // props: compare focus - topmost route <-> not topmost route
       || (routeIndex === prevProps.currentActiveRouteIndex) !== (routeIndex === nextProps.currentActiveRouteIndex)
       // props: compare "push transition config"
-      || CompareRouteTransitionPushConfig.compare(
+      || CompareRouteTransitionPushConfig.unwrapAndCompare(
         prevProps.transitionConfigPushOverride,
         nextProps.transitionConfigPushOverride
       )
       // props: compare "pop transition config"
-      || CompareRouteTransitionPushConfig.compare(
-        prevProps.transitionConfigPushOverride,
-        nextProps.transitionConfigPushOverride
+      || CompareRouteTransitionPopConfig.unwrapAndCompare(
+        prevProps.transitionConfigPopOverride,
+        nextProps.transitionConfigPopOverride
       )
       // state: compare `hasRoutePortal` - portal comp. added/removed 
       || (prevState.hasRoutePortal !== nextState.hasRoutePortal)
@@ -274,14 +274,14 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
         routeOptionsDefault?.navBarButtonLeftItemsConfig ??
         // custom left bar item was set, so we implicitly/automatically
         // create a `type: CUSTOM` nav bar item config...
-        (hasNavBarLeftItem? [{ type: 'CUSTOM' }] : null)
+        (hasNavBarLeftItem? [{ type: 'CUSTOM' }] : undefined)
       ),
       navBarButtonRightItemsConfig: (
         routeOptions       ?.navBarButtonRightItemsConfig ??
         routeOptionsDefault?.navBarButtonRightItemsConfig ??
         // custom right bar item was set, so we implicitly/automatically
         // create a `type: CUSTOM` nav bar item config...
-        (hasNavBarRightItem? [{ type: 'CUSTOM' }] : null)
+        (hasNavBarRightItem? [{ type: 'CUSTOM' }] : undefined)
       ),
       // #endregion ------------------------------*
       // #region - Navbar back button item config |
@@ -350,7 +350,7 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
     };
   };
   
-  public setRouteOptions = async (routeOptions: RouteOptions) => {
+  public setRouteOptions = async (routeOptions: RouteOptions | null | undefined) => {
     await Helpers.setStateAsync<NavigatorRouteViewState>(this, (prevState) => ({
       ...prevState, routeOptions,
       updateIndex: (prevState.updateIndex + 1),
@@ -375,7 +375,7 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
 
       await Helpers.promiseWithTimeout(1000,
         RNINavigatorRouteViewModule.setHidesBackButton(
-          findNodeHandle(this._nativeRef),
+          Helpers.getNativeNodeHandle(this._nativeRef),
           isHidden, animated
         )
       );
@@ -400,7 +400,7 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
 
       const result = await Helpers.promiseWithTimeout(1000,
         RNINavigatorRouteViewModule.getRouteConstants(
-          findNodeHandle(this._nativeRef)
+          Helpers.getNativeNodeHandle(this._nativeRef)
         )
       );
 
@@ -574,7 +574,7 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
       }}>
         <RNINavigatorRouteView
           style={styles.navigatorRouteView}
-          ref={r => { this._nativeRef = r }}
+          ref={r => { this._nativeRef = r! }}
           routeID={props.routeID}
           nativeID={NativeIDKeys.NavRouteItem}
           routeKey={props.routeKey}
@@ -604,7 +604,7 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
         >
           {this._renderRouteContents(navigation)}
           <RouteComponentsWrapper
-            ref={r => { this._routeComponentsWrapperRef = r }}
+            ref={r => { this._routeComponentsWrapperRef = r! }}
             navigation={navigation}
             getPortalRef={this.getPortalRef}
             // render nav bar items

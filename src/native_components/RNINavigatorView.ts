@@ -28,7 +28,7 @@ export type RNINavigatorViewProps = {
   // Customize the Bar's Appearance
   navBarPrefersLargeTitles: boolean;
   isNavBarTranslucent: boolean;
-  navBarAppearance: NavBarAppearanceCombinedConfig;
+  navBarAppearance: NavBarAppearanceCombinedConfig | null | undefined;
   
   // Native Events
   onNavRouteViewAdded?: OnNavRouteViewAddedEvent;

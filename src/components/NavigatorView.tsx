@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Platform, StyleSheet, findNodeHandle, ViewStyle } from 'react-native';
+import { Platform, StyleSheet, ViewStyle } from 'react-native';
 
 import { RNIWrapperView } from '../native_components/RNIWrapperView';
 import { NativeRouteMap, RNINavigatorView, RNINavigatorViewProps } from '../native_components/RNINavigatorView';
@@ -73,10 +73,10 @@ export type NavigatorViewProps = Partial<Pick<RNINavigatorViewProps,
 };
 
 /** `NavigatorView` comp. state */
-type NavigatorViewState = Pick<OnUIConstantsDidChangeEventObject['nativeEvent'],
+type NavigatorViewState = Partial<Pick<OnUIConstantsDidChangeEventObject['nativeEvent'],
   | 'statusBarHeight'
   | 'safeAreaInsets'
-> & {
+>> & {
   activeRoutes: Array<NavRouteStackItem>;
 
   // push/pop override config
@@ -93,7 +93,7 @@ const iOSVersion = parseInt(Platform.Version as string, 10);
 let NAVIGATOR_ID_COUNTER = 0;
 let ROUTE_ID_COUNTER     = 0;
 
-let nativeRouteKeys: Record<string, string> = null;
+let nativeRouteKeys: Record<string, string> = {};
 
 export class NavigatorView extends React.PureComponent<NavigatorViewProps, NavigatorViewState> {
   
@@ -134,11 +134,11 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     this.state = {
       activeRoutes: this.getInitialRoutes(),
 
-      transitionConfigPushOverride: null,
-      transitionConfigPopOverride: null,
+      transitionConfigPushOverride: undefined,
+      transitionConfigPopOverride: undefined,
 
-      safeAreaInsets: null,
-      statusBarHeight: null,
+      safeAreaInsets: undefined,
+      statusBarHeight: undefined,
     };
   };
 
@@ -150,7 +150,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   //#region - Private Functions
   private isValidRouteKey = (routeKey: string) => {
     const { routes } = this.props;
-    const hasNativeRouteKeyMatch = (nativeRouteKeys?.[routeKey] != null);
+    const hasNativeRouteKeyMatch = (nativeRouteKeys[routeKey] != null);
 
     return hasNativeRouteKeyMatch || routes.some(route => (
       route.routeKey === routeKey
@@ -183,7 +183,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       };
 
       const routeItem: NavRouteStackItem = {
-        isNativeRoute: config.isNativeRoute,
+        isNativeRoute: config.isNativeRoute!,
         routeID: ROUTE_ID_COUNTER++,
         routeIndex: index,
         routeKey: route.routeKey,
@@ -227,7 +227,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   };
 
   /** get route config with the matching `routeKey` */
-  private getRouteConfig = (routeKey: string): NavRouteConfigItem | null => {
+  private getRouteConfig = (routeKey: string): NavRouteConfigItem | undefined => {
     const { routes } = this.props;
 
     const routeConfig = routes.find(item => (item.routeKey === routeKey));
@@ -311,7 +311,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
           await Promise.all([
             // temp bugfix: delay so that pop transition config is set/received
             // from native.
-            !params.isPushing && Helpers.timeout(100),
+            params.isPushing? null : Helpers.timeout(100),
             // temporarily override the last route's push/pop transition
             Helpers.setStateAsync<Partial<NavigatorViewState>>(this, {
               transitionConfigPushOverride: params.pushConfig,
@@ -324,8 +324,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         if(hasTransitionConfig){
           // temporarily override the last route's push/pop transition
           await Helpers.setStateAsync<Partial<NavigatorViewState>>(this, {
-            transitionConfigPushOverride: null,
-            transitionConfigPopOverride : null,
+            transitionConfigPushOverride: undefined,
+            transitionConfigPopOverride : undefined,
           });
         };
       },
@@ -344,14 +344,15 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     }, [[], []] as [Array<number>, Array<number>]);
 
     const hasNativeRoutes = nativeRoutes.length > 0;
-    
+
     return Helpers.promiseWithTimeout(TIMEOUT_MOUNT, Promise.all([
-      // 1. wait for native routes to be init.
-      hasNativeRoutes && new Promise<void>(resolve => {
+      // 1. wait for native routes to be init. (if any)
+      hasNativeRoutes? new Promise<void>(resolve => {
         this.emitter.once(NavigatorViewEvents.onSetNativeRoutes, () => {
           resolve();
         });
-      }),
+      }) : null,
+      
       // 2. wait for react routes to be "received" from native
       ...reactRoutes.map(routeID => new Promise<void>(resolve => {
         this.emitter.once(NavigatorViewEvents.onNavRouteViewAdded, ({nativeEvent}) => {
@@ -364,7 +365,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   };
 
   private createStateSnapshot = () => {
-    let stateSnapshot: NavigatorViewState = null;
+    let stateSnapshot: NavigatorViewState | null = null;
 
     return {
       save: () => {
@@ -393,9 +394,11 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
     // trigger remove if:
     const shouldRemove = () => (
-      // - A the route to be removed has a valid `routeKey`
+      // - A. there's a param argument
+      (params != null) &&
+      // - B. the route to be removed has a valid `routeKey`
       this.isValidRouteKey(params.routeKey) &&
-      // - B. there are queued items to remove
+      // - C. there are queued items to remove
       (this.routesToRemove.length > 0)
     );
 
@@ -416,8 +419,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       //#region - 🐞 DEBUG 🐛
       LIB_GLOBAL.debugLog && console.log(
           `LOG/JS - NavigatorView, removeRouteBatchedFromState`
-        + ` - with routeKey: ${params.routeKey}`
-        + ` - routeIndex: ${params.routeIndex}`
+        + ` - with routeKey: ${params?.routeKey ?? 'N/A'}`
+        + ` - routeIndex: ${params?.routeIndex ?? 'N/A'}`
         + ` - navStatus: ${this.navStatus}`
         + ` - current activeRoutes: ${this.state.activeRoutes.length}`
         + ` - current routesToRemove: ${toBeRemoved.length}`
@@ -426,7 +429,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       //#endregion
 
       // Remove `routesToRemove` from `activeRoutes`.
-      await Helpers.setStateAsync<Partial<NavigatorViewState>>(this, 
+      await Helpers.setStateAsync<NavigatorViewState>(this, 
         ({activeRoutes: prevRoutes}) => ({
           activeRoutes: prevRoutes.filter((prevRoute) => !(
             toBeRemoved.some((removedRoute) => (
@@ -516,7 +519,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         // 1. Wait for new route to be added/init
         this.waitForRoutes([nextRoute]),
         // 2. Append new route to `activeRoutes`
-        Helpers.setStateAsync<Partial<NavigatorViewState>>(this, 
+        Helpers.setStateAsync<NavigatorViewState>(this, 
           ({activeRoutes: prevRoutes}) => ({
             activeRoutes: [...prevRoutes, nextRoute]
           })
@@ -526,7 +529,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       // forward "push" request to native module
       await Helpers.promiseWithTimeout(timeout,
         RNINavigatorViewModule.push(
-          findNodeHandle(this.nativeRef),
+          Helpers.getNativeNodeHandle(this.nativeRef),
           nextRoute.routeID, {
             isAnimated: (options?.isAnimated ?? true)
           }
@@ -584,14 +587,14 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       // forward "pop" request to native module
       const result = await Helpers.promiseWithTimeout(timeout,
         RNINavigatorViewModule.pop(
-          findNodeHandle(this.nativeRef), {
+          Helpers.getNativeNodeHandle(this.nativeRef), {
             isAnimated: options?.isAnimated ?? true,
           }
         )
       );
 
       // remove popped route from `activeRoutes`
-      await Helpers.setStateAsync<Partial<NavigatorViewState>>(this, 
+      await Helpers.setStateAsync<NavigatorViewState>(this, 
         (prevState) => ({
           activeRoutes: prevState.activeRoutes.filter((route) => !(
             (route.routeIndex === result.routeIndex) &&
@@ -650,7 +653,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       // forward `popToRoot` request to native module
       await Helpers.promiseWithTimeout(timeout,
         RNINavigatorViewModule.popToRoot(
-          findNodeHandle(this.nativeRef), {
+          Helpers.getNativeNodeHandle(this.nativeRef), {
             isAnimated: options?.isAnimated ?? true,
           }
         )
@@ -710,7 +713,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       await Helpers.promiseWithTimeout(TIMEOUT_COMMAND,
         RNINavigatorViewModule.removeRoute(
-          findNodeHandle(this.nativeRef),
+          Helpers.getNativeNodeHandle(this.nativeRef),
           routeToBeRemoved.routeID,
           routeToBeRemoved.routeIndex,
           animated
@@ -774,7 +777,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       await Helpers.promiseWithTimeout(TIMEOUT_COMMAND,
         RNINavigatorViewModule.removeRoutes(
-          findNodeHandle(this.nativeRef),
+          Helpers.getNativeNodeHandle(this.nativeRef),
           // routes to remove,
           routeIndices.map(routeIndex => ({
             routeIndex,
@@ -853,11 +856,11 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         // 2. replace route in state
         Helpers.setStateAsync<NavigatorViewState>(this, (prevState) => ({
           ...prevState,
-          activeRoutes: prevState.activeRoutes.map((route, index) => (
-            (routeToReplace.routeID === route.routeID)
-              ? { routeIndex: index, ...replacementRoute } 
-              : { routeIndex: index, ...route }
-          ))
+          activeRoutes: prevState.activeRoutes.map((route, index) => ({
+            ...((routeToReplace.routeID === route.routeID)? replacementRoute : route),
+            // overwrite new route index...
+            routeIndex: index
+          }))
         })),
       ]);
 
@@ -866,7 +869,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       // forward command to native module
       await Helpers.promiseWithTimeout(TIMEOUT_COMMAND,
         RNINavigatorViewModule.replaceRoute(
-          findNodeHandle(this.nativeRef),
+          Helpers.getNativeNodeHandle(this.nativeRef),
           prevRouteIndex,
           routeToReplace.routeID,
           replacementRoute.routeID,
@@ -937,7 +940,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         // 1. wait for next route to be added/init
         this.waitForRoutes([nextRoute]),
         // 2. append new route to `activeRoutes`
-        Helpers.setStateAsync<Partial<NavigatorViewState>>(this, 
+        Helpers.setStateAsync<NavigatorViewState>(this, 
           ({activeRoutes: prevRoutes}) => ({
             activeRoutes: Helpers.arrayInsert(prevRoutes, atIndex, nextRoute)
               .map((route, index) => ({...route, routeIndex: index}))
@@ -948,7 +951,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       // forward command to native module
       await Helpers.promiseWithTimeout(TIMEOUT_COMMAND,
         RNINavigatorViewModule.insertRoute(
-          findNodeHandle(this.nativeRef),
+          Helpers.getNativeNodeHandle(this.nativeRef),
           nextRoute.routeID,
           atIndex,
           animated
@@ -1007,20 +1010,42 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         }))
       );
 
-      const nextRoutes: Array<NavRouteStackItem> = transformResult.map((route, index) => ({
-        routeProps: route.routeProps,
-        // merge old + new route items
-        ...currentRoutesMap[route.routeID], ...route,
-        // assign new routeIndex
-        routeIndex: index,
-        // assign a routeID if it doesn't have one yet
-        routeID: route.routeID ?? ROUTE_ID_COUNTER++,
-      }));
+      const nextRoutes: Array<NavRouteStackItem> = transformResult.map((route, index) => {
+        const prevRoute = route.routeID && currentRoutesMap[route.routeID];
+        
+        if(prevRoute){
+          return {
+            // merge old + new route items
+            ...prevRoute, ...route,
+            // assign new routeIndex
+            routeIndex: index,
+          };
+
+        } else {
+          const routeConfig = this.getRouteConfig(route.routeKey);
+
+          if(routeConfig == null){
+            throw new Error(
+                'Transform callback returned an invalid route key.'
+              + `No matching route config for routeKey: ${route.routeKey}`
+            );
+          };
+
+          return {
+            ...route,
+            // assign a routeID since it's a new route
+            routeID: ROUTE_ID_COUNTER++,
+            // assign a routeIndex
+            routeIndex: index,
+            isNativeRoute: routeConfig.isNativeRoute ?? false,
+          };
+        };
+      });
 
       // get nextRoutes items that aren't mounted/added yet
-      const nextRoutesNew = nextRoutes.filter(newRoute => (
+      const nextRoutesNew = nextRoutes.filter(nextRoute => (
         !currentRoutes.some(currentRoute => (
-          currentRoute.routeID === newRoute.routeID
+          currentRoute.routeID === nextRoute.routeID
         ))
       ));
 
@@ -1045,7 +1070,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       // forward command to native module
       await Helpers.promiseWithTimeout(TIMEOUT_COMMAND,
         RNINavigatorViewModule.setRoutes(
-          findNodeHandle(this.nativeRef),
+          Helpers.getNativeNodeHandle(this.nativeRef),
           nextRoutes.map(route => route.routeID),
           animated
         )
@@ -1077,7 +1102,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     try {
       await Helpers.promiseWithTimeout(TIMEOUT_COMMAND,
         RNINavigatorViewModule.setNavigationBarHidden(
-          findNodeHandle(this.nativeRef),
+          Helpers.getNativeNodeHandle(this.nativeRef),
           isHidden, animated
         )
       );
@@ -1146,7 +1171,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   ): Promise<object | null> => {
 
     return await RNINavigatorViewModule.sendCustomCommandToNative(
-      findNodeHandle(this.nativeRef),
+      Helpers.getNativeNodeHandle(this.nativeRef),
       commandKey,
       commandData
     );
@@ -1156,7 +1181,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     try {
       const result = await Helpers.promiseWithTimeout(1000,
         RNINavigatorViewModule.getNavigatorConstants(
-          findNodeHandle(this.nativeRef)
+          Helpers.getNativeNodeHandle(this.nativeRef)
         )
       );
 
@@ -1227,7 +1252,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
             // 1. wait for the native route to be init
             this.waitForRoutes([nextRoute]),
             // 2. Append new route to `activeRoutes`
-            Helpers.setStateAsync<Partial<NavigatorViewState>>(this,
+            Helpers.setStateAsync<NavigatorViewState>(this,
               ({activeRoutes: prevRoutes}) => ({
                 activeRoutes: [...prevRoutes, nextRoute]
               })
@@ -1237,7 +1262,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
           // forward "push" request to native module
           await Helpers.promiseWithTimeout(TIMEOUT_COMMAND,
             RNINavigatorViewModule.push(
-              findNodeHandle(this.nativeRef),
+              Helpers.getNativeNodeHandle(this.nativeRef),
               nextRoute.routeID, {
                 isAnimated: commandData.isAnimated
               }
@@ -1373,7 +1398,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       return (
         <NavigatorRouteView
           key={`routeID-${route.routeID}`}
-          ref={r => { this.routeRefMap[route.routeID] = r }}
+          ref={r => { this.routeRefMap[route.routeID] = r! }}
           navigatorID={this.navigatorID}
           routeID={route.routeID}
           routeIndex={route.routeIndex}
@@ -1391,11 +1416,11 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
             route.routeOptions
           )}
           transitionConfigPushOverride={(isSecondToLast
-            ? state.transitionConfigPushOverride
+            ? state.transitionConfigPushOverride ?? null
             : null
           )}
           transitionConfigPopOverride ={(isLast
-            ? state.transitionConfigPopOverride
+            ? state.transitionConfigPopOverride 
             : null
           )}
           getRefToNavigator={this._handleGetRefToNavigator}
@@ -1423,10 +1448,14 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     const props = this.props;
     const state = this.state;
 
+    const style = (props.style == null) 
+      ? styles.navigatorView 
+      : [styles.navigatorView, props.style];
+
     return (
       <RNINavigatorView 
-        ref={r => { this.nativeRef = r }}
-        style={[styles.navigatorView, props.style]}
+        ref={r => { this.nativeRef = r! }}
+        style={style}
         // General config
         navigatorID={this.navigatorID}
         isInteractivePopGestureEnabled={props.isInteractivePopGestureEnabled ?? true}
