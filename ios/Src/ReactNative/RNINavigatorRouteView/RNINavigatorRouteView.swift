@@ -588,6 +588,8 @@ internal class RNINavigatorRouteView: UIView {
         self.reactNavBarRightItem = wrapperView!;
         
       case .NavBarTitleItem:
+        wrapperView?.willChangeSuperview = true;
+        
         self.reactNavBarTitleItem = wrapperView!;
         self.delegate?.didReceiveNavBarButtonTitleView(subview);
     };

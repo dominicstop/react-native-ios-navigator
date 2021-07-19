@@ -30,6 +30,9 @@ internal class RNIWrapperView: UIView {
   
   var autoSetSizeOnLayout = true;
   
+  var willChangeSuperview = false;
+  private var didChangeSuperview = false;
+  
   private var touchHandler: RCTTouchHandler!;
   
   // ---------------------
@@ -56,16 +59,35 @@ internal class RNIWrapperView: UIView {
   };
   
   override func didMoveToWindow() {
-    if self.window == nil && self.autoCleanupOnWindowNil {
+    #if DEBUG
+    print("LOG - RNIWrapperView, didMoveToWindow"
+      + " - for nativeID: \(self.nativeID ?? "N/A")"
+      + " - willChangeSuperview: \(self.willChangeSuperview)"
+      + " - didChangeSuperview: \(self.didChangeSuperview)"
+      + " - self.window is nil: \(self.window == nil)"
+      + " - self.superview is nil: \(self.superview == nil)"
+      + " - autoCleanupOnJSUnmount == nil: \(self.autoCleanupOnJSUnmount)"
+    );
+    #endif
+    
+    /// * if `willChangeSuperview` is true, don't allow cleanup until
+    ///   `didChangeSuperview` is also true.
+    /// * Otherwise, if `willChangeSuperview` is false, allow cleanup.
+    let triggerCleanup = self.willChangeSuperview ? self.didChangeSuperview : true;
+    
+    if self.window == nil, self.autoCleanupOnWindowNil, triggerCleanup {
       #if DEBUG
       print("LOG - RNIWrapperView, didMoveToWindow"
         + " - for nativeID: \(self.nativeID ?? "N/A")"
         + " - trigger cleanup"
-        + " - autoCleanupOnJSUnmount == nil: \(self.autoCleanupOnJSUnmount)"
       );
       #endif
       
       self.cleanup();
+    };
+    
+    if self.window == nil, self.willChangeSuperview {
+      self.didChangeSuperview = true;
     };
   };
   
