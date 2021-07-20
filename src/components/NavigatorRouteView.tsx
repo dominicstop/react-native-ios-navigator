@@ -35,7 +35,7 @@ import { NativeIDKeys } from '../constants/LibraryConstants';
 
 
 export interface RouteContentProps {
-  navigation: NavigationObject;
+  navigation?: NavigationObject;
 };
 
 enum RouteStatus {
