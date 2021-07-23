@@ -38,11 +38,11 @@ export type RNINavigatorRouteViewProps = {
   routeKey: string;
   routeIndex: number;
 
-  statusBarStyle?: StatusBarStyle;
+  statusBarStyle?: StatusBarStyle | null;
 
   // Transition Config
-  transitionConfigPush?: RouteTransitionPushConfig;
-  transitionConfigPop ?: RouteTransitionPopConfig;
+  transitionConfigPush?: RouteTransitionPushConfig | null;
+  transitionConfigPop ?: RouteTransitionPopConfig  | null;
 
   // Navbar Config
   prompt    ?: string | null;
@@ -60,7 +60,7 @@ export type RNINavigatorRouteViewProps = {
   hidesBackButton              ?: boolean | null;
   backButtonTitle              ?: string  | null;
   backButtonDisplayMode        ?: BackButtonDisplayMode | null;
-  leftItemsSupplementBackButton?: boolean | null
+  leftItemsSupplementBackButton?: boolean | null;
 
   /** 
    * By default, the `navBarButtonBackItemConfig` and related properties (e.g. `backButtonDisplayMode`) 

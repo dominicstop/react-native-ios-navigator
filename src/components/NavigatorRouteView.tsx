@@ -34,8 +34,8 @@ import { NativeIDKeys } from '../constants/LibraryConstants';
 
 
 
-export interface RouteContentProps {
-  navigation?: NavigationObject;
+export interface RouteContentProps<T = object> {
+  navigation?: NavigationObject<T>;
 };
 
 enum RouteStatus {
@@ -333,6 +333,7 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
       // pass down misc. navigator commands
       sendCustomCommandToNative: this._navigatorRef.sendCustomCommandToNative,
       getNavigatorConstants    : this._navigatorRef.getNavigatorConstants,
+      getActiveRoutes          : this._navigatorRef.getActiveRoutes,
       // pass down convenience navigator commands
       replacePreviousRoute: this._navigatorRef.replacePreviousRoute,
       replaceCurrentRoute : this._navigatorRef.replaceCurrentRoute,

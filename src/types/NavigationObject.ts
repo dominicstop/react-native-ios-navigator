@@ -7,10 +7,10 @@ import type { RouteOptions } from "./RouteOptions";
 
 import type { NavigatorRouteViewEventEmitter } from "./NavigatorRouteViewEventEmitter";
 
-export type NavigationObject = {
+export type NavigationObject<T = object> = {
   routeKey    : string;
   routeIndex  : number;
-  routeProps  : object | null;
+  routeProps  : T | null;
   routeOptions: RouteOptions;
 
   // navigator commands
@@ -34,6 +34,8 @@ export type NavigationObject = {
   // misc. navigator commands
   sendCustomCommandToNative: typeof NavigatorView.prototype.sendCustomCommandToNative;
   getNavigatorConstants    : typeof NavigatorView.prototype.getNavigatorConstants;
+
+  getActiveRoutes: typeof NavigatorView.prototype.getActiveRoutes;
 
   // route commands
   getRouteOptions: typeof NavigatorRouteView.prototype.getRouteOptions;
