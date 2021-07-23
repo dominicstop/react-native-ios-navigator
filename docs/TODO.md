@@ -8,7 +8,6 @@
 
 - [ ] Merge `routeProps` from `NavigatorView.initialRoutes`, `NavRouteConfigItem.initialRouteProps`, and `NavRouteStackItem.routeProps`.
 - [ ] Types - Update function parameters to be readonly.
-- [ ] Types - Refactor `useNavRouteEvents` to use mapped types.
 - [ ] Update `OnRoutePop` to receive `isAnimated` parameter.
 
 <br>
@@ -248,16 +247,13 @@
 ### Version: `next
 
 - [x] (Commit: `c3d4ac1`) **Refactor**: Types — Update `EventEmitter` to use mapped types i.e. each event will be mapped to an event handler. Then via generics the "event map" will be used to inject the type to the listener parameter depending on the event key.
-
 - [x] (Commit: `b7fcf61`) **Refactor**: Enable `strictNullChecks` for library.
-
 - [x] (Commit: `bd6341a`) **Fix**: `RouteViewPortal.renderNavBarTitleItem` not updating when component is mounted/unmounted.
-
 - [x] (Commit: `3da44f3`) **Implement**: Impl. navigation command for `NavigationObject`  to get the current navigation stack. One use case could be for it to be called inside a navbar render item and read the current navigation stack to display the prev. routes's title, etc.
 	- Note: `NavigatorView.getActiveRoutes` already exist so maybe just expose that to the navigation object.
 	- Maybe also add get prev. route and get current route for convenience.
-
 - [x] (Commit: `815e56c`) **Examples**: Add tester for the navigation events.
+- [x] (Commit: `21322a1`) Types - Refactor `useNavRouteEvents` to use mapped types.
 
 
 
