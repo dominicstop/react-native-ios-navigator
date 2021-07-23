@@ -1,30 +1,17 @@
 import { useContext, useEffect, useRef } from 'react';
 
-import type { OnPressNavBarItemEvent, OnRoutePopEvent, OnRoutePushEvent } from '../types/RNINavigatorRouteViewEvents';
-import type { NavigatorRouteViewEvents } from '../types/NavigatorRouteViewEventEmitter';
+import type { NavigatorRouteViewEvents, NavigatorRouteViewEventMap } from '../types/NavigatorRouteViewEventEmitter';
+import type { EnumValuesLiteral } from 'src/types/UtilityTypes';
 
 import { NavRouteViewContext } from '../context/NavRouteViewContext';
 
 
-/** Route push/pop events */
-type NavRouteLifeCycleEvents = 
-  | (NavigatorRouteViewEvents.onRouteWillPush  | 'onRouteWillPush' )
-  | (NavigatorRouteViewEvents.onRouteDidPush   | 'onRouteDidPush'  )
-  | (NavigatorRouteViewEvents.onRouteWillPop   | 'onRouteWillPop'  )
-  | (NavigatorRouteViewEvents.onRouteDidPop    | 'onRouteDidPop'   )
-  | (NavigatorRouteViewEvents.onRouteWillFocus | 'onRouteWillFocus')
-  | (NavigatorRouteViewEvents.onRouteDidFocus  | 'onRouteDidFocus' )
-  | (NavigatorRouteViewEvents.onRouteWillBlur  | 'onRouteWillBlur' )
-  | (NavigatorRouteViewEvents.onRouteDidBlur   | 'onRouteDidBlur'  )
-
-/** Route navigation bar item events */
-type NavBarItemEvents = 
-  | (NavigatorRouteViewEvents.onPressNavBarLeftItem  | 'onPressNavBarLeftItem' )
-  | (NavigatorRouteViewEvents.onPressNavBarRightItem | 'onPressNavBarRightItem')
-
-function useNavRouteEvents(
-  eventName: NavRouteLifeCycleEvents | NavBarItemEvents,
-  handler: Function
+export function useNavRouteEvents<
+  T extends EnumValuesLiteral<NavigatorRouteViewEvents>,
+  K extends NavigatorRouteViewEventMap[T]
+>(
+  eventName: T,
+  handler: (even: K) => void
 ){
   const { navigation } = useContext(NavRouteViewContext);
 
@@ -61,18 +48,4 @@ function useNavRouteEvents(
       emitterRef.removeListener(eventName, eventListener);
     };
   });
-};
-
-export function useNavRouteLifeCycle(
-  eventName: NavRouteLifeCycleEvents, 
-  handler: OnRoutePushEvent | OnRoutePopEvent
-){
-  useNavRouteEvents(eventName, handler);
-};
-
-export function useNavBarItemEvents(
-  eventName: NavBarItemEvents, 
-  handler: OnPressNavBarItemEvent
-){
-  useNavRouteEvents(eventName, handler);
 };
