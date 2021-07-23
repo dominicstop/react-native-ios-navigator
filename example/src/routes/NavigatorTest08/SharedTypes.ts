@@ -1,4 +1,3 @@
-import type { RouteContentProps } from "react-native-ios-navigator";
 
 export type EventData = {
   timestamp: number;

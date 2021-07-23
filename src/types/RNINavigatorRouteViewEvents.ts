@@ -16,7 +16,6 @@ export type OnRoutePushEventObject = {
   };
 };
 
-// TODO: Add `isAnimated` param 
 export type OnRoutePopEventObject = {
   nativeEvent: BaseEventObject & {
     isUserInitiated: boolean;
