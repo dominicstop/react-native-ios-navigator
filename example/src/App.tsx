@@ -23,6 +23,7 @@ import { RouteViewPortalExample01 } from './routes/RouteViewPortalExample01';
 
 import * as Colors  from './constants/Colors';
 import * as Helpers from './functions/Helpers';
+import { NavigatorTest08 } from './routes/NavigatorTest08';
 
 
 const RouteKeys = {
@@ -36,6 +37,7 @@ const RouteKeys = {
   NavigatorTest05: 'NavigatorTest05',
   NavigatorTest06: 'NavigatorTest06',
   NavigatorTest07: 'NavigatorTest07',
+  NavigatorTest08: 'NavigatorTest08',
 
   NavigatorDemo01: 'NavigatorDemo01',
   NavigatorDemo02: 'NavigatorDemo02',
@@ -101,6 +103,13 @@ const RouteItems = [{
   routeKey: RouteKeys.NavigatorTest07,
   title: 'Route Header Test #2',
   desc: `Tester for a route with a 'RouteHeaderView' that's fixed.`
+}, {
+  routeKey: RouteKeys.NavigatorTest08,
+  title: 'RouteViewEvents Test',
+  desc: (
+      `Tester for listening to the different route view events via`
+    + `the RouteViewEvents component`
+  )
 }, { 
   routeKey: RouteKeys.NavigatorDemo01,
   title: 'Navigator Nested Layout',
@@ -206,6 +215,14 @@ const ROUTES: Array<NavRouteConfigItem> = [{
   routeKey: RouteKeys.NavigatorTest07,
   renderRoute: () => (
     <NavigatorTest07/>
+  ),
+}, {
+  routeKey: RouteKeys.NavigatorTest08,
+  routeOptionsDefault: {
+    largeTitleDisplayMode: 'never',
+  },
+  renderRoute: () => (
+    <NavigatorTest08/>
   ),
 }, {
   routeKey: RouteKeys.NavigatorDemo01,
