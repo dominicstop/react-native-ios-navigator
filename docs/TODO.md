@@ -1,16 +1,15 @@
 # TODO
 
-## Table of Contents
-
-[TOC]
-
----
-
-<br>
-
 ## In Progress
 
 ---
+
+## Unsorted
+
+- [ ] Merge `routeProps` from `NavigatorView.initialRoutes`, `NavRouteConfigItem.initialRouteProps`, and `NavRouteStackItem.routeProps`.
+- [ ] Types - Update function parameters to be readonly.
+- [ ] Types - Refactor `useNavRouteEvents` to use mapped types.
+- [ ] Update `OnRoutePop` to receive `isAnimated` parameter.
 
 <br>
 
@@ -39,10 +38,15 @@
 <br>
 
 - [ ] **Implement**: Support for pushing native routes with `routeOptions`
-
 - [ ] **Implement**: Add prop  `lazyMountRoute`
-- [ ] **Implement**: transition: zoom in/out
-- [ ] **Implement**: transition: flip
+
+<br>
+
+* Route Transitions-Related
+	* [ ] **Implement**: transition: zoom in/out
+	* [ ] **Implement**: transition: flip
+	* [ ] **Implement**: Add easing to transition config
+	* [ ] **Implement**: Create custom animation stack push (like card, fromview static zoom out, toView left)
 
 <br>
 
@@ -61,8 +65,6 @@
 
 <br>
 
-- [ ] **Implement**: Add easing to transition config
-
 
 - [ ] **Implement**: Update nav route to support lazy mount
 
@@ -72,7 +74,6 @@
 <br>
 
 
-- [ ] **Implement**: Create custom animation stack push (like card, fromview static zoom out, toView left)
 - [ ] **Implement**: RouteView isFocused in state, in vc will appear/disappear check if vc is actually focused or not before sending event
 
 <br>
@@ -107,17 +108,10 @@
 
 <br>
 
-- [ ] **Implement**: Impl. navigation command for `NavigationObject`  to get the current navigation stack. One use case could be for it to be called inside a navbar render item and read the current navigation stack to display the prev. routes's title, etc.
-	- Note: `NavigatorView.getActiveRoutes` already exist so maybe just expose that to the navigation object.
-	- Maybe also add get prev. route and get current route for convenience.
-
-<br>
-
 - [ ] **Implement**: `NavigatorView` event: `onRouteFocusWillChange` and `onRouteFocusDidChange`.
-	- `nativeEvent.prevInFocus`, and `nativeEvent.nextInFocus`.
+	- Event Args: `nativeEvent.prevInFocus`, and `nativeEvent.nextInFocus`.
 - [ ] **Implement**: Update route config (i.e. `NavRouteConfigItemJS`) to accept `renderRouteHeader`.
 - [ ] **Implement**: Shallow merge route options and route props (e.g. `initialRouteOptions`, `routeOptionsDefault`, etc).
-- [ ] make func readonly
 
 <br>
 
@@ -184,7 +178,7 @@
 
 <br>
 
-- [ ] **Refactor**: Types — Update `EventEmitter` to use mapped types i.e. each event will be mapped to an event handler. Then via generics the "event map" will be used to inject the type to the listener parameter depending on the event key.
+- [ ] **Refactor**: Refactor `NavigatorView.routes` prop to accept an object instead of an array.
 
 ------
 
@@ -214,6 +208,12 @@
 - [ ] **Fix**: `RCTScrollView` indicator insets is wrong.
   - For devices with notches, the scroll view insets for the left and right of the screen is wrong. The top and bottom insets are correct (e.g. the scroll indicator insets are insetted from the home indicator and navigation bar).
 
+<br>
+
+- [ ] **Fix**: Navigation push/pop event not triggered if route is added via `insetRoute` (see `NavigatorTest08`).
+
+- [ ] **Fix**: When removing a route via `removeRoute`, only `onRouteWillPop` is triggered  (see `NavigatorTest08`).
+
 ---
 
 <br>
@@ -236,7 +236,6 @@
 - [ ] **Example**: Add new showcase for `RouteHeaderView` — A header that has complex controls when expanded (e.g. kinda like [this](https://uptech.team/blog/implement-airbnb-like-expandable-menu-on-ios)).
 - [ ] **Example**: Update `NavigatorTest02`
 - [ ] **Example**: Create "item picker" example.
-
 	- A new route is pushed that will present a list of options. When an item is selected, the selected item should be sent back to the previous route.
 	- Send a function via route props to the "sub" route that will call set state on the "main" route. 
 
@@ -246,9 +245,23 @@
 
 ## Completed
 
-### Version: `next`
+### Version: `next
+
+- [x] (Commit: `c3d4ac1`) **Refactor**: Types — Update `EventEmitter` to use mapped types i.e. each event will be mapped to an event handler. Then via generics the "event map" will be used to inject the type to the listener parameter depending on the event key.
+
+- [x] (Commit: `b7fcf61`) **Refactor**: Enable `strictNullChecks` for library.
 
 - [x] (Commit: `bd6341a`) **Fix**: `RouteViewPortal.renderNavBarTitleItem` not updating when component is mounted/unmounted.
+
+- [x] (Commit: `3da44f3`) **Implement**: Impl. navigation command for `NavigationObject`  to get the current navigation stack. One use case could be for it to be called inside a navbar render item and read the current navigation stack to display the prev. routes's title, etc.
+	- Note: `NavigatorView.getActiveRoutes` already exist so maybe just expose that to the navigation object.
+	- Maybe also add get prev. route and get current route for convenience.
+
+- [x] (Commit: `815e56c`) **Examples**: Add tester for the navigation events.
+
+
+
+
 
 ### Version: `0.1.4`
 
