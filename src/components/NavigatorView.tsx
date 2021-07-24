@@ -41,8 +41,15 @@ enum NavStatus {
   NAV_ABORT      = "NAV_ABORT"     , // nav. has been popped before push completed
 };
 
+// TODO: Move to types/InternalTypes
+type NavRouteConfigItemExtended = NavRouteConfigItem & {
+  routeKey: NavRouteItem['routeKey'];
+};
+
 export type SetRoutesTransformCallback = 
   (currentRoutes: Array<NavRouteStackPartialItem>) => Array<NavRouteStackPartialItem>;
+
+export type NavRoutesConfigMap = { [k: string]: NavRouteConfigItem };
 
 /** `NavigatorView` comp. props */
 export type NavigatorViewProps = Partial<Pick<RNINavigatorViewProps,
@@ -60,7 +67,7 @@ export type NavigatorViewProps = Partial<Pick<RNINavigatorViewProps,
   style?: ViewStyle;
 
   // Nav. Route Config
-  routes: Array<NavRouteConfigItem>;
+  routes: NavRoutesConfigMap;
   initialRoutes: Array<NavRouteItem>;
   routeContainerStyle?: ViewStyle;
   
@@ -121,6 +128,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   
   constructor(props: NavigatorViewProps){
     super(props);
+    this.verifyProps();
 
     this.navigatorID = NAVIGATOR_ID_COUNTER++;
 
@@ -129,6 +137,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
     this.emitter = new TSEventEmitter();
     this.queue = new SimpleQueue();
+
 
     this.state = {
       activeRoutes: this.getInitialRoutes(),
@@ -147,22 +156,54 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   };
 
   //#region - Private Functions
+  private verifyProps = () => {
+    const props = this.props;
+
+    if(props.routes == null) throw new Error(
+      'The NavigatorView.routes prop cannot be empty.'
+    );
+
+    if(typeof props.routes !== 'object' || Array.isArray(props.routes)) throw new Error(
+      'The value passed to the NavigatorView.routes prop must be an object.'
+    );
+
+    const routeKeys = Object.keys(props.routes);
+
+    if(routeKeys.length === 0) throw new Error(
+        'The NavigatorView.routes prop cannot be an empty object.'
+      + ' There must be at least one valid route.'
+    );
+
+    for (const routeKey of routeKeys) {
+      const routeConfig = props.routes[routeKey];
+
+      // skip native routes...
+      if(routeConfig.isNativeRoute) continue;
+
+      if(routeConfig.renderRoute == null) throw new Error(
+          `Invalid route config for ${routeKey} in NavigatorView.routes prop.`
+        + ` Missing 'renderRoute' function (all JS routes must have a component to render).`
+      );
+      
+    };
+  };
+
   private isValidRouteKey = (routeKey: string) => {
     const { routes } = this.props;
-    const hasNativeRouteKeyMatch = (nativeRouteKeys[routeKey] != null);
 
-    return hasNativeRouteKeyMatch || routes.some(route => (
-      route.routeKey === routeKey
-    ));
+    const hasNativeRouteKeyMatch = (nativeRouteKeys[routeKey] != null);
+    const hasRoutesConfigMatch   = (routes[routeKey] !== undefined);
+
+    return (hasNativeRouteKeyMatch || hasRoutesConfigMatch);
   };
 
   private getInitialRoutes = (): Array<NavRouteStackItem> => {
     const { initialRoutes } = this.props;
 
-    // guard: initial validation for `initialRoutes`
     const isValid = ((initialRoutes != null) && Array.isArray(initialRoutes));
     const isEmpty = (initialRoutes?.length === 0);
 
+    // guard: initial validation for `initialRoutes`
     if(!isValid || isEmpty){
       throw new Error(`'NavigatorView' error: Invalid value given to 'initialRoutes' prop.`);
     };
@@ -226,19 +267,23 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   };
 
   /** get route config with the matching `routeKey` */
-  private getRouteConfig = (routeKey: string): NavRouteConfigItem | undefined => {
+  private getRouteConfig = (routeKey: string): NavRouteConfigItemExtended | undefined => {
     const { routes } = this.props;
 
-    const routeConfig = routes.find(item => (item.routeKey === routeKey));
+    const routeConfig = routes[routeKey];
     const nativeRouteKey = nativeRouteKeys?.[routeKey];
 
     const hasNativeRouteKeyMatch = (nativeRouteKey != null);
     const isNativeRoute = routeConfig?.isNativeRoute || hasNativeRouteKeyMatch;
 
-    return (!isNativeRoute)? routeConfig : {
+    if(isNativeRoute) return {
       routeKey,
       isNativeRoute: true,
       initialRouteProps: routeConfig?.initialRouteProps,
+    };
+
+    return (routeConfig == null)? undefined : {
+      routeKey, ...routeConfig,
     };
   };
 

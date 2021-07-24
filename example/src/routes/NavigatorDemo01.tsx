@@ -116,34 +116,36 @@ class NestTestA2 extends React.PureComponent<RouteContentProps & {
           <NavigatorView
             ref={r => { this.navRefA = r }}
             initialRoutes={[{routeKey: 'BlankRoute'}]}
-            routes={[{
-              routeKey: 'BlankRoute',
-              routeOptionsDefault: {
-                routeTitle: "Left",
-              },
-              renderRoute: () => (
-                <BlankRoute
-                  offsetA={0}
-                  offsetB={props.offsetB}
-                />
-              ),
-            }]}
+            routes={{
+              BlankRoute: {
+                routeOptionsDefault: {
+                  routeTitle: "Left",
+                },
+                renderRoute: () => (
+                  <BlankRoute
+                    offsetA={0}
+                    offsetB={props.offsetB}
+                  />
+                ),
+              }
+            }}
           />
           <NavigatorView
             ref={r => { this.navRefB = r }}
             initialRoutes={[{routeKey: 'BlankRoute'}]}
-            routes={[{
-              routeKey: 'BlankRoute',
-              routeOptionsDefault: {
-                routeTitle: "Right",
-              },
-              renderRoute: () => (
-                <BlankRoute
-                  offsetA={1}
-                  offsetB={props.offsetB}
-                />
-              ),
-            }]}
+            routes={{
+              BlankRoute: {
+                routeOptionsDefault: {
+                  routeTitle: "Right",
+                },
+                renderRoute: () => (
+                  <BlankRoute
+                    offsetA={1}
+                    offsetB={props.offsetB}
+                  />
+                ),
+              }
+            }}
           />
         </SafeAreaView>
       </React.Fragment>
@@ -229,58 +231,60 @@ class NestTestA1 extends React.PureComponent<{
           <NavigatorView
             ref={r => { this.navRefA = r }}
             initialRoutes={[{routeKey: 'BlankRoute'}]}
-            routes={[{
-              routeKey: 'BlankRoute',
-              routeOptionsDefault: {
-                routeTitle: "Top",
-              },
-              renderRoute: () => (
-                <BlankRoute
-                  offsetA={0}
-                />
-              ),
-            }, {
-              routeKey: 'NestTestA2',
-              routeOptionsDefault: {
-                routeTitle: "A2",
-              },
-              renderRoute: () => (
-                <NestTestA2
-                  offsetB={0}
-                  onDidFinish={() => {
-                    this.callback?.();
-                  }}
-                />
-              ),
-            }]}
+            routes={{
+              BlankRoute: {
+                routeOptionsDefault: {
+                  routeTitle: "Top",
+                },
+                renderRoute: () => (
+                  <BlankRoute
+                    offsetA={0}
+                  />
+                ),
+              }, 
+              NestTestA2: {
+                routeOptionsDefault: {
+                  routeTitle: "A2",
+                },
+                renderRoute: () => (
+                  <NestTestA2
+                    offsetB={0}
+                    onDidFinish={() => {
+                      this.callback?.();
+                    }}
+                  />
+                ),
+              }
+            }}
           />
           <NavigatorView
             ref={r => { this.navRefB = r }}
             initialRoutes={[{routeKey: 'BlankRoute'}]}
-            routes={[{
-              routeKey: 'BlankRoute',
-              routeOptionsDefault: {
-                routeTitle: "Bottom",
+            routes={{
+              BlankRoute: {
+                routeOptionsDefault: {
+                  routeTitle: "Bottom",
+                },
+                renderRoute: () => (
+                  <BlankRoute
+                    offsetA={1}
+                  />
+                ),
               },
-              renderRoute: () => (
-                <BlankRoute
-                  offsetA={1}
-                />
-              ),
-            }, {
-              routeKey: 'NestTestA2',
-              routeOptionsDefault: {
-                routeTitle: "A2",
-              },
-              renderRoute: () => (
-                <NestTestA2
-                  offsetB={2}
-                  onDidFinish={() => {
-                    this.callback?.();
-                  }}
-                />
-              ),
-            }]}
+              NestTestA2: {
+                routeOptionsDefault: {
+                  routeTitle: "A2",
+                },
+                renderRoute: () => (
+                  <NestTestA2
+                    offsetB={2}
+                    onDidFinish={() => {
+                      this.callback?.();
+                    }}
+                  />
+                ),
+              }
+            }}
           />
         </SafeAreaView>
       </React.Fragment>
@@ -344,27 +348,28 @@ export class NavigatorDemo01 extends React.Component {
           <NavigatorView
             ref={r => { this.navRef = r }}
             initialRoutes={[{routeKey: 'BlankRoute'}]}
-            routes={[{
-              routeKey: 'BlankRoute',
-              routeOptionsDefault: {
-                routeTitle: "Start",
-              },
-              renderRoute: () => (
-                <BlankRoute/>
-              ),
-            }, {
-              routeKey: 'NestTestA1',
-              routeOptionsDefault: {
-                routeTitle: "A",
-              },
-              renderRoute: () => (
-                <NestTestA1
-                  onDidFinish={() => {
-                    this.callbackA1?.();
-                  }}
-                />
-              ),
-            }]}
+            routes={{
+              BlankRoute: {
+                routeOptionsDefault: {
+                  routeTitle: "Start",
+                },
+                renderRoute: () => (
+                  <BlankRoute/>
+                ),
+              }, 
+              NestTestA1: {
+                routeOptionsDefault: {
+                  routeTitle: "A",
+                },
+                renderRoute: () => (
+                  <NestTestA1
+                    onDidFinish={() => {
+                      this.callbackA1?.();
+                    }}
+                  />
+                ),
+              }
+            }}
           />
         </SafeAreaView>
       </React.Fragment>

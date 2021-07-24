@@ -109,15 +109,16 @@ export function NavigatorTest05() {
             JSON.stringify(nativeEvent.commandData)
           );
         }}
-        routes={[{
-          routeKey: 'routeA',
-          routeOptionsDefault: {
-            routeTitle: "Route A",
-          },
-          renderRoute: () => (
-            <RouteA/>
-          ),
-        }]}
+        routes={{
+          routeA: {
+            routeOptionsDefault: {
+              routeTitle: "Route A",
+            },
+            renderRoute: () => (
+              <RouteA/>
+            ),
+          }
+        }}
       />
     </SafeAreaView>
   );

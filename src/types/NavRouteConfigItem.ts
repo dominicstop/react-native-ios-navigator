@@ -8,7 +8,6 @@ import type { RouteOptions } from "./RouteOptions";
 
 
 type NavRouteConfigItemBase = {
-  routeKey: NavRouteItem['routeKey'];
   initialRouteProps?: object;
 };
 

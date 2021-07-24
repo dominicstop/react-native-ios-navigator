@@ -90,27 +90,28 @@ export function NavigatorExample01() {
         ref={r => { this.navRef = r }}
         initialRoutes={[{routeKey: 'routeA'}]}
         navBarPrefersLargeTitles={false}
-        routes={[{
-          routeKey: 'routeA',
-          routeOptionsDefault: {
-            routeTitle: "Route A",
-            navBarButtonBackItemConfig: {
-              type: 'IMAGE_SYSTEM',
-              imageValue: 'trash'
-            }
-          },
-          renderRoute: () => (
-            <ExampleRoute/>
-          ),
-        }, {
-          routeKey: 'routeB',
-          routeOptionsDefault: {
-            routeTitle: "Route B",
-          },
-          renderRoute: () => (
-            <ExampleRoute/>
-          ),
-        }]}
+        routes={{
+          routeA: {
+            routeOptionsDefault: {
+              routeTitle: "Route A",
+              navBarButtonBackItemConfig: {
+                type: 'IMAGE_SYSTEM',
+                imageValue: 'trash'
+              }
+            },
+            renderRoute: () => (
+              <ExampleRoute/>
+            ),
+          }, 
+          routeB: {
+            routeOptionsDefault: {
+              routeTitle: "Route B",
+            },
+            renderRoute: () => (
+              <ExampleRoute/>
+            ),
+          }
+        }}
       />
     </SafeAreaView>
   );

@@ -191,16 +191,16 @@ export function NavigatorTest04() {
         ref={r => { this.navRef = r }}
         initialRoutes={[{routeKey: 'MainRoute'}]}
         navBarPrefersLargeTitles={false}
-        routes={[{
-          routeKey: 'MainRoute',
-          routeOptionsDefault: {
-            largeTitleDisplayMode: 'never',
-            
-          },
-          renderRoute: () => (
-            <MainRoute/>
-          ),
-        }]}
+        routes={{
+          MainRoute: {
+            routeOptionsDefault: {
+              largeTitleDisplayMode: 'never',
+            },
+            renderRoute: () => (
+              <MainRoute/>
+            ),
+          }}
+        }
       />
     </SafeAreaView>
   );

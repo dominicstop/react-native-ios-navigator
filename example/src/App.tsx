@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
-import { NavigatorView, RouteContentProps, NavRouteConfigItem, RouteViewEvents } from 'react-native-ios-navigator';
+import { NavigatorView, RouteContentProps, RouteViewEvents, NavRoutesConfigMap } from 'react-native-ios-navigator';
 
 import { NavigatorShowcase01 } from './routes/NavigatorShowcase01';
 import { NavigatorShowcase02 } from './routes/NavigatorShowcase02';
@@ -132,121 +132,123 @@ const RouteItems = [{
   title: 'RouteViewPortal Example'
 }];
 
-const ROUTES: Array<NavRouteConfigItem> = [{
-  routeKey: RouteKeys.Home,
-  routeOptionsDefault: {
-    routeTitle: "Home",
-    searchBarConfig: {
-      placeholder: "Search Routes",
-      returnKeyType: 'done',
-      obscuresBackgroundDuringPresentation: false,
-      hidesSearchBarWhenScrolling: true,
-      textColor: {
-        dynamic: {
-          light: Colors.PURPLE.A700,
-          dark : Colors.PURPLE[100],
-        }
+const ROUTES: NavRoutesConfigMap = {
+  [RouteKeys.Home]: {
+    routeOptionsDefault: {
+      routeTitle: "Home",
+      searchBarConfig: {
+        placeholder: "Search Routes",
+        returnKeyType: 'done',
+        obscuresBackgroundDuringPresentation: false,
+        hidesSearchBarWhenScrolling: true,
+        textColor: {
+          dynamic: {
+            light: Colors.PURPLE.A700,
+            dark : Colors.PURPLE[100],
+          }
+        },
+        tintColor: {
+          dynamic: {
+            light: Colors.PURPLE.A700,
+            dark : Colors.PURPLE[100],
+          }
+        },
+        leftIconTintColor: {
+          dynamic: {
+            light: Colors.PURPLE.A700,
+            dark : Colors.PURPLE[100],
+          }
+        },
+        placeholderTextColor: Colors.PURPLE[300],
+        searchTextFieldBackgroundColor: Helpers.hexToRGBA(Colors.PURPLE.A100, 0.1),
       },
-      tintColor: {
-        dynamic: {
-          light: Colors.PURPLE.A700,
-          dark : Colors.PURPLE[100],
-        }
-      },
-      leftIconTintColor: {
-        dynamic: {
-          light: Colors.PURPLE.A700,
-          dark : Colors.PURPLE[100],
-        }
-      },
-      placeholderTextColor: Colors.PURPLE[300],
-      searchTextFieldBackgroundColor: Helpers.hexToRGBA(Colors.PURPLE.A100, 0.1),
     },
+    renderRoute: () => (
+      <HomeRoute/>
+    ),
+  }, 
+  [RouteKeys.NavigatorShowcase01]:{
+    renderRoute: () => (
+      <NavigatorShowcase01/>
+    ),
+  }, 
+  [RouteKeys.NavigatorShowcase02]: {
+    renderRoute: () => (
+      <NavigatorShowcase02/>
+    ),
+  }, 
+  [RouteKeys.NavigatorExample01]: {
+    renderRoute: () => (
+      <NavigatorExample01/>
+    ),
   },
-  renderRoute: () => (
-    <HomeRoute/>
-  ),
-}, {
-  routeKey: RouteKeys.NavigatorShowcase01,
-  renderRoute: () => (
-    <NavigatorShowcase01/>
-  ),
-}, {
-  routeKey: RouteKeys.NavigatorShowcase02,
-  renderRoute: () => (
-    <NavigatorShowcase02/>
-  ),
-}, {
-  routeKey: RouteKeys.NavigatorExample01,
-  renderRoute: () => (
-    <NavigatorExample01/>
-  ),
-}, {
-  routeKey: RouteKeys.NavigatorTest01,
-  renderRoute: () => (
-    <NavigatorTest01/>
-  ),
-}, {
-  routeKey: RouteKeys.NavigatorTest02,
-  renderRoute: () => (
-    <NavigatorTest02/>
-  ),
-}, {
-  routeKey: RouteKeys.NavigatorTest03,
-  renderRoute: () => (
-    <NavigatorTest03/>
-  ),
-}, {
-  routeKey: RouteKeys.NavigatorTest04,
-  renderRoute: () => (
-    <NavigatorTest04/>
-  ),
-}, {
-  routeKey: RouteKeys.NavigatorTest05,
-  renderRoute: () => (
-    <NavigatorTest05/>
-  ),
-}, {
-  routeKey: RouteKeys.NavigatorTest06,
-  renderRoute: () => (
-    <NavigatorTest06/>
-  ),
-}, {
-  routeKey: RouteKeys.NavigatorTest07,
-  renderRoute: () => (
-    <NavigatorTest07/>
-  ),
-}, {
-  routeKey: RouteKeys.NavigatorTest08,
-  routeOptionsDefault: {
-    largeTitleDisplayMode: 'never',
+  [RouteKeys.NavigatorTest01]: {
+    renderRoute: () => (
+      <NavigatorTest01/>
+    ),
+  }, 
+  [RouteKeys.NavigatorTest02]: {
+    renderRoute: () => (
+      <NavigatorTest02/>
+    ),
+  }, 
+  [RouteKeys.NavigatorTest03]: {
+    renderRoute: () => (
+      <NavigatorTest03/>
+    ),
+  }, 
+  [RouteKeys.NavigatorTest04]: {
+    renderRoute: () => (
+      <NavigatorTest04/>
+    ),
   },
-  renderRoute: () => (
-    <NavigatorTest08/>
-  ),
-}, {
-  routeKey: RouteKeys.NavigatorDemo01,
-  routeOptionsDefault: {
-    largeTitleDisplayMode: 'never',
+  [RouteKeys.NavigatorTest05]: {
+    renderRoute: () => (
+      <NavigatorTest05/>
+    ),
   },
-  renderRoute: () => (
-    <NavigatorDemo01/>
-  ),
-}, {
-  routeKey: RouteKeys.NavigatorDemo02,
-  routeOptionsDefault: {
-    largeTitleDisplayMode: 'never',
+  [RouteKeys.NavigatorTest06]: {
+    renderRoute: () => (
+      <NavigatorTest06/>
+    ),
   },
-  renderRoute: () => (
-    // @ts-ignore
-    <NavigatorDemo02/>
-  ),
-}, {
-  routeKey: RouteKeys.RouteViewPortalExample01,
-  renderRoute: () => (
-    <RouteViewPortalExample01/>
-  ),
-}];
+  [RouteKeys.NavigatorTest07]: {
+    renderRoute: () => (
+      <NavigatorTest07/>
+    ),
+  },
+  [RouteKeys.NavigatorTest08]: {
+    routeOptionsDefault: {
+      largeTitleDisplayMode: 'never',
+    },
+    renderRoute: () => (
+      <NavigatorTest08/>
+    ),
+  },
+  [RouteKeys.NavigatorDemo01]: {
+    routeOptionsDefault: {
+      largeTitleDisplayMode: 'never',
+    },
+    renderRoute: () => (
+      <NavigatorDemo01/>
+    ),
+  }, 
+  [RouteKeys.NavigatorDemo02]: {
+    routeOptionsDefault: {
+      largeTitleDisplayMode: 'never',
+    },
+    renderRoute: () => (
+      <NavigatorDemo02
+        triggerPop={null}
+      />
+    ),
+  },
+  [RouteKeys.RouteViewPortalExample01]: {
+    renderRoute: () => (
+      <RouteViewPortalExample01/>
+    ),
+  }
+};
 
 
 function RouteItem(props: {

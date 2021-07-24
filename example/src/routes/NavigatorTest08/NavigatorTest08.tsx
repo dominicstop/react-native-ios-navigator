@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, FlatList, ListRenderItem } from 'react-native';
 
-import { RouteViewPortal, RouteContentProps, NavigatorView, NavRouteConfigItem, RouteViewEvents } from 'react-native-ios-navigator';
+import { RouteViewPortal, RouteContentProps, NavigatorView, RouteViewEvents, NavRoutesConfigMap } from 'react-native-ios-navigator';
 
 import { EventListItem } from './EventListItem';
 import { RouteA } from './RouteA';
@@ -9,15 +9,16 @@ import { RouteA } from './RouteA';
 import type { EventData, RecordEvent, RouteProps } from './SharedTypes';
 
 
-const ROUTES: Array<NavRouteConfigItem> = [{
-  routeKey: 'RouteA',
-  routeOptionsDefault: {
-    largeTitleDisplayMode: 'never',
-  },
-  renderRoute: () => (
-    <RouteA/>
-  ),
-}];
+const ROUTES: NavRoutesConfigMap = {
+  RouteA: {
+    routeOptionsDefault: {
+      largeTitleDisplayMode: 'never',
+    },
+    renderRoute: () => (
+      <RouteA/>
+    ),
+  }
+};
 
 type NavigatorTest08State = {
   events: Array<EventData>;

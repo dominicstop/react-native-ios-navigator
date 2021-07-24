@@ -74,15 +74,16 @@ export function App() {
   return(
     <NavigatorView
       initialRoutes={[{routeKey: 'routeA'}]}
-      routes={[{
-        routeKey: 'routeA',
-        routeOptionsDefault: {
-          routeTitle: 'Route A',
-        },
-        renderRoute: () => (
-          <ExampleRoute/>
-        ),
-      }]}
+      routes={{
+        routeA: {
+          routeOptionsDefault: {
+            routeTitle: 'Route A',
+          },
+          renderRoute: () => (
+            <ExampleRoute/>
+          ),
+        }
+      }}
     />
   );
 };

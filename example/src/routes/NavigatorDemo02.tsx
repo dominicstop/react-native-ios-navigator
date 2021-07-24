@@ -77,48 +77,49 @@ export function NavigatorDemo02(props: RouteContentProps & {
           }
         }}
         navBarPrefersLargeTitles={false}
-        routes={[{
-          routeKey: 'BlankRoute',
-          routeOptionsDefault: {
-            backButtonDisplayMode: ((currentIndex % 2 === 0)
-              ? 'default'
-              : 'generic'
-            )
-          },
-          renderRoute: () => (
-            <BlankRoute/>
-          ),
-        }, {
-          routeKey: 'NestedNavigatorRoute',
-          routeOptionsDefault: {
-            navBarButtonRightItemsConfig: [{
-              type: 'IMAGE_SYSTEM',
-              imageValue: ((currentIndex % 2 === 0)
-                ? 'heart'
-                : 'heart.fill'
+        routes={{
+          BlankRoute: {
+            routeOptionsDefault: {
+              backButtonDisplayMode: ((currentIndex % 2 === 0)
+                ? 'default'
+                : 'generic'
               )
-            }]
-          },
-          renderRoute: () => (
-            <NavigatorDemo02
-              triggerPop={async () => {
-                if (props.triggerPop){
-                  await navRef.current.pop();
-                  props.triggerPop();
-                } else {
-                  await navRef.current.pop();
-                };
-              }}
-            />
-          ),
-          renderNavBarTitleItem: () => (
-            <View style={styles.navBarTitleContainer}>
-              <Text style={[styles.navBarTitleText, { color: prevColor }]}>
-                {`Nested: ${currentIndex + 1}`}
-              </Text>
-            </View>
-          ),
-        }]}
+            },
+            renderRoute: () => (
+              <BlankRoute/>
+            ),
+          }, 
+          NestedNavigatorRoute: {
+            routeOptionsDefault: {
+              navBarButtonRightItemsConfig: [{
+                type: 'IMAGE_SYSTEM',
+                imageValue: ((currentIndex % 2 === 0)
+                  ? 'heart'
+                  : 'heart.fill'
+                )
+              }]
+            },
+            renderRoute: () => (
+              <NavigatorDemo02
+                triggerPop={async () => {
+                  if (props.triggerPop){
+                    await navRef.current.pop();
+                    props.triggerPop();
+                  } else {
+                    await navRef.current.pop();
+                  };
+                }}
+              />
+            ),
+            renderNavBarTitleItem: () => (
+              <View style={styles.navBarTitleContainer}>
+                <Text style={[styles.navBarTitleText, { color: prevColor }]}>
+                  {`Nested: ${currentIndex + 1}`}
+                </Text>
+              </View>
+            ),
+          }
+        }}
       />
     </SafeAreaView>
   );
