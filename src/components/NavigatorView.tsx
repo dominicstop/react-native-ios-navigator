@@ -98,7 +98,6 @@ let nativeRouteKeys: Record<string, string> = {};
 export class NavigatorView extends React.PureComponent<NavigatorViewProps, NavigatorViewState> {
   
   //#region - Property Declarations
-  // @ts-ignore
   state: NavigatorViewState;
 
   /** A ref to the `RNINavigatorView` native component. */
@@ -249,13 +248,15 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     const lastIndex = activeRoutes.length - 1;
     const lastRoute = activeRoutes[lastIndex];
 
+    // if the last route is a native route, then this will be undefined
     const lastRouteRef = this.routeRefMap[lastRoute.routeID];
-    // if the last route is a native route, then this will be null
-    const routeConfig = lastRouteRef?.getRouteOptions();
+    if(!lastRouteRef) return 0;
+
+    const routeConfig = lastRouteRef.getRouteOptions();
 
     return (isPushing
-      ? routeConfig?.transitionConfigPush?.duration ?? 0
-      : routeConfig?.transitionConfigPop ?.duration ?? 0
+      ? routeConfig.transitionConfigPush?.duration ?? 0
+      : routeConfig.transitionConfigPop ?.duration ?? 0
     );
   };
 
@@ -322,7 +323,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       },
       resetTransition: async () => {
         if(hasTransitionConfig){
-          // temporarily override the last route's push/pop transition
+          // remove the push/pop transition override
           await Helpers.setStateAsync<Partial<NavigatorViewState>>(this, {
             transitionConfigPushOverride: undefined,
             transitionConfigPopOverride : undefined,
@@ -333,7 +334,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   };
 
   /** 
-   * Wait for the react routes to be added as a subview in the native side, and wait fot
+   * Wait for the react routes to be added as a subview in the native side, and wait for
    * native routes to be created/init. w/ data.
    * note: This promise will reject if the events fail to fire within `TIMEOUT_MOUNT` ms. */
   private waitForRoutes = (routeItems: Array<NavRouteStackItem>) => {
