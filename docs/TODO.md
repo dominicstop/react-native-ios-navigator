@@ -177,8 +177,6 @@
 
 <br>
 
-- [ ] **Refactor**: Refactor `NavigatorView.routes` prop to accept an object instead of an array.
-
 ------
 
 <br>
@@ -247,6 +245,7 @@
 ### Version: `next
 
 - [x] (Commit: `c3d4ac1`) **Refactor**: Types — Update `EventEmitter` to use mapped types i.e. each event will be mapped to an event handler. Then via generics the "event map" will be used to inject the type to the listener parameter depending on the event key.
+	* <u>Breaking Change</u> — Removed `useNavBarItemEvents` + `useNavRouteLifeCycle` hooks and consolidate them to a single hook called `useNavRouteEvents`.
 - [x] (Commit: `b7fcf61`) **Refactor**: Enable `strictNullChecks` for library.
 - [x] (Commit: `bd6341a`) **Fix**: `RouteViewPortal.renderNavBarTitleItem` not updating when component is mounted/unmounted.
 - [x] (Commit: `3da44f3`) **Implement**: Impl. navigation command for `NavigationObject`  to get the current navigation stack. One use case could be for it to be called inside a navbar render item and read the current navigation stack to display the prev. routes's title, etc.
@@ -254,6 +253,10 @@
 	- Maybe also add get prev. route and get current route for convenience.
 - [x] (Commit: `815e56c`) **Examples**: Add tester for the navigation events.
 - [x] (Commit: `21322a1`) Types - Refactor `useNavRouteEvents` to use mapped types.
+
+- [x] (Commit: `d69163b`) **Refactor**: Refactor `NavigatorView.routes` prop to accept an object instead of an array.
+
+	- <u>Major Breaking Change</u> — All usage of `NavigatorView` must be refactored.
 
 
 
