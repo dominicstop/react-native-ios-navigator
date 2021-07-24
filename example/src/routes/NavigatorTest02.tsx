@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { StyleSheet, View, ScrollView, Text, TouchableOpacity, Alert } from 'react-native';
 
-import { RouteViewPortal, RouteContentProps, useNavBarItemEvents } from 'react-native-ios-navigator';
+import { RouteViewPortal, RouteContentProps, useNavRouteEvents } from 'react-native-ios-navigator';
 import * as Colors from '../constants/Colors';
 
 export function NavigatorTest02(props: RouteContentProps){
   const [index, setIndex] = React.useState(0);
 
-  useNavBarItemEvents('onPressNavBarLeftItem', ({nativeEvent}) => {
+  useNavRouteEvents('onPressNavBarLeftItem', ({nativeEvent}) => {
     Alert.alert('onPressNavBarLeftItem', `key: ${nativeEvent.key}`);
   });
 
@@ -24,7 +24,9 @@ export function NavigatorTest02(props: RouteContentProps){
           }],
         }}
         renderNavBarRightItem={() => (
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => {
+            Alert.alert('TouchableOpacity', `onPress Custom Right`);
+          }}>
             <Text>
               {`Custom Right`}
             </Text>
@@ -44,7 +46,6 @@ export function NavigatorTest02(props: RouteContentProps){
       <Text 
         style={styles.textSubtitle}
         onPress={() => {
-          console.log(index);
           setIndex(prevIndex => prevIndex + 1);
         }}
       >
