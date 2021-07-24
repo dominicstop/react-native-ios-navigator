@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View, Text, SafeAreaView, StyleSheet } from 'react-native';
-import { NavigatorView, RouteContentProps, useNavRouteLifeCycle } from 'react-native-ios-navigator';
+import { NavigatorView, RouteContentProps, useNavRouteEvents } from 'react-native-ios-navigator';
 
 import * as Colors  from '../constants/Colors';
 import * as Helpers from '../functions/Helpers';
@@ -40,7 +40,7 @@ export function NavigatorDemo02(props: RouteContentProps & {
   // @ts-ignore
   const currentIndex = (props.navigation?.routeProps?.index ?? 0);
 
-  useNavRouteLifeCycle('onRouteDidPush', async () => {
+  useNavRouteEvents('onRouteDidPush', async () => {
     if(currentIndex < 12) {
       await navRef.current.push({
         routeKey: 'NestedNavigatorRoute',

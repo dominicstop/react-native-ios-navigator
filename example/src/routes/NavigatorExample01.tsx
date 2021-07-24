@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, Text, SafeAreaView, TouchableOpacity } from 'react-native';
 
-import { NavigatorView, RouteContentProps, RouteViewPortal, useNavRouteLifeCycle } from 'react-native-ios-navigator';
+import { NavigatorView, RouteContentProps, RouteViewPortal, useNavRouteEvents } from 'react-native-ios-navigator';
 
 import * as Colors  from '../constants/Colors';
 import * as Helpers from '../functions/Helpers';
@@ -34,14 +34,14 @@ function ExampleRoute(props: ExampleRouteProps){
 
   const routeContainerStyle = { backgroundColor: bgColor };
 
-  useNavRouteLifeCycle('onRouteWillPush' , () => console.log('onRouteWillPush' ));
-  useNavRouteLifeCycle('onRouteDidPush'  , () => console.log('onRouteDidPush'  ));
-  useNavRouteLifeCycle('onRouteWillPop'  , () => console.log('onRouteWillPop'  ));
-  useNavRouteLifeCycle('onRouteDidPop'   , () => console.log('onRouteDidPop'   ));
-  useNavRouteLifeCycle('onRouteWillFocus', () => console.log('onRouteWillFocus'));
-  useNavRouteLifeCycle('onRouteDidFocus' , () => console.log('onRouteDidFocus' ));
-  useNavRouteLifeCycle('onRouteWillBlur' , () => console.log('onRouteWillBlur' ));
-  useNavRouteLifeCycle('onRouteDidBlur'  , () => console.log('onRouteDidBlur'  ));
+  useNavRouteEvents('onRouteWillPush' , () => console.log('onRouteWillPush' ));
+  useNavRouteEvents('onRouteDidPush'  , () => console.log('onRouteDidPush'  ));
+  useNavRouteEvents('onRouteWillPop'  , () => console.log('onRouteWillPop'  ));
+  useNavRouteEvents('onRouteDidPop'   , () => console.log('onRouteDidPop'   ));
+  useNavRouteEvents('onRouteWillFocus', () => console.log('onRouteWillFocus'));
+  useNavRouteEvents('onRouteDidFocus' , () => console.log('onRouteDidFocus' ));
+  useNavRouteEvents('onRouteWillBlur' , () => console.log('onRouteWillBlur' ));
+  useNavRouteEvents('onRouteDidBlur'  , () => console.log('onRouteDidBlur'  ));
 
   return (
     <SafeAreaView style={[styles.routeContainer, routeContainerStyle]}>
