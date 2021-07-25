@@ -766,6 +766,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         )
       );
 
+      // wait a bit so `routeToBeRemoved` can receive the `onRouteDidPop` event
+      await Helpers.timeout(50);
+
       await Helpers.setStateAsync<NavigatorViewState>(this, (prevState) => ({
         ...prevState,
         activeRoutes: prevState.activeRoutes
@@ -832,6 +835,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
           animated
         )
       );
+
+      // wait a bit so the routes in `routeIndices` can receive the `onRouteDidPop` event
+      await Helpers.timeout(50);
 
       await Helpers.setStateAsync<NavigatorViewState>(this, (prevState) => ({
         ...prevState,
