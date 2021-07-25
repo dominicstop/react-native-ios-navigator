@@ -433,28 +433,31 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
   // #region - Native Event Handlers
   // Native Event Handlers for `RNINavigatorRouteView`
 
-  private _handleOnNavRouteWillPop: OnRoutePopEvent = (event) => {
+  private _handleOnRouteWillPop: OnRoutePopEvent = (event) => {
     if(this.props.routeID !== event.nativeEvent.routeID) return;
 
     this._emitter.emit(NavigatorRouteViewEvents.onRouteWillPop, event);
     this.routeStatus = RouteStatus.ROUTE_POPPING;
   };
 
-  private _handleOnNavRouteDidPop: OnRoutePopEvent = (event) => {
+  private _handleOnRouteDidPop: OnRoutePopEvent = (event) => {
     if(this.props.routeID !== event.nativeEvent.routeID) return;
+
+    console.log('_handleOnRouteDidPop');
+    
 
     this._emitter.emit(NavigatorRouteViewEvents.onRouteDidPop, event);
     this.routeStatus = RouteStatus.ROUTE_POPPED;
   };
 
-  private _handleOnNavRouteWillPush: OnRoutePushEvent = (event) => {
+  private _handleOnRouteWillPush: OnRoutePushEvent = (event) => {
     if(this.props.routeID !== event.nativeEvent.routeID) return;
 
     this._emitter.emit(NavigatorRouteViewEvents.onRouteWillPush, event);
     this.routeStatus = RouteStatus.ROUTE_PUSHING;
   };
 
-  private _handleOnNavRouteDidPush: OnRoutePushEvent = (event) => {
+  private _handleOnRouteDidPush: OnRoutePushEvent = (event) => {
     if(this.props.routeID !== event.nativeEvent.routeID) return;
 
     this._emitter.emit(NavigatorRouteViewEvents.onRouteDidPush, event);
@@ -581,10 +584,10 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
           routeKey={props.routeKey}
           routeIndex={props.routeIndex}
           // Route Native Events: Push/Pop Events
-          onRouteWillPop={this._handleOnNavRouteWillPop}
-          onRouteDidPop={this._handleOnNavRouteDidPop}
-          onRouteWillPush={this._handleOnNavRouteWillPush}
-          onRouteDidPush={this._handleOnNavRouteDidPush}
+          onRouteWillPop={this._handleOnRouteWillPop}
+          onRouteDidPop={this._handleOnRouteDidPop}
+          onRouteWillPush={this._handleOnRouteWillPush}
+          onRouteDidPush={this._handleOnRouteDidPush}
           // Route Native Events: Focus/Blur
           onRouteWillFocus={this._handleOnRouteWillFocus}
           onRouteDidFocus={this._handleOnRouteDidFocus}

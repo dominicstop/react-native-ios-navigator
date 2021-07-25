@@ -70,12 +70,12 @@ internal class RNINavigatorRouteView: UIView {
   /// Fired when a route *has been* "pushed"
   @objc var onRouteDidPush: RCTBubblingEventBlock?;
   
-  /// Fired when a route is *about to be* "popped", either due to a "user intiated"
+  /// Fired when a route is *about to be* "popped", either due to a "user initiated"
   /// pop (because the "back" button was pressed or it was swiped back via a
   /// gesture), or due to it being "popped" programmatically via the nav.
   @objc var onRouteWillPop: RCTBubblingEventBlock?;
   
-  /// Fired when a route *has been* "popped", either due to a "user intiated"
+  /// Fired when a route *has been* "popped", either due to a "user initiated"
   /// pop (because the "back" button was pressed or it was swiped back via a
   /// gesture), or due to it being "popped" programmatically via the nav.
   @objc var onRouteDidPop: RCTBubblingEventBlock?;

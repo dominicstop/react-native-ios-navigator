@@ -13,6 +13,7 @@ import type { NavCommandPopOptions, NavCommandPushOptions, RouteTransitionPopCon
 import type { NavRouteItem, NavRouteStackItem, NavRouteStackPartialItem } from '../types/NavRouteItem';
 import type { RenderNavItem } from '../types/NavTypes';
 import type { NavRouteConfigItem, NavRouteConfigItemJS } from '../types/NavRouteConfigItem';
+
 import { NavigatorViewEventEmitter, NavigatorViewEvents } from '../types/NavigatorViewEventEmitter';
 
 import type { OnUIConstantsDidChangeEventObject, OnNavRouteViewAddedEvent, OnSetNativeRoutesEvent, OnNativeCommandRequestEvent, OnNavRoutePopEvent, OnUIConstantsDidChangeEvent, OnCustomCommandFromNativeEvent } from '../types/RNINavigatorViewEvents';
@@ -379,10 +380,15 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   };
 
   /** 
-   * Wait for the react routes to be added as a subview in the native side, and wait for
-   * native routes to be created/init. w/ data.
+   * Returns a promise that will resolve once all the routes in `routeItems` are added/initialized
+   * from the native-side.
+   * * If the route item in `routeItems` has a native route, then wait for them to be created
+   *   and initialized with data (e.g. wait for the `onNavRouteViewAdded` event).
+   * * For each react/js route in `routeItems`, wait for it to be added as a subview in the 
+   *   native side (e.g. wait for the `onNavRouteViewAdded` event).
+   * 
    * note: This promise will reject if the events fail to fire within `TIMEOUT_MOUNT` ms. */
-  private waitForRoutes = (routeItems: Array<NavRouteStackItem>) => {
+  private waitForRoutesToBeAdded = (routeItems: Array<NavRouteStackItem>) => {
     // filter out/separate react and native routes
     const [nativeRoutes, reactRoutes] = routeItems.reduce((acc, curr) => {
       acc[curr.isNativeRoute? 0 : 1].push(curr.routeID);
@@ -563,7 +569,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       await Promise.all([
         // 1. Wait for new route to be added/init
-        this.waitForRoutes([nextRoute]),
+        this.waitForRoutesToBeAdded([nextRoute]),
         // 2. Append new route to `activeRoutes`
         Helpers.setStateAsync<NavigatorViewState>(this, 
           ({activeRoutes: prevRoutes}) => ({
@@ -804,7 +810,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     const stateSnapshot = this.createStateSnapshot();
 
     if(routeIndices.length === 0){
-      throw new Error(`\`removeRoutes\` failed, \`routeIndexes\` is empty`);
+      throw new Error(`'removeRoutes' failed, 'routeIndexes' is empty`);
     };
 
     // check if `routeIndexes` are valid
@@ -904,7 +910,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       await Promise.all([
         // 1. wait for replacement route to be added/init
-        this.waitForRoutes([replacementRoute]),
+        this.waitForRoutesToBeAdded([replacementRoute]),
         // 2. replace route in state
         Helpers.setStateAsync<NavigatorViewState>(this, (prevState) => ({
           ...prevState,
@@ -990,7 +996,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       await Promise.all([
         // 1. wait for next route to be added/init
-        this.waitForRoutes([nextRoute]),
+        this.waitForRoutesToBeAdded([nextRoute]),
         // 2. append new route to `activeRoutes`
         Helpers.setStateAsync<NavigatorViewState>(this, 
           ({activeRoutes: prevRoutes}) => ({
@@ -1112,7 +1118,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       
       await Promise.all([
         // 1. wait for the new route items to mount (if any)
-        this.waitForRoutes(nextRoutesNew),
+        this.waitForRoutesToBeAdded(nextRoutesNew),
         // 2. update the state route items
         Helpers.setStateAsync<Partial<NavigatorViewState>>(this, {
           activeRoutes: nextRoutes
@@ -1302,7 +1308,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
           await Promise.all([
             // 1. wait for the native route to be init
-            this.waitForRoutes([nextRoute]),
+            this.waitForRoutesToBeAdded([nextRoute]),
             // 2. Append new route to `activeRoutes`
             Helpers.setStateAsync<NavigatorViewState>(this,
               ({activeRoutes: prevRoutes}) => ({
