@@ -109,8 +109,11 @@
 
 - [ ] **Implement**: `NavigatorView` event: `onRouteFocusWillChange` and `onRouteFocusDidChange`.
 	- Event Args: `nativeEvent.prevInFocus`, and `nativeEvent.nextInFocus`.
+
 - [ ] **Implement**: Update route config (i.e. `NavRouteConfigItemJS`) to accept `renderRouteHeader`.
 - [ ] **Implement**: Shallow merge route options and route props (e.g. `initialRouteOptions`, `routeOptionsDefault`, etc).
+
+- [ ] **Implement**: `NavigatorView` prop: Implement `initialRouteProps`
 
 <br>
 
@@ -204,12 +207,14 @@
 
 - [ ] **Fix**: `RCTScrollView` indicator insets is wrong.
   - For devices with notches, the scroll view insets for the left and right of the screen is wrong. The top and bottom insets are correct (e.g. the scroll indicator insets are insetted from the home indicator and navigation bar).
+- [ ] **Fix**: `SafeAreaView` size/insets are initially wrong on first mount for `NavigatorView`'s that aren't the same size as the screen (See `NavigatorTest08` + `RouteB`). 
 
 <br>
 
-- [ ] **Fix**: Navigation push/pop event not triggered if route is added via `insetRoute` (see `NavigatorTest08`).
-
-- [ ] **Fix**: When removing a route via `removeRoute`, only `onRouteWillPop` is triggered  (see `NavigatorTest08`).
+- [ ] **Fix**: Navigation push/pop event not triggered if route is added via `insertRoute` (see `NavigatorTest08`).
+- [ ] **Fix**: Some route events are not triggered since the route has already been unmounted.
+	- This is dues to the fact that the route is removed from `state.activeRoutes` before the route could receive the event from the native side.
+	- Possible culprits: `replaceRoute`, `setRoutes`
 
 ---
 
@@ -242,7 +247,7 @@
 
 ## Completed
 
-### Version: `next
+### Version: `next`
 
 - [x] (Commit: `c3d4ac1`) **Refactor**: Types — Update `EventEmitter` to use mapped types i.e. each event will be mapped to an event handler. Then via generics the "event map" will be used to inject the type to the listener parameter depending on the event key.
 	* <u>Breaking Change</u> — Removed `useNavBarItemEvents` + `useNavRouteLifeCycle` hooks and consolidate them to a single hook called `useNavRouteEvents`.
@@ -257,6 +262,8 @@
 - [x] (Commit: `d69163b`) **Refactor**: Refactor `NavigatorView.routes` prop to accept an object instead of an array.
 
 	- <u>Major Breaking Change</u> — All usage of `NavigatorView` must be refactored.
+
+- [x] (Commit: `bfbdb29`) **Fix**: When removing a route via `removeRoute`, only `onRouteWillPop` is triggered, i.e. `onRouteDidPop` is never called. (see `NavigatorTest08`).
 
 
 
