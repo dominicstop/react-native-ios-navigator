@@ -4,6 +4,7 @@ import { StyleSheet, ScrollView, Alert  } from 'react-native';
 import { RouteContentProps, RouteViewEvents, RouteViewPortal } from 'react-native-ios-navigator';
 
 import { CardBody, CardButton, CardTitle } from '../../components/ui/Card';
+import { RouteKeys } from './NavigatorTest08';
 
 import type { RouteProps } from './SharedTypes';
 
@@ -21,52 +22,67 @@ export function RouteA(props: RouteContentProps<RouteProps>){
       />
       <RouteViewEvents
         onRouteWillPush={() => {
-          console.log('onRouteWillPush - routeProps: ', routeProps, ' - navigation: ', navigation);
           routeProps.recordEvent({
             eventType: 'onRouteWillPush',
             timestamp: Date.now(),
+            routeKey: navigation.routeKey,
+            routeIndex: navigation.routeIndex,
           });
         }}
         onRouteDidPush={() => {
           routeProps.recordEvent({
             eventType: 'onRouteDidPush',
             timestamp: Date.now(),
+            routeKey: navigation.routeKey,
+            routeIndex: navigation.routeIndex,
           });
         }}
         onRouteWillPop={() => {
           routeProps.recordEvent({
             eventType: 'onRouteWillPop',
             timestamp: Date.now(),
+            routeKey: navigation.routeKey,
+            routeIndex: navigation.routeIndex,
           });
         }}
         onRouteDidPop={() => {
           routeProps.recordEvent({
             eventType: 'onRouteDidPop',
             timestamp: Date.now(),
+            routeKey: navigation.routeKey,
+            routeIndex: navigation.routeIndex,
           });
         }}
         onRouteWillFocus={() => {
           routeProps.recordEvent({
             eventType: 'onRouteWillFocus',
             timestamp: Date.now(),
+            routeKey: navigation.routeKey,
+            routeIndex: navigation.routeIndex,
           });
         }}
         onRouteDidFocus={() => {
           routeProps.recordEvent({
             eventType: 'onRouteDidFocus',
             timestamp: Date.now(),
+            routeKey: navigation.routeKey,
+            routeIndex: navigation.routeIndex,
           });
         }}
         onRouteWillBlur={() => {
           routeProps.recordEvent({
             eventType: 'onRouteWillBlur',
             timestamp: Date.now(),
+            routeKey: navigation.routeKey,
+            routeIndex: navigation.routeIndex,
           });
         }}
         onRouteDidBlur={() => {
           routeProps.recordEvent({
             eventType: 'onRouteDidBlur',
             timestamp: Date.now(),
+            routeKey: navigation.routeKey,
+            routeIndex: navigation.routeIndex,
           });
         }}
       />
@@ -77,10 +93,17 @@ export function RouteA(props: RouteContentProps<RouteProps>){
             subtitle={`Debug - routeIndex: '${navigation.routeIndex}', routeKey: '${navigation.routeKey}'`}
           />
           <CardButton
-            title={'Push Route'}
+            title={'Push RouteA'}
             subtitle={`Push 'RouteA' into the stack`}
             onPress={() => {
-              navigation.push({routeKey: 'RouteA', routeProps});
+              navigation.push({routeKey: RouteKeys.RouteA, routeProps});
+            }}
+          />
+          <CardButton
+            title={'Push RouteB'}
+            subtitle={`Push 'RouteA' into the stack`}
+            onPress={() => {
+              navigation.push({routeKey: RouteKeys.RouteB, routeProps});
             }}
           />
           <CardButton
@@ -104,11 +127,41 @@ export function RouteA(props: RouteContentProps<RouteProps>){
             }}
           />
           <CardButton
-            title={'Insert Route in Index 0'}
+            title={'Remove All Previous Routes'}
+            subtitle={`Remove all the previous route in the stack`}
+            onPress={() => {
+              const activeRoutes = navigation.getActiveRoutes();
+              
+              if(activeRoutes.length < 2){
+              } else {
+                navigation.removeAllPrevRoutes();
+              }; 
+            }}
+          />
+          <CardButton
+            title={'Insert RouteA in Index 0'}
             subtitle={`Insert 'RouteA' at 'routeIndex: 0'`}
             onPress={() => {
-              props.navigation.insertRoute({routeKey: 'RouteA', routeProps}, 0);
+              props.navigation.insertRoute({routeKey: RouteKeys.RouteA, routeProps}, 0);
             }}
+        />
+        <CardButton
+          title={'Insert RouteB in Index 0'}
+          subtitle={`Insert 'RouteB' at 'routeIndex: 0'`}
+          onPress={() => {
+            props.navigation.insertRoute({routeKey: RouteKeys.RouteB, routeProps}, 0);
+          }}
+        />
+        <CardButton
+          title={'Replace Prev. Route'}
+          subtitle={`Replace previous route with 'RouteB'`}
+          onPress={async () => {
+            try {
+              await props.navigation.replacePreviousRoute({routeKey: RouteKeys.RouteB, routeProps});
+            } catch(error){
+              Alert.alert('Error', error.toString());
+            };
+          }}
         />
         </CardBody>
       </ScrollView>
@@ -120,6 +173,6 @@ const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
     paddingVertical: 10,
-    minHeight: '125%',
+    minHeight: '200%',
   },
 });

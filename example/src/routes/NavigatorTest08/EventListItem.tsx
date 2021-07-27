@@ -18,27 +18,49 @@ export function EventListItem(props: {
 
   return(
     <View style={styles.rootContainer}>
-      <Text style={styles.textEventIndex}>
-        {`${props.index + 1}.`}
-      </Text>
-      <Text style={styles.textEventName}>
-        {eventListItem.eventType}
-      </Text>
-      <Text style={styles.textTimestamp}>
-        {timeString}
-      </Text>
+      <View style={styles.rowHeadingContainer}>
+        <Text style={styles.textEventIndex}>
+          {`${props.index + 1}.`}
+        </Text>
+        <Text style={styles.textEventName}>
+          {eventListItem.eventType}
+        </Text>
+        <Text style={styles.textTimestamp}>
+          {timeString}
+        </Text>
+      </View>
+      <View style={styles.rowDetailsContainer}>
+        <Text style={styles.textLabelValue}>
+          <Text style={styles.textLabel}>
+            {'routeKey: '}
+          </Text>
+          <Text style={styles.textValue}>
+            {eventListItem.routeKey}
+          </Text>
+        </Text>
+        <Text style={[styles.textLabelValue, styles.secondColumn]}>
+          <Text style={styles.textLabel}>
+            {'routeIndex: '}
+          </Text>
+          <Text style={styles.textValue}>
+            {eventListItem.routeIndex}
+          </Text>
+        </Text>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   rootContainer: {
-    flexDirection: 'row',
     backgroundColor: Colors.PURPLE[25],
     paddingVertical: 7,
     paddingHorizontal: 10,
     marginBottom: 7,
     borderRadius: 10,
+  },
+  rowHeadingContainer: {
+    flexDirection: 'row',
   },
   textEventIndex: {
     fontWeight: '600',
@@ -47,11 +69,27 @@ const styles = StyleSheet.create({
   },
   textEventName: {
     flex: 1,
-    color: Colors.PURPLE[1000],
+    color: Colors.BLUE[900],
   },
   textTimestamp: {
     fontWeight: '600',
     color: Colors.PURPLE.A700,
     fontVariant: ['tabular-nums'],
+  },
+  rowDetailsContainer: {
+    flexDirection: 'row',
+  },
+  secondColumn: {
+    marginLeft: 10,
+  },
+  textLabelValue: {
+    flex: 1,
+  },
+  textLabel: {
+    fontWeight: '500',
+    color: Colors.PURPLE[1000],
+  },
+  textValue: {
+    color: Colors.BLUE[1000],
   },
 });

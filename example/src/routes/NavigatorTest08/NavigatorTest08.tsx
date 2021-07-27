@@ -5,19 +5,32 @@ import { RouteViewPortal, RouteContentProps, NavigatorView, RouteViewEvents, Nav
 
 import { EventListItem } from './EventListItem';
 import { RouteA } from './RouteA';
+import { RouteB } from './RouteB';
 
 import type { EventData, RecordEvent, RouteProps } from './SharedTypes';
 
+export const RouteKeys = {
+  RouteA: 'RouteA',
+  RouteB: 'RouteB',
+};
 
 const ROUTES: NavRoutesConfigMap = {
-  RouteA: {
+  [RouteKeys.RouteA]: {
     routeOptionsDefault: {
       largeTitleDisplayMode: 'never',
     },
     renderRoute: () => (
       <RouteA/>
     ),
-  }
+  },
+  [RouteKeys.RouteB]: {
+    routeOptionsDefault: {
+      largeTitleDisplayMode: 'never',
+    },
+    renderRoute: () => (
+      <RouteB/>
+    ),
+  },
 };
 
 type NavigatorTest08State = {
@@ -38,7 +51,7 @@ export class NavigatorTest08 extends React.Component<RouteContentProps, Navigato
 
   _handleRecordEvent: RecordEvent = (event) => {
     this.setState((prevState) => ({
-      events: [...prevState.events, event],
+      events: [event, ...prevState.events],
     }));
   };
 
@@ -47,9 +60,12 @@ export class NavigatorTest08 extends React.Component<RouteContentProps, Navigato
   };
 
   _renderEventListItem: ListRenderItem<EventData> = ({item, index}) => {
+    const { events } = this.state;
+    const eventCount = events.length;
+
     return(
       <EventListItem
-        index={index}
+        index={(eventCount - 1) - index}
         eventListItem={item}
       />
     );
