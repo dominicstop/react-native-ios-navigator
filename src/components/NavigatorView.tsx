@@ -416,6 +416,22 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     ]));
   };
 
+  /**
+   * Returns a promise that will resolve once all the routes in `routeItems` are removed
+   * from from the native-side (i.e. wait for `onNavRouteDidPop`).
+   */
+  private waitForRoutesToBeRemoved = (routeItems: Array<NavRouteStackItem>) => {
+    return Promise.all(
+      routeItems.map(routeItem => new Promise<void>(resolve => {
+        this.emitter.once(NavigatorViewEvents.onNavRouteDidPop, ({nativeEvent}) => {
+          if(nativeEvent.routeID === routeItem.routeID){
+            resolve();
+          };
+        })
+      }))
+    );
+  };
+
   private createStateSnapshot = () => {
     let stateSnapshot: NavigatorViewState | null = null;
 
@@ -773,7 +789,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       );
 
       // wait a bit so `routeToBeRemoved` can receive the `onRouteDidPop` event
-      await Helpers.timeout(50);
+      await Helpers.timeout(100);
 
       await Helpers.setStateAsync<NavigatorViewState>(this, (prevState) => ({
         ...prevState,
@@ -843,7 +859,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       );
 
       // wait a bit so the routes in `routeIndices` can receive the `onRouteDidPop` event
-      await Helpers.timeout(50);
+      await Helpers.timeout(100);
 
       await Helpers.setStateAsync<NavigatorViewState>(this, (prevState) => ({
         ...prevState,
@@ -1381,6 +1397,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
   private _handleOnNavRouteDidPop: OnNavRoutePopEvent = ({nativeEvent}) => {
     if(this.navigatorID !== nativeEvent.navigatorID) return;
+
+    this.emitter.emit('onNavRouteDidPop', {nativeEvent});
 
     const { onNavRouteDidPop } = this.props;
     onNavRouteDidPop && onNavRouteDidPop({nativeEvent});

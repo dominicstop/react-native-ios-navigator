@@ -1213,6 +1213,7 @@ extension RNINavigatorView: RNINavigatorRouteViewControllerDelegate {
     
     // send event: notify js navigator that a route is about to be "popped"
     self.onNavRouteWillPop?([
+      "routeID"        : sender.routeID,
       "routeKey"       : sender.routeKey,
       "routeIndex"     : sender.routeIndex,
       "isUserInitiated": isUserInitiated,
@@ -1232,6 +1233,7 @@ extension RNINavigatorView: RNINavigatorRouteViewControllerDelegate {
     #endif
     
     self.onNavRouteDidPop?([
+      "routeID"        : sender.routeID,
       "routeKey"       : sender.routeKey,
       "routeIndex"     : sender.routeIndex,
       "isUserInitiated": isUserInitiated,

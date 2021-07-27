@@ -17,6 +17,7 @@ export type OnNavRouteViewAddedEventObject = {
 
 export type OnNavRoutePopEventObject = { 
   nativeEvent: EventBaseEventObject & {
+    routeID        : number;
     routeKey       : string;
     routeIndex     : number;
     isUserInitiated: boolean;
