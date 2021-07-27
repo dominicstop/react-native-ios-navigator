@@ -8,6 +8,8 @@ import { CompareRouteOptions } from '../functions/CompareRouteOptions';
 
 import { NavRouteViewContext, NavRouteViewContextProps } from '../context/NavRouteViewContext';
 
+import { LIB_ENV } from '../constants/LibEnv';
+
 
 type RouteViewPortalProps = Partial<Pick<NavigatorRouteViewProps,
   // mirror props from `NavigatorRouteViewProps`
@@ -80,7 +82,7 @@ export class RouteViewPortal extends React.Component<RouteViewPortalProps> {
       this.routeRef.setRouteOptions(nextProps.routeOptions);
 
       //#region - 🐞 DEBUG 🐛
-      LIB_GLOBAL.debugLog && console.log(
+      LIB_ENV.debugLog && console.log(
           `LOG/JS - RouteViewPortal, componentDidUpdate`
         + ` - didRouteOptionsChange: ${didRouteOptionsChange? 'true' : 'false'}`
       );

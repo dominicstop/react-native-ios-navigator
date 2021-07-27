@@ -98,7 +98,6 @@
       ]
     },
     "globals": {
-      "LIB_GLOBAL": true
     }
   },
   "eslintIgnore": [

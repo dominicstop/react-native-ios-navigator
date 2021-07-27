@@ -1,5 +1,3 @@
-import './Globals';
-
 export * from './components/NavigatorView';
 export { RouteContentProps } from './components/NavigatorRouteView';
 

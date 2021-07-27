@@ -24,6 +24,7 @@ import { TSEventEmitter } from '../functions/TSEventEmitter';
 import { SimpleQueue } from '../functions/SimpleQueue';
 
 import { NativeIDKeys } from '../constants/LibraryConstants';
+import { LIB_ENV } from '../constants/LibEnv';
 
 
 //#region - Type Definitions
@@ -309,12 +310,15 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   private setNavStatus(navStatus: NavStatus){
     if(this.navStatus !== NavStatus.UNMOUNTED){
       //#region - 🐞 DEBUG 🐛
-      LIB_GLOBAL.debugLog && console.log(
+      LIB_ENV.debugLog && console.log(
           `LOG/JS - NavigatorView, setNavStatus`
+        + ` - navigatorID: ${this.navigatorID}`
         + ` - next status: ${navStatus}`
         + ` - current status: ${this.navStatus}`
+        + ` - queue.isBusy: ${this.queue.isBusy()}`
       );
       //#endregion
+
       this.navStatus = navStatus;
     };
   };
@@ -485,7 +489,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       this.routesToRemove = [];
 
       //#region - 🐞 DEBUG 🐛
-      LIB_GLOBAL.debugLog && console.log(
+      LIB_ENV.debugLog && console.log(
           `LOG/JS - NavigatorView, removeRouteBatchedFromState`
         + ` - with routeKey: ${params?.routeKey ?? 'N/A'}`
         + ` - routeIndex: ${params?.routeIndex ?? 'N/A'}`
@@ -565,10 +569,10 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       await transitionConfig.setTransition();
 
       //#region - 🐞 DEBUG 🐛
-      LIB_GLOBAL.debugLog && console.log(
+      LIB_ENV.debugLog && console.log(
           `LOG/JS - NavigatorView, push: add route`
         + ` - with routeKey: ${routeItem.routeKey}`
-        + ` - current activeRoutes: ${this.state.activeRoutes.length}`
+        + ` - pre-push activeRoutes: ${this.state.activeRoutes.length}`
       );
       //#endregion
       
@@ -1003,10 +1007,10 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       this.setNavStatus(NavStatus.NAV_INSERTING);
 
       //#region - 🐞 DEBUG 🐛
-      LIB_GLOBAL.debugLog && console.log(
+      LIB_ENV.debugLog && console.log(
           `LOG/JS - NavigatorView, insertRoute: add route`
         + ` - with routeKey: ${nextRoute.routeKey}`
-        + ` - current activeRoutes: ${this.state.activeRoutes.length}`
+        + ` - pre-push activeRoutes: ${this.state.activeRoutes.length}`
       );
       //#endregion
 
@@ -1124,7 +1128,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       ));
 
       //#region - 🐞 DEBUG 🐛
-      LIB_GLOBAL.debugLog && console.log(
+      LIB_ENV.debugLog && console.log(
           `LOG/JS - NavigatorView, setRoutes`
         + ` - current routes: ${currentRoutes}`
         + ` - next routes: ${nextRoutes}`
@@ -1262,14 +1266,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       return result;
 
     } catch(error){
-      //#region - 🐞 DEBUG 🐛
-      LIB_GLOBAL.debugLog && console.log(
-          `LOG/JS - NavigatorView, getNavigatorConstants`
-        + ` - error message: ${error}`
+      throw new Error(
+        "'NavigatorView.getNavigatorConstants' failed with error: " + error
       );
-      //#endregion
-
-      throw new Error("`NavigatorView` failed to do: `getNavigatorConstants` - " + error);
     };
   };
   //#endregion
@@ -1295,7 +1294,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     const { commandData } = nativeEvent;
 
     //#region - 🐞 DEBUG 🐛
-    LIB_GLOBAL.debugLog && console.log(
+    LIB_ENV.debugLog && console.log(
         `LOG/JS - NavigatorView, _handleOnNativeCommandRequest`
       + `commandKey: ${nativeEvent.commandData.commandKey}`
       + `commandData: ${JSON.stringify(nativeEvent.commandData)}`
@@ -1404,7 +1403,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     onNavRouteDidPop && onNavRouteDidPop({nativeEvent});
 
     //#region - 🐞 DEBUG 🐛
-    LIB_GLOBAL.debugLog && console.log(
+    LIB_ENV.debugLog && console.log(
         `LOG/JS - NavigatorView, onNavRouteDidPop`
       + ` - with args, routeKey: ${nativeEvent.routeKey}`
       + ` - routeIndex: ${nativeEvent.routeIndex}`
