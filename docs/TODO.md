@@ -10,6 +10,10 @@
 - [ ] Types - Update function parameters to be readonly.
 - [ ] Update `OnRoutePop` to receive `isAnimated` parameter.
 
+- [ ] Optimization — Add `shouldComponentUpdate` to `NavigatorRouteView` and `NavigatorView` to prevent excessive renders (especially when manipulating `state.activeRoutes` via the navigation commands).
+
+	- Debug + Investigate — Check for re-renders for the navigator + routes. E.g. Does re-rendering the navigator, also re-render their respective routes.
+
 <br>
 
 ## Implement
@@ -150,7 +154,6 @@
 
 - [ ] **Refactor**: Create navigator utilities file and move helper functions like `isNavBusy`, `compareRouteOptions`, etc.
 - [ ] **Refactor**: Export handlers for events so that types can applied more easily to event handler functions.
-- [ ] **Refactor**: Add `shouldComponentUpdate` to `NavigatorRouteView` and `NavigatorView` to prevent excessive renders (especially when manipulating `state.activeRoutes` via the navigation commands).
 - [ ] **Refactor**: Export types from native components to index.
 
 <br>
@@ -264,6 +267,9 @@
 	- <u>Major Breaking Change</u> — All usage of `NavigatorView` must be refactored.
 
 - [x] (Commit: `bfbdb29`) **Fix**: When removing a route via `removeRoute`, only `onRouteWillPop` is triggered, i.e. `onRouteDidPop` is never called. (see `NavigatorTest08`).
+- [x] (Commit: `7111060`) **Cleanup** — Cleanup `LIB_GLOBAL.debugLog` Usage
+	- Move `LIB_GLOBAL` to non-global constant `LIB_ENV` in `LibEnv.ts`.
+	- Removed `Globals.ts`.
 
 
 
