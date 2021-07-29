@@ -159,7 +159,7 @@ Each route can have a corresponding `RouteOptions` object. This object is used i
 | Name                                                         | Description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
 | 🔤 `getActiveRoutes`<br/><br/>⚛️ [`() => Array<NavRouteStackItem>`](PLACE_HOLDER_LINK) | Returns an array of `NavRouteStackItem` objects that represents the current state of the  navigation stack. |
-| 🔤 `sendCustomCommandToNative`<br/><br/>⚛️ `(commandKey: string, commandData: object |  null) => Promise<object | null>` | Will trigger  the `RNINavigatorViewDelegate.didReceiveCustomCommandFromJS` delegate method for the current navigator view instance. This method exists to send custom user-defined commands to the `RNINavigatorView`'s delegate (i.e. for custom native code integration).<br><br>📌 Check the [native integration guide](PLACE_HOLDER_LINK) section for more details. |
+| 🔤 `sendCustomCommandToNative`<br/><br/>⚛️ `(commandKey: string, commandData: object ¦ null) => Promise<object ¦ null>` | Will trigger  the `RNINavigatorViewDelegate.didReceiveCustomCommandFromJS` delegate method for the current navigator view instance. This method exists to send custom user-defined commands to the `RNINavigatorView`'s delegate (i.e. for custom native code integration).<br><br>📌 Check the [native integration guide](PLACE_HOLDER_LINK) section for more details. |
 | 🔤 `getNavigatorConstants`<br/><br/>⚛️ [`() => Promise<NavigatorConstantsObject>`](PLACE_HOLDER_LINK) | Resolves to an object containing values related to UI (e.g. `navBarHeight`, navigator bounds, `safeAreaInsets`, `statusBarHeight`), and the current state of the navigator (e.g. whether a view controller is being presented modally, the `activeRoutes`, the topmost view controller, and the current visible view controller). |
 
 <br>
@@ -687,14 +687,14 @@ const navBarAppearance = {
 ##### Object Type: `NavBarAppearanceLegacyConfig`
 
 | Name and Type                                                | Description |
-| :----------------------------------------------------------- | ----------- |
-| 🔤 `navBarPreset`<br/><br/>⚛️  `NavBarPreset` e.g. `'none' | 'noShadow' | 'clearBackground'`<br><br>✳️ **Default**: `none` |             |
-| 🔤 `barStyle`<br/><br/>⚛️  `'default' | 'black'`               |             |
+|--------------------------------------------------------------|-------------|
+| 🔤 `navBarPreset`<br/><br/>⚛️  `NavBarPreset` e.g. `'none' ¦ 'noShadow' ¦ 'clearBackground'`<br><br>✳️ **Default**: `none` |             |
+| 🔤 `barStyle`<br/><br/>⚛️  `'default' ¦ 'black'`               |             |
 | 🔤 `titleTextAttributes`<br/><br/>⚛️  `TextStyle`              |             |
 | 🔤 `largeTitleTextAttributes`<br/><br/>⚛️  `TextStyle`         |             |
 | 🔤 `titleVerticalPositionAdjustment`<br/><br/>⚛️ `{ [key in BarMetrics]?: number }`<br><br>📌 [`BarMetrics`](PLACE_HOLDER_LINK) |             |
-| 🔤 `tintColor`<br/><br/>⚛️  `string | DynamicColor`            |             |
-| 🔤 `barTintColor`<br/><br/>⚛️  `string | DynamicColor`         |             |
+| 🔤 `tintColor`<br/><br/>⚛️  `string ¦ DynamicColor`            |             |
+| 🔤 `barTintColor`<br><br>⚛️  `string ¦ DynamicColor`           |             |
 | 🔤 `backIndicatorImage`<br/><br/>⚛️  [`ImageItemConfig`](PLACE_HOLDER_LINK) |             |
 | 🔤 `backgroundImage`<br/><br/>⚛️  `{ [key in BarMetrics]?: ImageItemConfig }`<br><br>📌 [`BarMetrics`](PLACE_HOLDER_LINK)<br>📌 [`ImageItemConfig`](PLACE_HOLDER_LINK) |             |
 | 🔤 `shadowImage`<br/><br/>⚛️  [`ImageItemConfig`](PLACE_HOLDER_LINK) |             |
@@ -706,8 +706,8 @@ const navBarAppearance = {
 Lorum ipsum<br>
 
 | Name and Type                                                | Description |
-| :----------------------------------------------------------- | ----------- |
-| 🔤 `navBarPreset`<br/><br/>⚛️  `NavBarPreset` e.g. `'none' | 'noShadow' | 'clearBackground'`<br><br>✳️ **Default**: `none` |             |
+|--------------------------------------------------------------|-------------|
+| 🔤 `navBarPreset`<br><br>⚛️  `NavBarPreset` e.g. `'none' ¦ 'noShadow' ¦ 'clearBackground'`<br><br>✳️ **Default**: `none` |             |
 | 🔤 `standardAppearance`<br/><br/>⚛️  [`NavBarAppearance`](PLACE_HOLDER_LINK) |             |
 | 🔤 `compactAppearance`<br/><br/>⚛️  [`NavBarAppearance`](PLACE_HOLDER_LINK) |             |
 | 🔤 `scrollEdgeAppearance`<br/><br/>⚛️  [`NavBarAppearance`](PLACE_HOLDER_LINK) |             |
