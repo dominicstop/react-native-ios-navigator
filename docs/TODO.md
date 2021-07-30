@@ -10,10 +10,6 @@
 - [ ] Types - Update function parameters to be readonly.
 - [ ] Update `OnRoutePop` to receive `isAnimated` parameter.
 
-- [ ] Optimization — Add `shouldComponentUpdate` to `NavigatorRouteView` and `NavigatorView` to prevent excessive renders (especially when manipulating `state.activeRoutes` via the navigation commands).
-
-	- Debug + Investigate — Check for re-renders for the navigator + routes. E.g. Does re-rendering the navigator, also re-render their respective routes.
-
 <br>
 
 ## Implement
@@ -163,6 +159,7 @@
 - [ ] **Cleanup**: Swift — In property wrappers, replace all usage of `didSet` with `willSet` 
 - [ ] **Cleanup**: Swift — Replace all imports of `Foundation` with `UIKit`  
 - [ ] **Cleanup**: Types — Add JSDoc comments to types that shadow UIKit types.
+- [ ] **Cleanup**: Types — Replace `null | undefined` with custom `Nullish<T>` generic.
 
 <br>
 
@@ -232,6 +229,7 @@
 
 - [ ] **Test**: Demo for navigation bar appearance (i.e. like `NavigatorTest01` but in demo form).
 	* Automatically push routes consecutively/one after the other. Each route will have `routeOptions` that will change the appearance of the route's navigation bar
+- [ ] **Test**: Update route props (e.g. via `setRoutes`, etc). 
 
 <br>
 
@@ -270,6 +268,74 @@
 - [x] (Commit: `7111060`) **Cleanup** — Cleanup `LIB_GLOBAL.debugLog` Usage
 	- Move `LIB_GLOBAL` to non-global constant `LIB_ENV` in `LibEnv.ts`.
 	- Removed `Globals.ts`.
+
+- [x] (Commit: `8c5d232`) Optimization — Add `shouldComponentUpdate` to `NavigatorRouteView` and `NavigatorView` to prevent excessive renders (especially when manipulating `state.activeRoutes` via the navigation commands).
+
+	* Debug + Investigate
+
+		* A Debug: Check for re-renders for the navigator + routes. E.g. Does re-rendering the navigator, also re-render their respective routes.
+
+			- Setting `NavigatorRouteView.shouldComponentUpdate` to return `false`, still triggers re-render.
+
+			- Making `NavigatorRouteView.setRouteOptions` no-op, still triggers re-render.
+
+			- Making `NavigatorRouteView.setRouteViewPortalRef`  no-op, still triggers re-render.
+
+			- Disabling route sorting in `NavigatorView.getRoutesToRender` still triggers re-render.
+
+				- > Returning false does not prevent child components from re-rendering when their state changes
+
+			- Disabling `this._routeComponentsWrapperRef.forceUpdate()` in `RouteViewPortal.componentDidUpdate` still triggers re-render.
+
+			- Passing a constant to the following `NavigatorRouteView` props in `NavigatorView._renderRoutes` still triggers re-render. 
+
+				- Also tried: `currentActiveRouteIndex`, `routeProps`, `routeOptionsDefault`, `transitionConfigPushOverride`, `transitionConfigPopOverride`
+
+		* B. Debug: Push some routes  (i.e. `NavigatorTest03`) into the stack, then run react profiler. Push another route into the stack. If the other routes re-render, check reason.
+
+			- According to the react-devtools profiler, the reason why `NavigatorRouteView`  re-rendered is because:
+				- Context changed
+				- Props changed: `renderRouteContent`, `renderNavBarLeftItem`, `renderNavBarRightItem`, `renderNavBarTitleItem`.
+			- All `NavigatorRouteView` siblings (i.e. the previous routes in the stack) re-rendered when a route was pushed.
+				- `NavigatorView` re-rendered due to state change (e.g. `activeRoutes`) which is expected behavior.
+			- In `NavigatorView`, try passing null to the `NavigatorRouteView` props:  `renderNavBarLeftItem`, `renderNavBarRightItem`, `renderNavBarTitleItem`.
+				- Pushed 3 routes into the stack, then started profiling. Pushed a route, then stopped profiling.
+				- According to the react-devtools profiler, the reason why `NavigatorRouteView` re-rendered is because: **A**. context changed, and **B**. the `renderRouteContent` prop changed. All sibling routes re-rendered for the same reason.
+				- The last route sibling's (i,e, the new route pushed into the stack) reason for rendering is: "first time rendered".
+					- Which means that the other components aren't getting re-created on each render.
+
+		* C. Debug: Push some routes  (i.e. `RouteA` in `NavigatorTest08`) into the stack, then run react profiler. Push another route into the stack. If the other routes re-render, check reason.
+
+			- The results are similar to "B. Debug", even though the route config is declared as a constant outside the component.
+
+		* D. Attempt: Wrap the routes inside a component then try should component update false.
+
+			- Wrapped the `NavigatorRouteView` inside `NavigatorRouteViewWrapper`.	
+				- `NavigatorRouteViewWrapper` re-renders due to `renderRouteContent` prop change.
+				- `NavigatorRouteView` re-renders due to `renderRouteContent` + context change. i.e. same as before.
+			- Set `NavigatorRouteViewWrapper.shouldComponentUpdate` to return false.
+				- The `NavigatorRouteViewWrapper` no longer re-renders, but `NavigatorRouteView` still re-renders due to context change.
+
+		* E. Discard all previous changes. 
+
+		* F. Debug: Push some routes  (i.e.  `NavigatorTest03`) into the stack, then run react profiler. Push another route into the stack. If the other routes re-render, check reason.
+
+			- All sibling `NavigatorRouteView` routes re-rendered due to:
+				- Context changed
+				- Props changed: `currentActiveRouteIndex`, `renderRouteContent`, `renderNavBarLeftItem`, `renderNavBarRightItem`, `renderNavBarTitleItem`.
+
+		* G. Attempt: In `NavigatorRouteView._renderRouteContents` wrap the `routeContent` (i,e, the route to be rendered returned by `renderRouteContent`) inside a component.
+
+			- Wrapped `routeContent` inside `NavigatorRouteContentWrapper`.
+			- Push some routes  (i.e.  `NavigatorTest03`) into the stack, then run react profiler. Push another route into the stack. If the other routes re-render, check reason.
+				- `NavigatorRouteContentWrapper` re-rendered because the children changed.
+				- However, setting `NavigatorRouteContentWrapper.shouldComponentUpdate` to return false stopped the re-render from propagating.
+
+		* E. Bug Fix: The routes where re-rendering due to a missing in `!` when comparing the props, as such `NavigatorRouteView.shouldComponentUpdate` was always returning true 😂.
+
+	* Created `NavigatorRouteContentWrapper` and `NavigatorRouteContentWrapper` to optimize re-renders.
+
+	* Fixed re-renders caused by context, and other misc. optimizations.
 
 
 
