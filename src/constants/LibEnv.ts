@@ -6,8 +6,8 @@
 
 export const LIB_ENV = {
   /** Log debug messages to console */
-  debugLog: __DEV__ && true,
+  debugLog: __DEV__ && false,
 
   /** Log re-renders of components */
-  debugLogRender: __DEV__ && true,
+  debugLogRender: __DEV__ && false,
 };
