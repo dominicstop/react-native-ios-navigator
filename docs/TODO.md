@@ -252,11 +252,17 @@
 
 - [x] (Commit: `c3d4ac1`) **Refactor**: Types — Update `EventEmitter` to use mapped types i.e. each event will be mapped to an event handler. Then via generics the "event map" will be used to inject the type to the listener parameter depending on the event key.
 	* <u>Breaking Change</u> — Removed `useNavBarItemEvents` + `useNavRouteLifeCycle` hooks and consolidate them to a single hook called `useNavRouteEvents`.
+
+<br>
+
 - [x] (Commit: `b7fcf61`) **Refactor**: Enable `strictNullChecks` for library.
 - [x] (Commit: `bd6341a`) **Fix**: `RouteViewPortal.renderNavBarTitleItem` not updating when component is mounted/unmounted.
 - [x] (Commit: `3da44f3`) **Implement**: Impl. navigation command for `NavigationObject`  to get the current navigation stack. One use case could be for it to be called inside a navbar render item and read the current navigation stack to display the prev. routes's title, etc.
 	- Note: `NavigatorView.getActiveRoutes` already exist so maybe just expose that to the navigation object.
 	- Maybe also add get prev. route and get current route for convenience.
+
+<br>
+
 - [x] (Commit: `815e56c`) **Examples**: Add tester for the navigation events.
 - [x] (Commit: `21322a1`) Types - Refactor `useNavRouteEvents` to use mapped types.
 
@@ -264,10 +270,14 @@
 
 	- <u>Major Breaking Change</u> — All usage of `NavigatorView` must be refactored.
 
+<br>
+
 - [x] (Commit: `bfbdb29`) **Fix**: When removing a route via `removeRoute`, only `onRouteWillPop` is triggered, i.e. `onRouteDidPop` is never called. (see `NavigatorTest08`).
 - [x] (Commit: `7111060`) **Cleanup** — Cleanup `LIB_GLOBAL.debugLog` Usage
 	- Move `LIB_GLOBAL` to non-global constant `LIB_ENV` in `LibEnv.ts`.
 	- Removed `Globals.ts`.
+
+<br>
 
 - [x] (Commit: `8c5d232`) Optimization — Add `shouldComponentUpdate` to `NavigatorRouteView` and `NavigatorView` to prevent excessive renders (especially when manipulating `state.activeRoutes` via the navigation commands).
 
@@ -336,6 +346,10 @@
 	* Created `NavigatorRouteContentWrapper` and `NavigatorRouteContentWrapper` to optimize re-renders.
 
 	* Fixed re-renders caused by context, and other misc. optimizations.
+
+<br>
+
+- [x] (Commit: `4748b4b`) **Bugfix**: Fixed `renderRouteHeader` not showing up/mounting.
 
 
 
