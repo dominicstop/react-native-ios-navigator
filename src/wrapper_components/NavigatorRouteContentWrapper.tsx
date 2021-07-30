@@ -13,9 +13,11 @@ import { NativeIDKeys } from '../constants/LibraryConstants';
 type NavigatorRouteContentWrapperProps = Pick<NavigatorRouteViewProps, 
   | 'isInFocus'
 > & {
-  routePropsUpdateIndex: number;
-  safeAreaInsets: EdgeInsets | undefined;
+  hasRouteHeader: boolean;
   automaticallyAddHorizontalSafeAreaInsets: boolean | undefined;
+  routePropsUpdateIndex: number;
+  
+  safeAreaInsets: EdgeInsets | undefined;
   routeContainerStyle?: ViewStyle;
 };
 
@@ -39,8 +41,12 @@ export class NavigatorRouteContentWrapper extends React.Component<NavigatorRoute
     );
 
     return (shouldUpdate && (
+      // compare whether there's a `renderRouteHeader` or not
+      (prevProps.hasRouteHeader !== nextProps.hasRouteHeader)
+      
       // compare `automaticallyAddHorizontalSafeAreaInsets`
-      (prevProps.automaticallyAddHorizontalSafeAreaInsets !== nextProps.automaticallyAddHorizontalSafeAreaInsets)
+      || (prevProps.automaticallyAddHorizontalSafeAreaInsets !== nextProps.automaticallyAddHorizontalSafeAreaInsets)
+      
       // compare `safeAreaInsets`
       || !CompareEdgeInsets.unwrapAndCompare(
         prevProps.safeAreaInsets, 

@@ -556,6 +556,7 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
             routeContainerStyle={routeOptions.routeContainerStyle}
             automaticallyAddHorizontalSafeAreaInsets={routeOptions.automaticallyAddHorizontalSafeAreaInsets}
             safeAreaInsets={context.safeAreaInsets}
+            hasRouteHeader={(routeHeader != null)}
           >
             {routeContentWithProps}
             {routeHeader}
