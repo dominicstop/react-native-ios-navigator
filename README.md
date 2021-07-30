@@ -12,7 +12,7 @@ Currently in development... 😅 (See [TODO.md](https://github.com/dominicstop/r
 
 ## A. Introduction
 
-Before you use this library, please consider looking at `react-navigation` and `react-native-navigation` first. They offer more features, are battle-tested, well maintained, and most importantly: cross-platform.
+Before you use this library, please first consider looking at [`react-navigation`](https://github.com/react-navigation/react-navigation), [`react-native-navigation`](https://github.com/wix/react-native-navigation), and [`react-router`](https://github.com/ReactTraining/react-router). They offer more features, are battle-tested, well maintained, and most importantly: cross-platform. This library is more of a personal pet project 😌.
 
 <br>
 
