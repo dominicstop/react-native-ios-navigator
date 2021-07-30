@@ -1,7 +1,7 @@
 import { NativeModules } from 'react-native';
 
-import type { RNINavigatorRouteViewProps } from 'src/native_components/RNINavigatorRouteView';
-import type { EdgeInsets, Rect } from 'src/types/MiscTypes';
+import type { RNINavigatorRouteViewProps } from '../native_components/RNINavigatorRouteView';
+import type { EdgeInsets, Rect } from '../types/MiscTypes';
 
 export type NativePushPopOptions = {
   isAnimated?: boolean;

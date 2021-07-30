@@ -5,7 +5,7 @@ import { RNIWrapperView } from '../native_components/RNIWrapperView';
 import { NativeRouteMap, RNINavigatorView, RNINavigatorViewProps } from '../native_components/RNINavigatorView';
 import { NavigatorConstantsObject, RNINavigatorViewModule } from '../native_modules/RNINavigatorViewModule';
 
-import { NavigatorRouteView } from './NavigatorRouteView';
+import type { NavigatorRouteView } from './NavigatorRouteView';
 
 import { NavigatorUIConstantsContext } from '../context/NavigatorUIConstantsContext';
 
@@ -25,6 +25,9 @@ import { SimpleQueue } from '../functions/SimpleQueue';
 
 import { NativeIDKeys } from '../constants/LibraryConstants';
 import { LIB_ENV } from '../constants/LibEnv';
+import { NavigatorRouteViewWrapper } from '../wrapper_components/NavigatorRouteViewWrapper';
+
+
 
 
 //#region - Type Definitions
@@ -1273,7 +1276,11 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   };
   //#endregion
 
-  //#region - Native Event Handlers
+  //#region - Handlers
+  private _handleRouteViewWrapperRef = (ref: NavigatorRouteView | null, route: NavRouteStackItem) => {
+    this.routeRefMap[route.routeID] = ref!;
+  };
+
   private _handleOnNavRouteViewAdded: OnNavRouteViewAddedEvent = (event) => {
     if(this.navigatorID !== event.nativeEvent.navigatorID) return;
 
@@ -1471,15 +1478,16 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       const isSecondToLast = route.routeIndex === (activeRoutesLastIndex - 1);
 
       return (
-        <NavigatorRouteView
+        <NavigatorRouteViewWrapper
           key={`routeID-${route.routeID}`}
-          ref={r => { this.routeRefMap[route.routeID] = r! }}
+          innerRef={this._handleRouteViewWrapperRef}
           navigatorID={this.navigatorID}
           routeID={route.routeID}
           routeIndex={route.routeIndex}
           routeKey={route.routeKey}
-          isRootRoute={(route.routeIndex === 0)}
           currentActiveRouteIndex={activeRoutesLastIndex}
+          route={route}
+          routeConfig={routeConfig}
           // merge routeProps
           routeProps={Helpers.shallowMergeObjects(
             routeConfig.initialRouteProps,
@@ -1499,21 +1507,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
             : null
           )}
           getRefToNavigator={this._handleGetRefToNavigator}
-          renderRouteContent={() => (
-            routeConfig.renderRoute(route)
-          )}
-          renderNavBarLeftItem={(params) => (
-            routeConfig.renderNavBarLeftItem?.(params) ??
-            props      .renderNavBarLeftItem?.(params)
-          )}
-          renderNavBarRightItem={(params) => (
-            routeConfig.renderNavBarRightItem?.(params) ??
-            props      .renderNavBarRightItem?.(params)
-          )}
-          renderNavBarTitleItem={(params) => (
-            routeConfig.renderNavBarTitleItem?.(params) ??
-            props      .renderNavBarTitleItem?.(params)
-          )}
+          renderDefaultNavBarLeftItem={props.renderNavBarLeftItem}
+          renderDefaultNavBarRightItem={props.renderNavBarRightItem}
+          renderDefaultNavBarTitleItem={props.renderNavBarTitleItem}
         />
       );
     });

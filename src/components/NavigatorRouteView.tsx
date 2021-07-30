@@ -1,9 +1,9 @@
 import React, { ReactElement } from 'react';
-import { StyleSheet, View, ViewStyle } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import type { NavigationObject } from '../types/NavigationObject';
 import type { RouteOptions } from '../types/RouteOptions';
-import type { RenderNavItem } from '../types/NavTypes';
+import type { RenderNavItem, RenderRouteContent } from '../types/NavTypes';
 import type { OnRoutePopEvent, OnRoutePushEvent, OnPressNavBarItemEvent, OnRouteFocusBlurEvent, OnUpdateSearchResultsEvent, OnSearchBarCancelButtonClickedEvent, OnSearchBarSearchButtonClickedEvent } from '../types/RNINavigatorRouteViewEvents';
 import type { RouteTransitionPushConfig, RouteTransitionPopConfig } from '../types/NavigationCommands';
 
@@ -21,19 +21,18 @@ import * as Helpers from '../functions/Helpers';
 
 import { TSEventEmitter } from '../functions/TSEventEmitter';
 import { CompareRouteTransitionPopConfig, CompareRouteTransitionPushConfig } from '../functions/CompareRouteOptions';
+import { CompareUtilities } from '../functions/CompareUtilities';
+import { CompareRouteOptions } from '../functions/CompareRouteOptions';
 
 import { NavRouteViewContext } from '../context/NavRouteViewContext';
 import { NavigatorUIConstantsContext } from '../context/NavigatorUIConstantsContext';
 
 import { NativeIDKeys } from '../constants/LibraryConstants';
 import { LIB_ENV } from '../constants/LibEnv';
+import { NavigatorRouteContentWrapper } from '../wrapper_components/NavigatorRouteContentWrapper';
 
 
 //#region - Type Definitions
-/** Event emitter keys for `NavigatorRouteView` */
-
-
-
 
 export interface RouteContentProps<T = object> {
   navigation?: NavigationObject<T>;
@@ -61,17 +60,16 @@ export type NavigatorRouteViewProps = Pick<RNINavigatorRouteViewProps,
   navigatorID: number;
 
   routeProps: object | null;
-  isRootRoute: boolean;
-
-  currentActiveRouteIndex: number;
-
   routeOptionsDefault: RouteOptions | null;
+
+  isInFocus: boolean;
 
   transitionConfigPushOverride: RouteTransitionPushConfig | null | undefined;
   transitionConfigPopOverride : RouteTransitionPopConfig  | null | undefined;
 
   getRefToNavigator: () => NavigatorView;
-  renderRouteContent: () => ReactElement<RouteContentProps>;
+  
+  renderRouteContent: RenderRouteContent;
 
   // render nav bar items
   renderNavBarLeftItem : RenderNavItem | null;
@@ -91,12 +89,13 @@ type NavigatorRouteViewState = {
 
 
 export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps, NavigatorRouteViewState> {
-  static contextType = NavigatorUIConstantsContext;
-  
   //#region - Property Declarations
   routeContentRef: React.Component<RouteContentProps>;
 
   routeStatus: RouteStatus;
+
+  /** is incremented whenever `props.routeProps` changes */
+  private routePropsUpdateIndex = 0;
 
   // references
   private _emitter           : NavigatorRouteViewEventEmitter;
@@ -126,27 +125,43 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
     const prevProps = this.props;
     const prevState = this.state;
 
-    const routeIndex = prevProps.routeIndex;
+    const didRoutePropsChange = !CompareUtilities.unwrapAndShallowCompareObject(
+      prevProps.routeProps,
+      nextProps.routeProps
+    );
 
+    if(didRoutePropsChange) this.routePropsUpdateIndex++;
+
+    // note: short-circuit eval so:
+    // * value types first
+    // * complex/nested objects last
     return (
+      didRoutePropsChange
       // props: compare `routeIndex` - routes were re-arranged/sorted
-         (prevProps.routeIndex !== nextProps.routeIndex)
-      // props: compare focus - topmost route <-> not topmost route
-      || (routeIndex === prevProps.currentActiveRouteIndex) !== (routeIndex === nextProps.currentActiveRouteIndex)
-      // props: compare "push transition config"
-      || CompareRouteTransitionPushConfig.unwrapAndCompare(
-        prevProps.transitionConfigPushOverride,
-        nextProps.transitionConfigPushOverride
-      )
-      // props: compare "pop transition config"
-      || CompareRouteTransitionPopConfig.unwrapAndCompare(
-        prevProps.transitionConfigPopOverride,
-        nextProps.transitionConfigPopOverride
-      )
+      || (prevProps.routeIndex !== nextProps.routeIndex)
+      // props: compare focus change
+      || (prevProps.isInFocus !== nextProps.isInFocus)
+
       // state: compare `hasRoutePortal` - portal comp. added/removed 
       || (prevState.hasRoutePortal !== nextState.hasRoutePortal)
       // state: compare `updateIndex` - force an update
       || (prevState.updateIndex !== nextState.updateIndex)
+
+      // props: compare "push transition config"
+      || !CompareRouteTransitionPushConfig.unwrapAndCompare(
+        prevProps.transitionConfigPushOverride,
+        nextProps.transitionConfigPushOverride
+      )
+      // props: compare "pop transition config"
+      || !CompareRouteTransitionPopConfig.unwrapAndCompare(
+        prevProps.transitionConfigPopOverride,
+        nextProps.transitionConfigPopOverride
+      )
+      // props: compare "default route options"
+      || !CompareRouteOptions.unwrapAndCompare(
+        prevProps.routeOptionsDefault,
+        nextProps.routeOptionsDefault
+      )
     );
   };
 
@@ -512,12 +527,10 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
   
   private _renderRouteContents = (navigation: NavigationObject) => {
     const props = this.props;
-    const context = this.context;
-
-    const routeContent = props.renderRouteContent();
 
     const routeOptions = navigation.routeOptions;
-    const safeAreaInsets = context.safeAreaInsets;
+
+    const routeContent = props.renderRouteContent();
 
     const routeContentWithProps = React.cloneElement<RouteContentProps>(routeContent, {
       navigation,
@@ -534,21 +547,21 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
       props.renderRouteHeader?.(navigation)
     );
 
-    const routeContainerStyle: ViewStyle = {
-      ...(routeOptions.automaticallyAddHorizontalSafeAreaInsets && {
-        paddingLeft : safeAreaInsets?.left  ?? 0,
-        paddingRight: safeAreaInsets?.right ?? 0,
-      }),
-    };
-
-    return(
-      <View
-        style={[styles.routeContentContainer, routeContainerStyle, routeOptions.routeContainerStyle]}
-        nativeID={NativeIDKeys.RouteContent}
-      >
-        {routeContentWithProps}
-        {routeHeader}
-      </View>
+    return (
+      <NavigatorUIConstantsContext.Consumer>
+        {(context) => (
+          <NavigatorRouteContentWrapper
+            isInFocus={props.isInFocus}
+            routePropsUpdateIndex={this.routePropsUpdateIndex}
+            routeContainerStyle={routeOptions.routeContainerStyle}
+            automaticallyAddHorizontalSafeAreaInsets={routeOptions.automaticallyAddHorizontalSafeAreaInsets}
+            safeAreaInsets={context.safeAreaInsets}
+          >
+            {routeContentWithProps}
+            {routeHeader}
+          </NavigatorRouteContentWrapper>
+        )}
+      </NavigatorUIConstantsContext.Consumer>
     );
   };
 
@@ -638,18 +651,9 @@ class RouteViewUtils {
 };
 
 const styles = StyleSheet.create({
-  routeItem: {
-    position: 'absolute',
-    width: 0,
-    height: 0,
-  },
   navigatorRouteView: {
     ...StyleSheet.absoluteFillObject,
     // don't show
     opacity: 0,
-  },
-  routeContentContainer: {
-    ...StyleSheet.absoluteFillObject,
-    overflow: 'hidden',
   },
 });

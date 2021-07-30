@@ -41,6 +41,16 @@ export class CompareUtilities {
     return true;
   };
 
+  static unwrapAndShallowCompareObject<T extends object>(
+    itemA: T | null | undefined, 
+    itemB: T | null | undefined
+  ): boolean {
+    if((itemA == null) && (itemB == null)) return true;
+    if((itemA == null) || (itemB == null)) return false;
+
+    return CompareUtilities.shallowCompareObject(itemA, itemB);
+  };
+
   static compareObject<T extends {[k: string]: any}>(
     propertyMap: ComparisonConfig<T>,
     oldItem: T, newItem: T,

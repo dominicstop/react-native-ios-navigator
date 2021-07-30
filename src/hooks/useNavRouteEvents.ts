@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef } from 'react';
 
 import type { NavigatorRouteViewEvents, NavigatorRouteViewEventMap } from '../types/NavigatorRouteViewEventEmitter';
-import type { EnumValuesLiteral } from 'src/types/UtilityTypes';
+import type { EnumValuesLiteral } from '../types/UtilityTypes';
 
 import { NavRouteViewContext } from '../context/NavRouteViewContext';
 
