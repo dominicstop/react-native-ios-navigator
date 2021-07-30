@@ -434,9 +434,6 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
   private _handleOnRouteDidPop: OnRoutePopEvent = (event) => {
     if(this.props.routeID !== event.nativeEvent.routeID) return;
 
-    console.log('_handleOnRouteDidPop');
-    
-
     this._emitter.emit(NavigatorRouteViewEvents.onRouteDidPop, event);
     this.routeStatus = RouteStatus.ROUTE_POPPED;
   };
@@ -560,6 +557,15 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
 
     const navigation   = this.getRouteNavigationObject();
     const routeOptions = navigation.routeOptions;
+
+    //#region - 🐞 DEBUG 🐛
+    LIB_ENV.debugLogRender && console.log(
+        `LOG/JS - NavigatorRouteView, render`
+      + ` - routeID: ${props.routeID}`
+      + ` - routeKey: ${props.routeKey}`
+      + ` - routeKey: ${props.routeIndex}`
+    );
+    //#endregion
 
     return(
       <NavRouteViewContext.Provider value={{

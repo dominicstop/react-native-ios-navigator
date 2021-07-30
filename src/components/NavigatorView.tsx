@@ -95,7 +95,7 @@ type NavigatorViewState = Partial<Pick<OnUIConstantsDidChangeEventObject['native
 //#endregion
 
 const TIMEOUT_MOUNT   = 750;
-const TIMEOUT_COMMAND = 1500;
+const TIMEOUT_COMMAND = 1750;
 
 const iOSVersion = parseInt(Platform.Version as string, 10);
 
@@ -1526,6 +1526,13 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     const style = (props.style == null) 
       ? styles.navigatorView 
       : [styles.navigatorView, props.style];
+
+    //#region - 🐞 DEBUG 🐛
+    LIB_ENV.debugLogRender && console.log(
+        `LOG/JS - NavigatorView, render`
+      + ` - navigatorID: ${this.navigatorID}`
+    );
+    //#endregion
 
     return (
       <RNINavigatorView 
