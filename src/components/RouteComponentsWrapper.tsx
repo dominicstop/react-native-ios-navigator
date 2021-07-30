@@ -23,10 +23,10 @@ type RouteComponentsWrapperProps = Pick<NavigatorRouteViewProps,
  * This component is used to hold `NavigatorRouteView`'s navigation bar items, and the
  * other route-related comp. such as the route header.
  * 
- * This component needs to wrap the route component items so that they can re-render 
+ * * This component needs to wrap the route component items so that they can re-render 
  * and update when needed.
  * 
- * This component receives the route component items from `RouteViewPortal`. Whenever
+ * * This component receives the route component items from `RouteViewPortal`. Whenever
  * `RouteViewPortal` updates, this comp. will also update, causing the nav. bar items
  * to re-render and update.
  */
