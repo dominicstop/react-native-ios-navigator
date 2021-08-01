@@ -45,7 +45,10 @@ export function CardTitle(props: {
         {props.pillTitle && (
           <View style={[styles.cardPillWrapper, cardPillWrapper]}>
             <View style={styles.cardPillContainer}>
-              <Text style={styles.cardPillTitleText}>
+              <Text 
+                style={styles.cardPillTitleText}
+                numberOfLines={1}
+              >
                 {props.pillTitle}
               </Text>
             </View>
