@@ -150,6 +150,10 @@
 - [ ] **Refactor**: Create navigator utilities file and move helper functions like `isNavBusy`, `compareRouteOptions`, etc.
 - [ ] **Refactor**: Export handlers for events so that types can applied more easily to event handler functions.
 - [ ] **Refactor**: Export types from native components to index.
+- [ ] **Refactor**: Update component ref usage
+
+
+	- Use `React.createRef()` and `ref.current`.
 
 <br>
 
@@ -365,6 +369,7 @@
 <br>
 
 - [x] (Commit: `3da44f3`) **Refactor**: Types — Update function parameters to be readonly.
+- [x] (Commit: `ff754f4`) **Refactor**: Types — Enabled Strict Mode
 
 
 
