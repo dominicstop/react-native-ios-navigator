@@ -7,7 +7,7 @@
 ## Unsorted
 
 - [ ] Merge `routeProps` from `NavigatorView.initialRoutes`, `NavRouteConfigItem.initialRouteProps`, and `NavRouteStackItem.routeProps`.
-- [ ] Types - Update function parameters to be readonly.
+- [ ] Refactor: Move `RouteComponentsWrapper` to `src/wrapper_components`
 
 <br>
 
@@ -361,6 +361,10 @@
 	- Updated `onRouteFocusEventObject` to include `isFirstFocus`.
 	- Types — Extracted `OnRouteFocusEventObject` and `OnRouteFocusBlurEvent` to their own separate types.
 	- Update event handlers + emitters to use `OnRouteFocusEvent`, and `OnRouteBlurEvent`.
+
+<br>
+
+- [x] (Commit: `3da44f3`) **Refactor**: Types — Update function parameters to be readonly.
 
 
 
