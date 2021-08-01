@@ -8,7 +8,6 @@
 
 - [ ] Merge `routeProps` from `NavigatorView.initialRoutes`, `NavRouteConfigItem.initialRouteProps`, and `NavRouteStackItem.routeProps`.
 - [ ] Types - Update function parameters to be readonly.
-- [ ] Update `OnRoutePop` to receive `isAnimated` parameter.
 
 <br>
 
@@ -211,7 +210,6 @@
 
 <br>
 
-- [ ] **Fix**: Navigation push/pop event not triggered if route is added via `insertRoute` (see `NavigatorTest08`).
 - [ ] **Fix**: Some route events are not triggered since the route has already been unmounted.
 	- This is dues to the fact that the route is removed from `state.activeRoutes` before the route could receive the event from the native side.
 	- Possible culprits: `replaceRoute`, `setRoutes`
@@ -349,9 +347,13 @@
 
 <br>
 
-- [x] (Commit: `4748b4b`) **Bugfix**: Fixed `renderRouteHeader` not showing up/mounting.
+- [x] (Commit: `4748b4b`) **Fix**: Fixed `renderRouteHeader` not showing up/mounting.
 
+- [x] (Commit: `a3b2a0b`) **Fix**: Navigation push event not triggered if route is added via `insertRoute` (see `NavigatorTest08`).
 
+	* Push events only firing if triggered via the `push` route command.
+
+	- Trigger push events via  `vc.willMove` and `vc.didMove` view controller lifecycle instead of triggering manually from the navigation command.
 
 
 
@@ -766,4 +768,9 @@ DynamicColorIOS:  {"dynamic": {"dark": "blue", "light": "red"}}
 - [ ] **Implement**: Adopt `RCTInvalidating` protocol for all the `UIView`/`RCTView` subclasses.
 	- Tried reloading and fast refresh but `RCTInvalidating.invalidate` is not being invoked.
 	- It seems that `RCTInvalidating` is only meant to be used with view managers and native modules.
+
+<br>
+
+- [ ] Update `OnRoutePop` to receive `isAnimated` parameter.
+	- Cannot be impl. because `animated` is only available in `willAppear`/`didAppear` and not in `willMove`/`didMove`.
 
