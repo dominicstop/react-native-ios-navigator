@@ -637,23 +637,8 @@ internal extension RNINavigatorView {
     );
     #endif
     
-    let nextRouteView =
-      (nextRouteVC as? RNINavigatorReactRouteViewController)?.routeView;
-    
-    // notify js `RNINavigatorRouteView` that it's about to be pushed
-    nextRouteView?.notifyOnRoutePush(
-      isDone: false,
-      isAnimated: isAnimated
-    );
-    
     self.navigationVC.pushViewController(nextRouteVC, animated: isAnimated){
       completion();
-      
-      // notify js `RNINavigatorRouteView` that it's been pushed
-      nextRouteView?.notifyOnRoutePush(
-        isDone: true,
-        isAnimated: isAnimated
-      );
     };
   };
   

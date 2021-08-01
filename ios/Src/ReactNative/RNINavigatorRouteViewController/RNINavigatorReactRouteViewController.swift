@@ -347,6 +347,9 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
   private weak var searchBarTextField: UITextField?;
   private weak var searchBaPlaceholderLabel: UILabel?;
   
+  /// Whether or not the VC has been pushed into the navigation stack
+  private(set) var isPushed = false;
+  
   // -----------------------------------
   // MARK:- Convenient Property Wrappers
   // -----------------------------------
@@ -550,22 +553,27 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       + " - routeID: \(self.routeID)"
       + " - routeKey: \(self.routeKey)"
       + " - routeIndex: \(self.routeIndex)"
+      + " - has routeView: \(self.routeView != nil)"
     );
     #endif
+    
+    guard let routeView = self.routeView else { return };
     
     if parent == nil {
       // this vc 'will' be popped
       // note: if `isToBeRemoved` is false, then "pop"/back is user initiated.
       let isUserInitiated = !self.isToBeRemoved;
       
-      // send event: notify js nav. route view that it's going to be popped.
-      self.routeView?.notifyOnRoutePop(
+      // send event: notify js nav. route view that it's about to be popped.
+      routeView.notifyOnRoutePop(
         isDone: false,
         isUserInitiated: isUserInitiated
       );
       
-    } else {
-      // TODO: View controller was moved, possibly due replacing a route?
+    } else if !self.isPushed {
+      // this vc will be "pushed"
+      // send event: notify js nav. route view that it's about to be pushed.
+      routeView.notifyOnRoutePush(isDone: false);
     };
   };
   
@@ -595,8 +603,13 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
         isUserInitiated: isUserInitiated
       );
       
-    } else {
-      // TODO: View controller was moved, possibly due replacing a route?
+    } else if !self.isPushed {
+      // this vc will be "pushed"
+      // we only want this to trigger only once, so flip flag
+      self.isPushed = true;
+      
+      // send event: notify js nav. route view that it's been pushed.
+      routeView.notifyOnRoutePush(isDone: true);
     };
   };
   

@@ -11,9 +11,7 @@ type BaseEventObject = {
 };
 
 export type OnRoutePushEventObject = {
-  nativeEvent: BaseEventObject & { 
-    isAnimated: boolean;
-  };
+  nativeEvent: BaseEventObject;
 };
 
 export type OnRoutePopEventObject = {

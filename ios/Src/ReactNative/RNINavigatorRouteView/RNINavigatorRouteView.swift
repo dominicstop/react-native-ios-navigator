@@ -811,9 +811,8 @@ internal extension RNINavigatorRouteView {
   };
   
   /// notify js `RNINavigatorRouteView` that its about to be/has been pushed
-  func notifyOnRoutePush(isDone: Bool, isAnimated: Bool){
-    var dict = self.createEventPayload();
-    dict["isAnimated"] = isAnimated;
+  func notifyOnRoutePush(isDone: Bool){
+    let dict = self.createEventPayload();
     
     // send event
     (isDone ? self.onRouteDidPush : self.onRouteWillPush)?(dict);
