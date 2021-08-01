@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 
-import type { NavigatorRouteViewProps } from './NavigatorRouteView';
-import type { RouteViewPortal } from './RouteViewPortal';
+import type { NavigatorRouteViewProps } from '../components/NavigatorRouteView';
+import type { RouteViewPortal } from '../components/RouteViewPortal';
 import type { NavigationObject } from '../types/NavigationObject';
 
 import { NativeIDKeys } from '../constants/LibraryConstants';

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import type { NavigatorRouteView, NavigatorRouteViewProps } from '../components/NavigatorRouteView';
-import type { RouteComponentsWrapper } from './RouteComponentsWrapper';
+import type { RouteComponentsWrapper } from '../wrapper_components/RouteComponentsWrapper';
 import type { RouteOptions } from '../types/RouteOptions';
 
 import { CompareRouteOptions } from '../functions/CompareRouteOptions';

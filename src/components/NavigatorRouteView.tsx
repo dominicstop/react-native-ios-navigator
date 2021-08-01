@@ -12,7 +12,7 @@ import { NavigatorRouteViewEventEmitter, NavigatorRouteViewEvents } from '../typ
 import type { NavigatorView } from './NavigatorView';
 import type { RouteViewPortal } from './RouteViewPortal';
 
-import { RouteComponentsWrapper } from './RouteComponentsWrapper';
+import { RouteComponentsWrapper } from '../wrapper_components/RouteComponentsWrapper';
 
 import { RNINavigatorRouteView, RNINavigatorRouteViewProps } from '../native_components/RNINavigatorRouteView';
 import { RNINavigatorRouteViewModule } from '../native_modules/RNINavigatorRouteViewModule';
