@@ -110,8 +110,6 @@ let nativeRouteKeys: Record<string, string> = {};
 export class NavigatorView extends React.PureComponent<NavigatorViewProps, NavigatorViewState> {
   
   //#region - Property Declarations
-  state: NavigatorViewState;
-
   /** A ref to the `RNINavigatorView` native component. */
   nativeRef: React.Component;
 
@@ -184,8 +182,10 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       // skip native routes...
       if(routeConfig.isNativeRoute) continue;
+      // TODO: Add user-defined type guard
+      // * (x: NavRouteConfigItem): x is NavRouteConfigItemJS
 
-      if(routeConfig.renderRoute == null) throw new Error(
+      if((routeConfig as NavRouteConfigItemJS).renderRoute == null) throw new Error(
           `Invalid route config for ${routeKey} in NavigatorView.routes prop.`
         + ` Missing 'renderRoute' function (all JS routes must have a component to render).`
       );
