@@ -53,3 +53,6 @@ export type KeyMapType
   <T extends string, K extends { [k in `${T}`]: any }> = K;
 
 export type NeverUndefined<T> = T extends undefined | null ? never : T;
+
+/** Can be either `null` or `undefined` (it doesn't really matter). */
+export type Nullish<T> = T | null | undefined;

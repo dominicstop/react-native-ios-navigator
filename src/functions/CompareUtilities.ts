@@ -1,6 +1,6 @@
 
 import fastDeepEqual from "fast-deep-equal";
-import type { NeverUndefined } from "../types/UtilityTypes";
+import type { NeverUndefined, Nullish } from "../types/UtilityTypes";
 
 
 export type ComparisonConfig<T> = {[K in keyof Required<T>]: {
@@ -42,8 +42,8 @@ export class CompareUtilities {
   };
 
   static unwrapAndShallowCompareObject<T extends object>(
-    itemA: T | null | undefined, 
-    itemB: T | null | undefined
+    itemA: Nullish<T>,
+    itemB: Nullish<T>
   ): boolean {
     if((itemA == null) && (itemB == null)) return true;
     if((itemA == null) || (itemB == null)) return false;

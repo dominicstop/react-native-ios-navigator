@@ -6,6 +6,7 @@ import type { RouteOptions } from '../types/RouteOptions';
 import type { RenderNavItem, RenderRouteContent } from '../types/NavTypes';
 import type { OnRoutePopEvent, OnRoutePushEvent, OnPressNavBarItemEvent, OnRouteFocusEvent, OnRouteBlurEvent, OnUpdateSearchResultsEvent, OnSearchBarCancelButtonClickedEvent, OnSearchBarSearchButtonClickedEvent } from '../types/RNINavigatorRouteViewEvents';
 import type { RouteTransitionPushConfig, RouteTransitionPopConfig } from '../types/NavigationCommands';
+import type { Nullish } from '../types/UtilityTypes';
 
 import { NavigatorRouteViewEventEmitter, NavigatorRouteViewEvents } from '../types/NavigatorRouteViewEventEmitter';
 
@@ -64,8 +65,8 @@ export type NavigatorRouteViewProps = Pick<RNINavigatorRouteViewProps,
 
   isInFocus: boolean;
 
-  transitionConfigPushOverride: RouteTransitionPushConfig | null | undefined;
-  transitionConfigPopOverride : RouteTransitionPopConfig  | null | undefined;
+  transitionConfigPushOverride: Nullish<RouteTransitionPushConfig>;
+  transitionConfigPopOverride : Nullish<RouteTransitionPopConfig>;
 
   getRefToNavigator: () => NavigatorView;
   
@@ -82,7 +83,7 @@ export type NavigatorRouteViewProps = Pick<RNINavigatorRouteViewProps,
 /** `NavigatorView` comp. state */
 type NavigatorRouteViewState = {
   updateIndex: number;
-  routeOptions: RouteOptions | null | undefined;
+  routeOptions: Nullish<RouteOptions>;
   hasRoutePortal: boolean;
 };
 //#endregion
@@ -366,7 +367,7 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
   };
   
   public setRouteOptions = async (
-    routeOptions: Readonly<RouteOptions> | null | undefined
+    routeOptions: Nullish<Readonly<RouteOptions>>
   ) => {
     await Helpers.setStateAsync<NavigatorRouteViewState>(this, (prevState) => ({
       ...prevState, routeOptions,

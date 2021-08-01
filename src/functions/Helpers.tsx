@@ -1,6 +1,9 @@
 import type React from 'react';
 import { findNodeHandle } from 'react-native';
 
+import type { Nullish } from '../types/UtilityTypes';
+
+
 /** wrapper func for setState that returns a promise */
 // eslint-disable-next-line consistent-this
 export function setStateAsync<T>(
@@ -67,7 +70,10 @@ export function addOptional
   return {...a, ...b};
 };
 
-export function shallowMergeObjects<T extends object>(a: T | null | undefined, b: T | null | undefined): T | null {
+export function shallowMergeObjects<T extends object>(
+  a: Nullish<T>,
+  b: Nullish<T>
+): T | null {
   if     (a == null && b == null) return null;
   else if(a != null && b == null) return a;
   else if(a == null && b != null) return b;

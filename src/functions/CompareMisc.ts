@@ -1,4 +1,5 @@
 
+import type { Nullish } from 'src/types/UtilityTypes';
 import type { DynamicColor, EdgeInsets } from '../types/MiscTypes';
 
 
@@ -27,8 +28,8 @@ export class CompareEdgeInsets {
   };
 
   static unwrapAndCompare<T extends EdgeInsets>(
-    a: T | null | undefined, 
-    b: T | null | undefined
+    a: Nullish<T>,
+    b: Nullish<T>
   ){
     if((a == null) && (b == null)) return true;
     if((a == null) || (b == null)) return false;

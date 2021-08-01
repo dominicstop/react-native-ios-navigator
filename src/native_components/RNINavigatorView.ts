@@ -2,6 +2,7 @@ import { ViewStyle, requireNativeComponent, UIManager } from 'react-native';
 
 import type { OnCustomCommandFromNativeEvent, OnNativeCommandRequestEvent, OnNavRoutePopEvent, OnNavRouteViewAddedEvent, OnSetNativeRoutesEvent, OnUIConstantsDidChangeEvent } from '../types/RNINavigatorViewEvents';
 import type { NavBarAppearanceCombinedConfig } from '../types/NavBarAppearanceConfig';
+import type { Nullish } from '../types/UtilityTypes';
 
 
 export type NativeRouteMap = {
@@ -28,7 +29,7 @@ export type RNINavigatorViewProps = {
   // Customize the Bar's Appearance
   navBarPrefersLargeTitles: boolean;
   isNavBarTranslucent: boolean;
-  navBarAppearance: NavBarAppearanceCombinedConfig | null | undefined;
+  navBarAppearance: Nullish<NavBarAppearanceCombinedConfig>;
   
   // Native Events
   onNavRouteViewAdded?: OnNavRouteViewAddedEvent;

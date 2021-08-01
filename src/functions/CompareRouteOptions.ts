@@ -5,6 +5,7 @@ import { CompareNavBarAppearanceCombinedConfig } from './CompareNavBarAppearance
 
 import type { RouteTransitionPushConfig, RouteTransitionPopConfig } from "../types/NavigationCommands";
 import type { RouteOptions } from "../types/RouteOptions";
+import type { Nullish } from '../types/UtilityTypes';
 
 
 // Note: These functions are used to compare objects and decide whether or not to
@@ -32,8 +33,8 @@ export class CompareRouteTransitionPushConfig {
   };
 
   static unwrapAndCompare<T extends RouteTransitionPushConfig>(
-    oldItem: T | null | undefined, 
-    newItem: T | null | undefined
+    oldItem: Nullish<T>,
+    newItem: Nullish<T>
   ){
     if((oldItem == null) && (newItem == null)) return true;
     if((oldItem == null) || (newItem == null)) return false;
@@ -54,8 +55,8 @@ export class CompareRouteTransitionPopConfig {
   };
 
   static unwrapAndCompare<T extends RouteTransitionPopConfig>(
-    oldItem: T | null | undefined, 
-    newItem: T | null | undefined
+    oldItem: Nullish<T>,
+    newItem: Nullish<T>
   ){
     if((oldItem == null) && (newItem == null)) return true;
     if((oldItem == null) || (newItem == null)) return false;
@@ -124,8 +125,8 @@ export class CompareRouteOptions {
   };
 
   static unwrapAndCompare<T extends RouteOptions>(
-    oldItem: T | null | undefined, 
-    newItem: T | null | undefined
+    oldItem: Nullish<T>,
+    newItem: Nullish<T>
   ){
     if((oldItem == null) && (newItem == null)) return true;
     if((oldItem == null) || (newItem == null)) return false;
