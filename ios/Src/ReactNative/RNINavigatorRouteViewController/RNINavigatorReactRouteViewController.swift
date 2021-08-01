@@ -347,8 +347,11 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
   private weak var searchBarTextField: UITextField?;
   private weak var searchBaPlaceholderLabel: UILabel?;
   
-  /// Whether or not the VC has been pushed into the navigation stack
+  /// Whether or not the VC has been "pushed" into the navigation stack
   private(set) var isPushed = false;
+  
+  /// count of how many times this vc has been in "focus"
+  private(set) var focusCounter = 0;
   
   // -----------------------------------
   // MARK:- Convenient Property Wrappers
@@ -491,10 +494,14 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated);
     
+    /// Whether or not the VC has been "focused" for the 1st time
+    let isFirstFocus = self.focusCounter == 0;
+    
     // send event: notify js nav. route is about to appear
     self.routeView!.notifyOnRouteFocus(
       isDone: false,
-      isAnimated: animated
+      isAnimated: animated,
+      isFirstFocus: isFirstFocus
     );
     
     /// Override the nav. config based on the current `routeView` `routeConfig`-related props
@@ -507,10 +514,15 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated);
     
+    /// Whether or not the VC has been "focused" for the 1st time
+    let isFirstFocus = self.focusCounter == 0;
+    self.focusCounter += 1;
+    
     // send event: notify js nav. route has appeared
     self.routeView?.notifyOnRouteFocus(
       isDone: true,
-      isAnimated: animated
+      isAnimated: animated,
+      isFirstFocus: isFirstFocus
     );
     
     // if back config was prev. overridden, then restore...

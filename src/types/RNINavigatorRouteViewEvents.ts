@@ -20,7 +20,14 @@ export type OnRoutePopEventObject = {
   };
 };
 
-export type OnRouteFocusBlurEventObject = {
+export type OnRouteFocusEventObject = {
+  nativeEvent: BaseEventObject & { 
+    isAnimated: boolean;
+    isFirstFocus: boolean;
+  };
+};
+
+export type OnRouteBlurEventObject = {
   nativeEvent: BaseEventObject & { 
     isAnimated: boolean;
   };
@@ -57,8 +64,12 @@ export type OnRoutePushEvent = (
   event: OnRoutePushEventObject
 ) => void;
 
-export type OnRouteFocusBlurEvent = (
-  event: OnRouteFocusBlurEventObject
+export type OnRouteFocusEvent = (
+  event: OnRouteFocusEventObject
+) => void;
+
+export type OnRouteBlurEvent = (
+  event: OnRouteBlurEventObject
 ) => void;
 
 export type OnRoutePopEvent = (

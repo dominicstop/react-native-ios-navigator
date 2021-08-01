@@ -827,9 +827,10 @@ internal extension RNINavigatorRouteView {
     (isDone ? self.onRouteDidPop : self.onRouteWillPop)?(dict);
   };
   
-  func notifyOnRouteFocus(isDone: Bool, isAnimated: Bool){
+  func notifyOnRouteFocus(isDone: Bool, isAnimated: Bool, isFirstFocus: Bool){
     var dict = self.createEventPayload();
     dict["isAnimated"] = isAnimated;
+    dict["isFirstFocus"] = isFirstFocus;
     
     // send event
     (isDone ? self.onRouteDidFocus : self.onRouteWillFocus)?(dict);

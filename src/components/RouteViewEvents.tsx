@@ -3,7 +3,7 @@ import React from 'react';
 
 
 import type { NavigatorRouteView } from '../components/NavigatorRouteView';
-import type { OnRoutePopEvent, OnRoutePushEvent, OnRouteFocusBlurEvent, OnPressNavBarItemEvent, OnUpdateSearchResultsEvent, OnSearchBarCancelButtonClickedEvent, OnSearchBarSearchButtonClickedEvent } from '../types/RNINavigatorRouteViewEvents';
+import type { OnRoutePopEvent, OnRoutePushEvent, OnRouteFocusEvent, OnRouteBlurEvent, OnPressNavBarItemEvent, OnUpdateSearchResultsEvent, OnSearchBarCancelButtonClickedEvent, OnSearchBarSearchButtonClickedEvent } from '../types/RNINavigatorRouteViewEvents';
 
 import { NavigatorRouteViewEventEmitter, NavigatorRouteViewEvents } from '../types/NavigatorRouteViewEventEmitter';
 
@@ -18,10 +18,10 @@ type RouteViewEventsProps = {
   onRouteDidPop  ?: OnRoutePopEvent ;
 
   // focus/blur events
-  onRouteWillFocus?: OnRouteFocusBlurEvent;
-  onRouteDidFocus ?: OnRouteFocusBlurEvent;
-  onRouteWillBlur ?: OnRouteFocusBlurEvent;
-  onRouteDidBlur  ?: OnRouteFocusBlurEvent;
+  onRouteWillFocus?: OnRouteFocusEvent;
+  onRouteDidFocus ?: OnRouteFocusEvent;
+  onRouteWillBlur ?: OnRouteBlurEvent;
+  onRouteDidBlur  ?: OnRouteBlurEvent;
 
   // onPress navbar item events
   onPressNavBarLeftItem ?: OnPressNavBarItemEvent;
@@ -197,19 +197,19 @@ export class RouteViewEvents extends React.Component<RouteViewEventsProps> {
     this.props.onRouteDidPop?.(params);
   };
 
-  _handleOnRouteWillFocus: OnRouteFocusBlurEvent = (params) => {
+  _handleOnRouteWillFocus: OnRouteFocusEvent = (params) => {
     this.props.onRouteWillFocus?.(params);
   };
 
-  _handleOnRouteDidFocus: OnRouteFocusBlurEvent = (params) => {
+  _handleOnRouteDidFocus: OnRouteFocusEvent = (params) => {
     this.props.onRouteDidFocus?.(params);
   };
 
-  _handleOnRouteWillBlur: OnRouteFocusBlurEvent = (params) => {
+  _handleOnRouteWillBlur: OnRouteBlurEvent = (params) => {
     this.props.onRouteWillBlur?.(params);
   };
 
-  _handleOnRouteDidBlur: OnRouteFocusBlurEvent = (params) => {
+  _handleOnRouteDidBlur: OnRouteBlurEvent = (params) => {
     this.props.onRouteDidBlur?.(params);
   };
 

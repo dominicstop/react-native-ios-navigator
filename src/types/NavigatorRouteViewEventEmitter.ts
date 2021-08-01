@@ -1,7 +1,7 @@
 
 
 import type { TSEventEmitter } from "../functions/TSEventEmitter";
-import type { OnPressNavBarItemEventObject, OnRouteFocusBlurEventObject, OnRoutePopEventObject, OnRoutePushEventObject, OnSearchBarCancelButtonClickedEventObject, OnSearchBarSearchButtonClickedEventObject, OnUpdateSearchResultsEventObject } from "./RNINavigatorRouteViewEvents";
+import type { OnPressNavBarItemEventObject, OnRouteFocusEventObject, OnRouteBlurEventObject, OnRoutePopEventObject, OnRoutePushEventObject, OnSearchBarCancelButtonClickedEventObject, OnSearchBarSearchButtonClickedEventObject, OnUpdateSearchResultsEventObject } from "./RNINavigatorRouteViewEvents";
 import type { KeyMapType } from "./UtilityTypes";
 
 export enum NavigatorRouteViewEvents {
@@ -34,10 +34,10 @@ export type NavigatorRouteViewEventMap = KeyMapType<NavigatorRouteViewEvents, {
   onRouteWillPop : OnRoutePopEventObject ;
   onRouteDidPop  : OnRoutePopEventObject ;
 
-  onRouteWillFocus: OnRouteFocusBlurEventObject;
-  onRouteDidFocus : OnRouteFocusBlurEventObject;
-  onRouteWillBlur : OnRouteFocusBlurEventObject;
-  onRouteDidBlur  : OnRouteFocusBlurEventObject;
+  onRouteWillFocus: OnRouteFocusEventObject;
+  onRouteDidFocus : OnRouteFocusEventObject;
+  onRouteWillBlur : OnRouteBlurEventObject;
+  onRouteDidBlur  : OnRouteBlurEventObject;
 
   onPressNavBarLeftItem : OnPressNavBarItemEventObject;
   onPressNavBarRightItem: OnPressNavBarItemEventObject;

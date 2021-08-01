@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native';
 import type { NavigationObject } from '../types/NavigationObject';
 import type { RouteOptions } from '../types/RouteOptions';
 import type { RenderNavItem, RenderRouteContent } from '../types/NavTypes';
-import type { OnRoutePopEvent, OnRoutePushEvent, OnPressNavBarItemEvent, OnRouteFocusBlurEvent, OnUpdateSearchResultsEvent, OnSearchBarCancelButtonClickedEvent, OnSearchBarSearchButtonClickedEvent } from '../types/RNINavigatorRouteViewEvents';
+import type { OnRoutePopEvent, OnRoutePushEvent, OnPressNavBarItemEvent, OnRouteFocusEvent, OnRouteBlurEvent, OnUpdateSearchResultsEvent, OnSearchBarCancelButtonClickedEvent, OnSearchBarSearchButtonClickedEvent } from '../types/RNINavigatorRouteViewEvents';
 import type { RouteTransitionPushConfig, RouteTransitionPopConfig } from '../types/NavigationCommands';
 
 import { NavigatorRouteViewEventEmitter, NavigatorRouteViewEvents } from '../types/NavigatorRouteViewEventEmitter';
@@ -477,28 +477,28 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
     this._emitter.emit(NavigatorRouteViewEvents.onPressNavBarRightItem, event);
   };
 
-  private _handleOnRouteWillFocus: OnRouteFocusBlurEvent = (event)  => {
+  private _handleOnRouteWillFocus: OnRouteFocusEvent = (event)  => {
     if(this.props.routeID !== event.nativeEvent.routeID) return;
 
     this._emitter.emit(NavigatorRouteViewEvents.onRouteWillFocus, event);
     this.routeStatus = RouteStatus.ROUTE_FOCUSING;
   };
 
-  private _handleOnRouteDidFocus: OnRouteFocusBlurEvent = (event)  => {
+  private _handleOnRouteDidFocus: OnRouteFocusEvent = (event)  => {
     if(this.props.routeID !== event.nativeEvent.routeID) return;
 
     this._emitter.emit(NavigatorRouteViewEvents.onRouteDidFocus, event);
     this.routeStatus = RouteStatus.ROUTE_FOCUSED;
   };
 
-  private _handleOnRouteWillBlur: OnRouteFocusBlurEvent = (event)  => {
+  private _handleOnRouteWillBlur: OnRouteBlurEvent = (event)  => {
     if(this.props.routeID !== event.nativeEvent.routeID) return;
 
     this._emitter.emit(NavigatorRouteViewEvents.onRouteWillBlur, event);
     this.routeStatus = RouteStatus.ROUTE_BLURRING;
   };
 
-  private _handleOnRouteDidBlur: OnRouteFocusBlurEvent = (event)  => {
+  private _handleOnRouteDidBlur: OnRouteBlurEvent = (event)  => {
     if(this.props.routeID !== event.nativeEvent.routeID) return;
 
     this._emitter.emit(NavigatorRouteViewEvents.onRouteDidBlur, event);
