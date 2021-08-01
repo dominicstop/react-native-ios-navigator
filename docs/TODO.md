@@ -2,11 +2,19 @@
 
 ## In Progress
 
+- [ ] **Implement**: `NavigatorView` prop: Implement `initialRouteProps`.
+
+- [ ] **Implement**: Merge `routeProps` from `NavigatorView.initialRoutes`, `NavRouteConfigItem.initialRouteProps`, and `NavRouteStackItem.routeProps`.
+
+- [ ] **Implement**: Shallow merge route options and route props (e.g. `initialRouteOptions`, `routeOptionsDefault`, etc).
+
 ---
+
+<br>
 
 ## Unsorted
 
-- [ ] Merge `routeProps` from `NavigatorView.initialRoutes`, `NavRouteConfigItem.initialRouteProps`, and `NavRouteStackItem.routeProps`.
+---
 
 <br>
 
@@ -109,9 +117,6 @@
 	- Event Args: `nativeEvent.prevInFocus`, and `nativeEvent.nextInFocus`.
 
 - [ ] **Implement**: Update route config (i.e. `NavRouteConfigItemJS`) to accept `renderRouteHeader`.
-- [ ] **Implement**: Shallow merge route options and route props (e.g. `initialRouteOptions`, `routeOptionsDefault`, etc).
-
-- [ ] **Implement**: `NavigatorView` prop: Implement `initialRouteProps`
 
 <br>
 
@@ -161,7 +166,6 @@
 - [ ] **Cleanup**: Swift — In property wrappers, replace all usage of `didSet` with `willSet` 
 - [ ] **Cleanup**: Swift — Replace all imports of `Foundation` with `UIKit`  
 - [ ] **Cleanup**: Types — Add JSDoc comments to types that shadow UIKit types.
-- [ ] **Cleanup**: Types — Replace `null | undefined` with custom `Nullish<T>` generic.
 
 <br>
 
@@ -195,7 +199,10 @@
 <br>
 
 - [ ] **Fix**: autolayout warnings
+
+	* So far there aren't any warning.
 - [ ] **Fix** back swipe sometimes not working (`percentDrivenTransitions`)
+	- The back swipe is hard to do on the simulator, but testing on device, the back swipe gesture seems to work fine 🤷‍♀️.
 
 <br>
 
@@ -369,7 +376,8 @@
 
 - [x] (Commit: `3da44f3`) **Refactor**: Types — Update function parameters to be readonly.
 - [x] (Commit: `ff754f4`) **Refactor**: Types — Enabled Strict Mode.
-- [x] (Commit: `b4899a9`) **Refactor**: Move `RouteComponentsWrapper` to `src/wrapper_components`
+- [x] (Commit: `b4899a9`) **Refactor**: Move `RouteComponentsWrapper` to `src/wrapper_components`.
+- [x] (Commit: `03002b4`) **Cleanup**: Types — Replace `null | undefined` with custom `Nullish<T>` generic.
 
 
 
