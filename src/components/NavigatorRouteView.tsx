@@ -90,7 +90,6 @@ type NavigatorRouteViewState = {
 
 export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps, NavigatorRouteViewState> {
   //#region - Property Declarations
-  routeContentRef: React.Component<RouteContentProps>;
 
   routeStatus: RouteStatus;
 
@@ -98,13 +97,13 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
   private routePropsUpdateIndex = 0;
 
   // references
-  private _emitter           : NavigatorRouteViewEventEmitter;
-  private _nativeRef         : React.Component<RNINavigatorRouteViewProps>;
-  private _navigatorRef      : NavigatorView;
-  private _routeContentRef   : ReactElement;
-  private _routeViewPortalRef: RouteViewPortal;
+  private _emitter            : NavigatorRouteViewEventEmitter;
+  private _nativeRef         ?: React.Component<RNINavigatorRouteViewProps>;
+  private _navigatorRef       : NavigatorView;
+  private _routeContentRef   ?: ReactElement;
+  private _routeViewPortalRef?: RouteViewPortal;
   
-  private _routeComponentsWrapperRef: RouteComponentsWrapper;
+  private _routeComponentsWrapperRef?: RouteComponentsWrapper;
   //#endregion
 
   constructor(props: NavigatorRouteViewProps){
@@ -366,7 +365,9 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
     };
   };
   
-  public setRouteOptions = async (routeOptions: RouteOptions | null | undefined) => {
+  public setRouteOptions = async (
+    routeOptions: Readonly<RouteOptions> | null | undefined
+  ) => {
     await Helpers.setStateAsync<NavigatorRouteViewState>(this, (prevState) => ({
       ...prevState, routeOptions,
       updateIndex: (prevState.updateIndex + 1),
@@ -389,6 +390,10 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
         throw new Error("`NavigatorRouteView` is not mounted")
       };
 
+      if(this._nativeRef == null) throw new Error(
+        "this._nativeRef not set"
+      );
+
       await Helpers.promiseWithTimeout(1000,
         RNINavigatorRouteViewModule.setHidesBackButton(
           Helpers.getNativeNodeHandle(this._nativeRef),
@@ -409,6 +414,10 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
       if(!RouteViewUtils.isRouteReady(this.routeStatus)){
         throw new Error("`NavigatorRouteView` is not mounted")
       };
+
+      if(this._nativeRef == null) throw new Error(
+        "this._nativeRef not set"
+      );
 
       const result = await Helpers.promiseWithTimeout(1000,
         RNINavigatorRouteViewModule.getRouteConstants(

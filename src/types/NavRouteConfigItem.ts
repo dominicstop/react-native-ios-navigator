@@ -18,7 +18,7 @@ export type NavRouteConfigItemNative = NavRouteConfigItemBase & {
 
 /** JS/React route config */
 export type NavRouteConfigItemJS = NavRouteConfigItemBase & {
-  isNativeRoute?: false;
+  isNativeRoute?: false | undefined;
   routeOptionsDefault?: RouteOptions;
   renderRoute: (routeItem: Readonly<NavRouteItem>) => ReactElement<RouteContentProps>;
   // render nav bar items

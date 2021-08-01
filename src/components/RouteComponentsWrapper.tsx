@@ -16,7 +16,7 @@ type RouteComponentsWrapperProps = Pick<NavigatorRouteViewProps,
   | 'renderNavBarTitleItem'
 > & {
   navigation: NavigationObject;
-  getPortalRef: () => RouteViewPortal;
+  getPortalRef: () => RouteViewPortal | undefined;
 };
 
 /** 
@@ -31,7 +31,7 @@ type RouteComponentsWrapperProps = Pick<NavigatorRouteViewProps,
  * to re-render and update.
  */
 export class RouteComponentsWrapper extends React.Component<RouteComponentsWrapperProps> {
-  private _routeViewPortalRef: RouteViewPortal;
+  private _routeViewPortalRef?: RouteViewPortal;
 
   componentDidMount(){
     const props = this.props;
