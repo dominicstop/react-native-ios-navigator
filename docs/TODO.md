@@ -7,7 +7,6 @@
 ## Unsorted
 
 - [ ] Merge `routeProps` from `NavigatorView.initialRoutes`, `NavRouteConfigItem.initialRouteProps`, and `NavRouteStackItem.routeProps`.
-- [ ] Refactor: Move `RouteComponentsWrapper` to `src/wrapper_components`
 
 <br>
 
@@ -369,7 +368,8 @@
 <br>
 
 - [x] (Commit: `3da44f3`) **Refactor**: Types — Update function parameters to be readonly.
-- [x] (Commit: `ff754f4`) **Refactor**: Types — Enabled Strict Mode
+- [x] (Commit: `ff754f4`) **Refactor**: Types — Enabled Strict Mode.
+- [x] (Commit: `b4899a9`) **Refactor**: Move `RouteComponentsWrapper` to `src/wrapper_components`
 
 
 
