@@ -355,6 +355,13 @@
 
 	- Trigger push events via  `vc.willMove` and `vc.didMove` view controller lifecycle instead of triggering manually from the navigation command.
 
+<br>
+
+- [x] (Commit: `822136c`) **Implement** Update `onRouteFocusEventObject` to include `isFirstFocus`.
+	- Updated `onRouteFocusEventObject` to include `isFirstFocus`.
+	- Types — Extracted `OnRouteFocusEventObject` and `OnRouteFocusBlurEvent` to their own separate types.
+	- Update event handlers + emitters to use `OnRouteFocusEvent`, and `OnRouteBlurEvent`.
+
 
 
 ### Version: `0.1.4`
