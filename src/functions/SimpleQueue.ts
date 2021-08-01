@@ -17,7 +17,11 @@ export class SimpleQueue {
   // `queueKey` sounds like cutie so 🥰
   private queueKey = 0;
 
-  schedule = (): {queueKey: number, promise: Promise<void>, cancel: Function} => {
+  schedule = (): Readonly<{
+    queueKey: number, 
+    promise: Promise<void>, 
+    cancel: Function
+  }> => {
     const queueKey = this.queueKey++;
 
     const promise = new Promise<void>((resolve, reject) => {

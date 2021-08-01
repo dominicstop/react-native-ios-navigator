@@ -52,7 +52,7 @@ type NavRouteConfigItemExtended = NavRouteConfigItem & {
 };
 
 export type SetRoutesTransformCallback = 
-  (currentRoutes: Array<NavRouteStackPartialItem>) => Array<NavRouteStackPartialItem>;
+  (currentRoutes: readonly NavRouteStackPartialItem[]) => Array<NavRouteStackPartialItem>;
 
 export type NavRoutesConfigMap = { [k: string]: NavRouteConfigItem };
 
@@ -327,11 +327,11 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   };
 
   /** used to set/reset the transition override for the current route  */
-  private configureTransitionOverride = (params: {
+  private configureTransitionOverride = (params: Readonly<{
     isPushing: boolean;
     pushConfig?: RouteTransitionPushConfig;
     popConfig?: RouteTransitionPopConfig;
-  }) => {
+  }>) => {
 
     const hasTransitionConfig = (
       params.pushConfig != null ||
@@ -395,7 +395,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
    *   native side (e.g. wait for the `onNavRouteViewAdded` event).
    * 
    * note: This promise will reject if the events fail to fire within `TIMEOUT_MOUNT` ms. */
-  private waitForRoutesToBeAdded = (routeItems: Array<NavRouteStackItem>) => {
+  private waitForRoutesToBeAdded = (routeItems: readonly NavRouteStackItem[]) => {
     // filter out/separate react and native routes
     const [nativeRoutes, reactRoutes] = routeItems.reduce((acc, curr) => {
       acc[curr.isNativeRoute? 0 : 1].push(curr.routeID);
@@ -427,7 +427,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
    * Returns a promise that will resolve once all the routes in `routeItems` are removed
    * from from the native-side (i.e. wait for `onNavRouteDidPop`).
    */
-  private waitForRoutesToBeRemoved = (routeItems: Array<NavRouteStackItem>) => {
+  private waitForRoutesToBeRemoved = (routeItems: readonly NavRouteStackItem[]) => {
     return Promise.all(
       routeItems.map(routeItem => new Promise<void>(resolve => {
         this.emitter.once(NavigatorViewEvents.onNavRouteDidPop, ({nativeEvent}) => {
@@ -460,7 +460,10 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   };
 
   /** Remove route from `state.activeRoutes` in batches a few ms apart. */
-  private removeRouteBatchedFromState = async (params?: { routeKey: string, routeIndex: number }) => { 
+  private removeRouteBatchedFromState = async (params?: Readonly<{
+    routeKey: string, 
+    routeIndex: number 
+  }>) => { 
     if(params){
       // To prevent too many state updates, the routes to be removed
       // are queued/grouped, and are removed in batches...
@@ -534,7 +537,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   // -------------------
 
   public push = async (
-    routeItem: NavRouteItem, 
+    routeItem: Readonly<NavRouteItem>, 
     options?: NavCommandPushOptions
   ): Promise<void> => {
     
@@ -632,7 +635,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
   };
 
-  public pop = async (options?: NavCommandPopOptions): Promise<void> => {
+  public pop = async (options?: Readonly<NavCommandPopOptions>): Promise<void> => {
     const { activeRoutes } = this.state;
     const stateSnapshot = this.createStateSnapshot();
 
@@ -698,7 +701,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
   };
 
-  public popToRoot = async (options?: NavCommandPopOptions): Promise<void> => {
+  public popToRoot = async (options?: Readonly<NavCommandPopOptions>): Promise<void> => {
     const { activeRoutes } = this.state;
     const stateSnapshot = this.createStateSnapshot();
 
@@ -825,7 +828,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   };
 
   public removeRoutes = async (
-    routeIndices: Array<number>,
+    routeIndices: readonly number[],
     animated = false
   ): Promise<void> => {
     
@@ -896,7 +899,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
   public replaceRoute = async (
     prevRouteIndex: number, 
-    routeItem: NavRouteItem, 
+    routeItem: Readonly<NavRouteItem>, 
     animated = false
   ): Promise<void> => {
 
@@ -976,7 +979,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   };
 
   public insertRoute = async (
-    routeItem: NavRouteItem, 
+    routeItem: Readonly<NavRouteItem>, 
     atIndex: number, 
     animated = false
   ) => {
@@ -1204,7 +1207,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   // -------------------------------
 
   public replacePreviousRoute = async (
-    routeItem: NavRouteItem, 
+    routeItem: Readonly<NavRouteItem>, 
     animated = false
   ) => {
     
@@ -1215,7 +1218,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   };
 
   public replaceCurrentRoute = async (
-    routeItem: NavRouteItem, 
+    routeItem: Readonly<NavRouteItem>, 
     animated = false
   ): Promise<void> => {
 
@@ -1248,7 +1251,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
   public sendCustomCommandToNative = async (
     commandKey: string, 
-    commandData: object | null = null
+    commandData: Readonly<object> | null = null
   ): Promise<object | null> => {
 
     return await RNINavigatorViewModule.sendCustomCommandToNative(

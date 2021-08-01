@@ -40,12 +40,12 @@ interface RNINavigatorViewModule {
   push(
     node: number, 
     routeID: number,
-    options: NativePushPopOptions
+    options: Readonly<NativePushPopOptions>
   ): Promise<void>;
 
   pop(
     node: number, 
-    options: NativePushPopOptions
+    options: Readonly<NativePushPopOptions>
   ): Promise<{routeKey: string, routeIndex: number}>;
 
   setNavigationBarHidden(
@@ -56,7 +56,7 @@ interface RNINavigatorViewModule {
 
   popToRoot(
     node: number, 
-    options: NativePushPopOptions
+    options: Readonly<NativePushPopOptions>
   ): Promise<void>;
   
   removeRoute(
@@ -68,10 +68,10 @@ interface RNINavigatorViewModule {
 
   removeRoutes(
     node: number, 
-    itemsToRemove: Array<{
+    itemsToRemove: readonly Readonly<{
       routeID: number;
       routeIndex: number;
-    }>,
+    }>[],
     animated: boolean,
   ): Promise<void>;
 
@@ -92,7 +92,7 @@ interface RNINavigatorViewModule {
 
   setRoutes(
     node: number,
-    nextRouteIDs: Array<number>,
+    nextRouteIDs: readonly number[],
     animated: boolean,
   ): Promise<void>;
 
@@ -104,7 +104,7 @@ interface RNINavigatorViewModule {
   sendCustomCommandToNative(
     node: number,
     commandKey: string,
-    commandData: object | null
+    commandData: Readonly<object> | null
   ): Promise<object | null>;
 
   

@@ -61,34 +61,34 @@ export type OnSearchBarSearchButtonClickedEventObject = {
 
 //#region - Event Handler Types
 export type OnRoutePushEvent = (
-  event: OnRoutePushEventObject
+  event: Readonly<OnRoutePushEventObject>
 ) => void;
 
 export type OnRouteFocusEvent = (
-  event: OnRouteFocusEventObject
+  event: Readonly<OnRouteFocusEventObject>
 ) => void;
 
 export type OnRouteBlurEvent = (
-  event: OnRouteBlurEventObject
+  event: Readonly<OnRouteBlurEventObject>
 ) => void;
 
 export type OnRoutePopEvent = (
-  event: OnRoutePopEventObject
+  event: Readonly<OnRoutePopEventObject>
 ) => void;
 
 export type OnPressNavBarItemEvent = (
-  event: OnPressNavBarItemEventObject
+  event: Readonly<OnPressNavBarItemEventObject>
 ) => void;
 
 export type OnUpdateSearchResultsEvent = (
-  event: OnUpdateSearchResultsEventObject
+  event: Readonly<OnUpdateSearchResultsEventObject>
 ) => void;
 
 export type OnSearchBarCancelButtonClickedEvent = (
-  event: OnSearchBarCancelButtonClickedEventObject
+  event: Readonly<OnSearchBarCancelButtonClickedEventObject>
 ) => void;
 
 export type OnSearchBarSearchButtonClickedEvent = (
-  event: OnSearchBarSearchButtonClickedEventObject
+  event: Readonly<OnSearchBarSearchButtonClickedEventObject>
 ) => void;
 //#endregion

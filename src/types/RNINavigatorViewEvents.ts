@@ -64,26 +64,26 @@ export type OnUIConstantsDidChangeEventObject = {
 
 //#region - Event Handlers
 export type OnNavRouteViewAddedEvent = (
-  event: OnNavRouteViewAddedEventObject
+  event: Readonly<OnNavRouteViewAddedEventObject>
 ) => void;
 
 export type OnNavRoutePopEvent = (
-  event: OnNavRoutePopEventObject
+  event: Readonly<OnNavRoutePopEventObject>
 ) => void;
 
 export type OnSetNativeRoutesEvent = (
-  event: OnSetNativeRoutesEventObject
+  event: Readonly<OnSetNativeRoutesEventObject>
 ) => void;
 
 export type OnNativeCommandRequestEvent = (
-  event: OnNativeCommandRequestEventObject
+  event: Readonly<OnNativeCommandRequestEventObject>
 ) => void;
 
 export type OnCustomCommandFromNativeEvent = (
-  event: OnCustomCommandFromNativeEventObject
+  event: Readonly<OnCustomCommandFromNativeEventObject>
 ) => void;
 
 export type OnUIConstantsDidChangeEvent = (
-  event: OnUIConstantsDidChangeEventObject
+  event: Readonly<OnUIConstantsDidChangeEventObject>
 ) => void;
 //#endregion
