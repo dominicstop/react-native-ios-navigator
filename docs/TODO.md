@@ -8,11 +8,66 @@
 
 - [ ] **Implement**: Shallow merge route options and route props (e.g. `initialRouteOptions`, `routeOptionsDefault`, etc).
 
+<br>
+
+## Unsorted
+
 ---
 
 <br>
 
-## Unsorted
+## TODO from Code
+
+- [ ] `RNINavigatorRouteView.cleanup` — Crash sometimes occurring when detaching touch handler.
+	- ID: `TODO (001)`
+- [ ] `CustomAnimator` — Add `isPresenting` so that push and pop can be combined together
+	- ID: `TODO (002)`
+- [ ] `RNINavBarAppearance` — Impl. property: `backButtonAppearance`
+	- ID: `TODO (003)`
+
+- [ ] `RNINavBarAppearance` — Impl. property: `doneButtonAppearance`
+	- ID: `TODO (004)`
+
+- [ ] `RNINavBarAppearance` — Impl. property: `UIBarButtonItemAppearance`
+	- ID: `TODO (005)`
+
+- [ ] `RNINavigatorRouteHeaderView.setup` — Refactor: use view controller containment/child vc
+	- ID: `TODO (006)`
+
+- [ ] `RNINavigatorRouteView.insertReactSubview` — use `RNIWrapperView` for `RouteContent` so we can clean this up
+	- ID: `TODO (007)`
+
+- [ ] `RNINavigatorReactRouteViewController.overrideIsNavBarHidden` — Bug: when hiding nav bar, scrollview still snaps
+	- ID: `TODO (008)`
+
+- [ ] `RNINavigatorReactRouteViewController.transitionTypePop` — Cleanup `RNINavTransitionConfig`
+	- ID: `TODO (009)`
+
+- [ ] `NavRouteConfigItemExtended` — Moved type to `types/InternalTypes`
+	- ID: `TODO (010)`
+
+- [ ] `NavigatorView.setRoutes` — Use this command to replace existing native navigation commands
+	- ID: `TODO (011)`
+- [ ] `NavigatorView._handleOnNativeCommandRequest` — Cleanup: Extract to sep. functions
+	- ID: `TODO (012)`
+- [ ] `withRouteViewLifecycle` — Delete file + impl.
+	- ID: `TODO (013)`
+- [ ] `NavBarAppearanceBaseConfig` — Rename type to `NavBarAppearanceBaseConfigType` and export
+	- ID: `TODO (014)`
+- [ ] `NavBarBackItemConfig` — Type incomplete, missing back-button related properties + Impl.
+	- Related to: `TODO (003)`, `TODO (004)`, and `TODO (005)`.
+	- ID: `TODO (015)`
+- [ ] `NavigatorView.verifyProps` — Add user-defined type guard
+	- ID: `TODO (016)`
+- [ ] `overrideIsNavBarHidden` — Bug: when hiding nav bar, scrollview still snaps dolor ispicing
+	- ID: `TODO (017)`
+
+- [ ] `abc` — lorum ipsum
+	- ID: `TODO (xxx)`
+- [ ] `def` — dolor ispicing
+	- ID: `TODO (xxx)`
+
+
 
 ---
 

@@ -885,8 +885,25 @@ internal extension RNINavigatorRouteView {
       self,
     ];
     
-    // detach `RCTToucHandler` from react view
+    // detach `RCTTouchHandler` from react view
     if let routeContent = self.reactRouteContent {
+      /// TODO (001): Some error occurs here when reloading?
+      /// * Error: Terminating app due to uncaught exception
+      ///   'NSInternalInconsistencyException', reason: 'RCTTouchHandler
+      ///   attached to another view.'
+      ///   * Assertion failure in -[RCTTouchHandler attachToView:]()
+      ///   * [native] Exception thrown while executing UI block: RCTTouchHandler
+      ///     already has attached view.
+      /// * Also, during fast fast-refresh, the routes become non-responsive
+      ///   (but the back button can still be pressed, etc).
+      /// * It looks like the original route views must have unmounted (or
+      ///   replaced by the "new routes").
+      /// * Log - 'RNIWrapperViewManager: resetSharedBridge...'
+      /// * Last commands/logs before exception:
+      ///   * LOG - NativeView, RNINavigatorView: insertReactSubview
+      ///     - atIndex: 0 - routeView.routeKey: Home - routeView.routeIndex: 0
+      ///   * LOG - NativeView, RNINavigatorRouteView - insertReactSubview:
+      ///     RouteContent! - atIndex: 0
       self.touchHandlerRouteContent.detach(from: routeContent);
     };
     

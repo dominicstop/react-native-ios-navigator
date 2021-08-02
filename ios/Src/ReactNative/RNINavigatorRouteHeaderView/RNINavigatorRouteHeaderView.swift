@@ -261,7 +261,7 @@ internal class RNINavigatorRouteHeaderView: RCTView {
     bridge.uiManager.setSize(newBounds.size, for: self);
   };
   
-  /// TODO: Refactor - use view controller containment/child vc so that we don't
+  /// TODO (006): Refactor - use view controller containment/child vc so that we don't
   /// have to call `setup` on the parent vc's `loadView`, or perform layout updates
   /// on the parent vc's `willLayoutSubviews`
   func setup() {

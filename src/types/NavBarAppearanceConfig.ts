@@ -6,7 +6,7 @@ import type { ImageItemConfig } from "./ImageItemConfig";
 /** `UIBarStyle`: Defines the stylistic appearance of different types of views */
 type BarStyle = 'default' | 'black';
 
-// TODO: Rename to `NavBarAppearanceBaseConfigType` and export
+// TODO (014): Rename to `NavBarAppearanceBaseConfigType` and export
 type NavBarAppearanceBaseConfig = 
   /** Configures the bar appearance object with default background and shadow values. */
   | 'defaultBackground'

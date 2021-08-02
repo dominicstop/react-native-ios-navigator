@@ -46,7 +46,7 @@ enum NavStatus {
   NAV_ABORT      = "NAV_ABORT"     , // nav. has been popped before push completed
 };
 
-// TODO: Move to types/InternalTypes
+// TODO (010): Move to types/InternalTypes
 type NavRouteConfigItemExtended = NavRouteConfigItem & {
   routeKey: NavRouteItem['routeKey'];
 };
@@ -182,7 +182,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       // skip native routes...
       if(routeConfig.isNativeRoute) continue;
-      // TODO: Add user-defined type guard
+      // TODO (016): Add user-defined type guard
       // * (x: NavRouteConfigItem): x is NavRouteConfigItemJS
 
       if((routeConfig as NavRouteConfigItemJS).renderRoute == null) throw new Error(
@@ -1058,7 +1058,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     };
   };
   
-  // TODO: Use this command to replace the other native commands
+  // TODO (011): Use this command to replace the other native commands
   // * All the other nav commands (e.g. `removeRoute`, `removeRoutes`, `replaceRoute`,
   //   `popToRoot`, and `insertRoute`) can be updated to use this command instead.
   // * So we'll have 3 kinds of nav commands: 
@@ -1312,7 +1312,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     //#endregion
     
     switch (commandData.commandKey) {
-      // TODO: Move to sep. function
+      // TODO (012): Move to sep. function
       case 'pushViewController':
         try {
           // if busy, wait for prev. to finish

@@ -4,7 +4,7 @@ import { NavRouteViewContext } from '../context/NavRouteViewContext';
 
 import { NavigatorRouteViewEvents } from '../types/NavigatorRouteViewEventEmitter';
 
-// TODO: Delete this
+// TODO (013): Delete this
 
 export function withRouteViewLifecycle(WrappedComponent: any){
   return class extends React.PureComponent {

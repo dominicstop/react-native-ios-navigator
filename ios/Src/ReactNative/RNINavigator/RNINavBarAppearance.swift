@@ -66,9 +66,9 @@ internal class RNINavBarAppearance {
     // MARK: Button Appearance
     var backIndicatorImage: RNIImageItem?;
     
-    // TODO: backButtonAppearance: UIBarButtonItemAppearance
-    // TODO: doneButtonAppearance: UIBarButtonItemAppearance
-    // TODO: buttonAppearance: UIBarButtonItemAppearance
+    // TODO (003): backButtonAppearance: UIBarButtonItemAppearance
+    // TODO (004): doneButtonAppearance: UIBarButtonItemAppearance
+    // TODO (005): buttonAppearance: UIBarButtonItemAppearance
     
     // MARK: Computed Properties
     @available(iOS 13.0, *)

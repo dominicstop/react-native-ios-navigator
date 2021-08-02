@@ -7,8 +7,7 @@
 
 import UIKit;
 
-// TODO: Add `isPresenting` so that push and pop can be combined together
-
+// TODO (002): Add `isPresenting` so that push and pop can be combined together
 internal class CustomAnimator: NSObject, UIViewControllerAnimatedTransitioning {
 
   let duration: TimeInterval;

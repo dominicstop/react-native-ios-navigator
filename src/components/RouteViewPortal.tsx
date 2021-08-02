@@ -18,7 +18,6 @@ type RouteViewPortalProps = Partial<Pick<NavigatorRouteViewProps,
   | 'renderNavBarTitleItem'
   | 'renderRouteHeader'
 >> & {
-  // TODO: Impl. `trackValues?: object;`
   routeOptions?: RouteOptions;
 };
 

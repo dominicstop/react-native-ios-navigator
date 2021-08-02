@@ -122,7 +122,7 @@ export type NavBarItemConfigShared = {
 
 type ArrayWithOneElement<T> = { 0: T } & Array<T>;
 
-// TODO: Incomplete... missing back-button relate properties + Impl.
+// TODO (015): Incomplete... missing back-button related properties + Impl.
 export type NavBarBackItemConfig =
   & NavBarItemConfigBase
   & NavBarItemConfigShared

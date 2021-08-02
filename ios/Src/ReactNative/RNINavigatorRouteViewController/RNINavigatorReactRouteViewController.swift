@@ -135,7 +135,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       );
       #endif
       
-      /// TODO: Bug - when hiding nav bar, scrollview still snaps
+      /// TODO (017): Bug - when hiding nav bar, scrollview still snaps
       switch mode {
         case .hidden : navController.setNavigationBarHidden(true , animated: isAnimated);
         case .visible: navController.setNavigationBarHidden(false, animated: isAnimated);
@@ -321,7 +321,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       
       // don't set the delegate when using the default push/pop transition
       // to not disable the interactive swipe gesture.
-      // TODO: This can be fixed by re-impl. the default pop transition.
+      // TODO (009): This can be fixed by re-impl. the default pop transition.
       if newValue.transitionType == .DefaultPop,
          self.transitionTypePush.transitionType == .DefaultPush {
         
