@@ -74,6 +74,7 @@ export type NavigatorViewProps = Partial<Pick<RNINavigatorViewProps,
   // Nav. Route Config
   routes: NavRoutesConfigMap;
   initialRoutes: Array<NavRouteItem>;
+  sharedRouteProps?: object;
 
   // `RNINavigatorView` - Default Navbar items
   renderNavBarLeftItem ?: RenderNavItem;
@@ -1479,6 +1480,11 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       const isLast         = route.routeIndex === activeRoutesLastIndex;
       const isSecondToLast = route.routeIndex === (activeRoutesLastIndex - 1);
 
+      const initialRouteProps = Helpers.shallowMergeObjects(
+        routeConfig.initialRouteProps,
+        props.sharedRouteProps
+      );
+
       return (
         <NavigatorRouteViewWrapper
           key={`routeID-${route.routeID}`}
@@ -1492,7 +1498,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
           routeConfig={routeConfig}
           // merge routeProps
           routeProps={Helpers.shallowMergeObjects(
-            routeConfig.initialRouteProps,
+            initialRouteProps,
             route.routeProps
           )}
           // merge routeOptions
