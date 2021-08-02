@@ -111,7 +111,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   
   //#region - Property Declarations
   /** A ref to the `RNINavigatorView` native component. */
-  nativeRef: React.Component;
+  nativeRef!: React.Component;
 
   /** Unique identifier for this navigator */
   private navigatorID: number;

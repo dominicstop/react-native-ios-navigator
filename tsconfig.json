@@ -22,7 +22,7 @@
     "skipLibCheck": true,
     "target": "esnext",
 
-    "strict": false,
+    "strict": true,
     "noStrictGenericChecks": false,
     // "noImplicitAny": true,
     // "strictNullChecks": true,

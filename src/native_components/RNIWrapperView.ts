@@ -23,7 +23,7 @@ const NativeCommands: NativeComponentCommands =
 
 
 export class RNIWrapperView extends React.PureComponent<RNIWrapperViewProps> {
-  nativeRef: React.Component<RNIWrapperViewProps>;
+  nativeRef!: React.Component<RNIWrapperViewProps>;
 
   private _handleNativeRef = (ref: React.Component<RNIWrapperViewProps>) => {
     this.nativeRef = ref;
