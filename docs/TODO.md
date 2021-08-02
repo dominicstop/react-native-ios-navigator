@@ -2,8 +2,6 @@
 
 ## In Progress
 
-- [ ] **Implement**: `NavigatorView` prop: Implement `initialRouteProps`.
-
 - [ ] **Implement**: Merge `routeProps` from `NavigatorView.initialRoutes`, `NavRouteConfigItem.initialRouteProps`, and `NavRouteStackItem.routeProps`.
 
 - [ ] **Implement**: Shallow merge route options and route props (e.g. `initialRouteOptions`, `routeOptionsDefault`, etc).
@@ -402,6 +400,7 @@
 - [x] (Commit: `ff754f4`) **Refactor**: Types — Enabled Strict Mode.
 - [x] (Commit: `b4899a9`) **Refactor**: Move `RouteComponentsWrapper` to `src/wrapper_components`.
 - [x] (Commit: `03002b4`) **Cleanup**: Types — Replace `null | undefined` with custom `Nullish<T>` generic.
+- [x] (Commit: `4ae272f`) **Implement**: `NavigatorView` prop: Implement `sharedRouteProps`.
 
 
 
