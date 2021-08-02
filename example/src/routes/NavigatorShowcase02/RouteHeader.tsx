@@ -42,8 +42,6 @@ function HeaderCollapsedContainer(props: {
 export class RouteHeader extends React.Component<RouteHeaderProps> {
   static contextType = NavigatorUIConstantsContext;
 
-  context!: React.ContextType<typeof NavigatorUIConstantsContext>;
-
   headerBGBlurredOpacity: Animated.AnimatedInterpolation;
 
   headerCollapsedBG: Animated.AnimatedInterpolation;
