@@ -96,14 +96,14 @@ export function RouteA(props: RouteContentProps<RouteProps>){
             title={'Push RouteA'}
             subtitle={`Push 'RouteA' into the stack`}
             onPress={() => {
-              navigation.push({routeKey: RouteKeys.RouteA, routeProps});
+              navigation.push({routeKey: RouteKeys.RouteA});
             }}
           />
           <CardButton
             title={'Push RouteB'}
             subtitle={`Push 'RouteA' into the stack`}
             onPress={() => {
-              navigation.push({routeKey: RouteKeys.RouteB, routeProps});
+              navigation.push({routeKey: RouteKeys.RouteB});
             }}
           />
           <CardButton
@@ -142,14 +142,14 @@ export function RouteA(props: RouteContentProps<RouteProps>){
             title={'Insert RouteA in Index 0'}
             subtitle={`Insert 'RouteA' at 'routeIndex: 0'`}
             onPress={() => {
-              props.navigation.insertRoute({routeKey: RouteKeys.RouteA, routeProps}, 0);
+              props.navigation.insertRoute({routeKey: RouteKeys.RouteA}, 0);
             }}
         />
         <CardButton
           title={'Insert RouteB in Index 0'}
           subtitle={`Insert 'RouteB' at 'routeIndex: 0'`}
           onPress={() => {
-            props.navigation.insertRoute({routeKey: RouteKeys.RouteB, routeProps}, 0);
+            props.navigation.insertRoute({routeKey: RouteKeys.RouteB}, 0);
           }}
         />
         <CardButton
@@ -157,7 +157,7 @@ export function RouteA(props: RouteContentProps<RouteProps>){
           subtitle={`Replace previous route with 'RouteB'`}
           onPress={async () => {
             try {
-              await props.navigation.replacePreviousRoute({routeKey: RouteKeys.RouteB, routeProps});
+              await props.navigation.replacePreviousRoute({routeKey: RouteKeys.RouteB});
             } catch(error){
               Alert.alert('Error', error.toString());
             };

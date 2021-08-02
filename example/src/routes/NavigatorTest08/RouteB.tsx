@@ -46,7 +46,7 @@ export function RouteB(props: RouteContentProps<RouteProps>){
           <TouchableOpacity 
             style={styles.buttonContainer}
             onPress={() => {
-              navigation.push({routeKey: RouteKeys.RouteA, routeProps});
+              navigation.push({routeKey: RouteKeys.RouteA});
             }}
           >
             <Text style={styles.buttonText}>

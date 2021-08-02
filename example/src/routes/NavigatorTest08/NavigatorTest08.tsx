@@ -38,7 +38,6 @@ type NavigatorTest08State = {
 };
 
 
-
 export class NavigatorTest08 extends React.Component<RouteContentProps, NavigatorTest08State> {
   
   constructor(props: RouteContentProps){
@@ -72,7 +71,7 @@ export class NavigatorTest08 extends React.Component<RouteContentProps, Navigato
   };
 
   render(){
-    const routeProps: RouteProps = {
+    const sharedRouteProps: RouteProps = {
       recordEvent: this._handleRecordEvent,
     };
 
@@ -102,11 +101,9 @@ export class NavigatorTest08 extends React.Component<RouteContentProps, Navigato
         />
         <NavigatorView
           style={styles.bottomNavigator}
+          sharedRouteProps={sharedRouteProps}
           routes={ROUTES}
-          initialRoutes={[{
-            routeKey: 'RouteA',
-            routeProps,
-          }]}
+          initialRoutes={[{routeKey: 'RouteA'}]}
         />
       </React.Fragment>
     );
