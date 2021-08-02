@@ -74,8 +74,7 @@ export type NavigatorViewProps = Partial<Pick<RNINavigatorViewProps,
   // Nav. Route Config
   routes: NavRoutesConfigMap;
   initialRoutes: Array<NavRouteItem>;
-  routeContainerStyle?: ViewStyle;
-  
+
   // `RNINavigatorView` - Default Navbar items
   renderNavBarLeftItem ?: RenderNavItem;
   renderNavBarRightItem?: RenderNavItem;
