@@ -401,6 +401,12 @@
 - [x] (Commit: `b4899a9`) **Refactor**: Move `RouteComponentsWrapper` to `src/wrapper_components`.
 - [x] (Commit: `03002b4`) **Cleanup**: Types — Replace `null | undefined` with custom `Nullish<T>` generic.
 - [x] (Commit: `4ae272f`) **Implement**: `NavigatorView` prop: Implement `sharedRouteProps`.
+- [x] (Commit: `a7029a9`) **Fix**: Nav Bar Items Leaking
+	- Related to commit: `bd6341a`, e.g. fix for `RouteViewPortal.renderNavBarTitleItem` not updating when component is mounted/unmounted.
+	- Change implementation to use native modules instead of view manager commands.
+		- The view manager will throw an error when trying to send a command to a native component that no longer exists.
+		- Since the `notifyComponentWillUnmount` is called inside `componentWillUnmount`, RN will  throw an error when the cleanup is triggered from the native side.
+		- With the native modules impl., the look up for finding a `node`'s corresponding view is done by the module itself. So  don't forward the command if the view has already been cleaned up from the native side.
 
 
 
