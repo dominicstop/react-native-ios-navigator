@@ -19,21 +19,54 @@ internal class RNIWrapperView: UIView {
   
   weak var delegate: RNIWrapperViewDelegate?;
   
+  /// Whether or not `cleanup` was triggered.
   private(set) var didTriggerCleanup = false;
   
-  /// Determines whether `cleanup` is auto called on JS comp. unmount
+  /// This property determines whether `cleanup` should be called when
+  /// `shouldNotifyComponentWillUnmount` is called. Defaults to `true`.
+  ///
+  /// When `shouldNotifyComponentWillUnmount` prop is true, the JS component
+  /// will notify it's corresponding native view that it'll be unmounted (i.e.
+  /// via calling the `shouldNotifyComponentWillUnmount` method).
+  ///
+  /// * When react view is "detached" (i.e. when `removeFromSuperView` is called),
+  ///   the react view is on it's own (the view will leak since it won't be removed
+  ///   when the corresponding view comp. un-mounts).
+  /// * To get around this, the js comp. notifies the native view that it's
+  ///   going to unmount in `componentWillUnmount`.
+  /// * This also fixes the issue where the js comp. has already been unmounted
+  ///   but it's corresponding native view is still being used.
   var autoCleanupOnJSUnmount = true;
   
   /// Determines whether `cleanup` is called when this view is removed from the
   /// view hierarchy (i.e. the window ref. becomes nil).
   var autoCleanupOnWindowNil = false;
   
+  /// Determines whether `layoutSubviews` will automatically trigger
+  /// `notifyForBoundsChange`. Defaults to `true`.
+  ///
+  /// * If the layout size is determined from the react/js side, set this to `false`.
+  /// * Otherwise if the layout size is determined from the native side (e.g. via
+  ///   the view controller, etc.) then set this to `true`.
   var autoSetSizeOnLayout = true;
   
+  /// Set this property to `true` before moving this view somewhere else (i.e.
+  /// before calling `removeFromSuperView`).
+  ///
+  /// Setting this property to `true` will prevent triggering `cleanup` for the
+  /// first time when removing this view from it's `superview`.
   var willChangeSuperview = false;
-  private var didChangeSuperview = false;
   
+  private var didChangeSuperview = false;
   private var touchHandler: RCTTouchHandler!;
+  
+  // ------------------------
+  // MARK:- RN Exported Props
+  // ------------------------
+  
+  /// When this prop is set to `true`, the JS component will trigger
+  /// `shouldNotifyComponentWillUnmount` during `componentWillUnmount`.
+  @objc var shouldNotifyComponentWillUnmount: Bool = false;
   
   // ---------------------
   // MARK:- Init/Lifecycle
@@ -59,17 +92,9 @@ internal class RNIWrapperView: UIView {
   };
   
   override func didMoveToWindow() {
-    #if DEBUG
-    print("LOG - RNIWrapperView, didMoveToWindow"
-      + " - for nativeID: \(self.nativeID ?? "N/A")"
-      + " - willChangeSuperview: \(self.willChangeSuperview)"
-      + " - didChangeSuperview: \(self.didChangeSuperview)"
-      + " - self.window is nil: \(self.window == nil)"
-      + " - self.superview is nil: \(self.superview == nil)"
-      + " - autoCleanupOnJSUnmount == nil: \(self.autoCleanupOnJSUnmount)"
-    );
-    #endif
     
+    /// Prevent `cleanup` during the first move (i.e. when the view is detached
+    /// for the 1st time).
     /// * if `willChangeSuperview` is true, don't allow cleanup until
     ///   `didChangeSuperview` is also true.
     /// * Otherwise, if `willChangeSuperview` is false, allow cleanup.
@@ -114,34 +139,44 @@ internal class RNIWrapperView: UIView {
     bridge.uiManager.setSize(newBounds.size, for: reactView);
   };
   
-  func onJSComponentWillUnmount(isManuallyTriggered: Bool){
-    if self.window != nil && self.autoCleanupOnJSUnmount {
-      #if DEBUG
-      print("LOG - RNIWrapperView, onJSComponentWillUnmount"
-        + " - for nativeID: \(self.nativeID ?? "N/A")"
-        + " - trigger cleanup"
-        + " - autoCleanupOnWindowNil == nil: \(self.autoCleanupOnWindowNil)"
-      );
-      #endif
-      
-      self.cleanup();
-    };
-    
-    self.delegate?.onJSComponentWillUnmount?(
-      sender: self,
-      isManuallyTriggered: isManuallyTriggered
-    );
-  };
-  
   func cleanup(){
     guard !self.didTriggerCleanup else { return };
     self.didTriggerCleanup = true;
+    
+    #if DEBUG
+    print("LOG - RNIWrapperView, cleanup"
+      + " - for nativeID: \(self.nativeID ?? "N/A")"
+    );
+    #endif
     
     self.touchHandler.detach(from: self.reactContent);
     
     RNIUtilities.recursivelyRemoveFromViewRegistry(
       bridge: self.bridge,
       reactView: self
+    );
+  };
+  
+  // --------------------------
+  // MARK:- Commands For Module
+  // --------------------------
+  
+  /// Called by `RNIWrapperViewModule.notifyComponentWillUnmount`
+  func onJSComponentWillUnmount(isManuallyTriggered: Bool){
+    #if DEBUG
+    print("LOG - RNIWrapperView, onJSComponentWillUnmount"
+      + " - for nativeID: \(self.nativeID ?? "N/A")"
+      + " - trigger cleanup, autoCleanupOnWindowNil: \(self.autoCleanupOnWindowNil)"
+    );
+    #endif
+    
+    if self.autoCleanupOnJSUnmount {
+      self.cleanup();
+    };
+    
+    self.delegate?.onJSComponentWillUnmount?(
+      sender: self,
+      isManuallyTriggered: isManuallyTriggered
     );
   };
 };

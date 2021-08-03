@@ -1,25 +1,23 @@
 import React from 'react';
-import { requireNativeComponent, ViewStyle, UIManager, findNodeHandle } from 'react-native';
+import { requireNativeComponent, ViewStyle } from 'react-native';
+
+import { RNIWrapperViewModule } from '../native_modules/RNIWrapperViewModule';
+
+import * as Helpers from '../functions/Helpers';
 
 
 export type RNIWrapperViewProps = {
   style?: ViewStyle;
   nativeID?: String;
   children?: Element;
+  shouldNotifyComponentWillUnmount?: boolean;
 };
 
-type NativeComponentCommands = {
-  notifyComponentWillUnmount: any;
-};
 
 const COMPONENT_NAME = 'RNIWrapperView';
 
 const NativeComponent = 
   requireNativeComponent<RNIWrapperViewProps>(COMPONENT_NAME);
-
-const NativeCommands: NativeComponentCommands = 
-  // @ts-ignore
-  UIManager[COMPONENT_NAME].Commands;
 
 
 export class RNIWrapperView extends React.PureComponent<RNIWrapperViewProps> {
@@ -29,11 +27,19 @@ export class RNIWrapperView extends React.PureComponent<RNIWrapperViewProps> {
     this.nativeRef = ref;
   };
 
-  notifyComponentWillUnmount = (isManuallyTriggered: boolean) => {
-    UIManager.dispatchViewManagerCommand(
-      findNodeHandle(this.nativeRef),
-      NativeCommands.notifyComponentWillUnmount,
-      [{isManuallyTriggered}]
+  componentWillUnmount(){
+    const shouldNotifyComponentWillUnmount = 
+      this.props.shouldNotifyComponentWillUnmount ?? false;
+
+    if(shouldNotifyComponentWillUnmount){
+      this.notifyComponentWillUnmount(false);
+    };
+  };
+
+  notifyComponentWillUnmount = (isManuallyTriggered: boolean = true) => {
+    RNIWrapperViewModule.notifyComponentWillUnmount(
+      Helpers.getNativeNodeHandle(this.nativeRef), 
+      { isManuallyTriggered }
     );
   };
 
@@ -43,6 +49,8 @@ export class RNIWrapperView extends React.PureComponent<RNIWrapperViewProps> {
     return React.createElement(NativeComponent, {
       ...props,
       ref: this._handleNativeRef,
+      shouldNotifyComponentWillUnmount: 
+        props.shouldNotifyComponentWillUnmount ?? false,
     });
   };
 };

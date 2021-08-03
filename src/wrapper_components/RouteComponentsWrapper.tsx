@@ -69,6 +69,7 @@ export class RouteComponentsWrapper extends React.Component<RouteComponentsWrapp
           <RNIWrapperView 
             style={styles.routeItemContainer}
             nativeID={NativeIDKeys.NavBarLeftItem}
+            shouldNotifyComponentWillUnmount={true}
           >
             {navBarLeftItem}
           </RNIWrapperView>
@@ -77,6 +78,7 @@ export class RouteComponentsWrapper extends React.Component<RouteComponentsWrapp
           <RNIWrapperView  
             style={styles.routeItemContainer}
             nativeID={NativeIDKeys.NavBarRightItem}
+            shouldNotifyComponentWillUnmount={true}
           >
             {navBarRightItem}
           </RNIWrapperView>
@@ -85,6 +87,7 @@ export class RouteComponentsWrapper extends React.Component<RouteComponentsWrapp
           <RNIWrapperView 
             style={styles.routeItemContainer}
             nativeID={NativeIDKeys.NavBarTitleItem}
+            shouldNotifyComponentWillUnmount={true}
           >
             {navBarTitleItem}
           </RNIWrapperView>
