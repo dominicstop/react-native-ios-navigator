@@ -33,6 +33,7 @@ export const SCROLL_OFFSETS = (() => {
 
 export const ASSETS = {
   headerBG: require('../../../assets/images/unsplash_diagram.jpg'),
+  headerBGBlurred: require('../../../assets/images/unsplash_diagram_blurred.jpg'),
   headerProfile: require('../../../assets/images/domicstop_profile.jpg'),
   chevronBack: Image.resolveAssetSource(require('../../../assets/images/chevron_back.png'))
 };

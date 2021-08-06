@@ -101,24 +101,30 @@ export class RouteHeader extends React.Component<RouteHeaderProps> {
     });
   };
 
+  /**
+   * There's a bug in `Image` where in if you apply a `blurRadius`
+   * to it while `resizeMode` is 'cover', the image will not blur.
+   * * However, if `resizeMode` is not set 'cover', then `blurRadius`
+   *   will work.
+   * * Mentioned in this issue: https://github.com/facebook/react-native/issues/20910
+   */
   _renderHeaderBG(){
     return(
       <View
         pointerEvents={'none'}
         style={styles.headerExpandedBGImageContainer}
       >
-        <Animated.Image
+        <Image
           style={styles.headerExpandedBGImage}
           source={ASSETS.headerBG}
           resizeMode={'cover'}
         />
         <Animated.Image
           style={[styles.headerExpandedBGImage, {
-            opacity: this.headerBGBlurredOpacity
+            opacity: this.headerBGBlurredOpacity,
           }]}
-          source={ASSETS.headerBG}
+          source={ASSETS.headerBGBlurred}
           resizeMode={'cover'}
-          blurRadius={15}
         />
       </View>
     );
