@@ -249,6 +249,14 @@ internal class RNINavigatorRouteHeaderView: RCTView {
     
     // and force "update".
     self.layoutSubviews();
+    
+    #if DEBUG
+    print("LOG - NativeView, RNINavigatorRouteHeaderView"
+      + " - reactSetFrame"
+      + " - args, frame: \(frame.debugDescription)"
+      + " - newSize: \(newSize.debugDescription)"
+    );
+    #endif
   };
   
   // -------------------------
