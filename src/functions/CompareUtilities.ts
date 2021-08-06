@@ -55,7 +55,7 @@ export class CompareUtilities {
     propertyMap: ComparisonConfig<T>,
     oldItem: T, newItem: T,
     /** Skip checking properties with no matching config */
-    skipIfNoConfig: boolean = false
+    skipIfNoConfig: boolean = !__DEV__
   ): boolean {
 
 

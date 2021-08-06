@@ -62,10 +62,16 @@ export class CompareImageConfig {
         return (oldItem.imageValue !== (newItem as any).imageValue);
 
       case 'IMAGE_RECT':
-        return CompareImageRectConfig.compare(oldItem as any, newItem);
+        return CompareImageRectConfig.compare(
+          oldItem.imageValue,
+          (newItem as any).imageValue
+        );
         
       case 'IMAGE_GRADIENT':
-        return CompareImageGradientConfig.compare(oldItem as any, newItem);
+        return CompareImageGradientConfig.compare(
+          oldItem.imageValue,
+          (newItem as any).imageValue
+      );
 
       case 'IMAGE_REQUIRE':
       default:
