@@ -83,7 +83,11 @@ type NavBarAppearanceConfigBase = {
   navBarPreset?: NavBarPreset;
 };
 
-/** Legacy Customizations - Customize appearance information directly on the navigation bar object. */
+/** 
+ * Legacy Customizations
+ * Customize appearance information directly on the navigation bar object
+ * (i.e. using the "old" pre-iOS 13 API).
+ * */
 export type NavBarAppearanceLegacyConfig = NavBarAppearanceConfigBase & {
 
   /** The navigation bar style that specifies its appearance. */

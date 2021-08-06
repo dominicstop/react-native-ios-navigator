@@ -38,8 +38,9 @@ internal class RNIUtilities {
     else { return };
     
     #if DEBUG
-    let prevCountViewRegistry       = viewRegistry      .allValues.count;
-    let prevCountShadowViewRegistry = shadowViewRegistry.allValues.count;
+    // Protect from: Thread 1: EXC_BAD_ACCESS 
+    let prevCountViewRegistry       = NSDictionary(dictionary: viewRegistry).count;
+    let prevCountShadowViewRegistry = NSDictionary(dictionary: shadowViewRegistry).count;
     
     var removedViews: [NSNumber] = [];
     #endif
