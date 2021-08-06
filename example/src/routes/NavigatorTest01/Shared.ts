@@ -5,6 +5,7 @@ import type { NavBarItemsConfig, NavBarBackItemConfig } from '../../../../src/ty
 import type { NavBarAppearanceConfig, NavBarAppearanceCombinedConfig } from '../../../../src/types/NavBarAppearanceConfig';
 
 import * as Colors  from '../../constants/Colors';
+import * as Helpers from '../../functions/Helpers';
 
 
 //#region - Types
@@ -152,7 +153,7 @@ export const navBarItemsConfigs: Config<NavBarItemsConfig> = [{
     }
   }]
 }, {
-  description: "3 Nav bar items with gradient bg color",
+  description: "Nav bar item w/ linear gradient bg color",
   config: [{
     type: 'TEXT',
     key: 'A',
@@ -167,6 +168,55 @@ export const navBarItemsConfigs: Config<NavBarItemsConfig> = [{
             colors: ['red', 'blue', 'green'],
             width: 100,
             height: 50,
+          }
+        },
+      }
+    },
+  }]
+}, {
+  description: "Nav bar item w/ vertical linear gradient bg color + border radius",
+  config: [{
+    type: 'TEXT',
+    key: 'A',
+    title: 'Item A',
+    tintColor: 'white',
+    backgroundImage: {
+      default: {
+        controlState: 'normal',
+        imageItem: {
+          type: 'IMAGE_GRADIENT',
+          imageValue: {
+            colors: ['red', 'blue'],
+            width: 80,
+            height: 30,
+            borderRadius: 30/2,
+            startPoint: 'top',
+            endPoint: 'bottom'
+          }
+        },
+      }
+    },
+  }]
+}, {
+  description: "Nav bar item w/ radial gradient bg color + border radius #2",
+  config: [{
+    type: 'TEXT',
+    key: 'A',
+    title: 'Hello',
+    tintColor: 'white',
+    backgroundImage: {
+      default: {
+        controlState: 'normal',
+        imageItem: {
+          type: 'IMAGE_GRADIENT',
+          imageValue: {
+            colors: ['red', 'blue'],
+            width: 80,
+            height: 30,
+            type: 'radial',
+            borderRadius: 30/2,
+            startPoint: { x: 0.5, y: 0.5 },
+            endPoint: { x: 1.0, y: 1.0 }
           }
         },
       }
@@ -313,6 +363,7 @@ export const backButtonItemConfigs: Config<NavBarBackItemConfig>= [{
   }
 }];
 
+/** Appearance mode */
 export const navBarAppearanceConfigs: Config<NavBarAppearanceConfig> = [{
   description: "N/A",
   config: null,
@@ -325,6 +376,7 @@ export const navBarAppearanceConfigs: Config<NavBarAppearanceConfig> = [{
         fontSize: 32,
         color: 'white',
         fontWeight: '500',
+        fontStyle: 'italic',
       },
       titleTextAttributes: {
         color: 'white',
@@ -342,6 +394,7 @@ export const navBarAppearanceConfigs: Config<NavBarAppearanceConfig> = [{
         fontSize: 32,
         color: 'white',
         fontWeight: '800',
+        textDecorationLine: 'underline',
       },
       titleTextAttributes: {
         color: 'white',
@@ -352,7 +405,6 @@ export const navBarAppearanceConfigs: Config<NavBarAppearanceConfig> = [{
         type: 'IMAGE_SYSTEM',
         imageValue: 'trash'
       },
-      shadowColor: 'rgba(0,0,0,0)'
     }
   }
 }, {
@@ -411,6 +463,11 @@ export const navBarAppearanceConfigs: Config<NavBarAppearanceConfig> = [{
   config: {
     standardAppearance: {
       backgroundImageContentMode: 'scaleAspectFill',
+      titleTextAttributes: {
+        fontSize: 18,
+        color: 'white',
+        textDecorationLine: 'underline',
+      },
       backgroundImage: {
         type: 'IMAGE_GRADIENT',
         imageValue: {
@@ -429,6 +486,17 @@ export const navBarAppearanceConfigs: Config<NavBarAppearanceConfig> = [{
     standardAppearance: {
       backgroundEffect: 'systemUltraThinMaterial',
       backgroundColor: Colors.PURPLE.A100,
+      titleTextAttributes: {
+        fontSize: 16,
+        color: 'white',
+        fontWeight: 'bold',
+        fontStyle: 'italic',
+      },
+      largeTitleTextAttributes: {
+        fontSize: 26,
+        color: 'white',
+        fontWeight: 'bold',
+      },
       shadowImage: {
         type: 'IMAGE_GRADIENT',
         imageValue: {
@@ -441,8 +509,42 @@ export const navBarAppearanceConfigs: Config<NavBarAppearanceConfig> = [{
       },
     }
   },
+}, {
+  description: "Shadow Image Test #2",
+  config: {
+    standardAppearance: {
+      backgroundEffect: 'systemUltraThinMaterial',
+      backgroundColor: Helpers.hexToRGBA(Colors.BLUE.A100, 0.5),
+      titleTextAttributes: {
+        fontSize: 16,
+        color: 'white',
+        fontWeight: 'bold',
+        fontStyle: 'italic',
+      },
+      largeTitleTextAttributes: {
+        fontSize: 28,
+        color: 'white',
+        fontWeight: '500',
+        fontStyle: 'italic',
+      },
+      shadowImage: {
+        type: 'IMAGE_GRADIENT',
+        imageValue: {
+          colors: [
+            Helpers.hexToRGBA(Colors.BLUE.A100, 0.25),
+            'rgba(0,0,0,0)'
+          ],
+          startPoint: 'top',
+          endPoint: 'bottom',
+          height: 100,
+          width: 100,
+        }
+      },
+    }
+  },
 }];
 
+/** Legacy mode */
 export const navBarAppearanceLegacyConfigs: Config<NavBarAppearanceCombinedConfig> = [{
   description: 'N/A',
   config: null,
@@ -460,6 +562,13 @@ export const navBarAppearanceLegacyConfigs: Config<NavBarAppearanceCombinedConfi
   description: 'Gradient BG test',
   config: {
     mode: 'legacy',
+    tintColor: 'white',
+    titleTextAttributes: {
+      fontSize: 24,
+      color: 'cyan',
+      fontStyle: 'italic',
+      fontWeight: '500',
+    },
     backgroundImage: {
       default: {
         type: 'IMAGE_GRADIENT',
@@ -475,6 +584,10 @@ export const navBarAppearanceLegacyConfigs: Config<NavBarAppearanceCombinedConfi
   description: 'Gradient BG test 2',
   config: {
     mode: 'legacy',
+    tintColor: 'white',
+    titleTextAttributes: {
+      color: 'white',
+    },
     backgroundImage: {
       default: {
         type: 'IMAGE_GRADIENT',
@@ -490,16 +603,52 @@ export const navBarAppearanceLegacyConfigs: Config<NavBarAppearanceCombinedConfi
   description: 'Gradient BG test 3',
   config: {
     mode: 'legacy',
+    tintColor: 'white',
+    titleTextAttributes: {
+      color: 'white',
+      fontWeight: 'bold',
+      textDecorationLine: 'underline',
+    },
     backgroundImage: {
       default: {
         type: 'IMAGE_GRADIENT',
         imageValue: {
           colors: ['red', 'blue', 'green'],
-          startPoint: 'right',
-          endPoint: 'left'
+          startPoint: 'top',
+          endPoint: 'bottom'
         }
       }
     }
   },
+}, {
+  description: 'Radial gradient BG test 4',
+  config: {
+    mode: 'legacy',
+    tintColor: 'white',
+    backgroundImage: {
+      default: {
+        type: 'IMAGE_GRADIENT',
+        imageValue: {
+          colors: ['red', 'orange', 'yellow'],
+          type: 'radial',
+          startPoint: { x: 0.5, y: 0.5 },
+          endPoint: { x: 1.0, y: 1.0 }
+        }
+      }
+    }
+  }
+}, {
+  description: 'Shadow Test',
+  config: {
+    mode: 'legacy',
+    shadowImage: {
+      type: 'IMAGE_GRADIENT',
+      imageValue: {
+        colors: ['rgba(255,0,0,0.5)', 'rgba(0,0,0,0)'],
+        startPoint: 'top',
+        endPoint: 'bottom',
+      }
+    }
+  }
 }];
 //#endregion
