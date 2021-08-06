@@ -59,7 +59,7 @@ export class CompareImageConfig {
     switch (oldItem.type) {
       case 'IMAGE_ASSET' :
       case 'IMAGE_SYSTEM':
-        return (oldItem.imageValue !== (newItem as any).imageValue);
+        return (oldItem.imageValue === (newItem as any).imageValue);
 
       case 'IMAGE_RECT':
         return CompareImageRectConfig.compare(
@@ -71,7 +71,7 @@ export class CompareImageConfig {
         return CompareImageGradientConfig.compare(
           oldItem.imageValue,
           (newItem as any).imageValue
-      );
+        );
 
       case 'IMAGE_REQUIRE':
       default:
