@@ -142,10 +142,13 @@ internal struct RNIImageGradientMaker {
   
   var gradientLayer: CALayer {
     let layer = CAGradientLayer();
-    layer.colors     = self.colors;
-    layer.locations  = self.locations;
-    layer.startPoint = self.startPoint;
-    layer.endPoint   = self.endPoint;
+    
+    layer.type         = self.type;
+    layer.colors       = self.colors;
+    layer.locations    = self.locations;
+    layer.startPoint   = self.startPoint;
+    layer.endPoint     = self.endPoint;
+    layer.cornerRadius = self.borderRadius;
     
     return layer;
   };
@@ -202,7 +205,7 @@ internal struct RNIImageGradientMaker {
       
       let gradient = self.gradientLayer;
       gradient.frame = rect;
-      gradient.render(in: context.cgContext)
+      gradient.render(in: context.cgContext);
       
       let clipPath = UIBezierPath(
         roundedRect : rect,
