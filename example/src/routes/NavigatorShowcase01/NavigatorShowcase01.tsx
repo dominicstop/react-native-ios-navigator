@@ -122,6 +122,14 @@ export class NavigatorShowcase01 extends React.Component<RouteContentProps> {
     return `id:${item.id}`;
   };
 
+  _renderRouteHeader = () => {
+    return (
+      <RouteHeader
+        scrollY={this.scrollY}
+      />
+    );
+  };
+
   _renderListHeader  = () => {
     return (
       <View style={styles.listHeaderContainer}>
@@ -173,11 +181,7 @@ export class NavigatorShowcase01 extends React.Component<RouteContentProps> {
               tintColor: 'white',
             },
           }}
-          renderRouteHeader={() => (
-            <RouteHeader
-              scrollY={this.scrollY}
-            />
-          )}
+          renderRouteHeader={this._renderRouteHeader}
         />
         <Animated.FlatList
           style={styles.list}

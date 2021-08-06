@@ -33,8 +33,6 @@ const navBarAppearanceConfig: NavBarAppearanceCombinedConfig = ((iOSVersion >= 1
 });
 
 
-
-
 export class NavigatorShowcase02 extends React.Component<RouteContentProps> {
 
   scrollY = new Animated.Value(0);
@@ -56,6 +54,14 @@ export class NavigatorShowcase02 extends React.Component<RouteContentProps> {
 
   _handleKeyExtractor = (item: PostItem) => {
     return `id:${item.id}`;
+  };
+
+  _renderRouteHeader = () => {
+    return (
+      <RouteHeader
+        scrollY={this.scrollY}
+      />
+    );
   };
 
   _renderListHeader  = () => {
@@ -82,6 +88,7 @@ export class NavigatorShowcase02 extends React.Component<RouteContentProps> {
       />
     );
   };
+  
 
   render(){
     return(
@@ -99,11 +106,7 @@ export class NavigatorShowcase02 extends React.Component<RouteContentProps> {
               tintColor: 'white',
             },
           }}
-          renderRouteHeader={() => (
-            <RouteHeader
-              scrollY={this.scrollY}
-            />
-          )}
+          renderRouteHeader={this._renderRouteHeader}
         />
         <Animated.FlatList
           contentContainerStyle={styles.listContentContainer}
