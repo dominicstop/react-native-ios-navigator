@@ -1028,7 +1028,19 @@ Lorum ipsum
 
 ## G. Showcase, Tests and Demos
 
-### 
+### `NavigatorShowcase01`
+
+* 📌 **Declaration**: [`NavigatorShowcase01.tsx`](example/src/routes/NavigatorShowcase01/NavigatorShowcase01.tsx)
+
+![RouteViewPortalExample01](docs/assets/NavigatorShowcase01-00.gif)
+
+<br>
+
+### `NavigatorShowcase02`
+
+* 📌 **Declaration**: [`NavigatorShowcase02.tsx`](example/src/routes/NavigatorShowcase02/NavigatorShowcase02.tsx)
+
+![RouteViewPortalExample01](docs/assets/NavigatorShowcase02-00.gif)
 
 ------
 
