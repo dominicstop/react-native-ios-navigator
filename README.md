@@ -1042,6 +1042,34 @@ Lorum ipsum
 
 ![RouteViewPortalExample01](docs/assets/NavigatorShowcase02-00.gif)
 
+<br>
+
+### `NavigatorTest01`
+
+* 📌 **Declaration**: [`NavigatorTest01.tsx`](example/src/routes/NavigatorTest01/NavigatorTest01.tsx)
+
+![RouteViewPortalExample01](docs/assets/NavigatorTest01-00-00.gif)
+
+<br>
+
+![RouteViewPortalExample01](docs/assets/NavigatorTest01-01-00.gif)
+
+<br>
+
+![RouteViewPortalExample01](docs/assets/NavigatorTest01-02-00.gif)
+
+<br>
+
+![RouteViewPortalExample01](docs/assets/NavigatorTest01-03-00.gif)
+
+<br>
+
+![RouteViewPortalExample01](docs/assets/NavigatorTest01-03-01.gif)
+
+
+
+
+
 ------
 
 <br><br>
