@@ -128,6 +128,20 @@ export class NavigatorTest01 extends React.Component<RouteContentProps, Navigato
       }
     );
 
+    const shouldShowCustomLeftItem = (
+      Helpers.nextItemInCyclicArray(
+        state.navBarButtonLeftItemsConfigIndex,
+        navBarItemsConfigs
+      ).config?.[0]?.type === 'CUSTOM'
+    );
+
+    const shouldShowCustomRightItem = (
+      Helpers.nextItemInCyclicArray(
+        state.navBarButtonRightItemsConfigIndex,
+        navBarItemsConfigs
+      ).config?.[0]?.type === 'CUSTOM'
+    );
+
     const sharedProps: SharedSectionProps = {
       navigation : props.navigation,
       parentState: state,
@@ -193,20 +207,24 @@ export class NavigatorTest01 extends React.Component<RouteContentProps, Navigato
               : null
             ),
           }}
-          renderNavBarLeftItem={() => (
-            <View style={styles.navBarItemContainer}>
-              <Text style={styles.navBarItemText}>
-                {'Custom Left'}
-              </Text>
-            </View>
-          )}
-          renderNavBarRightItem={() => (
-            <View style={styles.navBarItemContainer}>
-              <Text style={styles.navBarItemText}>
-                {'Custom Right'}
-              </Text>
-            </View>
-          )}
+          {...(shouldShowCustomLeftItem && {
+            renderNavBarLeftItem: () => (
+              <View style={styles.navBarItemContainer}>
+                <Text style={styles.navBarItemText}>
+                  {'Custom Left'}
+                </Text>
+              </View>
+            )
+          })}
+          {...(shouldShowCustomRightItem && {
+            renderNavBarRightItem: () => (
+              <View style={styles.navBarItemContainer}>
+                <Text style={styles.navBarItemText}>
+                  {'Custom Right'}
+                </Text>
+              </View>
+            )
+          })}
           {...(state.renderNavBarTitleItem && ({
             renderNavBarTitleItem: (params) => (
               <View style={styles.navBarTitleContainer}>
