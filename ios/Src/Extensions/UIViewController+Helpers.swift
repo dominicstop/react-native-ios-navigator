@@ -51,4 +51,12 @@ extension UIViewController {
       );
     };
   };
+  
+  var previousViewController: UIViewController? {
+    guard let navController = self.navigationController,
+          navController.viewControllers.count >= 2
+    else { return nil };
+          
+    return navController.viewControllers[navController.viewControllers.count - 2];
+  };
 };

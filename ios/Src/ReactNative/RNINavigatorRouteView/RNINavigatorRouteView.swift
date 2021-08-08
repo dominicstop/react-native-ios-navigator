@@ -372,17 +372,17 @@ internal class RNINavigatorRouteView: UIView {
         // was enabled, so apply current config
         prevRouteVC.shouldResetNavBarBackConfig = true;
         
-        delegate?.didReceiveNavBarButtonBackItem(
+        self.delegate?.didReceiveNavBarButtonBackItem(
           self.backBarButtonItem,
           self.applyBackButtonConfigToCurrentRoute
         );
         
-        delegate?.didReceiveBackButtonTitle(
+        self.delegate?.didReceiveBackButtonTitle(
           self.backButtonTitle as String?,
           self.applyBackButtonConfigToCurrentRoute
         );
         
-        delegate?.didReceiveBackButtonDisplayMode(
+        self.delegate?.didReceiveBackButtonDisplayMode(
           self._backButtonDisplayMode,
           self.applyBackButtonConfigToCurrentRoute
         );
@@ -414,7 +414,7 @@ internal class RNINavigatorRouteView: UIView {
       }();
       
       self._backButtonDisplayMode = displayMode;
-      delegate?.didReceiveBackButtonDisplayMode(
+      self.delegate?.didReceiveBackButtonDisplayMode(
         displayMode,
         self.applyBackButtonConfigToCurrentRoute
       );
@@ -424,7 +424,7 @@ internal class RNINavigatorRouteView: UIView {
   @objc var hidesBackButton: Bool = false {
     didSet {
       guard self.hidesBackButton != oldValue else { return };
-      delegate?.didReceiveHidesBackButton(self.hidesBackButton);
+      self.delegate?.didReceiveHidesBackButton(self.hidesBackButton);
     }
   };
   
