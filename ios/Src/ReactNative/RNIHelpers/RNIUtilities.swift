@@ -132,4 +132,27 @@ internal class RNIUtilities {
 
     return views;
   };
+  
+  static func compareImages(_ a: UIImage?, _ b: UIImage?) -> Bool {
+    if (a == nil && b == nil){
+      // both are nil, equal
+      return true;
+      
+    } else if a == nil || b == nil {
+      // one is nil, not equal
+      return false;
+      
+    } else if a == b {
+      // same ref to the object, true
+      return true;
+      
+    } else if a!.size != b!.size {
+      // size diff, not equal
+      return false;
+    };
+    
+    // compare raw data
+    return a!.isEqual(b!);
+  };
 };
+

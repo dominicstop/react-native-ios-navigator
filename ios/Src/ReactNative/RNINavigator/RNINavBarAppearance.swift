@@ -476,7 +476,7 @@ internal class RNINavBarAppearance {
       
       /// set/init: `backIndicatorImage`
       let backImage = self.backIndicatorImage?.image;
-      if backImage != navBar.backIndicatorImage {
+      if !RNIUtilities.compareImages(backImage, navBar.backIndicatorImage) {
         navBar.backIndicatorImage               = backImage;
         navBar.backIndicatorTransitionMaskImage = backImage;
       };
@@ -501,19 +501,19 @@ internal class RNINavBarAppearance {
           // get background image
           let newBGImage = bgImageItem.image;
           
-          // did change, else skip...
-          guard currentBGImage != newBGImage  else { continue };
-          navBar.setBackgroundImage(newBGImage, for: .any, barMetrics: metric);
+          if !RNIUtilities.compareImages(currentBGImage, newBGImage) {
+            // did change, set bg image
+            navBar.setBackgroundImage(newBGImage, for: .any, barMetrics: metric);
+          };
           
         } else {
           // get the default bg image for the current metric
           let defaultBGImage = defaultAppearance.backgroundImage(for: .any, barMetrics: metric);
           
-          // did change, else skip...
-          guard currentBGImage != defaultBGImage  else { continue };
-          
-          // reset bg image to default
-          navBar.setBackgroundImage(defaultBGImage, for: .any, barMetrics: metric);
+          if !RNIUtilities.compareImages(currentBGImage, defaultBGImage) {
+            // image diff, reset bg image
+            navBar.setBackgroundImage(defaultBGImage, for: .any, barMetrics: metric);
+          };
         };
       };
             
