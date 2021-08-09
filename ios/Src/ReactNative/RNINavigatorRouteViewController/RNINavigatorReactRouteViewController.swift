@@ -42,9 +42,14 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     struct NavBarAppearanceLegacyConfig {
       
       // MARK: Title Config
-      var titleTextAttributes: Dictionary<NSAttributedString.Key, Any>?;
-      var largeTitleTextAttributes: Dictionary<NSAttributedString.Key, Any>?;
-      var titleVerticalPositionAdjustment: Dictionary<UIBarMetrics, CGFloat> = [:];
+      var titleTextAttributes:
+        Dictionary<NSAttributedString.Key, Any>?;
+      
+      var largeTitleTextAttributes:
+        Dictionary<NSAttributedString.Key, Any>?;
+      
+      var titleVerticalPositionAdjustment:
+        Dictionary<UIBarMetrics, CGFloat> = [:];
       
       // MARK: Navbar Style
       var barStyle: UIBarStyle?;
