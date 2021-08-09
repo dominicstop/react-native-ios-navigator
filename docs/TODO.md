@@ -10,7 +10,10 @@
 
 ## Unsorted
 
----
+
+
+- [ ] **Implement**: Update `RNIImageItem`: Make width/height optional (e.g. rely on `defaultSize`)
+- [ ] Expose  `backIndicatorTransitionMaskImage`
 
 <br>
 
@@ -220,6 +223,18 @@
 	- This is dues to the fact that the route is removed from `state.activeRoutes` before the route could receive the event from the native side.
 	- Possible culprits: `replaceRoute`, `setRoutes`
 
+<br>
+
+- [ ] **Fix**: navigation bar `backIndicatorImage` and `backIndicatorTransitionMaskImage` not resetting to the original chevron back button icon.
+	- Possible `UIKit` bug, according the debugger, `backIndicatorImage` is already set to `nil`,  and yet the back icon is not being reset to the original back button chevron icons.
+	- Persist across different view controllers/routes being pushed.
+	- **Note**: The default value for `backIndicatorImage` is `nil` (i.e. `UINavigationBar.appearance()`).
+
+<br>
+
+- [ ] **Fix**: Shadow styles not applying to the text styles for navigation bar title and large title.
+	* Shadow is a view property and not a text style.
+
 ---
 
 <br>
@@ -407,6 +422,8 @@
 		- The view manager will throw an error when trying to send a command to a native component that no longer exists.
 		- Since the `notifyComponentWillUnmount` is called inside `componentWillUnmount`, RN will  throw an error when the cleanup is triggered from the native side.
 		- With the native modules impl., the look up for finding a `node`'s corresponding view is done by the module itself. So  don't forward the command if the view has already been cleaned up from the native side.
+
+- [ ] (Commit: `a84dba3`) **Fix**: Navigation bar visibility not transitioning when the route that is being popped has its navigation bar hidden and the route that will become in focus has its navigation bar visible.
 
 
 
