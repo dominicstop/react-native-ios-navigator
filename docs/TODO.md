@@ -84,9 +84,9 @@
 
 - [ ] **Implement**:  animate `statusBarStyle` changes when transitioning between different styles.
 	- Current implementation doesn't animate the status bar changes because when putting `setNeedsStatusBarAppearanceUpdate()` inside an animation block using `UIView.animate()` it triggers the `ScrollView` offset bug.
-
-- [ ] **Implement**: Status bar animation should animate together with view controller transition + swipe back pop gesture.
+- [ ] **Implement**: Status bar animation should animate together with view controller transition pop + swipe back pop gesture.
 	- Implement status bar animation inside `animate(alongsideTransition:completion:)` in `UIViewControllerTransitionCoordinator`.
+	- status bar style transitions in during push, but not during pop + interactive swipe back pop gesture.
 
 <br>
 
@@ -279,13 +279,13 @@
 - [ ] `TODO (010)`: `NavRouteConfigItemExtended` — Moved type to `types/InternalTypes.`
 - [ ] `TODO (011)`: `NavigatorView.setRoutes` — Use this command to replace existing native navigation commands.
 - [ ] `TODO (012)`: `NavigatorView._handleOnNativeCommandRequest` — Cleanup: Extract to sep. functions.
-
 - [ ] `TODO (013)`: `withRouteViewLifecycle` — Delete file + impl.
 - [ ] `TODO (014)`: `NavBarAppearanceBaseConfig` — Rename type to `NavBarAppearanceBaseConfigType` and export
 - [ ] `TODO (015)`: `NavBarBackItemConfig` — Type incomplete, missing back-button related properties + Impl.
 	- Related to: `TODO (003)`, `TODO (004)`, and `TODO (005)`.
 - [ ] `TODO (017)`: `NavigatorView.verifyProps` — Add user-defined type guard
 - [ ] `TODO (018)`: `overrideIsNavBarHidden` — Bug: when hiding nav bar, scrollview still snaps.
+- [ ] `TODO (019)`: `RNINavigatorReactRouteViewController.statusBarStyle`: Move impl. to the base view controller.
 
 ---
 
@@ -423,7 +423,10 @@
 		- Since the `notifyComponentWillUnmount` is called inside `componentWillUnmount`, RN will  throw an error when the cleanup is triggered from the native side.
 		- With the native modules impl., the look up for finding a `node`'s corresponding view is done by the module itself. So  don't forward the command if the view has already been cleaned up from the native side.
 
-- [ ] (Commit: `a84dba3`) **Fix**: Navigation bar visibility not transitioning when the route that is being popped has its navigation bar hidden and the route that will become in focus has its navigation bar visible.
+<br>
+
+- [x] (Commit: `a84dba3`) **Fix**: Navigation bar visibility not transitioning when the route that is being popped has its navigation bar hidden and the route that will become in focus has its navigation bar visible.
+- [x] (Commit: `7b3e8a5`)  **Implement**: Transition `statusBarStyle` alongside push transition. 
 
 
 
