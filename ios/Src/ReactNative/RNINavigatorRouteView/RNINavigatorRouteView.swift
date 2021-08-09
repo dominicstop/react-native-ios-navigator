@@ -164,7 +164,8 @@ internal class RNINavigatorRouteView: UIView {
       );
       #endif
       
-      self.delegate?.didReceiveStatusBarStyle(self._statusBarStyle!);
+      self.delegate?
+        .didReceiveStatusBarStyle(self._statusBarStyle!, isInitialStyle: false);
     }
   };
   
@@ -682,7 +683,7 @@ private extension RNINavigatorRouteView {
     guard let delegate = self.delegate else { return };
     
     if let statusBarStyle = self._statusBarStyle {
-      delegate.didReceiveStatusBarStyle(statusBarStyle);
+      delegate.didReceiveStatusBarStyle(statusBarStyle, isInitialStyle: true);
     };
     
     // set push transition config

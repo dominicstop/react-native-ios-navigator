@@ -32,7 +32,10 @@ import Foundation
 
 internal protocol RNINavigatorRouteViewDelegate: AnyObject {
   
-  func didReceiveStatusBarStyle(_ style: UIStatusBarStyle);
+  func didReceiveStatusBarStyle(
+    _ style: UIStatusBarStyle,
+    isInitialStyle: Bool
+  );
   
   // --------------------------------------
   // MARK: Receive Props: Transition Config
