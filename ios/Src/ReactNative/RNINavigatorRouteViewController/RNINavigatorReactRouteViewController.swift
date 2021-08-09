@@ -240,7 +240,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     
     /// If there were any nav bar config values overridden, then this will restore
     /// them to the original/prev. values.
-    func restoreConfigIfNeeded(){
+    func restoreConfigIfNeeded(isAnimated: Bool){
       guard let parentRef     = self.parentRef,
             let navController = parentRef.navigationController,
             let navigatorView = self.parentRef?.routeView?.navigatorView
@@ -258,9 +258,10 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
         #endif
       };
       
+      // reset navigation bar visibility
       if let isNavBarHidden = self.isNavBarHidden {
         
-        navController.isNavigationBarHidden = isNavBarHidden;
+        navController.setNavigationBarHidden(isNavBarHidden, animated: isAnimated);
         self.isNavBarHidden = nil;
         
         #if DEBUG
@@ -543,7 +544,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     );
     
     // restore navigator config if prev. overridden
-    self.navigationConfigOverride.restoreConfigIfNeeded();
+    self.navigationConfigOverride.restoreConfigIfNeeded(isAnimated: animated);
   };
   
   override func viewDidDisappear(_ animated: Bool) {
