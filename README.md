@@ -1115,6 +1115,23 @@ Lorum ipsum
 
 <br>
 
+* `RouteOptions.statusBarStyle`: 
+	* **Left**: Change the current route's `StatusBarStyle`.
+	* **Right**: Push a route with `StatusBarStyle.lightContent`.
+
+![NavigatorTest01](docs/assets/NavigatorTest01-06-00.gif)
+
+<br>
+
+* **Left**: `NavigationObject.getRouteConstants()`
+* **Right**: `NavigationObject.getNavigatorConstants()`
+
+![NavigatorTest01](docs/assets/NavigatorTest01-07-00.png)
+
+<br>
+
+
+
 
 
 ------
