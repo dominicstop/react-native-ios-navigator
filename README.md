@@ -751,18 +751,18 @@ const navBarAppearance = {
 
 ##### Object Type: `NavBarAppearanceLegacyConfig`
 
-| Name and Type                                                | Description |
-| :----------------------------------------------------------- | ----------- |
-| 🔤 `navBarPreset`<br/><br/>⚛️  `NavBarPreset` e.g. `'none' ¦ 'noShadow' ¦ 'clearBackground'`<br><br>✳️ **Default**: `none` |             |
-| 🔤 `barStyle`<br/><br/>⚛️  `'default' ¦ 'black'`               |             |
-| 🔤 `titleTextAttributes`<br/><br/>⚛️  `TextStyle`              |             |
-| 🔤 `largeTitleTextAttributes`<br/><br/>⚛️  `TextStyle`         |             |
-| 🔤 `titleVerticalPositionAdjustment`<br/><br/>⚛️ `{ [key in BarMetrics]?: number }`<br><br>📌 [`BarMetrics`](PLACE_HOLDER_LINK) |             |
-| 🔤 `tintColor`<br/><br/>⚛️  `string ¦ DynamicColor`            |             |
-| 🔤 `barTintColor`<br><br>⚛️  `string ¦ DynamicColor`           |             |
-| 🔤 `backIndicatorImage`<br/><br/>⚛️  [`ImageItemConfig`](PLACE_HOLDER_LINK) |             |
-| 🔤 `backgroundImage`<br/><br/>⚛️  `{ [key in BarMetrics]?: ImageItemConfig }`<br><br>📌 [`BarMetrics`](PLACE_HOLDER_LINK)<br>📌 [`ImageItemConfig`](PLACE_HOLDER_LINK) |             |
-| 🔤 `shadowImage`<br/><br/>⚛️  [`ImageItemConfig`](PLACE_HOLDER_LINK) |             |
+| Name and Type                                                | Description                                                  |
+| :----------------------------------------------------------- | ------------------------------------------------------------ |
+| 🔤 `navBarPreset`<br/><br/>⚛️  `NavBarPreset` e.g. `'none' ¦ 'noShadow' ¦ 'clearBackground'`<br><br>✳️ **Default**: `none` |                                                              |
+| 🔤 `barStyle`<br/><br/>⚛️  `'default' ¦ 'black'`               |                                                              |
+| 🔤 `titleTextAttributes`<br/><br/>⚛️  `TextStyle`              |                                                              |
+| 🔤 `largeTitleTextAttributes`<br/><br/>⚛️  `TextStyle`         |                                                              |
+| 🔤 `titleVerticalPositionAdjustment`<br/><br/>⚛️ `{ [key in BarMetrics]?: number }`<br><br>📌 [`BarMetrics`](PLACE_HOLDER_LINK) |                                                              |
+| 🔤 `tintColor`<br/><br/>⚛️  `string ¦ DynamicColor`            |                                                              |
+| 🔤 `barTintColor`<br><br>⚛️  `string ¦ DynamicColor`           |                                                              |
+| 🔤 `backIndicatorImage`<br/><br/>⚛️  [`ImageItemConfig`](PLACE_HOLDER_LINK) |                                                              |
+| 🔤 `backgroundImage`<br/><br/>⚛️  `{ [key in BarMetrics]?: ImageItemConfig }`<br><br>📌 [`BarMetrics`](PLACE_HOLDER_LINK)<br>📌 [`ImageItemConfig`](PLACE_HOLDER_LINK) |                                                              |
+| 🔤 `shadowImage`<br/><br/>⚛️  [`ImageItemConfig`](PLACE_HOLDER_LINK) | 📝 **Note**: A custom background image must also be set for the shadow image to take affect. As mentioned in the apple [docs](https://developer.apple.com/documentation/uikit/uinavigationbar/1624963-shadowimage): "To show a custom shadow image, you must also set a custom background image". |
 
 <br>
 
@@ -1032,7 +1032,7 @@ Lorum ipsum
 
 * 📌 **Declaration**: [`NavigatorShowcase01.tsx`](example/src/routes/NavigatorShowcase01/NavigatorShowcase01.tsx)
 
-![RouteViewPortalExample01](docs/assets/NavigatorShowcase01-00.gif)
+![NavigatorShowcase01](docs/assets/NavigatorShowcase01-00.gif)
 
 <br>
 
@@ -1040,7 +1040,7 @@ Lorum ipsum
 
 * 📌 **Declaration**: [`NavigatorShowcase02.tsx`](example/src/routes/NavigatorShowcase02/NavigatorShowcase02.tsx)
 
-![RouteViewPortalExample01](docs/assets/NavigatorShowcase02-00.gif)
+![NavigatorShowcase02](docs/assets/NavigatorShowcase02-00.gif)
 
 <br>
 
@@ -1048,25 +1048,72 @@ Lorum ipsum
 
 * 📌 **Declaration**: [`NavigatorTest01.tsx`](example/src/routes/NavigatorTest01/NavigatorTest01.tsx)
 
-![RouteViewPortalExample01](docs/assets/NavigatorTest01-00-00.gif)
+<br>
+
+* `RouteOptions.routeTitle`: Updating the navigation bar title.
+* `RouteOptions.prompt`: Updating the navigation bar prompt (which doubles the navigation bar height).
+* `RouteOptions.titleDisplayMode`: Toggle large title on and off.
+
+![NavigatorTest01](docs/assets/NavigatorTest01-00-00.gif)
 
 <br>
 
-![RouteViewPortalExample01](docs/assets/NavigatorTest01-01-00.gif)
+* `RouteOptions.navBarButtonLeftItemsConfig`
+	* Cycling through all the ways a `NavBarItemConfig` can be configured (e.g. `TEXT`,  `SYSTEM_ITEM`, etc).
+	* Showing multiple navigation bar items and pressing them.
+	* Showing different `TEXT` navigation bar items with custom background images via `ImageItemConfig`.
+	* Using a react component as a custom navigation bar item via `type: 'CUSTOM'`.
+
+![NavigatorTest01](docs/assets/NavigatorTest01-01-00.gif)
 
 <br>
 
-![RouteViewPortalExample01](docs/assets/NavigatorTest01-02-00.gif)
+* `RouteOptions.navBarButtonRightItemsConfig`
+* Same as `RouteOptions.navBarButtonLeftItemsConfig`.
+
+![NavigatorTest01](docs/assets/NavigatorTest01-02-00.gif)
 
 <br>
 
-![RouteViewPortalExample01](docs/assets/NavigatorTest01-03-00.gif)
+* `RouteOptions.navBarButtonBackItemConfig`: Cycle through all the example  `NavBarBackItemConfig` configurations.
+* `RouteOptions.leftItemsSupplementBackButton`: Toggle showing the back button when there are `RouteOptions.navBarButtonLeftItemsConfig`.
+* `RouteOptions.applyBackButtonConfigToCurrentRoute`: By default, the back button config is applied to next route. This toggles whether or not the back button config is applied to the current route.
+* `RouteOptions.hidesBackButton`: Toggle back button visibility.
+* `RouteOptions.backButtonTitle`: Change the back button text.
+
+![NavigatorTest01](docs/assets/NavigatorTest01-03-00.gif)
 
 <br>
 
-![RouteViewPortalExample01](docs/assets/NavigatorTest01-03-01.gif)
+![NavigatorTest01](docs/assets/NavigatorTest01-03-01.gif)
 
+<br>
 
+* `RouteViewPortal.renderNavBarTitleItem`: Toggle using custom react component as the navigation bar title.
+
+![NavigatorTest01](docs/assets/NavigatorTest01-04-00.gif)
+
+<br>
+
+* `RouteOptions.navBarAppearanceOverride`: Cycle through all the example  `NavBarAppearanceCombinedConfig` configurations.
+	* **Left Gif**: "legacy" mode
+	* **Right Gif**: "appearance" mode
+
+![NavigatorTest01](docs/assets/NavigatorTest01-05-00-00.gif)
+
+<br>
+
+![NavigatorTest01](docs/assets/NavigatorTest01-05-01-00.gif)
+
+<br>
+
+* `RouteOptions.navigationBarVisibility`: 
+	* **Left**: Toggle the navigation bar visibility
+	* **Right**: Push route with its navigation bar visibility hidden.
+
+![NavigatorTest01](docs/assets/NavigatorTest01-05-02-00.gif)
+
+<br>
 
 
 
