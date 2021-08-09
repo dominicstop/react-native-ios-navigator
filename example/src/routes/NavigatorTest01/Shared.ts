@@ -433,6 +433,10 @@ export const navBarAppearanceConfigs: Config<NavBarAppearanceConfig> = [{
   description: "Gradient Test #1",
   config: {
     standardAppearance: {
+      largeTitleTextAttributes: {
+        fontSize: 32,
+        fontFamily: 'TimesNewRomanPS-ItalicMT',
+      },
       backgroundImage: {
         type: 'IMAGE_GRADIENT',
         imageValue: {
@@ -556,6 +560,12 @@ export const navBarAppearanceLegacyConfigs: Config<NavBarAppearanceCombinedConfi
     titleTextAttributes: {
       fontSize: 24,
       fontWeight: 'bold',
+      fontFamily: 'Georgia',
+    },
+    largeTitleTextAttributes: {
+      fontSize: 32,
+      fontFamily: 'Georgia-BoldItalic',
+      color: 'red',
     },
   },
 }, {
@@ -568,6 +578,12 @@ export const navBarAppearanceLegacyConfigs: Config<NavBarAppearanceCombinedConfi
       color: 'cyan',
       fontStyle: 'italic',
       fontWeight: '500',
+    },
+    largeTitleTextAttributes: {
+      fontSize: 32,
+      fontWeight: 'bold',
+      textDecorationLine: 'underline',
+      color: 'blue',
     },
     backgroundImage: {
       default: {
@@ -587,6 +603,11 @@ export const navBarAppearanceLegacyConfigs: Config<NavBarAppearanceCombinedConfi
     tintColor: 'white',
     titleTextAttributes: {
       color: 'white',
+    },
+    largeTitleTextAttributes: {
+      fontSize: 24,
+      textDecorationLine: 'line-through',
+      color: 'green',
     },
     backgroundImage: {
       default: {
@@ -609,6 +630,11 @@ export const navBarAppearanceLegacyConfigs: Config<NavBarAppearanceCombinedConfi
       fontWeight: 'bold',
       textDecorationLine: 'underline',
     },
+    largeTitleTextAttributes: {
+      fontSize: 36,
+      fontWeight: '200',
+      color: 'black',
+    },
     backgroundImage: {
       default: {
         type: 'IMAGE_GRADIENT',
@@ -625,6 +651,16 @@ export const navBarAppearanceLegacyConfigs: Config<NavBarAppearanceCombinedConfi
   config: {
     mode: 'legacy',
     tintColor: 'white',
+    largeTitleTextAttributes: {
+      fontSize: 32,
+      fontFamily: 'Futura-CondensedExtraBold',
+      color: 'red',
+      backgroundColor: 'blue',
+    },
+    titleTextAttributes: {
+      fontFamily: 'MarkerFelt-Thin',
+      fontSize: 22,
+    },
     backgroundImage: {
       default: {
         type: 'IMAGE_GRADIENT',
@@ -641,12 +677,73 @@ export const navBarAppearanceLegacyConfigs: Config<NavBarAppearanceCombinedConfi
   description: 'Shadow Test',
   config: {
     mode: 'legacy',
+    largeTitleTextAttributes: {
+      fontSize: 32,
+      color: 'yellow',
+
+    },
     shadowImage: {
       type: 'IMAGE_GRADIENT',
       imageValue: {
         colors: ['rgba(255,0,0,0.5)', 'rgba(0,0,0,0)'],
         startPoint: 'top',
         endPoint: 'bottom',
+      }
+    }
+  }
+}, {
+  description: 'Shadow Test #2',
+  config: {
+    mode: 'legacy',
+    shadowImage: {
+      type: 'IMAGE_GRADIENT',
+      imageValue: {
+        colors: ['rgba(0,0,0,0.25)', 'rgba(0,0,0,0)'],
+        startPoint: 'top',
+        endPoint: 'bottom',
+      }
+    }
+  }
+}, {
+  description: 'Shadow Test #3',
+  config: {
+    mode: 'legacy',
+    shadowImage: {
+      type: 'IMAGE_GRADIENT',
+      imageValue: {
+        colors: ['rgba(255,0,0,0.3)','rgba(0,255,0,0.2)', 'rgba(0,0,255,0.1)', 'rgba(0,0,0,0)'],
+        startPoint: 'top',
+        endPoint: 'bottom',
+      }
+    }
+  }
+}, {
+  description: 'Shadow Test #4',
+  config: {
+    mode: 'legacy',
+    // Note: When setting a shadow, a custom BG image must be set
+    // for it to take effect...
+    // * Link: https://developer.apple.com/documentation/uikit/uinavigationbar/1624963-shadowimage
+    //
+    // Also, it turns out weird things happen if you modify
+    // the bg image w/o providing a `backgroundImage` 
+    // (e.g. the size of the shadow not updating)
+    backgroundImage: {
+      default: {
+        type: 'IMAGE_RECT',
+        imageValue: {
+          fillColor: 'white',
+          width: 100,
+          height: 100,
+        }
+      }
+    },
+    shadowImage: {
+      type: 'IMAGE_RECT',
+      imageValue: {
+        fillColor: 'blue',
+        width: 100,
+        height: 1,
       }
     }
   }

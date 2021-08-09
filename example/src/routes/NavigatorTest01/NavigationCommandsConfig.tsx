@@ -29,11 +29,14 @@ export function NavigationCommandsConfig(props: RouteContentProps){
         title={'Pop Current'}
         subtitle={'Pop the current route with fade animation'}
         onPress={() => {
-          props.navigation.pop({
-            transitionConfig: {
-              type: 'FadePop'
-            }
-          });
+          props.navigation.pop();
+        }}
+      />
+      <CardButton
+        title={'Pop Current'}
+        subtitle={'Pop the current route'}
+        onPress={() => {
+          props.navigation.pop();
         }}
       />
     </CardBody>
