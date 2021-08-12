@@ -1,4 +1,3 @@
-import { Image } from 'react-native';
 import {  NavigatorViewConstants, } from 'react-native-ios-navigator';
 
 const { navigationBarHeight } = NavigatorViewConstants;
@@ -30,13 +29,6 @@ export const SCROLL_OFFSETS = (() => {
 
   });
 })();
-
-export const ASSETS = {
-  headerBG: require('../../../assets/images/unsplash_diagram.jpg'),
-  headerBGBlurred: require('../../../assets/images/unsplash_diagram_blurred.jpg'),
-  headerProfile: require('../../../assets/images/domicstop_profile.jpg'),
-  chevronBack: Image.resolveAssetSource(require('../../../assets/images/chevron_back.png'))
-};
 
 export const COLOR_PRESETS = {
   profileButton: 'rgb(0,132,230)',

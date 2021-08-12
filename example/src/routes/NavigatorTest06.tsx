@@ -4,9 +4,8 @@ import { StyleSheet, View, Text, Image, ScrollView, TouchableOpacity } from 'rea
 import { HeaderHeightValue, RouteHeaderView, RouteViewPortal } from 'react-native-ios-navigator';
 
 import { navBarAppearanceConfigHidden } from '../constants/Constants';
+import { ImageAssets } from '../functions/ImageCache';
 
-
-const AssetImageCoffee = require('../../assets/images/unsplash_coffee.jpg');
 
 const headerHeightValues: Array<HeaderHeightValue> = [
   'statusBar',
@@ -38,7 +37,7 @@ function RouteHeaderWithButton(){
       <View style={styles.headerBGImageContainer}>
         <Image 
           style={styles.headerBGImage}
-          source={AssetImageCoffee}
+          source={ImageAssets.BGCoverCoffee}
           resizeMode={'cover'}
         />
       </View>
@@ -84,7 +83,7 @@ export function NavigatorTest06(){
       <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
         <Image
           style={styles.contentImageTest}
-          source={AssetImageCoffee}
+          source={ImageAssets.BGCoverCoffee}
         />
         <TouchableOpacity 
           style={styles.headerButton}

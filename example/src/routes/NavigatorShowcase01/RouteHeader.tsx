@@ -3,6 +3,8 @@ import * as React from 'react';
 import { StyleSheet, View, SafeAreaView, Text, Image, Animated, StyleProp, ViewStyle } from 'react-native';
 import { RouteHeaderView, NavigatorViewConstants, NavigatorUIConstantsContext } from 'react-native-ios-navigator';
 
+import { ImageAssets } from '../../functions/ImageCache';
+
 import * as Colors  from '../../constants/Colors';
 
 const { navigationBarHeight } = NavigatorViewConstants;
@@ -112,9 +114,9 @@ export class RouteHeader extends React.Component<RouteHeaderProps> {
         >
           <Image
             style={styles.routeHeaderExpandedBGImage}
-            source={AssetImageCoffee}
             resizeMode={'cover'}
           />
+              source={ImageAssets.BGCoverCoffee}
         </Animated.View>
         <NavigationBarContainer backgroundStyle={{ opacity: this.headerCollapsedBGOpacity }}>
           <Animated.Text style={[styles.routeHeaderCollapsedTitle, {

@@ -4,8 +4,9 @@ import { StyleSheet, View, Text, Image, ScrollView } from 'react-native';
 import { RouteHeaderView, RouteViewPortal } from 'react-native-ios-navigator';
 
 import { navBarAppearanceConfigHidden } from '../constants/Constants';
+import { ImageAssets } from '../functions/ImageCache';
 
-const AssetImageCoffee = require('../../assets/images/unsplash_coffee.jpg');
+
 
 export function NavigatorTest07(){
   return (
@@ -33,7 +34,7 @@ export function NavigatorTest07(){
             <View style={styles.headerBGImageContainer}>
               <Image 
                 style={styles.headerBGImage}
-                source={AssetImageCoffee}
+                 source={ImageAssets.BGCoverCoffee}
                 resizeMode={'cover'}
               />
             </View>

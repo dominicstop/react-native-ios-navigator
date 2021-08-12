@@ -3,13 +3,14 @@ import { StyleSheet, View, Text, Animated, ListRenderItem } from 'react-native';
 
 import { RouteViewPortal, RouteContentProps, NavBarAppearanceCombinedConfig } from 'react-native-ios-navigator';
 
+import { ImageAssets } from '../../functions/ImageCache';
 import { iOSVersion } from '../../constants/Constants';
 
 import { RouteHeader } from './RouteHeader';
 import { ListHeaderProfile } from './ListHeaderProfile';
 import { ListItemPost } from './ListItemPost';
 
-import { ASSETS, POST_ITEMS, PostItem } from './Constants';
+import { POST_ITEMS, PostItem } from './Constants';
 
 
 const navBarAppearanceConfig: NavBarAppearanceCombinedConfig = ((iOSVersion >= 13)? {
@@ -21,7 +22,7 @@ const navBarAppearanceConfig: NavBarAppearanceCombinedConfig = ((iOSVersion >= 1
     },
     backIndicatorImage: {
       type: 'IMAGE_REQUIRE',
-      imageValue: ASSETS.chevronBack,
+      imageValue: ImageAssets.IconBackChevron,
     },
   },
 } : {

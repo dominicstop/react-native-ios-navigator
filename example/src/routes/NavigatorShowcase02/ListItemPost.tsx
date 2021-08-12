@@ -1,8 +1,9 @@
 import * as React from 'react';
-
 import { StyleSheet, View, Text, Image } from 'react-native';
 
-import { ASSETS, COLOR_PRESETS, PostItem, UI_CONSTANTS } from './Constants';
+import { ImageAssets } from '../../functions/ImageCache';
+
+import { COLOR_PRESETS, PostItem, UI_CONSTANTS } from './Constants';
 
 
 export function ListItemPost(props: {
@@ -13,7 +14,7 @@ export function ListItemPost(props: {
     <View style={styles.rootContainer}>
       <Image 
         style={styles.profileContainer}
-        source={ASSETS.headerProfile}
+        source={ImageAssets.ProfilePicDominicStop}
       />
       <View style={styles.rightContainer}>
 

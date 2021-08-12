@@ -25,6 +25,10 @@ import * as Colors  from './constants/Colors';
 import * as Helpers from './functions/Helpers';
 import { NavigatorTest08 } from './routes/NavigatorTest08';
 
+import { ImageCache } from './functions/ImageCache';
+
+
+ImageCache.loadImages();
 
 const RouteKeys = {
   Home: 'Home',

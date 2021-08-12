@@ -1,9 +1,12 @@
 import * as React from 'react';
-
 import { StyleSheet, View, SafeAreaView, Text, Image, Animated, StyleProp, ViewStyle } from 'react-native';
+
 import { RouteHeaderView, NavigatorUIConstantsContext } from 'react-native-ios-navigator';
 
-import { SCROLL_OFFSETS, UI_CONSTANTS, ASSETS } from './Constants';
+import { ImageAssets } from '../../functions/ImageCache';
+
+import { SCROLL_OFFSETS, UI_CONSTANTS } from './Constants';
+
 
 const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
 
@@ -116,14 +119,14 @@ export class RouteHeader extends React.Component<RouteHeaderProps> {
       >
         <Image
           style={styles.headerExpandedBGImage}
-          source={ASSETS.headerBG}
+          source={ImageAssets.BGCoverDiagram}
           resizeMode={'cover'}
         />
         <Animated.Image
           style={[styles.headerExpandedBGImage, {
             opacity: this.headerBGBlurredOpacity,
           }]}
-          source={ASSETS.headerBGBlurred}
+          source={ImageAssets.BGCoverDiagramBlurred}
           resizeMode={'cover'}
         />
       </View>
@@ -145,7 +148,7 @@ export class RouteHeader extends React.Component<RouteHeaderProps> {
         }]}>
           <Image
             style={styles.headerProfileImage}
-            source={ASSETS.headerProfile}
+            source={ImageAssets.ProfilePicDominicStop}
           />
         </Animated.View>
       </AnimatedSafeAreaView>
