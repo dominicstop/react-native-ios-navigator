@@ -223,7 +223,6 @@
 
 - [ ] **Fix**: `RCTScrollView` indicator insets is wrong.
   - For devices with notches, the scroll view insets for the left and right of the screen is wrong. The top and bottom insets are correct (e.g. the scroll indicator insets are insetted from the home indicator and navigation bar).
-- [ ] **Fix**: `SafeAreaView` size/insets are initially wrong on first mount for `NavigatorView`'s that aren't the same size as the screen (See `NavigatorTest08` + `RouteB`). 
 
 <br>
 
@@ -435,6 +434,31 @@
 
 - [x] (Commit: `a84dba3`) **Fix**: Navigation bar visibility not transitioning when the route that is being popped has its navigation bar hidden and the route that will become in focus has its navigation bar visible.
 - [x] (Commit: `7b3e8a5`)  **Implement**: Transition `statusBarStyle` alongside push transition. 
+
+<br>
+
+- [x] (Commit: `f69982f`) **Fix**: Route size initially wrong on first mount for `NavigatorView`'s that aren't the same size as the screen (See `NavigatorTest08` + push  `RouteB`).
+	- Debugging: Push `routeB`, then track `view.bounds` via breakpoints and  `po`.	
+		- **1)** `RNINavigatorView.insertReactSubview` — The route to be pushed is "received" as a subview from the navigator view.
+			- navigator bounds: `(0.0, 0.0, 375.0, 333.5)` — navigator has the correct size.
+			- `routeView` bounds: `(0.0, 0.0, 0.0, 0.0)` — the route view initially has no size.
+		- **1.1)** `RNINavigatorView.insertReactSubview` — `RNINavigatorReactRouteViewController` was initialized/created and the `routeView` has been assigned to it .
+			- `routeView` bounds: `(0.0, 0.0, 0.0, 0.0)` — the bounds still haven't been set yet.
+		- **1.2)** `RNINavigatorView.insertReactSubview` — `routeView.notifyForBoundsChange` has been triggered, i.e. the bounds have been set to the bounds of the navigator view.
+			- `routeView` bounds: `(0.0, 0.0, 375.0, 333.5)` — the route view's size is now correct.
+		- **2)** `RNINavigatorRouteView.reactSetFrame` — React lifecycle triggered. React sets the initial size of the route view.
+			- `frame` argument: `(0.0, 0.0, 375.0, 333.5)`
+			- `navigatorView.frame.size`: `(375.0, 333.5)`
+			- `routeView` bounds: `(0.0, 0.0, 375.0, 333.5)` — Unchanged.
+		- **2.1)** `RNINavigatorRouteView.reactSetFrame` — `super.reactSetFrame(...)` is triggered.
+			- `routeView` bounds: `(0.0, 0.0, 375.0, 333.5)` — Unchanged.
+		- **3)** `RNINavigatorView.push`:  The push command has been received from the native side, and `pushViewController` is about to be called.
+			- `nextRouteVC.view.bounds`: `(0.0, 0.0, 375.0, 667.0)` — The bounds changed to the wrong size.
+				- Something in the route VC lifecycle must have triggered the size change.
+					- Size change triggered in `loadView`.
+				- `nextRouteVC.isCurrentlyInFocus`: `false`.
+				- `nextRouteVC.view.window`: `nil` — makes sense, it hasn't been pushed yet.
+				- `(nextRouteVC as! RNINavigatorReactRouteViewController).isPushed` : `false` — again,  `pushViewController` hasn't actually been called yet.
 
 
 
