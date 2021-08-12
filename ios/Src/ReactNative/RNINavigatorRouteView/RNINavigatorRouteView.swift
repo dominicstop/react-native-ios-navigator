@@ -534,9 +534,10 @@ internal class RNINavigatorRouteView: UIView {
     
     self.didSetInitialHeight = true;
     
-    super.reactSetFrame(
-      CGRect(origin: .zero, size: navigatorView.frame.size)
-    );
+    let rect = CGRect(origin: .zero, size: navigatorView.frame.size);
+    
+    super.reactSetFrame(rect);
+    self.notifyForBoundsChange(rect);
   };
     
   override func reactSuperview() -> UIView! {

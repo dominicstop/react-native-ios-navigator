@@ -15,6 +15,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
   // MARK:- Embedded Types
   // ---------------------
   
+  /// The types of "root views" that a `routeView` can have
   enum RouteContentWrapper {
     case view(view: UIView);
     case reactSafeAreaView(view: RCTSafeAreaView);
@@ -431,7 +432,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     ///  * TODO: Fix the naming/pick better names because it's so confusing.
     ///
     let rootView = self.routeView!.reactRouteContent!;
-    rootView.frame = self.view.frame;
     
     // set the root view bg color
     if rootView.backgroundColor == nil {
@@ -443,8 +443,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       };
     };
     
-    /// update `routeView`'s size
-    self.routeView!.notifyForBoundsChange(self.view.bounds);
     /// set/replace the view controller's view
     self.view = rootView;
     
