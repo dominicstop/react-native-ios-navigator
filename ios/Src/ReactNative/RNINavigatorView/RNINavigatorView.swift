@@ -477,7 +477,8 @@ fileprivate extension RNINavigatorView {
   };
   
   /// Embed the navigation controller as a child view controller to the closest
-  /// parent view controller. By default it should be the root view controller:
+  /// parent view controller.
+  /// By default it should be the root view controller:
   /// `RCTRootContentView` -> `RCTRootView` -> `UIViewController` (root vc).
   func setupEmbedNavigationControllerToClosestVC(){
     guard let parentVC = RNIUtilities.getParent(responder: self, type: UIViewController.self)

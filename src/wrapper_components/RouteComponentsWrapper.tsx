@@ -100,5 +100,6 @@ export class RouteComponentsWrapper extends React.Component<RouteComponentsWrapp
 const styles = StyleSheet.create({
   routeItemContainer: {
     position: 'absolute',
+    overflow: 'visible',
   },
 });
