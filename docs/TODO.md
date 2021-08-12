@@ -143,6 +143,14 @@
 		* Impl. setting the `tokenBackgroundColor`.
 	* [ ] **Implement**: Expose remaining `UISearchController` events to react e.g. `willDismissSearchController`, `didDismissSearchController`, `willPresentSearchController`, and `didPresentSearchController`.
 
+
+
+- [ ] **Implement**: Disable clipping in the navigation bar.
+	- When a navigation bar item is bigger than the navigation bar, the navigation bar item is clipped.
+	- Setting `navigationBar.clipToBounds` to `false` does nothing (and recursively doing this to its subviews also does nothing).
+		- Disabling `clipToBounds` for all the subviews in `navigationController.view` does nothing.
+		- Setting `overflow: visible` to the `RNIWrapperView` also does nothing.
+
 ---
 
 <br>
