@@ -13,7 +13,8 @@
 
 
 - [ ] **Implement**: Update `RNIImageItem`: Make width/height optional (e.g. rely on `defaultSize`)
-- [ ] Expose  `backIndicatorTransitionMaskImage`
+- [ ] Expose  `backIndicatorTransitionMaskImage`.
+- [ ] Use `TurboModules` + `JSI`.
 
 <br>
 
@@ -275,7 +276,6 @@
 ## TODO from Code
 
 - [ ] `TODO (001)`: `RNINavigatorRouteView.cleanup` — Crash sometimes occurring when detaching touch handler.
-- [ ] `TODO (002)`: `CustomAnimator` — Add `isPresenting` so that push and pop can be combined together.
 - [ ] `TODO (003)`: `RNINavBarAppearance` — Impl. property: `backButtonAppearance`.
 - [ ] `TODO (004)`: `RNINavBarAppearance` — Impl. property: `doneButtonAppearance`.
 - [ ] `TODO (005)`:  `RNINavBarAppearance` — Impl. property: `UIBarButtonItemAppearance`.
@@ -460,7 +460,9 @@
 				- `nextRouteVC.view.window`: `nil` — makes sense, it hasn't been pushed yet.
 				- `(nextRouteVC as! RNINavigatorReactRouteViewController).isPushed` : `false` — again,  `pushViewController` hasn't actually been called yet.
 
+<br>
 
+- [x] (Commit `065d707`) `TODO (002)`: `CustomAnimator` — Add `isPresenting` so that push and pop can be combined together.
 
 ### Version: `0.1.4`
 
