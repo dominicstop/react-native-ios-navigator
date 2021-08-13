@@ -55,26 +55,26 @@ internal class RNINavTransitionConfig {
       case .DefaultPush: return nil;
       case .DefaultPop : return nil;
       
-      case .FadePush: return FadePushAnimator(duration: duration);
-      case .FadePop : return FadePopAnimator (
+      case .FadePush: return FadeAnimator(duration: duration);
+      case .FadePop : return FadeAnimator (
         duration: self.duration,
         interactionController: interactionController
       );
       
-      case .SlideLeftPush: return SlideLeftPushAnimator(duration: duration);
-      case .SlideLeftPop : return SlideLeftPopAnimator(
+      case .SlideLeftPush: return SlideLeftAnimator(duration: duration);
+      case .SlideLeftPop : return SlideLeftAnimator(
         duration: self.duration,
         interactionController: interactionController
       );
 
-      case .SlideUpPush: return SlideUpPushAnimator(duration: duration);
-      case .SlideUpPop : return SlideUpPopAnimator(
+      case .SlideUpPush: return SlideUpAnimator(duration: duration);
+      case .SlideUpPop : return SlideUpAnimator(
         duration: self.duration,
         interactionController: interactionController
       );
       
-      case .GlideUpPush: return GlideUpPushAnimator(duration: duration);
-      case .GlideUpPop : return GlideUpPopAnimator(
+      case .GlideUpPush: return GlideUpAnimator(duration: duration);
+      case .GlideUpPop : return GlideUpAnimator(
         duration: self.duration,
         interactionController: interactionController
       );

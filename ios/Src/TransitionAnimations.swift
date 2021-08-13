@@ -7,14 +7,27 @@
 
 import UIKit;
 
-// TODO (002): Add `isPresenting` so that push and pop can be combined together
 internal class CustomAnimator: NSObject, UIViewControllerAnimatedTransitioning {
-
+  
   let duration: TimeInterval;
+  let isPushing: Bool;
+  
   var interactionController: UIPercentDrivenInteractiveTransition?;
   
+  // Push Transition Animator
   init(duration: TimeInterval = 0.25) {
     self.duration = duration;
+    self.isPushing = true;
+    
+    super.init();
+  };
+  
+  // Pop Transition Animator
+  init(duration: TimeInterval = 0.25, interactionController: UIPercentDrivenInteractiveTransition? = nil){
+    self.duration = duration;
+    self.isPushing = false;
+    self.interactionController = interactionController;
+    
     super.init();
   };
   
@@ -90,62 +103,52 @@ internal class LeftEdgeInteractionController: UIPercentDrivenInteractiveTransiti
   };
 };
 
-
-internal class FadePushAnimator: CustomAnimator {
-  override func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-    guard let toViewController = transitionContext.viewController(forKey: .to)
-    else { return };
-  
-    transitionContext.containerView.addSubview(toViewController.view);
-    toViewController.view.alpha = 0;
-
-    let duration = self.transitionDuration(using: transitionContext);
-    
-    UIView.animate(withDuration: duration,
-      animations: {
-        toViewController.view.alpha = 1;
-      
-      }, completion: { _ in
-        transitionContext.completeTransition(
-          !transitionContext.transitionWasCancelled
-        );
-      }
-    );
-  };
-};
-
-internal class FadePopAnimator: CustomAnimator {
-  
-  init(duration: TimeInterval = 0.25, interactionController: UIPercentDrivenInteractiveTransition? = nil){
-    super.init(duration: duration);
-    self.interactionController = interactionController;
-  };
+internal class FadeAnimator: CustomAnimator {
   
   override func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
     guard let fromViewController = transitionContext.viewController(forKey: .from),
           let toViewController   = transitionContext.viewController(forKey: .to)
     else { return };
-
-    transitionContext.containerView.insertSubview(
-      toViewController.view,
-      belowSubview: fromViewController.view
-    );
-
+    
     let duration = self.transitionDuration(using: transitionContext);
     
-    UIView.animate(withDuration: duration,
-      animations: {
-        fromViewController.view.alpha = 0;
+    let animations: () -> Void = {
+      if self.isPushing {
+        // fade in `toViewController`
+        // start: [A] -> B
+        transitionContext.containerView.addSubview(toViewController.view);
+        toViewController.view.alpha = 0;
         
-      }, completion: { _ in
-        transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
-      }
-    );
+        // end
+        return {
+          toViewController.view.alpha = 1;
+        };
+        
+      } else {
+        // fade out `fromViewController`
+        // start: A <- [B]
+        transitionContext.containerView.insertSubview(
+          toViewController.view,
+          belowSubview: fromViewController.view
+        );
+        
+        // end
+        return {
+          fromViewController.view.alpha = 0;
+        };
+      };
+    }();
+    
+    UIView.animate(withDuration: duration, animations: animations){ _ in
+      transitionContext.completeTransition(
+        !transitionContext.transitionWasCancelled
+      );
+    };
   };
 };
 
-
-internal class SlideLeftPushAnimator: CustomAnimator {
+internal class SlideLeftAnimator: CustomAnimator {
+  
   override func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
     guard let fromViewController = transitionContext.viewController(forKey: .from),
           let toViewController   = transitionContext.viewController(forKey: .to)
@@ -155,142 +158,111 @@ internal class SlideLeftPushAnimator: CustomAnimator {
     let fromView = fromViewController.view!;
     
     let toViewFrame = toView.frame;
-  
-    transitionContext.containerView.addSubview(toView);
+    
     let duration = self.transitionDuration(using: transitionContext);
     
     // `AnimationOptions` -> `KeyframeAnimationOptions`
     let options: UIView.KeyframeAnimationOptions =
       .init(animationOptions: .curveEaseInOut);
     
-    // animation - start values
-    toView.alpha = 0.5;
-    fromView.alpha = 1;
-    
-    toView.frame = CGRect(
-      origin: CGPoint(
-        x: toView.frame.width,
-        y: toView.frame.origin.y
-      ),
-      size: CGSize(
-        width : toView.frame.width,
-        height: toView.frame.height
-      )
-    );
-    
-    // animation - end values
-    let animationBlock = {
-      UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.75) {
-        toView.alpha = 1;
-        fromView.alpha = 0.75;
-      };
-      
-      UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1) {
-        toView.frame = toViewFrame
-        fromView.frame = CGRect(
-          origin: CGPoint(
-            x: -toView.frame.width,
-            y: toView.frame.origin.y
-          ),
-          size: toView.frame.size
-        );
-      };
-    };
-    
-    UIView.animateKeyframes(withDuration: duration,
-      delay: 0,
-      options: options,
-      animations: animationBlock,
-      completion: { _ in
-        // reset alpha
+    let animations: () -> Void = {
+      if self.isPushing {
+        transitionContext.containerView.addSubview(toView);
+        
+        // push - transition in `toView`
+        // start values: [A] -> B
+        toView.alpha = 0.5;
         fromView.alpha = 1;
         
-        // finish animation
-        transitionContext.completeTransition(
-          !transitionContext.transitionWasCancelled
-        );
-      }
-    );
-  };
-};
-
-internal class SlideLeftPopAnimator: CustomAnimator {
-  
-  init(duration: TimeInterval = 0.25, interactionController: UIPercentDrivenInteractiveTransition? = nil){
-    super.init(duration: duration);
-    self.interactionController = interactionController;
-  };
-  
-  override func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-    guard let fromViewController = transitionContext.viewController(forKey: .from),
-          let toViewController   = transitionContext.viewController(forKey: .to)
-    else { return };
-    
-    let toView   = toViewController  .view!;
-    let fromView = fromViewController.view!;
-    
-    let toViewFrame = toView.frame;
-    
-    // `AnimationOptions` -> `KeyframeAnimationOptions`
-    let options: UIView.KeyframeAnimationOptions =
-      .init(animationOptions: .curveEaseInOut);
-  
-    transitionContext.containerView.insertSubview(toView, belowSubview: toView);
-    let duration = self.transitionDuration(using: transitionContext);
-    
-    // animation - start values
-    toView.alpha = 0.8;
-    fromView.alpha = 1;
-    
-    toView.frame = CGRect(
-      origin: CGPoint(
-        x: -toView.frame.width,
-        y: toView.frame.origin.y
-      ),
-      size: CGSize(
-        width : toView.frame.width,
-        height: toView.frame.height
-      )
-    );
-    
-    // animation - end values
-    let animationBlock = {
-      UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
-        toView.alpha = 1;
-        fromView.alpha = 0.8;
-      };
-      
-      UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1) {
-        toView.frame = toViewFrame;
-        fromView.frame = CGRect(
+        toView.frame = CGRect(
           origin: CGPoint(
             x: toView.frame.width,
             y: toView.frame.origin.y
           ),
-          size: toView.frame.size
+          size: CGSize(
+            width : toView.frame.width,
+            height: toView.frame.height
+          )
         );
-      };
-    };
-    
-    UIView.animateKeyframes(withDuration: duration,
-      delay: 0,
-      options: options,
-      animations: animationBlock,
-      completion: { _ in
-        // reset alpha
+        
+        // end of push
+        return {
+          UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.75) {
+            toView.alpha = 1;
+            fromView.alpha = 0.75;
+          };
+          
+          UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1) {
+            toView.frame = toViewFrame
+            fromView.frame = CGRect(
+              origin: CGPoint(
+                x: -toView.frame.width,
+                y: toView.frame.origin.y
+              ),
+              size: toView.frame.size
+            );
+          };
+        };
+        
+      } else {
+        transitionContext.containerView.insertSubview(toView, belowSubview: toView);
+        
+        // pop - transition out `fromViewController`
+        // start values: A <- [B]
+        toView.alpha = 0.8;
         fromView.alpha = 1;
         
-        // finish animation
-        transitionContext.completeTransition(
-          !transitionContext.transitionWasCancelled
+        toView.frame = CGRect(
+          origin: CGPoint(
+            x: -toView.frame.width,
+            y: toView.frame.origin.y
+          ),
+          size: CGSize(
+            width : toView.frame.width,
+            height: toView.frame.height
+          )
         );
-      }
-    );
+
+        
+        // end of pop
+        return {
+          UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
+            toView.alpha = 1;
+            fromView.alpha = 0.8;
+          };
+          
+          UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1) {
+            toView.frame = toViewFrame;
+            fromView.frame = CGRect(
+              origin: CGPoint(
+                x: toView.frame.width,
+                y: toView.frame.origin.y
+              ),
+              size: toView.frame.size
+            );
+          };
+        };
+      };
+    }();
+    
+    UIView.animateKeyframes(
+      withDuration: duration,
+      delay: 0,
+      options: options,
+      animations: animations
+    ) { _ in
+      // reset alpha
+      fromView.alpha = 1;
+      
+      transitionContext.completeTransition(
+        !transitionContext.transitionWasCancelled
+      );
+    };
   };
 };
 
-
-internal class SlideUpPushAnimator: CustomAnimator {
+internal class SlideUpAnimator: CustomAnimator {
+  
   override func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
     guard let fromViewController = transitionContext.viewController(forKey: .from),
           let toViewController   = transitionContext.viewController(forKey: .to)
@@ -300,148 +272,116 @@ internal class SlideUpPushAnimator: CustomAnimator {
     let fromView = fromViewController.view!;
     
     let toViewFrame = toView.frame;
-  
-    transitionContext.containerView.addSubview(toView);
+    
     let duration = self.transitionDuration(using: transitionContext);
     
     // `AnimationOptions` -> `KeyframeAnimationOptions`
     let options: UIView.KeyframeAnimationOptions =
       .init(animationOptions: .curveEaseInOut);
     
-    // animation - start values
-    toView.alpha = 1;
-    fromView.alpha = 1;
-    
-    toView.frame = CGRect(
-      origin: CGPoint(
-        x: toView.frame.origin.x,
-        y: toView.frame.height
-      ),
-      size: CGSize(
-        width : toView.frame.width,
-        height: toView.frame.height
-      )
-    );
-    
-    // animation - end values
-    let animationBlock = {
-      UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.75) {
+    let animations: () -> Void = {
+      if self.isPushing {
+        transitionContext.containerView.addSubview(toView);
+        
+        // push - transition in `toView`
+        // start values: [A] -> B
         toView.alpha = 1;
-        fromView.alpha = 0.5;
-      };
-      
-      UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1) {
-        toView.frame = toViewFrame;
-        fromView.frame = CGRect(
-          origin: CGPoint(
-            x: fromView.frame.origin.x,
-            y: -fromView.frame.height
-          ),
-          size: CGSize(
-            width : fromView.frame.width,
-            height: fromView.frame.height
-          )
-        );
-      };
-    };
-    
-    UIView.animateKeyframes(withDuration: duration,
-      delay: 0,
-      options: options,
-      animations: animationBlock,
-      completion: { _ in
-        // reset alpha
         fromView.alpha = 1;
         
-        // finish animation
-        transitionContext.completeTransition(
-          !transitionContext.transitionWasCancelled
+        toView.frame = CGRect(
+          origin: CGPoint(
+            x: toView.frame.origin.x,
+            y: toView.frame.height
+          ),
+          size: CGSize(
+            width : toView.frame.width,
+            height: toView.frame.height
+          )
         );
-      }
-    );
+        
+        // end of push
+        return {
+          UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.75) {
+            toView.alpha = 1;
+            fromView.alpha = 0.5;
+          };
+          
+          UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1) {
+            toView.frame = toViewFrame;
+            fromView.frame = CGRect(
+              origin: CGPoint(
+                x: fromView.frame.origin.x,
+                y: -fromView.frame.height
+              ),
+              size: CGSize(
+                width : fromView.frame.width,
+                height: fromView.frame.height
+              )
+            );
+          };
+        };
+        
+      } else {
+        transitionContext.containerView.insertSubview(toView, belowSubview: toView);
+        
+        // pop - transition out `fromViewController`
+        // start values: A <- [B]
+        toView.alpha = 0.5;
+        fromView.alpha = 1;
+        
+        toView.frame = CGRect(
+          origin: CGPoint(
+            x: toView.frame.origin.x,
+            y: -toView.frame.height
+          ),
+          size: CGSize(
+            width : toView.frame.width,
+            height: toView.frame.height
+          )
+        );
+
+        // end of pop
+        return {
+          UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
+            toView.alpha = 1;
+            fromView.alpha = 1;
+          };
+          
+          UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1) {
+            toView.frame = toViewFrame;
+            fromView.frame = CGRect(
+              origin: CGPoint(
+                x: fromView.frame.origin.x,
+                y: fromView.frame.height
+              ),
+              size: CGSize(
+                width : fromView.frame.width,
+                height: fromView.frame.height
+              )
+            );
+          };
+        };
+      };
+    }();
+    
+    UIView.animateKeyframes(
+      withDuration: duration,
+      delay: 0,
+      options: options,
+      animations: animations
+    ) { _ in
+      // reset alpha
+      fromView.alpha = 1;
+      
+      transitionContext.completeTransition(
+        !transitionContext.transitionWasCancelled
+      );
+    };
   };
 };
 
-internal class SlideUpPopAnimator: CustomAnimator {
+internal class GlideUpAnimator: CustomAnimator {
   
-  init(duration: TimeInterval = 0.25, interactionController: UIPercentDrivenInteractiveTransition? = nil){
-    super.init(duration: duration);
-    self.interactionController = interactionController;
-  };
-  
-  override func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-    guard let fromViewController = transitionContext.viewController(forKey: .from),
-          let toViewController   = transitionContext.viewController(forKey: .to)
-    else { return };
-    
-    let toView   = toViewController  .view!;
-    let fromView = fromViewController.view!;
-    
-    // `AnimationOptions` -> `KeyframeAnimationOptions`
-    let options: UIView.KeyframeAnimationOptions =
-      .init(animationOptions: .curveEaseInOut);
-  
-    transitionContext.containerView.insertSubview(toView, belowSubview: fromView);
-    let duration = self.transitionDuration(using: transitionContext);
-    
-    let toViewFrame = toView.frame;
-    
-    // animation - start values
-    toView.alpha = 0.5;
-    fromView.alpha = 1;
-    
-    toView.frame = CGRect(
-      origin: CGPoint(
-        x: toView.frame.origin.x,
-        y: -toView.frame.height
-      ),
-      size: CGSize(
-        width : toView.frame.width,
-        height: toView.frame.height
-      )
-    );
-    
-    // animation - end values
-    let animationBlock = {
-      UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
-        toView.alpha = 1;
-        fromView.alpha = 1;
-      };
-      
-      UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1) {
-        toView.frame = toViewFrame;
-        fromView.frame = CGRect(
-          origin: CGPoint(
-            x: fromView.frame.origin.x,
-            y: fromView.frame.height
-          ),
-          size: CGSize(
-            width : fromView.frame.width,
-            height: fromView.frame.height
-          )
-        );
-      };
-    };
-    
-    UIView.animateKeyframes(withDuration: duration,
-      delay: 0,
-      options: options,
-      animations: animationBlock,
-      completion: { _ in
-        // reset alpha
-        fromView.alpha = 1;
-        
-        // finish animation
-        transitionContext.completeTransition(
-          !transitionContext.transitionWasCancelled
-        );
-      }
-    );
-  };
-};
-
-
-internal class GlideUpPushAnimator: CustomAnimator {
   override func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
     guard let fromViewController = transitionContext.viewController(forKey: .from),
           let toViewController   = transitionContext.viewController(forKey: .to)
@@ -451,64 +391,98 @@ internal class GlideUpPushAnimator: CustomAnimator {
     let fromView = fromViewController.view!;
     
     let toViewFrame = toView.frame;
-  
-    transitionContext.containerView.addSubview(toView);
+    
     let duration = self.transitionDuration(using: transitionContext);
     
     // `AnimationOptions` -> `KeyframeAnimationOptions`
     let options: UIView.KeyframeAnimationOptions =
       .init(animationOptions: .curveEaseInOut);
     
-    // animation - start values
-    toView.alpha = 1;
-    fromView.alpha = 1;
-    
-    toView.frame = CGRect(
-      origin: CGPoint(
-        x: toView.frame.origin.x,
-        y: toView.frame.height
-      ),
-      size: CGSize(
-        width : toView.frame.width,
-        height: toView.frame.height
-      )
-    );
-    
-    // animation - end values
-    let animationBlock = {
-      UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.75) {
+    let animations: () -> Void = {
+      if self.isPushing {
+        transitionContext.containerView.addSubview(toView);
+        
+        // push - transition in `toView`
+        // start values: [A] -> B
         toView.alpha = 1;
-        fromView.alpha = 0.5;
-      };
-      
-      UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1) {
-        toView.frame = toViewFrame;
-      };
-    };
-    
-    UIView.animateKeyframes(withDuration: duration,
-      delay: 0,
-      options: options,
-      animations: animationBlock,
-      completion: { _ in
-        // reset alpha
         fromView.alpha = 1;
         
-        // finish animation
-        transitionContext.completeTransition(
-          !transitionContext.transitionWasCancelled
+        toView.frame = CGRect(
+          origin: CGPoint(
+            x: toView.frame.origin.x,
+            y: toView.frame.height
+          ),
+          size: CGSize(
+            width : toView.frame.width,
+            height: toView.frame.height
+          )
         );
-      }
-    );
+        
+        
+        // end of push
+        return {
+          UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.75) {
+            toView.alpha = 1;
+            fromView.alpha = 0.5;
+          };
+          
+          UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1) {
+            toView.frame = toViewFrame;
+          };
+        };
+        
+      } else {
+        transitionContext.containerView.insertSubview(toView, belowSubview: toView);
+        
+        // pop - transition out `fromViewController`
+        // start values: A <- [B]
+        toView.alpha = 0.5;
+        fromView.alpha = 1;
+        
+        toView.frame = fromView.frame;
+        
+        // end of pop
+        return {
+          UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
+            toView.alpha = 1;
+            fromView.alpha = 1;
+          };
+          
+          UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1) {
+            fromView.frame = CGRect(
+              origin: CGPoint(
+                x: fromView.frame.origin.x,
+                y: fromView.frame.height
+              ),
+              size: CGSize(
+                width : fromView.frame.width,
+                height: fromView.frame.height
+              )
+            );
+          };
+        };
+      };
+    }();
+    
+    UIView.animateKeyframes(
+      withDuration: duration,
+      delay: 0,
+      options: options,
+      animations: animations
+    ) { _ in
+      // reset alpha
+      fromView.alpha = 1;
+      
+      transitionContext.completeTransition(
+        !transitionContext.transitionWasCancelled
+      );
+    };
   };
 };
 
-internal class GlideUpPopAnimator: CustomAnimator {
-  
-  init(duration: TimeInterval = 0.25, interactionController: UIPercentDrivenInteractiveTransition? = nil){
-    super.init(duration: duration);
-    self.interactionController = interactionController;
-  };
+
+/*
+internal class Template: CustomAnimator {
   
   override func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
     guard let fromViewController = transitionContext.viewController(forKey: .from),
@@ -518,53 +492,51 @@ internal class GlideUpPopAnimator: CustomAnimator {
     let toView   = toViewController  .view!;
     let fromView = fromViewController.view!;
     
+    let toViewFrame = toView.frame;
+    
+    let duration = self.transitionDuration(using: transitionContext);
+    
     // `AnimationOptions` -> `KeyframeAnimationOptions`
     let options: UIView.KeyframeAnimationOptions =
       .init(animationOptions: .curveEaseInOut);
-  
-    transitionContext.containerView.insertSubview(toView, belowSubview: fromView);
-    let duration = self.transitionDuration(using: transitionContext);
     
-    // animation - start values
-    toView.alpha = 0.5;
-    fromView.alpha = 1;
-    
-    toView.frame = fromView.frame;
-    
-    // animation - end values
-    let animationBlock = {
-      UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
-        toView.alpha = 1;
-        fromView.alpha = 1;
+    let animations: () -> Void = {
+      if self.isPushing {
+        transitionContext.containerView.addSubview(toView);
+        
+        // push - transition in `toView`
+        // start values: [A] -> B
+        
+        
+        // end of push
+        return {
+
+        };
+        
+      } else {
+        transitionContext.containerView.insertSubview(toView, belowSubview: toView);
+        
+        // pop - transition out `fromViewController`
+        // start values: A <- [B]
+
+        
+        // end of pop
+        return {
+
+        };
       };
-      
-      UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1) {
-        fromView.frame = CGRect(
-          origin: CGPoint(
-            x: fromView.frame.origin.x,
-            y: fromView.frame.height
-          ),
-          size: CGSize(
-            width : fromView.frame.width,
-            height: fromView.frame.height
-          )
-        );
-      };
-    };
+    }();
     
-    UIView.animateKeyframes(withDuration: duration,
+    UIView.animateKeyframes(
+      withDuration: duration,
       delay: 0,
       options: options,
-      animations: animationBlock,
-      completion: { _ in
-        // reset alpha
-        fromView.alpha = 1;
-        
-        // finish animation
-        transitionContext.completeTransition(
-          !transitionContext.transitionWasCancelled
-        );
-      }
-    );
+      animations: animations
+    ) { _ in
+      transitionContext.completeTransition(
+        !transitionContext.transitionWasCancelled
+      );
+    };
   };
 };
+*/
