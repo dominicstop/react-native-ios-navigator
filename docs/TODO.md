@@ -302,6 +302,10 @@
 
 ### Version: `next`
 
+<br>
+
+### Version: `0.2.0`
+
 - [x] (Commit: `c3d4ac1`) **Refactor**: Types — Update `EventEmitter` to use mapped types i.e. each event will be mapped to an event handler. Then via generics the "event map" will be used to inject the type to the listener parameter depending on the event key.
 	* <u>Breaking Change</u> — Removed `useNavBarItemEvents` + `useNavRouteLifeCycle` hooks and consolidate them to a single hook called `useNavRouteEvents`.
 
