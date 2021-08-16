@@ -1030,9 +1030,22 @@ Lorum ipsum
 
 ## G. Showcase, Tests and Demos
 
-All the gifs/screenshots shown here are captured from the example app in the [example directory](example). For convenience, each item listed in this section is its own separate route in the example app.
+All the gifs/screenshots shown here are captured from the example app in the [example directory](example). For convenience, each item listed in this section is its own [separate route](example/src/routes) in the example app.
 
 If you want to run the example app by yourself, please head on over to the [Run Example App](#run-example-app) section for instructions.
+
+<br>
+
+### `HomeRoute`
+
+* 📌 **Declaration**: [`HomeRoute.tsx`](example/src/routes/HomeRoute/HomeRoute.tsx)
+
+<br>
+
+* Contains a lists of all the showcase, tests and demo-related routes.
+* Demos the navigation bar search (i.e. `RouteOptions.searchBarConfig`).
+
+![HomeRoute](docs/assets/HomeRoute-00.gif)
 
 <br>
 
