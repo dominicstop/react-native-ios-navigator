@@ -446,7 +446,7 @@ fileprivate extension RNINavigatorView {
     };
   };
   
-  /// setup - create nav. and add it as a subview
+  /// setup - create/init. navigation controller
   func setupNavigationController(){
     // create nav controller
     let navigationVC = RNINavigationController();
@@ -464,16 +464,6 @@ fileprivate extension RNINavigatorView {
       navigationVC.navigationBar.prefersLargeTitles =
         self.navBarPrefersLargeTitles;
     };
-    
-    // enable autolayout
-    navigationVC.view.translatesAutoresizingMaskIntoConstraints = false;
-    // stretch vc to fit/fill this view
-    NSLayoutConstraint.activate([
-      navigationVC.view.topAnchor     .constraint(equalTo: self.topAnchor     ),
-      navigationVC.view.bottomAnchor  .constraint(equalTo: self.bottomAnchor  ),
-      navigationVC.view.leadingAnchor .constraint(equalTo: self.leadingAnchor ),
-      navigationVC.view.trailingAnchor.constraint(equalTo: self.trailingAnchor)
-    ]);
   };
   
   /// Embed the navigation controller as a child view controller to the closest
