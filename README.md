@@ -1050,34 +1050,42 @@ Lorum ipsum
 
 <br>
 
-* `RouteOptions.routeTitle`: Updating the navigation bar title.
-* `RouteOptions.prompt`: Updating the navigation bar prompt (which doubles the navigation bar height).
-* `RouteOptions.titleDisplayMode`: Toggle large title on and off.
+* `RouteOptions.routeTitle`
+	* Update the navigation bar title text.
+* `RouteOptions.prompt`
+	* Update the navigation bar prompt.
+	* When set, the navigation bar height doubles and a subtitle appears above the navigation bar title.
+* `RouteOptions.titleDisplayMode`
+	* Toggles whether or not to use large title for the current route.
 
 ![NavigatorTest01](docs/assets/NavigatorTest01-00-00.gif)
 
 <br>
 
 * `RouteOptions.navBarButtonLeftItemsConfig`
-	* Cycling through all the ways a `NavBarItemConfig` can be configured (e.g. `TEXT`,  `SYSTEM_ITEM`, etc).
-	* Showing multiple navigation bar items and pressing them.
-	* Showing different `TEXT` navigation bar items with custom background images via `ImageItemConfig`.
-	* Using a react component as a custom navigation bar item via `type: 'CUSTOM'`.
+	* Cycle through all the different ways a `NavBarItemConfig` can be configured (e.g. `TEXT`,  `SYSTEM_ITEM`, etc).
+	* Demo showing multiple navigation bar items, and then pressing them.
+	* Demo showing the different ways a `TEXT` navigation bar item can be configured (e.g. an item with custom background images created via `ImageItemConfig`).
+	* Shows using a react component as the custom navigation bar left item via `type: 'CUSTOM'`.
 
 ![NavigatorTest01](docs/assets/NavigatorTest01-01-00.gif)
 
 <br>
 
 * `RouteOptions.navBarButtonRightItemsConfig`
-* Same as `RouteOptions.navBarButtonLeftItemsConfig`.
+	* Same as `RouteOptions.navBarButtonLeftItemsConfig`.
 
 ![NavigatorTest01](docs/assets/NavigatorTest01-02-00.gif)
 
 <br>
 
-* `RouteOptions.navBarButtonBackItemConfig`: Cycle through all the example  `NavBarBackItemConfig` configurations.
-* `RouteOptions.leftItemsSupplementBackButton`: Toggle showing the back button when there are `RouteOptions.navBarButtonLeftItemsConfig`.
-* `RouteOptions.applyBackButtonConfigToCurrentRoute`: By default, the back button config is applied to next route. This toggles whether or not the back button config is applied to the current route.
+* `RouteOptions.navBarButtonBackItemConfig`
+	* Cycle through all the example  `NavBarBackItemConfig` configurations. Shows all the ways the back button can be customized. 
+* `RouteOptions.leftItemsSupplementBackButton`
+	* Toggles whether or not to show the back button when there are `RouteOptions.navBarButtonLeftItemsConfig`.
+* `RouteOptions.applyBackButtonConfigToCurrentRoute`
+	* By default, the back button config is applied to next route. This toggles whether or not the back button config is applied to the current route.
+	* If set to `false`, then the "back button"-related configs are applied to the next route.
 * `RouteOptions.hidesBackButton`: Toggle back button visibility.
 * `RouteOptions.backButtonTitle`: Change the back button text.
 
@@ -1089,13 +1097,15 @@ Lorum ipsum
 
 <br>
 
-* `RouteViewPortal.renderNavBarTitleItem`: Toggle using custom react component as the navigation bar title.
+* `RouteViewPortal.renderNavBarTitleItem`
+	* Toggles whether or not to use a custom react component as the navigation bar's title.
 
 ![NavigatorTest01](docs/assets/NavigatorTest01-04-00.gif)
 
 <br>
 
-* `RouteOptions.navBarAppearanceOverride`: Cycle through all the example  `NavBarAppearanceCombinedConfig` configurations.
+* `RouteOptions.navBarAppearanceOverride`: Cycle through all the example  `NavBarAppearanceCombinedConfig` configurations. 
+	* Shows all the possible ways the navigation bar can be customized.
 	* **Left Gif**: "legacy" mode
 	* **Right Gif**: "appearance" mode
 
@@ -1130,9 +1140,17 @@ Lorum ipsum
 
 <br>
 
+### `NavigatorTest03`
 
+* 📌 **Declaration**: [`NavigatorTest03.tsx`](example/src/routes/NavigatorTest03.tsx)
 
+<br>
 
+* This route is used to test out the different navigation commands.
+	* Each button represents a navigation command.
+	* Some of the commands include pushing/popping "react" and "native" routes, adding/removing routes, manipulating the navigation stack, etc.
+
+![NavigatorTest01](docs/assets/NavigatorTest03-00.jpg)
 
 ------
 
