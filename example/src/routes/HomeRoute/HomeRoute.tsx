@@ -78,7 +78,7 @@ export class HomeRoute extends React.PureComponent<RouteContentProps, HomeRouteS
             .toLocaleLowerCase()
             .includes(searchBarTextLowerCase)
           || item.desc
-            .toLocaleLowerCase()
+            ?.toLocaleLowerCase()
             .includes(searchBarTextLowerCase)
         ))
       // false - no filter
