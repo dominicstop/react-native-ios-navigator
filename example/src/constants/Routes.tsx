@@ -86,11 +86,17 @@ export const ROUTES: NavRoutesConfigMap = {
     ),
   }, 
   [RouteKeys.NavigatorShowcase01]:{
+    routeOptionsDefault: {
+      statusBarStyle: 'lightContent',
+    },
     renderRoute: () => (
       <NavigatorShowcase01/>
     ),
   }, 
   [RouteKeys.NavigatorShowcase02]: {
+    routeOptionsDefault: {
+      statusBarStyle: 'lightContent',
+    },
     renderRoute: () => (
       <NavigatorShowcase02/>
     ),
