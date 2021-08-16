@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { StyleSheet, View, SafeAreaView, Text, Image, Animated, StyleProp, ViewStyle } from 'react-native';
-import { RouteHeaderView, NavigatorViewConstants, NavigatorUIConstantsContext } from 'react-native-ios-navigator';
+import { RouteHeaderView, NavigatorViewConstants, NavigatorUIConstantsContext, RouteViewEvents } from 'react-native-ios-navigator';
 
 import { ImageAssets } from '../../functions/ImageCache';
 
@@ -9,11 +9,13 @@ import * as Colors  from '../../constants/Colors';
 
 const { navigationBarHeight } = NavigatorViewConstants;
 
-const AssetImageCoffee = require('../../../assets/images/unsplash_coffee.jpg');
-
 
 type RouteHeaderProps = {
   scrollY: Animated.Value;
+};
+
+type RouteHeaderState = {
+  mountHeaderBGImage: boolean;
 };
 
 const ROUTE_HEADER_HEIGHT_MAX = 300;
@@ -56,7 +58,7 @@ const ScrollOffsets = (() => {
   });
 })();
 
-export class RouteHeader extends React.Component<RouteHeaderProps> {
+export class RouteHeader extends React.Component<RouteHeaderProps, RouteHeaderState> {
   static contextType = NavigatorUIConstantsContext;
 
   headerBGOpacity        : Animated.AnimatedInterpolation;
@@ -100,9 +102,15 @@ export class RouteHeader extends React.Component<RouteHeaderProps> {
       outputRange: [40, 0],
       extrapolate: 'clamp',
     });
+
+    this.state = {
+      mountHeaderBGImage: false,
+    };
   };
 
   _renderHeaderCollapsed(){
+    const state = this.state;
+
     return(
       <React.Fragment>
         <Animated.View
@@ -112,11 +120,13 @@ export class RouteHeader extends React.Component<RouteHeaderProps> {
             { opacity: this.headerBGOpacity }
           ]}
         >
-          <Image
-            style={styles.routeHeaderExpandedBGImage}
-            resizeMode={'cover'}
-          />
+          {state.mountHeaderBGImage && (
+            <Image
+              style={styles.routeHeaderExpandedBGImage}
               source={ImageAssets.BGCoverCoffee}
+              resizeMode={'cover'}
+            />
+          )}
         </Animated.View>
         <NavigationBarContainer backgroundStyle={{ opacity: this.headerCollapsedBGOpacity }}>
           <Animated.Text style={[styles.routeHeaderCollapsedTitle, {
@@ -155,18 +165,27 @@ export class RouteHeader extends React.Component<RouteHeaderProps> {
 
   render(){
     return (
-      <RouteHeaderView
-        style={styles.routeHeader}
-        headerTopPadding={'statusBar'}
-        config={{
-          headerMode: 'resize',
-          headerHeightMax: ROUTE_HEADER_HEIGHT_MAX,
-          headerHeightMin: 'navigationBarWithStatusBar',
-        }}
-      >
-        {this._renderHeaderCollapsed()}
-        {this._renderHeaderExpanded()}
-      </RouteHeaderView>
+      <React.Fragment>
+        <RouteViewEvents
+          onRouteWillPush={() => {
+            this.setState({
+              mountHeaderBGImage: true
+            });
+          }}
+        />
+        <RouteHeaderView
+          style={styles.routeHeader}
+          headerTopPadding={'statusBar'}
+          config={{
+            headerMode: 'resize',
+            headerHeightMax: ROUTE_HEADER_HEIGHT_MAX,
+            headerHeightMin: 'navigationBarWithStatusBar',
+          }}
+        >
+          {this._renderHeaderCollapsed()}
+          {this._renderHeaderExpanded()}
+        </RouteHeaderView>
+      </React.Fragment>
     );
   };
 };
