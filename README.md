@@ -14,12 +14,14 @@ Currently in development... 😅 (See [TODO.md](https://github.com/dominicstop/r
 
 ## Quick Links
 
-| Section + Link                                    | Description                                                  |
-| :------------------------------------------------ | ------------------------------------------------------------ |
-| ⭐️ [Getting Started Guide](PLACE_HOLDER_LINK)      | Discussion + step by step guide on how to use this library.  |
-| 💖 [Usage and Examples](PLACE_HOLDER_LINK)         | Example usage that covers the various components and functionality of this library. |
-| 💫 [Showcase, Tests, and Demos](PLACE_HOLDER_LINK) | Just some gifs + vibes that shows what this library can do.  |
-| 📝 [Documentation](PLACE_HOLDER_LINK)              | Documentation for all the various components, functions, types, etc. |
+😌💬 Hey there, if you're just checking this library out, I recommend jumping to the [Showcase, Tests, and Demos](#g-showcase-tests-and-demos) section.
+
+| Section + Link                                              | Description                                                  |
+| :---------------------------------------------------------- | ------------------------------------------------------------ |
+| ⭐️ [Getting Started Guide](PLACE_HOLDER_LINK)                | Discussion + step by step guide on how to use this library.  |
+| 💖 [Usage and Examples](PLACE_HOLDER_LINK)                   | Example usage that covers the various components and functionality of this library. |
+| 💫 [Showcase, Tests, and Demos](#g-showcase-tests-and-demos) | Just some gifs, screenshots + vibes that shows what this library can do. |
+| 📝 [Documentation](#d-documentation)                         | Documentation for all the various components, functions, types, etc. |
 
 ---
 
@@ -1028,6 +1030,12 @@ Lorum ipsum
 
 ## G. Showcase, Tests and Demos
 
+All the gifs/screenshots shown here are captured from the example app in the [example directory](example). For convenience, each item listed in this section is its own separate route in the example app.
+
+If you want to run the example app by yourself, please head on over to the [Run Example App](#run-example-app) section for instructions.
+
+<br>
+
 ### `NavigatorShowcase01`
 
 * 📌 **Declaration**: [`NavigatorShowcase01.tsx`](example/src/routes/NavigatorShowcase01/NavigatorShowcase01.tsx)
@@ -1158,7 +1166,29 @@ Lorum ipsum
 
 ## H. Meta
 
-Lorum ipsum
+### Run Example App
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/dominicstop/react-native-ios-navigator.git
+
+# 2. Initialize project
+cd react-native-ios-navigator && yarn
+
+# 3. Run Example App
+yarn example ios
+
+```
+
+<br>
+
+For convenience 😌:
+
+```bash
+git clone https://github.com/dominicstop/react-native-ios-navigator.git && cd react-native-ios-navigator && yarn && yarn example ios
+```
+
+
 
 ------
 
