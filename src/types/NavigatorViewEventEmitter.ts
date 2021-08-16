@@ -1,4 +1,5 @@
-import type { TSEventEmitter } from "../functions/TSEventEmitter";
+import type { TSEventEmitter } from '@dominicstop/ts-event-emitter';
+
 import type { OnNavRoutePopEventObject, OnNavRouteViewAddedEventObject, OnSetNativeRoutesEventObject } from "./RNINavigatorViewEvents";
 import type { KeyMapType } from "./UtilityTypes";
 

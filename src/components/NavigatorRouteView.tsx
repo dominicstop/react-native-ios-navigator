@@ -1,6 +1,8 @@
 import React, { ReactElement } from 'react';
 import { StyleSheet } from 'react-native';
 
+import { TSEventEmitter } from '@dominicstop/ts-event-emitter';
+
 import type { NavigationObject } from '../types/NavigationObject';
 import type { RouteOptions } from '../types/RouteOptions';
 import type { RenderNavItem, RenderRouteContent } from '../types/NavTypes';
@@ -20,7 +22,6 @@ import { RNINavigatorRouteViewModule } from '../native_modules/RNINavigatorRoute
 
 import * as Helpers from '../functions/Helpers';
 
-import { TSEventEmitter } from '../functions/TSEventEmitter';
 import { CompareRouteTransitionPopConfig, CompareRouteTransitionPushConfig } from '../functions/CompareRouteOptions';
 import { CompareUtilities } from '../functions/CompareUtilities';
 import { CompareRouteOptions } from '../functions/CompareRouteOptions';

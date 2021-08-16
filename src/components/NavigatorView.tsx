@@ -1,6 +1,8 @@
 import React, { ReactElement } from 'react';
 import { Platform, StyleSheet, ViewStyle } from 'react-native';
 
+import { TSEventEmitter } from '@dominicstop/ts-event-emitter';
+
 import { RNIWrapperView } from '../native_components/RNIWrapperView';
 import { NativeRouteMap, RNINavigatorView, RNINavigatorViewProps } from '../native_components/RNINavigatorView';
 import { NavigatorConstantsObject, RNINavigatorViewModule } from '../native_modules/RNINavigatorViewModule';
@@ -20,7 +22,6 @@ import type { OnUIConstantsDidChangeEventObject, OnNavRouteViewAddedEvent, OnSet
 
 import * as Helpers from '../functions/Helpers';
 
-import { TSEventEmitter } from '../functions/TSEventEmitter';
 import { SimpleQueue } from '../functions/SimpleQueue';
 
 import { NativeIDKeys } from '../constants/LibraryConstants';

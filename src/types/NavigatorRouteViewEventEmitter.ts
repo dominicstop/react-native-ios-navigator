@@ -1,6 +1,7 @@
 
 
-import type { TSEventEmitter } from "../functions/TSEventEmitter";
+import type { TSEventEmitter } from '@dominicstop/ts-event-emitter';
+
 import type { OnPressNavBarItemEventObject, OnRouteFocusEventObject, OnRouteBlurEventObject, OnRoutePopEventObject, OnRoutePushEventObject, OnSearchBarCancelButtonClickedEventObject, OnSearchBarSearchButtonClickedEventObject, OnUpdateSearchResultsEventObject } from "./RNINavigatorRouteViewEvents";
 import type { KeyMapType } from "./UtilityTypes";
 
