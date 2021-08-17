@@ -48,7 +48,6 @@
 <br>
 
 * Route Transitions-Related
-	* [ ] **Implement**: transition: zoom in/out
 	* [ ] **Implement**: transition: flip
 	* [ ] **Implement**: Add easing to transition config
 	* [ ] **Implement**: Create custom animation stack push (like card, fromview static zoom out, toView left)
@@ -301,6 +300,8 @@
 ## Completed
 
 ### Version: `next`
+
+* [x] (Commit: `afd4626`) **Implement**: transition: zoom transition
 
 <br>
 
