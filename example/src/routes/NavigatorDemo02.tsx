@@ -33,12 +33,15 @@ function BlankRoute(_: RouteContentProps){
 };
 
 export function NavigatorDemo02(props: RouteContentProps & {
-  triggerPop: () => void;
+  triggerPop?: () => void;
+  incrementColorIndex?: () => void;
 }){
   const navRef = React.useRef<NavigatorView>();
+  const [colorIndexOffset, setColorIndexOffset] = React.useState(0);
 
-  // @ts-ignore
-  const currentIndex = (props.navigation?.routeProps?.index ?? 0);
+  const currentIndex = 
+    // @ts-ignore
+    (props.navigation?.routeProps?.index ?? 0) + colorIndexOffset;
 
   useNavRouteEvents('onRouteDidPush', async () => {
     if(currentIndex < 12) {
@@ -48,6 +51,12 @@ export function NavigatorDemo02(props: RouteContentProps & {
       });
 
     } else {
+      for (let i = 0; i < 12; i++) {
+        setColorIndexOffset(prev => prev + 1);
+        props.incrementColorIndex();
+        await Helpers.timeout(250);
+      };
+
       props.triggerPop();
     };
   });
@@ -101,10 +110,15 @@ export function NavigatorDemo02(props: RouteContentProps & {
             },
             renderRoute: () => (
               <NavigatorDemo02
+                incrementColorIndex={() => {
+                  setColorIndexOffset(prev => prev + 1);
+                  props.incrementColorIndex?.();
+                }}
                 triggerPop={async () => {
                   if (props.triggerPop){
                     await navRef.current.pop();
                     props.triggerPop();
+
                   } else {
                     await navRef.current.pop();
                   };

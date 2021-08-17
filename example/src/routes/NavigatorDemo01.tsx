@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, View, Text, SafeAreaView } from 'react-native';
-import { NavigatorView, RouteContentProps, RouteViewEvents } from 'react-native-ios-navigator';
+import { NavBarAppearanceCombinedConfig, NavigatorView, RouteContentProps, RouteViewEvents } from 'react-native-ios-navigator';
 
 import * as Colors  from '../constants/Colors';
 import * as Helpers from '../functions/Helpers';
@@ -19,6 +19,17 @@ const colors = [
   Colors.VIOLET.A700,
   Colors.INDIGO.A700,
 ];
+
+const sharedNavBarConfig: NavBarAppearanceCombinedConfig = {
+  mode: 'legacy',
+  tintColor: 'white',
+  largeTitleTextAttributes: {
+    color: 'white',
+    fontSize: 38,
+    fontWeight: '800',
+    fontStyle: 'italic',
+  },
+};
 
 function randomBGColor(){
   return Helpers.randomElement<string>(colors);
@@ -116,6 +127,7 @@ class NestTestA2 extends React.PureComponent<RouteContentProps & {
           <NavigatorView
             ref={r => { this.navRefA = r }}
             initialRoutes={[{routeKey: 'BlankRoute'}]}
+            navBarAppearance={sharedNavBarConfig}
             routes={{
               BlankRoute: {
                 routeOptionsDefault: {
@@ -133,6 +145,7 @@ class NestTestA2 extends React.PureComponent<RouteContentProps & {
           <NavigatorView
             ref={r => { this.navRefB = r }}
             initialRoutes={[{routeKey: 'BlankRoute'}]}
+            navBarAppearance={sharedNavBarConfig}
             routes={{
               BlankRoute: {
                 routeOptionsDefault: {
@@ -231,6 +244,7 @@ class NestTestA1 extends React.PureComponent<{
           <NavigatorView
             ref={r => { this.navRefA = r }}
             initialRoutes={[{routeKey: 'BlankRoute'}]}
+            navBarAppearance={sharedNavBarConfig}
             routes={{
               BlankRoute: {
                 routeOptionsDefault: {
@@ -260,6 +274,7 @@ class NestTestA1 extends React.PureComponent<{
           <NavigatorView
             ref={r => { this.navRefB = r }}
             initialRoutes={[{routeKey: 'BlankRoute'}]}
+            navBarAppearance={sharedNavBarConfig}
             routes={{
               BlankRoute: {
                 routeOptionsDefault: {
@@ -348,6 +363,7 @@ export class NavigatorDemo01 extends React.Component {
           <NavigatorView
             ref={r => { this.navRef = r }}
             initialRoutes={[{routeKey: 'BlankRoute'}]}
+            navBarAppearance={sharedNavBarConfig}
             routes={{
               BlankRoute: {
                 routeOptionsDefault: {
