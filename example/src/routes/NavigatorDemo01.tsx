@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, View, Text, SafeAreaView } from 'react-native';
-import { NavBarAppearanceCombinedConfig, NavigatorView, RouteContentProps, RouteViewEvents } from 'react-native-ios-navigator';
+import { NavBarAppearanceCombinedConfig, NavCommandPopOptions, NavCommandPushOptions, NavigatorView, RouteContentProps, RouteTransitionPopTypes, RouteTransitionPopTypesEnum, RouteTransitionPushTypes, RouteTransitionPushTypesEnum, RouteViewEvents } from 'react-native-ios-navigator';
 
 import * as Colors  from '../constants/Colors';
 import * as Helpers from '../functions/Helpers';
@@ -19,6 +19,12 @@ const colors = [
   Colors.VIOLET.A700,
   Colors.INDIGO.A700,
 ];
+
+const transitionTypesPush: Array<RouteTransitionPushTypes> = 
+  Object.values(RouteTransitionPushTypesEnum);
+
+const transitionTypesPop: Array<RouteTransitionPopTypes> = 
+  Object.values(RouteTransitionPopTypesEnum);
 
 const sharedNavBarConfig: NavBarAppearanceCombinedConfig = {
   mode: 'legacy',
@@ -57,6 +63,16 @@ function BlankRoute(props: RouteContentProps & {
 };
 
 //#region - Nest Test A
+
+// ┌─────┬─────┐
+// │.....│.....│
+// │..1..│..2..│
+// │.....│.....│
+// ├─────┼─────┤
+// │.....│.....│
+// │..3..│..4..│
+// │.....│.....│
+// └─────┴─────┘
 class NestTestA2 extends React.PureComponent<RouteContentProps & {
   offsetB?: number;
   onDidFinish?: () => void;
@@ -70,34 +86,39 @@ class NestTestA2 extends React.PureComponent<RouteContentProps & {
     const offset = props.offsetB ?? 0;
 
     for (let i = 0; i < total; i++) {
-      const options = (i < 1)? null : {
+      const pushOptions: NavCommandPushOptions = {
         transitionConfig: {
-          type: 'FadePush',
+          type: Helpers.nextItemInCyclicArray(i, transitionTypesPush),
           duration: 0.3,
         }
       };
-
       
       await Promise.all([
         this.navRefA.push({
           routeKey: 'BlankRoute', 
           routeOptions: { routeTitle: `A2-${i + 1 + offset}`},
           routeProps: { offsetB: 0 },
-          // @ts-ignore
-        }, options),
+        }, pushOptions),
+
         this.navRefB.push({
           routeKey: 'BlankRoute', 
           routeOptions: { routeTitle: `A2-${i + 2 + offset}`},
           routeProps: { offsetB: 1 },
-          // @ts-ignore
-        }, options),
+        }, pushOptions),
       ]);
     };
 
     for (let i = 0; i < total; i++) {
+      const popOptions: NavCommandPopOptions = {
+        transitionConfig: {
+          type: Helpers.nextItemInCyclicArray(i, transitionTypesPop),
+          duration: 0.3,
+        }
+      };
+
       await Promise.all([
-        this.navRefA.pop(),
-        this.navRefB.pop(),
+        this.navRefA.pop(popOptions),
+        this.navRefB.pop(popOptions),
       ]);
     };
   };
@@ -105,7 +126,7 @@ class NestTestA2 extends React.PureComponent<RouteContentProps & {
   _handleOnRouteDidPush = async () => {
     const props = this.props;
 
-    await this.pushAndPop(4);
+    await this.pushAndPop(transitionTypesPush.length);
 
     await Promise.all([
       this.navRefA.setNavigationBarHidden(true, true),
@@ -166,6 +187,11 @@ class NestTestA2 extends React.PureComponent<RouteContentProps & {
   };
 };
 
+// ┌─────┬─────┐
+// │.....│.....│
+// │..1..│..2..│
+// │.....│.....│
+// └─────┴─────┘
 class NestTestA1 extends React.PureComponent<{
   onDidFinish?: () => void;
 }> {
@@ -341,6 +367,8 @@ export class NavigatorDemo01 extends React.Component {
     await this.navRef.push({routeKey: 'NestTestA1'});
 
     // NestTestA1: Finished
+    // `callbackA1` is called when `NestTestA1` et. al. is done
+    // pushing/popping.
     await new Promise<void>(resolve => {
       this.callbackA1 = resolve;
     });
@@ -348,6 +376,7 @@ export class NavigatorDemo01 extends React.Component {
     await this.navRef.setNavigationBarHidden(false, true);
 
     // pop: NestTestA1
+    // Go back to the very beginning
     await this.navRef.pop();
     await this.pushAndPopBlank(1);
 
