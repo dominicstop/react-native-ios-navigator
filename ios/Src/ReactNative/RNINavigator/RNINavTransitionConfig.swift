@@ -27,6 +27,9 @@ internal class RNINavTransitionConfig {
     
     case ZoomFadePush;
     case ZoomFadePop;
+    
+    case FlipHorizontalPush;
+    case FlipHorizontalPop;
   };
   
   let transitionType: TransitionTypes;
@@ -84,6 +87,12 @@ internal class RNINavTransitionConfig {
       
       case .ZoomFadePush: return ZoomFadeAnimator(duration: duration);
       case .ZoomFadePop : return ZoomFadeAnimator(
+        duration: self.duration,
+        interactionController: interactionController
+      );
+      
+      case .FlipHorizontalPush: return FlipHorizontalAnimator(duration: duration);
+      case .FlipHorizontalPop : return FlipHorizontalAnimator(
         duration: self.duration,
         interactionController: interactionController
       );

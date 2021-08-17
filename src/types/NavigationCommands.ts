@@ -5,21 +5,23 @@ type RouteTransitionConfigBase = {
 };
 
 export enum RouteTransitionPushTypesEnum {
-  DefaultPush   = "DefaultPush",
-  FadePush      = "FadePush",
-  SlideLeftPush = "SlideLeftPush",
-  SlideUpPush   = "SlideUpPush",
-  GlideUpPush   = "GlideUpPush",
-  ZoomFadePush  = "ZoomFadePush",
+  DefaultPush        = "DefaultPush",
+  FadePush           = "FadePush",
+  SlideLeftPush      = "SlideLeftPush",
+  SlideUpPush        = "SlideUpPush",
+  GlideUpPush        = "GlideUpPush",
+  ZoomFadePush       = "ZoomFadePush",
+  FlipHorizontalPush = "FlipHorizontalPush",
 };
 
 export enum RouteTransitionPopTypesEnum {
-  DefaultPop   = "DefaultPop",
-  FadePop      = "FadePop",
-  SlideLeftPop = "SlideLeftPop",
-  SlideUpPop   = "SlideUpPop",
-  GlideUpPop   = "GlideUpPop",
-  ZoomFadePop  = "ZoomFadePop",
+  DefaultPop        = "DefaultPop",
+  FadePop           = "FadePop",
+  SlideLeftPop      = "SlideLeftPop",
+  SlideUpPop        = "SlideUpPop",
+  GlideUpPop        = "GlideUpPop",
+  ZoomFadePop       = "ZoomFadePop",
+  FlipHorizontalPop = "FlipHorizontalPop",
 };
 
 export type RouteTransitionPushTypes = keyof typeof RouteTransitionPushTypesEnum;
