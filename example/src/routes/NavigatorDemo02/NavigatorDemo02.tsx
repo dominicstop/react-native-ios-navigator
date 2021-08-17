@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { View, Text, SafeAreaView, StyleSheet } from 'react-native';
+
 import { NavigatorView, RouteContentProps, useNavRouteEvents } from 'react-native-ios-navigator';
 
-import * as Colors  from '../constants/Colors';
-import * as Helpers from '../functions/Helpers';
+import { BlankRoute } from './BlankRoute';
 
+import * as Colors  from '../../constants/Colors';
+import * as Helpers from '../../functions/Helpers';
 
 class DemoUtils {
   static colors = [
@@ -26,17 +28,12 @@ class DemoUtils {
   };
 };
 
-function BlankRoute(_: RouteContentProps){
-  return(
-    <View/>
-  );
-};
-
 export function NavigatorDemo02(props: RouteContentProps & {
   triggerPop?: () => void;
-  incrementColorIndex?: () => void;
+  incrementColorIndex?: (options: {delay: boolean}) => Promise<void>;
 }){
   const navRef = React.useRef<NavigatorView>();
+
   const [colorIndexOffset, setColorIndexOffset] = React.useState(0);
 
   const currentIndex = 
@@ -53,8 +50,13 @@ export function NavigatorDemo02(props: RouteContentProps & {
     } else {
       for (let i = 0; i < 12; i++) {
         setColorIndexOffset(prev => prev + 1);
-        props.incrementColorIndex();
-        await Helpers.timeout(250);
+        if(i % 2 === 0){
+          await props.incrementColorIndex({delay: true});
+
+        } else {
+          await props.incrementColorIndex({delay: false});
+          await Helpers.timeout(250);
+        };
       };
 
       props.triggerPop();
@@ -95,7 +97,10 @@ export function NavigatorDemo02(props: RouteContentProps & {
               )
             },
             renderRoute: () => (
-              <BlankRoute/>
+              <BlankRoute
+                index={currentIndex}
+                color={currentColor}
+              />
             ),
           }, 
           NestedNavigatorRoute: {
@@ -110,9 +115,16 @@ export function NavigatorDemo02(props: RouteContentProps & {
             },
             renderRoute: () => (
               <NavigatorDemo02
-                incrementColorIndex={() => {
+                incrementColorIndex={async (options) => {
                   setColorIndexOffset(prev => prev + 1);
-                  props.incrementColorIndex?.();
+
+                  if (options.delay) {
+                    await Helpers.timeout(50);
+                    await props.incrementColorIndex?.(options);
+
+                  } else {
+                    props.incrementColorIndex?.(options);
+                  };
                 }}
                 triggerPop={async () => {
                   if (props.triggerPop){
