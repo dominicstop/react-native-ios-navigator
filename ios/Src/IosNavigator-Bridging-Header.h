@@ -8,7 +8,9 @@
 
 #import <React/RCTBridge.h>
 #import <React/RCTUIManager.h>
+#import <React/RCTUIManagerUtils.h>
 #import "React/RCTEventEmitter.h"
+
 
 #import <React/RCTView.h>
 #import <React/RCTShadowView.h>

@@ -28,38 +28,33 @@ internal class RNIUtilities {
       return bridge.uiManager.value(forKey: key) as? NSMutableDictionary;
     };
     
-    /// Get a ref to the `_viewRegistry` and `_shadowViewRegistry` ivar in the
-    /// `RCTUIManager` instance.
+    /// Get a ref to the `_viewRegistry` ivar in the `RCTUIManager` instance.
     /// * Note: Unlike objc properties, ivars are "private" so they aren't
     ///   automagically exposed/bridged to swift.
     /// * Note: key: `NSNumber` (the `reactTag`), and value: `UIView`
-    guard let viewRegistry       = getRegistry(forKey: "_viewRegistry"),
-          let shadowViewRegistry = getRegistry(forKey: "_shadowViewRegistry")
+    guard let viewRegistry = getRegistry(forKey: "_viewRegistry")
     else { return };
     
     #if DEBUG
     // Protect from: Thread 1: EXC_BAD_ACCESS 
-    let prevCountViewRegistry       = NSDictionary(dictionary: viewRegistry).count;
-    let prevCountShadowViewRegistry = NSDictionary(dictionary: shadowViewRegistry).count;
-    
-    var removedViews: [NSNumber] = [];
+    let prevCountViewRegistry = NSDictionary(dictionary: viewRegistry).count;
     #endif
+    
+    /// The "react tags" of the views that were removed
+    var removedViewTags: [NSNumber] = [];
     
     func removeView(_ v: UIView){
       /// if this really is a "react view" then it should have a `reactTag`
       if let reactTag = v.reactTag,
          viewRegistry[reactTag] != nil {
         
-        #if DEBUG
-        removedViews.append(reactTag);
-        #endif
+        removedViewTags.append(reactTag);
         
         /// remove from view hierarchy
         v.removeFromSuperview();
         
         /// remove this "react view" from the registry
-        viewRegistry      .removeObject(forKey: reactTag);
-        shadowViewRegistry.removeObject(forKey: reactTag);
+        viewRegistry.removeObject(forKey: reactTag);
       };
       
       /// remove other subviews...
@@ -73,22 +68,49 @@ internal class RNIUtilities {
       };
     };
     
+    func removeShadowViews(){
+      /// Get a ref to the `_shadowViewRegistry` ivar in the `RCTUIManager` instance.
+      /// Note: Execute on "RCT thread" (i.e. "com.facebook.react.ShadowQueue")
+      guard let shadowViewRegistry = getRegistry(forKey: "_shadowViewRegistry")
+      else { return };
+      
+      #if DEBUG
+      let prevCountShadowViewRegistry = NSDictionary(dictionary: shadowViewRegistry).count;
+      #endif
+      
+      for reactTag in removedViewTags {
+        shadowViewRegistry.removeObject(forKey: reactTag);
+      };
+      
+      #if DEBUG
+      let nextCountShadowViewRegistry = NSDictionary(dictionary: shadowViewRegistry).count;
+      let delta = prevCountShadowViewRegistry - nextCountShadowViewRegistry;
+      
+      print("LOG - RNIUtilities: recursivelyRemoveFromViewRegistry"
+        + " - removed shadow view count: \(delta)"
+        + " - prevCountShadowViewRegistry: \(prevCountShadowViewRegistry)"
+        + " - nextCountShadowViewRegistry: \(nextCountShadowViewRegistry)"
+      );
+      #endif
+    };
+    
     DispatchQueue.main.async {
       // start recursively removing views...
       removeView(reactView);
       
-      RCTSharedApplication()
+      // remove shadow views...
+      RCTExecuteOnUIManagerQueue {
+        removeShadowViews();
+      };
 
       #if DEBUG
-      let nextCountViewRegistry       = viewRegistry      .allValues.count;
-      let nextCountShadowViewRegistry = shadowViewRegistry.allValues.count;
+      // Protect from: Thread 1: EXC_BAD_ACCESS
+      let nextCountViewRegistry = NSDictionary(dictionary: viewRegistry).count;
       
       print("LOG - RNIUtilities: recursivelyRemoveFromViewRegistry"
-        + " - removedViews count: \(removedViews.count)"
+        + " - removed views count: \(removedViewTags.count)"
         + " - prevCountViewRegistry: \(prevCountViewRegistry)"
-        + " - prevCountShadowViewRegistry: \(prevCountShadowViewRegistry)"
         + " - nextCountViewRegistry: \(nextCountViewRegistry)"
-        + " - nextCountShadowViewRegistry: \(nextCountShadowViewRegistry)"
       );
       #endif
     };
