@@ -4,18 +4,34 @@ type RouteTransitionConfigBase = {
   duration?: number;
 };
 
-export type RouteTransitionPushTypes = 
-  "DefaultPush" | "FadePush" | "SlideLeftPush" | "SlideUpPush" | "GlideUpPush";
+export enum RouteTransitionPushTypesEnum {
+  DefaultPush   = "DefaultPush",
+  FadePush      = "FadePush",
+  SlideLeftPush = "SlideLeftPush",
+  SlideUpPush   = "SlideUpPush",
+  GlideUpPush   = "GlideUpPush",
+  ZoomFadePush  = "ZoomFadePush",
+};
 
-export type RouteTransitionPopTypes = 
-  "DefaultPop" | "FadePop" | "SlideLeftPop" | "SlideUpPop" | "GlideUpPop";
+export enum RouteTransitionPopTypesEnum {
+  DefaultPop   = "DefaultPop",
+  FadePop      = "FadePop",
+  SlideLeftPop = "SlideLeftPop",
+  SlideUpPop   = "SlideUpPop",
+  GlideUpPop   = "GlideUpPop",
+  ZoomFadePop  = "ZoomFadePop",
+};
+
+export type RouteTransitionPushTypes = keyof typeof RouteTransitionPushTypesEnum;
+
+export type RouteTransitionPopTypes = keyof typeof RouteTransitionPopTypesEnum;
 
 export type RouteTransitionPushConfig = RouteTransitionConfigBase & {
-  type: RouteTransitionPushTypes;
+  type: RouteTransitionPushTypesEnum | RouteTransitionPushTypes;
 };
 
 export type RouteTransitionPopConfig = RouteTransitionConfigBase & {
-  type: RouteTransitionPopTypes;
+  type: RouteTransitionPopTypesEnum | RouteTransitionPopTypes;
 };
 
 export type NavCommandPushOptions = NativePushPopOptions & {
