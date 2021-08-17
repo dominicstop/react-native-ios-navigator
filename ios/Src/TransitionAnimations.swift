@@ -480,6 +480,90 @@ internal class GlideUpAnimator: CustomAnimator {
   };
 };
 
+internal class ZoomFadeAnimator: CustomAnimator {
+  
+  override func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+    guard let fromViewController = transitionContext.viewController(forKey: .from),
+          let toViewController   = transitionContext.viewController(forKey: .to)
+    else { return };
+    
+    let toView   = toViewController  .view!;
+    let fromView = fromViewController.view!;
+
+    let duration = self.transitionDuration(using: transitionContext);
+    let scaleAmount: CGFloat = 0.5;
+    
+    // `AnimationOptions` -> `KeyframeAnimationOptions`
+    let options: UIView.KeyframeAnimationOptions =
+      .init(animationOptions: .curveEaseInOut);
+    
+    let animations: () -> Void = {
+      if self.isPushing {
+        transitionContext.containerView.addSubview(toView);
+        
+        // push - transition in `toView`
+        // start values: [A] -> B
+        toView.alpha = 0;
+        fromView.alpha = 1;
+        
+        fromView.transform = CGAffineTransform(scaleX: 1, y: 1);
+        toView.transform = CGAffineTransform(scaleX: 1 - scaleAmount, y: 1 - scaleAmount);
+        
+        // end of push
+        return {
+          UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.75) {
+            fromView.alpha = 0;
+            toView.alpha = 1;
+          };
+          
+          UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1) {
+            fromView.transform = CGAffineTransform(scaleX: 1 + scaleAmount, y: 1 + scaleAmount);
+            toView.transform = CGAffineTransform(scaleX: 1, y: 1);
+          };
+        };
+        
+      } else {
+        transitionContext.containerView.insertSubview(toView, belowSubview: toView);
+        
+        // pop - transition out `fromViewController`
+        // start values: A <- [B]
+        fromView.alpha = 1;
+        toView.alpha = 0;
+        
+        fromView.transform = CGAffineTransform(scaleX: 1, y: 1);
+        toView.transform = CGAffineTransform(scaleX: 1 + scaleAmount, y: 1 + scaleAmount);
+        
+        // end of pop
+        return {
+          UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.75) {
+            fromView.alpha = 0;
+            toView.alpha = 1;
+          };
+          
+          UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1) {
+            fromView.transform = CGAffineTransform(scaleX: 1 - scaleAmount, y: 1 - scaleAmount);
+            toView.transform = CGAffineTransform(scaleX: 1, y: 1);
+          };
+        };
+      };
+    }();
+    
+    UIView.animateKeyframes(
+      withDuration: duration,
+      delay: 0,
+      options: options,
+      animations: animations
+    ) { _ in
+      // reset
+      fromView.alpha = 1;
+      fromView.transform = CGAffineTransform(scaleX: 1, y: 1);
+      
+      transitionContext.completeTransition(
+        !transitionContext.transitionWasCancelled
+      );
+    };
+  };
+};
 
 /*
 internal class Template: CustomAnimator {

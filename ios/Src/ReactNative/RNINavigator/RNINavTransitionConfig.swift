@@ -24,6 +24,9 @@ internal class RNINavTransitionConfig {
     
     case GlideUpPush;
     case GlideUpPop;
+    
+    case ZoomFadePush;
+    case ZoomFadePop;
   };
   
   let transitionType: TransitionTypes;
@@ -75,6 +78,12 @@ internal class RNINavTransitionConfig {
       
       case .GlideUpPush: return GlideUpAnimator(duration: duration);
       case .GlideUpPop : return GlideUpAnimator(
+        duration: self.duration,
+        interactionController: interactionController
+      );
+      
+      case .ZoomFadePush: return ZoomFadeAnimator(duration: duration);
+      case .ZoomFadePop : return ZoomFadeAnimator(
         duration: self.duration,
         interactionController: interactionController
       );
