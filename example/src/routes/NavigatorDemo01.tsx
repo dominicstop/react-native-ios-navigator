@@ -21,10 +21,10 @@ const colors = [
 ];
 
 const transitionTypesPush: Array<RouteTransitionPushTypes> = 
-  Object.values(RouteTransitionPushTypesEnum);
+  Object.values(RouteTransitionPushTypesEnum).slice(1);
 
 const transitionTypesPop: Array<RouteTransitionPopTypes> = 
-  Object.values(RouteTransitionPopTypesEnum);
+  Object.values(RouteTransitionPopTypesEnum).slice(1);
 
 const sharedNavBarConfig: NavBarAppearanceCombinedConfig = {
   mode: 'legacy',
@@ -37,15 +37,16 @@ const sharedNavBarConfig: NavBarAppearanceCombinedConfig = {
   },
 };
 
-function randomBGColor(){
-  return Helpers.randomElement<string>(colors);
+let colorIndex = 0;
+function getNextColor(){
+  return Helpers.nextItemInCyclicArray(colorIndex++, colors);
 };
 
 function BlankRoute(props: RouteContentProps & {
   offsetA?: number
   offsetB?: number
 }){
-  const [bgColor] = React.useState(randomBGColor());
+  const [bgColor] = React.useState(getNextColor());
   const containerStyle = { backgroundColor: bgColor };
 
   const offset = (
@@ -89,7 +90,7 @@ class NestTestA2 extends React.PureComponent<RouteContentProps & {
       const pushOptions: NavCommandPushOptions = {
         transitionConfig: {
           type: Helpers.nextItemInCyclicArray(i, transitionTypesPush),
-          duration: 0.3,
+          duration: 0.4,
         }
       };
       
@@ -112,7 +113,7 @@ class NestTestA2 extends React.PureComponent<RouteContentProps & {
       const popOptions: NavCommandPopOptions = {
         transitionConfig: {
           type: Helpers.nextItemInCyclicArray(i, transitionTypesPop),
-          duration: 0.3,
+          duration: 0.4,
         }
       };
 
