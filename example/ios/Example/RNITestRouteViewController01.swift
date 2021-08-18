@@ -14,7 +14,7 @@ class BlankRoute: RNINavigatorRouteBaseViewController {
     super.loadView();
     
     let title = UILabel();
-    title.text = "Native Route";
+    title.text = "Native Route (UIViewController)";
     title.font = .systemFont(ofSize: 18, weight: .bold);
     
     self.view.addSubview(title);
@@ -31,28 +31,44 @@ class BlankRoute: RNINavigatorRouteBaseViewController {
 
 /// Example route that get's registered in the route registry
 class RNITestRouteViewController01: RNINavigatorRouteBaseViewController {
-
+  
   override func loadView() {
     super.loadView();
     
     self.navigationItem.title = "Native Route";
     
-    let title1 = UILabel();
-    title1.text = "UIViewController";
-    title1.font = .systemFont(ofSize: 24, weight: .bold);
-    title1.textColor = UIColor(red: 0.19, green: 0.11, blue: 0.57, alpha: 1.00)
+    let title1: UILabel = {
+      let label = UILabel();
+      label.font = .systemFont(ofSize: 24, weight: .bold);
+      label.textColor = UIColor(red: 0.19, green: 0.11, blue: 0.57, alpha: 1.00);
+      label.text = "UIViewController";
+      
+      return label;
+    }();
     
-    let title2 = UILabel();
-    title2.text = "Native Route: \(self.routeKey)";
-    title2.font = .systemFont(ofSize: 18, weight: .semibold);
+    let title2: UILabel = {
+      let label = UILabel();
+      label.font = .systemFont(ofSize: 18, weight: .semibold);
+      label.text = "Native Route: \(self.routeKey)";
+      
+      return label;
+    }();
     
-    let subtitle1 = UILabel();
-    subtitle1.text = "Route Index: \(self.routeIndex)";
-    subtitle1.font = .systemFont(ofSize: 16, weight: .regular);
+    let subtitle1: UILabel = {
+      let label = UILabel();
+      label.font = .systemFont(ofSize: 16, weight: .regular);
+      label.text = "Route Index: \(self.routeIndex)";
+      
+      return label;
+    }();
     
-    let subtitle2 = UILabel();
-    subtitle2.text = "Route Data: \(self.routeProps.debugDescription)";
-    subtitle2.font = .systemFont(ofSize: 16, weight: .regular);
+    let subtitle2: UILabel = {
+      let label = UILabel();
+      label.font = .systemFont(ofSize: 16, weight: .regular);
+      label.text = "Route Props: \(self.routeProps.debugDescription)";
+      
+      return label;
+    }();
     
     func buttonMaker() -> UIButton {
       let button = UIButton();
@@ -114,7 +130,7 @@ class RNITestRouteViewController01: RNINavigatorRouteBaseViewController {
       // title
       title1, title2, subtitle1, subtitle2,
       // nav commands buttons
-      button1, button2, button3, button4, button5
+      button1, button3, button2, button4, button5
     ]);
     
     if #available(iOS 11.0, *) {
@@ -144,6 +160,8 @@ class RNITestRouteViewController01: RNINavigatorRouteBaseViewController {
       // make center
       stack.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
       stack.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
+      // horizontal margin
+      stack.widthAnchor .constraint(lessThanOrEqualTo: self.view.widthAnchor, constant: -30)
     ]);
   };
 
@@ -153,7 +171,14 @@ class RNITestRouteViewController01: RNINavigatorRouteBaseViewController {
   };
 
   @objc func onPressPushReactRoute(){
-    self.navigator?.push(routeKey: "NavigatorTest01", routeProps: nil, animated: true);
+    let routeToPush = self.routeProps["routeToPush"] as? String
+      ?? "NavigatorTest01";
+    
+    let dict: Dictionary<String, Any> = [
+      "nativeRouteProps": "Hello from Native"
+    ];
+    
+    self.navigator?.push(routeKey: routeToPush, routeProps: dict, animated: true);
   };
 
   @objc func onPressPopCurrentRoute(){
