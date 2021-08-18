@@ -1,7 +1,9 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, SafeAreaView, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, SafeAreaView, Alert } from 'react-native';
 
 import { NavigatorView, RouteContentProps, RouteViewPortal } from 'react-native-ios-navigator';
+import { CardBody, CardButton, CardTitle } from '../components/ui/Card';
+import { ObjectPropertyDisplay } from '../components/ui/ObjectPropertyDisplay';
 
 import * as Colors  from '../constants/Colors';
 import * as Helpers from '../functions/Helpers';
@@ -30,58 +32,44 @@ function RouteA(props: RouteContentProps){
   const [bgColor] = React.useState(randomBGColor());
   const routeContainerStyle = { backgroundColor: bgColor };
 
-  return (
+  const data = {
+    routeKey: props.navigation.routeKey,
+    routeIndex: props.navigation.routeIndex,
+    routeProps: props.navigation.routeProps,
+  };
+
+  return(
     <SafeAreaView style={[styles.routeContainer, routeContainerStyle]}>
-      <View style={styles.textContainer}>
-        <Text style={styles.titleText}>
-          {'React/JS Route'}
-        </Text>
-        <Text style={styles.labelText}>
-          {`routeKey: `}
-          <Text style={styles.labelValueText}>
-            {props.navigation.routeKey}
-          </Text>
-        </Text>
-        <Text style={styles.labelText}>
-          {`routeIndex: `}
-          <Text style={styles.labelValueText}>
-            {props.navigation.routeIndex}
-          </Text>
-        </Text>
-        <Text style={styles.labelText}>
-          {`routeProps: `}
-          <Text style={styles.labelValueText}>
-            {JSON.stringify(props.navigation.routeProps ?? {})}
-          </Text>
-        </Text>
-      </View>
-      <TouchableOpacity
-        style={styles.buttonContainer}
-        onPress={() => {
-          const nav = props.navigation;
-          nav.push({routeKey: 'routeA'});
-        }}
-      >
-        <Text style={styles.buttonText}>
-          {'Push: RouteA'}
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.buttonContainer}
-        onPress={() => {
-          const nav = props.navigation;
-          nav.push({
-            routeKey: 'TestNativeRoute', 
-            routeProps: { 
-              routeToPush: 'routeA', 
-            },
-          });
-        }}
-      >
-        <Text style={styles.buttonText}>
-          {'Push: TestNativeRoute'}
-        </Text>
-      </TouchableOpacity>
+      <CardBody style={styles.cardBody}>
+        <CardTitle
+          title={'React/JS Route'}
+          pillTitle={'RouteA'}
+        />
+        <ObjectPropertyDisplay
+          object={data}
+        />
+        <CardButton
+          title={'Push React Route'}
+          subtitle={"Push route: 'RouteA'"}
+          onPress={() => {
+            const nav = props.navigation;
+            nav.push({routeKey: 'routeA'});
+          }}
+        />
+        <CardButton
+          title={'Push Native Route'}
+          subtitle={"Push 'UIViewController': 'TestNativeRoute'"}
+          onPress={() => {
+            const nav = props.navigation;
+            nav.push({
+              routeKey: 'TestNativeRoute', 
+              routeProps: { 
+                routeToPush: 'routeA', 
+              },
+            });
+          }}
+        />
+      </CardBody>
     </SafeAreaView>
   );
 };
@@ -149,8 +137,10 @@ const styles = StyleSheet.create({
   },
   routeContainer: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
+  },
+  cardBody: {
+    marginHorizontal: 12
   },
   textContainer: {
     backgroundColor: 'rgba(255,255,255,0.75)',

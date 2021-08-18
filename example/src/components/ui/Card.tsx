@@ -1,12 +1,14 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, TextInput, Switch, GestureResponderEvent } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, TextInput, Switch, GestureResponderEvent, ViewStyle } from 'react-native';
 
 import * as Colors  from '../../constants/Colors';
 
 
-export const CardBody: React.FC = (props) => {
+export const CardBody: React.FC<{
+  style?: ViewStyle;
+}> = (props) => {
   return (
-    <View style={styles.cardBodyContainer}>
+    <View style={[styles.cardBodyContainer, props.style]}>
       {props.children}
     </View>
   );
