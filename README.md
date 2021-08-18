@@ -1073,6 +1073,14 @@ If you want to run the example app by yourself, please head on over to the [Run 
 
 <br>
 
+### `NavigatorDemo02`
+
+* 📌 **Declaration**: [`NavigatorDemo02.tsx`](example/src/routes/NavigatorDemo02/NavigatorDemo02.tsx)
+
+![NavigatorShowcase02](docs/assets/NavigatorDemo02-00.gif)
+
+<br>
+
 ### `NavigatorTest01`
 
 * 📌 **Declaration**: [`NavigatorTest01.tsx`](example/src/routes/NavigatorTest01/NavigatorTest01.tsx)
