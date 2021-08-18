@@ -25,7 +25,7 @@ internal class RNIUtilities {
   static func recursivelyRemoveFromViewRegistry(bridge: RCTBridge, reactView: UIView) {
     
     func getRegistry(forKey key: String) -> NSMutableDictionary? {
-      return bridge.uiManager.value(forKey: key) as? NSMutableDictionary;
+      return bridge.uiManager?.value(forKey: key) as? NSMutableDictionary;
     };
     
     /// Get a ref to the `_viewRegistry` ivar in the `RCTUIManager` instance.
