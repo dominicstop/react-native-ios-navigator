@@ -8,6 +8,10 @@
 import UIKit;
 
 internal class AnimationHelper {
+  static func xRotation(_ angle: Double) -> CATransform3D {
+    return CATransform3DMakeRotation(CGFloat(angle), 1.0, 0.0, 0.0);
+  };
+  
   static func yRotation(_ angle: Double) -> CATransform3D {
     return CATransform3DMakeRotation(CGFloat(angle), 0.0, 1.0, 0.0);
   };
@@ -656,6 +660,93 @@ internal class FlipHorizontalAnimator: CustomAnimator {
     ) { _ in
       // reset
       fromView.layer.transform = AnimationHelper.yRotation(0.0);
+      
+      transitionContext.completeTransition(
+        !transitionContext.transitionWasCancelled
+      );
+    };
+  };
+};
+
+internal class FlipVerticalAnimator: CustomAnimator {
+  
+  override func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+    guard let fromViewController = transitionContext.viewController(forKey: .from),
+          let toViewController   = transitionContext.viewController(forKey: .to)
+    else { return };
+    
+    let toView   = toViewController  .view!;
+    let fromView = fromViewController.view!;
+    
+    let containerView = transitionContext.containerView;
+    
+    let duration = self.transitionDuration(using: transitionContext);
+    
+    // `AnimationOptions` -> `KeyframeAnimationOptions`
+    let options: UIView.KeyframeAnimationOptions =
+      .init(animationOptions: .curveEaseInOut);
+    
+    let animations: () -> Void = {
+      if self.isPushing {
+        transitionContext.containerView.addSubview(toView);
+        
+        // push - transition in `toView`
+        // start values: [A] -> B
+        
+        // h rotate 90 deg - not visible
+        AnimationHelper.perspectiveTransform(for: containerView)
+        toView.layer.transform = AnimationHelper.xRotation(.pi / 2);
+
+        // end of push
+        return {
+          UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1/2) {
+            // h rotate from view 90 deg (hidden)
+            // e.g.: [] -> |
+            fromView.layer.transform = AnimationHelper.xRotation(-.pi / 2);
+          };
+          
+          // h rotate to view back to normal (visible)
+          // e.g.: | -> []
+          UIView.addKeyframe(withRelativeStartTime: 1/2, relativeDuration: 1/2) {
+            toView.layer.transform = AnimationHelper.yRotation(0.0)
+          };
+        };
+        
+      } else {
+        transitionContext.containerView.insertSubview(toView, belowSubview: toView);
+        
+        // pop - transition out `fromViewController`
+        // start values: A <- [B]
+        
+        // h rotate 90 deg - not visible
+        AnimationHelper.perspectiveTransform(for: containerView)
+        toView.layer.transform = AnimationHelper.xRotation(-.pi / 2);
+
+        // end of pop
+        return {
+          UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1/2) {
+            // h rotate from view 90 deg (hidden)
+            // e.g.: | <- []
+            fromView.layer.transform = AnimationHelper.xRotation(.pi / 2);
+          };
+          
+          // h rotate to view back to normal (visible)
+          // e.g.: [] <- |
+          UIView.addKeyframe(withRelativeStartTime: 1/2, relativeDuration: 1/2) {
+            toView.layer.transform = AnimationHelper.xRotation(0.0)
+          };
+        };
+      };
+    }();
+    
+    UIView.animateKeyframes(
+      withDuration: duration,
+      delay: 0,
+      options: options,
+      animations: animations
+    ) { _ in
+      // reset
+      fromView.layer.transform = AnimationHelper.xRotation(0.0);
       
       transitionContext.completeTransition(
         !transitionContext.transitionWasCancelled

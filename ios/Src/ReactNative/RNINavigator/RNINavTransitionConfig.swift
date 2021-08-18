@@ -30,6 +30,9 @@ internal class RNINavTransitionConfig {
     
     case FlipHorizontalPush;
     case FlipHorizontalPop;
+    
+    case FlipVerticalPush;
+    case FlipVerticalPop;
   };
   
   let transitionType: TransitionTypes;
@@ -93,6 +96,12 @@ internal class RNINavTransitionConfig {
       
       case .FlipHorizontalPush: return FlipHorizontalAnimator(duration: duration);
       case .FlipHorizontalPop : return FlipHorizontalAnimator(
+        duration: self.duration,
+        interactionController: interactionController
+      );
+      
+      case .FlipVerticalPush: return FlipVerticalAnimator(duration: duration);
+      case .FlipVerticalPop : return FlipVerticalAnimator(
         duration: self.duration,
         interactionController: interactionController
       );

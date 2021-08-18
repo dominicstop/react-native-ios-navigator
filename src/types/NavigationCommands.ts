@@ -12,6 +12,7 @@ export enum RouteTransitionPushTypesEnum {
   GlideUpPush        = "GlideUpPush",
   ZoomFadePush       = "ZoomFadePush",
   FlipHorizontalPush = "FlipHorizontalPush",
+  FlipVerticalPush   = "FlipVerticalPush",
 };
 
 export enum RouteTransitionPopTypesEnum {
@@ -22,6 +23,7 @@ export enum RouteTransitionPopTypesEnum {
   GlideUpPop        = "GlideUpPop",
   ZoomFadePop       = "ZoomFadePop",
   FlipHorizontalPop = "FlipHorizontalPop",
+  FlipVerticalPop   = "FlipVerticalPop",
 };
 
 export type RouteTransitionPushTypes = keyof typeof RouteTransitionPushTypesEnum;
