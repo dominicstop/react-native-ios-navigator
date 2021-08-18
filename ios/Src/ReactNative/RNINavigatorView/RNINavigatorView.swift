@@ -187,10 +187,7 @@ public final class RNINavigatorView: UIView {
             routeVC.navigator = self;
             
             // add/register native route
-            self.routeItemsMap[routeID] = routeVC;
-            // preload native route vc
-            routeVC.loadViewIfNeeded();
-            
+            self.routeItemsMap[routeID] = routeVC;            
             return routeVC;
           };
           
