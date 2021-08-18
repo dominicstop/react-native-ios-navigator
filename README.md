@@ -1189,6 +1189,25 @@ If you want to run the example app by yourself, please head on over to the [Run 
 
 ![NavigatorTest01](docs/assets/NavigatorTest03-00.jpg)
 
+<br>
+
+### `NavigatorTest05`
+
+* 📌 **Declaration**: [`NavigatorTest05.tsx`](example/src/routes/NavigatorTest05.tsx)
+
+<br>
+
+* This route is used to test having multiple initial routes on the navigator's first mount.
+	* Shows having react and native (i.e. `UIViewController`) routes as the initial route items.
+* Demos the use of native routes:
+	* Pushing/popping native routes from a react route (and vice versa), and sending "route props" to the next route.
+	* Pushing a plain `UIViewController` instance to the navigator.
+	* Sending commands from a native route to the JS navigator instance. 
+
+![NavigatorTest01](docs/assets/NavigatorTest05-00.gif)
+
+
+
 ------
 
 <br><br>
