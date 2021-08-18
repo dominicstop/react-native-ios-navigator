@@ -15,8 +15,24 @@
 - [ ] **Implement**: Update `RNIImageItem`: Make width/height optional (e.g. rely on `defaultSize`)
 - [ ] Expose  `backIndicatorTransitionMaskImage`.
 - [ ] Use `TurboModules` + `JSI`.
+- [ ] Refactor `CustomAnimator`
+	- Create overridable method `animateTransition`. Returns a tuple of values that will be used to configure `animateKeyframes`.
+	- `(options, animations, completion)`.
+	- `completion` will be used to reset the animation values.
+	- Use snapshot view for the `toView` (e.g. do not directly modify the `toView`).
 
 <br>
+
+- [ ] Update `CustomAnimator` to accept animation options from JS.
+	- Any dict variable initialized from JS object.
+	- Each custom animator subclass will read the dict var via a property wrapper (e.g. for `FlipHorizontalAnimator`, the options could be `reverseFlipDirection: Bool` , `scaleFactor`, etc).
+	- Allow setting of easing, but provide defaults when no value provided. Each animator subclass can override the default when needed.
+
+<br>
+
+- [ ] Allow for user-defined `CustomAnimator` 
+	- Impl. custom animator registry dictionary where a key + `CustomAnimator` subclass can be registered.
+	- `RNINavTransitionConfig.makeAnimator` will lookup if the animation key corresponds to a custom animator and will use it. 
 
 ## Implement
 
@@ -301,7 +317,10 @@
 
 ### Version: `next`
 
-* [x] (Commit: `afd4626`) **Implement**: transition: zoom transition
+* Route Transitions-Related
+	* [x] (Commit: `afd4626`) **Implement**: transition: zoom transition
+	* [x] (Commit: `9c73911`) **Implement**: transition: flip horizontal
+	* [x] (Commit: `6427e80`) **Implement**: transition: flip vertical
 
 <br>
 
