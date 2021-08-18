@@ -34,20 +34,23 @@ function RouteA(props: RouteContentProps){
     <SafeAreaView style={[styles.routeContainer, routeContainerStyle]}>
       <View style={styles.textContainer}>
         <Text style={styles.titleText}>
+          {'React/JS Route'}
+        </Text>
+        <Text style={styles.labelText}>
           {`routeKey: `}
-          <Text style={styles.subtitleText}>
+          <Text style={styles.labelValueText}>
             {props.navigation.routeKey}
           </Text>
         </Text>
-        <Text style={styles.titleText}>
+        <Text style={styles.labelText}>
           {`routeIndex: `}
-          <Text style={styles.subtitleText}>
+          <Text style={styles.labelValueText}>
             {props.navigation.routeIndex}
           </Text>
         </Text>
-        <Text style={styles.titleText}>
+        <Text style={styles.labelText}>
           {`routeProps: `}
-          <Text style={styles.subtitleText}>
+          <Text style={styles.labelValueText}>
             {JSON.stringify(props.navigation.routeProps ?? {})}
           </Text>
         </Text>
@@ -61,6 +64,22 @@ function RouteA(props: RouteContentProps){
       >
         <Text style={styles.buttonText}>
           {'Push: RouteA'}
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.buttonContainer}
+        onPress={() => {
+          const nav = props.navigation;
+          nav.push({
+            routeKey: 'TestNativeRoute', 
+            routeProps: { 
+              routeToPush: 'routeA', 
+            },
+          });
+        }}
+      >
+        <Text style={styles.buttonText}>
+          {'Push: TestNativeRoute'}
         </Text>
       </TouchableOpacity>
     </SafeAreaView>
@@ -82,25 +101,25 @@ export function NavigatorTest05() {
           routeProps: { message: 'A' }
         }, { 
           routeKey: 'TestNativeRoute',
-          routeProps: { message: 'B' }
+          routeProps: { message: 'B', routeToPush: 'routeA' }
         }, { 
           routeKey: 'routeA',
           routeProps: { message: 'C' }
         }, { 
           routeKey: 'TestNativeRoute',
-          routeProps: { message: 'D' }
+          routeProps: { message: 'D', routeToPush: 'routeA' }
         }, { 
           routeKey: 'routeA',
           routeProps: { message: 'E' }
         }, { 
           routeKey: 'TestNativeRoute',
-          routeProps: { message: 'F' }
+          routeProps: { message: 'F', routeToPush: 'routeA' }
         }, { 
           routeKey: 'routeA',
           routeProps: { message: 'G' }
         }, { 
           routeKey: 'TestNativeRoute',
-          routeProps: { message: 'H' }
+          routeProps: { message: 'H', routeToPush: 'routeA' }
         }]}
         navBarPrefersLargeTitles={false}
         onCustomCommandFromNative={({nativeEvent}) => {
@@ -140,11 +159,17 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   titleText: {
+    alignSelf: 'center',
+    marginBottom: 10,
+    fontSize: 20,
+    fontWeight: '500',
+  },
+  labelText: {
     fontSize: 22,
     fontWeight: '500',
     marginBottom: 5,
   },
-  subtitleText: {
+  labelValueText: {
     fontWeight: '300',
     opacity: 0.75,
   },
