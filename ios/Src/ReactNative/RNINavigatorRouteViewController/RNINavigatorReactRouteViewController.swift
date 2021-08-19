@@ -465,14 +465,14 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
   override func viewDidLoad() {
     super.viewDidLoad();
     
+    self.setupSearchController();
+    self.setupScrollView();
+    
     /// setup for custom pop transition (if any)
     if self.transitionTypePop.transitionType != .DefaultPop {
       self.navigationController?.delegate = self;
       self.interactionController = LeftEdgeInteractionController(viewController: self);
     };
-    
-    self.setupSearchController();
-    self.setupScrollView();
   };
   
   override func viewWillLayoutSubviews() {

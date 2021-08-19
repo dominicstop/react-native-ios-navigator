@@ -528,16 +528,12 @@ internal class RNINavigatorRouteView: UIView {
   // -------------------
   
   override func reactSetFrame(_ frame: CGRect) {
-    guard !self.didSetInitialHeight,
-          let navigatorView = self.navigatorView
-    else { return };
+    guard !self.didSetInitialHeight else { return };
     
     self.didSetInitialHeight = true;
     
-    let rect = CGRect(origin: .zero, size: navigatorView.frame.size);
-    
-    super.reactSetFrame(rect);
-    self.notifyForBoundsChange(rect);
+    super.reactSetFrame(frame);
+    self.notifyForBoundsChange(frame);
   };
     
   override func reactSuperview() -> UIView! {
@@ -801,15 +797,28 @@ internal extension RNINavigatorRouteView {
 
 internal extension RNINavigatorRouteView {
   
+  func setInitialSize(_ newBounds: CGRect){
+    self.didSetInitialHeight = true;
+    self.notifyForBoundsChange(newBounds);
+  };
+  
   /// Notify `RouteView`'s bounds had changed and resize
   func notifyForBoundsChange(_ newBounds: CGRect){
     guard let bridge    = self.bridge,
           let reactView = self.reactRouteContent
     else { return };
     
-    // update react view's size
-    self.bounds = newBounds;
-    bridge.uiManager.setSize(newBounds.size, for: reactView);
+    let didChangeSize =
+         self.bounds.width  != newBounds.size.width
+      || self.bounds.height != newBounds.size.height
+      || reactView.bounds.width  != newBounds.size.width
+      || reactView.bounds.height != newBounds.size.height;
+    
+    if didChangeSize {
+      // update react view's size
+      self.bounds = newBounds;
+      bridge.uiManager.setSize(newBounds.size, for: reactView);
+    };
   };
   
   /// notify js `RNINavigatorRouteView` that its about to be/has been pushed

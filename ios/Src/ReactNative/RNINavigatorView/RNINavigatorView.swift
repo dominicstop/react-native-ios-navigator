@@ -347,7 +347,7 @@ public final class RNINavigatorView: UIView {
         if self.bounds.width  > 0,
            self.bounds.height > 0 {
           
-          routeView.notifyForBoundsChange(self.bounds);
+          routeView.setInitialSize(self.bounds);
         };
         
         /// save a ref to `routeView`'s vc instance
@@ -439,7 +439,11 @@ fileprivate extension RNINavigatorView {
     
     if currentRouteCount == initialRouteCount {
       self.didReceiveAllInitialRoutes = true;
-      self.navigationVC.setViewControllers(self.routeItems, animated: false);
+      
+      self.navigationVC.setViewControllers(self.routeItems, animated: false) {
+        // unhide navigation controller
+        self.navigationVC.view.isHidden = false;
+      };
     };
   };
   
@@ -452,15 +456,29 @@ fileprivate extension RNINavigatorView {
     
     navigationVC.delegate = self;
     
-    // add vc's view as subview
-    self.addSubview(navigationVC.view);
-    navigationVC.view.frame = self.frame;
-    
     // set with initial value for `navBarPrefersLargeTitles` prop
     if #available(iOS 11.0, *) {
       navigationVC.navigationBar.prefersLargeTitles =
         self.navBarPrefersLargeTitles;
     };
+    
+    // temp. hide at first, init. route items not added yet...
+    navigationVC.view.isHidden = true;
+
+    // add vc's view as subview
+    self.addSubview(navigationVC.view);
+    navigationVC.view.frame = self.frame;
+    
+    // enable autolayout
+    navigationVC.view.translatesAutoresizingMaskIntoConstraints = false;
+    
+    // stretch vc to fit/fill this view
+    NSLayoutConstraint.activate([
+      navigationVC.view.topAnchor     .constraint(equalTo: self.topAnchor     ),
+      navigationVC.view.bottomAnchor  .constraint(equalTo: self.bottomAnchor  ),
+      navigationVC.view.leadingAnchor .constraint(equalTo: self.leadingAnchor ),
+      navigationVC.view.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+    ]);
   };
   
   /// Embed the navigation controller as a child view controller to the closest
@@ -565,7 +583,7 @@ fileprivate extension RNINavigatorView {
     let routeItems = self.routeItems;
     return(
         "current routeVC count: \(routeItems.count)"
-      + " - current nav vc count: \(self.navigationVC.viewControllers.count)"
+      + " - current nav vc count: \(self.navigationVC?.viewControllers.count ?? 0)"
       + " - last routeID: \(routeItems.last?.routeID ?? -1)"
       + " - last routeKey: \(routeItems.last?.routeKey ?? "N/A")"
       + " - last routeIndex: \(routeItems.last?.routeIndex ?? -1)"
