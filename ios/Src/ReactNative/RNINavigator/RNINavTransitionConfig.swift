@@ -38,6 +38,8 @@ internal class RNINavTransitionConfig {
   let transitionType: TransitionTypes;
   var duration: TimeInterval = 0.5;
   
+  let transitionOptions: Dictionary<String, Any>?;
+  
   init?(dictionary: NSDictionary) {
     guard let typeString = dictionary["type"] as? String,
           let type = TransitionTypes(rawValue: typeString)
@@ -50,10 +52,13 @@ internal class RNINavTransitionConfig {
       
       self.duration = duration;
     };
+    
+    self.transitionOptions = dictionary as? Dictionary<String, Any>;
   };
   
   init(type: TransitionTypes){
     self.transitionType = type;
+    self.transitionOptions = nil;
   };
 
   func makeAnimator(
@@ -61,46 +66,46 @@ internal class RNINavTransitionConfig {
   ) -> CustomAnimator? {
     
     switch self.transitionType {
-      case .DefaultPush: return nil;
+      case .DefaultPush: fallthrough;
       case .DefaultPop : return nil;
       
-      case .FadePush: return FadeAnimator(duration: duration);
+      case .FadePush: fallthrough;
       case .FadePop : return FadeAnimator (
         duration: self.duration,
         interactionController: interactionController
       );
       
-      case .SlideLeftPush: return SlideLeftAnimator(duration: duration);
+      case .SlideLeftPush: fallthrough;
       case .SlideLeftPop : return SlideLeftAnimator(
         duration: self.duration,
         interactionController: interactionController
       );
 
-      case .SlideUpPush: return SlideUpAnimator(duration: duration);
+      case .SlideUpPush: fallthrough;
       case .SlideUpPop : return SlideUpAnimator(
         duration: self.duration,
         interactionController: interactionController
       );
       
-      case .GlideUpPush: return GlideUpAnimator(duration: duration);
+      case .GlideUpPush: fallthrough;
       case .GlideUpPop : return GlideUpAnimator(
         duration: self.duration,
         interactionController: interactionController
       );
       
-      case .ZoomFadePush: return ZoomFadeAnimator(duration: duration);
+      case .ZoomFadePush: fallthrough;
       case .ZoomFadePop : return ZoomFadeAnimator(
         duration: self.duration,
         interactionController: interactionController
       );
       
-      case .FlipHorizontalPush: return FlipHorizontalAnimator(duration: duration);
+      case .FlipHorizontalPush: fallthrough;
       case .FlipHorizontalPop : return FlipHorizontalAnimator(
         duration: self.duration,
         interactionController: interactionController
       );
       
-      case .FlipVerticalPush: return FlipVerticalAnimator(duration: duration);
+      case .FlipVerticalPush: fallthrough;
       case .FlipVerticalPop : return FlipVerticalAnimator(
         duration: self.duration,
         interactionController: interactionController
