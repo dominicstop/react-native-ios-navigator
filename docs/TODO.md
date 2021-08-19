@@ -15,11 +15,6 @@
 - [ ] **Implement**: Update `RNIImageItem`: Make width/height optional (e.g. rely on `defaultSize`)
 - [ ] Expose  `backIndicatorTransitionMaskImage`.
 - [ ] Use `TurboModules` + `JSI`.
-- [ ] Refactor `CustomAnimator`
-	- Create overridable method `animateTransition`. Returns a tuple of values that will be used to configure `animateKeyframes`.
-	- `(options, animations, completion)`.
-	- `completion` will be used to reset the animation values.
-	- Use snapshot view for the `toView` (e.g. do not directly modify the `toView`).
 
 <br>
 
@@ -33,6 +28,9 @@
 - [ ] Allow for user-defined `CustomAnimator` 
 	- Impl. custom animator registry dictionary where a key + `CustomAnimator` subclass can be registered.
 	- `RNINavTransitionConfig.makeAnimator` will lookup if the animation key corresponds to a custom animator and will use it. 
+- [ ] Refactor navigation bar appearance reset
+	- Only reset the appearance properties that have changed.
+	- There's a bug in UIKit where if you use the appearance API, its corresponding legacy counterpart will no longer work.
 
 ## Implement
 
@@ -321,6 +319,18 @@
 	* [x] (Commit: `afd4626`) **Implement**: transition: zoom transition
 	* [x] (Commit: `9c73911`) **Implement**: transition: flip horizontal
 	* [x] (Commit: `6427e80`) **Implement**: transition: flip vertical
+
+<br>
+
+- [x] (Commit: `247f664`) **Refactor** `CustomAnimator`: Cleanup/Simplify 
+	- Create overridable method `animateTransition`. Returns a tuple of values that will be used to configure `animateKeyframes`.
+	- `animations, completion)`.
+	- `completion` will be used to reset the animation values.
+	- Use snapshot view for the `toView` (e.g. do not directly modify the `toView`).
+
+<br>
+
+- [x] (Commit: `0720283`) **Fix**: Search bar/navigation bar flicker on first mount.
 
 <br>
 
