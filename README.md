@@ -362,8 +362,7 @@ Internally, every route has an associated event emitter (i.e. a  [`NavigatorRout
 
 * The route's event emitter can be accessed via the route's navigation object (e.g.  `NavigationObject.getRefToNavRouteEmitter`). 
 * Internally, this component uses the route's event emitter object to subscribe and listen to the route events.
-
-💡 **Tip**: As an alternative, there's also the [`useNavRouteEvents`](PLACE_HOLDER_LINK) hook.
+* 💡 **Tip**: As an alternative, there's also the [`useNavRouteEvents`](PLACE_HOLDER_LINK) hook.
 
 Here is a list a list of the event props that this component supports. The various route-related events are documented and explained in the [`NavigatorRouteViewEvents`](PLACE_HOLDER_LINK) section.
 
@@ -1171,7 +1170,7 @@ If you want to run the example app by yourself, please head on over to the [Run 
 <br>
 
 * **Left**: `NavigationObject.getRouteConstants()`
-* **Right**: `NavigationObject.getNavigatorConstants()`
+* **Middle/Right**: `NavigationObject.getNavigatorConstants()`
 
 ![NavigatorTest01](docs/assets/NavigatorTest01-07-00.png)
 
@@ -1207,6 +1206,26 @@ If you want to run the example app by yourself, please head on over to the [Run 
 ![NavigatorTest01](docs/assets/NavigatorTest05-00.gif)
 
 
+
+
+
+
+
+### `NavigatorTest08`
+
+* 📌 **Declaration**: [`NavigatorTest08.tsx`](example/src/routes/NavigatorTest08/NavigatorTest08.tsx)
+
+* The following is used to test out a route's navigation events (e.g. `onRouteWillPush`, `onRouteWillFocus`, etc).
+	* When a route event fires from a route in the bottom navigator, It'll be added to the list of events (which is sorted from newest to oldest).
+	* The bottom navigator has buttons to trigger various navigation commands (e.g. push/pop, replace/remove the previous route, remove all routes, insert route, etc).
+
+![NavigatorTest01](docs/assets/NavigatorTest08-00-00.gif)
+
+<br>
+
+![NavigatorTest01](docs/assets/NavigatorTest08-01-00.gif)
+
+<br>
 
 ------
 
