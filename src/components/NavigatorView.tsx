@@ -440,23 +440,59 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     );
   };
 
-  private createStateSnapshot = () => {
-    let stateSnapshot: NavigatorViewState | null = null;
+  private syncRoutesFromNative = async () => {
+    const state = this.state;
 
-    return {
-      save: () => {
-        stateSnapshot = { ...this.state };
-      },
-      restore: () => {
-        const isMounted = this.navStatus !== NavStatus.UNMOUNTED;
-        if(stateSnapshot != null && isMounted){
-          this.setState(stateSnapshot);
-          stateSnapshot = null;
+    // is the current react routes diff. from the native routes?
+    let syncStatus: 'sync' | 'diverged' | 'unknown' = 'sync';
+
+    let activeRoutesNext: NavRouteStackItem[] = [];
+
+    try {
+      const activeRoutesNative = await this.getActiveRoutes();
+
+      const activeRoutesMapJS: Record<number, NavRouteStackItem> = {};
+      for (const route of state.activeRoutes) {
+        activeRoutesMapJS[route.routeID] = route;
+      };
+
+      for (let i = 0; i < activeRoutesNative.length; i++) {
+        activeRoutesNext[i] = (activeRoutesNative[i]);
+
+        if(state.activeRoutes[i]?.routeID !== activeRoutesNative[i].routeID){
+          syncStatus = 'diverged';
         };
-      },
-      clear: () => {
-        stateSnapshot = null;
-      },
+      };
+
+      if(syncStatus === 'diverged'){
+        //#region - 🐞 DEBUG 🐛
+        LIB_ENV.debugLog && console.log(
+            `LOG/JS - NavigatorView, syncRoutesFromNative`
+          + ` - active routes synced`
+        );
+        //#endregion
+
+        await Helpers.setStateAsync<NavigatorViewState>(this, {
+          activeRoutes: activeRoutesNext,
+        });
+      };
+
+    } catch(error) {
+      //#region - 🐞 DEBUG 🐛
+      LIB_ENV.debugLog && console.log(
+          `LOG/JS - Error, NavigatorView, syncRoutesFromNative`
+        + ` - sync failed w/ error: ${error}`
+      );
+      //#endregion
+
+      // sync failed
+      syncStatus = 'unknown';
+    };
+    
+    return {
+      results: syncStatus,
+      didDivergeFromNative: 
+        (syncStatus === 'diverged' || syncStatus === 'unknown')
     };
   };
 
@@ -542,8 +578,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     options?: NavCommandPushOptions
   ): Promise<void> => {
     
-    const stateSnapshot = this.createStateSnapshot();
-    const routeConfig   = this.getRouteConfig(routeItem.routeKey);
+    const routeConfig = this.getRouteConfig(routeItem.routeKey);
 
     if(!routeConfig){
       // no matching route config found for `routeItem`
@@ -559,8 +594,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       const { activeRoutes } = this.state;
       this.setNavStatus(NavStatus.NAV_PUSHING);
-
-      stateSnapshot.save();
 
       const transitionConfig = this.configureTransitionOverride({
         isPushing: true,
@@ -617,20 +650,19 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       // reset transition override
       transitionConfig.resetTransition();
-      
+
       // finished, start next item
       this.setNavStatus(NavStatus.IDLE);
       this.queue.dequeue();
-      stateSnapshot.clear();
 
     } catch(error){
       const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
-      stateSnapshot.restore();
+      const syncStats = await this.syncRoutesFromNative();
 
       this.setNavStatus(NavStatus.IDLE_ERROR);
       this.queue.dequeue();
-
-      if(!wasAborted) {
+      
+      if(!wasAborted || syncStats.didDivergeFromNative) {
         throw new Error(`'NavigatorView' failed to do: 'push' with error: ${error}`);
       };
     };
@@ -638,7 +670,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
   public pop = async (options?: Readonly<NavCommandPopOptions>): Promise<void> => {
     const { activeRoutes } = this.state;
-    const stateSnapshot = this.createStateSnapshot();
 
     if(activeRoutes.length < 1){
       throw new Error(`'pop' failed, active route count must be > 1`);
@@ -650,7 +681,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       await queue.promise;
 
       this.setNavStatus(NavStatus.NAV_POPPING);
-      stateSnapshot.save();
 
       const transitionConfig = this.configureTransitionOverride({
         isPushing: false,
@@ -687,16 +717,16 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       this.setNavStatus(NavStatus.IDLE);
       this.queue.dequeue();
-      stateSnapshot.clear();
 
     } catch(error){
       const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
-      stateSnapshot.restore();
+      const syncStats = await this.syncRoutesFromNative();
+
 
       this.setNavStatus(NavStatus.IDLE_ERROR);
       this.queue.dequeue();
 
-      if(!wasAborted) {
+      if(!wasAborted || syncStats.didDivergeFromNative) {
         throw new Error(`'NavigatorView' failed to do: 'pop' with error: ${error}`);
       };
     };
@@ -704,7 +734,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
   public popToRoot = async (options?: Readonly<NavCommandPopOptions>): Promise<void> => {
     const { activeRoutes } = this.state;
-    const stateSnapshot = this.createStateSnapshot();
 
     if(activeRoutes.length < 1){
       throw new Error(`\`popToRoot\` failed, route count must be > 1`);
@@ -716,7 +745,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       await queue.promise;
 
       this.setNavStatus(NavStatus.NAV_POPPING);
-      stateSnapshot.save();
 
       const transitionConfig = this.configureTransitionOverride({
         isPushing: false,
@@ -749,16 +777,16 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       this.setNavStatus(NavStatus.IDLE);
       this.queue.dequeue();
-      stateSnapshot.clear();
 
     } catch(error){
       const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
-      stateSnapshot.restore();
+      const syncStats = await this.syncRoutesFromNative();
+
 
       this.setNavStatus(NavStatus.IDLE_ERROR);
       this.queue.dequeue();
 
-      if(!wasAborted) {
+      if(!wasAborted || syncStats.didDivergeFromNative) {
         throw new Error(`'NavigatorView' failed to do: 'popToRoot' with error: ${error}`);
       };
     };
@@ -770,7 +798,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   ): Promise<void> => {
 
     const { activeRoutes } = this.state;
-    const stateSnapshot = this.createStateSnapshot();
 
     const routeToBeRemoved = activeRoutes[routeIndex];
 
@@ -788,7 +815,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       await queue.promise;
 
       this.setNavStatus(NavStatus.NAV_REMOVING);
-      stateSnapshot.save();
 
       await Helpers.promiseWithTimeout(TIMEOUT_COMMAND,
         RNINavigatorViewModule.removeRoute(
@@ -813,16 +839,16 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       this.setNavStatus(NavStatus.IDLE);
       this.queue.dequeue();
-      stateSnapshot.clear();
 
     } catch(error){
       const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
-      stateSnapshot.restore();
+       const syncStats = await this.syncRoutesFromNative();
+
 
       this.setNavStatus(NavStatus.IDLE_ERROR);
       this.queue.dequeue();
 
-      if(!wasAborted) {
+      if(!wasAborted || syncStats.didDivergeFromNative) {
         throw new Error(`'NavigatorView' failed to do: 'removeRoute' with error: ${error}`);
       };
     };
@@ -834,7 +860,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   ): Promise<void> => {
     
     const { activeRoutes } = this.state;
-    const stateSnapshot = this.createStateSnapshot();
 
     if(routeIndices.length === 0){
       throw new Error(`'removeRoutes' failed, 'routeIndexes' is empty`);
@@ -855,7 +880,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       await queue.promise;
 
       this.setNavStatus(NavStatus.NAV_REMOVING);
-      stateSnapshot.save();
 
       await Helpers.promiseWithTimeout(TIMEOUT_COMMAND,
         RNINavigatorViewModule.removeRoutes(
@@ -883,16 +907,15 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       this.setNavStatus(NavStatus.IDLE);
       this.queue.dequeue();
-      stateSnapshot.clear();
 
     } catch(error){
       const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
-      stateSnapshot.restore();
+      const syncStats = await this.syncRoutesFromNative();
 
       this.setNavStatus(NavStatus.IDLE_ERROR);
       this.queue.dequeue();
 
-      if(!wasAborted) {
+      if(!wasAborted || syncStats.didDivergeFromNative) {
         throw new Error(`'NavigatorView' failed to do: 'removeRoutes' with error: ${error}`);
       };
     };
@@ -905,7 +928,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   ): Promise<void> => {
 
     const { activeRoutes } = this.state;
-    const stateSnapshot = this.createStateSnapshot();
 
     const routeToReplace         = activeRoutes[prevRouteIndex];
     const replacementRouteConfig = this.getRouteConfig(routeItem.routeKey);
@@ -933,7 +955,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       await queue.promise;
 
       this.setNavStatus(NavStatus.NAV_REPLACING);
-      stateSnapshot.save();
 
       await Promise.all([
         // 1. wait for replacement route to be added/init
@@ -964,16 +985,15 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       this.setNavStatus(NavStatus.IDLE);
       this.queue.dequeue();
-      stateSnapshot.clear();
 
     } catch(error){
       const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
-      stateSnapshot.restore();
+      const syncStats = await this.syncRoutesFromNative();
 
       this.setNavStatus(NavStatus.IDLE_ERROR);
       this.queue.dequeue();
 
-      if(!wasAborted) {
+      if(!wasAborted || syncStats.didDivergeFromNative) {
         throw new Error(`'NavigatorView' failed to do: 'removeRoutes' with error: ${error}`);
       };
     };
@@ -1049,11 +1069,12 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
     } catch(error){
       const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
+      const syncStats = await this.syncRoutesFromNative();
 
       this.setNavStatus(NavStatus.IDLE_ERROR);
       this.queue.dequeue();
 
-      if(!wasAborted) {
+      if(!wasAborted || syncStats.didDivergeFromNative) {
         throw new Error(`'NavigatorView' failed to do: 'insertRoute' with error: ${error}`);
       };
     };
@@ -1071,7 +1092,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     transform: SetRoutesTransformCallback, 
     animated = false
   ): Promise<void> => {
-    const stateSnapshot = this.createStateSnapshot();
 
     try {
       // if busy, wait for prev. to finish
@@ -1079,7 +1099,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       await queue.promise;
 
       this.setNavStatus(NavStatus.NAV_UPDATING);
-      stateSnapshot.save();
 
       const currentRoutes = [...this.state.activeRoutes];
       
@@ -1164,16 +1183,16 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       // finished, start next item
       this.setNavStatus(NavStatus.IDLE);
       this.queue.dequeue();
-      stateSnapshot.clear();
 
     } catch(error){
       const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
-      stateSnapshot.restore();
+       const syncStats = await this.syncRoutesFromNative();
+
 
       this.setNavStatus(NavStatus.IDLE_ERROR);
       this.queue.dequeue();
 
-      if(!wasAborted) {
+      if(!wasAborted || syncStats.didDivergeFromNative) {
         throw new Error(`'NavigatorView' failed to do: 'setRoutes' with error: ${error}`);
       };
     };
@@ -1359,11 +1378,12 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
         } catch(error) {
           const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
+          const syncStats = await this.syncRoutesFromNative();
 
           this.setNavStatus(NavStatus.IDLE_ERROR);
           this.queue.dequeue();
 
-          if(!wasAborted) {
+          if(!wasAborted || syncStats.didDivergeFromNative) {
             throw new Error(
                 `'NavigatorView' failed to do: '${commandData.commandKey}'`
               + `with error: ${error}`

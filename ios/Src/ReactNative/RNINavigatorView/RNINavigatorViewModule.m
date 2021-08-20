@@ -97,4 +97,9 @@ RCT_EXTERN_METHOD(getNavigatorConstants: (nonnull NSNumber)node
                   resolve: (RCTPromiseResolveBlock)resolve
                   reject : (RCTPromiseRejectBlock )reject);
 
+RCT_EXTERN_METHOD(getNavigatorActiveRoutes: (nonnull NSNumber)node
+                  // promise blocks -----------------------
+                  resolve: (RCTPromiseResolveBlock)resolve
+                  reject : (RCTPromiseRejectBlock )reject);
+
 @end

@@ -17,6 +17,14 @@ export type NativeRouteData = {
   | 'routeIndex'
 >);
 
+export type NativeActiveRoutes = Pick<RNINavigatorRouteViewProps, 
+  | 'routeID'
+  | 'routeKey'
+  | 'routeIndex'
+> & {
+  type: 'reactRoute' | 'nativeRoute'
+};
+
 export type NavigatorConstantsObject = {
   navigatorID: number;
 
@@ -109,6 +117,8 @@ interface RNINavigatorViewModule {
 
   
   getNavigatorConstants(node: number): Promise<NavigatorConstantsObject>;
+
+  getNavigatorActiveRoutes(node: number): Promise<NativeActiveRoutes>;
 };
 
 const MODULE_NAME = "RNINavigatorViewModule";

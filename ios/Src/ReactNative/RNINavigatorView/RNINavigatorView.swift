@@ -93,6 +93,20 @@ public final class RNINavigatorView: UIView {
       .sorted { $0.routeIndex < $1.routeIndex }
   };
   
+  var activeRoutesDict: [Dictionary<String, Any>] {
+    self.activeRoutes.enumerated().map {
+      let type = $1 is RNINavigatorReactRouteViewController
+        ? "reactRoute" : "nativeRoute";
+      
+      return [
+        "routeID"   : $1.routeID,
+        "routeKey"  : $1.routeKey,
+        "routeIndex": $0,
+        "type"      : type
+      ];
+    };
+  };
+  
   // -----------------------------
   // MARK: RN Exported Event Props
   // -----------------------------
