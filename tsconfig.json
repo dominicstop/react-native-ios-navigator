@@ -25,5 +25,8 @@
     "forceConsistentCasingInFileNames": true,
     // "noImplicitAny": true,
     // "strictNullChecks": true,
-  }
+  },
+  "exclude": [
+    "example"
+  ]
 }

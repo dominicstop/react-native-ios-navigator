@@ -22,7 +22,7 @@
     "!**/__mocks__"
   ],
   "scripts": {
-    "typescript": "tsc --noEmit",
+    "typescript": "tsc --noEmit --project tsconfig.json ; cd example && tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "prepare": "bob build",
     "release": "release-it --only-version",
