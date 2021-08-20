@@ -29,10 +29,6 @@
 	-  Refactor native active routes to be `(routeData, UIViewController)`.
 	- Route data is kept in not stored in the properties.
 
-
-
-
-
 <br>
 
 - [ ] Update `CustomAnimator` to accept animation options from JS.
@@ -79,9 +75,8 @@
 <br>
 
 * Route Transitions-Related
-	* [ ] **Implement**: transition: flip
 	* [ ] **Implement**: Add easing to transition config
-	* [ ] **Implement**: Create custom animation stack push (like card, fromview static zoom out, toView left)
+	* [ ] **Implement**: Create custom animation stack push (like card).
 
 <br>
 
@@ -335,6 +330,11 @@
 - [x] (Commit: `e2831e3`) **Implement**: Impl. `syncRoutesFromNative`
 	- Command to sync the native active routes to the JS active routes.
 	- Replacement for `createStateSnapshot` as form of error recovery when a route command fails.
+
+<br>
+
+- [x] (Commit: `a85b813`) **Refactor**: Consolidate Push/Pop Transition String Types
+	- Remove separate push/pop transition types and combined into one (e.g. combined `RouteTransitionPushTypesEnum` and `RouteTransitionPopTypesEnum` into `RouteTransitionTypesEnum`, etc).
 
 <br>
 
