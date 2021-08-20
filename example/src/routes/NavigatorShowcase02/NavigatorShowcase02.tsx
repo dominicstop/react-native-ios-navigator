@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, View, Text, Animated, ListRenderItem } from 'react-native';
 
-import { RouteViewPortal, RouteContentProps, NavBarAppearanceCombinedConfig } from 'react-native-ios-navigator';
+import { RouteViewPortal, RouteContentProps, NavBarAppearanceCombinedConfig, RouteViewEvents } from 'react-native-ios-navigator';
 
 import { ImageAssets } from '../../functions/ImageCache';
 import { iOSVersion } from '../../constants/Constants';
@@ -33,8 +33,11 @@ const navBarAppearanceConfig: NavBarAppearanceCombinedConfig = ((iOSVersion >= 1
   },
 });
 
+type RouteContentState = {
+  items: PostItem[];
+};
 
-export class NavigatorShowcase02 extends React.Component<RouteContentProps> {
+export class NavigatorShowcase02 extends React.Component<RouteContentProps, RouteContentState> {
 
   scrollY = new Animated.Value(0);
   listHeaderTitleY = new Animated.Value(0);
@@ -51,6 +54,16 @@ export class NavigatorShowcase02 extends React.Component<RouteContentProps> {
 
   constructor(props: RouteContentProps){
     super(props);
+
+    this.state = {
+      items: POST_ITEMS.slice(0, 5),
+    };
+  };
+
+  _handleOnRouteDidPush = () => {
+    this.setState({
+      items: POST_ITEMS
+    });
   };
 
   _handleKeyExtractor = (item: PostItem) => {
@@ -89,7 +102,6 @@ export class NavigatorShowcase02 extends React.Component<RouteContentProps> {
       />
     );
   };
-  
 
   render(){
     return(
@@ -109,9 +121,12 @@ export class NavigatorShowcase02 extends React.Component<RouteContentProps> {
           }}
           renderRouteHeader={this._renderRouteHeader}
         />
+        <RouteViewEvents
+          onRouteDidPush={this._handleOnRouteDidPush}
+        />
         <Animated.FlatList
           contentContainerStyle={styles.listContentContainer}
-          data={POST_ITEMS}
+          data={this.state.items}
           keyExtractor={this._handleKeyExtractor}
           renderItem={this._renderListItem}
           ListHeaderComponent={this._renderListHeader}
