@@ -397,7 +397,7 @@ import { RouteViewEvents } from 'react-native-ios-navigator';
 function ExampleRoute(props){
   return (
     <SafeAreaView>
-			<RouteViewEvents
+      <RouteViewEvents
         onRouteDidPush={({nativeEvent}) => {
           console.log(`Route ${nativeEvent.routeKey} was pushed...`);
         }}
@@ -1205,11 +1205,7 @@ If you want to run the example app by yourself, please head on over to the [Run 
 
 ![NavigatorTest01](docs/assets/NavigatorTest05-00.gif)
 
-
-
-
-
-
+<br>
 
 ### `NavigatorTest08`
 
