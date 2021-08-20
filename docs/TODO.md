@@ -15,6 +15,23 @@
 - [ ] **Implement**: Update `RNIImageItem`: Make width/height optional (e.g. rely on `defaultSize`)
 - [ ] Expose  `backIndicatorTransitionMaskImage`.
 - [ ] Use `TurboModules` + `JSI`.
+- [ ] Impl. Error Codes 
+	* Specific error codes for when a navigator command fails (e.g. library errors, and user errors).
+	* E.g. `ACTIVE_ROUTES_DESYNC`, `INVALID_ROUTE_KEY`, `UNKNOWN_ERROR`.
+	* Will be used to trigger `syncRoutesFromNative` when the error code is `ACTIVE_ROUTES_DESYNC`.
+
+<br>
+
+- [ ] Possibly trigger `syncRoutesFromNative` from native when active routes diverged.
+- [ ] Impl. Close Modals
+- [ ] Impl. On Modal Event
+- [ ] Refactor: Allow pushing regular `UIViewController` instances
+	-  Refactor native active routes to be `(routeData, UIViewController)`.
+	- Route data is kept in not stored in the properties.
+
+
+
+
 
 <br>
 
@@ -314,6 +331,14 @@
 ## Completed
 
 ### Version: `next`
+
+- [x] (Commit: `e2831e3`) **Implement**: Impl. `syncRoutesFromNative`
+	- Command to sync the native active routes to the JS active routes.
+	- Replacement for `createStateSnapshot` as form of error recovery when a route command fails.
+
+<br>
+
+### Version: `0.2.1`
 
 * Route Transitions-Related
 	* [x] (Commit: `afd4626`) **Implement**: transition: zoom transition
