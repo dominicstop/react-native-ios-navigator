@@ -4,44 +4,27 @@ type RouteTransitionConfigBase = {
   duration?: number;
 };
 
-export enum RouteTransitionPushTypesEnum {
-  DefaultPush        = "DefaultPush",
-  FadePush           = "FadePush",
-  SlideLeftPush      = "SlideLeftPush",
-  SlideUpPush        = "SlideUpPush",
-  GlideUpPush        = "GlideUpPush",
-  ZoomFadePush       = "ZoomFadePush",
-  FlipHorizontalPush = "FlipHorizontalPush",
-  FlipVerticalPush   = "FlipVerticalPush",
+export enum RouteTransitionTypesEnum {
+  Default        = "Default",
+  CrossFade      = "CrossFade",
+  SlideLeft      = "SlideLeft",
+  SlideUp        = "SlideUp",
+  GlideUp        = "GlideUp",
+  ZoomFade       = "ZoomFade",
+  FlipHorizontal = "FlipHorizontal",
+  FlipVertical   = "FlipVertical",
 };
 
-export enum RouteTransitionPopTypesEnum {
-  DefaultPop        = "DefaultPop",
-  FadePop           = "FadePop",
-  SlideLeftPop      = "SlideLeftPop",
-  SlideUpPop        = "SlideUpPop",
-  GlideUpPop        = "GlideUpPop",
-  ZoomFadePop       = "ZoomFadePop",
-  FlipHorizontalPop = "FlipHorizontalPop",
-  FlipVerticalPop   = "FlipVerticalPop",
-};
+export type RouteTransitionTypes = keyof typeof RouteTransitionTypesEnum;
 
-export type RouteTransitionPushTypes = keyof typeof RouteTransitionPushTypesEnum;
-
-export type RouteTransitionPopTypes = keyof typeof RouteTransitionPopTypesEnum;
-
-export type RouteTransitionPushConfig = RouteTransitionConfigBase & {
-  type: RouteTransitionPushTypesEnum | RouteTransitionPushTypes;
-};
-
-export type RouteTransitionPopConfig = RouteTransitionConfigBase & {
-  type: RouteTransitionPopTypesEnum | RouteTransitionPopTypes;
+export type RouteTransitionConfig = RouteTransitionConfigBase & {
+  type: RouteTransitionTypesEnum | RouteTransitionTypes;
 };
 
 export type NavCommandPushOptions = NativePushPopOptions & {
-  transitionConfig?: RouteTransitionPushConfig;
+  transitionConfig?: RouteTransitionConfig;
 };
 
 export type NavCommandPopOptions = NativePushPopOptions & {
-  transitionConfig?: RouteTransitionPopConfig;
+  transitionConfig?: RouteTransitionConfig;
 };

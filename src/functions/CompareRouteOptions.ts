@@ -3,7 +3,7 @@ import { CompareUtilities, ComparisonConfig } from './CompareUtilities';
 import { CompareNavBarBackItemConfig, CompareNavBarItemsConfig } from './CompareNavBarItemConfig';
 import { CompareNavBarAppearanceCombinedConfig } from './CompareNavBarAppearanceCombinedConfig';
 
-import type { RouteTransitionPushConfig, RouteTransitionPopConfig } from "../types/NavigationCommands";
+import type { RouteTransitionConfig } from "../types/NavigationCommands";
 import type { RouteOptions } from "../types/RouteOptions";
 import type { Nullish } from '../types/UtilityTypes';
 
@@ -20,19 +20,19 @@ import type { Nullish } from '../types/UtilityTypes';
 
 
 export class CompareRouteTransitionPushConfig {
-  static propertyMap: ComparisonConfig<RouteTransitionPushConfig> = {
+  static propertyMap: ComparisonConfig<RouteTransitionConfig> = {
     // shallow compare
     type    : { mode: 'shallow' },
     duration: { mode: 'shallow' },
   };
 
-  static compare<T extends RouteTransitionPushConfig>(oldItem: T, newItem: T){
+  static compare<T extends RouteTransitionConfig>(oldItem: T, newItem: T){
     return CompareUtilities.compareObject(
       CompareRouteTransitionPushConfig.propertyMap, oldItem, newItem
     );
   };
 
-  static unwrapAndCompare<T extends RouteTransitionPushConfig>(
+  static unwrapAndCompare<T extends RouteTransitionConfig>(
     oldItem: Nullish<T>,
     newItem: Nullish<T>
   ){
@@ -44,17 +44,17 @@ export class CompareRouteTransitionPushConfig {
 };
 
 export class CompareRouteTransitionPopConfig {
-  static propertyMap: ComparisonConfig<RouteTransitionPopConfig> = {
+  static propertyMap: ComparisonConfig<RouteTransitionConfig> = {
     // shallow compare
     type    : { mode: 'shallow' },
     duration: { mode: 'shallow' },
   };
 
-  static compare(oldItem: RouteTransitionPopConfig, newItem: RouteTransitionPopConfig){
+  static compare(oldItem: RouteTransitionConfig, newItem: RouteTransitionConfig){
     return CompareUtilities.compareObject(CompareRouteTransitionPopConfig.propertyMap, oldItem, newItem);
   };
 
-  static unwrapAndCompare<T extends RouteTransitionPopConfig>(
+  static unwrapAndCompare<T extends RouteTransitionConfig>(
     oldItem: Nullish<T>,
     newItem: Nullish<T>
   ){

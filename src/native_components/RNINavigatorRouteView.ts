@@ -4,7 +4,7 @@ import type { NavBarBackItemConfig, NavBarItemsConfig } from '../types/NavBarIte
 import type { NavBarAppearanceCombinedConfig } from '../types/NavBarAppearanceConfig';
 import type { RouteSearchControllerConfig } from '../types/RouteSearchControllerConfig';
 import type { OnPressNavBarItemEvent, OnRouteFocusEvent, OnRouteBlurEvent, OnRoutePopEvent, OnRoutePushEvent, OnSearchBarCancelButtonClickedEvent, OnSearchBarSearchButtonClickedEvent, OnUpdateSearchResultsEvent } from '../types/RNINavigatorRouteViewEvents';
-import type { RouteTransitionPushConfig, RouteTransitionPopConfig } from '../types/NavigationCommands';
+import type { RouteTransitionConfig } from '../types/NavigationCommands';
 
 
 export type BackButtonDisplayMode =
@@ -41,8 +41,8 @@ export type RNINavigatorRouteViewProps = {
   statusBarStyle?: StatusBarStyle | null;
 
   // Transition Config
-  transitionConfigPush?: RouteTransitionPushConfig | null;
-  transitionConfigPop ?: RouteTransitionPopConfig  | null;
+  transitionConfigPush?: RouteTransitionConfig | null;
+  transitionConfigPop ?: RouteTransitionConfig  | null;
 
   // Navbar Config
   prompt    ?: string | null;

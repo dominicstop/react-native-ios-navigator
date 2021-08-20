@@ -20,7 +20,7 @@ export function NavigationCommandsConfig(props: RouteContentProps){
             routeKey: 'NavigatorTest03',
           }, {
             transitionConfig: {
-              type: 'FadePush'
+              type: 'CrossFade'
             }
           });
         }}

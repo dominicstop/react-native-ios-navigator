@@ -10,29 +10,14 @@ import Foundation
 internal class RNINavTransitionConfig {
   
   enum TransitionTypes: String {
-    case DefaultPush;
-    case DefaultPop;
-    
-    case FadePush;
-    case FadePop;
-    
-    case SlideLeftPush;
-    case SlideLeftPop;
-    
-    case SlideUpPush;
-    case SlideUpPop;
-    
-    case GlideUpPush;
-    case GlideUpPop;
-    
-    case ZoomFadePush;
-    case ZoomFadePop;
-    
-    case FlipHorizontalPush;
-    case FlipHorizontalPop;
-    
-    case FlipVerticalPush;
-    case FlipVerticalPop;
+    case Default;
+    case CrossFade;
+    case SlideLeft;
+    case SlideUp;
+    case GlideUp;
+    case ZoomFade;
+    case FlipHorizontal;
+    case FlipVertical;
   };
   
   let transitionType: TransitionTypes;
@@ -66,47 +51,39 @@ internal class RNINavTransitionConfig {
   ) -> CustomAnimator? {
     
     switch self.transitionType {
-      case .DefaultPush: fallthrough;
-      case .DefaultPop : return nil;
+      case .Default: return nil;
       
-      case .FadePush: fallthrough;
-      case .FadePop : return FadeAnimator (
+      case .CrossFade: return FadeAnimator (
         duration: self.duration,
         interactionController: interactionController
       );
       
-      case .SlideLeftPush: fallthrough;
-      case .SlideLeftPop : return SlideLeftAnimator(
+      case .SlideLeft: return SlideLeftAnimator(
         duration: self.duration,
         interactionController: interactionController
       );
 
-      case .SlideUpPush: fallthrough;
-      case .SlideUpPop : return SlideUpAnimator(
+      case .SlideUp : return SlideUpAnimator(
         duration: self.duration,
         interactionController: interactionController
       );
       
-      case .GlideUpPush: fallthrough;
-      case .GlideUpPop : return GlideUpAnimator(
+      case .GlideUp: return GlideUpAnimator(
         duration: self.duration,
         interactionController: interactionController
       );
       
-      case .ZoomFadePush: fallthrough;
-      case .ZoomFadePop : return ZoomFadeAnimator(
+      case .ZoomFade: return ZoomFadeAnimator(
         duration: self.duration,
         interactionController: interactionController
       );
       
-      case .FlipHorizontalPush: fallthrough;
-      case .FlipHorizontalPop : return FlipHorizontalAnimator(
+      case .FlipHorizontal: return FlipHorizontalAnimator(
         duration: self.duration,
         interactionController: interactionController
       );
       
-      case .FlipVerticalPush: fallthrough;
-      case .FlipVerticalPop : return FlipVerticalAnimator(
+      case .FlipVertical: return FlipVerticalAnimator(
         duration: self.duration,
         interactionController: interactionController
       );

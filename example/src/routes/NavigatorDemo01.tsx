@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, View, Text, SafeAreaView } from 'react-native';
-import { NavBarAppearanceCombinedConfig, NavCommandPopOptions, NavCommandPushOptions, NavigatorView, RouteContentProps, RouteTransitionPopTypes, RouteTransitionPopTypesEnum, RouteTransitionPushTypes, RouteTransitionPushTypesEnum, RouteViewEvents } from 'react-native-ios-navigator';
+import { NavBarAppearanceCombinedConfig, NavCommandPopOptions, NavCommandPushOptions, NavigatorView, RouteContentProps, RouteTransitionTypes, RouteTransitionTypesEnum, RouteViewEvents } from 'react-native-ios-navigator';
 
 import * as Colors  from '../constants/Colors';
 import * as Helpers from '../functions/Helpers';
@@ -20,11 +20,8 @@ const colors = [
   Colors.INDIGO.A700,
 ];
 
-const transitionTypesPush: Array<RouteTransitionPushTypes> = 
-  Object.values(RouteTransitionPushTypesEnum).slice(1);
-
-const transitionTypesPop: Array<RouteTransitionPopTypes> = 
-  Object.values(RouteTransitionPopTypesEnum).slice(1);
+const transitionTypes: Array<RouteTransitionTypes> = 
+  Object.values(RouteTransitionTypesEnum).slice(1);
 
 const sharedNavBarConfig: NavBarAppearanceCombinedConfig = {
   mode: 'legacy',
@@ -89,7 +86,7 @@ class NestTestA2 extends React.PureComponent<RouteContentProps & {
     for (let i = 0; i < total; i++) {
       const pushOptions: NavCommandPushOptions = {
         transitionConfig: {
-          type: Helpers.nextItemInCyclicArray(i, transitionTypesPush),
+          type: Helpers.nextItemInCyclicArray(i, transitionTypes),
           duration: 0.4,
         }
       };
@@ -112,7 +109,7 @@ class NestTestA2 extends React.PureComponent<RouteContentProps & {
     for (let i = 0; i < total; i++) {
       const popOptions: NavCommandPopOptions = {
         transitionConfig: {
-          type: Helpers.nextItemInCyclicArray(i, transitionTypesPop),
+          type: Helpers.nextItemInCyclicArray(i, transitionTypes),
           duration: 0.4,
         }
       };
@@ -127,7 +124,7 @@ class NestTestA2 extends React.PureComponent<RouteContentProps & {
   _handleOnRouteDidPush = async () => {
     const props = this.props;
 
-    await this.pushAndPop(transitionTypesPush.length);
+    await this.pushAndPop(transitionTypes.length);
 
     await Promise.all([
       this.navRefA.setNavigationBarHidden(true, true),

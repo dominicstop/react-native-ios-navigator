@@ -58,7 +58,7 @@ export function RouteB(props: RouteContentProps<RouteProps>){
       <RouteViewEvents
         onRouteWillPush={() => {
           routeProps.recordEvent({
-            eventType: 'onRouteWillPush',
+            eventType: 'onRouteWill',
             timestamp: Date.now(),
             routeKey: navigation.routeKey,
             routeIndex: navigation.routeIndex,
@@ -66,7 +66,7 @@ export function RouteB(props: RouteContentProps<RouteProps>){
         }}
         onRouteDidPush={() => {
           routeProps.recordEvent({
-            eventType: 'onRouteDidPush',
+            eventType: 'onRouteDid',
             timestamp: Date.now(),
             routeKey: navigation.routeKey,
             routeIndex: navigation.routeIndex,
@@ -74,7 +74,7 @@ export function RouteB(props: RouteContentProps<RouteProps>){
         }}
         onRouteWillPop={() => {
           routeProps.recordEvent({
-            eventType: 'onRouteWillPop',
+            eventType: 'onRouteWill',
             timestamp: Date.now(),
             routeKey: navigation.routeKey,
             routeIndex: navigation.routeIndex,
@@ -82,7 +82,7 @@ export function RouteB(props: RouteContentProps<RouteProps>){
         }}
         onRouteDidPop={() => {
           routeProps.recordEvent({
-            eventType: 'onRouteDidPop',
+            eventType: 'onRouteDid',
             timestamp: Date.now(),
             routeKey: navigation.routeKey,
             routeIndex: navigation.routeIndex,

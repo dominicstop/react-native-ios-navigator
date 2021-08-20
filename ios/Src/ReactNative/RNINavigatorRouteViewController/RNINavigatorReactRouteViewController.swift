@@ -306,12 +306,12 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
   // used for the custom transitions
   var interactionController: LeftEdgeInteractionController?;
   
-  var transitionTypePush = RNINavTransitionConfig(type: .DefaultPush) {
+  var transitionTypePush = RNINavTransitionConfig(type: .Default) {
     willSet {
       // don't set the delegate when using the default push/pop transition
       // to not disable the interactive swipe gesture.
-      if newValue.transitionType == .DefaultPush,
-         self.transitionTypePop.transitionType == .DefaultPop {
+      if newValue.transitionType == .Default,
+         self.transitionTypePop.transitionType == .Default {
         
         self.navigationController?.delegate = nil;
         
@@ -321,7 +321,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     }
   };
   
-  var transitionTypePop = RNINavTransitionConfig(type: .DefaultPop) {
+  var transitionTypePop = RNINavTransitionConfig(type: .Default) {
     willSet {
       guard let navigationController = self.navigationController
       else { return };
@@ -329,8 +329,8 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       // don't set the delegate when using the default push/pop transition
       // to not disable the interactive swipe gesture.
       // TODO (009): This can be fixed by re-impl. the default pop transition.
-      if newValue.transitionType == .DefaultPop,
-         self.transitionTypePush.transitionType == .DefaultPush {
+      if newValue.transitionType == .Default,
+         self.transitionTypePush.transitionType == .Default {
         
         self.interactionController = nil;
         navigationController.delegate = nil;
@@ -469,7 +469,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     self.setupScrollView();
     
     /// setup for custom pop transition (if any)
-    if self.transitionTypePop.transitionType != .DefaultPop {
+    if self.transitionTypePop.transitionType != .Default {
       self.navigationController?.delegate = self;
       self.interactionController = LeftEdgeInteractionController(viewController: self);
     };

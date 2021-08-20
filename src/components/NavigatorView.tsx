@@ -11,7 +11,7 @@ import type { NavigatorRouteView } from './NavigatorRouteView';
 
 import { NavigatorUIConstantsContext } from '../context/NavigatorUIConstantsContext';
 
-import type { NavCommandPopOptions, NavCommandPushOptions, RouteTransitionPopConfig, RouteTransitionPushConfig } from '../types/NavigationCommands';
+import type { NavCommandPopOptions, NavCommandPushOptions, RouteTransitionConfig } from '../types/NavigationCommands';
 import type { NavRouteItem, NavRouteStackItem, NavRouteStackPartialItem } from '../types/NavRouteItem';
 import type { RenderNavItem } from '../types/NavTypes';
 import type { NavRouteConfigItem, NavRouteConfigItemJS } from '../types/NavRouteConfigItem';
@@ -93,8 +93,8 @@ type NavigatorViewState = Partial<Pick<OnUIConstantsDidChangeEventObject['native
   activeRoutes: Array<NavRouteStackItem>;
 
   // push/pop override config
-  transitionConfigPushOverride?: RouteTransitionPushConfig;
-  transitionConfigPopOverride ?: RouteTransitionPopConfig;
+  transitionConfigPushOverride?: RouteTransitionConfig;
+  transitionConfigPopOverride ?: RouteTransitionConfig;
 };
 //#endregion
 
@@ -330,8 +330,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   /** used to set/reset the transition override for the current route  */
   private configureTransitionOverride = (params: Readonly<{
     isPushing: boolean;
-    pushConfig?: RouteTransitionPushConfig;
-    popConfig?: RouteTransitionPopConfig;
+    pushConfig?: RouteTransitionConfig;
+    popConfig?: RouteTransitionConfig;
   }>) => {
 
     const hasTransitionConfig = (

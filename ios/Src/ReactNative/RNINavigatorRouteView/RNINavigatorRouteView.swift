@@ -181,7 +181,7 @@ internal class RNINavigatorRouteView: UIView {
       let config: RNINavTransitionConfig = {
         guard let dict = self.transitionConfigPush,
               let config = RNINavTransitionConfig(dictionary: dict)
-        else { return .init(type: .DefaultPush) };
+        else { return .init(type: .Default) };
         
         return config;
       }();
@@ -199,7 +199,7 @@ internal class RNINavigatorRouteView: UIView {
       let config: RNINavTransitionConfig = {
         guard let dict = self.transitionConfigPop,
               let config = RNINavTransitionConfig(dictionary: dict)
-        else { return .init(type: .DefaultPop) };
+        else { return .init(type: .Default) };
         
         return config;
       }();

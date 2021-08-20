@@ -7,7 +7,7 @@ import type { NavigationObject } from '../types/NavigationObject';
 import type { RouteOptions } from '../types/RouteOptions';
 import type { RenderNavItem, RenderRouteContent } from '../types/NavTypes';
 import type { OnRoutePopEvent, OnRoutePushEvent, OnPressNavBarItemEvent, OnRouteFocusEvent, OnRouteBlurEvent, OnUpdateSearchResultsEvent, OnSearchBarCancelButtonClickedEvent, OnSearchBarSearchButtonClickedEvent } from '../types/RNINavigatorRouteViewEvents';
-import type { RouteTransitionPushConfig, RouteTransitionPopConfig } from '../types/NavigationCommands';
+import type { RouteTransitionConfig } from '../types/NavigationCommands';
 import type { Nullish } from '../types/UtilityTypes';
 
 import { NavigatorRouteViewEventEmitter, NavigatorRouteViewEvents } from '../types/NavigatorRouteViewEventEmitter';
@@ -66,8 +66,8 @@ export type NavigatorRouteViewProps = Pick<RNINavigatorRouteViewProps,
 
   isInFocus: boolean;
 
-  transitionConfigPushOverride: Nullish<RouteTransitionPushConfig>;
-  transitionConfigPopOverride : Nullish<RouteTransitionPopConfig>;
+  transitionConfigPushOverride: Nullish<RouteTransitionConfig>;
+  transitionConfigPopOverride : Nullish<RouteTransitionConfig>;
 
   getRefToNavigator: () => NavigatorView;
   

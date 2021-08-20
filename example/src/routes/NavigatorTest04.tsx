@@ -65,7 +65,7 @@ function MainRoute(props: RouteContentProps){
         </Text>
       </View>
       <Button
-        title={'Push'}
+        title={''}
         subtitle={'with `FadePush` 1s'}
         marginTop={30}
         onPress={() => {
@@ -73,19 +73,19 @@ function MainRoute(props: RouteContentProps){
             routeKey: 'MainRoute'
           }, {
             transitionConfig: {
-              type: 'FadePush',
+              type: 'CrossFade',
               duration: 1,
             }
           });
         }}
       />
       <Button
-        title={'Pop'}
+        title={''}
         subtitle={'with `FadePop` 1s'}
         onPress={() => {
           props.navigation.pop({
             transitionConfig: {
-              type: 'FadePop',
+              type: 'CrossFade',
               duration: 1,
             }
           });
@@ -93,7 +93,7 @@ function MainRoute(props: RouteContentProps){
       />
 
       <Button
-        title={'Push'}
+        title={''}
         subtitle={'with `SlideLeftPush` 1s'}
         marginTop={30}
         onPress={() => {
@@ -101,19 +101,19 @@ function MainRoute(props: RouteContentProps){
             routeKey: 'MainRoute'
           }, {
             transitionConfig: {
-              type: 'SlideLeftPush',
+              type: 'SlideLeft',
               duration: 1,
             }
           });
         }}
       />
       <Button
-        title={'Pop'}
+        title={''}
         subtitle={'with `SlideLeftPop` 1s'}
         onPress={() => {
           props.navigation.pop({
             transitionConfig: {
-              type: 'SlideLeftPop',
+              type: 'SlideLeft',
               duration: 1,
             }
           });
@@ -121,7 +121,7 @@ function MainRoute(props: RouteContentProps){
       />
 
       <Button
-        title={'Push'}
+        title={''}
         subtitle={'with `SlideUpPush` 1s'}
         marginTop={30}
         onPress={() => {
@@ -129,19 +129,19 @@ function MainRoute(props: RouteContentProps){
             routeKey: 'MainRoute'
           }, {
             transitionConfig: {
-              type: 'SlideUpPush',
+              type: 'SlideUp',
               duration: 1,
             }
           });
         }}
       />
       <Button
-        title={'Pop'}
+        title={''}
         subtitle={'with `SlideUpPop` 1s'}
         onPress={() => {
           props.navigation.pop({
             transitionConfig: {
-              type: 'SlideUpPop',
+              type: 'SlideUp',
               duration: 1,
             }
           });
@@ -149,7 +149,7 @@ function MainRoute(props: RouteContentProps){
       />
 
       <Button
-        title={'Push'}
+        title={''}
         subtitle={'with `GlideUpPush` 1s'}
         marginTop={30}
         onPress={() => {
@@ -157,19 +157,19 @@ function MainRoute(props: RouteContentProps){
             routeKey: 'MainRoute'
           }, {
             transitionConfig: {
-              type: 'GlideUpPush',
+              type: 'GlideUp',
               duration: 1,
             }
           });
         }}
       />
       <Button
-        title={'Pop'}
+        title={''}
         subtitle={'with `GlideUpPop` 1s'}
         onPress={() => {
           props.navigation.pop({
             transitionConfig: {
-              type: 'GlideUpPop',
+              type: 'GlideUp',
               duration: 1,
             }
           });
