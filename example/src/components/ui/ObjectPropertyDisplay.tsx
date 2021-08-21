@@ -39,7 +39,7 @@ export function ObjectPropertyDisplay<T extends Object>(props: {
           <View key={`container-${objKey}-${index}`}>
             <Text 
               key={`label-${objKey}-${index}`}
-              style={styles.propertyLabelText}
+              style={[styles.propertyLabelText, styles.propertyLabelObjectText]}
             >
               {`${objKey}: `}
             </Text>
@@ -96,6 +96,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   rootContainerWhenHasObject: {
+    flexDirection: 'column',
     paddingVertical: 5,
   },
   propertyLabelText: {
@@ -104,6 +105,9 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: Colors.PURPLE[1100],
     opacity: 0.75,
+  },
+  propertyLabelObjectText: {
+    flex: 0,
   },
   propertyValueText: {
     fontSize: 16,
