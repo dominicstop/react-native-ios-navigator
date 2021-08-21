@@ -14,14 +14,18 @@ Currently in development... 😅 (See [TODO.md](https://github.com/dominicstop/r
 
 ## Quick Links
 
-😌💬 Hey there, if you're just checking this library out, I recommend jumping to the [Showcase, Tests, and Demos](#g-showcase-tests-and-demos) section.
+😌💬 Hey there, if you're just checking this library out, I recommend jumping to the [Showcase, Tests, and Demos](#g-showcase-tests-and-demos) section (It has a bunch of gifs showing all the various features).
+
+<br>
 
 | Section + Link                                              | Description                                                  |
 | :---------------------------------------------------------- | ------------------------------------------------------------ |
-| ⭐️ [Getting Started Guide](PLACE_HOLDER_LINK)                | Discussion + step by step guide on how to use this library.  |
-| 💖 [Usage and Examples](PLACE_HOLDER_LINK)                   | Example usage that covers the various components and functionality of this library. |
+| ⭐️ [Getting Started Guide](PLACE_HOLDER_LINK)                | Discussion + step by step guide on how to use this library.<br><br>**Related Links**:<br>1️⃣ [Installation](#b-installation)<br>2️⃣ [Basic Usage](#c-basic-usage) |
+| 💖 [Usage and Examples](#f-usage-and-examples)               | Example usage that covers the various components and functionality of this library. |
 | 💫 [Showcase, Tests, and Demos](#g-showcase-tests-and-demos) | Just some gifs, screenshots + vibes that shows what this library can do. |
-| 📝 [Documentation](#d-documentation)                         | Documentation for all the various components, functions, types, etc. |
+| 📝 [Documentation](#d-documentation)                         | Documentation for all the various components, functions, types, etc.<br><br>**Sub-Section Links**:<br>1️⃣[`NavigatorView` Component](#d11-navigatorview-component)<br>2️⃣[`RouteViewPortal` Component](#d12-routeviewportal-component)<br/>3️⃣[`RouteViewEvents` Component](#d13-routeviewevents-component)<br>4️⃣[`RouteHeaderView` Component](#d14-routeheaderview-component)<br>5️⃣ [Context](#d2-context)<br>6️⃣ [Hooks](#d3-hooks)<br>7️⃣ [Objects and Types](#d4-objects-and-types)<br>8️⃣ [Native-Related](#d6-native-related) |
+
+
 
 ---
 
@@ -34,8 +38,6 @@ Before you use this library, please first consider looking at [`react-navigation
 <br>
 
 ### A.1. Features 
-
-
 
 <br>
 
@@ -197,10 +199,10 @@ Each route has a corresponding `RouteOptions` object associated with it. This ob
 Listed in this section are commands that can be called to control the navigator (e.g. like showing or hiding a route, replacing a route in the navigation stack, etc). Unless specified otherwise, the commands listed here are really just invoking [`UINavigationController.setViewControllers`](https://developer.apple.com/documentation/uikit/uinavigationcontroller/1621861-setviewcontrollers) internally in the native side. 
 
 * The navigation commands are asynchronous, and as such, they will return a promise that resolves once the command is completed.
-
 * Due to timing related issues, the `NavigatorView` internally has a command queue, as such, only one command can be executed at a given time. 
 * So for example if you call `push`, then call `pop` immediately (i.e. not waiting for `push` to complete first before calling `pop`), they will always be executed in that order (i.e. it will always wait for the previous command to complete).
-	<br>
+
+<br>
 
 | Name and Type                                                | Description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
@@ -1009,13 +1011,41 @@ Lorum Ipsum<br>
 
 Native/Swift Integration
 
+<br>
+
+#### `RNINavigatorManager`
+
+#### `RNINavigatorNativeCommands`
+
+#### `RNINavigatorManagerDelegate`
+
+#### `RNINavigatorRouteBaseViewController`
+
 ------
 
 <br><br>
 
 ## E. Getting Started Guide
 
-Lorum ipsum
+### Navigation Hello World 
+
+<br>
+
+### Navigation Commands Basics
+
+#### `RouteProps` (Forward Data To Routes)
+
+#### `RouteOptions` (Configure Next Routes)
+
+#### `NavCommandPushOptions` and `NavCommandPopOptions`
+
+<br>
+
+### Route Config (`routes` prop)
+
+### Initial Routes
+
+### Basic Customizations
 
 ------
 
@@ -1023,7 +1053,83 @@ Lorum ipsum
 
 ## F. Usage and Examples
 
-Lorum ipsum
+### F.1. Navigation Bar Customizations
+
+#### Navigation Bar: Appearance/Legacy API
+
+##### Navigation Bar Legacy Customizations
+
+##### Navigation Bar Appearance Customizations
+
+<br>
+
+#### Navigation Bar: Global/Default Customizations
+
+#### Navigation Bar: Per-Route Customizations
+
+#### Navigation Bar: Custom Bar Items
+
+#### Navigation Bar: Search Bar
+
+#### Navigation Bar: `RouteHeaderView`
+
+<br>
+
+### F.2. Navigation Commands
+
+[Navigation Command List](#navigatorview-navigation-commands)
+
+<br>
+
+#### Navigation Command: `push`
+
+#### Navigation Command: `pop`
+
+#### Navigation Command: `popToRoot`
+
+#### Navigation Command: `removeRoute`
+
+#### Navigation Command: `removeRoutes`
+
+#### Navigation Command: `replaceRoute` 
+
+#### Navigation Command: `insertRoute`
+
+#### Navigation Command: `replaceRoute`
+
+#### Navigation Command: `setRoutes`
+
+<br>
+
+### F.3. Navigation Events 
+
+#### `NavigatorView` Events 
+
+<br>
+
+#### Route-Level Events
+
+##### Route Events: `NavigatorRouteViewEventEmitter`
+
+##### Route Events: `RouteViewEvents` Component
+
+##### Route Events: `useNavRouteEvents` Hooks
+
+##### Route Lifecycle Events
+
+##### Navigation Bar-Related Events 
+
+<br>
+
+### F.4. Native Integration
+
+#### Creating Native Routes 
+
+#### Pushing Routes From Native-Side
+
+#### Using Native Routes From React-Side
+
+#### Getting The `RNINavigatorView` Instance
 
 ------
 
