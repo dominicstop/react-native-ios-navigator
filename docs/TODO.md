@@ -45,6 +45,8 @@
 	- Only reset the appearance properties that have changed.
 	- There's a bug in UIKit where if you use the appearance API, its corresponding legacy counterpart will no longer work.
 
+<br>
+
 ## Implement
 
 
@@ -335,6 +337,10 @@
 
 - [x] (Commit: `a85b813`) **Refactor**: Consolidate Push/Pop Transition String Types
 	- Remove separate push/pop transition types and combined into one (e.g. combined `RouteTransitionPushTypesEnum` and `RouteTransitionPopTypesEnum` into `RouteTransitionTypesEnum`, etc).
+
+<br>
+
+- [x] (Commit: `211bb54`) **Implement**: `NavigatorView`: Impl. `onNavRouteWillShow` and `onNavRouteDidShow`.
 
 <br>
 
