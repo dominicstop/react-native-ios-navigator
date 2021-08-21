@@ -1,3 +1,4 @@
+import type { NativeActiveRoutes } from 'src/native_modules/RNINavigatorViewModule';
 import type { EdgeInsets } from './MiscTypes';
 
 //#region - Event Objects
@@ -22,6 +23,14 @@ export type OnNavRoutePopEventObject = {
     routeIndex     : number;
     isUserInitiated: boolean;
   };
+};
+
+export type OnNavRouteWillShowEventObject = {
+  nativeEvent: EventBaseEventObject & NativeActiveRoutes;
+};
+
+export type OnNavRouteDidShowEventObject = {
+  nativeEvent: EventBaseEventObject & NativeActiveRoutes;
 };
 
 export type OnSetNativeRoutesEventObject = {
@@ -81,6 +90,14 @@ export type OnNativeCommandRequestEvent = (
 
 export type OnCustomCommandFromNativeEvent = (
   event: Readonly<OnCustomCommandFromNativeEventObject>
+) => void;
+
+export type OnNavRouteWillShowEvent = (
+  event: Readonly<OnNavRouteWillShowEventObject>
+) => void;
+
+export type OnNavRouteDidShowEvent = (
+  event: Readonly<OnNavRouteDidShowEventObject>
 ) => void;
 
 export type OnUIConstantsDidChangeEvent = (

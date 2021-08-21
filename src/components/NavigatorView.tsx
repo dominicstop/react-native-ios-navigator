@@ -69,6 +69,8 @@ export type NavigatorViewProps = Partial<Pick<RNINavigatorViewProps,
   | 'onCustomCommandFromNative'
   | 'onNavRouteWillPop'
   | 'onNavRouteDidPop'
+  | 'onNavRouteWillShow'
+  | 'onNavRouteDidShow'
 >> & {
   style?: ViewStyle;
 
@@ -1583,6 +1585,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         onNativeCommandRequest={this._handleOnNativeCommandRequest}
         onCustomCommandFromNative={this._handleOnCustomCommandFromNative}
         onUIConstantsDidChange={this._handleOnUIConstantsDidChange}
+        onNavRouteWillShow={props.onNavRouteWillShow}
+        onNavRouteDidShow={props.onNavRouteDidShow}
       >
         <NavigatorUIConstantsContext.Provider value={{
           safeAreaInsets: state.safeAreaInsets,

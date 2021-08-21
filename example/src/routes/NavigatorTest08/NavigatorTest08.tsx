@@ -48,7 +48,7 @@ export class NavigatorTest08 extends React.Component<RouteContentProps, Navigato
     };
   };
 
-  _handleRecordEvent: RecordEvent = (event) => {
+  recordEvent: RecordEvent = (event) => {
     this.setState((prevState) => ({
       events: [event, ...prevState.events],
     }));
@@ -72,7 +72,7 @@ export class NavigatorTest08 extends React.Component<RouteContentProps, Navigato
 
   render(){
     const sharedRouteProps: RouteProps = {
-      recordEvent: this._handleRecordEvent,
+      recordEvent: this.recordEvent,
     };
 
     return(
@@ -104,6 +104,22 @@ export class NavigatorTest08 extends React.Component<RouteContentProps, Navigato
           sharedRouteProps={sharedRouteProps}
           routes={ROUTES}
           initialRoutes={[{routeKey: 'RouteA'}]}
+          onNavRouteWillShow={({nativeEvent}) => {
+            this.recordEvent({
+              eventType: 'onNavRouteWillShow',
+              routeKey: nativeEvent.routeKey,
+              routeIndex: nativeEvent.routeIndex,
+              timestamp: Date.now(),
+            });
+          }}
+          onNavRouteDidShow={({nativeEvent}) => {
+            this.recordEvent({
+              eventType: 'onNavRouteDidShow',
+              routeKey: nativeEvent.routeKey,
+              routeIndex: nativeEvent.routeIndex,
+              timestamp: Date.now(),
+            });
+          }}
         />
       </React.Fragment>
     );

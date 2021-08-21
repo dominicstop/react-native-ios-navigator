@@ -22,6 +22,9 @@ RCT_EXPORT_VIEW_PROPERTY(onCustomCommandFromNative, RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onNavRouteWillPop, RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onNavRouteDidPop, RCTBubblingEventBlock);
 
+RCT_EXPORT_VIEW_PROPERTY(onNavRouteWillShow, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onNavRouteDidShow, RCTBubblingEventBlock);
+
 RCT_EXPORT_VIEW_PROPERTY(onUIConstantsDidChange, RCTBubblingEventBlock);
 
 // ----------------------------

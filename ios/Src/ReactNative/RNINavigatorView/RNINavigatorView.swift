@@ -94,14 +94,14 @@ public final class RNINavigatorView: UIView {
   };
   
   var activeRoutesDict: [Dictionary<String, Any>] {
-    self.activeRoutes.enumerated().map {
-      let type = $1 is RNINavigatorReactRouteViewController
+    self.activeRoutes.map {
+      let type = $0 is RNINavigatorReactRouteViewController
         ? "reactRoute" : "nativeRoute";
       
       return [
-        "routeID"   : $1.routeID,
-        "routeKey"  : $1.routeKey,
-        "routeIndex": $0,
+        "routeID"   : $0.routeID,
+        "routeKey"  : $0.routeKey,
+        "routeIndex": $0.routeIndex,
         "type"      : type
       ];
     };
@@ -132,6 +132,9 @@ public final class RNINavigatorView: UIView {
   /// pop (because the "back" button was pressed or it was swiped back via a
   /// gesture), or due to it being "popped" programmatically via the nav.
   @objc var onNavRouteDidPop: RCTBubblingEventBlock?;
+  
+  @objc var onNavRouteWillShow: RCTBubblingEventBlock?;
+  @objc var onNavRouteDidShow : RCTBubblingEventBlock?;
   
   @objc var onUIConstantsDidChange: RCTBubblingEventBlock?;
   
@@ -187,7 +190,7 @@ public final class RNINavigatorView: UIView {
              // check if it's a native route
              routeVC as? RNINavigatorReactRouteViewController == nil {
             
-            // A - native route for `routeID`  already added...
+            // A - native route for `routeID` already added...
             return routeVC;
             
           } else if let vc = RNINavigatorManager.routeRegistry[routeKey] {
@@ -590,6 +593,22 @@ fileprivate extension RNINavigatorView {
       + " - routeVCs removed count: \(prevCountRouteVCs - nextCountRouteVCs)"
     );
     #endif
+  };
+  
+  func createRouteDataDict(from viewController: UIViewController) -> Dictionary<String, Any> {
+    var dict: Dictionary<String, Any> = [:];
+    
+    dict["type"] =
+      viewController is RNINavigatorReactRouteViewController ? "reactRoute"  :
+      viewController is RNINavigatorRouteBaseViewController  ? "nativeRoute" : "viewController";
+    
+    if let route = viewController as? RNINavigatorRouteBaseViewController {
+      dict["routeID"   ] = route.routeID;
+      dict["routeKey"  ] = route.routeKey;
+      dict["routeIndex"] = route.routeIndex;
+    };
+    
+    return dict;
   };
   
   #if DEBUG
@@ -1130,22 +1149,6 @@ internal extension RNINavigatorView {
       );
     };
     
-    func getRouteData(vc: UIViewController) -> Dictionary<String, Any> {
-      var dict: Dictionary<String, Any> = [:];
-      
-      dict["type"] =
-        vc is RNINavigatorReactRouteViewController ? "reactRoute"  :
-        vc is RNINavigatorRouteBaseViewController  ? "nativeRoute" : "viewController";
-      
-      if let routeVC = vc as? RNINavigatorRouteBaseViewController {
-        dict["routeID"   ] = routeVC.routeID;
-        dict["routeKey"  ] = routeVC.routeKey;
-        dict["routeIndex"] = routeVC.routeIndex;
-      };
-      
-      return dict;
-    };
-    
     let safeAreaInsets: NSDictionary = {
       let insets = navigationVC.synthesizedSafeAreaInsets;
       
@@ -1181,16 +1184,16 @@ internal extension RNINavigatorView {
         navigationVC.visibleViewController?.isBeingPresented ?? false,
       
       "activeRoutes": self.activeRoutes.map {
-        getRouteData(vc: $0)
+        self.createRouteDataDict(from: $0)
       },
     ];
     
     if let topVC = navigationVC.topViewController {
-      dict["topViewController"] = getRouteData(vc: topVC);
+      dict["topViewController"] = self.createRouteDataDict(from: topVC);
     };
     
     if let visibleVC = navigationVC.visibleViewController {
-      dict["visibleViewController"] = getRouteData(vc: visibleVC);
+      dict["visibleViewController"] = self.createRouteDataDict(from: visibleVC);
     };
     
     completion(dict as NSDictionary);
@@ -1343,5 +1346,23 @@ extension RNINavigatorView: UINavigationControllerDelegate {
   ) {
     // trigger `onUIConstantsDidChange`
     self.navigatorConstants.refreshConstants();
+    
+    var dict = self.createRouteDataDict(from: viewController);
+    dict["navigatorID"] = self.navigatorID!;
+    dict["animated"] = animated;
+    
+    self.onNavRouteWillShow?(dict);
+  };
+  
+  public func navigationController(
+    _ navigationController: UINavigationController,
+    didShow viewController: UIViewController,
+    animated: Bool
+  ) {
+    var dict = self.createRouteDataDict(from: viewController);
+    dict["navigatorID"] = self.navigatorID!;
+    dict["animated"] = animated;
+    
+    self.onNavRouteDidShow?(dict);
   };
 };
