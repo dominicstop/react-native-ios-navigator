@@ -48,7 +48,12 @@
 <br>
 
 - [ ] Fix `RouteViewPortal.statusBarStyle` not animating in with push transition.
-- [ ] Impl. Route Event: Screen Rotate (i.e. `willTransitionTo`)
+- [ ] Impl. Route Event: Screen Rotate (i.e. `willTransitionTo`).
+- [ ] Impl. `useNavigation` context.
+- [ ] Move forceUpdate logic to route
+	- Create `updateIndex`
+
+- [ ] Rename `NavRouteViewContext` to `NavigationContext`
 - [ ] Examples: Update `NavigatorTest04`
 - [ ] Examples: Update `NavigatorTest02`
 - [ ] Examples: Create `NavigatorShowcase03`
@@ -349,11 +354,9 @@
 
 <br>
 
-- [x] (Commit: `211bb54`) **Implement**: `NavigatorView`: Impl. `onNavRouteWillShow` and `onNavRouteDidShow`.
-
+- [x] (Commit: `211bb54`) **Implement**: `NavigatorView`: Impl. `onNavRouteWillShow` and `onNavRouteDidShow`
 - [x] (Commit: `f744525`) **Refactor**: `RouteHeaderView`: Refactored To Use `HeaderHeightConfig`
-
-
+- [x] (Commit: `992ed17`) **Refactor**: Re-Impl. `RouteViewPortal`
 
 <br>
 
