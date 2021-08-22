@@ -10,7 +10,7 @@
 @interface RCT_EXTERN_MODULE(RNINavigatorRouteHeaderViewManager, RCTViewManager)
 
 RCT_EXPORT_VIEW_PROPERTY(config, NSDictionary);
-RCT_EXPORT_VIEW_PROPERTY(headerTopPadding, NSString);
+RCT_EXPORT_VIEW_PROPERTY(headerTopPadding, NSDictionary);
 
 @end
 

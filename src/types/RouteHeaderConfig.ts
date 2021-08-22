@@ -1,17 +1,21 @@
 
-export type HeaderHeightValue = 
-  | number 
+export type HeaderHeightPreset = 
   | 'navigationBar'
   | 'statusBar'
   | 'navigationBarWithStatusBar'
   | 'safeArea'
   | 'none';
 
+export type HeaderHeightConfig = {
+  preset: HeaderHeightPreset;
+  offset?: number; 
+};
+
 export type RouteHeaderConfig = {
   headerMode: 'fixed';
-  headerHeight?: HeaderHeightValue;
+  headerHeight?: HeaderHeightConfig;
 } | {
   headerMode: 'resize';
-  headerHeightMin?: HeaderHeightValue;
-  headerHeightMax?: HeaderHeightValue;
+  headerHeightMin?: HeaderHeightConfig;
+  headerHeightMax?: HeaderHeightConfig;
 };

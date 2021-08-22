@@ -14,19 +14,15 @@ internal class RNINavigatorRouteHeaderView: RCTView {
   // MARK:- Embedded Types
   // ---------------------
   
-  enum HeaderHeight: Equatable {
+  enum HeaderHeightPreset: Equatable {
     case navigationBar;
     case statusBar;
     case navigationBarWithStatusBar;
     case safeArea;
     case none;
     
-    case custom(height: CGFloat);
-    
     func getHeight(viewController: UIViewController) -> CGFloat {
       switch self {
-        case let .custom(height): return height;
-          
         case .navigationBar             : return viewController.navBarHeight;
         case .statusBar                 : return viewController.statusBarHeight;
         case .safeArea                  : return viewController.synthesizedSafeAreaInsets.top;
@@ -35,83 +31,110 @@ internal class RNINavigatorRouteHeaderView: RCTView {
       };
     };
     
-    static func fromString(_ string: String) -> HeaderHeight? {
+    static func fromString(_ string: String) -> Self? {
       switch string {
         case "navigationBar"             : return .navigationBar;
         case "statusBar"                 : return .statusBar;
         case "safeArea"                  : return .safeArea;
         case "navigationBarWithStatusBar": return .navigationBarWithStatusBar;
-        case "none"                      : return HeaderHeight.none;
+        case "none"                      : return HeaderHeightPreset.none;
         
         default: return nil;
       }
     };
+  };
+  
+  struct HeaderHeightConfig {
+    let preset: HeaderHeightPreset;
+    let offset: CGFloat;
     
-    static func fromAnyObject(_ value: Any) -> HeaderHeight? {
-      if let string = value as? String,
-         let mode   = Self.fromString(string) {
-        
-        return mode;
-        
-      } else if let number = value as? NSNumber {
-        return .custom(height: CGFloat(truncating: number));
-      };
+    init(preset: HeaderHeightPreset, offset: CGFloat = 0) {
+      self.preset = preset;
+      self.offset = offset;
+    };
+    
+    init?(dict: NSDictionary?) {
+      guard let presetString = dict?["preset"] as? String,
+            let preset = HeaderHeightPreset.fromString(presetString)
+      else { return nil };
       
-      return nil;
+      self.preset = preset;
+      
+      self.offset = {
+        guard let number = dict?["offset"] as? NSNumber
+        else { return 0 };
+        
+        return CGFloat(truncating: number);
+      }();
     };
   };
   
-  struct RouteHeaderConfig {
+  enum HeaderConfig {
+    case fixed(height: HeaderHeightConfig);
+    case resize(minHeight: HeaderHeightConfig, maxHeight: HeaderHeightConfig);
     
-    enum HeaderMode: String {
-      case fixed;
-      case resize;
-    };
-    
-    let headerMode: HeaderMode;
-    let headerHeight: HeaderHeight?;
-    
-    let headerHeightMin: HeaderHeight?;
-    let headerHeightMax: HeaderHeight?;
-    
-    init(dict: NSDictionary?) {
-      self.headerMode = {
-        guard let string = dict?["headerMode"] as? String,
-              let mode   = HeaderMode(rawValue: string)
-        else { return .fixed };
-        
-        return mode;
-      }();
+    static func fromDict(_ dict: NSDictionary) -> Self? {
+      guard let string = dict["headerMode"] as? String
+      else { return nil };
       
-      switch self.headerMode {
-        case .fixed:
-          self.headerHeight = Self.extractHeight(dict, key: "headerHeight");
+      switch string {
+        case "fixed":
+          guard let heightDict   = dict["headerHeight"] as? NSDictionary,
+                let heightConfig = HeaderHeightConfig(dict: heightDict)
+          else { return nil };
           
-          self.headerHeightMin = nil;
-          self.headerHeightMax = nil;
+          return .fixed(height: heightConfig);
           
-        case .resize:
-          self.headerHeightMin = Self.extractHeight(dict, key: "headerHeightMin");
-          self.headerHeightMax = Self.extractHeight(dict,
-            key: "headerHeightMax",
-            default: .custom(height: 200)
+        case "resize":
+          guard let heightMinDict = dict["headerHeightMin"] as? NSDictionary,
+                let heightMaxDict = dict["headerHeightMax"] as? NSDictionary,
+                
+                let heightMinConfig = HeaderHeightConfig(dict: heightMinDict),
+                let heightMaxConfig = HeaderHeightConfig(dict: heightMaxDict)
+          else { return nil };
+          
+          return .resize(
+            minHeight: heightMinConfig,
+            maxHeight: heightMaxConfig
           );
           
-          self.headerHeight = nil;
+        default: return nil;
+      }
+    };
+    
+    static var defaultConfig: Self {
+      .fixed(
+        height: HeaderHeightConfig(preset: .navigationBarWithStatusBar)
+      );
+    };
+    
+    func getCollapsedHeight(viewController vc: UIViewController) -> CGFloat {
+      switch self {
+        case let .fixed(height: heightConfig):
+          let presetHeight =
+            heightConfig.preset.getHeight(viewController: vc);
+          
+          return presetHeight + heightConfig.offset;
+          
+        case let .resize(minHeight: minHeightConfig, maxHeight: _):
+          let presetHeight =
+            minHeightConfig.preset.getHeight(viewController: vc);
+          
+          return presetHeight + minHeightConfig.offset;
       };
     };
     
-    private static func extractHeight(
-      _ dict: NSDictionary?,
-      key: String,
-      default: HeaderHeight? = nil
-    ) -> HeaderHeight? {
-      guard let value = dict?[key] else {
-        return `default` ?? .safeArea;
+    func getExpandedHeight(viewController vc: UIViewController) -> CGFloat {
+      switch self {
+        case .fixed:
+          return self.getCollapsedHeight(viewController: vc);
+          
+        case let .resize(minHeight: _, maxHeight: maxHeightConfig):
+          let presetHeight =
+            maxHeightConfig.preset.getHeight(viewController: vc);
+          
+          return presetHeight + maxHeightConfig.offset;
       };
-      
-      return HeaderHeight.fromAnyObject(value)
-        ?? `default` ?? .safeArea;
     };
   };
   
@@ -144,53 +167,67 @@ internal class RNINavigatorRouteHeaderView: RCTView {
   
   var headerInitialSize: CGSize? {
     guard let routeVC = self.routeViewController,
-          let navigationBar = routeVC.navigationController?.navigationBar,
-          let height =
-            self.headerConfig.headerHeightMax?.getHeight(viewController: routeVC) ??
-            self.headerConfig.headerHeight?   .getHeight(viewController: routeVC)
+          let navigationBar = routeVC.navigationController?.navigationBar
     else { return nil };
+    
+    let headerHeight =
+      self.headerConfig.getExpandedHeight(viewController: routeVC);
     
     return CGSize(
       width: navigationBar.frame.width,
-      height: height
+      height: headerHeight
     );
+  };
+  
+  var navigationController: UINavigationController? {
+    self.routeViewController?.routeView?.navigatorView?.navigationVC
   };
   
   // ------------------------
   // MARK:- RN Exported Props
   // ------------------------
   
-  private var headerConfig = RouteHeaderConfig(dict: nil);
+  private var headerConfig = HeaderConfig.defaultConfig;
   @objc var config: NSDictionary? {
     willSet {
       guard self.config != newValue else { return };
       
-      self.headerConfig = RouteHeaderConfig(dict: newValue);
+      self.headerConfig = {
+        guard let dict   = newValue,
+              let config = HeaderConfig.fromDict(dict)
+        else { return HeaderConfig.defaultConfig };
+        
+        return config;
+      }();
+      
       #if DEBUG
       print("LOG - RNINavigatorRouteHeaderView: didSet"
-        + " - headerMode: \(self.headerConfig.headerMode)"
+        + " - headerMode: \(self.headerConfig)"
+        + " - newValue: \(String(describing: newValue))"
       );
       #endif
     }
   };
   
-  var _headerTopPadding: HeaderHeight = .safeArea;
-  @objc var headerTopPadding: NSString? {
+  var _headerTopPadding = HeaderHeightConfig(preset: .safeArea);
+  @objc var headerTopPadding: NSDictionary? {
     willSet {
       guard self.headerTopPadding != newValue else { return };
       
       self._headerTopPadding = {
-        guard let string = newValue as String?,
-              let height = HeaderHeight.fromString(string)
-        else { return .statusBar };
+        guard let dict   = newValue,
+              let config = HeaderHeightConfig(dict: dict)
+        else {
+          return HeaderHeightConfig(preset: .safeArea)
+        };
         
-        return height;
+        return config;
       }();
       
       #if DEBUG
       print("LOG - RNINavigatorRouteHeaderView: didSet"
         + " - headerTopPadding: \(self._headerTopPadding)"
-        + " - newValue: \(newValue ?? "N/A")"
+        + " - newValue: \(String(describing: newValue))"
       );
       #endif
       
@@ -232,8 +269,7 @@ internal class RNINavigatorRouteHeaderView: RCTView {
       parentRouteView.navigatorView!.frame.width;
     
     let initialHeight: CGFloat! =
-      self.headerConfig.headerHeightMax?.getHeight(viewController: parentRouteVC) ??
-      self.headerConfig.headerHeight?   .getHeight(viewController: parentRouteVC);
+      self.headerConfig.getExpandedHeight(viewController: parentRouteVC);
     
     let newSize = CGSize(width: initialWidth, height: initialHeight);
     
@@ -273,7 +309,8 @@ internal class RNINavigatorRouteHeaderView: RCTView {
   /// have to call `setup` on the parent vc's `loadView`, or perform layout updates
   /// on the parent vc's `willLayoutSubviews`
   func setup() {
-    guard let navController = self.routeViewController?.navigationController,
+    
+    guard let navController = self.navigationController,
           let wrapperView   = self.wrapperView
     else { return };
     
@@ -285,35 +322,43 @@ internal class RNINavigatorRouteHeaderView: RCTView {
     /// time the safe area insets haven't been set yet, so we'll use the nav.
     /// controller for `getHeight` so it can get the safe area insets.
     
-    switch self.headerConfig.headerMode {
-      case .fixed:
-        guard let headerHeightMode = self.headerConfig.headerHeight else { break };
-        let headerHeight = headerHeightMode.getHeight(viewController: navController);
+    switch self.headerConfig {
+      case let .fixed(height: heightConfig):
+        let presetHeight =
+          heightConfig.preset.getHeight(viewController: navController);
 
-        self.setWrapperViewInsets(headerHeight: headerHeight);
+        self.setWrapperViewInsets(
+          headerHeight: presetHeight + heightConfig.offset
+        );
         
-      case .resize:
-        guard case let .reactScrollView(reactScrollView) = wrapperView,
-              let headerHeightMaxMode = self.headerConfig.headerHeightMax
+      case let.resize(minHeight: _, maxHeight: maxHeightConfig):
+        guard case let .reactScrollView(reactScrollView) = wrapperView
         else { break };
         
         reactScrollView.addScrollListener(self);
         
-        let headerHeightMax = headerHeightMaxMode.getHeight(viewController: navController);
-        self.setWrapperViewInsets(headerHeight: headerHeightMax);
+        let presetMaxHeight =
+          maxHeightConfig.preset.getHeight(viewController: navController);
+        
+        self.setWrapperViewInsets(
+          headerHeight: presetMaxHeight + maxHeightConfig.offset
+        );
     };
   };
 
   func refreshHeaderTopPadding(){
-    guard let navigatorVC = self.routeView?.navigatorView?.navigationVC
-    else { return };
+    guard let navigatorVC = self.navigationController else { return };
     
     let insets = navigatorVC.synthesizedSafeAreaInsets;
-    let height = self._headerTopPadding.getHeight(viewController: navigatorVC);
+    
+    let presetHeight =
+      self._headerTopPadding.preset.getHeight(viewController: navigatorVC);
+    
+    let totalHeight = presetHeight + self._headerTopPadding.offset;
     
     let localData = RNINavigatorRouteHeaderShadowView.RouteHeaderLocalData();
     localData.insets = UIEdgeInsets(
-      top   : height,
+      top   : totalHeight,
       left  : insets.left,
       bottom: 0,
       right : insets.right
@@ -322,7 +367,8 @@ internal class RNINavigatorRouteHeaderView: RCTView {
     #if DEBUG
     print("LOG - RNINavigatorRouteHeaderView: refreshHeaderTopPadding"
       + " - headerTopPadding: \(self._headerTopPadding)"
-      + " - height: \(height)"
+      + " - height: \(presetHeight)"
+      + " - height: \(totalHeight)"
       + " - insets: \(insets)"
     );
     #endif
@@ -396,9 +442,20 @@ extension RNINavigatorRouteHeaderView: UIScrollViewDelegate {
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
     guard let routeVC = self.routeViewController,
           let navigationBar = routeVC.navigationController?.navigationBar,
-          let headerHeightMin = self.headerConfig.headerHeightMin?.getHeight(viewController: routeVC),
-          let headerHeightMax = self.headerConfig.headerHeightMax?.getHeight(viewController: routeVC)
+          case let .resize(
+            minHeight: minHeightConfig,
+            maxHeight: maxHeightConfig
+          ) = self.headerConfig
     else { return };
+    
+    let presetHeaderHeightMin =
+      minHeightConfig.preset.getHeight(viewController: routeVC);
+    
+    let presetHeaderHeightMax =
+      maxHeightConfig.preset.getHeight(viewController: routeVC);
+    
+    let headerHeightMin = presetHeaderHeightMin + minHeightConfig.offset;
+    let headerHeightMax = presetHeaderHeightMax + maxHeightConfig.offset;
     
     let scrollY    = scrollView.contentOffset.y;
     let scrollYAdj = scrollY + headerHeightMax;

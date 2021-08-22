@@ -181,11 +181,16 @@ export class RouteHeader extends React.Component<RouteHeaderProps> {
     return (
       <RouteHeaderView
         style={styles.routeHeader}
-        headerTopPadding={'statusBar'}
+        headerTopPadding={{preset: 'statusBar'}}
         config={{
           headerMode: 'resize',
-          headerHeightMax: UI_CONSTANTS.routeHeaderHeight,
-          headerHeightMin: 'navigationBarWithStatusBar',
+          headerHeightMax: {
+            preset: 'none',
+            offset: UI_CONSTANTS.routeHeaderHeight,
+          },
+          headerHeightMin: {
+            preset: 'navigationBarWithStatusBar'
+          },
         }}
       >
         {this._renderHeaderBG()}

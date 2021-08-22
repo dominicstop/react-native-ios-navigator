@@ -1,13 +1,13 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
-import { HeaderHeightValue, RouteHeaderView, RouteViewPortal } from 'react-native-ios-navigator';
+import { HeaderHeightConfig, HeaderHeightPreset, RouteHeaderView, RouteViewPortal } from 'react-native-ios-navigator';
 
 import { navBarAppearanceConfigHidden } from '../constants/Constants';
 import { ImageAssets } from '../functions/ImageCache';
 
 
-const headerHeightValues: Array<HeaderHeightValue> = [
+const headerHeightPresets: Array<HeaderHeightPreset> = [
   'statusBar',
   'navigationBar',
   'navigationBarWithStatusBar',
@@ -20,9 +20,11 @@ let cachedIndex = 0;
 function RouteHeaderWithButton(){
   const [headerTopPaddingIndex, setHeaderTopPaddingIndex] = React.useState(cachedIndex);
 
-  const currentHeaderTopPadding = headerHeightValues[
-    headerTopPaddingIndex %  headerHeightValues.length
-  ];
+  const currentHeaderTopPadding: HeaderHeightConfig = {
+    preset: headerHeightPresets[
+      headerTopPaddingIndex %  headerHeightPresets.length
+    ],
+  };
 
   return (
     <RouteHeaderView
@@ -30,8 +32,8 @@ function RouteHeaderWithButton(){
       headerTopPadding={currentHeaderTopPadding}
       config={{ 
         headerMode: 'resize',
-        headerHeightMin: 'navigationBarWithStatusBar',
-        headerHeightMax: 300,
+        headerHeightMin: { preset: 'navigationBarWithStatusBar' },
+        headerHeightMax: { preset: 'navigationBarWithStatusBar', offset: 200 },
       }}
     >
       <View style={styles.headerBGImageContainer}>
@@ -105,10 +107,12 @@ const styles = StyleSheet.create({
   },
   headerBGImageContainer: {
     ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'red',
   },
   headerBGImage: {
     width: '100%',
     height: '100%',
+    opacity: 0.75,
   },
   headerTitle: {
     fontSize: 18,

@@ -1,5 +1,5 @@
 import { ViewStyle, requireNativeComponent, StyleProp } from 'react-native';
-import type { RouteHeaderConfig, HeaderHeightValue } from '../types/RouteHeaderConfig';
+import type { RouteHeaderConfig, HeaderHeightConfig } from '../types/RouteHeaderConfig';
 
 
 /** `RNINavigatorView` native comp. props */
@@ -7,7 +7,7 @@ export type RNINavigatorRouteHeaderViewProps = {
   style: StyleProp<ViewStyle>;
   nativeID: string;
   config?: RouteHeaderConfig;
-  headerTopPadding?: HeaderHeightValue;
+  headerTopPadding?: HeaderHeightConfig;
 };
 
 export const RNINavigatorRouteHeaderView = 

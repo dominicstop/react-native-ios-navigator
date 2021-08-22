@@ -28,13 +28,16 @@ export function NavigatorTest07(){
             style={styles.routeHeader}
             config={{ 
               headerMode: 'fixed',
-              headerHeight: 200,
+              headerHeight: { 
+                preset: 'none', 
+                offset: 200 
+              },
             }}
           >
             <View style={styles.headerBGImageContainer}>
               <Image 
                 style={styles.headerBGImage}
-                 source={ImageAssets.BGCoverCoffee}
+                source={ImageAssets.BGCoverCoffee}
                 resizeMode={'cover'}
               />
             </View>
@@ -60,10 +63,12 @@ const styles = StyleSheet.create({
   },
   headerBGImageContainer: {
     ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'red'
   },
   headerBGImage: {
     width: '100%',
     height: '100%',
+    opacity: 0.75
   },
   headerTitle: {
     fontSize: 18,
