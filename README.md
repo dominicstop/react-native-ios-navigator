@@ -434,12 +434,12 @@ When in use, this component is displayed behind the navigation bar, and is ancho
 
 <br>
 
-##### D.1.4.1. `RouteViewPortal` Component Props
+##### D.1.4.1. `RouteHeaderView` Component Props
 
 | Prop Name and Type                                           | Description |
 | :----------------------------------------------------------- | ----------- |
 | 🔤 **Required**: `config`<br/><br/>⚛️ [`RouteHeaderConfig`](PLACE_HOLDER_LINK) |             |
-| 🔤 `headerTopPadding`<br/><br/>⚛️ [`HeaderHeightValue`](PLACE_HOLDER_LINK) |             |
+| 🔤 `headerTopPadding`<br/><br/>⚛️ [`HeaderHeightConfig`](PLACE_HOLDER_LINK) |             |
 | 🔤 `style`<br/><br/>⚛️  `ViewStyle`                            |             |
 
 <br>
@@ -452,7 +452,7 @@ Lorum Ipsum<br>
 
 | Name and Type                                                | Description |
 | :----------------------------------------------------------- | ----------- |
-| 🔤 `routeID`<br/><br/>⚛️ [`HeaderHeightValue`](PLACE_HOLDER_LINK) |             |
+| 🔤 `routeID`<br/><br/>⚛️ `abc`                                 |             |
 | 🔤 `abc`<br/><br/>⚛️ `abc`                                     |             |
 | 🔤 `abc`<br/><br/>⚛️ `abc`                                     |             |
 
