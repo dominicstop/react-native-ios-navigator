@@ -88,18 +88,29 @@ export class RouteViewPortal extends React.Component<RouteViewPortalProps> {
       //#endregion
     };
 
-    const didNavBarItemsChange = (
-      (prevProps.renderNavBarLeftItem  != null) === (nextProps.renderNavBarLeftItem  != null) ||
-      (prevProps.renderNavBarRightItem != null) === (nextProps.renderNavBarRightItem != null) ||
-      (prevProps.renderNavBarTitleItem != null) === (nextProps.renderNavBarTitleItem != null)
+    const didNavBarItemsChange = !(
+      (prevProps.renderNavBarLeftItem  == null) === (nextProps.renderNavBarLeftItem  == null) ||
+      (prevProps.renderNavBarRightItem == null) === (nextProps.renderNavBarRightItem == null) ||
+      (prevProps.renderNavBarTitleItem == null) === (nextProps.renderNavBarTitleItem == null)
+    );
+
+    const hasNavBarItems = (
+      (nextProps.renderNavBarLeftItem  !== null) ||
+      (nextProps.renderNavBarRightItem !== null) ||
+      (nextProps.renderNavBarTitleItem !== null) 
     );
 
     if(this._routeComponentsWrapperRef == null){
       this._routeComponentsWrapperRef = this.routeRef.getRouteComponentsWrapper();
     };
 
-    if(didNavBarItemsChange && this._routeComponentsWrapperRef != null){
-      this._routeComponentsWrapperRef.forceUpdate();
+    const shouldTriggerUpdate = 
+         (this._routeComponentsWrapperRef != null) 
+      && (didNavBarItemsChange || hasNavBarItems);
+
+
+    if(!didRouteOptionsChange && shouldTriggerUpdate){
+      this._routeComponentsWrapperRef!.forceUpdate();
     };
   };
 
