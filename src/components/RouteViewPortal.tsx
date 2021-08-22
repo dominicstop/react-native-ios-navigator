@@ -1,7 +1,6 @@
 import React from 'react';
 
 import type { NavigatorRouteView, NavigatorRouteViewProps } from '../components/NavigatorRouteView';
-import type { RouteComponentsWrapper } from '../wrapper_components/RouteComponentsWrapper';
 import type { RouteOptions } from '../types/RouteOptions';
 
 import { CompareRouteOptions } from '../functions/CompareRouteOptions';
@@ -51,8 +50,6 @@ export class RouteViewPortal extends React.Component<RouteViewPortalProps> {
   
   routeRef: NavigatorRouteView;
 
-  _routeComponentsWrapperRef?: RouteComponentsWrapper;
-  
   constructor(props: RouteViewPortalProps, context: NavRouteViewContextProps){
     super(props);
 
@@ -88,29 +85,9 @@ export class RouteViewPortal extends React.Component<RouteViewPortalProps> {
       //#endregion
     };
 
-    const didNavBarItemsChange = !(
-      (prevProps.renderNavBarLeftItem  == null) === (nextProps.renderNavBarLeftItem  == null) ||
-      (prevProps.renderNavBarRightItem == null) === (nextProps.renderNavBarRightItem == null) ||
-      (prevProps.renderNavBarTitleItem == null) === (nextProps.renderNavBarTitleItem == null)
-    );
-
-    const hasNavBarItems = (
-      (nextProps.renderNavBarLeftItem  !== null) ||
-      (nextProps.renderNavBarRightItem !== null) ||
-      (nextProps.renderNavBarTitleItem !== null) 
-    );
-
-    if(this._routeComponentsWrapperRef == null){
-      this._routeComponentsWrapperRef = this.routeRef.getRouteComponentsWrapper();
-    };
-
-    const shouldTriggerUpdate = 
-         (this._routeComponentsWrapperRef != null) 
-      && (didNavBarItemsChange || hasNavBarItems);
-
-
-    if(!didRouteOptionsChange && shouldTriggerUpdate){
-      this._routeComponentsWrapperRef!.forceUpdate();
+    // updating the `routeOptions` will already trigger a re-render/update
+    if(!didRouteOptionsChange){
+      this.routeRef.updateRouteComponents();
     };
   };
 

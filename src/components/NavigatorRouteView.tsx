@@ -16,6 +16,8 @@ import type { NavigatorView } from './NavigatorView';
 import type { RouteViewPortal } from './RouteViewPortal';
 
 import { RouteComponentsWrapper } from '../wrapper_components/RouteComponentsWrapper';
+import { NavigatorRouteContentWrapper } from '../wrapper_components/NavigatorRouteContentWrapper';
+import { RouteHeaderWrapper } from '../wrapper_components/RouteHeaderWrapper';
 
 import { RNINavigatorRouteView, RNINavigatorRouteViewProps } from '../native_components/RNINavigatorRouteView';
 import { RNINavigatorRouteViewModule } from '../native_modules/RNINavigatorRouteViewModule';
@@ -31,7 +33,6 @@ import { NavigatorUIConstantsContext } from '../context/NavigatorUIConstantsCont
 
 import { NativeIDKeys } from '../constants/LibraryConstants';
 import { LIB_ENV } from '../constants/LibEnv';
-import { NavigatorRouteContentWrapper } from '../wrapper_components/NavigatorRouteContentWrapper';
 
 
 //#region - Type Definitions
@@ -97,6 +98,7 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
 
   /** is incremented whenever `props.routeProps` changes */
   private routePropsUpdateIndex = 0;
+  private isPushed = false;
 
   // references
   private _emitter            : NavigatorRouteViewEventEmitter;
@@ -104,7 +106,8 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
   private _navigatorRef       : NavigatorView;
   private _routeContentRef   ?: ReactElement;
   private _routeViewPortalRef?: RouteViewPortal;
-  
+
+  private _routeHeaderWrapperRef    ?: RouteHeaderWrapper;
   private _routeComponentsWrapperRef?: RouteComponentsWrapper;
   //#endregion
 
@@ -179,6 +182,14 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
     this.routeStatus = RouteStatus.UNMOUNTED;
   };
 
+  updateRouteComponents(){
+    // don't allow update until it's pushed
+    if(!this.isPushed) return;
+
+    this._routeComponentsWrapperRef?.requestUpdate();
+    this._routeHeaderWrapperRef    ?.requestUpdate();
+  };
+
   //#region - "get ref" Functions
   public getRefToNavigator = () => {
     return this.props.getRefToNavigator();
@@ -194,10 +205,6 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
 
   public getPortalRef = () => {
     return this._routeViewPortalRef;
-  };
-  
-  public getRouteComponentsWrapper = () => {
-    return this._routeComponentsWrapperRef;
   };
   //#endregion
 
@@ -378,8 +385,10 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
 
   public setRouteViewPortalRef = (ref: RouteViewPortal) => {
     this._routeViewPortalRef = ref;
-    this._routeComponentsWrapperRef?.setPortalRef(ref);
 
+    this._routeHeaderWrapperRef    ?.setPortalRef(ref);
+    this._routeComponentsWrapperRef?.setPortalRef(ref);
+    
     this.setState({hasRoutePortal: true});
   };
 
@@ -500,6 +509,8 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
 
     this._emitter.emit(NavigatorRouteViewEvents.onRouteDidFocus, event);
     this.routeStatus = RouteStatus.ROUTE_FOCUSED;
+
+    this.isPushed = true;
   };
 
   private _handleOnRouteWillBlur: OnRouteBlurEvent = (event)  => {
@@ -553,9 +564,9 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
 
     const portalProps = this._routeViewPortalRef?.props;
 
-    const routeHeader = (
-      portalProps?.renderRouteHeader?.(navigation) ??
-      props.renderRouteHeader?.(navigation)
+    const hasRouteHeader = (
+      portalProps?.renderRouteHeader != null ||
+      props       .renderRouteHeader != null
     );
 
     return (
@@ -567,10 +578,14 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
             routeContainerStyle={routeOptions.routeContainerStyle}
             automaticallyAddHorizontalSafeAreaInsets={routeOptions.automaticallyAddHorizontalSafeAreaInsets}
             safeAreaInsets={context.safeAreaInsets}
-            hasRouteHeader={(routeHeader != null)}
+            hasRouteHeader={hasRouteHeader}
           >
             {routeContentWithProps}
-            {routeHeader}
+            <RouteHeaderWrapper
+              ref={r => { this._routeHeaderWrapperRef = r! }}
+              navigation={navigation}
+              getPortalRef={this.getPortalRef}
+            />
           </NavigatorRouteContentWrapper>
         )}
       </NavigatorUIConstantsContext.Consumer>

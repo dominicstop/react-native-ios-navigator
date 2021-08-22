@@ -42,6 +42,25 @@ export class RouteComponentsWrapper extends React.Component<RouteComponentsWrapp
     this._routeViewPortalRef = portalRef;
   };
 
+  requestUpdate = () => {
+    const props = this.props;
+    const portalProps = this._routeViewPortalRef?.props;
+
+    const hasNavBarItem = (
+      portalProps?.renderNavBarLeftItem  != null ||
+      portalProps?.renderNavBarRightItem != null ||
+      portalProps?.renderNavBarTitleItem != null ||
+
+      props.renderNavBarLeftItem  != null ||
+      props.renderNavBarRightItem != null ||
+      props.renderNavBarTitleItem != null
+    );
+
+    if(hasNavBarItem){
+      this.forceUpdate();
+    };
+  };
+
   render(){
     const props = this.props;
     const portalProps = this._routeViewPortalRef?.props;

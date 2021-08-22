@@ -17,66 +17,17 @@ const headerHeightPresets: Array<HeaderHeightPreset> = [
 
 let cachedIndex = 0;
 
-function RouteHeaderWithButton() {
+
+export function NavigatorTest06(){
+  const [passthroughTouchEvents, setPassthroughTouchEvents] = React.useState(false);
   const [headerTopPaddingIndex, setHeaderTopPaddingIndex] = React.useState(cachedIndex);
   const [extraOffset, setExtraOffset] = React.useState(0);
-
 
   const currentHeaderTopPadding: HeaderHeightConfig = {
     preset: headerHeightPresets[
       headerTopPaddingIndex %  headerHeightPresets.length
     ],
   };
-  
-  return (
-    <RouteHeaderView
-      style={styles.routeHeader}
-      headerTopPadding={currentHeaderTopPadding}
-      config={{ 
-        headerMode: 'resize',
-        headerHeightMin: { preset: 'navigationBarWithStatusBar' },
-        headerHeightMax: { 
-          preset: 'navigationBarWithStatusBar', 
-          offset: 200 + extraOffset
-        },
-      }}
-    >
-      <View style={styles.headerBGImageContainer}>
-        <Image 
-          style={styles.headerBGImage}
-          source={ImageAssets.BGCoverCoffee}
-          resizeMode={'cover'}
-        />
-      </View>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity 
-          style={styles.headerButton}
-          onPress={() => {
-            setHeaderTopPaddingIndex(prevValue => prevValue + 1);
-            cachedIndex = headerTopPaddingIndex + 1;
-          }}
-        >
-          <Text style={styles.headerButtonText}>
-            {`headerTopPadding: ${currentHeaderTopPadding.preset}`}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={styles.headerButton}
-          onPress={() => {
-            setExtraOffset(offset => offset + 10);
-          }}
-        >
-          <Text style={styles.headerButtonText}>
-            {`Increase Offset: ${extraOffset}`}
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </RouteHeaderView>
-  );
-};
-
-export function NavigatorTest06(){
-  const [passthroughTouchEvents, setPassthroughTouchEvents] = React.useState(false);
 
   return (
     <React.Fragment>
@@ -94,7 +45,49 @@ export function NavigatorTest06(){
           navBarAppearanceOverride: navBarAppearanceConfigHidden,
         }}
         renderRouteHeader={() => (
-          <RouteHeaderWithButton/>
+          <RouteHeaderView
+            style={styles.routeHeader}
+            headerTopPadding={currentHeaderTopPadding}
+            config={{ 
+              headerMode: 'resize',
+              headerHeightMin: { preset: 'navigationBarWithStatusBar' },
+              headerHeightMax: { 
+                preset: 'navigationBarWithStatusBar', 
+                offset: 200 + extraOffset
+              },
+            }}
+          >
+            <View style={styles.headerBGImageContainer}>
+              <Image 
+                style={styles.headerBGImage}
+                source={ImageAssets.BGCoverCoffee}
+                resizeMode={'cover'}
+              />
+            </View>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity 
+                style={styles.headerButton}
+                onPress={() => {
+                  setHeaderTopPaddingIndex(prevValue => prevValue + 1);
+                  cachedIndex = headerTopPaddingIndex + 1;
+                }}
+              >
+                <Text style={styles.headerButtonText}>
+                  {`headerTopPadding: ${currentHeaderTopPadding.preset}`}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={styles.headerButton}
+                onPress={() => {
+                  setExtraOffset(offset => offset + 10);
+                }}
+              >
+                <Text style={styles.headerButtonText}>
+                  {`Increase Offset: ${extraOffset}`}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </RouteHeaderView>
         )}
       />
       <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
