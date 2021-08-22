@@ -17,15 +17,17 @@ const headerHeightPresets: Array<HeaderHeightPreset> = [
 
 let cachedIndex = 0;
 
-function RouteHeaderWithButton(){
+function RouteHeaderWithButton() {
   const [headerTopPaddingIndex, setHeaderTopPaddingIndex] = React.useState(cachedIndex);
+  const [extraOffset, setExtraOffset] = React.useState(0);
+
 
   const currentHeaderTopPadding: HeaderHeightConfig = {
     preset: headerHeightPresets[
       headerTopPaddingIndex %  headerHeightPresets.length
     ],
   };
-
+  
   return (
     <RouteHeaderView
       style={styles.routeHeader}
@@ -33,7 +35,10 @@ function RouteHeaderWithButton(){
       config={{ 
         headerMode: 'resize',
         headerHeightMin: { preset: 'navigationBarWithStatusBar' },
-        headerHeightMax: { preset: 'navigationBarWithStatusBar', offset: 200 },
+        headerHeightMax: { 
+          preset: 'navigationBarWithStatusBar', 
+          offset: 200 + extraOffset
+        },
       }}
     >
       <View style={styles.headerBGImageContainer}>
@@ -52,7 +57,17 @@ function RouteHeaderWithButton(){
           }}
         >
           <Text style={styles.headerButtonText}>
-            {`headerTopPadding: ${currentHeaderTopPadding}`}
+            {`headerTopPadding: ${currentHeaderTopPadding.preset}`}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={styles.headerButton}
+          onPress={() => {
+            setExtraOffset(offset => offset + 10);
+          }}
+        >
+          <Text style={styles.headerButtonText}>
+            {`Increase Offset: ${extraOffset}`}
           </Text>
         </TouchableOpacity>
       </View>
@@ -130,6 +145,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     backgroundColor: 'purple',
     borderRadius: 10,
+    margin: 5,
   },
   headerButtonText: {
     color: 'white'
