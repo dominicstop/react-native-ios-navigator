@@ -10,9 +10,8 @@
 
 ## Unsorted
 
-
-
 - [ ] **Implement**: Update `RNIImageItem`: Make width/height optional (e.g. rely on `defaultSize`)
+- [ ] Refactor: `getSecondToLastRouteVC`
 - [ ] Expose  `backIndicatorTransitionMaskImage`.
 - [ ] Use `TurboModules` + `JSI`.
 - [ ] Impl. Error Codes 
@@ -48,13 +47,14 @@
 <br>
 
 - [ ] Fix `RouteViewPortal.statusBarStyle` not animating in with push transition.
-- [ ] Impl. Route Event: Screen Rotate (i.e. `willTransitionTo`).
-- [ ] Impl. `useNavigation` context.
-- [ ] Move forceUpdate logic to route
-	- Create `updateIndex`
 
-- [ ] Rename `NavRouteViewContext` to `NavigationContext`
-- [ ] Examples: Update `NavigatorTest04`
+- [ ] Impl. Route Event: Screen Rotate (i.e. `willTransitionTo`).
+
+- [ ] Impl. `useNavigation` context.
+
+	
+
+- [ ] Rename `NavRouteViewContext` to `NavigationContext
 - [ ] Examples: Update `NavigatorTest02`
 - [ ] Examples: Create `NavigatorShowcase03`
 	- Extra height for navigation bar, tab-bar like appearance.
@@ -255,12 +255,6 @@
 
 <br>
 
-- [ ] **Fix**: `RouteHeaderView` - Values received from props are not updating
-	* Component re-renders but the prop doesn't change (tried `forceUpdate()` on the portal component and the `RouteHeaderView` itself ).
-	* Guess: It could have something to do with the fact that  `RouteHeaderView` is being rendered somewhere else. Also in `RouteViewPortal` it's being passed as function component, but the prop it's depending on is outside the component.
-	* Logging the props in `RouteHeaderView` render shows that the props aren't updating even though the component is updating. The props are frozen to the initial prop value.
-	* See `NavigatorTest06`.
-
 <br>
 
 - [ ] **Fix**: `RCTScrollView` indicator insets is wrong.
@@ -355,8 +349,39 @@
 <br>
 
 - [x] (Commit: `211bb54`) **Implement**: `NavigatorView`: Impl. `onNavRouteWillShow` and `onNavRouteDidShow`
+
 - [x] (Commit: `f744525`) **Refactor**: `RouteHeaderView`: Refactored To Use `HeaderHeightConfig`
+
 - [x] (Commit: `992ed17`) **Refactor**: Re-Impl. `RouteViewPortal`
+
+	* Move `forceUpdate` logic to route.
+
+	- Also fixes: **Fix**: `RouteHeaderView` - Values received from props are not updating.
+		- Component re-renders but the prop doesn't change (tried `forceUpdate()` on the portal component and the `RouteHeaderView` itself ).
+		- Guess: It could have something to do with the fact that  `RouteHeaderView` is being rendered somewhere else. Also in `RouteViewPortal` it's being passed as function component, but the prop it's depending on is outside the component.
+		- Logging the props in `RouteHeaderView` render shows that the props aren't updating even though the component is updating. The props are frozen to the initial prop value.
+		- See `NavigatorTest06`.
+
+<br>
+
+- [x] (Commit: `5eeb270`) **Examples**: Update `NavigatorTest04`
+- [x] (Commit: `70c12ec`) Fix: Transition pop config via `RouteViewPortal.routeOptions` not being applied when using push + transition config override beforehand.
+	- See `NavigatorTest04` while `Use via RouteOptions` is enabled. When popping routes, the chosen transition is not used (it only works for the first item popped).
+	- Debug:
+		- A) Added breakpoint before a route is pushed, then pushed route. 
+			- A.1) Run:  `po self.routeView.navigatorView!.routeItems.compactMap { $0 as? RNINavigatorReactRouteViewController }.map { $0.transitionTypePop.transitionType }` 
+			- A.2) Result: `["CrossFade", "CrossFade", "CrossFade", "Default"]`.
+			- A.3) Running the command again, but for  `transitionTypePush.transitionType` yields the same output: The last route's transition is set to `Default` . 
+		- B) Next, check react devtools and inspect the props/state of the routes.
+			- B.1) All of the routes `state.transitionConfigPush` and `state.transitionConfigPop` is set to have a fade transition.
+			- B.2) The only difference is that the last route's `props.transitionConfigPopOverride` is set to `undefined`. All the preceding routes have their's set to `null`.
+			- B.3) The parent `NavigatorView`'s transition override push/pop config are set to undefined.
+		- C) Set breakpoint before a route is popped in the delegate method that handles the transition, then pop a route.
+			- C.1) The transition method only gets called when popping the first route, but not the others. Could be a sign that the transition delegate  is not set.
+			- C.2) Running `po self.routeView.navigatorView!.delegate }`  yields `nil`. This means there is no delegate set to handle the route transition.
+			- C.3) Dumping all of the routes's `interactionController` yields non-nil values/unique instances. This means that there's a push/pop transition.
+			- C.4) Dumping all of the route's transition push + pop config yields `['CrossFade', 'CrossFade', ...]`. This means that the routes have received the push/pop config.
+			- C.5) Possible fix: Re-apply transition delegate for a route that's about to appear.
 
 <br>
 
