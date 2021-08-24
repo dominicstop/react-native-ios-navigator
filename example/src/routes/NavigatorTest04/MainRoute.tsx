@@ -130,7 +130,7 @@ export function MainRoute(props: RouteContentProps<{
                   prevTypeIndex: transitionTypeIndex,
                   prevUseRouteOptions: useRouteOptions,
                 },
-              }, {
+              }, !useRouteOptions && {
                 transitionConfig
               });
             }}

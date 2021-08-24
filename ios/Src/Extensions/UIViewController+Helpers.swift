@@ -52,11 +52,20 @@ extension UIViewController {
     };
   };
   
-  var previousViewController: UIViewController? {
+  var secondToLastViewController: UIViewController? {
     guard let navController = self.navigationController,
           navController.viewControllers.count >= 2
     else { return nil };
           
     return navController.viewControllers[navController.viewControllers.count - 2];
+  };
+  
+  var previousViewController: UIViewController? {
+    guard let viewControllers = self.navigationController?.viewControllers,
+              let currentIndex = viewControllers.firstIndex(of: self),
+              currentIndex >= 2
+    else { return nil };
+      
+    return viewControllers[currentIndex - 1];
   };
 };

@@ -306,41 +306,15 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
   // used for the custom transitions
   var interactionController: LeftEdgeInteractionController?;
   
-  var transitionTypePush = RNINavTransitionConfig(type: .Default) {
-    willSet {
-      // don't set the delegate when using the default push/pop transition
-      // to not disable the interactive swipe gesture.
-      if newValue.transitionType == .Default,
-         self.transitionTypePop.transitionType == .Default {
-        
-        self.navigationController?.delegate = nil;
-        
-      } else {
-        self.navigationController?.delegate = self;
-      };
+  var transitionPushConfig = RNINavTransitionConfig(type: .Default) {
+    didSet {
+      self.refreshNavigationControllerDelegate();
     }
   };
   
-  var transitionTypePop = RNINavTransitionConfig(type: .Default) {
-    willSet {
-      guard let navigationController = self.navigationController
-      else { return };
-      
-      // don't set the delegate when using the default push/pop transition
-      // to not disable the interactive swipe gesture.
-      // TODO (009): This can be fixed by re-impl. the default pop transition.
-      if newValue.transitionType == .Default,
-         self.transitionTypePush.transitionType == .Default {
-        
-        self.interactionController = nil;
-        navigationController.delegate = nil;
-        
-      } else {
-        self.interactionController =
-          LeftEdgeInteractionController(viewController: self);
-        
-        navigationController.delegate = self;
-      };
+  var transitionPopConfig = RNINavTransitionConfig(type: .Default) {
+    didSet {
+      self.refreshNavigationControllerDelegate();
     }
   };
   
@@ -469,7 +443,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     self.setupScrollView();
     
     /// setup for custom pop transition (if any)
-    if self.transitionTypePop.transitionType != .Default {
+    if self.transitionPopConfig.transitionType != .Default {
       self.navigationController?.delegate = self;
       self.interactionController = LeftEdgeInteractionController(viewController: self);
     };
@@ -529,7 +503,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
   
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated);
-    
+       
     /// Whether or not the VC has been "focused" for the 1st time
     let isFirstFocus = self.focusCounter == 0;
     self.focusCounter += 1;
@@ -549,6 +523,10 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     
     // update the search bar
     self.refreshSearchController();
+    
+    if !isFirstFocus {
+      self.refreshNavigationControllerDelegate();
+    };
   };
   
   override func viewWillDisappear(_ animated: Bool) {
@@ -751,6 +729,34 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     /// Update status bar style
     self.setNeedsStatusBarAppearanceUpdate();
   };
+  
+  /// * Each route has its own transition config.
+  /// * The transition is set via becoming the delegate for the navigation
+  ///   controller instance.
+  /// * So it's a game of hot potato, where in the topmost view controller (i.e.
+  ///   the one in focus) becomes the delegate for the navigation controller so
+  ///   that it becomes responsible for setting the transition.
+  func refreshNavigationControllerDelegate(){
+    guard let navigationController = self.navigationController
+    else { return };
+    
+    // don't set the delegate when using the default push/pop transition
+    // so it doesn't disable the interactive swipe gesture.
+    if self.transitionPushConfig.transitionType == .Default,
+       self.transitionPopConfig .transitionType == .Default {
+      
+      navigationController.delegate = nil;
+      self.interactionController = nil;
+      
+    } else {
+      navigationController.delegate = self;
+      
+      if self.transitionPopConfig.transitionType != .Default {
+        self.interactionController =
+          LeftEdgeInteractionController(viewController: self);
+      };
+    };
+  };
 };
 
 // -----------------------------------------------
@@ -778,11 +784,11 @@ extension RNINavigatorReactRouteViewController: RNINavigatorRouteViewDelegate {
   // --------------------------------------
   
   func didReceiveTransitionConfigPush(_ config: RNINavTransitionConfig){
-    self.transitionTypePush = config;
+    self.transitionPushConfig = config;
   };
   
   func didReceiveTransitionConfigPop(_ config: RNINavTransitionConfig){
-    self.transitionTypePop = config;
+    self.transitionPopConfig = config;
   };
   
   // ----------------------------------
@@ -939,9 +945,9 @@ extension RNINavigatorReactRouteViewController:
 
   ) -> UIViewControllerAnimatedTransitioning? {
     switch operation {
-      case .push: return self.transitionTypePush.makeAnimator();
+      case .push: return self.transitionPushConfig.makeAnimator();
         
-      case .pop : return self.transitionTypePop.makeAnimator(
+      case .pop : return self.transitionPopConfig.makeAnimator(
         interactionController: self.interactionController
       );
       
