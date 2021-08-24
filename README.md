@@ -1272,6 +1272,7 @@ If you want to run the example app by yourself, please head on over to the [Run 
 * `RouteOptions.statusBarStyle`: 
 	* **Left**: Change the current route's `StatusBarStyle`.
 	* **Right**: Push a route with `StatusBarStyle.lightContent`.
+	* Also shows what the `statusBarStyle` looks likes in dark mode (i.e. "dark appearance").
 
 ![NavigatorTest01](docs/assets/NavigatorTest01-06-00.gif)
 
@@ -1295,6 +1296,21 @@ If you want to run the example app by yourself, please head on over to the [Run 
 	* Some of the commands include pushing/popping "react" and "native" routes, adding/removing routes, manipulating the navigation stack, etc.
 
 ![NavigatorTest01](docs/assets/NavigatorTest03-00.jpg)
+
+<br>
+
+### `NavigatorTest04
+
+* 📌 **Declaration**: [`NavigatorTest04.tsx`](example/src/routes/NavigatorTest04/NavigatorTest04.tsx)
+
+<br>
+
+* This route is used to test the out the built-in push and pop transitions.
+	* Tests if the temporary route transitions applied via the push/pop command options works.
+	* Tests if the push/pop route transitions configs applied via `RouteViewPortal.routeOptions` works.
+	* Tests if the custom transition duration works.
+
+![NavigatorTest01](docs/assets/NavigatorTest04-00.gif)
 
 <br>
 
