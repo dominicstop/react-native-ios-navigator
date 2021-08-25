@@ -706,55 +706,6 @@ internal class RNINavBarAppearance {
     };
   };
   
-  /// e.g. `resetNavBarAppearance(for: navigationBar.standardAppearance)`
-  @available(iOS 13.0, *)
-  func resetNavBarAppearance2(
-    for     currentAppearance: inout UINavigationBarAppearance,
-    default defaultAppearance: inout UINavigationBarAppearance
-  ){
-    
-    let resettableKeyPaths: [ResettableKeyPath<UINavigationBarAppearance>] = [
-      ResettableKeyPath(\.titlePositionAdjustment),
-      ResettableKeyPath(\.backgroundEffect),
-      ResettableKeyPath(\.backgroundColor),
-      ResettableKeyPath(\.backgroundImage),
-      ResettableKeyPath(\.backgroundImageContentMode),
-      ResettableKeyPath(\.shadowColor),
-      ResettableKeyPath(\.shadowImage),
-    ];
-    
-    for resettableKeyPath in resettableKeyPaths {
-      resettableKeyPath.reset(current: &currentAppearance, default: &defaultAppearance)
-    };
-    
-    /// `[NSAttributedString.Key : Any]` does not conform to Equatable so
-    /// compare and reset manually.
-    
-    if currentAppearance.titleTextAttributes != defaultAppearance.titleTextAttributes {
-      currentAppearance.titleTextAttributes = defaultAppearance.titleTextAttributes;
-    };
-    
-    if currentAppearance.largeTitleTextAttributes != defaultAppearance.largeTitleTextAttributes {
-      currentAppearance.largeTitleTextAttributes = defaultAppearance.largeTitleTextAttributes;
-    };
-    
-    /// Back indicator image + mask is read-only, and is set via method, so
-    /// compare and reset manually.
-    
-    if !currentAppearance.backIndicatorImage.isEqual(defaultAppearance.backIndicatorImage) ||
-       !currentAppearance.backIndicatorTransitionMaskImage.isEqual(defaultAppearance.backIndicatorImage) {
-      
-      currentAppearance.setBackIndicatorImage(defaultAppearance.backIndicatorImage, transitionMaskImage: defaultAppearance.backIndicatorTransitionMaskImage);
-    };
-    
-    /// ` UIBarButtonItemAppearance`
-    
-    currentAppearance.backButtonAppearance.configureWithDefault(for: .plain);
-    currentAppearance.doneButtonAppearance = defaultAppearance.doneButtonAppearance;
-    currentAppearance.buttonAppearance     = defaultAppearance.buttonAppearance;
-  };
-  
-  // rename to resetNavigationBar
   func resetNavBarAppearance(
     _ navBar: UINavigationBar?,
     navigationItem: UINavigationItem? = nil
@@ -765,34 +716,9 @@ internal class RNINavBarAppearance {
     
     let defaultAppearance = UINavigationBar.appearance();
     
- 
-    if #available(iOS 13.0, *), self.didUseNewAppearance {
-      
-      if let navItem = navigationItem {
-        if navItem.standardAppearance != nil {
-          self.resetNavBarAppearance2(
-            for: &navItem.standardAppearance!,
-            default: &defaultAppearance.standardAppearance
-          );
-        };
-        
-        navItem.compactAppearance    = defaultAppearance.compactAppearance;
-        navItem.scrollEdgeAppearance = defaultAppearance.scrollEdgeAppearance;
-        
-      } else {
-        self.resetNavBarAppearance2(
-          for: &navBar.standardAppearance,
-          default: &defaultAppearance.standardAppearance
-        );
-        
-        navBar.compactAppearance    = defaultAppearance.compactAppearance;
-        navBar.scrollEdgeAppearance = defaultAppearance.scrollEdgeAppearance;
-      };
-    };
-    
     // reset nav bar appearance
     // only reset appearance if was prev. set
-    if #available(iOS 13.0, *), self.didUseNewAppearance, false {
+    if #available(iOS 13.0, *), self.didUseNewAppearance {
       if let navItem = navigationItem {
         navItem.standardAppearance   = defaultAppearance.standardAppearance;
         navItem.compactAppearance    = defaultAppearance.compactAppearance;
