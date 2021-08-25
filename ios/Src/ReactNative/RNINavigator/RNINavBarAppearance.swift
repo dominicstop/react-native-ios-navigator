@@ -682,20 +682,20 @@ internal class RNINavBarAppearance {
           navigationItem.standardAppearance = standardConfig.appearance;
           
           navigationItem.compactAppearance =
-            (self.appearanceConfigCompact ?? standardConfig).appearance;
+            self.appearanceConfigCompact?.appearance;
           
           navigationItem.scrollEdgeAppearance =
-            (self.appearanceConfigScrollEdge ?? standardConfig).appearance;
+            self.appearanceConfigScrollEdge?.appearance;
           
         } else {
           // update the nav bar appearance directly
           navBar.standardAppearance = standardConfig.appearance;
           
           navBar.compactAppearance =
-            (self.appearanceConfigCompact ?? standardConfig).appearance;
+            self.appearanceConfigCompact?.appearance;
           
           navBar.scrollEdgeAppearance =
-            (self.appearanceConfigScrollEdge ?? standardConfig).appearance;
+            self.appearanceConfigScrollEdge?.appearance;
         };
         
         // refresh the navbar appearance
