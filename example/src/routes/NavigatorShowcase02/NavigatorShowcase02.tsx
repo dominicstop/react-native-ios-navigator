@@ -33,24 +33,14 @@ const navBarAppearanceConfig: NavBarAppearanceCombinedConfig = ((iOSVersion >= 1
   },
 });
 
-type RouteContentState = {
+type NavigatorShowcase02State = {
   items: PostItem[];
 };
 
-export class NavigatorShowcase02 extends React.Component<RouteContentProps, RouteContentState> {
+export class NavigatorShowcase02 extends React.Component<RouteContentProps, NavigatorShowcase02State> {
 
   scrollY = new Animated.Value(0);
   listHeaderTitleY = new Animated.Value(0);
-
-  _handleScrollViewOnScroll = Animated.event([{
-    nativeEvent: {
-      contentOffset: {
-        y: this.scrollY
-      }
-    }
-  }], {
-    useNativeDriver: true
-  });
 
   constructor(props: RouteContentProps){
     super(props);
@@ -65,6 +55,16 @@ export class NavigatorShowcase02 extends React.Component<RouteContentProps, Rout
       items: POST_ITEMS
     });
   };
+
+  _handleScrollViewOnScroll = Animated.event([{
+    nativeEvent: {
+      contentOffset: {
+        y: this.scrollY
+      }
+    }
+  }], {
+    useNativeDriver: true
+  });
 
   _handleKeyExtractor = (item: PostItem) => {
     return `id:${item.id}`;

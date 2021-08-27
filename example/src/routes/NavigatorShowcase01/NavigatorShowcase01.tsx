@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Text, Animated, ListRenderItem } from 'react-native';
-import { RouteViewPortal, RouteContentProps } from 'react-native-ios-navigator';
+import { RouteViewPortal, RouteContentProps, RouteViewEvents } from 'react-native-ios-navigator';
 
 import { RouteHeader } from './RouteHeader';
 import { ListItemTrack } from './ListItemTrack';
@@ -99,10 +99,29 @@ const TRACK_ITEMS: Array<TrackItem> = [{
   artists: ['Valiant Vermin'],
 }];
 
+type NavigatorShowcase01State = {
+  items: TrackItem[];
+};
 
-export class NavigatorShowcase01 extends React.Component<RouteContentProps> {
+
+
+export class NavigatorShowcase01 extends React.Component<RouteContentProps, NavigatorShowcase01State> {
 
   scrollY = new Animated.Value(0);
+
+  constructor(props: RouteContentProps){
+    super(props);
+
+    this.state = {
+      items: TRACK_ITEMS.slice(0, 5),
+    };
+  };
+
+  _handleOnRouteDidPush = () => {
+    this.setState({
+      items: TRACK_ITEMS
+    });
+  };
 
   _handleScrollViewOnScroll = Animated.event([{
     nativeEvent: {
@@ -113,10 +132,6 @@ export class NavigatorShowcase01 extends React.Component<RouteContentProps> {
   }], {
     useNativeDriver: true,
   });
-
-  constructor(props: RouteContentProps){
-    super(props);
-  };
 
   _handleKeyExtractor = (item: TrackItem) => {
     return `id:${item.id}`;
@@ -183,9 +198,12 @@ export class NavigatorShowcase01 extends React.Component<RouteContentProps> {
           }}
           renderRouteHeader={this._renderRouteHeader}
         />
+        <RouteViewEvents
+          onRouteDidPush={this._handleOnRouteDidPush}
+        />
         <Animated.FlatList
           style={styles.list}
-          data={TRACK_ITEMS}
+          data={this.state.items}
           horizontal={false}
           indicatorStyle={'white'}
           contentInsetAdjustmentBehavior={'always'}
