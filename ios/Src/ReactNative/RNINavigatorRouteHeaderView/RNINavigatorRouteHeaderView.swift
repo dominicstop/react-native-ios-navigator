@@ -258,7 +258,8 @@ internal class RNINavigatorRouteHeaderView: RCTView {
             responder: self,
             type: RNINavigatorRouteView.self
           ),
-          let parentRouteVC = parentRouteView.routeVC
+          let parentRouteVC = parentRouteView.routeVC,
+          let navController = parentRouteView.navigatorView?.navigationVC
     else { return };
     
     self.didSetInitialSize = true;
@@ -272,7 +273,7 @@ internal class RNINavigatorRouteHeaderView: RCTView {
       parentRouteView.navigatorView!.frame.width;
     
     let initialHeight: CGFloat! =
-      self.headerConfig.getExpandedHeight(viewController: parentRouteVC);
+      self.headerConfig.getExpandedHeight(viewController: navController);
     
     let newSize = CGSize(width: initialWidth, height: initialHeight);
     
