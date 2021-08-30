@@ -494,6 +494,28 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     if animated, let coordinator = self.transitionCoordinator {
       coordinator.animate(alongsideTransition: { _ in
         self.applyStatusBarTargetStyle();
+        
+        /// The route header will sometimes derive it's height based on the
+        /// height of the navigation bar height (i.e. the route header will read
+        /// the navigation bar's height before the route gets pushed and adjust
+        /// it's height).
+        ///
+        /// The problem is that, the navigation bar height changes (e.g.
+        /// due to compact height, large title, search bar, etc).
+        ///
+        /// In other words, if the prev. route has a large navigation bar,
+        /// and the current route does not, then it will use the prev. height
+        /// (because the navigation bar hasn't completed it's transition yet).
+        ///
+        /// As such the header height used can be sometimes wrong.
+        /// To prevent this, the route header's height will be animated alongside
+        /// the transition so that the route header's height matches the
+        /// navigation bar's height as it transitions in.
+        ///
+        if let routeHeader = self.routeView.reactRouteHeader {
+          routeHeader.refreshHeaderHeight(updateScrollOffsets: true);
+          routeHeader.refreshHeaderTopPadding();
+        };
       });
       
     } else {
@@ -526,6 +548,11 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     
     if !isFirstFocus {
       self.refreshNavigationControllerDelegate();
+    };
+    
+    if let routeHeader = self.routeView.reactRouteHeader {
+      routeHeader.refreshHeaderHeight(updateScrollOffsets: true);
+      routeHeader.refreshHeaderTopPadding();
     };
   };
   
@@ -583,7 +610,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     };
   };
   
-  override func didMove(toParent parent: UIViewController?) {
+  override func didMove(toParent parent: UIViewController?){
     /// calls the parent impl. (e.g. `RNINavigatorRouteBaseViewController`)
     super.didMove(toParent: parent);
     

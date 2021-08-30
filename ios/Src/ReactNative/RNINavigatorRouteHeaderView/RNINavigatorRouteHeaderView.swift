@@ -287,9 +287,6 @@ internal class RNINavigatorRouteHeaderView: RCTView {
       CGRect(origin: .zero, size: newSize)
     );
     
-    // and force "update".
-    self.layoutSubviews();
-    
     #if DEBUG
     print("LOG - NativeView, RNINavigatorRouteHeaderView"
       + " - reactSetFrame"
@@ -307,6 +304,7 @@ internal class RNINavigatorRouteHeaderView: RCTView {
     guard let bridge = self.bridge else { return };
     
     bridge.uiManager.setSize(newBounds.size, for: self);
+    self.frame = newBounds;
   };
   
   /// TODO (006): Refactor - use view controller containment/child vc so that we don't
@@ -382,19 +380,25 @@ internal class RNINavigatorRouteHeaderView: RCTView {
     self.bridge.uiManager.setLocalData(localData, for: self);
   };
   
-  func refreshHeaderHeight(){
-    guard let routeVC = self.routeViewController,
-          self.didSetInitialSize
-    else { return };
+  func refreshHeaderHeight(updateScrollOffsets: Bool = false){
+    guard let routeVC = self.routeViewController else { return };
     
     switch self.headerConfig {
       case let .fixed(height: heightConfig):
         let presetHeight =
           heightConfig.preset.getHeight(viewController: routeVC);
-
+        
+        let newHeight = presetHeight + heightConfig.offset;
+        
+        let newSize = CGSize(width: self.frame.width, height: newHeight);
+        
+        self.notifyForBoundsChange(
+          CGRect(origin: .zero, size: newSize)
+        );
+        
         self.setWrapperViewInsets(
-          headerHeight: presetHeight + heightConfig.offset,
-          updateScrollOffsets: false
+          headerHeight: newHeight,
+          updateScrollOffsets: updateScrollOffsets
         );
         
       case let .resize(minHeight: _, maxHeight: maxHeightConfig):
@@ -406,7 +410,7 @@ internal class RNINavigatorRouteHeaderView: RCTView {
         
         self.setWrapperViewInsets(
           headerHeight: presetMaxHeight + maxHeightConfig.offset,
-          updateScrollOffsets: false
+          updateScrollOffsets: updateScrollOffsets
         );
         
         self.scrollViewDidScroll(reactScrollView.scrollView);
@@ -433,7 +437,7 @@ internal class RNINavigatorRouteHeaderView: RCTView {
         };
         
         if #available(iOS 13.0, *) {
-          scrollView.automaticallyAdjustsScrollIndicatorInsets = true;
+          scrollView.automaticallyAdjustsScrollIndicatorInsets = false;
         };
         
         reactScrollView.automaticallyAdjustContentInsets = false;
