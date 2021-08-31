@@ -48,16 +48,16 @@
 
 - [ ] Fix `RouteViewPortal.statusBarStyle` not animating in with push transition.
 
+- [ ] Impl. Navigation Bar `mixed` mode (e.g. use legacy and appearance at the same time).
+
 - [ ] Impl. Route Event: Screen Rotate (i.e. `willTransitionTo`).
 
 - [ ] Impl. `useNavigation` context.
 
 	
 
-- [ ] Rename `NavRouteViewContext` to `NavigationContext
+- [ ] Rename `NavRouteViewContext` to `NavigationContext`
 - [ ] Examples: Update `NavigatorTest02`
-- [ ] Examples: Create `NavigatorShowcase03`
-	- Extra height for navigation bar, tab-bar like appearance.
 
 <br>
 
@@ -382,6 +382,15 @@
 			- C.3) Dumping all of the routes's `interactionController` yields non-nil values/unique instances. This means that there's a push/pop transition.
 			- C.4) Dumping all of the route's transition push + pop config yields `['CrossFade', 'CrossFade', ...]`. This means that the routes have received the push/pop config.
 			- C.5) Possible fix: Re-apply transition delegate for a route that's about to appear.
+
+<br>
+
+- [x] (Commit: `e89c00c`) Examples: Create `NavigatorShowcase03`
+	- Extra height for navigation bar, tab-bar like appearance.
+
+<br>
+
+- [x] (Commit: `9722af7`) **Fix**: Route header height wrong when screen is rotated.
 
 <br>
 
