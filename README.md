@@ -1172,6 +1172,14 @@ If you want to run the example app by yourself, please head on over to the [Run 
 
 <br>
 
+### `NavigatorShowcase03`
+
+* 📌 **Declaration**: [`NavigatorShowcase03.tsx`](example/src/routes/NavigatorShowcase03/NavigatorShowcase03.tsx)
+
+![NavigatorShowcase02](docs/assets/NavigatorShowcase03-00.gif)
+
+<br>
+
 ### `NavigatorDemo01`
 
 * 📌 **Declaration**: [`NavigatorDemo01.tsx`](example/src/routes/NavigatorDemo01.tsx)
