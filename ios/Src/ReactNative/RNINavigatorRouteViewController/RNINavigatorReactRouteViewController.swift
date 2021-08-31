@@ -657,8 +657,9 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       };
       
       if let routeHeader = self.routeView?.reactRouteHeader {
-        // rotation - update the route header's top padding
+        // rotation - update the route header's top padding + height
         routeHeader.refreshHeaderTopPadding();
+        routeHeader.refreshHeaderHeight();
       };
     };
   };
