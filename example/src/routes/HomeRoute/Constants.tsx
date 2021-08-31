@@ -11,6 +11,10 @@ export const RouteItems = [{
   title: 'Profile',
   desc: 'A route showing a generic profile layout.'
 }, { 
+  routeKey: RouteKeys.NavigatorShowcase03,
+  title: 'Filter List',
+  desc: 'A route with a list of items with filter controls in the navigation bar.'
+}, { 
   routeKey: RouteKeys.NavigatorExample01,
   title: 'Basic Nested',
   desc: 'Nested navigator example w/ basic navigation (e.g. push and pop).',

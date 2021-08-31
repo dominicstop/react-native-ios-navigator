@@ -6,6 +6,7 @@ import { HomeRoute } from '../routes/HomeRoute';
 
 import { NavigatorShowcase01 } from '../routes/NavigatorShowcase01';
 import { NavigatorShowcase02 } from '../routes/NavigatorShowcase02';
+import { NavigatorShowcase03 } from '../routes/NavigatorShowcase03';
 
 import { NavigatorExample01 } from '../routes/NavigatorExample01';
 
@@ -46,6 +47,7 @@ export const RouteKeys = {
 
   NavigatorShowcase01: 'NavigatorShowcase01',
   NavigatorShowcase02: 'NavigatorShowcase02',
+  NavigatorShowcase03: 'NavigatorShowcase03',
 
   RouteViewPortalExample01: 'RouteViewPortalExample01',
 };
@@ -99,6 +101,14 @@ export const ROUTES: NavRoutesConfigMap = {
     },
     renderRoute: () => (
       <NavigatorShowcase02/>
+    ),
+  }, 
+  [RouteKeys.NavigatorShowcase03]: {
+    routeOptionsDefault: {
+      largeTitleDisplayMode: 'never',
+    },
+    renderRoute: () => (
+      <NavigatorShowcase03/>
     ),
   }, 
   [RouteKeys.NavigatorExample01]: {
