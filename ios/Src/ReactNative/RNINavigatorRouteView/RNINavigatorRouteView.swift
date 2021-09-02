@@ -561,16 +561,16 @@ internal class RNINavigatorRouteView: UIView {
     );
     #endif
     
-    if nativeIDKey != .RouteContent {
-      // do not show as subview, i.e. remove from view hierarchy
-      subview.removeFromSuperview();
-    };
-    
     // TODO: use `RNIWrapperView` for `RouteContent` so we can clean this up
     let wrapperView = subview as? RNIWrapperView;
     wrapperView?.delegate = self;
     wrapperView?.autoSetSizeOnLayout = false;
-    wrapperView?.autoCleanupOnWindowNil = true;
+    wrapperView?.willChangeSuperview = true;
+    
+    if nativeIDKey != .RouteContent {
+      // do not show as subview, i.e. remove from view hierarchy
+      subview.removeFromSuperview();
+    };
     
     /// receive child comps. from `RNINavigatorRouteView`.
     /// note: the child comp. can be identified based on their `nativeID`
@@ -586,13 +586,10 @@ internal class RNINavigatorRouteView: UIView {
         self.reactNavBarRightItem = wrapperView!;
         
       case .NavBarTitleItem:
-        wrapperView?.willChangeSuperview = true;
-        
         self.reactNavBarTitleItem = wrapperView!;
         self.delegate?.didReceiveNavBarButtonTitleView(subview);
     };
   };
-  
 };
 
 // ------------------------------------
