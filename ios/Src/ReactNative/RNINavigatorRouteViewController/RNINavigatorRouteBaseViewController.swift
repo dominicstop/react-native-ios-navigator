@@ -50,7 +50,7 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
   /// the "remove command" was user initiated (i.e. invoked via tapping the
   /// "back" button, or a swipe gesture), or if it was invoked programmatically
   /// via the parent nav.
-  var isToBeRemoved = false;
+  public var isToBeRemoved = false;
   
   /// A flag that indicates whether a route's back item config was temp. modified
   /// and as a result, should be reset.
@@ -59,6 +59,12 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
   /// Stores the prev. back item, used to reset the back item whenever it's
   /// been temporarily modified.
   internal var prevBackItem = BackItemCache();
+  
+  public var navigationConfigOverride = RNINavigationControllerConfig();
+  
+  internal var navigatorViewRef: RNINavigatorView? {
+    self.delegate as? RNINavigatorView
+  };
   
   // --------------------------------
   // MARK:- View Controller Lifecycle

@@ -10,7 +10,7 @@ import UIKit
 extension UIViewController {
   
   var isCurrentlyInFocus: Bool {
-    self.navigationController?.topViewController == self
+    self.navigationController?.topViewController === self
   };
   
   var navBarHeight: CGFloat {
@@ -67,5 +67,13 @@ extension UIViewController {
     else { return nil };
       
     return viewControllers[currentIndex - 1];
+  };
+  
+  var lastViewController: UIViewController? {
+    self.navigationController?.viewControllers.last
+  };
+  
+  var isLastViewController: Bool {
+    self.lastViewController === self;
   };
 };

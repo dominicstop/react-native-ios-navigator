@@ -11,7 +11,6 @@ import Foundation
 /// handles applying/resetting the nav bar appearance.
 internal class RNINavBarAppearance {
   
-  // ---------------------
   // MARK:- Embedded Types
   // ---------------------
   
@@ -424,11 +423,12 @@ internal class RNINavBarAppearance {
       }();
     };
     
-    func updateNavBarAppearance(_ navBar: UINavigationBar){
-      let defaultAppearance = UINavigationBar.appearance();
-      
-      let shouldSetBG     = self.navBarPreset != .clearBackground;
-      let shouldSetShadow = self.navBarPreset != .noShadow && shouldSetBG;
+    func applyConfig(
+      to config: RNINavigationControllerLegacyAppearanceConfig,
+      navBar: UINavigationBar
+    ){
+      let hasBackground  = self.navBarPreset != .clearBackground;
+      let hasShadow      = self.navBarPreset != .noShadow && hasBackground;
       
       let statusBarHeight = UIApplication.shared.statusBarFrame.size.height;
       
@@ -438,108 +438,130 @@ internal class RNINavBarAppearance {
       // Section: Title Config
       // ---------------------
       
-      /// set/init: `titleTextAttributes`
-      navBar.titleTextAttributes =
+      config.titleTextAttributes =
         self.titleTextAttributes?.effectiveTextAttributes();
       
-      /// set/init: `largeTitleTextAttributes`
       if #available(iOS 11.0, *) {
-        navBar.largeTitleTextAttributes =
+        config.largeTitleTextAttributes =
           self.largeTitleTextAttributes?.effectiveTextAttributes();
       };
       
-      /// set/init: `titleVerticalPositionAdjustment`
       for (metric, number) in self.titleVerticalPositionAdjustment ?? [] {
-        // did change, else skip...
-        guard navBar.titleVerticalPositionAdjustment(for: metric) != number
-        else { continue };
-        
-        navBar.setTitleVerticalPositionAdjustment(number, for: metric);
+        config.titleVerticalPositionAdjustment[metric] = number;
       };
       
       // Section: Navbar Style
       // ---------------------
       
-      /// set/init: `barStyle`, the button/item color
-      navBar.barStyle = self.barStyle ?? .default;
+      if let barStyle = self.barStyle {
+        config.barStyle = barStyle;
+      };
       
-      /// set/init: `tintColor`
-      navBar.tintColor = self.tintColor;
+      if let tintColor = self.tintColor {
+        config.tintColor = tintColor;
+      };
       
       /// set/init: `barTintColor`, e.g. the bg color
-      if shouldSetBG {
-        navBar.barTintColor = self.barTintColor;
+      if hasBackground,
+         let barTintColor = self.barTintColor {
+        
+        config.barTintColor = barTintColor;
       };
       
       // Section: Misc. Images
       // ---------------------
       
-      /// set/init: `backIndicatorImage`
-      let backImage = self.backIndicatorImage?.image;
-      if !RNIUtilities.compareImages(backImage, navBar.backIndicatorImage) {
-        navBar.backIndicatorImage               = backImage;
-        navBar.backIndicatorTransitionMaskImage = backImage;
-      };
-      
+      config.backIndicatorImage = self.backIndicatorImage?.image;
+
       for metric in UIBarMetrics.allCases {
-        // allow set bg image, else stop
-        guard shouldSetBG else { break };
         
-        // get the current bg image for the current metric
-        let currentBGImage = navBar.backgroundImage(for: metric);
-        
-        // get the matching bg image for the current metric
-        let bgImageConfig = self.backgroundImage?.first { metric == $0.0 };
-        
-        if let (_, bgImageItem) = bgImageConfig {
-          // set image size
+        if hasBackground {
+          // get the matching bg image for the current metric
+          let bgImageConfig = self.backgroundImage?.first { metric == $0.0 };
+          
+          // if no bg image for metric, skip...
+          guard let (_, bgImageItem) = bgImageConfig else { continue };
+          
+          // set bg image size
           bgImageItem.defaultSize = CGSize(
             width : navBarWidth,
             height: navBarHeight + statusBarHeight
           );
           
-          // get background image
-          let newBGImage = bgImageItem.image;
-          
-          if !RNIUtilities.compareImages(currentBGImage, newBGImage) {
-            // did change, set bg image
-            navBar.setBackgroundImage(newBGImage, for: .any, barMetrics: metric);
-          };
+          // set bg image for metric
+          config.backgroundImage[metric] = bgImageItem.image;
           
         } else {
-          // get the default bg image for the current metric
-          let defaultBGImage = defaultAppearance.backgroundImage(for: .any, barMetrics: metric);
-          
-          if !RNIUtilities.compareImages(currentBGImage, defaultBGImage) {
-            // image diff, reset bg image
-            navBar.setBackgroundImage(defaultBGImage, for: .any, barMetrics: metric);
-          };
+          // no background, make see-through
+          config.backgroundImage[metric] = UIImage();
         };
       };
             
-      if shouldSetShadow {
-        navBar.shadowImage = self.shadowImage?.image;
+      if hasShadow {
+        config.shadowImage = self.shadowImage?.image;
       };
       
       // Section: NavBar Preset
       // ----------------------
       
       switch self.navBarPreset {
-        case .clearBackground:
-          navBar.setBackgroundImage(UIImage(), for: .default);
-          fallthrough;
+        case .clearBackground: fallthrough;
           
         case .noShadow:
-          navBar.shadowImage = UIImage();
+          config.shadowImage = UIImage();
           
         default: break;
       };
     };
+    
+    func applyConfig(to navBar: UINavigationBar){
+      // The logic to apply the config to the navigation bar is impl. in this
+      // class, so re-use to make things DRY
+      let navBarLegacyConfig = RNINavigationControllerLegacyAppearanceConfig();
+      
+      // copy over config
+      self.applyConfig(to: navBarLegacyConfig, navBar: navBar);
+      
+      // apply legacy appearance
+      navBarLegacyConfig.applyConfig(to: navBar);
+    };
   };
   
-  // --------------------------
-  // MARK:- RNINavBarAppearance
-  // --------------------------
+  // MARK:- RNINavBarAppearance - Class Methods
+  // ------------------------------------------
+  
+  /// Reset navigation bar appearance-related properties
+  static func resetNavBarAppearanceToDefault(for navBar: UINavigationBar){
+    guard #available(iOS 13.0, *) else { return };
+    
+    let defaultAppearance = UINavigationBar.appearance();
+    
+    navBar.standardAppearance   = defaultAppearance.standardAppearance;
+    navBar.compactAppearance    = defaultAppearance.compactAppearance;
+    navBar.scrollEdgeAppearance = defaultAppearance.scrollEdgeAppearance;
+  };
+  
+  /// Reset `navigationItem` appearance-related properties
+  static func resetNavBarAppearanceToDefault(for navItem: UINavigationItem){
+    guard #available(iOS 13.0, *) else { return };
+    
+    let defaultAppearance = UINavigationBar.appearance();
+    
+    navItem.standardAppearance   = defaultAppearance.standardAppearance;
+    navItem.compactAppearance    = defaultAppearance.compactAppearance;
+    navItem.scrollEdgeAppearance = defaultAppearance.scrollEdgeAppearance;
+  };
+  
+  /// Reset navigation bar "legacy appearance"-related properties
+  static func resetNavBarAppearanceLegacyToDefault(for navBar: UINavigationBar){
+    // This is init. w/ the default legacy appearance config, and contains the
+    // logic for applying the config to the nav. bar, so re-use (DRY)
+    let config = RNINavigationControllerLegacyAppearanceConfig();
+    config.applyConfig(to: navBar);
+  };
+  
+  // MARK:- RNINavBarAppearance - Properties
+  // ---------------------------------------
   
   /// indicates whether or not the iOS 13+ appearance API was ever used
   var didUseNewAppearance = false;
@@ -548,9 +570,8 @@ internal class RNINavBarAppearance {
   var mode: AppearanceMode? {
     willSet {
       // mode has changed, trigger nav bar reset
-      self.shouldResetNavBar = (
-        self.shouldResetNavBar || (self.mode != newValue)
-      );
+      self.shouldResetNavBar =
+        self.shouldResetNavBar || (self.mode != newValue);
     }
   };
   
@@ -577,6 +598,9 @@ internal class RNINavBarAppearance {
     self.appearanceConfigCompact    != nil ||
     self.appearanceConfigScrollEdge != nil
   };
+  
+  // MARK:- RNINavBarAppearance - Methods
+  // ------------------------------------
   
   init(dict: NSDictionary?){
     guard let dict = dict else { return };
@@ -652,19 +676,17 @@ internal class RNINavBarAppearance {
   };
   
   func updateNavBarAppearance(
-    _ navBar: UINavigationBar?,
+    for navBar: UINavigationBar?,
     navigationItem: UINavigationItem? = nil
   ){
+    guard let navBar = navBar else { return };
+    
     // reset the nav bar first before updating
     if self.shouldResetNavBar {
-      self.resetNavBarAppearance(navBar, navigationItem: navigationItem);
+      self.resetNavBarAppearance(for: navBar, navigationItem: navigationItem);
     };
     
-    guard let navBar = navBar,
-          let mode = mode
-    else { return };
-    
-    switch mode {
+    switch self.mode {
       case .appearance:
         guard #available(iOS 13.0, *) else { return };
         self.didUseNewAppearance = true;
@@ -702,65 +724,42 @@ internal class RNINavBarAppearance {
         navBar.setNeedsLayout();
 
       case .legacy:
-        self.appearanceLegacy?.updateNavBarAppearance(navBar);
+        self.appearanceLegacy?.applyConfig(to: navBar);
+        
+      default:
+        navBar.setNeedsLayout();
     };
   };
   
+  /// Reset navigation bar/`navigationItem` appearance-related properties and
+  /// navigation bar "legacy appearance"-related properties.
+  ///
+  /// **Note A**: You need to call `navigationBar.setNeedsLayout` afterwards so
+  /// that the reset will take effect.
+  ///
+  /// **Note B**: This will not reset any of the appearance properties (you need
+  /// to call `resetValues` first).
+  ///
   func resetNavBarAppearance(
-    _ navBar: UINavigationBar?,
+    for navBar: UINavigationBar?,
     navigationItem: UINavigationItem? = nil
   ){
     guard let navBar = navBar else { return };
     // since a reset was done, no need to reset on next nav bar update
     self.shouldResetNavBar = false;
     
-    let defaultAppearance = UINavigationBar.appearance();
-    
     // reset nav bar appearance
-    // only reset appearance if was prev. set
-    if #available(iOS 13.0, *), self.didUseNewAppearance {
-      if let navItem = navigationItem {
-        navItem.standardAppearance   = defaultAppearance.standardAppearance;
-        navItem.compactAppearance    = defaultAppearance.compactAppearance;
-        navItem.scrollEdgeAppearance = defaultAppearance.scrollEdgeAppearance;
-        
-      } else {
-        navBar.standardAppearance   = defaultAppearance.standardAppearance;
-        navBar.compactAppearance    = defaultAppearance.compactAppearance;
-        navBar.scrollEdgeAppearance = defaultAppearance.scrollEdgeAppearance;
-      };
+    // Note: only reset appearance if was prev. set
+    if let navItem = navigationItem,
+       self.didUseNewAppearance {
+      
+      Self.resetNavBarAppearanceToDefault(for: navItem);
+      
+    } else if self.didUseNewAppearance {
+      Self.resetNavBarAppearanceToDefault(for: navBar);
     };
     
     // reset legacy appearance
-    navBar.barStyle     = defaultAppearance.barStyle;
-    navBar.tintColor    = defaultAppearance.tintColor;
-    navBar.shadowImage  = defaultAppearance.shadowImage;
-    navBar.barTintColor = defaultAppearance.barTintColor;
-    
-    navBar.titleTextAttributes = defaultAppearance.titleTextAttributes;
-    navBar.backIndicatorImage  = defaultAppearance.backIndicatorImage;
-    
-    navBar.backIndicatorTransitionMaskImage =
-      defaultAppearance.backIndicatorTransitionMaskImage;
-    
-    for metric in UIBarMetrics.allCases {
-      /// reset `titleVerticalPositionAdjustment`
-      navBar.setTitleVerticalPositionAdjustment(
-        defaultAppearance.titleVerticalPositionAdjustment(for: metric),
-        for: metric
-      );
-      
-      /// reset `backgroundImage`
-      navBar.setBackgroundImage(
-        defaultAppearance.backgroundImage(for: metric),
-        for: metric
-      );
-    };
-    
-    if #available(iOS 11.0, *) {
-      navBar.largeTitleTextAttributes = defaultAppearance.largeTitleTextAttributes;
-    };
-    
-    navBar.setNeedsLayout();
+    Self.resetNavBarAppearanceLegacyToDefault(for: navBar);
   };
 };

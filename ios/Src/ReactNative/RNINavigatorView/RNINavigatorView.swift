@@ -260,7 +260,7 @@ public final class RNINavigatorView: UIView {
   @objc var navBarAppearance: NSDictionary? {
     didSet {
       guard self.navBarAppearance != oldValue else { return };
-      
+
       #if DEBUG
       let dictStr = navBarAppearance.debugDescription
         .replacingOccurrences(of: "\n", with: " ")
@@ -274,12 +274,14 @@ public final class RNINavigatorView: UIView {
       if let dict = self.navBarAppearance {
         // update nav bar appearance
         self.navBarAppearanceConfig.updateValues(dict: dict);
-        self.navBarAppearanceConfig.updateNavBarAppearance(self.navigationBar);
+        self.navBarAppearanceConfig.updateNavBarAppearance(for: self.navigationBar);
+        self.navigationBar.layoutIfNeeded();
         
       } else {
         // reset appearance config
         self.navBarAppearanceConfig.resetValues();
-        self.navBarAppearanceConfig.resetNavBarAppearance(self.navigationBar);
+        self.navBarAppearanceConfig.resetNavBarAppearance(for: self.navigationBar);
+        self.navigationBar.layoutIfNeeded();
       };
     }
   };
