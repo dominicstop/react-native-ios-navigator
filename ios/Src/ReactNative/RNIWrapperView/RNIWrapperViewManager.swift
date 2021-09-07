@@ -10,7 +10,6 @@ import Foundation
 @objc(RNIWrapperViewManager)
 internal class RNIWrapperViewManager: RCTViewManager {
   
-  // --------------------
   // MARK:- Shared Bridge
   // --------------------
   
@@ -40,7 +39,6 @@ internal class RNIWrapperViewManager: RCTViewManager {
   };
   #endif
   
-  // ----------------------
   // MARK:- RN Module Setup
   // ----------------------
   

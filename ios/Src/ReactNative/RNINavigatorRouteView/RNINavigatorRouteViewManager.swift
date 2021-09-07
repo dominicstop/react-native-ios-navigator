@@ -10,7 +10,6 @@ import Foundation
 @objc(RNINavigatorRouteViewManager)
 internal class RNINavigatorRouteViewManager: RCTViewManager, RCTInvalidating {
   
-  // --------------------
   // MARK:- Shared Bridge
   // --------------------
   
@@ -40,7 +39,6 @@ internal class RNINavigatorRouteViewManager: RCTViewManager, RCTInvalidating {
   };
   #endif
   
-  // ----------------------
   // MARK:- RN Module Setup
   // ----------------------
   
@@ -58,7 +56,6 @@ internal class RNINavigatorRouteViewManager: RCTViewManager, RCTInvalidating {
     return RNINavigatorRouteView(bridge: self.bridge);
   };
   
-  // ----------------------
   // MARK:- RCTInvalidating
   // ----------------------
   

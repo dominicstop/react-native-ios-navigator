@@ -10,7 +10,6 @@ import Foundation
 @objc(RNINavigatorRouteHeaderViewManager)
 internal class RNINavigatorRouteHeaderViewManager: RCTViewManager {
   
-  // --------------------
   // MARK:- Shared Bridge
   // --------------------
   
@@ -37,7 +36,6 @@ internal class RNINavigatorRouteHeaderViewManager: RCTViewManager {
   };
   #endif
   
-  // ----------------------
   // MARK:- RN Module Setup
   // ----------------------
   

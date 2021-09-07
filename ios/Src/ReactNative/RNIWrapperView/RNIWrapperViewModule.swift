@@ -27,7 +27,6 @@ internal class RNIWrapperViewModule: NSObject {
     return wrapperView;
   };
   
-  // ---------------------------------
   // MARK:- Module Commands: Navigator
   // ---------------------------------
   

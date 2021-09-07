@@ -10,7 +10,6 @@ import Foundation
 @objc(RNINavigatorViewManager)
 internal class RNINavigatorViewManager: RCTViewManager, RCTInvalidating {
   
-  // --------------------
   // MARK:- Shared Bridge
   // --------------------
   
@@ -40,7 +39,6 @@ internal class RNINavigatorViewManager: RCTViewManager, RCTInvalidating {
   };
   #endif
   
-  // ----------------------
   // MARK:- RN Module Setup
   // ----------------------
 
@@ -68,7 +66,6 @@ internal class RNINavigatorViewManager: RCTViewManager, RCTInvalidating {
     return ["navigationBarHeight": navBarHeight];
   };
   
-  // ----------------------
   // MARK:- RCTInvalidating
   // ----------------------
   

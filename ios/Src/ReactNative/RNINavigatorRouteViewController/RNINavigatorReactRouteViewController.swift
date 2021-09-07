@@ -11,7 +11,7 @@ import UIKit;
 /// A view controller to hold js/react routes
 internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewController {
   
-  // ---------------------
+
   // MARK:- Embedded Types
   // ---------------------
   
@@ -35,7 +35,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     };
   };
   
-  // -----------------
   // MARK:- Properties
   // -----------------
   
@@ -82,7 +81,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
   /// count of how many times this vc has been in "focus"
   private(set) var focusCounter = 0;
   
-  // -----------------------------------
   // MARK:- Convenient Property Wrappers
   // -----------------------------------
   
@@ -120,7 +118,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     return .view(view: contentView);
   };
   
-  // --------------------------------
   // MARK:- View Controller Lifecycle
   // --------------------------------
   
@@ -434,7 +431,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     };
   };
   
-  // --------------------------
   // MARK:- Internal  Functions
   // --------------------------
   
@@ -559,7 +555,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
   };
 };
 
-// -----------------------------------------------
 // MARK:- Extension: RNINavigatorRouteViewDelegate
 // -----------------------------------------------
 
@@ -579,7 +574,6 @@ extension RNINavigatorReactRouteViewController: RNINavigatorRouteViewDelegate {
     };
   };
   
-  // --------------------------------------
   // MARK: Receive Props: Transition Config
   // --------------------------------------
   
@@ -591,7 +585,6 @@ extension RNINavigatorReactRouteViewController: RNINavigatorRouteViewDelegate {
     self.transitionPopConfig = config;
   };
   
-  // ----------------------------------
   // MARK: Receive Props: Navbar Config
   // ----------------------------------
   
@@ -657,7 +650,6 @@ extension RNINavigatorReactRouteViewController: RNINavigatorRouteViewDelegate {
       config.hidesSearchBarWhenScrolling ?? true;
   };
   
-  // ----------------------------------
   // MARK: Receive Props: Nav bar Items
   // ----------------------------------
   
@@ -692,7 +684,6 @@ extension RNINavigatorReactRouteViewController: RNINavigatorRouteViewDelegate {
     self.navigationItem.rightBarButtonItems = items;
   };
   
-  // ----------------------------------------------
   // MARK: Receive Props: NavBar Back Button Config
   // ----------------------------------------------
   
@@ -745,7 +736,6 @@ extension RNINavigatorReactRouteViewController: RNINavigatorRouteViewDelegate {
   };
 };
 
-// ------------------------------------------------
 // MARK:- Extension: UINavigationControllerDelegate
 // ------------------------------------------------
 
@@ -784,7 +774,6 @@ extension RNINavigatorReactRouteViewController:
   };
 };
 
-// -----------------------------------------
 // MARK:- Extension: UISearchResultsUpdating
 // -----------------------------------------
 
@@ -805,7 +794,6 @@ extension RNINavigatorReactRouteViewController: UISearchResultsUpdating {
   };
 };
 
-// -------------------------------------
 // MARK:- Extension: UISearchBarDelegate
 // -------------------------------------
 

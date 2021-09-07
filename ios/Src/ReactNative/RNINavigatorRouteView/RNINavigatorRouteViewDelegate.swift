@@ -37,7 +37,6 @@ internal protocol RNINavigatorRouteViewDelegate: AnyObject {
     isInitialStyle: Bool
   );
   
-  // --------------------------------------
   // MARK: Receive Props: Transition Config
   // --------------------------------------
   
@@ -45,7 +44,6 @@ internal protocol RNINavigatorRouteViewDelegate: AnyObject {
   
   func didReceiveTransitionConfigPop(_ config: RNINavTransitionConfig);
   
-  // ----------------------------------
   // MARK: Receive Props: Navbar Config
   // ----------------------------------
   
@@ -57,7 +55,6 @@ internal protocol RNINavigatorRouteViewDelegate: AnyObject {
   
   func didReceiveSearchBarConfig(_ config: RNISearchControllerConfig?);
   
-  // ---------------------------------
   // MARK: Receive Props: Navbar Items
   // ---------------------------------
   
@@ -72,7 +69,6 @@ internal protocol RNINavigatorRouteViewDelegate: AnyObject {
   
   func didReceiveNavBarButtonRightItems(_ items: [UIBarButtonItem]?);
   
-  // ----------------------------------------------
   // MARK: Receive Props: Navbar Back Button Config
   // ----------------------------------------------
   
@@ -90,7 +86,6 @@ internal protocol RNINavigatorRouteViewDelegate: AnyObject {
   
   func didReceiveHidesBackButton(_ hidesBackButton: Bool);
   
-  // ----------------------------------------------
   // MARK: Props - NavigationConfigOverride-related
   // ----------------------------------------------
   

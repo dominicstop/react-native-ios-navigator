@@ -18,7 +18,6 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
     var backButtonDisplayMode: UINavigationItem.BackButtonDisplayMode?;
   };
   
-  // ----------------
   // MARK: Properties
   // ----------------
   
@@ -66,7 +65,6 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
     self.delegate as? RNINavigatorView
   };
   
-  // --------------------------------
   // MARK:- View Controller Lifecycle
   // --------------------------------
   
@@ -126,7 +124,6 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
     };
   };
   
-  // ---------------
   // MARK: Functions
   // ---------------
   

@@ -60,7 +60,6 @@ internal class RNIWrapperView: UIView {
   private var didChangeSuperview = false;
   private var touchHandler: RCTTouchHandler!;
   
-  // ------------------------
   // MARK:- RN Exported Props
   // ------------------------
   
@@ -68,7 +67,6 @@ internal class RNIWrapperView: UIView {
   /// `shouldNotifyComponentWillUnmount` during `componentWillUnmount`.
   @objc var shouldNotifyComponentWillUnmount: Bool = false;
   
-  // ---------------------
   // MARK:- Init/Lifecycle
   // ---------------------
   
@@ -116,7 +114,6 @@ internal class RNIWrapperView: UIView {
     };
   };
   
-  // ----------------------
   // MARK:- React Lifecycle
   // ----------------------
   
@@ -127,7 +124,6 @@ internal class RNIWrapperView: UIView {
     self.touchHandler.attach(to: subview);
   };
   
-  // -------------------------
   // MARK:- Internal Functions
   // -------------------------
   
@@ -157,7 +153,6 @@ internal class RNIWrapperView: UIView {
     );
   };
   
-  // --------------------------
   // MARK:- Commands For Module
   // --------------------------
   

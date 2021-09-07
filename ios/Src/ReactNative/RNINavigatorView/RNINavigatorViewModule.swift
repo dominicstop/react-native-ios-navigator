@@ -26,7 +26,6 @@ internal class RNINavigatorViewModule: NSObject {
     );
   };
   
-  // ---------------------------------
   // MARK:- Module Commands: Navigator
   // ---------------------------------
   
@@ -427,7 +426,6 @@ internal class RNINavigatorViewModule: NSObject {
     };
   };
   
-  // ----------------------------
   // MARK:- Module Commands: Misc
   // ----------------------------
   

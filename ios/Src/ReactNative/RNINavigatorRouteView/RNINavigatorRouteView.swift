@@ -10,7 +10,6 @@ import UIKit;
 
 internal class RNINavigatorRouteView: UIView {
   
-  // ---------------------
   // MARK:- Embedded Types
   // ---------------------
   
@@ -25,7 +24,6 @@ internal class RNINavigatorRouteView: UIView {
     case visible, hidden, `default`;
   };
   
-  // -----------------
   // MARK:- Properties
   // -----------------
   
@@ -59,7 +57,6 @@ internal class RNINavigatorRouteView: UIView {
   
   private var didSetInitialHeight = false;
   
-  // ------------------------------
   // MARK:- RN Exported Event Props
   // ------------------------------
   
@@ -103,7 +100,6 @@ internal class RNINavigatorRouteView: UIView {
   @objc var onSearchBarCancelButtonClicked: RCTBubblingEventBlock?;
   @objc var onSearchBarSearchButtonClicked: RCTBubblingEventBlock?;
   
-  // ------------------------
   // MARK:- RN Exported Props
   // ------------------------
   
@@ -430,9 +426,7 @@ internal class RNINavigatorRouteView: UIView {
   };
   
   //  MARK: Props - NavigationConfigOverride-related
-  /// * These props are handled by `NavigationConfigOverride` in
-  ///   the `RNINavigatorReactRouteViewController` class.
-  /// -------------------------------------------------------------------------
+  /// ----------------------------------------------
   
   let navBarAppearanceOverrideConfig = RNINavBarAppearance(dict: nil);
   @objc var navBarAppearanceOverride: NSDictionary? {
@@ -444,7 +438,7 @@ internal class RNINavigatorRouteView: UIView {
         .replacingOccurrences(of: "\n", with: " ")
         .replacingOccurrences(of: "  ", with: "");
       
-      print("LOG - NativeView, RNINavigatorView: navBarAppearanceOverride, didSet"
+      print("LOG - NativeView, RNINavigatorRouteView: navBarAppearanceOverride, didSet"
         + " - dict \(dictStr)"
       );
       #endif
@@ -459,7 +453,9 @@ internal class RNINavigatorRouteView: UIView {
       };
       
       // notify delegate of update
-      self.delegate?.didReceiveNavBarAppearanceOverride(self.navBarAppearanceOverrideConfig);
+      self.delegate?.didReceiveNavBarAppearanceOverride(
+        self.navBarAppearanceOverrideConfig
+      );
     }
   };
   
@@ -499,7 +495,6 @@ internal class RNINavigatorRouteView: UIView {
     }
   };
   
-  // ---------------------
   // MARK:- Init/Lifecycle
   // ---------------------
   
@@ -523,7 +518,6 @@ internal class RNINavigatorRouteView: UIView {
     fatalError("init(coder:) has not been implemented");
   };
   
-  // -------------------
   // MARK:- RN Lifecycle
   // -------------------
   
@@ -592,7 +586,6 @@ internal class RNINavigatorRouteView: UIView {
   };
 };
 
-// ------------------------------------
 // MARK:- Convenience Property Wrappers
 // ------------------------------------
 
@@ -659,7 +652,6 @@ internal extension RNINavigatorRouteView {
   };
 };
 
-// ------------------------
 // MARK:- Private Functions
 // ------------------------
 
@@ -680,62 +672,61 @@ private extension RNINavigatorRouteView {
       delegate.didReceiveStatusBarStyle(statusBarStyle, isInitialStyle: true);
     };
     
-    // set push transition config
+    // MARK: Section - Set Transition Config
+    // -------------------------------------
+    
     if let pushConfig = self._transitionConfigPush {
       delegate.didReceiveTransitionConfigPush(pushConfig);
     };
     
-    // set pop transition config
     if let popConfig = self._transitionConfigPop {
       delegate.didReceiveTransitionConfigPop(popConfig);
     };
     
-    // set the vc's title for the 1st time
+    // MARK: Section - Set Navbar Config
+    // ---------------------------------
+    
     if let routeTitle = self.routeTitle {
       delegate.didReceiveRouteTitle(routeTitle as String);
     };
     
-    // set nav bar prompt
     delegate.didReceivePrompt(self.prompt as String?);
     
-    // set nav bar large title display mode
     delegate.didReceiveLargeTitleDisplayMode(self._largeTitleDisplayMode);
     
-    // set nav bar back item
     delegate.didReceiveNavBarButtonBackItem(
       self.backBarButtonItem,
       self.applyBackButtonConfigToCurrentRoute
     );
     
-    // set nav bar left item
+    // MARK: Section - Set Navbar Item Config
+    // --------------------------------------
+    
     delegate.didReceiveNavBarButtonLeftItems(self.leftBarButtonItems);
     
-    // set nav bar right item
     delegate.didReceiveNavBarButtonRightItems(self.rightBarButtonItems);
     
-    // set nav bar title item
     if let titleBarItem = self.reactNavBarTitleItem {
       delegate.didReceiveNavBarButtonTitleView(titleBarItem);
     };
     
-    // init `navigationItem` property from `leftItemsSupplementBackButton` prop
+    // MARK: Section - NavBar Back Button Config
+    // -----------------------------------------
+    
     delegate.didReceiveLeftItemsSupplementBackButton(
       self.leftItemsSupplementBackButton
     );
     
-    // init `navigationItem` property from `backButtonTitle` prop
     delegate.didReceiveBackButtonTitle(
       self.backButtonTitle as String?,
       self.applyBackButtonConfigToCurrentRoute
     );
     
-    // init `navigationItem` property from `backButtonDisplayMode` prop
     delegate.didReceiveBackButtonDisplayMode(
       self._backButtonDisplayMode,
       self.applyBackButtonConfigToCurrentRoute
     );
     
-    // init `navigationItem` property from `hidesBackButton` prop
     delegate.didReceiveHidesBackButton(
       self.hidesBackButton
     );
@@ -757,7 +748,6 @@ private extension RNINavigatorRouteView {
   };
 };
 
-// ---------------------------
 // MARK:- Functions for Module
 // ---------------------------
 
@@ -788,7 +778,6 @@ internal extension RNINavigatorRouteView {
   };
 };
 
-// -------------------------
 // MARK:- Internal Functions
 // -------------------------
 
@@ -938,7 +927,6 @@ internal extension RNINavigatorRouteView {
   };
 };
 
-// -----------------------------
 // MARK:- RNIWrapperViewDelegate
 // -----------------------------
 

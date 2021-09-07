@@ -10,7 +10,6 @@ import Foundation
 
 internal class RNINavigatorRouteHeaderView: RCTView {
   
-  // ---------------------
   // MARK:- Embedded Types
   // ---------------------
   
@@ -140,7 +139,6 @@ internal class RNINavigatorRouteHeaderView: RCTView {
     };
   };
   
-  // -----------------
   // MARK:- Properties
   // -----------------
   
@@ -155,7 +153,6 @@ internal class RNINavigatorRouteHeaderView: RCTView {
   private var didTriggerSetup = false;
   private var didSetInitialSize = false;
   
-  // --------------------------
   // MARK:- Computed Properties
   // --------------------------
   
@@ -185,7 +182,6 @@ internal class RNINavigatorRouteHeaderView: RCTView {
     self.routeViewController?.routeView?.navigatorView?.navigationVC
   };
   
-  // ------------------------
   // MARK:- RN Exported Props
   // ------------------------
   
@@ -238,7 +234,6 @@ internal class RNINavigatorRouteHeaderView: RCTView {
     }
   };
   
-  // ---------------------
   // MARK:- Init/Lifecycle
   // ---------------------
   
@@ -296,7 +291,6 @@ internal class RNINavigatorRouteHeaderView: RCTView {
     #endif
   };
   
-  // -------------------------
   // MARK:- Internal Functions
   // -------------------------
 
@@ -480,7 +474,6 @@ internal class RNINavigatorRouteHeaderView: RCTView {
   };
 };
 
-// ---------------------------
 // MARK:- UIScrollViewDelegate
 // ---------------------------
 

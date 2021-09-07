@@ -12,7 +12,6 @@ import Foundation
 /// and handles creating them based on the config.
 internal class RNINavBarItemConfig {
   
-  // ---------------------
   // MARK:- Embedded Types
   // ---------------------
   
@@ -41,7 +40,6 @@ internal class RNINavBarItemConfig {
     offset: UIOffset
   );
   
-  // -----------------
   // MARK:- Properties
   // -----------------
     
@@ -75,7 +73,7 @@ internal class RNINavBarItemConfig {
   
   private(set) var titlePositionAdjustment: [TitlePositionAdjustmentConfig]?;
   
-  /** Disabled */
+  #warning("backgroundVerticalPositionAdjustment impl. is disabled")
   private(set) var backgroundVerticalPositionAdjustment:
     [(UIBarMetrics, CGFloat)]?;
   
@@ -115,7 +113,6 @@ internal class RNINavBarItemConfig {
     };
   };
 
-  // -----------
   // MARK:- Init
   // -----------
   
@@ -255,7 +252,6 @@ internal class RNINavBarItemConfig {
     self.init(customView: view);
   };
   
-  // ----------------
   // MARK:- Functions
   // ----------------
   

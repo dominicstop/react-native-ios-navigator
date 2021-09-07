@@ -26,7 +26,6 @@ internal class RNINavigatorRouteViewModule: NSObject {
     return false;
   };
   
-  // ----------------------
   // MARK:- Module Commands
   // ----------------------
     
