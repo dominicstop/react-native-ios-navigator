@@ -227,16 +227,8 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       isFirstFocus: isFirstFocus
     );
     
-    let configOverrideBlocks = self.navigationConfigOverride
-      .makeApplyConfigBlocks(for: self, isAnimated: animated);
-    
-    configOverrideBlocks.applyConfig();
-    
     if animated, let coordinator = self.transitionCoordinator {
       coordinator.animate(alongsideTransition: { _ in
-        
-        /// Transition in new appearance override
-        configOverrideBlocks.applyAnimatableConfig();
 
         /// Transition in the status bar style alongside the push transition
         self.applyStatusBarTargetStyle();
@@ -263,33 +255,11 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
           routeHeader.refreshHeaderHeight(updateScrollOffsets: true);
           routeHeader.refreshHeaderTopPadding();
         };
-      }, completion: { context in
-        if context.isCancelled,
-           let currentVC = self.lastViewController as? RNINavigatorRouteBaseViewController {
-          
-          /// Transition was cancelled, re-apply navigator override for the
-          /// current active view controller
-          
-          let currentConfigOverrideBlocks = currentVC.navigationConfigOverride
-            .makeApplyConfigBlocks(for: self, isAnimated: animated);
-          
-          currentConfigOverrideBlocks.applyConfig();
-          
-          if animated {
-            UIView.animate(withDuration: 0.3, animations: {
-              currentConfigOverrideBlocks.applyAnimatableConfig();
-            });
-            
-          } else {
-            currentConfigOverrideBlocks.applyAnimatableConfig();
-          };
-        };
       });
       
     } else {
       /// No animation
       self.applyStatusBarTargetStyle();
-      configOverrideBlocks.applyAnimatableConfig();
     };
   };
   

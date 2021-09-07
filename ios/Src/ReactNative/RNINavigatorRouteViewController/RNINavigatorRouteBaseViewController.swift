@@ -124,6 +124,12 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
     };
   };
   
+  open override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated);
+    
+    self.applyNavigationConfigOverride(animated);
+  };
+  
   // MARK: Functions
   // ---------------
   
@@ -175,5 +181,45 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
     
     // reset back to empty
     self.prevBackItem = BackItemCache();
+  };
+  
+  internal func applyNavigationConfigOverride(_ animated: Bool){
+    let configOverrideBlocks = self.navigationConfigOverride
+      .makeApplyConfigBlocks(for: self, isAnimated: animated);
+    
+    configOverrideBlocks.applyConfig();
+    
+    if animated, let coordinator = self.transitionCoordinator {
+      coordinator.animate(alongsideTransition: { _ in
+        /// Transition in new appearance override
+        configOverrideBlocks.applyAnimatableConfig();
+        
+      }, completion: { context in
+        if context.isCancelled,
+           let currentVC = self.lastViewController as? RNINavigatorRouteBaseViewController {
+          
+          /// Transition was cancelled, re-apply navigator override for the
+          /// current active view controller
+          
+          let currentConfigOverrideBlocks = currentVC.navigationConfigOverride
+            .makeApplyConfigBlocks(for: self, isAnimated: animated);
+          
+          currentConfigOverrideBlocks.applyConfig();
+          
+          if animated {
+            UIView.animate(withDuration: 0.3, animations: {
+              currentConfigOverrideBlocks.applyAnimatableConfig();
+            });
+            
+          } else {
+            currentConfigOverrideBlocks.applyAnimatableConfig();
+          };
+        };
+      });
+      
+    } else {
+      /// No animation - Immediately apply
+      configOverrideBlocks.applyAnimatableConfig();
+    };
   };
 };
