@@ -62,12 +62,12 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
   };
 
   // the status bar style the view controller will transition to
-  var statusBarStyleTarget: UIStatusBarStyle?;
+  var statusBarStyleTarget: UIStatusBarStyle = .default;
   
   // TODO: move impl. to base view controller
   // the current status bar style
   var statusBarStyleCurrent: UIStatusBarStyle?;
-  #warning("Refactor status bar style - use transition overrode + apply during transition")
+
   override var preferredStatusBarStyle: UIStatusBarStyle {
     self.statusBarStyleCurrent ?? .default;
   };
@@ -227,11 +227,10 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       isFirstFocus: isFirstFocus
     );
     
+    self.applyStatusBarTargetStyle(animated);
+    
     if animated, let coordinator = self.transitionCoordinator {
       coordinator.animate(alongsideTransition: { _ in
-
-        /// Transition in the status bar style alongside the push transition
-        self.applyStatusBarTargetStyle();
         
         /// The route header will sometimes derive it's height based on the
         /// height of the navigation bar height (i.e. the route header will read
@@ -256,10 +255,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
           routeHeader.refreshHeaderTopPadding();
         };
       });
-      
-    } else {
-      /// No animation
-      self.applyStatusBarTargetStyle();
     };
   };
   
@@ -483,15 +478,35 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     scrollView.automaticallyAdjustsScrollIndicatorInsets = false;
   };
   
-  func applyStatusBarTargetStyle(){
-    // set current status bar style to the target style, then reset
-    if let statusBarStyleTarget = self.statusBarStyleTarget {
-      self.statusBarStyleCurrent = statusBarStyleTarget;
-      self.statusBarStyleTarget = nil;
-    };
+  func applyStatusBarTargetStyle(_ animated: Bool){
+    guard self.statusBarStyleTarget != self.statusBarStyleCurrent
+    else { return };
+
+    // set current status bar style to the target style
+    self.statusBarStyleCurrent = self.statusBarStyleTarget;
     
-    /// Update status bar style
-    self.setNeedsStatusBarAppearanceUpdate();
+    if animated, let coordinator = self.transitionCoordinator {
+      coordinator.animate(alongsideTransition: { _ in
+        /// transition - animate in status bar style
+        self.setNeedsStatusBarAppearanceUpdate();
+        
+      });
+      
+    } else {
+      /// No animation/transition, immediately apply
+      self.setNeedsStatusBarAppearanceUpdate();
+    };
+  };
+  
+  /// Is used so that the "status bar style" pop fade transition works
+  func notifyRoutesForChangeInStatusBarStyle(_ style: UIStatusBarStyle){
+    guard let activeRoutes = self.navigatorViewRef?.activeRoutes,
+          let activeReactRoutes = activeRoutes as? [RNINavigatorReactRouteViewController]
+    else { return };
+    
+    activeReactRoutes.forEach {
+      $0.statusBarStyleCurrent = style;
+    };
   };
   
   /// * Each route has its own transition config.
@@ -532,15 +547,18 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
 /// This delegate is used to receive "props" from `RNINavigatorRouteView`.
 extension RNINavigatorReactRouteViewController: RNINavigatorRouteViewDelegate {
   
-  func didReceiveStatusBarStyle(_ style: UIStatusBarStyle, isInitialStyle: Bool) {
-    if isInitialStyle {
-      // set the status bar style in `viewWillAppear` so it transitions in
-      self.statusBarStyleTarget = style;
-      
-    } else {
+  func didReceiveStatusBarStyle(_ style: UIStatusBarStyle) {
+    // notify other routes that the status bar style has changed
+    self.notifyRoutesForChangeInStatusBarStyle(style);
+    
+    if self.isPushed {
       // immediately update the status bar style
       self.statusBarStyleCurrent = style;
       self.setNeedsStatusBarAppearanceUpdate();
+      
+    } else {
+      // apply the status bar style in `viewWillAppear` so it transitions in
+      self.statusBarStyleTarget = style;
     };
   };
   

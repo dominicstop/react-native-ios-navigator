@@ -139,7 +139,7 @@ internal class RNINavigatorRouteView: UIView {
     }
   };
   
-  var _statusBarStyle: UIStatusBarStyle?;
+  var _statusBarStyle: UIStatusBarStyle = .default;
   @objc var statusBarStyle: NSString? {
     didSet {
       guard self.statusBarStyle != oldValue else { return };
@@ -154,14 +154,14 @@ internal class RNINavigatorRouteView: UIView {
       
       #if DEBUG
       print("LOG - RNINavigatorRouteView: didSet"
-        + " - statusBarStyle: \(self._statusBarStyle?.rawValue ?? -1)"
+        + " - statusBarStyle: \(self._statusBarStyle.rawValue)"
         + " - string: \(self.statusBarStyle ?? "N/A")"
         + " - prev value: \(oldValue ?? "N/A")"
       );
       #endif
       
       self.delegate?
-        .didReceiveStatusBarStyle(self._statusBarStyle!, isInitialStyle: false);
+        .didReceiveStatusBarStyle(self._statusBarStyle);
     }
   };
   
@@ -668,9 +668,7 @@ private extension RNINavigatorRouteView {
   func setupRouteVC(){
     guard let delegate = self.delegate else { return };
     
-    if let statusBarStyle = self._statusBarStyle {
-      delegate.didReceiveStatusBarStyle(statusBarStyle, isInitialStyle: true);
-    };
+    delegate.didReceiveStatusBarStyle(self._statusBarStyle);
     
     // MARK: Section - Set Transition Config
     // -------------------------------------
