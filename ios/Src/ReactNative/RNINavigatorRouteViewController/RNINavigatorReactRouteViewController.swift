@@ -60,17 +60,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       self.refreshNavigationControllerDelegate();
     }
   };
-
-  // the status bar style the view controller will transition to
-  var statusBarStyleTarget: UIStatusBarStyle = .default;
-  
-  // TODO: move impl. to base view controller
-  // the current status bar style
-  var statusBarStyleCurrent: UIStatusBarStyle?;
-
-  override var preferredStatusBarStyle: UIStatusBarStyle {
-    self.statusBarStyleCurrent ?? .default;
-  };
   
   private weak var searchBarTextField: UITextField?;
   private weak var searchBaPlaceholderLabel: UILabel?;
@@ -169,7 +158,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       + " - total subviews: \(subviewCount)"
       + " - wrapperView: \(self.wrapperView?.description ?? "N/A")"
       + " - headerView: \(self.routeView.reactRouteHeader != nil ? "true" : "false")"
-      + " - statusBarStyleCurrent: \(self.statusBarStyleCurrent?.rawValue ?? -1)"
+      + " - statusBarStyleCurrent: \(self.statusBarStyleCurrent.rawValue)"
       + " - preferredStatusBarStyle: \(self.preferredStatusBarStyle.rawValue)"
     );
     #endif
@@ -226,8 +215,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       isAnimated: animated,
       isFirstFocus: isFirstFocus
     );
-    
-    self.applyStatusBarTargetStyle(animated);
     
     if animated, let coordinator = self.transitionCoordinator {
       coordinator.animate(alongsideTransition: { _ in
@@ -478,37 +465,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     scrollView.automaticallyAdjustsScrollIndicatorInsets = false;
   };
   
-  func applyStatusBarTargetStyle(_ animated: Bool){
-    guard self.statusBarStyleTarget != self.statusBarStyleCurrent
-    else { return };
-
-    // set current status bar style to the target style
-    self.statusBarStyleCurrent = self.statusBarStyleTarget;
-    
-    if animated, let coordinator = self.transitionCoordinator {
-      coordinator.animate(alongsideTransition: { _ in
-        /// transition - animate in status bar style
-        self.setNeedsStatusBarAppearanceUpdate();
-        
-      });
-      
-    } else {
-      /// No animation/transition, immediately apply
-      self.setNeedsStatusBarAppearanceUpdate();
-    };
-  };
-  
-  /// Is used so that the "status bar style" pop fade transition works
-  func notifyRoutesForChangeInStatusBarStyle(_ style: UIStatusBarStyle){
-    guard let activeRoutes = self.navigatorViewRef?.activeRoutes,
-          let activeReactRoutes = activeRoutes as? [RNINavigatorReactRouteViewController]
-    else { return };
-    
-    activeReactRoutes.forEach {
-      $0.statusBarStyleCurrent = style;
-    };
-  };
-  
   /// * Each route has its own transition config.
   /// * The transition is set via becoming the delegate for the navigation
   ///   controller instance.
@@ -548,18 +504,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
 extension RNINavigatorReactRouteViewController: RNINavigatorRouteViewDelegate {
   
   func didReceiveStatusBarStyle(_ style: UIStatusBarStyle) {
-    // notify other routes that the status bar style has changed
-    self.notifyRoutesForChangeInStatusBarStyle(style);
-    
-    if self.isPushed {
-      // immediately update the status bar style
-      self.statusBarStyleCurrent = style;
-      self.setNeedsStatusBarAppearanceUpdate();
-      
-    } else {
-      // apply the status bar style in `viewWillAppear` so it transitions in
-      self.statusBarStyleTarget = style;
-    };
+    self.setStatusBarStyle(style);
   };
   
   // MARK: Receive Props: Transition Config

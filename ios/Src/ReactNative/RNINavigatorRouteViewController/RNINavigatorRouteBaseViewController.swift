@@ -7,7 +7,9 @@
 
 import UIKit;
 
-var ROUTE_ID_COUNTER = 1000000;
+/// Offset the `routeID` counter for native routes so it doesn't collide with
+/// JS `routeID` counter for JS/React routes.
+var ROUTE_ID_COUNTER = 1_000_000_000;
 
 open class RNINavigatorRouteBaseViewController: UIViewController {
   
@@ -18,13 +20,21 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
     var backButtonDisplayMode: UINavigationItem.BackButtonDisplayMode?;
   };
   
-  // MARK: Properties
-  // ----------------
+  // MARK:- Properties - References
+  // ------------------------------
+  
+  public weak var navigator: RNINavigatorNativeCommands?;
   
   /// Used to send/forward navigation-related events
   internal weak var delegate: RNINavigatorRouteViewControllerDelegate?;
   
-  public weak var navigator: RNINavigatorNativeCommands?;
+  internal var navigatorViewRef: RNINavigatorView? {
+    (self.navigator as? RNINavigatorView)
+      ?? (self.delegate as? RNINavigatorView)
+  };
+  
+  // MARK: Properties - Route-Related
+  // --------------------------------
   
   private var _routeID = -1;
   public var routeID: Int {
@@ -44,12 +54,45 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
   /// Receive route data when this route was pushed/added from js/react
   public var routeProps: Dictionary<String, Any> = [:];
   
+  // MARK: Properties - Public
+  // --------------------------
+  
   /// A flag that indicates that the nav. controller responsible for this vc is
-  /// about to remove it from the nav. stack. This is used to differentiate if
-  /// the "remove command" was user initiated (i.e. invoked via tapping the
-  /// "back" button, or a swipe gesture), or if it was invoked programmatically
-  /// via the parent nav.
+  /// about to remove it from the nav. stack.
+  ///
+  /// This is used to differentiate if the removal of the view controller was:
+  /// * A. "user initiated" (i.e. invoked via tapping the "back" button, or a swipe
+  ///    gesture), or-
+  ///
+  /// <br>
+  ///
+  /// * B. it was removed programmatically via a navigation command (e.g. pop view
+  ///   controller, etc).
+  ///
+  /// **Note**: If you are planning to remove this view controller, don't forget
+  /// to set this flag to `true`.
   public var isToBeRemoved = false;
+  
+  /// the status bar style the view controller will transition to when the the
+  /// view controller appears.
+  ///
+  ///
+  public var statusBarStyleTarget: UIStatusBarStyle = .default;
+  
+  /// The current status bar style.
+  public var statusBarStyleCurrent: UIStatusBarStyle = .default;
+
+  open override var preferredStatusBarStyle: UIStatusBarStyle {
+    self.statusBarStyleCurrent;
+  };
+  
+  /// Properties that get temporarily applied to the navigator whenever the
+  /// view controller becomes active (e.g. legacy navigation bar appearance,
+  /// navigation bar visibility, etc).
+  public var navigationConfigOverride = RNINavigationControllerConfig();
+  
+  // MARK: Properties - Internal
+  // ----------------------------
   
   /// A flag that indicates whether a route's back item config was temp. modified
   /// and as a result, should be reset.
@@ -58,12 +101,6 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
   /// Stores the prev. back item, used to reset the back item whenever it's
   /// been temporarily modified.
   internal var prevBackItem = BackItemCache();
-  
-  public var navigationConfigOverride = RNINavigationControllerConfig();
-  
-  internal var navigatorViewRef: RNINavigatorView? {
-    self.delegate as? RNINavigatorView
-  };
   
   // MARK:- View Controller Lifecycle
   // --------------------------------
@@ -128,10 +165,38 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
     super.viewWillAppear(animated);
     
     self.applyNavigationConfigOverride(animated);
+    self.applyStatusBarTargetStyle(animated);
   };
   
-  // MARK: Functions
-  // ---------------
+  // MARK:- Functions - Public
+  // -------------------------
+  
+  public func setRouteKey(_ routeKey: String){
+    self._routeKey = routeKey;
+  };
+  
+  /// Change the status bar style
+  public func setStatusBarStyle(_ style: UIStatusBarStyle){
+    guard self.statusBarStyleCurrent != style ||
+          self.statusBarStyleTarget  != style
+    else { return };
+    
+    // notify other routes that the status bar style has changed
+    self.notifyRoutesForChangeInStatusBarStyle(style);
+    
+    if self.isCurrentlyInFocus {
+      // immediately update the status bar style
+      self.statusBarStyleCurrent = style;
+      self.setNeedsStatusBarAppearanceUpdate();
+      
+    } else {
+      // apply the status bar style in `viewWillAppear` so it transitions in
+      self.statusBarStyleTarget = style;
+    };
+  };
+  
+  // MARK: Functions - Internal
+  // --------------------------
   
   internal func setRouteID(){
     self._routeID = ROUTE_ID_COUNTER;
@@ -144,10 +209,6 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
   
   internal func setRouteKey(){
     self._routeKey = UUID().uuidString;
-  };
-  
-  public func setRouteKey(_ routeKey: String){
-    self._routeKey = routeKey;
   };
   
   internal func setRouteIndex(_ routeIndex: Int){
@@ -220,6 +281,36 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
     } else {
       /// No animation - Immediately apply
       configOverrideBlocks.applyAnimatableConfig();
+    };
+  };
+  
+  internal func applyStatusBarTargetStyle(_ animated: Bool){
+    guard self.statusBarStyleTarget != self.statusBarStyleCurrent
+    else { return };
+
+    // set current status bar style to the target style
+    self.statusBarStyleCurrent = self.statusBarStyleTarget;
+    
+    if animated, let coordinator = self.transitionCoordinator {
+      coordinator.animate(alongsideTransition: { _ in
+        /// transition - animate in status bar style
+        self.setNeedsStatusBarAppearanceUpdate();
+      });
+      
+    } else {
+      /// No animation/transition, immediately apply
+      self.setNeedsStatusBarAppearanceUpdate();
+    };
+  };
+  
+  /// Is used so that the "status bar style" pop fade transition works
+  internal func notifyRoutesForChangeInStatusBarStyle(_ style: UIStatusBarStyle){
+    guard let activeRoutes = self.navigatorViewRef?.activeRoutes,
+          let activeReactRoutes = activeRoutes as? [RNINavigatorReactRouteViewController]
+    else { return };
+    
+    activeReactRoutes.forEach {
+      $0.statusBarStyleCurrent = style;
     };
   };
 };
