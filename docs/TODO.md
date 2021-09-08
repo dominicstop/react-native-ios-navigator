@@ -47,7 +47,6 @@
 
 <br>
 
-- [ ] Fix `RouteViewPortal.statusBarStyle` not animating in with push transition.
 - [ ] Impl. Navigation Bar `mixed` mode (e.g. use legacy and appearance at the same time).
 - [ ] Impl. Route Event: Screen Rotate (i.e. `willTransitionTo`).
 - [ ] Impl. `useNavigation` context.
@@ -106,7 +105,8 @@
 
 - [ ] **Implement**: Support for pushing native routes with `routeOptions`.
 
-	- Partial suport implemented in commit `5a50646`. 
+	- Partial suport implemented in commit `5a50646` (navigator config override).
+	- Partial support implemented in commit `558ce57` (status bar style).
 
 <br>
 
@@ -417,6 +417,7 @@
 - [x] (Commit: `d886d60`) **Implement**: Status bar style  should animate together with the view controller pop transition.
 	- Implement status bar animation inside `animate(alongsideTransition:completion:)` in `UIViewControllerTransitionCoordinator`.
 	- Status bar style transitions in during push, but not during pop + interactive swipe back pop gesture.
+	- Also fixes: `RouteViewPortal.statusBarStyle` not animating in with push transition (tested in `RouteViewPortalExample01`.
 
 <br>
 
