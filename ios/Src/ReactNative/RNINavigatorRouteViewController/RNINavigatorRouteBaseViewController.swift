@@ -76,7 +76,6 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
   /// the status bar style the view controller will transition to when the the
   /// view controller appears.
   ///
-  ///
   public var statusBarStyleTarget: UIStatusBarStyle = .default;
   
   /// The current status bar style.
@@ -181,13 +180,13 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
           self.statusBarStyleTarget  != style
     else { return };
     
-    // notify other routes that the status bar style has changed
-    self.notifyRoutesForChangeInStatusBarStyle(style);
-    
     if self.isCurrentlyInFocus {
       // immediately update the status bar style
       self.statusBarStyleCurrent = style;
       self.setNeedsStatusBarAppearanceUpdate();
+      
+      // notify other routes that the status bar style has changed
+      self.notifyRoutesForChangeInStatusBarStyle(style);
       
     } else {
       // apply the status bar style in `viewWillAppear` so it transitions in
@@ -291,10 +290,26 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
     // set current status bar style to the target style
     self.statusBarStyleCurrent = self.statusBarStyleTarget;
     
+    // notify other routes that the status bar style has changed
+    // * Note: The vc that is being popped will not receive the new status bar style
+    self.notifyRoutesForChangeInStatusBarStyle(self.statusBarStyleTarget);
+    
     if animated, let coordinator = self.transitionCoordinator {
-      coordinator.animate(alongsideTransition: { _ in
+      coordinator.animate(alongsideTransition: { [weak self] _ in
         /// transition - animate in status bar style
-        self.setNeedsStatusBarAppearanceUpdate();
+        self?.setNeedsStatusBarAppearanceUpdate();
+        
+      }, completion: { [weak self] context in
+        if context.isCancelled,
+           let currentVC = self?.lastViewController as? RNINavigatorRouteBaseViewController {
+          
+          // transition cancelled, reset status bar style
+          currentVC.notifyRoutesForChangeInStatusBarStyle(
+            currentVC.statusBarStyleTarget
+          );
+          
+          currentVC.setNeedsStatusBarAppearanceUpdate();
+        };
       });
       
     } else {
