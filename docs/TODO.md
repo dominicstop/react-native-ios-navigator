@@ -26,7 +26,8 @@
 - [ ] Impl. On Modal Event
 - [ ] Refactor: Allow pushing regular `UIViewController` instances
 	-  Refactor native active routes to be `(routeData, UIViewController)`.
-	- Route data is kept in not stored in the properties.
+	- Route data is not stored in the properties.
+	- There could also be a dictionary of weak references to `UIViewController`. The dictionary will then contain all the other route data.
 
 <br>
 
@@ -47,17 +48,35 @@
 <br>
 
 - [ ] Fix `RouteViewPortal.statusBarStyle` not animating in with push transition.
-
 - [ ] Impl. Navigation Bar `mixed` mode (e.g. use legacy and appearance at the same time).
-
 - [ ] Impl. Route Event: Screen Rotate (i.e. `willTransitionTo`).
-
 - [ ] Impl. `useNavigation` context.
-
-	
 
 - [ ] Rename `NavRouteViewContext` to `NavigationContext`
 - [ ] Examples: Update `NavigatorTest02`
+
+
+
+* Back-gesture related bugs.
+
+	- [ ] **Fix**: Starting the back  gesture by slowly swiping left, then immediately swiping right and letting go (i.e. to cancel the back gesture) causes the navigation bar to become transparent with a large title even though the scroll offset isn't at the very top (i.e. the navigation bar flickers, and becomes temporarily see through).
+		* This bug can be reproduced using `NavigatorTest01` route.
+		* In other words, the large title appears even though it shouldn't (due to the current scroll offset).
+		* It's as though the configuration was restored/re-applied when the route was focused again (could be some logic in the VC lifecycle, e.g. `viewWillAppear`, etc).
+		* Might be a bug related to the appearance config restoration logic (i.e. likely related the restoration of the navigation bar from the previous route, or the "re-application" of the current route's config when the swipe back gesture is cancelled and becomes in focus again).
+			* Still persist even after navigator override config refactor in commit `5395fb2`.
+		* Might also be related to `setupScrollView`?
+		* 
+	- [x] **Fix**: (Commit: `bde6344`) The custom navigation bar left and right item disappears when the back gesture is started and cancelled.
+		* Note: The custom navigation bar title item doesn't disappear, it's only the custom left/right items that disappear. 
+		* Can be reproduced using `NavigatorShowcase03`, ``NavigatorTest02`,  `RouteViewPortalExample01`, etc.
+		* It seems like the cleanup for the navigation items are being triggered, causing the react views to be removed.
+
+	- [ ] **Fix**: When using legacy mode, the appearance config flickers in, i.e. when you trigger the back swipe gesture, the appearance changes to the prev. routes config, and when you cancel the back swipe, the appearance config for the current route get's applied immediately.
+		* Example: During the back swipe gesture, the header background color properly transitions, but the navigation bar tint does not (it gets immediately applied, there is no transition).
+		* Can be reproduced using `NavigatorTest01`.
+		* Note: Things that do not transition properly: `tintColor`, `backgroundImage`, `shadowImage`.
+		* Note: was partially fixed in commit `5395fb2` (`tintColor` now fades in after the swipe gesure is cancelled).
 
 <br>
 
@@ -85,7 +104,12 @@
 
 <br>
 
-- [ ] **Implement**: Support for pushing native routes with `routeOptions`
+- [ ] **Implement**: Support for pushing native routes with `routeOptions`.
+
+	- Partial suport implemented in commit `5a50646`. 
+
+<br>
+
 - [ ] **Implement**: Add prop  `lazyMountRoute`
 
 <br>
@@ -126,9 +150,6 @@
 
 - [ ] **Implement**:  animate `statusBarStyle` changes when transitioning between different styles.
 	- Current implementation doesn't animate the status bar changes because when putting `setNeedsStatusBarAppearanceUpdate()` inside an animation block using `UIView.animate()` it triggers the `ScrollView` offset bug.
-- [ ] **Implement**: Status bar animation should animate together with view controller transition pop + swipe back pop gesture.
-	- Implement status bar animation inside `animate(alongsideTransition:completion:)` in `UIViewControllerTransitionCoordinator`.
-	- status bar style transitions in during push, but not during pop + interactive swipe back pop gesture.
 
 <br>
 
@@ -327,7 +348,7 @@
 	- Related to: `TODO (003)`, `TODO (004)`, and `TODO (005)`.
 - [ ] `TODO (017)`: `NavigatorView.verifyProps` — Add user-defined type guard
 - [ ] `TODO (018)`: `overrideIsNavBarHidden` — Bug: when hiding nav bar, scrollview still snaps.
-- [ ] `TODO (019)`: `RNINavigatorReactRouteViewController.statusBarStyle`: Move impl. to the base view controller.
+- [ ] 
 
 ---
 
@@ -339,7 +360,7 @@
 
 - [x] (Commit: `e2831e3`) **Implement**: Impl. `syncRoutesFromNative`
 	- Command to sync the native active routes to the JS active routes.
-	- Replacement for `createStateSnapshot` as form of error recovery when a route command fails.
+	- Replacement for `createStateSnapshot` as a form of error recovery when a route command fails.
 
 <br>
 
@@ -391,6 +412,15 @@
 <br>
 
 - [x] (Commit: `9722af7`) **Fix**: Route header height wrong when screen is rotated.
+- [x] (Commit: `5395fb2`) **Refactor**: Refactored navigation override-related logic.
+- [x] (Commit: `5a50646`) **Refactor**: Move navigation override-related logic from route view controller to base view controller.
+- [x] (Commit: `d886d60`) **Implement**: Status bar style  should animate together with the view controller pop transition.
+	- Implement status bar animation inside `animate(alongsideTransition:completion:)` in `UIViewControllerTransitionCoordinator`.
+	- Status bar style transitions in during push, but not during pop + interactive swipe back pop gesture.
+
+<br>
+
+- [x] (Commit: `558ce57`) `TODO (019)`:  `RNINavigatorReactRouteViewController.statusBarStyle`: Move impl. to the base view controller.
 
 <br>
 
