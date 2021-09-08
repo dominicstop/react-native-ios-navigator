@@ -421,7 +421,8 @@
 
 <br>
 
-- [x] (Commit: `558ce57`) `TODO (019)`:  `RNINavigatorReactRouteViewController.statusBarStyle`: Move impl. to the base view controller.
+- [x] (Commit: `558ce57` / `TODO (019)`):  `RNINavigatorReactRouteViewController.statusBarStyle`: Move impl. to the base view controller.
+- [x] (Commit: `4c33444`) Fixed status bar style transition not being triggered when the pop gesture is repeatedly cancelled (i.e. the status bar style pop transition only worked on the first try).
 
 <br>
 
