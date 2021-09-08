@@ -547,7 +547,7 @@ extension RNINavigatorReactRouteViewController: RNINavigatorRouteViewDelegate {
         case .hidden : return true;
         case .visible: return false;
           
-        // TODO
+        #warning("Implement...")
         case .default: return false;
       };
     }();

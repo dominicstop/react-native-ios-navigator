@@ -320,11 +320,7 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
   
   /// Is used so that the "status bar style" pop fade transition works
   internal func notifyRoutesForChangeInStatusBarStyle(_ style: UIStatusBarStyle){
-    guard let activeRoutes = self.navigatorViewRef?.activeRoutes,
-          let activeReactRoutes = activeRoutes as? [RNINavigatorReactRouteViewController]
-    else { return };
-    
-    activeReactRoutes.forEach {
+    self.navigatorViewRef?.activeRoutes.forEach {
       $0.statusBarStyleCurrent = style;
     };
   };

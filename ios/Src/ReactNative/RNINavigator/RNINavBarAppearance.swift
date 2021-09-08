@@ -20,6 +20,7 @@ internal class RNINavBarAppearance {
   /// The current "preset" in the config tells us whether or not we should allow
   /// changes to certain "appearance"-related properties of the navbar (e.g. when
   /// `.noShadow`, don't allow "shadowColor" to be set, etc).
+  ///
   enum NavBarPreset: String {
     case none;
     case noShadow;
@@ -330,7 +331,6 @@ internal class RNINavBarAppearance {
       // Section: Title Config
       // ---------------------
       
-      /// set/init: `titleTextAttributes`
       self.titleTextAttributes = {
         guard let styleDict = dict["titleTextAttributes"] as? NSDictionary
         else { return nil };
@@ -338,7 +338,6 @@ internal class RNINavBarAppearance {
         return RCTTextAttributes(dict: styleDict);
       }();
       
-      /// set/init: `largeTitleTextAttributes`
       self.largeTitleTextAttributes = {
         guard let styleDict = dict["largeTitleTextAttributes"] as? NSDictionary
         else { return nil };
@@ -346,7 +345,6 @@ internal class RNINavBarAppearance {
         return RCTTextAttributes(dict: styleDict);
       }();
       
-      /// set/init: `titleVerticalPositionAdjustment`
       self.titleVerticalPositionAdjustment = {
         guard let dict = dict["titleVerticalPositionAdjustment"] as? NSDictionary,
               let keys = dict.allKeys as? [String]
@@ -364,13 +362,11 @@ internal class RNINavBarAppearance {
       // Section: Navbar Style
       // ---------------------
       
-      /// set/init: `barStyle`
       self.barStyle = {
         guard let string = dict["barStyle"] as? String else { return nil };
         return UIBarStyle(string: string);
       }();
       
-      /// set/init: `tintColor`
       self.tintColor = {
         guard let value = dict["tintColor"],
               let color = UIColor.parseColor(value: value)
@@ -379,7 +375,6 @@ internal class RNINavBarAppearance {
         return color;
       }();
 
-      /// set/init: `barTintColor`
       self.barTintColor = {
         guard let value = dict["barTintColor"],
               let color = UIColor.parseColor(value: value)
@@ -662,6 +657,7 @@ internal class RNINavBarAppearance {
     };
   };
   
+  /// Clear all the config values
   func resetValues(){
     self.shouldResetNavBar = true;
     
@@ -675,6 +671,12 @@ internal class RNINavBarAppearance {
     self.appearanceConfigScrollEdge = nil;
   };
   
+  /// Update the navigation bar either using the legacy appearance config,
+  /// or using the appearance config.
+  ///
+  /// **Note**: If a `navigationItem` is provided, the appearance config will
+  /// be applied to the `navigationItem`, otherwise it'll be applied to the
+  /// navigation bar.
   func updateNavBarAppearance(
     for navBar: UINavigationBar?,
     navigationItem: UINavigationItem? = nil
