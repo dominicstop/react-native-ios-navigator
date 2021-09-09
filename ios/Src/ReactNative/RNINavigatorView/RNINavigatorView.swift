@@ -855,7 +855,7 @@ internal extension RNINavigatorView {
         );
       };
     };
-    
+  
     // filter out `itemsToRemove` items
     let filteredRoutes = vc.filter { routeVC in
       

@@ -7,9 +7,6 @@
 
 import UIKit
 
-
-
-
 extension UINavigationBar {
 
   // MARK: `allowTouchEventsToPassThroughNavigationBar`-related

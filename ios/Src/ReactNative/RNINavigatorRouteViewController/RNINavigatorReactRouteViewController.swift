@@ -217,7 +217,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     );
     
     if animated, let coordinator = self.transitionCoordinator {
-      coordinator.animate(alongsideTransition: { _ in
+      coordinator.animate(alongsideTransition: { [unowned self] _ in
         
         /// The route header will sometimes derive it's height based on the
         /// height of the navigation bar height (i.e. the route header will read
@@ -370,7 +370,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     
     guard let routeView = self.routeView else { return };
     
-    coordinator.animate(alongsideTransition: nil){ _ in
+    coordinator.animate(alongsideTransition: nil){ [unowned self] _ in
       if let navigatorView = routeView.navigatorView {
         navigatorView.navigatorConstants.refreshConstants();
       };

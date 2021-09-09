@@ -250,11 +250,11 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
     configOverrideBlocks.applyConfig();
     
     if animated, let coordinator = self.transitionCoordinator {
-      coordinator.animate(alongsideTransition: { _ in
+      coordinator.animate(alongsideTransition: {  _ in
         /// Transition in new appearance override
         configOverrideBlocks.applyAnimatableConfig();
         
-      }, completion: { context in
+      }, completion: { [unowned self] context in
         if context.isCancelled,
            let currentVC = self.lastViewController as? RNINavigatorRouteBaseViewController {
           
@@ -295,13 +295,13 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
     self.notifyRoutesForChangeInStatusBarStyle(self.statusBarStyleTarget);
     
     if animated, let coordinator = self.transitionCoordinator {
-      coordinator.animate(alongsideTransition: { [weak self] _ in
+      coordinator.animate(alongsideTransition: { [unowned self] _ in
         /// transition - animate in status bar style
-        self?.setNeedsStatusBarAppearanceUpdate();
+        self.setNeedsStatusBarAppearanceUpdate();
         
-      }, completion: { [weak self] context in
+      }, completion: { [unowned self] context in
         if context.isCancelled,
-           let currentVC = self?.lastViewController as? RNINavigatorRouteBaseViewController {
+           let currentVC = self.lastViewController as? RNINavigatorRouteBaseViewController {
           
           // transition cancelled, reset status bar style
           currentVC.notifyRoutesForChangeInStatusBarStyle(
