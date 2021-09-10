@@ -65,17 +65,10 @@
 		* Might be a bug related to the appearance config restoration logic (i.e. likely related the restoration of the navigation bar from the previous route, or the "re-application" of the current route's config when the swipe back gesture is cancelled and becomes in focus again).
 			* Still persist even after navigator override config refactor in commit `5395fb2`.
 		* Might also be related to `setupScrollView`?
-		* 
-	- [x] **Fix**: (Commit: `bde6344`) The custom navigation bar left and right item disappears when the back gesture is started and cancelled.
-		* Note: The custom navigation bar title item doesn't disappear, it's only the custom left/right items that disappear. 
-		* Can be reproduced using `NavigatorShowcase03`, ``NavigatorTest02`,  `RouteViewPortalExample01`, etc.
-		* It seems like the cleanup for the navigation items are being triggered, causing the react views to be removed.
 
-	- [ ] **Fix**: When using legacy mode, the appearance config flickers in, i.e. when you trigger the back swipe gesture, the appearance changes to the prev. routes config, and when you cancel the back swipe, the appearance config for the current route get's applied immediately.
-		* Example: During the back swipe gesture, the header background color properly transitions, but the navigation bar tint does not (it gets immediately applied, there is no transition).
-		* Can be reproduced using `NavigatorTest01`.
-		* Note: Things that do not transition properly: `tintColor`, `backgroundImage`, `shadowImage`.
-		* Note: was partially fixed in commit `5395fb2` (`tintColor` now fades in after the swipe gesure is cancelled).
+	- [ ] The header custom `backgroundImage` image and `shadowImage` doesn't transition properly, e.g. the `backgroundImage` abruptly disappears, and the `shadowImage` transitions to the wrong height (i.e. the default hair width height, but stretched vertically).
+		* This bug is present in both appearance and appearance legacy mode (so it's a potential bug in UIKit).
+		* Partially fixed in commit `589384c` (i.e. the navigation bar background + shadow now fades in when the transition is cancelled).
 
 <br>
 
@@ -421,8 +414,23 @@
 
 <br>
 
-- [x] (Commit: `558ce57` / `TODO (019)`):  `RNINavigatorReactRouteViewController.statusBarStyle`: Move impl. to the base view controller.
+- [x] (Commit: `558ce57` ) `TODO (019)`):  `RNINavigatorReactRouteViewController.statusBarStyle`: Move impl. to the base view controller.
 - [x] (Commit: `4c33444`) Fixed status bar style transition not being triggered when the pop gesture is repeatedly cancelled (i.e. the status bar style pop transition only worked on the first try).
+- [x] (Commit: `29af00e`):  `NavigationConfigOverride` — Fixed  `navigationBarVisibilityMode` and `allowTouchEventsToPassThroughNavigationBar` not being applied.
+- [x] (Commit: `589384c`) Partial fix for navigation bar `backgroundImage` and `shadowImage` not being transitioned during push/pop.
+
+<br>
+
+- [x] **Fix**: (Commit: `bde6344`) The custom navigation bar left and right item disappears when the back gesture is started and cancelled.
+	* Note: The custom navigation bar title item doesn't disappear, it's only the custom left/right items that disappear. 
+	* Can be reproduced using `NavigatorShowcase03`, ``NavigatorTest02`,  `RouteViewPortalExample01`, etc.
+	* It seems like the cleanup for the navigation items are being triggered, causing the react views to be removed.
+
+- [x] **Fix**: When using legacy mode, the appearance config flickers in, i.e. when you trigger the back swipe gesture, the appearance changes to the prev. routes config, and when you cancel the back swipe, the appearance config for the current route get's applied immediately.
+	* Example: During the back swipe gesture, the header background color properly transitions, but the navigation bar `tintColor` does not (it gets immediately applied, there is no transition).
+	* Can be reproduced using `NavigatorTest01`.
+	* Note: Things that do not transition properly: `tintColor`, `backgroundImage`, `shadowImage`.
+	* Note: was fixed in commit `5395fb2` (`tintColor` now fades in after the swipe gesture is cancelled).
 
 <br>
 
