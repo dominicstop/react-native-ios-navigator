@@ -1021,6 +1021,8 @@ Native/Swift Integration
 
 #### `RNINavigatorRouteBaseViewController`
 
+#### `RNINavigationControllerConfig`
+
 ------
 
 <br><br>
@@ -1124,6 +1126,8 @@ Native/Swift Integration
 ### F.4. Native Integration
 
 #### Creating Native Routes 
+
+#### Route Customizations
 
 #### Pushing Routes From Native-Side
 
