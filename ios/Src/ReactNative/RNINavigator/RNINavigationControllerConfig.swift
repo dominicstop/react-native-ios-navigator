@@ -54,6 +54,16 @@ public class RNINavigationControllerConfig {
   
   // MARK:- Properties
   
+  /// As of iOS 13, setting a custom background image or shadow image in the
+  /// navigation bar does not transition properly.
+  ///
+  /// As such, this flag indicates whether or not to add a custom fade transition
+  /// to the navigation bar.
+  ///
+  /// Note: Be sure to reset this to `false` whenever a route loses focus.
+  ///
+  var shouldAddFadeTransitionToNavigationBar = false;
+  
   /// store the navigation bar's current legacy appearance config so that it can
   /// be re-applied/restored later.
   var navBarLegacyConfig = RNINavigationControllerLegacyAppearanceConfig();
@@ -158,6 +168,17 @@ public class RNINavigationControllerConfig {
           navigationItem: routeVC.navigationItem
         );
     };
+    
+    self.shouldAddFadeTransitionToNavigationBar = (
+         navigatorView.navBarAppearanceConfig.hasBackgroundImage
+      || navigatorView.navBarAppearanceConfig.hasShadowImage
+      
+      || config?.hasBackgroundImage ?? false
+      || config?.hasShadowImage     ?? false
+      
+      || self.navBarLegacyConfig.hasBackgroundImage
+      || self.navBarLegacyConfig.hasShadowImage
+    );
   };
   
   func makeApplyConfigBlocks(
@@ -172,14 +193,14 @@ public class RNINavigationControllerConfig {
         self?.applyAllowTouchEventsToPassThroughNavigationBar(
           for: routeVC, forceApplyConfig: true
         );
+        
+        self?.applyIsNavBarHidden(
+          for: routeVC, isAnimated: isAnimated, forceApplyConfig: true
+        );
       },
       applyAnimatableConfig: { [weak self] in
         self?.applyNavBarAppearance(
           for: routeVC, with: nil, forceApplyLegacyConfig: true
-        );
-        
-        self?.applyIsNavBarHidden(
-          for: routeVC, isAnimated: isAnimated, forceApplyConfig: true
         );
       }
     );
@@ -232,6 +253,17 @@ class RNINavigationControllerLegacyAppearanceConfig {
   var backgroundImage: Dictionary<UIBarMetrics, UIImage> = [:];
   var shadowImage: UIImage?;
   
+  // MARK:- Computed Properties
+  // --------------------------
+  
+  var hasBackgroundImage: Bool {
+    self.backgroundImage.values.count > 0;
+  };
+  
+  var hasShadowImage: Bool {
+    self.shadowImage != nil;
+  };
+  
   // MARK:- Functions
   // ----------------
   
@@ -265,7 +297,7 @@ class RNINavigationControllerLegacyAppearanceConfig {
     self.shadowImage        = defaultAppearance.shadowImage;
   };
 
- func saveValues(from navBar: UINavigationBar) {
+  func saveValues(from navBar: UINavigationBar) {
     self.titleTextAttributes = navBar.titleTextAttributes;
     
     if #available(iOS 11.0, *) {
@@ -283,11 +315,13 @@ class RNINavigationControllerLegacyAppearanceConfig {
       self.titleVerticalPositionAdjustment[metric] =
         navBar.titleVerticalPositionAdjustment(for: metric);
       
+      // Note: This can return `nil`, but writing `nil` as the value for a given
+      // key erases that key
       self.backgroundImage[metric] = navBar.backgroundImage(for: metric);
     };
   };
-  
- func applyConfig(to navBar: UINavigationBar){
+
+  func applyConfig(to navBar: UINavigationBar){
 
     // Section: Title Config
     // ---------------------

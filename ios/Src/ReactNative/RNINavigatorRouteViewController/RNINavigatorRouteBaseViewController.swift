@@ -244,6 +244,12 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
   };
   
   internal func applyNavigationConfigOverride(_ animated: Bool){
+    
+    // add custom fade transition
+    if animated && self.navigationConfigOverride.shouldAddFadeTransitionToNavigationBar {
+      self.navigatorViewRef?.addFadeTransitionToNavigationBar();
+    };
+    
     let configOverrideBlocks = self.navigationConfigOverride
       .makeApplyConfigBlocks(for: self, isAnimated: animated);
     
@@ -255,6 +261,11 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
         configOverrideBlocks.applyAnimatableConfig();
         
       }, completion: { [unowned self] context in
+        
+        // Transition finished, remove custom fade transition (if any)
+        self.navigatorViewRef?.removeFadeTransitionFromNavigationBar();
+        self.navigationConfigOverride.shouldAddFadeTransitionToNavigationBar = false;
+        
         if context.isCancelled,
            let currentVC = self.lastViewController as? RNINavigatorRouteBaseViewController {
           

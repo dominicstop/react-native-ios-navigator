@@ -156,6 +156,14 @@ internal class RNINavBarAppearance {
       return appearance;
     };
     
+    var hasShadowImage: Bool {
+      self.shadowImage != nil
+    };
+    
+    var hasBackgroundImage: Bool {
+      self.backgroundImage != nil
+    };
+    
     // MARK: Init + Config
     // -------------------
     
@@ -311,6 +319,17 @@ internal class RNINavBarAppearance {
     var backIndicatorImage: RNIImageItem?;
     var backgroundImage: [(UIBarMetrics, RNIImageItem)]?;
     var shadowImage: RNIImageItem?;
+    
+    // MARK: Computed Properties
+    // -------------------------
+    
+    var hasShadowImage: Bool {
+      self.shadowImage != nil
+    };
+    
+    var hasBackgroundImage: Bool {
+      self.backgroundImage != nil
+    };
     
     // MARK: Init + Config
     // -------------------
@@ -592,6 +611,31 @@ internal class RNINavBarAppearance {
     self.appearanceConfigStandard   != nil ||
     self.appearanceConfigCompact    != nil ||
     self.appearanceConfigScrollEdge != nil
+  };
+  
+  // MARK:- RNINavBarAppearance - Computed Properties
+  // ------------------------------------------------
+  
+  var appearanceHasBackgroundImage: Bool {
+    self.appearanceConfigStandard?  .hasBackgroundImage ?? false ||
+    self.appearanceConfigCompact?   .hasBackgroundImage ?? false ||
+    self.appearanceConfigScrollEdge?.hasBackgroundImage ?? false
+  };
+  
+  var appearanceHasShadowImage: Bool {
+    self.appearanceConfigStandard?  .hasShadowImage ?? false ||
+    self.appearanceConfigCompact?   .hasShadowImage ?? false ||
+    self.appearanceConfigScrollEdge?.hasShadowImage ?? false
+  };
+  
+  var hasBackgroundImage: Bool {
+    self.appearanceLegacy?.hasBackgroundImage ?? false ||
+    self.appearanceHasBackgroundImage
+  };
+  
+  var hasShadowImage: Bool {
+    self.appearanceLegacy?.hasShadowImage ?? false ||
+    self.appearanceHasShadowImage
   };
   
   // MARK:- RNINavBarAppearance - Methods

@@ -35,6 +35,8 @@ public final class RNINavigatorView: UIView {
   
   var navigatorConstants: RNINavigatorUIConstants!;
   
+  var navigationBarFadeTransition: CATransition?;
+  
   // MARK:- Properties - Private
   // --------------------------
 
@@ -429,6 +431,30 @@ public final class RNINavigatorView: UIView {
     
     let lastIndex = routeItems.count - 1;
     return routeItems[lastIndex - 1];
+  };
+  
+  internal func addFadeTransitionToNavigationBar(){
+    guard self.navigationBarFadeTransition == nil,
+          let navigationBar = self.navigationVC?.navigationBar
+    else { return };
+    
+    let animation = CATransition();
+    self.navigationBarFadeTransition = animation;
+    
+    animation.duration = 0.3;
+    animation.timingFunction = CAMediaTimingFunction(name: .linear);
+    animation.type = .fade;
+    
+    navigationBar.layer.add(animation, forKey: "fadeTransition");
+  };
+  
+  internal func removeFadeTransitionFromNavigationBar(){
+    guard self.navigationBarFadeTransition != nil,
+          let navigationBar = self.navigationVC?.navigationBar
+    else { return };
+    
+    navigationBar.layer.removeAnimation(forKey: "fadeTransition");
+    self.navigationBarFadeTransition = nil;
   };
 };
 
