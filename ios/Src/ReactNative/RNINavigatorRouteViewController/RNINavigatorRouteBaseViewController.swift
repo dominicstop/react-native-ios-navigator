@@ -93,6 +93,9 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
   // MARK: Properties - Internal
   // ----------------------------
   
+  /// Whether or not the VC has been "pushed" into the navigation stack
+  internal var isPushed = false;
+  
   /// A flag that indicates whether a route's back item config was temp. modified
   /// and as a result, should be reset.
   internal var shouldResetNavBarBackConfig = false;
@@ -154,9 +157,10 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
         sender: self,
         isUserInitiated: isUserInitiated
       );
-      
-    } else {
-      // TODO: View controller was moved, possibly due replacing a route?
+    };
+    
+    if !(self is RNINavigatorReactRouteViewController) {
+      self.isPushed = true;
     };
   };
   

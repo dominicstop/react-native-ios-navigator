@@ -64,8 +64,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
   private weak var searchBarTextField: UITextField?;
   private weak var searchBaPlaceholderLabel: UILabel?;
   
-  /// Whether or not the VC has been "pushed" into the navigation stack
-  private(set) var isPushed = false;
+  
   
   /// count of how many times this vc has been in "focus"
   private(set) var focusCounter = 0;

@@ -88,7 +88,9 @@ public class RNINavigationControllerConfig {
           navController.isNavigationBarHidden != isNavBarHidden
     else { return };
     
-    if forceApplyConfig || routeVC.isLastViewController {
+    let shouldApply = routeVC.isLastViewController && routeVC.isPushed;
+    
+    if forceApplyConfig || shouldApply {
       /// TODO (017): Bug - when hiding nav bar, scrollview still snaps
       navController.setNavigationBarHidden(isNavBarHidden, animated: isAnimated);
     };
@@ -104,10 +106,9 @@ public class RNINavigationControllerConfig {
           navigatorView.allowTouchEventsToPassThroughNavigationBar != flag
     else { return };
     
-    // override current value
-    self.allowTouchEventsToPassThroughNavigationBar = flag;
+    let shouldApply = routeVC.isLastViewController && routeVC.isPushed;
     
-    if forceApplyConfig || routeVC.isLastViewController {
+    if forceApplyConfig || shouldApply {
       /// TODO (017): Bug - when hiding nav bar, scrollview still snaps
       navigatorView.allowTouchEventsToPassThroughNavigationBar = flag;
     };
@@ -122,8 +123,7 @@ public class RNINavigationControllerConfig {
           let navController = navigatorView.navigationVC
     else { return };
     
-    // If `routeVC` is a react route, then get the
-    // `navBarAppearanceOverrideConfig`.
+    // If `routeVC` is a react route, then get the `navBarAppearanceOverrideConfig`.
     let config: RNINavBarAppearance? = config ?? {
       guard let reactRouteVC = routeVC as? RNINavigatorReactRouteViewController,
             let routeView    = reactRouteVC.routeView
@@ -150,7 +150,9 @@ public class RNINavigationControllerConfig {
           navBar: navController.navigationBar
         );
         
-        if forceApplyLegacyConfig || routeVC.isLastViewController {
+        let shouldApply = routeVC.isLastViewController && routeVC.isPushed;
+        
+        if forceApplyLegacyConfig || shouldApply {
           // If route is currently active/focused, immediately apply config
           // to the navigation bar
           self.navBarLegacyConfig.applyConfig(to: navController.navigationBar);
