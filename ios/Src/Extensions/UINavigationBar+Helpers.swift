@@ -8,8 +8,9 @@
 import UIKit
 
 extension UINavigationBar {
-
-  // MARK: `allowTouchEventsToPassThroughNavigationBar`-related
+  
+  // MARK:- `allowTouchEventsToPassThroughNavigationBar`-related
+  // ----------------------------------------------------------
   
   var allowTouchEventsToPassThrough: Bool {
     guard let navigatorView = RNIUtilities.getParent(responder: self, type: RNINavigatorView.self)

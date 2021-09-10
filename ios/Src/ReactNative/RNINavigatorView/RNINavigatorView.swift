@@ -387,7 +387,7 @@ public final class RNINavigatorView: UIView {
   // ---------------------
   
   /// remove this view (+ related-views) from the RN view registry
-  func cleanup(){
+  internal func cleanup(){
     guard !self.didTriggerCleanup else { return };
     self.didTriggerCleanup = true;
     
@@ -425,7 +425,7 @@ public final class RNINavigatorView: UIView {
     self.reactNavBarBackground = nil;
   };
   
-  func getSecondToLastRouteVC() -> RNINavigatorRouteBaseViewController? {
+  internal func getSecondToLastRouteVC() -> RNINavigatorRouteBaseViewController? {
     guard self.routeItemsMap.count > 1 else { return nil };
     let routeItems = self.routeItems;
     

@@ -132,12 +132,11 @@ public class RNINavigationControllerConfig {
       return routeView.navBarAppearanceOverrideConfig;
     }();
     
-    #warning("Handle when navigator appearance is set/changes")
-    
     self.resetAppearanceIfNeeded(for: routeVC, with: config);
     
-    switch config?.mode  {
+    switch config?.mode {
       case .none: fallthrough;
+        
       case .legacy:
         // use navigator `navBarAppearanceConfig` prop as base
         navigatorView.navBarAppearanceConfig.appearanceLegacy?.applyConfig(
@@ -155,13 +154,9 @@ public class RNINavigationControllerConfig {
           // If route is currently active/focused, immediately apply config
           // to the navigation bar
           self.navBarLegacyConfig.applyConfig(to: navController.navigationBar);
-          
         };
       
       case .appearance:
-        //TODO:
-        #warning("Handle appearance mode switching")
-        
         // Apply changes via navigationItem + appearance API
         config!.updateNavBarAppearance(
           for: navController.navigationBar,
