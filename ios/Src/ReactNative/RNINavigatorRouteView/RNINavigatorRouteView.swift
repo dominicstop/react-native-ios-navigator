@@ -663,8 +663,6 @@ private extension RNINavigatorRouteView {
   /// So this method triggers the delegate events to send the initial values that
   /// this view received from react/js.
   ///
-  /// Note: the events for **`NavigationConfigOverride`-related** props are not
-  /// triggered here, since those values will be init. set in the vc's `viewDidAppear`.
   func setupRouteVC(){
     guard let delegate = self.delegate else { return };
     
@@ -727,6 +725,15 @@ private extension RNINavigatorRouteView {
     
     delegate.didReceiveHidesBackButton(
       self.hidesBackButton
+    );
+    
+    //  MARK: Section - NavigationConfigOverride-related
+    /// ------------------------------------------------
+    
+    delegate.didReceiveNavBarVisibility(self.navigationBarVisibilityMode);
+    
+    delegate.didReceiveAllowTouchEventsToPassThroughNavigationBar(
+      self.allowTouchEventsToPassThroughNavigationBar
     );
   };
   
