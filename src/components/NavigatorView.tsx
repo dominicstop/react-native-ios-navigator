@@ -7,6 +7,8 @@ import { RNIWrapperView } from '../native_components/RNIWrapperView';
 import { NativeRouteMap, RNINavigatorView, RNINavigatorViewProps } from '../native_components/RNINavigatorView';
 import { NavigatorConstantsObject, RNINavigatorViewModule } from '../native_modules/RNINavigatorViewModule';
 
+import { NavigatorRouteViewWrapper } from '../wrapper_components/NavigatorRouteViewWrapper';
+
 import type { NavigatorRouteView } from './NavigatorRouteView';
 
 import { NavigatorUIConstantsContext } from '../context/NavigatorUIConstantsContext';
@@ -18,7 +20,7 @@ import type { NavRouteConfigItem, NavRouteConfigItemJS } from '../types/NavRoute
 
 import { NavigatorViewEventEmitter, NavigatorViewEvents } from '../types/NavigatorViewEventEmitter';
 
-import type { OnUIConstantsDidChangeEventObject, OnNavRouteViewAddedEvent, OnSetNativeRoutesEvent, OnNativeCommandRequestEvent, OnNavRoutePopEvent, OnUIConstantsDidChangeEvent, OnCustomCommandFromNativeEvent } from '../types/RNINavigatorViewEvents';
+import type { OnUIConstantsDidChangeEventObject, OnNavRouteViewAddedEvent, OnSetNativeRoutesEvent, OnNativeCommandRequestEvent, OnNavRoutePopEvent, OnUIConstantsDidChangeEvent, OnCustomCommandFromNativeEvent, OnNavRouteDidShowEvent } from '../types/RNINavigatorViewEvents';
 
 import * as Helpers from '../functions/Helpers';
 
@@ -26,10 +28,6 @@ import { SimpleQueue } from '../functions/SimpleQueue';
 
 import { NativeIDKeys } from '../constants/LibraryConstants';
 import { LIB_ENV } from '../constants/LibEnv';
-import { NavigatorRouteViewWrapper } from '../wrapper_components/NavigatorRouteViewWrapper';
-import type { OnNavRouteDidShowEvent } from 'lib/typescript';
-
-
 
 
 //#region - Type Definitions
