@@ -33,7 +33,7 @@ export type NavigatorConstantsObject = {
   safeAreaInsets: EdgeInsets;
   bounds: Rect;
 
-  isPresenting: boolean;
+  isPresentingModal: boolean;
   activeRoutes: Array<NativeRouteData>;
 
   topViewController    ?: NativeRouteData;
@@ -115,7 +115,6 @@ interface RNINavigatorViewModule {
     commandData: Readonly<object> | null
   ): Promise<object | null>;
 
-  
   getNavigatorConstants(node: number): Promise<NavigatorConstantsObject>;
 
   getNavigatorActiveRoutes(node: number): Promise<NativeActiveRoutes>;

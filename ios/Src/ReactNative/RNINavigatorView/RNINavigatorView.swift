@@ -1190,13 +1190,14 @@ internal extension RNINavigatorView {
       "navigatorID": self.navigatorID!,
       
       // ui values
-      "navBarHeight"             : navigationVC.navigationBar.frame.height,
-      "statusBarHeight"          : navigationVC.statusBarHeight,
-      "safeAreaInsets"           : safeAreaInsets,
-      "bounds"                   : bounds,
+      "navBarHeight"   : navigationVC.navigationBar.frame.height,
+      "statusBarHeight": navigationVC.statusBarHeight,
+      "safeAreaInsets" : safeAreaInsets,
+      "bounds"         : bounds,
       
-      "isPresenting":
-        navigationVC.visibleViewController?.isBeingPresented ?? false,
+      "isPresentingModal":
+        // note: might fail in some edge case
+        navigationVC.presentingViewController != nil,
       
       "activeRoutes": self.activeRoutes.map {
         self.createRouteDataDict(from: $0)
