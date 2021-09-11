@@ -564,4 +564,48 @@ internal class RNINavigatorViewModule: NSObject {
       };
     };
   };
+  
+  @objc func dismissModal(
+    _ node  : NSNumber,
+    animated: Bool,
+    // promise blocks ------------------------
+    resolve: @escaping RCTPromiseResolveBlock,
+    reject : @escaping RCTPromiseRejectBlock
+  ){
+    
+    DispatchQueue.main.async {
+      do {
+        // get `RNINavigatorView` instance that matches node/reactTag
+        guard let navigatorView = self.getNavigatorView(node) else {
+          throw RNIError.commandFailed(
+            source : "RNINavigatorViewModule.getNavigatorActiveRoutes",
+            message:
+                "Command failed because no corresponding `RNINavigatorView` "
+              + "instance found for the given node",
+            debug: "for node: \(node)"
+          );
+        };
+        
+        #if DEBUG
+        print("LOG - NativeModule, RNINavigatorViewModule: dismissModal"
+          + " - for node: \(node)"
+        );
+        #endif
+        
+        navigatorView.navigationVC.dismiss(animated: animated){
+          resolve([:]);
+        };
+        
+      } catch {
+        let message = RNIError.constructErrorMessage(error);
+        
+        #if DEBUG
+        print("ERROR - \(message)");
+        #endif
+        
+        // reject promise w/: code, message, error
+        reject("LIB_ERROR", message, nil);
+      };
+    };
+  };
 };

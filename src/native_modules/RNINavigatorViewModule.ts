@@ -118,6 +118,11 @@ interface RNINavigatorViewModule {
   getNavigatorConstants(node: number): Promise<NavigatorConstantsObject>;
 
   getNavigatorActiveRoutes(node: number): Promise<NativeActiveRoutes>;
+
+  dismissModal(
+    node: number,
+    animated: boolean
+  ): Promise<object | null>;
 };
 
 const MODULE_NAME = "RNINavigatorViewModule";

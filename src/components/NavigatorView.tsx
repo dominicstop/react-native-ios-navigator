@@ -1334,6 +1334,13 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       );
     };
   };
+
+  public dismissModal = async (animated = true) => {
+    await RNINavigatorViewModule.dismissModal(
+      Helpers.getNativeNodeHandle(this.nativeRef),
+      animated
+    );
+  };
   //#endregion
 
   //#region - Handlers

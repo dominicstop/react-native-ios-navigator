@@ -102,4 +102,10 @@ RCT_EXTERN_METHOD(getNavigatorActiveRoutes: (nonnull NSNumber)node
                   resolve: (RCTPromiseResolveBlock)resolve
                   reject : (RCTPromiseRejectBlock )reject);
 
+RCT_EXTERN_METHOD(dismissModal: (nonnull NSNumber)node
+                  animated: (BOOL)animated
+                  // promise blocks -----------------------
+                  resolve: (RCTPromiseResolveBlock)resolve
+                  reject : (RCTPromiseRejectBlock )reject);
+
 @end
