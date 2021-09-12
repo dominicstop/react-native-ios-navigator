@@ -39,11 +39,53 @@ Before you use this library, please first consider looking at [`react-navigation
 
 ### A.1. Features 
 
+💡 **Tip**: You can also just browse through the gifs/images in the [Showcase, Tests, and Demos](#g-showcase-tests-and-demos) section.
+
+<br>
+
+* Support for using native routes (e.g. `UIViewController`). Allows you to combine  js/react routes and native routes together. 
+	* Support for controlling the navigator from native/swift-side (e.g. pushing routes, etc.)
+	* Support for passing data (i.e. `routeProps`) between native and JS/React routes.
+
+<br>
+
+* Support for multiple initial react/native routes (useful for state-restoration, e.g. restoring the navigation stack on app startup).
+* Support for using custom transitions (e.g. crossfade, slide, flip, etc).
+* Support for customizing the navigation bar either through the "legacy" API (iOS 11 and below), or the newer appearance API (iOS 13+).
+	* This includes per-route customizations using either the "legacy" or "appearance" modes.
+	* Support for:
+		* Using routes with a `UISearchBar` in the navigation bar.
+		* Using either custom react components or standard navigation bar controls (e.g. buttons, text, icons) for the navigation bar items (e.g. navigation bar title, left items, right items).
+		* Customizing the font style of the navigation bar title + large title.
+		* Per-route navigation bar visibility and status bar style.
+		* Customize the navigation bar tint, background color, background image, back indicator, blur effects, shadow, etc.
+		* Support for generating images (e.g. solid colors, gradients, rounded rects, etc) that can be used as the navigation bar background, navigation bar items... basically, anywhere that accepts an image.
+		* Etc.
+
+<br>
+
+* Exposes almost all of the `UINavigationController` events.
+* Exposes all of the things that can be configured in the view controller's [`UINavigationItem`](https://developer.apple.com/documentation/uikit/uinavigationitem) (`title`, `prompt`, `largeTitleDisplayMode`, `backBarButtonItem`, etc).
+* Etc.
+
 <br>
 
 ### A.2. Motivation 
 
-Lorum ipsum
+Basically, `react-native` [deprecated](https://archive.reactnative.dev/docs/0.58/navigatorios#docsNav) the built-in [`NavigatorIOS`](https://archive.reactnative.dev/docs/0.57/navigatorios#docsNav) component starting on version `0.58`. I really liked that component though; it was very limited, but it was great for simple demos and stuff 😔.
+
+To be fair, `react-navigation` and `react-native-navigation` are far more versatile and powerful anyway, so the deprecation didn't really matter ig.
+
+One thing that I liked about `NavigatorIOS` is that it behaved like any regular old `<View/>` component. Which is fun since you can just plop it down anywhere in your app, and it'll just "work" (this included the weird quirk of having multiple navigators 🤷‍♀️).
+
+So this library is my own attempt to recreate `NavigatorIOS`, but with slightly more features. One thing I tried to do is to expose (almost) all the ways the `UINavigationController` + `UINavigationBar` can be configured/customized.
+
+<br>
+
+#### 📝 Notes
+
+* Modal support is handled via [`react-native-ios-modal`](https://github.com/dominicstop/react-native-ios-modal) (WIP)
+* Adding menu's/submenu's in the navigation bar is handled via [`react-native-ios-context-menu`](https://github.com/dominicstop/react-native-ios-context-menu) (WIP)
 
 ------
 
