@@ -179,6 +179,7 @@ Each route has a corresponding `RouteOptions` object associated with it. This ob
 | 🔤 `onCustomCommandFromNative`<br><br>⚛️ [`OnCustomCommandFromNativeEvent`](PLACE_HOLDER_LINK)<br><br>📌 [`OnCustomCommandFromNativeEventObject`](src/types/RNINavigatorViewEvents.ts) | Event that is triggered from the native-side via the `RNINavigatorNativeCommands.sendCustomCommandToJS` delegate method.<br><br>This event exists to receive custom user-defined commands from a `RNINavigatorView` (i.e. for custom native code integration). |
 | 🔤 `onNavRouteWillShow`<br/><br/>⚛️ [`OnNavRouteWillShowEvent`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnNavRouteWillShowEventObject`](src/types/RNINavigatorViewEvents.ts) | Gets called just before the navigator shows the route (similar to `onRouteWillFocus` event).<br><br>This event maps to [`UINavigationControllerDelegate.navigationController(_:willShow:animated:)`](https://developer.apple.com/documentation/uikit/uinavigationcontrollerdelegate/1621878-navigationcontroller). |
 | 🔤 `onNavRouteDidShow`<br/><br/>⚛️ [`OnNavRouteDidShowEvent`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnNavRouteDidShowEventObject`](src/types/RNINavigatorViewEvents.ts) | Gets called after the navigator shows the route (similar to `onRouteDidFocus` event).<br/><br/>This event maps to [`UINavigationControllerDelegate.navigationController(_:didShow:animated:)`](https://developer.apple.com/documentation/uikit/uinavigationcontrollerdelegate/1621848-navigationcontroller). |
+| 🔤 `onUIConstantsDidChange`<br/><br/>⚛️ [`OnUIConstantsDidChangeEvent`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnUIConstantsDidChangeEventObject`](src/types/RNINavigatorViewEvents.ts) | Gets called whenever the UI-related constants changes (e.g. this event is triggered when the screen rotates, the navigation bar visibility is changed, etc).<br><br>The event object contains the current safe area values, status bar height, and the navigator frame.<br><br>💡 **Tip**: You can also access the UI constants via `NavigatorUIConstantsContext` or via the `useNavigatorUIConstants` hook. |
 
 <br>
 
@@ -191,6 +192,7 @@ Each route has a corresponding `RouteOptions` object associated with it. This ob
 | 🔤 `getActiveRoutes`<br/><br/>⚛️ [`() => Array<NavRouteStackItem>`](PLACE_HOLDER_LINK) | Returns an array of `NavRouteStackItem` objects that represents the current state of the  navigation stack.<br><br>This method is useful for getting the `routeIndex` of a particular route, or for getting the current active routes. |
 | 🔤 `sendCustomCommandToNative`<br/><br/>⚛️ `(commandKey: string, commandData: object ¦ null) => Promise<object ¦ null>` | Will trigger  the `RNINavigatorViewDelegate.didReceiveCustomCommandFromJS` delegate method for the current navigator view instance.<br><br>This method exists to send custom user-defined commands to the `RNINavigatorView`'s delegate (i.e. for custom native code integration).<br><br>📌 Check the [native integration guide](PLACE_HOLDER_LINK) section for more details. |
 | 🔤 `getNavigatorConstants`<br/><br/>⚛️ [`() => Promise<NavigatorConstantsObject>`](PLACE_HOLDER_LINK) | Resolves to an object containing values related to UI (e.g. `navBarHeight`, navigator bounds, `safeAreaInsets`, `statusBarHeight`), and the current state of the navigator (e.g. whether a view controller is being presented modally, the current  `activeRoutes`, the current topmost view controller, and the current visible view controller). |
+| 🔤 `dismissModal`<br/><br/>⚛️ [`(animated: Bool) => Promise<void>`](PLACE_HOLDER_LINK) | This will close any modals that are currently being presented. |
 
 <br>
 
@@ -418,19 +420,20 @@ function ExampleRoute(props){
 A common UI navigation pattern is having a large header at the very top of the screen that acts as the centerpiece for a route.
 
 * That header will either remain at a fixed size, or expand and collapse during scrolling.
-* Check out [`NavigatorShowcase01`](PLACE_HOLDER_LINK) and [`NavigatorShowcase02`](PLACE_HOLDER_LINK) for examples.
+* Check out [`NavigatorShowcase01`](PLACE_HOLDER_LINK), [`NavigatorShowcase02`](PLACE_HOLDER_LINK) and [`NavigatorShowcase03`](PLACE_HOLDER_LINK) for some examples.
 
-The navigation bar cannot be easily customized (this is especially true for its height).
+The navigation bar cannot be easily customized (this is especially true you're trying to change the height).
 
 * As such, this makes things like extending the navigation bar's height to show some custom UI elements underneath the title bar very difficult.
 * It's also undesirable to create a custom built solution because the built-in navigation bar has a lot of expected native behaviors/functionality that will be hard to re-create (transitions, the back button, etc). 
-* To workaround this, some apps (e.g. twitter's profile screen, spotify's album/playlist screen, etc) will just make the navigation bar's background transparent, and then show their custom UI elements underneath it.
-* This component uses that same approach.
+* To workaround this, some apps (e.g. spotify's album/playlist screen, etc) will just make the navigation bar's background transparent, and then show their custom UI elements underneath it.
+	* Other apps (like twitter's profile screen) will simply just hide navigation bar entirely, and show their own custom view (you can also do that using this library by pushing a route with `RouteOptions.navigationBarVisibility`).
 
 
-When in use, this component is displayed behind the navigation bar, and is anchored to the top of the screen.
+This component uses the "transparent navigation bar" approach. When in use, this component is displayed behind the navigation bar, and is anchored to the top of the screen.
 
 * The header can either have a fixed height, or it can be paired with a scroll view so that the header will expand or collapse as the user scrolls.
+* In order for your "custom navigation bar" to receive touch events, set `RouteOptions.allowTouchEventsToPassThroughNavigationBar` to `true`.
 
 <br>
 
@@ -446,7 +449,7 @@ When in use, this component is displayed behind the navigation bar, and is ancho
 
 ### D.2. Context
 
-#### D.2.1. `NavRouteViewContext`
+#### D.2.1. `NavigationContext`
 
 Lorum Ipsum<br>
 
@@ -473,6 +476,10 @@ Lorum Ipsum<br>
 ### D.3. Hooks
 
 #### D.3.1.  `useNavRouteEvents`
+
+#### D.3.2.  `useNavigation`
+
+#### D.3.2.  `useNavigatorUIConstants`
 
 <br>
 
@@ -979,9 +986,9 @@ Lorum Ipsum<br>
 
 <br>
 
-####  `abc`
+####  Enum: `NavigatorErrorCodes`
 
-* 📌 **Declaration**: [`abc`](src/types/abc)
+* 📌 **Declaration**: [`NavigatorError`](src/functions/NavigatorError.ts)
 
 ##### Object Type: `abc`
 
