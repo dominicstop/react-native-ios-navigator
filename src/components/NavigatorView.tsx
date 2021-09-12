@@ -376,11 +376,11 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       this.getLastRouteTransitionDuration(true) ?? 0
     ));
 
-    if(transitionDuration > 10){
+    if(transitionDuration > 10000){
       throw new NavigatorError({
         code: NavigatorErrorCodes.invalidArguments,
         message: 
-            `the transition duration of ${transitionDuration} sec. is too long`
+            `the transition duration of ${transitionDuration} ms. is too long`
           + " - reminder: specify duration in seconds (ex: 0.5), not in ms (ex: 500)"
       });
     };
