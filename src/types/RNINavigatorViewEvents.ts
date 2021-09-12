@@ -1,5 +1,5 @@
 import type { NativeActiveRoutes } from 'src/native_modules/RNINavigatorViewModule';
-import type { EdgeInsets } from './MiscTypes';
+import type { EdgeInsets, Rect } from './MiscTypes';
 
 //#region - Event Objects
 type EventBaseEventObject = {
@@ -67,6 +67,7 @@ export type OnUIConstantsDidChangeEventObject = {
   nativeEvent: EventBaseEventObject & {
     statusBarHeight: number;
     safeAreaInsets: EdgeInsets;
+    navigatorSize: Rect;
   };
 };
 //#endregion

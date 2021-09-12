@@ -91,6 +91,7 @@ export type NavigatorViewProps = Partial<Pick<RNINavigatorViewProps,
 type NavigatorViewState = Partial<Pick<OnUIConstantsDidChangeEventObject['nativeEvent'],
   | 'statusBarHeight'
   | 'safeAreaInsets'
+  | 'navigatorSize'
 >> & {
   activeRoutes: Array<NavRouteStackItem>;
 
@@ -153,6 +154,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       safeAreaInsets: undefined,
       statusBarHeight: undefined,
+      navigatorSize: undefined,
     };
   };
 
@@ -1577,10 +1579,11 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
   private _handleOnUIConstantsDidChange: OnUIConstantsDidChangeEvent = ({nativeEvent}) => {
     if(this.navigatorID !== nativeEvent.navigatorID) return;
-
+    
     this.setState({
       safeAreaInsets : nativeEvent.safeAreaInsets,
       statusBarHeight: nativeEvent.statusBarHeight,
+      navigatorSize  : nativeEvent.navigatorSize,
     });
   };
 
@@ -1710,8 +1713,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         onNavRouteDidShow={this._handleOnNavRouteDidShow}
       >
         <NavigatorUIConstantsContext.Provider value={{
-          safeAreaInsets: state.safeAreaInsets,
+          safeAreaInsets : state.safeAreaInsets,
           statusBarHeight: state.statusBarHeight,
+          navigatorSize  : state.navigatorSize,
         }}>
           {this._renderRoutes()}
           {props.renderNavBarBackground && (

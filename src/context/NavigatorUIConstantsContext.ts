@@ -6,6 +6,7 @@ export type NavigatorUIConstantsContextProps = Pick<OnUIConstantsDidChangeEventO
   | 'navigatorID'
   | 'safeAreaInsets'
   | 'statusBarHeight'
+  | 'navigatorSize'
 >;
 
 export const NavigatorUIConstantsContext = 
