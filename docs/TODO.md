@@ -2,9 +2,11 @@
 
 ## In Progress
 
-- [ ] **Implement**: Merge `routeProps` from `NavigatorView.initialRoutes`, `NavRouteConfigItem.initialRouteProps`, and `NavRouteStackItem.routeProps`.
-
-- [ ] **Implement**: Shallow merge route options and route props (e.g. `initialRouteOptions`, `routeOptionsDefault`, etc).
+- [ ] **Implement**: `NavigatorView` — Impl. `modalPresentationCapturesStatusBarAppearance` prop.
+- [ ] **Implement**: Route Event — Screen rotate event (i.e. using `willTransitionTo` VC lifecycle).
+- [ ] **Implement**: Create `useNavigation` context.
+- [ ] **Refactor**: Rename `NavRouteViewContext` to `NavigationContext`
+- [ ] **Cleanup**: Remove debug logs in native code. 
 
 <br>
 
@@ -14,15 +16,10 @@
 - [ ] Refactor: `getSecondToLastRouteVC`
 - [ ] Expose  `backIndicatorTransitionMaskImage`.
 - [ ] Use `TurboModules` + `JSI`.
-- [ ] Impl. Error Codes 
-	* Specific error codes for when a navigator command fails (e.g. library errors, and user errors).
-	* E.g. `ACTIVE_ROUTES_DESYNC`, `INVALID_ROUTE_KEY`, `UNKNOWN_ERROR`.
-	* Will be used to trigger `syncRoutesFromNative` when the error code is `ACTIVE_ROUTES_DESYNC`.
 
 <br>
 
 - [ ] Possibly trigger `syncRoutesFromNative` from native when active routes diverged.
-- [ ] Impl. Close Modals
 - [ ] Impl. On Modal Event
 - [ ] Refactor: Allow pushing regular `UIViewController` instances
 	-  Refactor native active routes to be `(routeData, UIViewController)`.
@@ -48,27 +45,7 @@
 <br>
 
 - [ ] Impl. Navigation Bar `mixed` mode (e.g. use legacy and appearance at the same time).
-- [ ] Impl. Route Event: Screen Rotate (i.e. `willTransitionTo`).
-- [ ] Impl. `useNavigation` context.
-
-- [ ] Rename `NavRouteViewContext` to `NavigationContext`
 - [ ] Examples: Update `NavigatorTest02`
-
-
-
-* Back-gesture related bugs.
-
-	- [ ] **Fix**: Starting the back  gesture by slowly swiping left, then immediately swiping right and letting go (i.e. to cancel the back gesture) causes the navigation bar to become transparent with a large title even though the scroll offset isn't at the very top (i.e. the navigation bar flickers, and becomes temporarily see through).
-		* This bug can be reproduced using `NavigatorTest01` route.
-		* In other words, the large title appears even though it shouldn't (due to the current scroll offset).
-		* It's as though the configuration was restored/re-applied when the route was focused again (could be some logic in the VC lifecycle, e.g. `viewWillAppear`, etc).
-		* Might be a bug related to the appearance config restoration logic (i.e. likely related the restoration of the navigation bar from the previous route, or the "re-application" of the current route's config when the swipe back gesture is cancelled and becomes in focus again).
-			* Still persist even after navigator override config refactor in commit `5395fb2`.
-		* Might also be related to `setupScrollView`?
-
-	- [ ] The header custom `backgroundImage` image and `shadowImage` doesn't transition properly, e.g. the `backgroundImage` abruptly disappears, and the `shadowImage` transitions to the wrong height (i.e. the default hair width height, but stretched vertically).
-		* This bug is present in both appearance and appearance legacy mode (so it's a potential bug in UIKit).
-		* Partially fixed in commit `589384c` (i.e. the navigation bar background + shadow now fades in when the transition is cancelled).
 
 <br>
 
@@ -146,11 +123,6 @@
 
 <br>
 
-- [ ] **Implement**: Support landscape orientation/screen rotate.
-	* Already seems to work, but there might be edge cases (especially regarding safe area layout).
-
-<br>
-
 - [ ] **Implement**: Add support for setting the root view's background color.
 - [ ] **Implement**: Create `RouteHeaderContainer` — a native component that will copy the navigation bar's current height.
 
@@ -199,7 +171,7 @@
 		* Impl. setting the `tokenBackgroundColor`.
 	* [ ] **Implement**: Expose remaining `UISearchController` events to react e.g. `willDismissSearchController`, `didDismissSearchController`, `willPresentSearchController`, and `didPresentSearchController`.
 
-
+<br>
 
 - [ ] **Implement**: Disable clipping in the navigation bar.
 	- When a navigation bar item is bigger than the navigation bar, the navigation bar item is clipped.
@@ -234,7 +206,7 @@
 
 - [ ] **Refactor**: Replace `IF DEBUG` with `IF RNI_NAV_DEBUG`
 
-* Tested by adding `RNI_NAV_DEBUG` to the `Other Swift Flags` build setting for `IosNavigatorExample` but it didn't seem to work.
+	- Tested by adding `RNI_NAV_DEBUG` to the `Other Swift Flags` build setting for `IosNavigatorExample` but it didn't seem to work.
 
 <br>
 
@@ -261,16 +233,6 @@
 
 <br>
 
-- [ ] **Fix**: autolayout warnings
-
-	* So far there aren't any warning.
-- [ ] **Fix** back swipe sometimes not working (`percentDrivenTransitions`)
-	- The back swipe is hard to do on the simulator, but testing on device, the back swipe gesture seems to work fine 🤷‍♀️.
-
-<br>
-
-<br>
-
 - [ ] **Fix**: `RCTScrollView` indicator insets is wrong.
   - For devices with notches, the scroll view insets for the left and right of the screen is wrong. The top and bottom insets are correct (e.g. the scroll indicator insets are insetted from the home indicator and navigation bar).
 
@@ -283,7 +245,7 @@
 <br>
 
 - [ ] **Fix**: navigation bar `backIndicatorImage` and `backIndicatorTransitionMaskImage` not resetting to the original chevron back button icon.
-	- Possible `UIKit` bug, according the debugger, `backIndicatorImage` is already set to `nil`,  and yet the back icon is not being reset to the original back button chevron icons.
+	- Possible `UIKit` bug, according to the debugger, `backIndicatorImage` is already set to `nil`,  and yet the back icon is not being reset to the original back button chevron icons.
 	- Persist across different view controllers/routes being pushed.
 	- **Note**: The default value for `backIndicatorImage` is `nil` (i.e. `UINavigationBar.appearance()`).
 
@@ -291,6 +253,22 @@
 
 - [ ] **Fix**: Shadow styles not applying to the text styles for navigation bar title and large title.
 	* Shadow is a view property and not a text style.
+
+<br>
+
+* Back-gesture related bugs.
+
+	- [ ] **Fix**: Starting the back  gesture by slowly swiping left, then immediately swiping right and letting go (i.e. to cancel the back gesture) causes the navigation bar to become transparent with a large title even though the scroll offset isn't at the very top (i.e. the navigation bar flickers, and becomes temporarily see through).
+		* This bug can be reproduced using `NavigatorTest01` route.
+		* In other words, the large title appears even though it shouldn't (due to the current scroll offset).
+		* It's as though the configuration was restored/re-applied when the route was focused again (could be some logic in the VC lifecycle, e.g. `viewWillAppear`, etc).
+		* Might be a bug related to the appearance config restoration logic (i.e. likely related the restoration of the navigation bar from the previous route, or the "re-application" of the current route's config when the swipe back gesture is cancelled and becomes in focus again).
+			* Still persist even after navigator override config refactor in commit `5395fb2`.
+		* Might also be related to `setupScrollView`?
+
+	- [ ] The header custom `backgroundImage` image and `shadowImage` doesn't transition properly, e.g. the `backgroundImage` abruptly disappears, and the `shadowImage` transitions to the wrong height (i.e. the default hair width height, but stretched vertically).
+		* This bug is present in both appearance and appearance legacy mode (so it's a potential bug in UIKit).
+		* Partially fixed in commit `589384c` (i.e. the navigation bar background + shadow now fades in when the transition is cancelled).
 
 ---
 
@@ -305,9 +283,10 @@
 
 - [ ] **Test**: Demo for navigation bar appearance (i.e. like `NavigatorTest01` but in demo form).
 	* Automatically push routes consecutively/one after the other. Each route will have `routeOptions` that will change the appearance of the route's navigation bar
-- [ ] **Test**: Update route props (e.g. via `setRoutes`, etc). 
 
 <br>
+
+- [ ] **Test**: Update route props (e.g. via `setRoutes`, etc). 
 
 - [ ] **Example**: Add test for multiple initial routes + test for initial native route.
 - [ ] **Test**: Scroll view with headers and footers, snapping, etc.
@@ -341,7 +320,6 @@
 	- Related to: `TODO (003)`, `TODO (004)`, and `TODO (005)`.
 - [ ] `TODO (017)`: `NavigatorView.verifyProps` — Add user-defined type guard
 - [ ] `TODO (018)`: `overrideIsNavBarHidden` — Bug: when hiding nav bar, scrollview still snaps.
-- [ ] 
 
 ---
 
@@ -350,6 +328,19 @@
 ## Completed
 
 ### Version: `next`
+
+- [x] (Commit: `7cdae0d`) **Refactor**: Re-write error handling — Impl. error codes 
+	* Specific error codes for when a navigator command fails (e.g. library errors, and user errors).
+	* E.g. `ACTIVE_ROUTES_DESYNC`, `INVALID_ROUTE_KEY`, `ROUTE_OUT_OF_BOUNDS`, `MODAL_ACTIVE`,  `UNKNOWN_ERROR`, etc.
+	* Will be used to trigger `syncRoutesFromNative` when the error code is `ACTIVE_ROUTES_DESYNC`.
+	* Can be used to distinguish user errors and library-specific errors.
+	* Create user-friendly error messages for user errors.
+
+<br>
+
+- [x] (Commit: `ad00e43`) **Implement**: Impl. navigation command to close all modals.
+
+<br>
 
 - [x] (Commit: `e2831e3`) **Implement**: Impl. `syncRoutesFromNative`
 	- Command to sync the native active routes to the JS active routes.
