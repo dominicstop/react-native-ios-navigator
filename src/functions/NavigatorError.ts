@@ -26,7 +26,7 @@ export class NavigatorError extends Error {
   name: NavigatorErrorCodes | string;
   message: string;
 
-  constructor(error: Error | NavigatorErrorObject | string){
+  constructor(error: any){
     super();
     const errorObj = NavigatorError.parseErrorObject(error);
 
