@@ -71,6 +71,7 @@ export type NavigatorViewProps = Partial<Pick<RNINavigatorViewProps,
   | 'onNavRouteDidPop'
   | 'onNavRouteWillShow'
   | 'onNavRouteDidShow'
+  | 'onUIConstantsDidChange'
 >> & {
   style?: ViewStyle;
 
@@ -1579,6 +1580,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
   private _handleOnUIConstantsDidChange: OnUIConstantsDidChangeEvent = ({nativeEvent}) => {
     if(this.navigatorID !== nativeEvent.navigatorID) return;
+    
+    this.props.onUIConstantsDidChange?.({nativeEvent});
     
     this.setState({
       safeAreaInsets : nativeEvent.safeAreaInsets,
