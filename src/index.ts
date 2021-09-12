@@ -6,7 +6,9 @@ export * from './components/RouteViewPortal';
 export * from './components/RouteViewEvents';
 
 export * from './hoc/withRouteViewLifecycle';
+
 export * from './hooks/useNavRouteEvents';
+export * from './hooks/useNavigation';
 
 export * from './context/NavigationContext';
 export * from './context/NavigatorUIConstantsContext';
