@@ -13,12 +13,15 @@ export * from './hooks/useNavigation';
 export * from './context/NavigationContext';
 export * from './context/NavigatorUIConstantsContext';
 
-// Types
+export { NavigatorErrorCodes } from './functions/NavigatorError';
+
 export { RNINavigatorViewConstants as NavigatorViewConstants } from './native_components/RNINavigatorView';
 export { BackButtonDisplayMode, LargeTitleDisplayMode, NavigationBarVisibilityMode, StatusBarStyle } from './native_components/RNINavigatorRouteView';
 
 export { RouteConstantsObject } from './native_modules/RNINavigatorRouteViewModule';
 export { NavigatorConstantsObject, NativeRouteData } from './native_modules/RNINavigatorViewModule';
+
+// Types
 
 export * from './types/RouteOptions';
 export * from './types/NavigationObject';

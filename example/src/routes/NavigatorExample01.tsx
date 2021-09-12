@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, Text, SafeAreaView, TouchableOpacity } from 'react-native';
 
-import { NavigatorView, RouteContentProps, RouteViewPortal, useNavRouteEvents } from 'react-native-ios-navigator';
+import { NavigatorView, RouteViewPortal, useNavigation, useNavRouteEvents } from 'react-native-ios-navigator';
 
 import * as Colors  from '../constants/Colors';
 import * as Helpers from '../functions/Helpers';
@@ -25,11 +25,9 @@ function randomBGColor(){
   return Helpers.randomElement<string>(colors);
 };
 
-// extend
-interface ExampleRouteProps extends RouteContentProps {
-};
+function ExampleRoute(){
+  const navigation = useNavigation();
 
-function ExampleRoute(props: ExampleRouteProps){
   const [bgColor] = React.useState(randomBGColor());
 
   const routeContainerStyle = { backgroundColor: bgColor };
@@ -46,13 +44,12 @@ function ExampleRoute(props: ExampleRouteProps){
   return (
     <SafeAreaView style={[styles.routeContainer, routeContainerStyle]}>
       <Text style={styles.textRoute}>
-        {`Debug: ${props.navigation.routeKey} - ${props.navigation.routeIndex}`}
+        {`Debug: ${navigation.routeKey} - ${navigation.routeIndex}`}
       </Text>
       <TouchableOpacity
         style={styles.buttonContainer}
         onPress={() => {
-          const nav = props.navigation;
-          nav.push({routeKey: 'routeA'}, {
+          navigation.push({routeKey: 'routeA'}, {
             transitionConfig: { type: 'SlideLeft', duration: 0.3 }
           });
         }}
@@ -64,9 +61,8 @@ function ExampleRoute(props: ExampleRouteProps){
       <TouchableOpacity
         style={styles.buttonContainer}
         onPress={() => {
-          const nav = props.navigation;
-          nav.push({routeKey: 'routeB', routeOptions: {
-            routeTitle: `Route B${nav.routeIndex + 1}`
+          navigation.push({routeKey: 'routeB', routeOptions: {
+            routeTitle: `Route B${navigation.routeIndex + 1}`
           }});
         }}
       >
