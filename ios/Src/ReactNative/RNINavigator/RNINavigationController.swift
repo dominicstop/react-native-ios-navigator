@@ -16,7 +16,8 @@ class RNINavigationController: UINavigationController {
   ///
   /// Note: Placing this in an extension as an `open override` doesn't seem to work,
   /// so a subclass was needed.
-  public override var childForStatusBarStyle: UIViewController? {
+  ///
+  override var childForStatusBarStyle: UIViewController? {
     return self.visibleViewController;
   };
 };

@@ -1288,6 +1288,17 @@ extension RNINavigatorView: RNINavigatorNativeCommands {
 
 extension RNINavigatorView: UINavigationControllerDelegate {
   
+  /// **Note**:
+  /// * "willShow"/"didShow" will not trigger when a view controller is
+  ///    being presented
+  ///
+  /// * Using KVO on `.presentedViewController` also does not work (bc it's
+  ///   probably a computed property).
+  ///
+  /// * Overriding `.present` doesn't work when the child VC is the one who's
+  ///   presenting the VC.
+  ///
+  /// * `viewWillDisappear` isn't triggered when a view controller is presented.
   
   public func navigationController(
     _ navigationController: UINavigationController,
