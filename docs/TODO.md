@@ -4,8 +4,6 @@
 
 - [ ] **Implement**: `NavigatorView` — Impl. `modalPresentationCapturesStatusBarAppearance` prop.
 - [ ] **Implement**: Route Event — Screen rotate event (i.e. using `willTransitionTo` VC lifecycle).
-- [ ] **Implement**: Create `useNavigation` context.
-- [ ] **Refactor**: Rename `NavRouteViewContext` to `NavigationContext`
 - [ ] **Cleanup**: Remove debug logs in native code. 
 
 <br>
@@ -46,6 +44,7 @@
 
 - [ ] Impl. Navigation Bar `mixed` mode (e.g. use legacy and appearance at the same time).
 - [ ] Examples: Update `NavigatorTest02`
+- [ ] Add support for using `RouteHeader` when the navigation bar is hidden.
 
 <br>
 
@@ -422,6 +421,13 @@
 	* Can be reproduced using `NavigatorTest01`.
 	* Note: Things that do not transition properly: `tintColor`, `backgroundImage`, `shadowImage`.
 	* Note: was fixed in commit `5395fb2` (`tintColor` now fades in after the swipe gesture is cancelled).
+
+<br>
+
+- [x] (Commit: `0e9a9d1`) **Implement**: Impl. `useNavigation` context hook.
+- [x] (Commit: `6c9c66e`) **Refactor**: Rename `NavRouteViewContext` to `NavigationContext`.
+- [x] (Commit: `b768803`) **Implement**: Expose `NavigatorView.onUIConstantsDidChange` event.
+- [x] (Commit: `33c2f26`) **Implement**: Impl. `useNavigatorUIConstants` context hook.
 
 <br>
 
