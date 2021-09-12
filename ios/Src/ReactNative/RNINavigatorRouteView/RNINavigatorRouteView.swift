@@ -760,12 +760,12 @@ internal extension RNINavigatorRouteView {
   
   func getConstants(completion: @escaping (NSDictionary) -> Void) throws {
     guard let routeVC = self.routeVC else {
-      throw RNIError.commandFailed(
-        source : "RNINavigatorRouteView.getConstants",
+      throw RNINavigatorError(
+        code: .libraryError,
+        domain: "RNINavigatorRouteView.getConstants",
         message:
-            "No corresponding 'routeVC' found for the route view."
-          + " The route view may not be completely initialized yet.",
-        debug: nil
+          "No corresponding 'routeVC' found for the route view."
+        + " The route view may not be completely initialized yet."
       );
     };
     

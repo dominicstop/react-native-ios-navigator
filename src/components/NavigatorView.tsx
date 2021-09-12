@@ -25,6 +25,7 @@ import type { OnUIConstantsDidChangeEventObject, OnNavRouteViewAddedEvent, OnSet
 import * as Helpers from '../functions/Helpers';
 
 import { SimpleQueue } from '../functions/SimpleQueue';
+import { NavigatorError, NavigatorErrorCodes } from '../functions/NavigatorError';
 
 import { NativeIDKeys } from '../constants/LibraryConstants';
 import { LIB_ENV } from '../constants/LibEnv';
@@ -164,34 +165,48 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   private verifyProps = () => {
     const props = this.props;
 
-    if(props.routes == null) throw new Error(
-      'The NavigatorView.routes prop cannot be empty.'
-    );
+    if(props.routes == null){
+      throw new NavigatorError({
+        code: NavigatorErrorCodes.invalidProps,
+        message: "the 'NavigatorView.routes' prop cannot be empty"
+      });
+    };
 
-    if(typeof props.routes !== 'object' || Array.isArray(props.routes)) throw new Error(
-      'The value passed to the NavigatorView.routes prop must be an object.'
-    );
+    if(typeof props.routes !== 'object' || Array.isArray(props.routes)){
+      throw new NavigatorError({
+        code: NavigatorErrorCodes.invalidProps,
+        message: "the value passed to the 'NavigatorView.routes' prop must be an object"
+      });
+    };
 
     const routeKeys = Object.keys(props.routes);
 
-    if(routeKeys.length === 0) throw new Error(
-        'The NavigatorView.routes prop cannot be an empty object.'
-      + ' There must be at least one valid route.'
-    );
+    if(routeKeys.length === 0){
+      throw new NavigatorError({
+        code: NavigatorErrorCodes.invalidProps,
+        message: 
+            "the 'NavigatorView.routes' prop cannot be an empty object."
+          + ' There must be at least one valid route'
+      });
+    };
 
     for (const routeKey of routeKeys) {
       const routeConfig = props.routes[routeKey];
 
       // skip native routes...
       if(routeConfig.isNativeRoute) continue;
+
       // TODO (016): Add user-defined type guard
       // * (x: NavRouteConfigItem): x is NavRouteConfigItemJS
 
-      if((routeConfig as NavRouteConfigItemJS).renderRoute == null) throw new Error(
-          `Invalid route config for ${routeKey} in NavigatorView.routes prop.`
-        + ` Missing 'renderRoute' function (all JS routes must have a component to render).`
-      );
-      
+      if((routeConfig as NavRouteConfigItemJS).renderRoute == null){
+        throw new NavigatorError({
+          code: NavigatorErrorCodes.invalidProps,
+          message: 
+              `invalid route config for ${routeKey} in 'NavigatorView.routes' prop.`
+            + " Missing 'renderRoute' function (all JS routes must have a component to render)"
+        });
+      };
     };
   };
 
@@ -211,8 +226,12 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     const isEmpty = (initialRoutes?.length === 0);
 
     // guard: initial validation for `initialRoutes`
+    
     if(!isValid || isEmpty){
-      throw new Error(`'NavigatorView' error: Invalid value given to 'initialRoutes' prop.`);
+      throw new NavigatorError({
+        code: NavigatorErrorCodes.invalidProps,
+        message: "Invalid value given to 'initialRoutes' prop"
+      });
     };
 
     return initialRoutes.map((route, index) => {
@@ -220,13 +239,15 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       // guard: no matching route config found for `routeKey`
       if(config == null){
-        throw new Error(
-            "'NavigatorView' error: invalid value for 'initialRoutes' prop"
-          + ` - no matching route found for 'routeKey': ${route.routeKey}.`
-          + " All routes must be declared in the routes prop."
-          + " If this is a native route, please add it to the 'routes' prop w/"
-          + " the 'isNativeRoute' property set to true."
-        );
+        throw new NavigatorError({
+          code: NavigatorErrorCodes.invalidProps,
+          message: 
+                "invalid value for 'initialRoutes' prop"
+            + ` - no matching route found for 'routeKey': ${route.routeKey}.`
+            + " All routes must be declared in the routes prop."
+            + " If this is a native route, please add it to the 'routes' prop w/"
+            + " the 'isNativeRoute' property set to 'true'"
+        });
       };
 
       const routeItem: NavRouteStackItem = {
@@ -355,11 +376,13 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       this.getLastRouteTransitionDuration(true) ?? 0
     ));
 
-    if(transitionDuration > 10000){
-      throw new Error(
-          `The transition duration of ${transitionDuration} sec. is too long`
-        + " - reminder: specify duration in seconds (ex: 0.5), not in ms (ex: 500)"
-      );
+    if(transitionDuration > 10){
+      throw new NavigatorError({
+        code: NavigatorErrorCodes.invalidArguments,
+        message: 
+            `the transition duration of ${transitionDuration} sec. is too long`
+          + " - reminder: specify duration in seconds (ex: 0.5), not in ms (ex: 500)"
+      });
     };
 
 
@@ -507,11 +530,13 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         });
       };
 
-    } catch(error) {
+    } catch(e) {
+      const error = new NavigatorError(e);
+
       //#region - 🐞 DEBUG 🐛
       LIB_ENV.debugLog && console.log(
           `LOG/JS - Error, NavigatorView, syncRoutesFromNative`
-        + ` - sync failed w/ error: ${error}`
+        + ` - sync failed w/ error: ${error.message}`
       );
       //#endregion
 
@@ -617,9 +642,10 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
     if(!routeConfig){
       // no matching route config found for `routeItem`
-      throw new Error(
-        `NavigatorView' failed to do: 'push', invalid 'routeKey': ${routeItem.routeKey}`
-      );
+      throw new NavigatorError({
+        code: NavigatorErrorCodes.invalidArguments,
+        message: `invalid 'routeKey': ${routeItem.routeKey}`
+      });
     };
     
     try {
@@ -686,7 +712,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       this.setNavStatus(NavStatus.IDLE);
       this.queue.dequeue();
 
-    } catch(error){
+    } catch(e){
+      const error = new NavigatorError(e);
       const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
 
       transitionConfig.resetTransition();
@@ -696,7 +723,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       this.queue.dequeue();
       
       if(!wasAborted || syncStats.didDivergeFromNative) {
-        throw new Error(`'NavigatorView' failed to do: 'push' with error: ${error}`);
+        throw error;
       };
     };
   };
@@ -705,7 +732,10 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     const { activeRoutes } = this.state;
 
     if(activeRoutes.length < 1){
-      throw new Error(`'pop' failed, active route count must be > 1`);
+      throw new NavigatorError({
+        code: NavigatorErrorCodes.routeOutOfBounds,
+        message: "no routes to pop, the current active route count must be > 1"
+      });
     };
 
     const transitionConfig = this.configureTransitionOverride({
@@ -752,8 +782,10 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       this.setNavStatus(NavStatus.IDLE);
       this.queue.dequeue();
 
-    } catch(error){
+    } catch(e){
+      const error = new NavigatorError(e);
       const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
+
       transitionConfig.resetTransition();
 
       const syncStats = await this.syncRoutesFromNative();
@@ -762,7 +794,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       this.queue.dequeue();
 
       if(!wasAborted || syncStats.didDivergeFromNative) {
-        throw new Error(`'NavigatorView' failed to do: 'pop' with error: ${error}`);
+        throw error;
       };
     };
   };
@@ -814,7 +846,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       this.setNavStatus(NavStatus.IDLE);
       this.queue.dequeue();
 
-    } catch(error){
+    } catch(e){
+      const error = new NavigatorError(e);
       const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
 
       transitionConfig.resetTransition();
@@ -824,7 +857,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       this.queue.dequeue();
 
       if(!wasAborted || syncStats.didDivergeFromNative) {
-        throw new Error(`'NavigatorView' failed to do: 'popToRoot' with error: ${error}`);
+        throw error;
       };
     };
   };
@@ -839,11 +872,18 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     const routeToBeRemoved = activeRoutes[routeIndex];
 
     if(activeRoutes.length < 1){
-      throw new Error(`\`removeRoute\` failed, route count must be > 1`);
+      throw new NavigatorError({
+        code: NavigatorErrorCodes.routeOutOfBounds,
+        message: "no routes to remove, the current active route count must be > 1"
+      });
     };
 
     if(routeToBeRemoved == null){
-      throw new Error(`\`removeRoute\` failed, invalid index: ${routeIndex}`);
+      throw new NavigatorError({
+        code: NavigatorErrorCodes.invalidRouteIndex,
+        message: `invalid 'routeIndex' value: ${routeIndex}`
+          + " - no matching route could be found for the given value"
+      });
     };
 
     try {
@@ -877,16 +917,17 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       this.setNavStatus(NavStatus.IDLE);
       this.queue.dequeue();
 
-    } catch(error){
+    } catch(e){
+      const error = new NavigatorError(e);
       const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
-       const syncStats = await this.syncRoutesFromNative();
 
+      const syncStats = await this.syncRoutesFromNative();
 
       this.setNavStatus(NavStatus.IDLE_ERROR);
       this.queue.dequeue();
 
       if(!wasAborted || syncStats.didDivergeFromNative) {
-        throw new Error(`'NavigatorView' failed to do: 'removeRoute' with error: ${error}`);
+        throw error;
       };
     };
   };
@@ -899,7 +940,10 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     const { activeRoutes } = this.state;
 
     if(routeIndices.length === 0){
-      throw new Error(`'removeRoutes' failed, 'routeIndexes' is empty`);
+      throw new NavigatorError({
+        code: NavigatorErrorCodes.invalidArguments,
+        message: "the provided 'routeIndexes' to remove is empty"
+      });
     };
 
     // check if `routeIndexes` are valid
@@ -907,7 +951,11 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       const item = activeRoutes[routeIndex];
 
       if(item == null){
-        throw new Error(`\`removeRoutes\` failed, invalid index: ${routeIndex}`);
+        throw new NavigatorError({
+          code: NavigatorErrorCodes.invalidRouteIndex,
+          message: `invalid 'routeIndexes' value: ${routeIndex}`
+            + " - no matching route found the given value"
+        });
       };
     };
     
@@ -945,15 +993,17 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       this.setNavStatus(NavStatus.IDLE);
       this.queue.dequeue();
 
-    } catch(error){
+    } catch(e){
+      const error = new NavigatorError(e);
       const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
+
       const syncStats = await this.syncRoutesFromNative();
 
       this.setNavStatus(NavStatus.IDLE_ERROR);
       this.queue.dequeue();
 
       if(!wasAborted || syncStats.didDivergeFromNative) {
-        throw new Error(`'NavigatorView' failed to do: 'removeRoutes' with error: ${error}`);
+        throw error;
       };
     };
   };
@@ -970,11 +1020,19 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     const replacementRouteConfig = this.getRouteConfig(routeItem.routeKey);
 
     if(routeToReplace == null){
-      throw new Error(`\`replaceRoute\` failed, no route found for the given \`routeIndex\`: ${prevRouteIndex}`);
+      throw new NavigatorError({
+        code: NavigatorErrorCodes.invalidRouteIndex,
+        message: `invalid 'prevRouteIndex' value: ${prevRouteIndex}`
+          + " - no matching route found for the given value"
+      });
     };
 
     if(replacementRouteConfig == null){
-      throw new Error(`\`replaceRoute\` failed, no route found for the given \`routeKey\`: ${routeItem?.routeKey}`);
+      throw new NavigatorError({
+        code: NavigatorErrorCodes.invalidRouteKey,
+        message: `invalid replacement 'routeKey' value: ${routeItem?.routeKey}`
+          + " - no matching route found for the given value"
+      });
     };
 
     const replacementRoute: NavRouteStackItem = {
@@ -1023,15 +1081,17 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       this.setNavStatus(NavStatus.IDLE);
       this.queue.dequeue();
 
-    } catch(error){
+    } catch(e){
+      const error = new NavigatorError(e);
       const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
+
       const syncStats = await this.syncRoutesFromNative();
 
       this.setNavStatus(NavStatus.IDLE_ERROR);
       this.queue.dequeue();
 
       if(!wasAborted || syncStats.didDivergeFromNative) {
-        throw new Error(`'NavigatorView' failed to do: 'removeRoutes' with error: ${error}`);
+        throw error;
       };
     };
   };
@@ -1047,11 +1107,19 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
     if(!routeConfig){
       // no matching route config found for `routeItem`
-      throw new Error("`NavigatorView` failed to do: `insertRoute`: Invalid `routeKey`");
+      throw new NavigatorError({
+        code: NavigatorErrorCodes.invalidRouteKey,
+        message: `invalid 'routeKey' value: ${routeItem?.routeKey}`
+          + " - no corresponding route could be for the given value"
+      });
     };
 
     if(atIndex > state.activeRoutes.length){
-      throw new Error("`NavigatorView` failed to do: `insertRoute`: Invalid `atIndex` (out of bounds)");
+      throw new NavigatorError({
+        code: NavigatorErrorCodes.routeOutOfBounds,
+        message: `invalid 'atIndex' value: ${atIndex} (out of bounds)`
+          + " - the provided 'atIndex' exceeds the total active routes"
+      });
     };
 
     const nextRoute: NavRouteStackItem = {
@@ -1104,15 +1172,17 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       this.setNavStatus(NavStatus.IDLE);
       this.queue.dequeue();
 
-    } catch(error){
+    } catch(e){
+      const error = new NavigatorError(e);
       const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
+
       const syncStats = await this.syncRoutesFromNative();
 
       this.setNavStatus(NavStatus.IDLE_ERROR);
       this.queue.dequeue();
 
       if(!wasAborted || syncStats.didDivergeFromNative) {
-        throw new Error(`'NavigatorView' failed to do: 'insertRoute' with error: ${error}`);
+        throw error;
       };
     };
   };
@@ -1166,10 +1236,11 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
           const routeConfig = this.getRouteConfig(route.routeKey);
 
           if(routeConfig == null){
-            throw new Error(
-                'Transform callback returned an invalid route key.'
-              + `No matching route config for routeKey: ${route.routeKey}`
-            );
+            throw new NavigatorError({
+              code: NavigatorErrorCodes.invalidRouteKey,
+              message: "the transform callback returned an invalid route key."
+                + ` - no matching route found for the given 'routeKey': ${route.routeKey}`
+            });
           };
 
           return {
@@ -1221,16 +1292,17 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       this.setNavStatus(NavStatus.IDLE);
       this.queue.dequeue();
 
-    } catch(error){
+    } catch(e){
+      const error = new NavigatorError(e);
       const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
-       const syncStats = await this.syncRoutesFromNative();
 
+      const syncStats = await this.syncRoutesFromNative();
 
       this.setNavStatus(NavStatus.IDLE_ERROR);
       this.queue.dequeue();
 
       if(!wasAborted || syncStats.didDivergeFromNative) {
-        throw new Error(`'NavigatorView' failed to do: 'setRoutes' with error: ${error}`);
+        throw error;
       };
     };
   };
@@ -1248,14 +1320,15 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         )
       );
 
-    } catch(error){
+    } catch(e){
+      const error = new NavigatorError(e);
       const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
 
       this.setNavStatus(NavStatus.IDLE_ERROR);
       this.queue.dequeue();
 
       if(!wasAborted) {
-        throw new Error(`'NavigatorView' failed to do: 'setNavigationBarHidden' with error: ${error}`);
+        throw error;
       };
     };
   };
@@ -1328,10 +1401,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       return result;
 
-    } catch(error){
-      throw new Error(
-        "'NavigatorView.getNavigatorConstants' failed with error: " + error
-      );
+    } catch(e){
+      throw new NavigatorError(e);
     };
   };
 
@@ -1420,18 +1491,17 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
           this.setNavStatus(NavStatus.IDLE);
           this.queue.dequeue();
 
-        } catch(error) {
+        } catch(e) {
+          const error = new NavigatorError(e);
           const wasAborted = NavigatorViewUtils.wasAborted(this.navStatus);
+
           const syncStats = await this.syncRoutesFromNative();
 
           this.setNavStatus(NavStatus.IDLE_ERROR);
           this.queue.dequeue();
 
           if(!wasAborted || syncStats.didDivergeFromNative) {
-            throw new Error(
-                `'NavigatorView' failed to do: '${commandData.commandKey}'`
-              + `with error: ${error}`
-            );
+            throw error;
           };
         };
         break;

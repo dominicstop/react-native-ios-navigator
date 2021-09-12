@@ -27,6 +27,7 @@ import * as Helpers from '../functions/Helpers';
 import { CompareRouteTransitionPopConfig, CompareRouteTransitionPushConfig } from '../functions/CompareRouteOptions';
 import { CompareUtilities } from '../functions/CompareUtilities';
 import { CompareRouteOptions } from '../functions/CompareRouteOptions';
+import { NavigatorError, NavigatorErrorCodes } from '../functions/NavigatorError';
 
 import { NavRouteViewContext } from '../context/NavRouteViewContext';
 import { NavigatorUIConstantsContext } from '../context/NavigatorUIConstantsContext';
@@ -398,12 +399,18 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
   public setHidesBackButton = async (isHidden: boolean, animated: boolean) => {
     try {
       if(!RouteViewUtils.isRouteReady(this.routeStatus)){
-        throw new Error("`NavigatorRouteView` is not mounted")
+        throw new NavigatorError({
+          code: NavigatorErrorCodes.libraryError,
+          message: "'NavigatorRouteView' is not mounted"
+        });
       };
 
-      if(this._nativeRef == null) throw new Error(
-        "this._nativeRef not set"
-      );
+      if(this._nativeRef == null){
+        throw new NavigatorError({
+          code: NavigatorErrorCodes.libraryError,
+          message: "'this._nativeRef' is not set"
+        });
+      };
 
       await Helpers.promiseWithTimeout(1000,
         RNINavigatorRouteViewModule.setHidesBackButton(
@@ -412,23 +419,26 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
         )
       );
 
-    } catch(error){
-      throw new Error(
-          "'NavigatorRouteView' failed to do: 'setHidesBackButton'"
-        + ` - with error: ${error}`
-      );
+    } catch(e){
+      throw new NavigatorError(e);
     };
   };
 
   public getRouteConstants = async () => {
     try {
       if(!RouteViewUtils.isRouteReady(this.routeStatus)){
-        throw new Error("`NavigatorRouteView` is not mounted")
+        throw new NavigatorError({
+          code: NavigatorErrorCodes.libraryError,
+          message: "'NavigatorRouteView' is not mounted"
+        });
       };
 
-      if(this._nativeRef == null) throw new Error(
-        "this._nativeRef not set"
-      );
+      if(this._nativeRef == null){
+        throw new NavigatorError({
+          code: NavigatorErrorCodes.libraryError,
+          message: "'this._nativeRef' is not set"
+        });
+      };
 
       const result = await Helpers.promiseWithTimeout(1000,
         RNINavigatorRouteViewModule.getRouteConstants(
@@ -438,10 +448,8 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
 
       return result;
 
-    } catch(error){
-      throw new Error(
-        "'NavigatorRouteView.getConstants' failed with error: " + error
-      );
+    } catch(e){
+      throw new NavigatorError(e);
     };
   };
   // #endregion

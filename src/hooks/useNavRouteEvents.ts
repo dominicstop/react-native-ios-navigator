@@ -5,6 +5,8 @@ import type { EnumValuesLiteral } from '../types/UtilityTypes';
 
 import { NavRouteViewContext } from '../context/NavRouteViewContext';
 
+import { NavigatorError, NavigatorErrorCodes } from '../functions/NavigatorError';
+
 
 export function useNavRouteEvents<
   T extends EnumValuesLiteral<NavigatorRouteViewEvents>,
@@ -15,9 +17,12 @@ export function useNavRouteEvents<
 ){
   const { navigation } = useContext(NavRouteViewContext);
 
-  if(navigation == null) throw new Error(
-    "Unable to get navigation object via context"
-  );
+  if(navigation == null){
+    throw new NavigatorError({
+      code: NavigatorErrorCodes.libraryError,
+      message: "unable to get navigation object via context"
+    });
+  };
   
   // Create a ref that stores handler
   const savedHandler = useRef<Function | null>(null);
@@ -33,9 +38,12 @@ export function useNavRouteEvents<
   useEffect(() => {
     const emitterRef = navigation.getRefToNavRouteEmitter();
 
-    if(emitterRef == null) throw new Error(
-      "Unable to get ref. to the route event emitter."
-    );
+    if(emitterRef == null) {
+      throw new NavigatorError({
+        code: NavigatorErrorCodes.libraryError,
+        message: "unable to get ref. to the route event emitter"
+      });
+    };
 
     // create event listener that calls handler function stored in ref
     const eventListener = (params: any) => savedHandler.current!(params);

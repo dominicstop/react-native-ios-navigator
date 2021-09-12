@@ -665,31 +665,23 @@ internal extension RNINavigatorView {
     
     /// get the route to be pushed in the nav stack
     guard let nextRouteVC = self.routeItemsMap[routeID] else {
-      throw RNIError.commandFailed(
-        source : "RNINavigatorView.push",
-        message:
-            "Unable to push due to invalid routeID, no corresponding route found "
-          + "for the given routeID.",
+      throw RNINavigatorError(
+        code: .invalidRouteID,
+        domain: "RNINavigatorView.push",
+        message: "no corresponding route found for the given 'routeID' value: \(routeID)",
         debug: debug
       );
     };
     
     guard routeItems.last?.routeID == routeID else {
-      throw RNIError.commandFailed(
-        source : "RNINavigatorView.push",
-        message:
-            "Unable to push due to mismatch, the last routeID does not match "
-          + "the given routeID.",
+      throw RNINavigatorError(
+        code: .activeRoutesDeSync,
+        domain: "RNINavigatorView.push",
+        message: "the last 'routeID' value of \(routeItems.last?.routeID ?? -1)"
+         + " does not match the given 'routeID' value of \(routeID)",
         debug: debug
       );
     };
-    
-    #if DEBUG
-    print("LOG - NativeView, RNINavigatorView: push"
-      + " - pushing with routeKey: \(nextRouteVC.routeKey)"
-      + " - \(debug)"
-    );
-    #endif
     
     self.navigationVC.pushViewController(nextRouteVC, animated: isAnimated){
       completion();
@@ -711,10 +703,11 @@ internal extension RNINavigatorView {
     #endif
     
     guard routeItems.count > 1 else {
-      throw RNIError.commandFailed(
-        source : "RNINavigatorView.pop",
-        message: "Unable to `pop` because there are <= 1 active routes.",
-        debug  : debug
+      throw RNINavigatorError(
+        code: .routeOutOfBounds,
+        domain: "RNINavigatorView.pop",
+        message: "there are currently <= 1 active routes.",
+        debug: debug
       );
     };
     
@@ -724,22 +717,13 @@ internal extension RNINavigatorView {
           /// last route in `routeVCs`
           lastRouteVC == lastNavRouteVC
     else {
-      throw RNIError.commandFailed(
-        source : "RNINavigatorView.pop",
-        message:
-            "Unable to pop due to mismatch, the last item in the navigation "
-          + "controller does not match the last item in `self.routeVCs` ",
+      throw RNINavigatorError(
+        code: .activeRoutesDeSync,
+        domain: "RNINavigatorView.pop",
+        message: "the last item in the navigation controller does not match the last item in 'self.routeVCs'",
         debug: debug
       );
     };
-    
-    #if DEBUG
-    print("LOG - NativeView, RNINavigatorView: pop"
-      + " - for routeKey: \(lastRouteVC.routeKey)"
-      + " - routeIndex: \(lastRouteVC.routeIndex)"
-      + " - current routeVC count: \(debug)"
-    );
-    #endif
     
     lastRouteVC.isToBeRemoved = true;
     
@@ -766,16 +750,13 @@ internal extension RNINavigatorView {
     #endif
     
     guard routeItems.count > 1 else {
-      throw RNIError.commandFailed(
-        source : "RNINavigatorView.popToRoot",
-        message: "Unable to `popToRoot` because the route count is currently <= 1",
-        debug  : debug
+      throw RNINavigatorError(
+        code: .routeOutOfBounds,
+        domain: "RNINavigatorView.popToRoot",
+        message: "the route count is currently <= 1",
+        debug: debug
       );
     };
-    
-    #if DEBUG
-    print("LOG - NativeView, RNINavigatorView: popToRoot - \(debug)");
-    #endif
     
     for route in routeItems {
       route.isToBeRemoved = true;
@@ -805,35 +786,22 @@ internal extension RNINavigatorView {
     #endif
     
     guard routeIndex < self.activeRoutes.count else {
-      throw RNIError.commandFailed(
-        source : "RNINavigatorView.removeRoute",
-        message: "Unable to `removeRoute` because `routeIndex` > the total active routes"
+      throw RNINavigatorError(
+        code: .routeOutOfBounds,
+        domain: "RNINavigatorView.removeRoute",
+        message: "'routeIndex' > the total active routes",
+        debug: debug
       );
     };
     
     guard let routeToRemove = self.routeItemsMap[routeID] else {
-      throw RNIError.commandFailed(
-        source : "RNINavigatorView.removeRoute",
-        message:
-            "Unable to `removeRoute` due to invalid routeID, no corresponding "
-          + "route could be found for the given `routeID`.",
+      throw RNINavigatorError(
+        code: .invalidRouteID,
+        domain: "RNINavigatorView.removeRoute",
+        message: "invalid 'routeID', no corresponding route could be found for the given 'routeID'",
         debug: debug
       );
     };
-    
-    guard routeItems[routeIndex].routeID == routeID else {
-      throw RNIError.commandFailed(
-        source : "RNINavigatorView.removeRoute",
-        message:
-            "Unable to `removeRoute` due to mismatch, the route for the given "
-          + "`routeIndex` does not match the route for the given `routeID`.",
-        debug: debug
-      );
-    };
-    
-    #if DEBUG
-    print("LOG - NativeView, RNINavigatorView: removeRoute - \(debug)");
-    #endif
     
     routeItems.remove(at: routeIndex);
     routeToRemove.isToBeRemoved = true;
@@ -849,7 +817,6 @@ internal extension RNINavigatorView {
     completion   : @escaping Completion
   ) throws {
     
-    let routeItems = self.routeItems;
     let vc = self.activeRoutes;
     
     #if DEBUG
@@ -863,20 +830,21 @@ internal extension RNINavigatorView {
     // check if items to remove are valid
     for item in itemsToRemove {
       guard item.routeIndex < vc.count else {
-        throw RNIError.commandFailed(
-          source : "RNINavigatorView.removeRoute",
-          message: "Unable to `removeRoute` because `routeIndex` > the total active routes"
+        throw RNINavigatorError(
+          code: .routeOutOfBounds,
+          domain: "RNINavigatorView.removeRoute",
+          message: "'routeIndex' > the total active routes",
+          debug: debug
         );
       };
       
       let routeToRemove = vc[item.routeIndex];
       
       guard item.routeID == routeToRemove.routeID else {
-        throw RNIError.commandFailed(
-          source : "RNINavigatorView.removeRoute",
-          message:
-              "Unable to `removeRoute` due to mismatch, the route that is to be "
-            + "removed does not match the given `routeID`.",
+        throw RNINavigatorError(
+          code: .invalidRouteID,
+          domain: "RNINavigatorView.removeRoute",
+          message: "'routeID' mismatch, the route that is to be removed does not match the given 'routeID'",
           debug: debug
         );
       };
@@ -893,14 +861,6 @@ internal extension RNINavigatorView {
       routeVC.isToBeRemoved = shouldRemove;
       return !shouldRemove;
     };
-    
-    #if DEBUG
-    print("LOG - NativeView, RNINavigatorView: removeRoutes"
-      + " - isAnimated: \(isAnimated)"
-      + " - current routeVC count: \(routeItems.count)"
-      + " - current nav vc count: \(self.navigationVC.viewControllers.count)"
-    );
-    #endif
     
     self.navigationVC.setViewControllers(filteredRoutes, animated: isAnimated) {
       completion();
@@ -927,31 +887,28 @@ internal extension RNINavigatorView {
     #endif
     
     guard prevRouteIndex < self.activeRoutes.count else {
-      throw RNIError.commandFailed(
-        source : "RNINavigatorView.replaceRoute",
-        message:
-            "Unable to `replaceRoute` because `prevRouteIndex` is invalid,"
-          + " because it's value is > the total active routes (out of bounds).",
+      throw RNINavigatorError(
+        code: .routeOutOfBounds,
+        domain: "RNINavigatorView.replaceRoute",
+        message: "the 'prevRouteIndex' is invalid because it's value is > the total active routes (out of bounds).",
         debug: debug
       );
     };
     
     guard let routeToReplace = self.routeItemsMap[prevRouteID] else {
-      throw RNIError.commandFailed(
-        source : "RNINavigatorView.replaceRoute",
-        message:
-            "Unable to `replaceRoute` because no matching route could be found "
-          + "for the given prevRouteID",
+      throw RNINavigatorError(
+        code: .invalidRouteID,
+        domain: "RNINavigatorView.replaceRoute",
+        message: "no matching route could be found for the given 'prevRouteID'",
         debug: debug
       );
     };
     
     guard let replacementRoute = self.routeItemsMap[nextRouteID] else {
-      throw RNIError.commandFailed(
-        source : "RNINavigatorView.replaceRoute",
-        message:
-            "Unable to `replaceRoute` because no matching route could be found "
-          + "for the given nextRouteID",
+      throw RNINavigatorError(
+        code: .invalidRouteID,
+        domain: "RNINavigatorView.replaceRoute",
+        message: "no matching route could be found for the given 'nextRouteID'",
         debug: debug
       );
     };
@@ -959,22 +916,17 @@ internal extension RNINavigatorView {
     guard routeToReplace  .routeIndex == prevRouteIndex,
           replacementRoute.routeIndex == prevRouteIndex
     else {
-      throw RNIError.commandFailed(
-        source : "RNINavigatorView.replaceRoute",
+      throw RNINavigatorError(
+        code: .activeRoutesDeSync,
+        domain: "RNINavigatorView.replaceRoute",
         message:
-            "Unable to `replaceRoute` due to mismatch, the given prevRouteIndex "
-          + " is invalid because it does not match the routeIndex of the matching "
-          + "'replacement' route (i.e. the route for the given nextRouteID), and/or "
-          + "the 'to be replaced' route (i.e. the route for the given prevRouteID)",
+            "Unable to `replaceRoute` due to mismatch, the given prevRouteIndex"
+          + " is invalid because it does not match the routeIndex of the matching"
+          + " 'replacement' route (i.e. the route for the given nextRouteID), and/or"
+          + " the 'to be replaced' route (i.e. the route for the given prevRouteID)",
         debug: debug
       );
     };
-    
-    #if DEBUG
-    print("LOG - NativeView, RNINavigatorView: replaceRoute - \(debug)");
-    #endif
-    
-    
     routeToReplace.isToBeRemoved = true;
     self.routeItemsMap.removeValue(forKey: routeToReplace.routeID);
     
@@ -1003,49 +955,43 @@ internal extension RNINavigatorView {
     #endif
     
     guard atIndex < self.activeRoutes.count else {
-      throw RNIError.commandFailed(
-        source : "RNINavigatorView.insertRoute",
-        message:
-            "Unable to `insertRoute` because `atIndex` is invalid,"
-          + " because it's value is > the total active routes (out of bounds).",
+      throw RNINavigatorError(
+        code: .routeOutOfBounds,
+        domain: "RNINavigatorView.insertRoute",
+        message: "'atIndex' is invalid because it's value is > the total active routes (out of bounds).",
         debug: debug
       );
     };
     
     guard self.routeItemsMap.count > self.activeRoutes.count else {
-      throw RNIError.commandFailed(
-        source : "RNINavigatorView.insertRoute",
+      throw RNINavigatorError(
+        code: .libraryError,
+        domain: "RNINavigatorView.insertRoute",
         message:
-            "Unable to `insertRoute` because the total `routeItemsMap` < the"
-          + " total active routes. This could mean that the route to be inserted"
-          + " hasn't been received in the native side yet (or it wasn't sent at all)",
+            "the total `routeItemsMap` < the total active routes."
+          + " This could mean that the route to be inserted hasn't been received"
+          + " in the native side yet (or it wasn't sent at all)",
         debug: debug
       );
     };
     
     guard let routeToBeInserted = self.routeItemsMap[nextRouteID] else {
-      throw RNIError.commandFailed(
-        source : "RNINavigatorView.insertRoute",
-        message:
-            "Unable to `insertRoute` because no route could be found for the"
-          + " given route `nextRouteID`",
+      throw RNINavigatorError(
+        code: .invalidRouteID,
+        domain: "RNINavigatorView.insertRoute",
+        message: "no route could be found for the given route 'nextRouteID'",
         debug: debug
       );
     };
     
     guard routeToBeInserted.routeID == nextRouteID else {
-      throw RNIError.commandFailed(
-        source : "RNINavigatorView.insertRoute",
-        message:
-            "Unable to `insertRoute` due to `nextRouteID` mismatch, the 'route to be"
-          + " inserted' does not match the provided `nextRouteKey`",
+      throw RNINavigatorError(
+        code: .activeRoutesDeSync,
+        domain: "RNINavigatorView.insertRoute",
+        message: "'nextRouteID' mismatch, the 'route to be inserted' does not match the provided 'nextRouteKey'",
         debug: debug
       );
     };
-    
-    #if DEBUG
-    print("LOG - NativeView, RNINavigatorView: insertRoute - \(debug)");
-    #endif
     
     var nextRoutes = self.activeRoutes;
     nextRoutes.insert(routeToBeInserted, at: atIndex);
@@ -1076,10 +1022,11 @@ internal extension RNINavigatorView {
     #endif
     
     guard nextRouteIDs.count > 0 else {
-      throw RNIError.commandFailed(
-        source : "RNINavigatorView.insertRoute",
-        message: "Unable to `insertRoute` because the given `nextRouteIDs` is empty",
-        debug  : debug
+      throw RNINavigatorError(
+        code: .invalidArguments,
+        domain: "RNINavigatorView.setRoutes",
+        message: "the given 'nextRouteIDs' is empty.",
+        debug: debug
       );
     };
     
@@ -1094,11 +1041,10 @@ internal extension RNINavigatorView {
       
       for routeID in nextRouteIDs {
         guard let routeVC = self.routeItemsMap[routeID] else {
-          throw RNIError.commandFailed(
-            source : "RNINavigatorView.setRoutes",
-            message:
-                "Unable to `setRoutes` because no corresponding route could be"
-              + " found for routeID: \(routeID)",
+          throw RNINavigatorError(
+            code: .invalidRouteID,
+            domain: "RNINavigatorView.setRoutes",
+            message: "no corresponding route could be found for routeID: \(routeID)",
             debug: debug
           );
         };
@@ -1119,13 +1065,6 @@ internal extension RNINavigatorView {
       self.routeItemsMap.removeValue(forKey: route.routeID);
     };
     
-    #if DEBUG
-    print("LOG - NativeView, RNINavigatorView: setRoutes - \(debug)"
-      + " - routesToRemove: \(routesToRemove.map { $0.routeID }.debugDescription)"
-      + " - routesToAdd: \(routesToAdd.map { $0.routeID }.debugDescription)"
-    );
-    #endif
-    
     self.navigationVC.setViewControllers(routesToAdd, animated: isAnimated) {
       completion();
     };
@@ -1138,17 +1077,13 @@ internal extension RNINavigatorView {
     resolve: @escaping (Any?   ) -> Void,
     reject : @escaping (String?) -> Void
   ) throws {
-    #if DEBUG
-    print("LOG - NativeView, RNINavigatorView: didReceiveCustomCommandFromJS"
-      + " - key: \(key)"
-      + " - data: \(data?.debugDescription ?? "N/A")"
-    );
-    #endif
     
     guard let delegate = self.delegate else {
-      throw RNIError.commandFailed(
-        source : "RNINavigatorView.didReceiveCustomCommandFromJS",
-        message: "Unable to forward command because delegate is nil"
+      throw RNINavigatorError(
+        code: .libraryError,
+        domain: "RNINavigatorView.didReceiveCustomCommandFromJS",
+        message: "Unable to forward command because delegate is nil",
+        debug: nil
       );
     };
     
@@ -1157,8 +1092,9 @@ internal extension RNINavigatorView {
   
   func getConstants(completion: @escaping (NSDictionary) -> Void) throws {
     guard let navigationVC = self.navigationVC else {
-      throw RNIError.commandFailed(
-        source : "RNINavigatorView.getConstants",
+      throw RNINavigatorError(
+        code: .libraryError,
+        domain: "RNINavigatorView.getConstants",
         message: "Unable to get the navigation controller, it may not be initialized yet.",
         debug: nil
       );
@@ -1351,6 +1287,7 @@ extension RNINavigatorView: RNINavigatorNativeCommands {
 // ------------------------------------------------
 
 extension RNINavigatorView: UINavigationControllerDelegate {
+  
   
   public func navigationController(
     _ navigationController: UINavigationController,

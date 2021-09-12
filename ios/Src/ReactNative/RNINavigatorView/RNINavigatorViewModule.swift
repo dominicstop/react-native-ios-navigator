@@ -42,14 +42,9 @@ internal class RNINavigatorViewModule: NSObject {
       do {
         // get `RNINavigatorView` instance that matches node/reactTag
         guard let navigatorView = self.getNavigatorView(node) else {
-          throw RNIError.commandFailed(
-            source : "RNINavigatorViewModule.push",
-            message:
-                "Unable to `push` because no corresponding `RNINavigatorView` "
-              + "instance found for the given node",
-            debug:
-                "for node: \(node)"
-              + " - with params, routeID: \(routeID)"
+          throw RNINavigatorError(
+            code: .invalidReactTag,
+            domain: "RNINavigatorViewModule.push"
           );
         };
       
@@ -59,14 +54,8 @@ internal class RNINavigatorViewModule: NSObject {
           resolve([:]);
         };
       } catch {
-        let message = RNIError.constructErrorMessage(error);
-        
-        #if DEBUG
-        print("ERROR - \(message)");
-        #endif
-        
-        // reject promise w/: code, message, error
-        reject("LIB_ERROR", message, nil);
+        let error = error as? RNINavigatorError;
+        reject(error?.code.rawValue , error?.createJSONString(), nil);
       };
     };
   };
@@ -83,12 +72,9 @@ internal class RNINavigatorViewModule: NSObject {
       do {
         // get `RNINavigatorView` instance that matches node/reactTag
         guard let navigatorView = self.getNavigatorView(node) else {
-          throw RNIError.commandFailed(
-            source : "RNINavigatorViewModule.pop",
-            message:
-                "Unable to `pop` because no corresponding `RNINavigatorView` "
-              + "instance found for the given node",
-            debug: "for node: \(node)"
+          throw RNINavigatorError(
+            code: .invalidReactTag,
+            domain: "RNINavigatorViewModule.pop"
           );
         };
 
@@ -102,14 +88,8 @@ internal class RNINavigatorViewModule: NSObject {
         };
         
       } catch {
-        let message = RNIError.constructErrorMessage(error);
-        
-        #if DEBUG
-        print("ERROR - \(message)");
-        #endif
-        
-        // reject promise w/: code, message, error
-        reject("LIB_ERROR", message, nil);
+        let error = error as? RNINavigatorError;
+        reject(error?.code.rawValue , error?.createJSONString(), nil);
       };
     };
   };
@@ -124,35 +104,21 @@ internal class RNINavigatorViewModule: NSObject {
   ){
 
     DispatchQueue.main.async {
-      // get `RNINavigatorView` instance that matches node/reactTag
-      guard let navigatorView = self.getNavigatorView(node) else {
-        // construct error message for promise
-        let errorMessage = (
-            "NativeModule, RNINavigatorViewModule: setNavigationBarHidden"
-          + " - for node: \(node)"
-          + " - Error: guard check failed"
-          + " - no corresponding view found for node"
-        );
+      do {
+        guard let navigatorView = self.getNavigatorView(node) else {
+          throw RNINavigatorError(
+            code: .invalidReactTag,
+            domain: "RNINavigatorViewModule.setNavigationBarHidden"
+          );
+        };
         
-        #if DEBUG
-        print("LOG - \(errorMessage)");
-        #endif
+        navigatorView.navigationVC.setNavigationBarHidden(isHidden, animated: animated){
+          resolve([:]);
+        };
         
-        // reject promise w/: code, message, error
-        reject("LIB_ERROR", errorMessage, nil);
-        return;
-      };
-      
-      #if DEBUG
-      print("LOG - NativeModule, RNINavigatorViewModule: setNavigationBarHidden"
-        + " - for node: \(node)"
-        + " - with args - isHidden: \(isHidden)"
-        + " - animated: \(animated)"
-      );
-      #endif
-      
-      navigatorView.navigationVC.setNavigationBarHidden(isHidden, animated: animated){
-        resolve([:]);
+      } catch {
+        let error = error as? RNINavigatorError;
+        reject(error?.code.rawValue , error?.createJSONString(), nil);
       };
     };
   };
@@ -169,12 +135,9 @@ internal class RNINavigatorViewModule: NSObject {
       do {
         // get `RNINavigatorView` instance that matches node/reactTag
         guard let navigatorView = self.getNavigatorView(node) else {
-          throw RNIError.commandFailed(
-            source : "RNINavigatorViewModule.popToRoot",
-            message:
-                "Unable to `popToRoot` because no corresponding `RNINavigatorView` "
-              + "instance found for the given node",
-            debug: "for node: \(node)"
+          throw RNINavigatorError(
+            code: .invalidReactTag,
+            domain: "RNINavigatorViewModule.popToRoot"
           );
         };
               
@@ -184,14 +147,8 @@ internal class RNINavigatorViewModule: NSObject {
         };
         
       } catch {
-         let message = RNIError.constructErrorMessage(error);
-         
-         #if DEBUG
-         print("ERROR - \(message)");
-         #endif
-         
-         // reject promise w/: code, message, error
-         reject("LIB_ERROR", message, nil);
+        let error = error as? RNINavigatorError;
+        reject(error?.code.rawValue , error?.createJSONString(), nil);
        };
     };
   };
@@ -210,12 +167,9 @@ internal class RNINavigatorViewModule: NSObject {
       do {
         // get `RNINavigatorView` instance that matches node/reactTag
         guard let navigatorView = self.getNavigatorView(node) else {
-          throw RNIError.commandFailed(
-            source : "RNINavigatorViewModule.removeRoute",
-            message:
-                "Unable to `popToRoot` because no corresponding `RNINavigatorView` "
-              + "instance found for the given node",
-            debug: "for node: \(node)"
+          throw RNINavigatorError(
+            code: .invalidReactTag,
+            domain: "RNINavigatorViewModule.removeRoute"
           );
         };
     
@@ -229,14 +183,8 @@ internal class RNINavigatorViewModule: NSObject {
         };
         
       } catch {
-        let message = RNIError.constructErrorMessage(error);
-
-        #if DEBUG
-        print("ERROR - \(message)");
-        #endif
-
-        // reject promise w/: code, message, error
-        reject("LIB_ERROR", message, nil);
+        let error = error as? RNINavigatorError;
+        reject(error?.code.rawValue , error?.createJSONString(), nil);
       };
     };
   };
@@ -256,12 +204,9 @@ internal class RNINavigatorViewModule: NSObject {
       do {
         // get `RNINavigatorView` instance that matches node/reactTag
         guard let navigatorView = self.getNavigatorView(node) else {
-          throw RNIError.commandFailed(
-            source : "RNINavigatorViewModule.replaceRoute",
-            message:
-                "Unable to `replaceRoute` because no corresponding `RNINavigatorView` "
-              + "instance found for the given node",
-            debug: "for node: \(node)"
+          throw RNINavigatorError(
+            code: .invalidReactTag,
+            domain: "RNINavigatorViewModule.replaceRoute"
           );
         };
     
@@ -276,14 +221,8 @@ internal class RNINavigatorViewModule: NSObject {
         };
         
       } catch {
-        let message = RNIError.constructErrorMessage(error);
-
-        #if DEBUG
-        print("ERROR - \(message)");
-        #endif
-
-        // reject promise w/: code, message, error
-        reject("LIB_ERROR", message, nil);
+        let error = error as? RNINavigatorError;
+        reject(error?.code.rawValue , error?.createJSONString(), nil);
       };
     };
   };
@@ -301,12 +240,9 @@ internal class RNINavigatorViewModule: NSObject {
       do {
         // get `RNINavigatorView` instance that matches node/reactTag
         guard let navigatorView = self.getNavigatorView(node) else {
-          throw RNIError.commandFailed(
-            source : "RNINavigatorViewModule.removeRoutes",
-            message:
-                "Unable to `popToRoot` because no corresponding `RNINavigatorView` "
-              + "instance found for the given node",
-            debug: "for node: \(node)"
+          throw RNINavigatorError(
+            code: .invalidReactTag,
+            domain: "RNINavigatorViewModule.removeRoutes"
           );
         };
     
@@ -326,14 +262,8 @@ internal class RNINavigatorViewModule: NSObject {
         };
         
       } catch {
-        let message = RNIError.constructErrorMessage(error);
-
-        #if DEBUG
-        print("ERROR - \(message)");
-        #endif
-
-        // reject promise w/: code, message, error
-        reject("LIB_ERROR", message, nil);
+        let error = error as? RNINavigatorError;
+        reject(error?.code.rawValue , error?.createJSONString(), nil);
       };
     };
   };
@@ -352,12 +282,9 @@ internal class RNINavigatorViewModule: NSObject {
       do {
         // get `RNINavigatorView` instance that matches node/reactTag
         guard let navigatorView = self.getNavigatorView(node) else {
-          throw RNIError.commandFailed(
-            source : "RNINavigatorViewModule.insertRoute",
-            message:
-                "Unable to `insertRoute` because no corresponding `RNINavigatorView` "
-              + "instance found for the given node",
-            debug: "for node: \(node)"
+          throw RNINavigatorError(
+            code: .invalidReactTag,
+            domain: "RNINavigatorViewModule.insertRoute"
           );
         };
     
@@ -371,14 +298,8 @@ internal class RNINavigatorViewModule: NSObject {
         };
         
       } catch {
-        let message = RNIError.constructErrorMessage(error);
-
-        #if DEBUG
-        print("ERROR - \(message)");
-        #endif
-
-        // reject promise w/: code, message, error
-        reject("LIB_ERROR", message, nil);
+        let error = error as? RNINavigatorError;
+        reject(error?.code.rawValue , error?.createJSONString(), nil);
       };
     };
   };
@@ -396,12 +317,9 @@ internal class RNINavigatorViewModule: NSObject {
       do {
         // get `RNINavigatorView` instance that matches node/reactTag
         guard let navigatorView = self.getNavigatorView(node) else {
-          throw RNIError.commandFailed(
-            source : "RNINavigatorViewModule.setRoutes",
-            message:
-                "Unable to `setRoutes` because no corresponding `RNINavigatorView` "
-              + "instance found for the given node",
-            debug: "for node: \(node)"
+          throw RNINavigatorError(
+            code: .invalidReactTag,
+            domain: "RNINavigatorViewModule.setRoutes"
           );
         };
     
@@ -414,14 +332,8 @@ internal class RNINavigatorViewModule: NSObject {
         };
         
       } catch {
-        let message = RNIError.constructErrorMessage(error);
-
-        #if DEBUG
-        print("ERROR - \(message)");
-        #endif
-
-        // reject promise w/: code, message, error
-        reject("LIB_ERROR", message, nil);
+        let error = error as? RNINavigatorError;
+        reject(error?.code.rawValue , error?.createJSONString(), nil);
       };
     };
   };
@@ -448,12 +360,9 @@ internal class RNINavigatorViewModule: NSObject {
       do {
         // get `RNINavigatorView` instance that matches node/reactTag
         guard let navigatorView = self.getNavigatorView(node) else {
-          throw RNIError.commandFailed(
-            source : "RNINavigatorViewModule.sendCustomCommandToNative",
-            message:
-                "Command failed because no corresponding `RNINavigatorView` "
-              + "instance found for the given node",
-            debug: "for node: \(node)"
+          throw RNINavigatorError(
+            code: .invalidReactTag,
+            domain: "RNINavigatorViewModule.sendCustomCommandToNative"
           );
         };
         
@@ -469,14 +378,8 @@ internal class RNINavigatorViewModule: NSObject {
         );
         
       } catch {
-        let message = RNIError.constructErrorMessage(error);
-
-        #if DEBUG
-        print("ERROR - \(message)");
-        #endif
-
-        // reject promise w/: code, message, error
-        reject("LIB_ERROR", message, nil);
+        let error = error as? RNINavigatorError;
+        reject(error?.code.rawValue , error?.createJSONString(), nil);
       };
     };
   };
@@ -492,34 +395,19 @@ internal class RNINavigatorViewModule: NSObject {
       do {
         // get `RNINavigatorView` instance that matches node/reactTag
         guard let navigatorView = self.getNavigatorView(node) else {
-          throw RNIError.commandFailed(
-            source : "RNINavigatorViewModule.getNavigatorConstants",
-            message:
-                "Command failed because no corresponding `RNINavigatorView` "
-              + "instance found for the given node",
-            debug: "for node: \(node)"
+          throw RNINavigatorError(
+            code: .invalidReactTag,
+            domain: "RNINavigatorViewModule.getNavigatorConstants"
           );
         };
-        
-        #if DEBUG
-        print("LOG - NativeModule, RNINavigatorRouteViewModule: getRouteConstants"
-          + " - for node: \(node)"
-        );
-        #endif
         
         try navigatorView.getConstants() {
           resolve($0);
         };
         
       } catch {
-        let message = RNIError.constructErrorMessage(error);
-        
-        #if DEBUG
-        print("ERROR - \(message)");
-        #endif
-        
-        // reject promise w/: code, message, error
-        reject("LIB_ERROR", message, nil);
+        let error = error as? RNINavigatorError;
+        reject(error?.code.rawValue , error?.createJSONString(), nil);
       };
     };
   };
@@ -535,32 +423,17 @@ internal class RNINavigatorViewModule: NSObject {
       do {
         // get `RNINavigatorView` instance that matches node/reactTag
         guard let navigatorView = self.getNavigatorView(node) else {
-          throw RNIError.commandFailed(
-            source : "RNINavigatorViewModule.getNavigatorActiveRoutes",
-            message:
-                "Command failed because no corresponding `RNINavigatorView` "
-              + "instance found for the given node",
-            debug: "for node: \(node)"
+          throw RNINavigatorError(
+            code: .invalidReactTag,
+            domain: "RNINavigatorViewModule.getNavigatorActiveRoutes"
           );
         };
-        
-        #if DEBUG
-        print("LOG - NativeModule, RNINavigatorRouteViewModule: getNavigatorActiveRoutes"
-          + " - for node: \(node)"
-        );
-        #endif
         
         resolve(navigatorView.activeRoutesDict);
         
       } catch {
-        let message = RNIError.constructErrorMessage(error);
-        
-        #if DEBUG
-        print("ERROR - \(message)");
-        #endif
-        
-        // reject promise w/: code, message, error
-        reject("LIB_ERROR", message, nil);
+        let error = error as? RNINavigatorError;
+        reject(error?.code.rawValue , error?.createJSONString(), nil);
       };
     };
   };
@@ -577,34 +450,19 @@ internal class RNINavigatorViewModule: NSObject {
       do {
         // get `RNINavigatorView` instance that matches node/reactTag
         guard let navigatorView = self.getNavigatorView(node) else {
-          throw RNIError.commandFailed(
-            source : "RNINavigatorViewModule.getNavigatorActiveRoutes",
-            message:
-                "Command failed because no corresponding `RNINavigatorView` "
-              + "instance found for the given node",
-            debug: "for node: \(node)"
+          throw RNINavigatorError(
+            code: .invalidReactTag,
+            domain: "RNINavigatorViewModule.dismissModal"
           );
         };
-        
-        #if DEBUG
-        print("LOG - NativeModule, RNINavigatorViewModule: dismissModal"
-          + " - for node: \(node)"
-        );
-        #endif
         
         navigatorView.navigationVC.dismiss(animated: animated){
           resolve([:]);
         };
         
       } catch {
-        let message = RNIError.constructErrorMessage(error);
-        
-        #if DEBUG
-        print("ERROR - \(message)");
-        #endif
-        
-        // reject promise w/: code, message, error
-        reject("LIB_ERROR", message, nil);
+        let error = error as? RNINavigatorError;
+        reject(error?.code.rawValue , error?.createJSONString(), nil);
       };
     };
   };

@@ -38,35 +38,24 @@ internal class RNINavigatorRouteViewModule: NSObject {
   ){
     
     DispatchQueue.main.async {
-      // get `RNINavigatorRouteView` instance that matches node/reactTag
-      guard let routeView = self.getRouteView(node),
-            let routeVC = routeView.routeVC
-      else {
-        // construct error message for promise
-        let errorMessage = (
-            "NativeModule, RNINavigatorRouteViewModule: setHidesBackButton"
-          + " - for node: \(node)"
-          + " - Error: guard check failed"
-          + " - no corresponding manager found for node"
-        );
+      do {
+        guard let routeView = self.getRouteView(node),
+              let routeVC = routeView.routeVC
+        else {
+          throw RNINavigatorError(
+            code: .invalidReactTag,
+            domain: "RNINavigatorRouteViewModule.setHidesBackButton",
+            message: "no corresponding 'routeVC' found for the 'routeView'"
+          );
+        };
         
-        #if DEBUG
-        print("LOG - \(errorMessage)");
-        #endif
+        routeVC.navigationItem.setHidesBackButton(isHidden, animated: animated){
+          resolve([:]);
+        };
         
-        // reject promise w/: code, message, error
-        reject("LIB_ERROR", errorMessage, nil);
-        return;
-      };
-      
-      #if DEBUG
-      print("LOG - NativeModule, RNINavigatorRouteViewModule: setHidesBackButton"
-        + " - for node: \(node)"
-      );
-      #endif
-      
-      routeVC.navigationItem.setHidesBackButton(isHidden, animated: animated){
-        resolve([:]);
+      } catch {
+        let error = error as? RNINavigatorError;
+        reject(error?.code.rawValue , error?.createJSONString(), nil);
       };
     };
   };
@@ -82,42 +71,19 @@ internal class RNINavigatorRouteViewModule: NSObject {
       do {
         // get `RNINavigatorRouteView` instance that matches node/reactTag
         guard let routeView = self.getRouteView(node) else {
-          // construct error message for promise
-          let errorMessage = (
-              "NativeModule, RNINavigatorRouteViewModule: getConstants"
-            + " - for node: \(node)"
-            + " - Error: guard check failed"
-            + " - no corresponding manager found for node"
+          throw RNINavigatorError(
+            code: .invalidReactTag,
+            domain: "RNINavigatorRouteViewModule.getRouteConstants"
           );
-          
-          #if DEBUG
-          print("LOG - \(errorMessage)");
-          #endif
-          
-          // reject promise w/: code, message, error
-          reject("LIB_ERROR", errorMessage, nil);
-          return;
         };
-        
-        #if DEBUG
-        print("LOG - NativeModule, RNINavigatorRouteViewModule: getRouteConstants"
-          + " - for node: \(node)"
-        );
-        #endif
         
         try routeView.getConstants() {
           resolve($0);
         };
         
       } catch {
-        let message = RNIError.constructErrorMessage(error);
-        
-        #if DEBUG
-        print("ERROR - \(message)");
-        #endif
-        
-        // reject promise w/: code, message, error
-        reject("LIB_ERROR", message, nil);
+        let error = error as? RNINavigatorError;
+        reject(error?.code.rawValue , error?.createJSONString(), nil);
       };
     };
   };
