@@ -2,8 +2,6 @@
 
 ## In Progress
 
-- [ ] **Implement**: `NavigatorView` — Impl. `modalPresentationCapturesStatusBarAppearance` prop.
-- [ ] **Implement**: Route Event — Screen rotate event (i.e. using `willTransitionTo` VC lifecycle).
 - [ ] **Cleanup**: Remove debug logs in native code. 
 
 <br>
@@ -14,6 +12,7 @@
 - [ ] Refactor: `getSecondToLastRouteVC`
 - [ ] Expose  `backIndicatorTransitionMaskImage`.
 - [ ] Use `TurboModules` + `JSI`.
+- [ ] **Implement**: `NavigatorView` — Impl. `modalPresentationCapturesStatusBarAppearance` prop.
 
 <br>
 
