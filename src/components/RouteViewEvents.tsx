@@ -7,7 +7,7 @@ import type { OnRoutePopEvent, OnRoutePushEvent, OnRouteFocusEvent, OnRouteBlurE
 
 import { NavigatorRouteViewEventEmitter, NavigatorRouteViewEvents } from '../types/NavigatorRouteViewEventEmitter';
 
-import { NavRouteViewContext, NavRouteViewContextProps } from '../context/NavRouteViewContext';
+import { NavigationContext, NavigationContextProps } from '../context/NavigationContext';
 
 
 type RouteViewEventsProps = {
@@ -44,12 +44,12 @@ type RouteViewEventsProps = {
  * via context.
  */
 export class RouteViewEvents extends React.Component<RouteViewEventsProps> {
-  static contextType = NavRouteViewContext;
+  static contextType = NavigationContext;
   
   routerRef: NavigatorRouteView;
   emitterRef: NavigatorRouteViewEventEmitter;
   
-  constructor(props: RouteViewEventsProps, context: NavRouteViewContextProps){
+  constructor(props: RouteViewEventsProps, context: NavigationContextProps){
     super(props);
     const { navigation } = context;
 

@@ -5,7 +5,7 @@ import type { RouteOptions } from '../types/RouteOptions';
 
 import { CompareRouteOptions } from '../functions/CompareRouteOptions';
 
-import { NavRouteViewContext, NavRouteViewContextProps } from '../context/NavRouteViewContext';
+import { NavigationContext, NavigationContextProps } from '../context/NavigationContext';
 
 import { LIB_ENV } from '../constants/LibEnv';
 
@@ -46,11 +46,11 @@ type RouteViewPortalProps = Partial<Pick<NavigatorRouteViewProps,
  * even though a prop directly depends on a value from the parent's state.
  */
 export class RouteViewPortal extends React.Component<RouteViewPortalProps> {
-  static contextType = NavRouteViewContext;
+  static contextType = NavigationContext;
   
   routeRef: NavigatorRouteView;
 
-  constructor(props: RouteViewPortalProps, context: NavRouteViewContextProps){
+  constructor(props: RouteViewPortalProps, context: NavigationContextProps){
     super(props);
 
     const { navigation } = context;

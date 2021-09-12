@@ -3,7 +3,7 @@ import { useContext, useEffect, useRef } from 'react';
 import type { NavigatorRouteViewEvents, NavigatorRouteViewEventMap } from '../types/NavigatorRouteViewEventEmitter';
 import type { EnumValuesLiteral } from '../types/UtilityTypes';
 
-import { NavRouteViewContext } from '../context/NavRouteViewContext';
+import { NavigationContext } from '../context/NavigationContext';
 
 import { NavigatorError, NavigatorErrorCodes } from '../functions/NavigatorError';
 
@@ -15,7 +15,7 @@ export function useNavRouteEvents<
   eventName: T,
   handler: (even: K) => void
 ){
-  const { navigation } = useContext(NavRouteViewContext);
+  const { navigation } = useContext(NavigationContext);
 
   if(navigation == null){
     throw new NavigatorError({

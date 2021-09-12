@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { NavRouteViewContext } from '../context/NavRouteViewContext';
+import { NavigationContext } from '../context/NavigationContext';
 
 import { NavigatorRouteViewEvents } from '../types/NavigatorRouteViewEventEmitter';
 
@@ -8,7 +8,7 @@ import { NavigatorRouteViewEvents } from '../types/NavigatorRouteViewEventEmitte
 
 export function withRouteViewLifecycle(WrappedComponent: any){
   return class extends React.PureComponent {
-    static contextType = NavRouteViewContext;
+    static contextType = NavigationContext;
 
     childRef: any;
 

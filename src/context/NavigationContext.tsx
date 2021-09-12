@@ -4,7 +4,7 @@ import type { NavigationObject } from '../types/NavigationObject';
 import type { NavigatorRouteViewProps } from '../components/NavigatorRouteView';
 
 
-export type NavRouteViewContextProps = Pick<NavigatorRouteViewProps,
+export type NavigationContextProps = Pick<NavigatorRouteViewProps,
   // mirror props from `NavigatorRouteView`
   | 'routeID'
   | 'navigatorID'
@@ -12,5 +12,5 @@ export type NavRouteViewContextProps = Pick<NavigatorRouteViewProps,
   navigation: NavigationObject;
 };
 
-export const NavRouteViewContext = 
-  React.createContext<Partial<NavRouteViewContextProps>>({});
+export const NavigationContext = 
+  React.createContext<Partial<NavigationContextProps>>({});

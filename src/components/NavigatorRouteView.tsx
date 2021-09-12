@@ -29,7 +29,7 @@ import { CompareUtilities } from '../functions/CompareUtilities';
 import { CompareRouteOptions } from '../functions/CompareRouteOptions';
 import { NavigatorError, NavigatorErrorCodes } from '../functions/NavigatorError';
 
-import { NavRouteViewContext } from '../context/NavRouteViewContext';
+import { NavigationContext } from '../context/NavigationContext';
 import { NavigatorUIConstantsContext } from '../context/NavigatorUIConstantsContext';
 
 import { NativeIDKeys } from '../constants/LibraryConstants';
@@ -616,7 +616,7 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
     //#endregion
 
     return(
-      <NavRouteViewContext.Provider value={{
+      <NavigationContext.Provider value={{
         navigation,
         navigatorID: props.navigatorID,
         routeID: props.routeID,
@@ -662,7 +662,7 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
             renderNavBarTitleItem={props.renderNavBarTitleItem}
           />
         </RNINavigatorRouteView>
-      </NavRouteViewContext.Provider>
+      </NavigationContext.Provider>
     );
   };
 };
