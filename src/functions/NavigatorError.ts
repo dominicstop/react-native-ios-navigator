@@ -26,15 +26,16 @@ export class NavigatorError extends Error {
   name: NavigatorErrorCodes | string;
   message: string;
 
-  constructor(error: Error | NavigatorErrorObject){
+  constructor(error: Error | NavigatorErrorObject | string){
     super();
-    const errorObj = NavigatorError.parseErrorObject(error)!;
+    const errorObj = NavigatorError.parseErrorObject(error);
 
     if(errorObj != null){
+      // the error is from native
       this.name = errorObj.code;
       this.message = NavigatorError.createErrorString(errorObj);
 
-    } else if (error instanceof Error) {
+    } else if (NavigatorError.isErrorObject(error)) {
       // the error is a JS error
       this.name    = error.name;
       this.message = error.message;
@@ -44,6 +45,10 @@ export class NavigatorError extends Error {
       this.name = 'error';
       this.message = `${error}`;
     };
+  };
+
+  static isErrorObject(obj: any): obj is Error {
+    return ('name' in obj || 'message' in obj || 'stack' in obj);
   };
 
   static isNavigatorErrorObject(obj: object): obj is NavigatorErrorObject {
