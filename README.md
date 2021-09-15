@@ -167,7 +167,7 @@ export function App() {
 
 #### D.1.1. `NavigatorView` Component
 
-This component is a wrapper around [`UINavigationController`](https://developer.apple.com/documentation/uikit/uinavigationcontroller), and as such, it also facilitates navigation in a stack-like manner, where in routes are "pushed" and "popped" in and out of the navigation stack. Only one route can be shown at a given time. However it is possible to have multiple `NavigatorView` instances at the same time. 
+This component is a wrapper around [`UINavigationController`](https://developer.apple.com/documentation/uikit/uinavigationcontroller), and as such, it also facilitates navigation in a stack-like manner (where in routes are "pushed" and "popped" in and out of the navigation stack). Only one route can be shown at a given time. However it is possible to have multiple `NavigatorView` instances at the same time. 
 
 * Each instance will have their own separate navigation stack, allowing you to show multiple routes at once. 
 * But do note that the 1st instance will always be treated as the "root" navigation controller, and subsequently, it’ll become responsible for handling things like setting the color of the status bar, etc.
@@ -479,13 +479,13 @@ This component uses the "transparent navigation bar" approach. When in use, this
 
 <br>
 
-##### D.1.4.1. `RouteHeaderView` Component Props
+##### `RouteHeaderView` Component Props
 
 | Prop Name and Type                                           | Description |
 | :----------------------------------------------------------- | ----------- |
-| 🔤 **Required**: `config`<br/><br/>⚛️ [`RouteHeaderConfig`](PLACE_HOLDER_LINK) |             |
-| 🔤 `headerTopPadding`<br/><br/>⚛️ [`HeaderHeightConfig`](PLACE_HOLDER_LINK) |             |
-| 🔤 `style`<br/><br/>⚛️  `ViewStyle`                            |             |
+| 🔤 **Required**: `config`<br/><br/>⚛️ [`RouteHeaderConfig`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤 `headerTopPadding`<br/><br/>⚛️ [`HeaderHeightConfig`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤 `style`<br/><br/>⚛️  `ViewStyle`                            | TBA         |
 
 <br>
 
@@ -1080,23 +1080,39 @@ Native/Swift Integration
 
 ### Navigation Hello World 
 
+#### Routes and Route Config
+
+#### Initial Routes
+
 <br>
 
 ### Navigation Commands Basics
 
-#### `RouteProps` (Forward Data To Routes)
+#### The `NavigationObject`
 
-#### `RouteOptions` (Configure Next Routes)
+#### Pushing Routes
 
-#### `NavCommandPushOptions` and `NavCommandPopOptions`
+#### Forwarding Data To Routes
+
+#### Configure Next Routes
+
+#### Popping Routes
+
+#### Extra Options 
 
 <br>
 
-### Route Config (`routes` prop)
+### Customizations Basics
 
-### Initial Routes
+#### Route Options
 
-### Basic Customizations
+#### Applying Route Options
+
+#### Navigator Customization
+
+#### Per-Route Customization
+
+#### Dynamic Customizations
 
 ------
 
@@ -1108,15 +1124,11 @@ Native/Swift Integration
 
 #### Navigation Bar: Appearance/Legacy API
 
-##### Navigation Bar Legacy Customizations
+##### Navigation Bar — Legacy Customizations
 
-##### Navigation Bar Appearance Customizations
+##### Navigation Bar — Appearance Customizations
 
 <br>
-
-#### Navigation Bar: Global/Default Customizations
-
-#### Navigation Bar: Per-Route Customizations
 
 #### Navigation Bar: Custom Bar Items
 
