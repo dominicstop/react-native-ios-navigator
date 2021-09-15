@@ -7,69 +7,70 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		88FE8FA926CF113F007F2632 /* UIBarMetrics+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F6126CF113E007F2632 /* UIBarMetrics+Init.swift */; };
-		88FE8FAA26CF113F007F2632 /* RCTTextTransform+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F6226CF113E007F2632 /* RCTTextTransform+Init.swift */; };
-		88FE8FAB26CF113F007F2632 /* UINavigationItem+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F6326CF113E007F2632 /* UINavigationItem+Init.swift */; };
-		88FE8FAC26CF113F007F2632 /* NSUnderlineStyle+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F6426CF113E007F2632 /* NSUnderlineStyle+Init.swift */; };
-		88FE8FAD26CF113F007F2632 /* RCTTextDecorationLineType+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F6526CF113E007F2632 /* RCTTextDecorationLineType+Init.swift */; };
-		88FE8FAE26CF113F007F2632 /* RCTTextAttributes+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F6626CF113E007F2632 /* RCTTextAttributes+Init.swift */; };
-		88FE8FAF26CF113F007F2632 /* UIBlurEffect+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F6726CF113E007F2632 /* UIBlurEffect+Init.swift */; };
-		88FE8FB026CF113F007F2632 /* UISearchBar+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F6826CF113E007F2632 /* UISearchBar+Init.swift */; };
-		88FE8FB126CF113F007F2632 /* UIBarStyle+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F6926CF113E007F2632 /* UIBarStyle+Init.swift */; };
-		88FE8FB226CF113F007F2632 /* UIOffset+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F6A26CF113E007F2632 /* UIOffset+Init.swift */; };
-		88FE8FB326CF113F007F2632 /* UIStatusBarStyle+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F6B26CF113E007F2632 /* UIStatusBarStyle+Init.swift */; };
-		88FE8FB426CF113F007F2632 /* NSTextAlignment+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F6C26CF113E007F2632 /* NSTextAlignment+Init.swift */; };
-		88FE8FB526CF113F007F2632 /* UIView+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F6D26CF113E007F2632 /* UIView+Init.swift */; };
-		88FE8FB626CF113F007F2632 /* UIControl+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F6E26CF113E007F2632 /* UIControl+Init.swift */; };
-		88FE8FB726CF113F007F2632 /* CAGradientLayerType+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F6F26CF113E007F2632 /* CAGradientLayerType+Init.swift */; };
-		88FE8FB826CF113F007F2632 /* UIBarButtonItem+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F7026CF113E007F2632 /* UIBarButtonItem+Init.swift */; };
-		88FE8FB926CF113F007F2632 /* UIReturnKeyType+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F7126CF113E007F2632 /* UIReturnKeyType+Init.swift */; };
-		88FE8FBA26CF113F007F2632 /* WeakObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F7226CF113E007F2632 /* WeakObjects.swift */; };
-		88FE8FBB26CF113F007F2632 /* UINavigationItem+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F7426CF113E007F2632 /* UINavigationItem+Helpers.swift */; };
-		88FE8FBC26CF113F007F2632 /* UIViewController+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F7526CF113E007F2632 /* UIViewController+Helpers.swift */; };
-		88FE8FBD26CF113F007F2632 /* UIEdgeInsets+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F7626CF113E007F2632 /* UIEdgeInsets+Helpers.swift */; };
-		88FE8FBE26CF113F007F2632 /* UINavigationBar+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F7726CF113E007F2632 /* UINavigationBar+Helpers.swift */; };
-		88FE8FBF26CF113F007F2632 /* UIView+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F7826CF113E007F2632 /* UIView+Helpers.swift */; };
-		88FE8FC026CF113F007F2632 /* UIColor+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F7926CF113E007F2632 /* UIColor+Helpers.swift */; };
-		88FE8FC126CF113F007F2632 /* UISearchBar+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F7A26CF113E007F2632 /* UISearchBar+Helpers.swift */; };
-		88FE8FC226CF113F007F2632 /* CGRect+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F7B26CF113E007F2632 /* CGRect+Helpers.swift */; };
-		88FE8FC326CF113F007F2632 /* UINavigationController+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F7C26CF113E007F2632 /* UINavigationController+Helpers.swift */; };
-		88FE8FC426CF113F007F2632 /* TransitionAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F7D26CF113E007F2632 /* TransitionAnimations.swift */; };
-		88FE8FC526CF113F007F2632 /* RNINavigatorRouteHeaderShadowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F8026CF113E007F2632 /* RNINavigatorRouteHeaderShadowView.swift */; };
-		88FE8FC626CF113F007F2632 /* RNINavigatorRouteHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F8126CF113E007F2632 /* RNINavigatorRouteHeaderView.swift */; };
-		88FE8FC726CF113F007F2632 /* RNINavigatorRouteHeaderViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F8226CF113E007F2632 /* RNINavigatorRouteHeaderViewManager.swift */; };
-		88FE8FC826CF113F007F2632 /* RNINavigatorRouteHeaderViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F8326CF113E007F2632 /* RNINavigatorRouteHeaderViewManager.m */; };
-		88FE8FC926CF113F007F2632 /* RNIRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F8426CF113E007F2632 /* RNIRootViewController.swift */; };
-		88FE8FCA26CF113F007F2632 /* RNINavigatorRouteViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F8626CF113E007F2632 /* RNINavigatorRouteViewManager.swift */; };
-		88FE8FCB26CF113F007F2632 /* RNINavigatorRouteViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F8726CF113E007F2632 /* RNINavigatorRouteViewManager.m */; };
-		88FE8FCC26CF113F007F2632 /* RNINavigatorRouteViewModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F8826CF113E007F2632 /* RNINavigatorRouteViewModule.m */; };
-		88FE8FCD26CF113F007F2632 /* RNINavigatorRouteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F8926CF113E007F2632 /* RNINavigatorRouteView.swift */; };
-		88FE8FCE26CF113F007F2632 /* RNINavigatorRouteViewModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F8A26CF113E007F2632 /* RNINavigatorRouteViewModule.swift */; };
-		88FE8FCF26CF113F007F2632 /* RNINavigatorRouteViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F8B26CF113E007F2632 /* RNINavigatorRouteViewDelegate.swift */; };
-		88FE8FD026CF113F007F2632 /* RNINavigatorRouteBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F8D26CF113E007F2632 /* RNINavigatorRouteBaseViewController.swift */; };
-		88FE8FD126CF113F007F2632 /* RNINavigatorRouteViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F8E26CF113E007F2632 /* RNINavigatorRouteViewControllerDelegate.swift */; };
-		88FE8FD226CF113F007F2632 /* RNINavigatorReactRouteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F8F26CF113E007F2632 /* RNINavigatorReactRouteViewController.swift */; };
-		88FE8FD326CF113F007F2632 /* RNINavBarItemConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F9126CF113E007F2632 /* RNINavBarItemConfig.swift */; };
-		88FE8FD426CF113F007F2632 /* RNINavigatorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F9226CF113E007F2632 /* RNINavigatorManager.swift */; };
-		88FE8FD526CF113F007F2632 /* RNINavigatorUIConstantsObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F9326CF113E007F2632 /* RNINavigatorUIConstantsObserver.swift */; };
-		88FE8FD626CF113F007F2632 /* RNISearchControllerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F9426CF113E007F2632 /* RNISearchControllerConfig.swift */; };
-		88FE8FD726CF113F007F2632 /* RNINavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F9526CF113E007F2632 /* RNINavigationController.swift */; };
-		88FE8FD826CF113F007F2632 /* RNINavTransitionConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F9626CF113E007F2632 /* RNINavTransitionConfig.swift */; };
-		88FE8FD926CF113F007F2632 /* RNINavBarAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F9726CF113E007F2632 /* RNINavBarAppearance.swift */; };
-		88FE8FDA26CF113F007F2632 /* RNIWrapperViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F9926CF113E007F2632 /* RNIWrapperViewManager.swift */; };
-		88FE8FDB26CF113F007F2632 /* RNIWrapperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F9A26CF113E007F2632 /* RNIWrapperView.swift */; };
-		88FE8FDC26CF113F007F2632 /* RNIWrapperViewModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F9B26CF113E007F2632 /* RNIWrapperViewModule.swift */; };
-		88FE8FDD26CF113F007F2632 /* RNIWrapperViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F9C26CF113E007F2632 /* RNIWrapperViewManager.m */; };
-		88FE8FDE26CF113F007F2632 /* RNIWrapperViewModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F9D26CF113F007F2632 /* RNIWrapperViewModule.m */; };
-		88FE8FDF26CF113F007F2632 /* RNINavigatorViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8F9F26CF113F007F2632 /* RNINavigatorViewManager.swift */; };
-		88FE8FE026CF113F007F2632 /* RNINavigatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8FA026CF113F007F2632 /* RNINavigatorView.swift */; };
-		88FE8FE126CF113F007F2632 /* RNINavigatorViewModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8FA126CF113F007F2632 /* RNINavigatorViewModule.m */; };
-		88FE8FE226CF113F007F2632 /* RNINavigatorViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8FA226CF113F007F2632 /* RNINavigatorViewManager.m */; };
-		88FE8FE326CF113F007F2632 /* RNINavigatorViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8FA326CF113F007F2632 /* RNINavigatorViewDelegate.swift */; };
-		88FE8FE426CF113F007F2632 /* RNINavigatorViewModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8FA426CF113F007F2632 /* RNINavigatorViewModule.swift */; };
-		88FE8FE526CF113F007F2632 /* RNIUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8FA626CF113F007F2632 /* RNIUtilities.swift */; };
-		88FE8FE626CF113F007F2632 /* RNIImageItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8FA726CF113F007F2632 /* RNIImageItem.swift */; };
-		88FE8FE726CF113F007F2632 /* RNIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88FE8FA826CF113F007F2632 /* RNIError.swift */; };
+		88CE9B8126F19E6D00E3BF6E /* UIBarMetrics+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B3826F19E6D00E3BF6E /* UIBarMetrics+Init.swift */; };
+		88CE9B8226F19E6D00E3BF6E /* RCTTextTransform+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B3926F19E6D00E3BF6E /* RCTTextTransform+Init.swift */; };
+		88CE9B8326F19E6D00E3BF6E /* UINavigationItem+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B3A26F19E6D00E3BF6E /* UINavigationItem+Init.swift */; };
+		88CE9B8426F19E6D00E3BF6E /* NSUnderlineStyle+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B3B26F19E6D00E3BF6E /* NSUnderlineStyle+Init.swift */; };
+		88CE9B8526F19E6D00E3BF6E /* RCTTextDecorationLineType+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B3C26F19E6D00E3BF6E /* RCTTextDecorationLineType+Init.swift */; };
+		88CE9B8626F19E6D00E3BF6E /* RCTTextAttributes+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B3D26F19E6D00E3BF6E /* RCTTextAttributes+Init.swift */; };
+		88CE9B8726F19E6D00E3BF6E /* UIBlurEffect+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B3E26F19E6D00E3BF6E /* UIBlurEffect+Init.swift */; };
+		88CE9B8826F19E6D00E3BF6E /* UISearchBar+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B3F26F19E6D00E3BF6E /* UISearchBar+Init.swift */; };
+		88CE9B8926F19E6D00E3BF6E /* UIBarStyle+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B4026F19E6D00E3BF6E /* UIBarStyle+Init.swift */; };
+		88CE9B8A26F19E6D00E3BF6E /* UIOffset+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B4126F19E6D00E3BF6E /* UIOffset+Init.swift */; };
+		88CE9B8B26F19E6D00E3BF6E /* UIStatusBarStyle+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B4226F19E6D00E3BF6E /* UIStatusBarStyle+Init.swift */; };
+		88CE9B8C26F19E6D00E3BF6E /* NSTextAlignment+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B4326F19E6D00E3BF6E /* NSTextAlignment+Init.swift */; };
+		88CE9B8D26F19E6D00E3BF6E /* UIView+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B4426F19E6D00E3BF6E /* UIView+Init.swift */; };
+		88CE9B8E26F19E6D00E3BF6E /* UIControl+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B4526F19E6D00E3BF6E /* UIControl+Init.swift */; };
+		88CE9B8F26F19E6D00E3BF6E /* CAGradientLayerType+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B4626F19E6D00E3BF6E /* CAGradientLayerType+Init.swift */; };
+		88CE9B9026F19E6D00E3BF6E /* UIBarButtonItem+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B4726F19E6D00E3BF6E /* UIBarButtonItem+Init.swift */; };
+		88CE9B9126F19E6D00E3BF6E /* UIReturnKeyType+Init.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B4826F19E6D00E3BF6E /* UIReturnKeyType+Init.swift */; };
+		88CE9B9226F19E6D00E3BF6E /* WeakObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B4926F19E6D00E3BF6E /* WeakObjects.swift */; };
+		88CE9B9326F19E6D00E3BF6E /* UINavigationItem+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B4B26F19E6D00E3BF6E /* UINavigationItem+Helpers.swift */; };
+		88CE9B9426F19E6D00E3BF6E /* UIViewController+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B4C26F19E6D00E3BF6E /* UIViewController+Helpers.swift */; };
+		88CE9B9526F19E6D00E3BF6E /* UIEdgeInsets+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B4D26F19E6D00E3BF6E /* UIEdgeInsets+Helpers.swift */; };
+		88CE9B9626F19E6D00E3BF6E /* UINavigationBar+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B4E26F19E6D00E3BF6E /* UINavigationBar+Helpers.swift */; };
+		88CE9B9726F19E6D00E3BF6E /* UIView+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B4F26F19E6D00E3BF6E /* UIView+Helpers.swift */; };
+		88CE9B9826F19E6D00E3BF6E /* UIColor+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B5026F19E6D00E3BF6E /* UIColor+Helpers.swift */; };
+		88CE9B9926F19E6D00E3BF6E /* UISearchBar+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B5126F19E6D00E3BF6E /* UISearchBar+Helpers.swift */; };
+		88CE9B9A26F19E6D00E3BF6E /* CGRect+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B5226F19E6D00E3BF6E /* CGRect+Helpers.swift */; };
+		88CE9B9B26F19E6D00E3BF6E /* UINavigationController+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B5326F19E6D00E3BF6E /* UINavigationController+Helpers.swift */; };
+		88CE9B9C26F19E6D00E3BF6E /* TransitionAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B5426F19E6D00E3BF6E /* TransitionAnimations.swift */; };
+		88CE9B9D26F19E6D00E3BF6E /* RNINavigatorRouteHeaderShadowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B5726F19E6D00E3BF6E /* RNINavigatorRouteHeaderShadowView.swift */; };
+		88CE9B9E26F19E6D00E3BF6E /* RNINavigatorRouteHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B5826F19E6D00E3BF6E /* RNINavigatorRouteHeaderView.swift */; };
+		88CE9B9F26F19E6D00E3BF6E /* RNINavigatorRouteHeaderViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B5926F19E6D00E3BF6E /* RNINavigatorRouteHeaderViewManager.swift */; };
+		88CE9BA026F19E6D00E3BF6E /* RNINavigatorRouteHeaderViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B5A26F19E6D00E3BF6E /* RNINavigatorRouteHeaderViewManager.m */; };
+		88CE9BA126F19E6D00E3BF6E /* RNIRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B5B26F19E6D00E3BF6E /* RNIRootViewController.swift */; };
+		88CE9BA226F19E6D00E3BF6E /* RNINavigatorRouteViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B5D26F19E6D00E3BF6E /* RNINavigatorRouteViewManager.swift */; };
+		88CE9BA326F19E6D00E3BF6E /* RNINavigatorRouteViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B5E26F19E6D00E3BF6E /* RNINavigatorRouteViewManager.m */; };
+		88CE9BA426F19E6D00E3BF6E /* RNINavigatorRouteViewModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B5F26F19E6D00E3BF6E /* RNINavigatorRouteViewModule.m */; };
+		88CE9BA526F19E6D00E3BF6E /* RNINavigatorRouteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B6026F19E6D00E3BF6E /* RNINavigatorRouteView.swift */; };
+		88CE9BA626F19E6D00E3BF6E /* RNINavigatorRouteViewModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B6126F19E6D00E3BF6E /* RNINavigatorRouteViewModule.swift */; };
+		88CE9BA726F19E6D00E3BF6E /* RNINavigatorRouteViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B6226F19E6D00E3BF6E /* RNINavigatorRouteViewDelegate.swift */; };
+		88CE9BA826F19E6D00E3BF6E /* RNINavigatorRouteBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B6426F19E6D00E3BF6E /* RNINavigatorRouteBaseViewController.swift */; };
+		88CE9BA926F19E6D00E3BF6E /* RNINavigatorRouteViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B6526F19E6D00E3BF6E /* RNINavigatorRouteViewControllerDelegate.swift */; };
+		88CE9BAA26F19E6D00E3BF6E /* RNINavigatorReactRouteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B6626F19E6D00E3BF6E /* RNINavigatorReactRouteViewController.swift */; };
+		88CE9BAB26F19E6D00E3BF6E /* RNINavigationControllerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B6826F19E6D00E3BF6E /* RNINavigationControllerConfig.swift */; };
+		88CE9BAC26F19E6D00E3BF6E /* RNINavigatorError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B6926F19E6D00E3BF6E /* RNINavigatorError.swift */; };
+		88CE9BAD26F19E6D00E3BF6E /* RNINavBarItemConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B6A26F19E6D00E3BF6E /* RNINavBarItemConfig.swift */; };
+		88CE9BAE26F19E6D00E3BF6E /* RNINavigatorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B6B26F19E6D00E3BF6E /* RNINavigatorManager.swift */; };
+		88CE9BAF26F19E6D00E3BF6E /* RNINavigatorUIConstantsObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B6C26F19E6D00E3BF6E /* RNINavigatorUIConstantsObserver.swift */; };
+		88CE9BB026F19E6D00E3BF6E /* RNISearchControllerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B6D26F19E6D00E3BF6E /* RNISearchControllerConfig.swift */; };
+		88CE9BB126F19E6D00E3BF6E /* RNINavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B6E26F19E6D00E3BF6E /* RNINavigationController.swift */; };
+		88CE9BB226F19E6D00E3BF6E /* RNINavTransitionConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B6F26F19E6D00E3BF6E /* RNINavTransitionConfig.swift */; };
+		88CE9BB326F19E6D00E3BF6E /* RNINavBarAppearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B7026F19E6D00E3BF6E /* RNINavBarAppearance.swift */; };
+		88CE9BB426F19E6D00E3BF6E /* RNIWrapperViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B7226F19E6D00E3BF6E /* RNIWrapperViewManager.swift */; };
+		88CE9BB526F19E6D00E3BF6E /* RNIWrapperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B7326F19E6D00E3BF6E /* RNIWrapperView.swift */; };
+		88CE9BB626F19E6D00E3BF6E /* RNIWrapperViewModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B7426F19E6D00E3BF6E /* RNIWrapperViewModule.swift */; };
+		88CE9BB726F19E6D00E3BF6E /* RNIWrapperViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B7526F19E6D00E3BF6E /* RNIWrapperViewManager.m */; };
+		88CE9BB826F19E6D00E3BF6E /* RNIWrapperViewModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B7626F19E6D00E3BF6E /* RNIWrapperViewModule.m */; };
+		88CE9BB926F19E6D00E3BF6E /* RNINavigatorViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B7826F19E6D00E3BF6E /* RNINavigatorViewManager.swift */; };
+		88CE9BBA26F19E6D00E3BF6E /* RNINavigatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B7926F19E6D00E3BF6E /* RNINavigatorView.swift */; };
+		88CE9BBB26F19E6D00E3BF6E /* RNINavigatorViewModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B7A26F19E6D00E3BF6E /* RNINavigatorViewModule.m */; };
+		88CE9BBC26F19E6D00E3BF6E /* RNINavigatorViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B7B26F19E6D00E3BF6E /* RNINavigatorViewManager.m */; };
+		88CE9BBD26F19E6D00E3BF6E /* RNINavigatorViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B7C26F19E6D00E3BF6E /* RNINavigatorViewDelegate.swift */; };
+		88CE9BBE26F19E6D00E3BF6E /* RNINavigatorViewModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B7D26F19E6D00E3BF6E /* RNINavigatorViewModule.swift */; };
+		88CE9BBF26F19E6D00E3BF6E /* RNIUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B7F26F19E6D00E3BF6E /* RNIUtilities.swift */; };
+		88CE9BC026F19E6D00E3BF6E /* RNIImageItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88CE9B8026F19E6D00E3BF6E /* RNIImageItem.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -86,70 +87,71 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libIosNavigator.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libIosNavigator.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		88FE8F5F26CF113E007F2632 /* IosNavigator-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IosNavigator-Bridging-Header.h"; sourceTree = "<group>"; };
-		88FE8F6126CF113E007F2632 /* UIBarMetrics+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIBarMetrics+Init.swift"; sourceTree = "<group>"; };
-		88FE8F6226CF113E007F2632 /* RCTTextTransform+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RCTTextTransform+Init.swift"; sourceTree = "<group>"; };
-		88FE8F6326CF113E007F2632 /* UINavigationItem+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UINavigationItem+Init.swift"; sourceTree = "<group>"; };
-		88FE8F6426CF113E007F2632 /* NSUnderlineStyle+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSUnderlineStyle+Init.swift"; sourceTree = "<group>"; };
-		88FE8F6526CF113E007F2632 /* RCTTextDecorationLineType+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RCTTextDecorationLineType+Init.swift"; sourceTree = "<group>"; };
-		88FE8F6626CF113E007F2632 /* RCTTextAttributes+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RCTTextAttributes+Init.swift"; sourceTree = "<group>"; };
-		88FE8F6726CF113E007F2632 /* UIBlurEffect+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIBlurEffect+Init.swift"; sourceTree = "<group>"; };
-		88FE8F6826CF113E007F2632 /* UISearchBar+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UISearchBar+Init.swift"; sourceTree = "<group>"; };
-		88FE8F6926CF113E007F2632 /* UIBarStyle+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIBarStyle+Init.swift"; sourceTree = "<group>"; };
-		88FE8F6A26CF113E007F2632 /* UIOffset+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIOffset+Init.swift"; sourceTree = "<group>"; };
-		88FE8F6B26CF113E007F2632 /* UIStatusBarStyle+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIStatusBarStyle+Init.swift"; sourceTree = "<group>"; };
-		88FE8F6C26CF113E007F2632 /* NSTextAlignment+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSTextAlignment+Init.swift"; sourceTree = "<group>"; };
-		88FE8F6D26CF113E007F2632 /* UIView+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Init.swift"; sourceTree = "<group>"; };
-		88FE8F6E26CF113E007F2632 /* UIControl+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIControl+Init.swift"; sourceTree = "<group>"; };
-		88FE8F6F26CF113E007F2632 /* CAGradientLayerType+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CAGradientLayerType+Init.swift"; sourceTree = "<group>"; };
-		88FE8F7026CF113E007F2632 /* UIBarButtonItem+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+Init.swift"; sourceTree = "<group>"; };
-		88FE8F7126CF113E007F2632 /* UIReturnKeyType+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIReturnKeyType+Init.swift"; sourceTree = "<group>"; };
-		88FE8F7226CF113E007F2632 /* WeakObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeakObjects.swift; sourceTree = "<group>"; };
-		88FE8F7426CF113E007F2632 /* UINavigationItem+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UINavigationItem+Helpers.swift"; sourceTree = "<group>"; };
-		88FE8F7526CF113E007F2632 /* UIViewController+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Helpers.swift"; sourceTree = "<group>"; };
-		88FE8F7626CF113E007F2632 /* UIEdgeInsets+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIEdgeInsets+Helpers.swift"; sourceTree = "<group>"; };
-		88FE8F7726CF113E007F2632 /* UINavigationBar+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UINavigationBar+Helpers.swift"; sourceTree = "<group>"; };
-		88FE8F7826CF113E007F2632 /* UIView+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Helpers.swift"; sourceTree = "<group>"; };
-		88FE8F7926CF113E007F2632 /* UIColor+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Helpers.swift"; sourceTree = "<group>"; };
-		88FE8F7A26CF113E007F2632 /* UISearchBar+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UISearchBar+Helpers.swift"; sourceTree = "<group>"; };
-		88FE8F7B26CF113E007F2632 /* CGRect+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGRect+Helpers.swift"; sourceTree = "<group>"; };
-		88FE8F7C26CF113E007F2632 /* UINavigationController+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UINavigationController+Helpers.swift"; sourceTree = "<group>"; };
-		88FE8F7D26CF113E007F2632 /* TransitionAnimations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionAnimations.swift; sourceTree = "<group>"; };
-		88FE8F8026CF113E007F2632 /* RNINavigatorRouteHeaderShadowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteHeaderShadowView.swift; sourceTree = "<group>"; };
-		88FE8F8126CF113E007F2632 /* RNINavigatorRouteHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteHeaderView.swift; sourceTree = "<group>"; };
-		88FE8F8226CF113E007F2632 /* RNINavigatorRouteHeaderViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteHeaderViewManager.swift; sourceTree = "<group>"; };
-		88FE8F8326CF113E007F2632 /* RNINavigatorRouteHeaderViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNINavigatorRouteHeaderViewManager.m; sourceTree = "<group>"; };
-		88FE8F8426CF113E007F2632 /* RNIRootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNIRootViewController.swift; sourceTree = "<group>"; };
-		88FE8F8626CF113E007F2632 /* RNINavigatorRouteViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteViewManager.swift; sourceTree = "<group>"; };
-		88FE8F8726CF113E007F2632 /* RNINavigatorRouteViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNINavigatorRouteViewManager.m; sourceTree = "<group>"; };
-		88FE8F8826CF113E007F2632 /* RNINavigatorRouteViewModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNINavigatorRouteViewModule.m; sourceTree = "<group>"; };
-		88FE8F8926CF113E007F2632 /* RNINavigatorRouteView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteView.swift; sourceTree = "<group>"; };
-		88FE8F8A26CF113E007F2632 /* RNINavigatorRouteViewModule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteViewModule.swift; sourceTree = "<group>"; };
-		88FE8F8B26CF113E007F2632 /* RNINavigatorRouteViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteViewDelegate.swift; sourceTree = "<group>"; };
-		88FE8F8D26CF113E007F2632 /* RNINavigatorRouteBaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteBaseViewController.swift; sourceTree = "<group>"; };
-		88FE8F8E26CF113E007F2632 /* RNINavigatorRouteViewControllerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteViewControllerDelegate.swift; sourceTree = "<group>"; };
-		88FE8F8F26CF113E007F2632 /* RNINavigatorReactRouteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorReactRouteViewController.swift; sourceTree = "<group>"; };
-		88FE8F9126CF113E007F2632 /* RNINavBarItemConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavBarItemConfig.swift; sourceTree = "<group>"; };
-		88FE8F9226CF113E007F2632 /* RNINavigatorManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorManager.swift; sourceTree = "<group>"; };
-		88FE8F9326CF113E007F2632 /* RNINavigatorUIConstantsObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorUIConstantsObserver.swift; sourceTree = "<group>"; };
-		88FE8F9426CF113E007F2632 /* RNISearchControllerConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNISearchControllerConfig.swift; sourceTree = "<group>"; };
-		88FE8F9526CF113E007F2632 /* RNINavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigationController.swift; sourceTree = "<group>"; };
-		88FE8F9626CF113E007F2632 /* RNINavTransitionConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavTransitionConfig.swift; sourceTree = "<group>"; };
-		88FE8F9726CF113E007F2632 /* RNINavBarAppearance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavBarAppearance.swift; sourceTree = "<group>"; };
-		88FE8F9926CF113E007F2632 /* RNIWrapperViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNIWrapperViewManager.swift; sourceTree = "<group>"; };
-		88FE8F9A26CF113E007F2632 /* RNIWrapperView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNIWrapperView.swift; sourceTree = "<group>"; };
-		88FE8F9B26CF113E007F2632 /* RNIWrapperViewModule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNIWrapperViewModule.swift; sourceTree = "<group>"; };
-		88FE8F9C26CF113E007F2632 /* RNIWrapperViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNIWrapperViewManager.m; sourceTree = "<group>"; };
-		88FE8F9D26CF113F007F2632 /* RNIWrapperViewModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNIWrapperViewModule.m; sourceTree = "<group>"; };
-		88FE8F9F26CF113F007F2632 /* RNINavigatorViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorViewManager.swift; sourceTree = "<group>"; };
-		88FE8FA026CF113F007F2632 /* RNINavigatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorView.swift; sourceTree = "<group>"; };
-		88FE8FA126CF113F007F2632 /* RNINavigatorViewModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNINavigatorViewModule.m; sourceTree = "<group>"; };
-		88FE8FA226CF113F007F2632 /* RNINavigatorViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNINavigatorViewManager.m; sourceTree = "<group>"; };
-		88FE8FA326CF113F007F2632 /* RNINavigatorViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorViewDelegate.swift; sourceTree = "<group>"; };
-		88FE8FA426CF113F007F2632 /* RNINavigatorViewModule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorViewModule.swift; sourceTree = "<group>"; };
-		88FE8FA626CF113F007F2632 /* RNIUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNIUtilities.swift; sourceTree = "<group>"; };
-		88FE8FA726CF113F007F2632 /* RNIImageItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNIImageItem.swift; sourceTree = "<group>"; };
-		88FE8FA826CF113F007F2632 /* RNIError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNIError.swift; sourceTree = "<group>"; };
+		88CE9B3626F19E6D00E3BF6E /* IosNavigator-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IosNavigator-Bridging-Header.h"; sourceTree = "<group>"; };
+		88CE9B3826F19E6D00E3BF6E /* UIBarMetrics+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIBarMetrics+Init.swift"; sourceTree = "<group>"; };
+		88CE9B3926F19E6D00E3BF6E /* RCTTextTransform+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RCTTextTransform+Init.swift"; sourceTree = "<group>"; };
+		88CE9B3A26F19E6D00E3BF6E /* UINavigationItem+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UINavigationItem+Init.swift"; sourceTree = "<group>"; };
+		88CE9B3B26F19E6D00E3BF6E /* NSUnderlineStyle+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSUnderlineStyle+Init.swift"; sourceTree = "<group>"; };
+		88CE9B3C26F19E6D00E3BF6E /* RCTTextDecorationLineType+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RCTTextDecorationLineType+Init.swift"; sourceTree = "<group>"; };
+		88CE9B3D26F19E6D00E3BF6E /* RCTTextAttributes+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RCTTextAttributes+Init.swift"; sourceTree = "<group>"; };
+		88CE9B3E26F19E6D00E3BF6E /* UIBlurEffect+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIBlurEffect+Init.swift"; sourceTree = "<group>"; };
+		88CE9B3F26F19E6D00E3BF6E /* UISearchBar+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UISearchBar+Init.swift"; sourceTree = "<group>"; };
+		88CE9B4026F19E6D00E3BF6E /* UIBarStyle+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIBarStyle+Init.swift"; sourceTree = "<group>"; };
+		88CE9B4126F19E6D00E3BF6E /* UIOffset+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIOffset+Init.swift"; sourceTree = "<group>"; };
+		88CE9B4226F19E6D00E3BF6E /* UIStatusBarStyle+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIStatusBarStyle+Init.swift"; sourceTree = "<group>"; };
+		88CE9B4326F19E6D00E3BF6E /* NSTextAlignment+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSTextAlignment+Init.swift"; sourceTree = "<group>"; };
+		88CE9B4426F19E6D00E3BF6E /* UIView+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Init.swift"; sourceTree = "<group>"; };
+		88CE9B4526F19E6D00E3BF6E /* UIControl+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIControl+Init.swift"; sourceTree = "<group>"; };
+		88CE9B4626F19E6D00E3BF6E /* CAGradientLayerType+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CAGradientLayerType+Init.swift"; sourceTree = "<group>"; };
+		88CE9B4726F19E6D00E3BF6E /* UIBarButtonItem+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+Init.swift"; sourceTree = "<group>"; };
+		88CE9B4826F19E6D00E3BF6E /* UIReturnKeyType+Init.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIReturnKeyType+Init.swift"; sourceTree = "<group>"; };
+		88CE9B4926F19E6D00E3BF6E /* WeakObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeakObjects.swift; sourceTree = "<group>"; };
+		88CE9B4B26F19E6D00E3BF6E /* UINavigationItem+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UINavigationItem+Helpers.swift"; sourceTree = "<group>"; };
+		88CE9B4C26F19E6D00E3BF6E /* UIViewController+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Helpers.swift"; sourceTree = "<group>"; };
+		88CE9B4D26F19E6D00E3BF6E /* UIEdgeInsets+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIEdgeInsets+Helpers.swift"; sourceTree = "<group>"; };
+		88CE9B4E26F19E6D00E3BF6E /* UINavigationBar+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UINavigationBar+Helpers.swift"; sourceTree = "<group>"; };
+		88CE9B4F26F19E6D00E3BF6E /* UIView+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Helpers.swift"; sourceTree = "<group>"; };
+		88CE9B5026F19E6D00E3BF6E /* UIColor+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Helpers.swift"; sourceTree = "<group>"; };
+		88CE9B5126F19E6D00E3BF6E /* UISearchBar+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UISearchBar+Helpers.swift"; sourceTree = "<group>"; };
+		88CE9B5226F19E6D00E3BF6E /* CGRect+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGRect+Helpers.swift"; sourceTree = "<group>"; };
+		88CE9B5326F19E6D00E3BF6E /* UINavigationController+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UINavigationController+Helpers.swift"; sourceTree = "<group>"; };
+		88CE9B5426F19E6D00E3BF6E /* TransitionAnimations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionAnimations.swift; sourceTree = "<group>"; };
+		88CE9B5726F19E6D00E3BF6E /* RNINavigatorRouteHeaderShadowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteHeaderShadowView.swift; sourceTree = "<group>"; };
+		88CE9B5826F19E6D00E3BF6E /* RNINavigatorRouteHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteHeaderView.swift; sourceTree = "<group>"; };
+		88CE9B5926F19E6D00E3BF6E /* RNINavigatorRouteHeaderViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteHeaderViewManager.swift; sourceTree = "<group>"; };
+		88CE9B5A26F19E6D00E3BF6E /* RNINavigatorRouteHeaderViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNINavigatorRouteHeaderViewManager.m; sourceTree = "<group>"; };
+		88CE9B5B26F19E6D00E3BF6E /* RNIRootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNIRootViewController.swift; sourceTree = "<group>"; };
+		88CE9B5D26F19E6D00E3BF6E /* RNINavigatorRouteViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteViewManager.swift; sourceTree = "<group>"; };
+		88CE9B5E26F19E6D00E3BF6E /* RNINavigatorRouteViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNINavigatorRouteViewManager.m; sourceTree = "<group>"; };
+		88CE9B5F26F19E6D00E3BF6E /* RNINavigatorRouteViewModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNINavigatorRouteViewModule.m; sourceTree = "<group>"; };
+		88CE9B6026F19E6D00E3BF6E /* RNINavigatorRouteView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteView.swift; sourceTree = "<group>"; };
+		88CE9B6126F19E6D00E3BF6E /* RNINavigatorRouteViewModule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteViewModule.swift; sourceTree = "<group>"; };
+		88CE9B6226F19E6D00E3BF6E /* RNINavigatorRouteViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteViewDelegate.swift; sourceTree = "<group>"; };
+		88CE9B6426F19E6D00E3BF6E /* RNINavigatorRouteBaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteBaseViewController.swift; sourceTree = "<group>"; };
+		88CE9B6526F19E6D00E3BF6E /* RNINavigatorRouteViewControllerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorRouteViewControllerDelegate.swift; sourceTree = "<group>"; };
+		88CE9B6626F19E6D00E3BF6E /* RNINavigatorReactRouteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorReactRouteViewController.swift; sourceTree = "<group>"; };
+		88CE9B6826F19E6D00E3BF6E /* RNINavigationControllerConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigationControllerConfig.swift; sourceTree = "<group>"; };
+		88CE9B6926F19E6D00E3BF6E /* RNINavigatorError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorError.swift; sourceTree = "<group>"; };
+		88CE9B6A26F19E6D00E3BF6E /* RNINavBarItemConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavBarItemConfig.swift; sourceTree = "<group>"; };
+		88CE9B6B26F19E6D00E3BF6E /* RNINavigatorManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorManager.swift; sourceTree = "<group>"; };
+		88CE9B6C26F19E6D00E3BF6E /* RNINavigatorUIConstantsObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorUIConstantsObserver.swift; sourceTree = "<group>"; };
+		88CE9B6D26F19E6D00E3BF6E /* RNISearchControllerConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNISearchControllerConfig.swift; sourceTree = "<group>"; };
+		88CE9B6E26F19E6D00E3BF6E /* RNINavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigationController.swift; sourceTree = "<group>"; };
+		88CE9B6F26F19E6D00E3BF6E /* RNINavTransitionConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavTransitionConfig.swift; sourceTree = "<group>"; };
+		88CE9B7026F19E6D00E3BF6E /* RNINavBarAppearance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavBarAppearance.swift; sourceTree = "<group>"; };
+		88CE9B7226F19E6D00E3BF6E /* RNIWrapperViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNIWrapperViewManager.swift; sourceTree = "<group>"; };
+		88CE9B7326F19E6D00E3BF6E /* RNIWrapperView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNIWrapperView.swift; sourceTree = "<group>"; };
+		88CE9B7426F19E6D00E3BF6E /* RNIWrapperViewModule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNIWrapperViewModule.swift; sourceTree = "<group>"; };
+		88CE9B7526F19E6D00E3BF6E /* RNIWrapperViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNIWrapperViewManager.m; sourceTree = "<group>"; };
+		88CE9B7626F19E6D00E3BF6E /* RNIWrapperViewModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNIWrapperViewModule.m; sourceTree = "<group>"; };
+		88CE9B7826F19E6D00E3BF6E /* RNINavigatorViewManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorViewManager.swift; sourceTree = "<group>"; };
+		88CE9B7926F19E6D00E3BF6E /* RNINavigatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorView.swift; sourceTree = "<group>"; };
+		88CE9B7A26F19E6D00E3BF6E /* RNINavigatorViewModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNINavigatorViewModule.m; sourceTree = "<group>"; };
+		88CE9B7B26F19E6D00E3BF6E /* RNINavigatorViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNINavigatorViewManager.m; sourceTree = "<group>"; };
+		88CE9B7C26F19E6D00E3BF6E /* RNINavigatorViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorViewDelegate.swift; sourceTree = "<group>"; };
+		88CE9B7D26F19E6D00E3BF6E /* RNINavigatorViewModule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNINavigatorViewModule.swift; sourceTree = "<group>"; };
+		88CE9B7F26F19E6D00E3BF6E /* RNIUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNIUtilities.swift; sourceTree = "<group>"; };
+		88CE9B8026F19E6D00E3BF6E /* RNIImageItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNIImageItem.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,158 +176,159 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
-				88FE8F5E26CF113E007F2632 /* Src */,
+				88CE9B3526F19E6D00E3BF6E /* Src */,
 				134814211AA4EA7D00B7C361 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		88FE8F5E26CF113E007F2632 /* Src */ = {
+		88CE9B3526F19E6D00E3BF6E /* Src */ = {
 			isa = PBXGroup;
 			children = (
-				88FE8F5F26CF113E007F2632 /* IosNavigator-Bridging-Header.h */,
-				88FE8F6026CF113E007F2632 /* Extensions+Init */,
-				88FE8F7226CF113E007F2632 /* WeakObjects.swift */,
-				88FE8F7326CF113E007F2632 /* Extensions */,
-				88FE8F7D26CF113E007F2632 /* TransitionAnimations.swift */,
-				88FE8F7E26CF113E007F2632 /* ReactNative */,
+				88CE9B3626F19E6D00E3BF6E /* IosNavigator-Bridging-Header.h */,
+				88CE9B3726F19E6D00E3BF6E /* Extensions+Init */,
+				88CE9B4926F19E6D00E3BF6E /* WeakObjects.swift */,
+				88CE9B4A26F19E6D00E3BF6E /* Extensions */,
+				88CE9B5426F19E6D00E3BF6E /* TransitionAnimations.swift */,
+				88CE9B5526F19E6D00E3BF6E /* ReactNative */,
 			);
 			path = Src;
 			sourceTree = "<group>";
 		};
-		88FE8F6026CF113E007F2632 /* Extensions+Init */ = {
+		88CE9B3726F19E6D00E3BF6E /* Extensions+Init */ = {
 			isa = PBXGroup;
 			children = (
-				88FE8F6126CF113E007F2632 /* UIBarMetrics+Init.swift */,
-				88FE8F6226CF113E007F2632 /* RCTTextTransform+Init.swift */,
-				88FE8F6326CF113E007F2632 /* UINavigationItem+Init.swift */,
-				88FE8F6426CF113E007F2632 /* NSUnderlineStyle+Init.swift */,
-				88FE8F6526CF113E007F2632 /* RCTTextDecorationLineType+Init.swift */,
-				88FE8F6626CF113E007F2632 /* RCTTextAttributes+Init.swift */,
-				88FE8F6726CF113E007F2632 /* UIBlurEffect+Init.swift */,
-				88FE8F6826CF113E007F2632 /* UISearchBar+Init.swift */,
-				88FE8F6926CF113E007F2632 /* UIBarStyle+Init.swift */,
-				88FE8F6A26CF113E007F2632 /* UIOffset+Init.swift */,
-				88FE8F6B26CF113E007F2632 /* UIStatusBarStyle+Init.swift */,
-				88FE8F6C26CF113E007F2632 /* NSTextAlignment+Init.swift */,
-				88FE8F6D26CF113E007F2632 /* UIView+Init.swift */,
-				88FE8F6E26CF113E007F2632 /* UIControl+Init.swift */,
-				88FE8F6F26CF113E007F2632 /* CAGradientLayerType+Init.swift */,
-				88FE8F7026CF113E007F2632 /* UIBarButtonItem+Init.swift */,
-				88FE8F7126CF113E007F2632 /* UIReturnKeyType+Init.swift */,
+				88CE9B3826F19E6D00E3BF6E /* UIBarMetrics+Init.swift */,
+				88CE9B3926F19E6D00E3BF6E /* RCTTextTransform+Init.swift */,
+				88CE9B3A26F19E6D00E3BF6E /* UINavigationItem+Init.swift */,
+				88CE9B3B26F19E6D00E3BF6E /* NSUnderlineStyle+Init.swift */,
+				88CE9B3C26F19E6D00E3BF6E /* RCTTextDecorationLineType+Init.swift */,
+				88CE9B3D26F19E6D00E3BF6E /* RCTTextAttributes+Init.swift */,
+				88CE9B3E26F19E6D00E3BF6E /* UIBlurEffect+Init.swift */,
+				88CE9B3F26F19E6D00E3BF6E /* UISearchBar+Init.swift */,
+				88CE9B4026F19E6D00E3BF6E /* UIBarStyle+Init.swift */,
+				88CE9B4126F19E6D00E3BF6E /* UIOffset+Init.swift */,
+				88CE9B4226F19E6D00E3BF6E /* UIStatusBarStyle+Init.swift */,
+				88CE9B4326F19E6D00E3BF6E /* NSTextAlignment+Init.swift */,
+				88CE9B4426F19E6D00E3BF6E /* UIView+Init.swift */,
+				88CE9B4526F19E6D00E3BF6E /* UIControl+Init.swift */,
+				88CE9B4626F19E6D00E3BF6E /* CAGradientLayerType+Init.swift */,
+				88CE9B4726F19E6D00E3BF6E /* UIBarButtonItem+Init.swift */,
+				88CE9B4826F19E6D00E3BF6E /* UIReturnKeyType+Init.swift */,
 			);
 			path = "Extensions+Init";
 			sourceTree = "<group>";
 		};
-		88FE8F7326CF113E007F2632 /* Extensions */ = {
+		88CE9B4A26F19E6D00E3BF6E /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				88FE8F7426CF113E007F2632 /* UINavigationItem+Helpers.swift */,
-				88FE8F7526CF113E007F2632 /* UIViewController+Helpers.swift */,
-				88FE8F7626CF113E007F2632 /* UIEdgeInsets+Helpers.swift */,
-				88FE8F7726CF113E007F2632 /* UINavigationBar+Helpers.swift */,
-				88FE8F7826CF113E007F2632 /* UIView+Helpers.swift */,
-				88FE8F7926CF113E007F2632 /* UIColor+Helpers.swift */,
-				88FE8F7A26CF113E007F2632 /* UISearchBar+Helpers.swift */,
-				88FE8F7B26CF113E007F2632 /* CGRect+Helpers.swift */,
-				88FE8F7C26CF113E007F2632 /* UINavigationController+Helpers.swift */,
+				88CE9B4B26F19E6D00E3BF6E /* UINavigationItem+Helpers.swift */,
+				88CE9B4C26F19E6D00E3BF6E /* UIViewController+Helpers.swift */,
+				88CE9B4D26F19E6D00E3BF6E /* UIEdgeInsets+Helpers.swift */,
+				88CE9B4E26F19E6D00E3BF6E /* UINavigationBar+Helpers.swift */,
+				88CE9B4F26F19E6D00E3BF6E /* UIView+Helpers.swift */,
+				88CE9B5026F19E6D00E3BF6E /* UIColor+Helpers.swift */,
+				88CE9B5126F19E6D00E3BF6E /* UISearchBar+Helpers.swift */,
+				88CE9B5226F19E6D00E3BF6E /* CGRect+Helpers.swift */,
+				88CE9B5326F19E6D00E3BF6E /* UINavigationController+Helpers.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		88FE8F7E26CF113E007F2632 /* ReactNative */ = {
+		88CE9B5526F19E6D00E3BF6E /* ReactNative */ = {
 			isa = PBXGroup;
 			children = (
-				88FE8F7F26CF113E007F2632 /* RNINavigatorRouteHeaderView */,
-				88FE8F8426CF113E007F2632 /* RNIRootViewController.swift */,
-				88FE8F8526CF113E007F2632 /* RNINavigatorRouteView */,
-				88FE8F8C26CF113E007F2632 /* RNINavigatorRouteViewController */,
-				88FE8F9026CF113E007F2632 /* RNINavigator */,
-				88FE8F9826CF113E007F2632 /* RNIWrapperView */,
-				88FE8F9E26CF113F007F2632 /* RNINavigatorView */,
-				88FE8FA526CF113F007F2632 /* RNIHelpers */,
+				88CE9B5626F19E6D00E3BF6E /* RNINavigatorRouteHeaderView */,
+				88CE9B5B26F19E6D00E3BF6E /* RNIRootViewController.swift */,
+				88CE9B5C26F19E6D00E3BF6E /* RNINavigatorRouteView */,
+				88CE9B6326F19E6D00E3BF6E /* RNINavigatorRouteViewController */,
+				88CE9B6726F19E6D00E3BF6E /* RNINavigator */,
+				88CE9B7126F19E6D00E3BF6E /* RNIWrapperView */,
+				88CE9B7726F19E6D00E3BF6E /* RNINavigatorView */,
+				88CE9B7E26F19E6D00E3BF6E /* RNIHelpers */,
 			);
 			path = ReactNative;
 			sourceTree = "<group>";
 		};
-		88FE8F7F26CF113E007F2632 /* RNINavigatorRouteHeaderView */ = {
+		88CE9B5626F19E6D00E3BF6E /* RNINavigatorRouteHeaderView */ = {
 			isa = PBXGroup;
 			children = (
-				88FE8F8026CF113E007F2632 /* RNINavigatorRouteHeaderShadowView.swift */,
-				88FE8F8126CF113E007F2632 /* RNINavigatorRouteHeaderView.swift */,
-				88FE8F8226CF113E007F2632 /* RNINavigatorRouteHeaderViewManager.swift */,
-				88FE8F8326CF113E007F2632 /* RNINavigatorRouteHeaderViewManager.m */,
+				88CE9B5726F19E6D00E3BF6E /* RNINavigatorRouteHeaderShadowView.swift */,
+				88CE9B5826F19E6D00E3BF6E /* RNINavigatorRouteHeaderView.swift */,
+				88CE9B5926F19E6D00E3BF6E /* RNINavigatorRouteHeaderViewManager.swift */,
+				88CE9B5A26F19E6D00E3BF6E /* RNINavigatorRouteHeaderViewManager.m */,
 			);
 			path = RNINavigatorRouteHeaderView;
 			sourceTree = "<group>";
 		};
-		88FE8F8526CF113E007F2632 /* RNINavigatorRouteView */ = {
+		88CE9B5C26F19E6D00E3BF6E /* RNINavigatorRouteView */ = {
 			isa = PBXGroup;
 			children = (
-				88FE8F8626CF113E007F2632 /* RNINavigatorRouteViewManager.swift */,
-				88FE8F8726CF113E007F2632 /* RNINavigatorRouteViewManager.m */,
-				88FE8F8826CF113E007F2632 /* RNINavigatorRouteViewModule.m */,
-				88FE8F8926CF113E007F2632 /* RNINavigatorRouteView.swift */,
-				88FE8F8A26CF113E007F2632 /* RNINavigatorRouteViewModule.swift */,
-				88FE8F8B26CF113E007F2632 /* RNINavigatorRouteViewDelegate.swift */,
+				88CE9B5D26F19E6D00E3BF6E /* RNINavigatorRouteViewManager.swift */,
+				88CE9B5E26F19E6D00E3BF6E /* RNINavigatorRouteViewManager.m */,
+				88CE9B5F26F19E6D00E3BF6E /* RNINavigatorRouteViewModule.m */,
+				88CE9B6026F19E6D00E3BF6E /* RNINavigatorRouteView.swift */,
+				88CE9B6126F19E6D00E3BF6E /* RNINavigatorRouteViewModule.swift */,
+				88CE9B6226F19E6D00E3BF6E /* RNINavigatorRouteViewDelegate.swift */,
 			);
 			path = RNINavigatorRouteView;
 			sourceTree = "<group>";
 		};
-		88FE8F8C26CF113E007F2632 /* RNINavigatorRouteViewController */ = {
+		88CE9B6326F19E6D00E3BF6E /* RNINavigatorRouteViewController */ = {
 			isa = PBXGroup;
 			children = (
-				88FE8F8D26CF113E007F2632 /* RNINavigatorRouteBaseViewController.swift */,
-				88FE8F8E26CF113E007F2632 /* RNINavigatorRouteViewControllerDelegate.swift */,
-				88FE8F8F26CF113E007F2632 /* RNINavigatorReactRouteViewController.swift */,
+				88CE9B6426F19E6D00E3BF6E /* RNINavigatorRouteBaseViewController.swift */,
+				88CE9B6526F19E6D00E3BF6E /* RNINavigatorRouteViewControllerDelegate.swift */,
+				88CE9B6626F19E6D00E3BF6E /* RNINavigatorReactRouteViewController.swift */,
 			);
 			path = RNINavigatorRouteViewController;
 			sourceTree = "<group>";
 		};
-		88FE8F9026CF113E007F2632 /* RNINavigator */ = {
+		88CE9B6726F19E6D00E3BF6E /* RNINavigator */ = {
 			isa = PBXGroup;
 			children = (
-				88FE8F9126CF113E007F2632 /* RNINavBarItemConfig.swift */,
-				88FE8F9226CF113E007F2632 /* RNINavigatorManager.swift */,
-				88FE8F9326CF113E007F2632 /* RNINavigatorUIConstantsObserver.swift */,
-				88FE8F9426CF113E007F2632 /* RNISearchControllerConfig.swift */,
-				88FE8F9526CF113E007F2632 /* RNINavigationController.swift */,
-				88FE8F9626CF113E007F2632 /* RNINavTransitionConfig.swift */,
-				88FE8F9726CF113E007F2632 /* RNINavBarAppearance.swift */,
+				88CE9B6826F19E6D00E3BF6E /* RNINavigationControllerConfig.swift */,
+				88CE9B6926F19E6D00E3BF6E /* RNINavigatorError.swift */,
+				88CE9B6A26F19E6D00E3BF6E /* RNINavBarItemConfig.swift */,
+				88CE9B6B26F19E6D00E3BF6E /* RNINavigatorManager.swift */,
+				88CE9B6C26F19E6D00E3BF6E /* RNINavigatorUIConstantsObserver.swift */,
+				88CE9B6D26F19E6D00E3BF6E /* RNISearchControllerConfig.swift */,
+				88CE9B6E26F19E6D00E3BF6E /* RNINavigationController.swift */,
+				88CE9B6F26F19E6D00E3BF6E /* RNINavTransitionConfig.swift */,
+				88CE9B7026F19E6D00E3BF6E /* RNINavBarAppearance.swift */,
 			);
 			path = RNINavigator;
 			sourceTree = "<group>";
 		};
-		88FE8F9826CF113E007F2632 /* RNIWrapperView */ = {
+		88CE9B7126F19E6D00E3BF6E /* RNIWrapperView */ = {
 			isa = PBXGroup;
 			children = (
-				88FE8F9926CF113E007F2632 /* RNIWrapperViewManager.swift */,
-				88FE8F9A26CF113E007F2632 /* RNIWrapperView.swift */,
-				88FE8F9B26CF113E007F2632 /* RNIWrapperViewModule.swift */,
-				88FE8F9C26CF113E007F2632 /* RNIWrapperViewManager.m */,
-				88FE8F9D26CF113F007F2632 /* RNIWrapperViewModule.m */,
+				88CE9B7226F19E6D00E3BF6E /* RNIWrapperViewManager.swift */,
+				88CE9B7326F19E6D00E3BF6E /* RNIWrapperView.swift */,
+				88CE9B7426F19E6D00E3BF6E /* RNIWrapperViewModule.swift */,
+				88CE9B7526F19E6D00E3BF6E /* RNIWrapperViewManager.m */,
+				88CE9B7626F19E6D00E3BF6E /* RNIWrapperViewModule.m */,
 			);
 			path = RNIWrapperView;
 			sourceTree = "<group>";
 		};
-		88FE8F9E26CF113F007F2632 /* RNINavigatorView */ = {
+		88CE9B7726F19E6D00E3BF6E /* RNINavigatorView */ = {
 			isa = PBXGroup;
 			children = (
-				88FE8F9F26CF113F007F2632 /* RNINavigatorViewManager.swift */,
-				88FE8FA026CF113F007F2632 /* RNINavigatorView.swift */,
-				88FE8FA126CF113F007F2632 /* RNINavigatorViewModule.m */,
-				88FE8FA226CF113F007F2632 /* RNINavigatorViewManager.m */,
-				88FE8FA326CF113F007F2632 /* RNINavigatorViewDelegate.swift */,
-				88FE8FA426CF113F007F2632 /* RNINavigatorViewModule.swift */,
+				88CE9B7826F19E6D00E3BF6E /* RNINavigatorViewManager.swift */,
+				88CE9B7926F19E6D00E3BF6E /* RNINavigatorView.swift */,
+				88CE9B7A26F19E6D00E3BF6E /* RNINavigatorViewModule.m */,
+				88CE9B7B26F19E6D00E3BF6E /* RNINavigatorViewManager.m */,
+				88CE9B7C26F19E6D00E3BF6E /* RNINavigatorViewDelegate.swift */,
+				88CE9B7D26F19E6D00E3BF6E /* RNINavigatorViewModule.swift */,
 			);
 			path = RNINavigatorView;
 			sourceTree = "<group>";
 		};
-		88FE8FA526CF113F007F2632 /* RNIHelpers */ = {
+		88CE9B7E26F19E6D00E3BF6E /* RNIHelpers */ = {
 			isa = PBXGroup;
 			children = (
-				88FE8FA626CF113F007F2632 /* RNIUtilities.swift */,
-				88FE8FA726CF113F007F2632 /* RNIImageItem.swift */,
-				88FE8FA826CF113F007F2632 /* RNIError.swift */,
+				88CE9B7F26F19E6D00E3BF6E /* RNIUtilities.swift */,
+				88CE9B8026F19E6D00E3BF6E /* RNIImageItem.swift */,
 			);
 			path = RNIHelpers;
 			sourceTree = "<group>";
@@ -388,69 +391,70 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				88FE8FD526CF113F007F2632 /* RNINavigatorUIConstantsObserver.swift in Sources */,
-				88FE8FD226CF113F007F2632 /* RNINavigatorReactRouteViewController.swift in Sources */,
-				88FE8FAB26CF113F007F2632 /* UINavigationItem+Init.swift in Sources */,
-				88FE8FC626CF113F007F2632 /* RNINavigatorRouteHeaderView.swift in Sources */,
-				88FE8FC226CF113F007F2632 /* CGRect+Helpers.swift in Sources */,
-				88FE8FD626CF113F007F2632 /* RNISearchControllerConfig.swift in Sources */,
-				88FE8FB026CF113F007F2632 /* UISearchBar+Init.swift in Sources */,
-				88FE8FD126CF113F007F2632 /* RNINavigatorRouteViewControllerDelegate.swift in Sources */,
-				88FE8FE726CF113F007F2632 /* RNIError.swift in Sources */,
-				88FE8FD326CF113F007F2632 /* RNINavBarItemConfig.swift in Sources */,
-				88FE8FC426CF113F007F2632 /* TransitionAnimations.swift in Sources */,
-				88FE8FE626CF113F007F2632 /* RNIImageItem.swift in Sources */,
-				88FE8FB826CF113F007F2632 /* UIBarButtonItem+Init.swift in Sources */,
-				88FE8FCD26CF113F007F2632 /* RNINavigatorRouteView.swift in Sources */,
-				88FE8FBD26CF113F007F2632 /* UIEdgeInsets+Helpers.swift in Sources */,
-				88FE8FDF26CF113F007F2632 /* RNINavigatorViewManager.swift in Sources */,
-				88FE8FAE26CF113F007F2632 /* RCTTextAttributes+Init.swift in Sources */,
-				88FE8FBA26CF113F007F2632 /* WeakObjects.swift in Sources */,
-				88FE8FCE26CF113F007F2632 /* RNINavigatorRouteViewModule.swift in Sources */,
-				88FE8FD926CF113F007F2632 /* RNINavBarAppearance.swift in Sources */,
-				88FE8FAC26CF113F007F2632 /* NSUnderlineStyle+Init.swift in Sources */,
-				88FE8FBF26CF113F007F2632 /* UIView+Helpers.swift in Sources */,
-				88FE8FBB26CF113F007F2632 /* UINavigationItem+Helpers.swift in Sources */,
-				88FE8FDC26CF113F007F2632 /* RNIWrapperViewModule.swift in Sources */,
-				88FE8FDD26CF113F007F2632 /* RNIWrapperViewManager.m in Sources */,
-				88FE8FC326CF113F007F2632 /* UINavigationController+Helpers.swift in Sources */,
-				88FE8FE026CF113F007F2632 /* RNINavigatorView.swift in Sources */,
-				88FE8FCB26CF113F007F2632 /* RNINavigatorRouteViewManager.m in Sources */,
-				88FE8FB126CF113F007F2632 /* UIBarStyle+Init.swift in Sources */,
-				88FE8FD026CF113F007F2632 /* RNINavigatorRouteBaseViewController.swift in Sources */,
-				88FE8FBC26CF113F007F2632 /* UIViewController+Helpers.swift in Sources */,
-				88FE8FB726CF113F007F2632 /* CAGradientLayerType+Init.swift in Sources */,
-				88FE8FD426CF113F007F2632 /* RNINavigatorManager.swift in Sources */,
-				88FE8FAD26CF113F007F2632 /* RCTTextDecorationLineType+Init.swift in Sources */,
-				88FE8FC826CF113F007F2632 /* RNINavigatorRouteHeaderViewManager.m in Sources */,
-				88FE8FA926CF113F007F2632 /* UIBarMetrics+Init.swift in Sources */,
-				88FE8FCC26CF113F007F2632 /* RNINavigatorRouteViewModule.m in Sources */,
-				88FE8FE326CF113F007F2632 /* RNINavigatorViewDelegate.swift in Sources */,
-				88FE8FB326CF113F007F2632 /* UIStatusBarStyle+Init.swift in Sources */,
-				88FE8FD726CF113F007F2632 /* RNINavigationController.swift in Sources */,
-				88FE8FC926CF113F007F2632 /* RNIRootViewController.swift in Sources */,
-				88FE8FE226CF113F007F2632 /* RNINavigatorViewManager.m in Sources */,
-				88FE8FDE26CF113F007F2632 /* RNIWrapperViewModule.m in Sources */,
-				88FE8FAA26CF113F007F2632 /* RCTTextTransform+Init.swift in Sources */,
-				88FE8FB426CF113F007F2632 /* NSTextAlignment+Init.swift in Sources */,
-				88FE8FC726CF113F007F2632 /* RNINavigatorRouteHeaderViewManager.swift in Sources */,
-				88FE8FE426CF113F007F2632 /* RNINavigatorViewModule.swift in Sources */,
-				88FE8FE526CF113F007F2632 /* RNIUtilities.swift in Sources */,
-				88FE8FB926CF113F007F2632 /* UIReturnKeyType+Init.swift in Sources */,
-				88FE8FDB26CF113F007F2632 /* RNIWrapperView.swift in Sources */,
-				88FE8FDA26CF113F007F2632 /* RNIWrapperViewManager.swift in Sources */,
-				88FE8FE126CF113F007F2632 /* RNINavigatorViewModule.m in Sources */,
-				88FE8FCF26CF113F007F2632 /* RNINavigatorRouteViewDelegate.swift in Sources */,
-				88FE8FD826CF113F007F2632 /* RNINavTransitionConfig.swift in Sources */,
-				88FE8FB226CF113F007F2632 /* UIOffset+Init.swift in Sources */,
-				88FE8FC026CF113F007F2632 /* UIColor+Helpers.swift in Sources */,
-				88FE8FC126CF113F007F2632 /* UISearchBar+Helpers.swift in Sources */,
-				88FE8FCA26CF113F007F2632 /* RNINavigatorRouteViewManager.swift in Sources */,
-				88FE8FAF26CF113F007F2632 /* UIBlurEffect+Init.swift in Sources */,
-				88FE8FB526CF113F007F2632 /* UIView+Init.swift in Sources */,
-				88FE8FC526CF113F007F2632 /* RNINavigatorRouteHeaderShadowView.swift in Sources */,
-				88FE8FB626CF113F007F2632 /* UIControl+Init.swift in Sources */,
-				88FE8FBE26CF113F007F2632 /* UINavigationBar+Helpers.swift in Sources */,
+				88CE9BAA26F19E6D00E3BF6E /* RNINavigatorReactRouteViewController.swift in Sources */,
+				88CE9B8326F19E6D00E3BF6E /* UINavigationItem+Init.swift in Sources */,
+				88CE9B9E26F19E6D00E3BF6E /* RNINavigatorRouteHeaderView.swift in Sources */,
+				88CE9B9A26F19E6D00E3BF6E /* CGRect+Helpers.swift in Sources */,
+				88CE9B8826F19E6D00E3BF6E /* UISearchBar+Init.swift in Sources */,
+				88CE9BB926F19E6D00E3BF6E /* RNINavigatorViewManager.swift in Sources */,
+				88CE9BA926F19E6D00E3BF6E /* RNINavigatorRouteViewControllerDelegate.swift in Sources */,
+				88CE9BBD26F19E6D00E3BF6E /* RNINavigatorViewDelegate.swift in Sources */,
+				88CE9BC026F19E6D00E3BF6E /* RNIImageItem.swift in Sources */,
+				88CE9B9C26F19E6D00E3BF6E /* TransitionAnimations.swift in Sources */,
+				88CE9B9026F19E6D00E3BF6E /* UIBarButtonItem+Init.swift in Sources */,
+				88CE9BA526F19E6D00E3BF6E /* RNINavigatorRouteView.swift in Sources */,
+				88CE9B9526F19E6D00E3BF6E /* UIEdgeInsets+Helpers.swift in Sources */,
+				88CE9B8626F19E6D00E3BF6E /* RCTTextAttributes+Init.swift in Sources */,
+				88CE9B9226F19E6D00E3BF6E /* WeakObjects.swift in Sources */,
+				88CE9BA626F19E6D00E3BF6E /* RNINavigatorRouteViewModule.swift in Sources */,
+				88CE9B8426F19E6D00E3BF6E /* NSUnderlineStyle+Init.swift in Sources */,
+				88CE9BB426F19E6D00E3BF6E /* RNIWrapperViewManager.swift in Sources */,
+				88CE9B9726F19E6D00E3BF6E /* UIView+Helpers.swift in Sources */,
+				88CE9B9326F19E6D00E3BF6E /* UINavigationItem+Helpers.swift in Sources */,
+				88CE9B9B26F19E6D00E3BF6E /* UINavigationController+Helpers.swift in Sources */,
+				88CE9BAD26F19E6D00E3BF6E /* RNINavBarItemConfig.swift in Sources */,
+				88CE9BA326F19E6D00E3BF6E /* RNINavigatorRouteViewManager.m in Sources */,
+				88CE9BB826F19E6D00E3BF6E /* RNIWrapperViewModule.m in Sources */,
+				88CE9BAB26F19E6D00E3BF6E /* RNINavigationControllerConfig.swift in Sources */,
+				88CE9BB526F19E6D00E3BF6E /* RNIWrapperView.swift in Sources */,
+				88CE9B8926F19E6D00E3BF6E /* UIBarStyle+Init.swift in Sources */,
+				88CE9BA826F19E6D00E3BF6E /* RNINavigatorRouteBaseViewController.swift in Sources */,
+				88CE9B9426F19E6D00E3BF6E /* UIViewController+Helpers.swift in Sources */,
+				88CE9B8F26F19E6D00E3BF6E /* CAGradientLayerType+Init.swift in Sources */,
+				88CE9BB126F19E6D00E3BF6E /* RNINavigationController.swift in Sources */,
+				88CE9B8526F19E6D00E3BF6E /* RCTTextDecorationLineType+Init.swift in Sources */,
+				88CE9BA026F19E6D00E3BF6E /* RNINavigatorRouteHeaderViewManager.m in Sources */,
+				88CE9BB326F19E6D00E3BF6E /* RNINavBarAppearance.swift in Sources */,
+				88CE9BBA26F19E6D00E3BF6E /* RNINavigatorView.swift in Sources */,
+				88CE9B8126F19E6D00E3BF6E /* UIBarMetrics+Init.swift in Sources */,
+				88CE9BA426F19E6D00E3BF6E /* RNINavigatorRouteViewModule.m in Sources */,
+				88CE9BBB26F19E6D00E3BF6E /* RNINavigatorViewModule.m in Sources */,
+				88CE9BB726F19E6D00E3BF6E /* RNIWrapperViewManager.m in Sources */,
+				88CE9B8B26F19E6D00E3BF6E /* UIStatusBarStyle+Init.swift in Sources */,
+				88CE9BAE26F19E6D00E3BF6E /* RNINavigatorManager.swift in Sources */,
+				88CE9BA126F19E6D00E3BF6E /* RNIRootViewController.swift in Sources */,
+				88CE9B8226F19E6D00E3BF6E /* RCTTextTransform+Init.swift in Sources */,
+				88CE9B8C26F19E6D00E3BF6E /* NSTextAlignment+Init.swift in Sources */,
+				88CE9B9F26F19E6D00E3BF6E /* RNINavigatorRouteHeaderViewManager.swift in Sources */,
+				88CE9B9126F19E6D00E3BF6E /* UIReturnKeyType+Init.swift in Sources */,
+				88CE9BB026F19E6D00E3BF6E /* RNISearchControllerConfig.swift in Sources */,
+				88CE9BA726F19E6D00E3BF6E /* RNINavigatorRouteViewDelegate.swift in Sources */,
+				88CE9BB226F19E6D00E3BF6E /* RNINavTransitionConfig.swift in Sources */,
+				88CE9BBF26F19E6D00E3BF6E /* RNIUtilities.swift in Sources */,
+				88CE9B8A26F19E6D00E3BF6E /* UIOffset+Init.swift in Sources */,
+				88CE9B9826F19E6D00E3BF6E /* UIColor+Helpers.swift in Sources */,
+				88CE9BBE26F19E6D00E3BF6E /* RNINavigatorViewModule.swift in Sources */,
+				88CE9BB626F19E6D00E3BF6E /* RNIWrapperViewModule.swift in Sources */,
+				88CE9B9926F19E6D00E3BF6E /* UISearchBar+Helpers.swift in Sources */,
+				88CE9BA226F19E6D00E3BF6E /* RNINavigatorRouteViewManager.swift in Sources */,
+				88CE9B8726F19E6D00E3BF6E /* UIBlurEffect+Init.swift in Sources */,
+				88CE9B8D26F19E6D00E3BF6E /* UIView+Init.swift in Sources */,
+				88CE9BBC26F19E6D00E3BF6E /* RNINavigatorViewManager.m in Sources */,
+				88CE9BAF26F19E6D00E3BF6E /* RNINavigatorUIConstantsObserver.swift in Sources */,
+				88CE9BAC26F19E6D00E3BF6E /* RNINavigatorError.swift in Sources */,
+				88CE9B9D26F19E6D00E3BF6E /* RNINavigatorRouteHeaderShadowView.swift in Sources */,
+				88CE9B8E26F19E6D00E3BF6E /* UIControl+Init.swift in Sources */,
+				88CE9B9626F19E6D00E3BF6E /* UINavigationBar+Helpers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
