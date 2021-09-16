@@ -263,7 +263,10 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
       return (config.isNativeRoute ? routeItem : ({
         ...routeItem,
-        routeOptions: (config as NavRouteConfigItemJS).routeOptionsDefault,
+        routeOptions: Helpers.shallowMergeObjects(
+          (config as NavRouteConfigItemJS).routeOptionsDefault,
+          route.routeOptions,
+        ) ?? undefined,
       }));
     });
   };
