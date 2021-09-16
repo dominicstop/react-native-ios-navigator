@@ -64,7 +64,7 @@ Before you use this library, please first consider looking at [`react-navigation
 
 <br>
 
-* Exposes almost all of the `UINavigationController` events.
+* Exposes almost all of the `UINavigationController`/`UIViewController`-related events.
 * Exposes all of the things that can be configured in the view controller's [`UINavigationItem`](https://developer.apple.com/documentation/uikit/uinavigationitem) (`title`, `prompt`, `largeTitleDisplayMode`, `backBarButtonItem`, etc).
 * Etc.
 
@@ -113,7 +113,8 @@ cd ios && pod install
 ## C. Basic Usage
 
 ```jsx
-import { SafeAreaView, TouchableOpacity, Text } from 'react-native-ios-navigator';
+import * as React from 'react';
+import { SafeAreaView, TouchableOpacity, Text } from 'react-native';
 import { NavigatorView } from 'react-native-ios-navigator';
 
 // Route to show in the navigator
@@ -586,7 +587,7 @@ These events are triggered whenever the current route will receive or lose focus
 
 ###### `NavigatorRouteViewEvents` Navigation Bar Item-related Events
 
-📝 **Note**: When using custom navigation bar items (e.g. `renderNavBarLeftItem`, etc.), the `onPressNavBar` events will not be triggered.
+📝 **Note**: When using a custom navigation bar items (e.g. `renderNavBarLeftItem`, etc.), the `onPressNavBar` events will not be triggered.
 
 * Instead, use a button component  (e.g. `TouchableOpacity`), and then wrap your custom navigation bar item inside it.
 
@@ -1078,11 +1079,187 @@ Native/Swift Integration
 
 ## E. Getting Started Guide
 
-### Navigation Hello World 
+### A01 - Navigation Hello World 
 
-#### Routes and Route Config
+Here's a bare minimum example: a navigator with a single route.
 
-#### Initial Routes
+[🔗 Full Example](./example/src/routes/GettingStartedGuide/ExampleA01.tsx)
+
+```react
+import * as React from 'react';
+import { SafeAreaView, TouchableOpacity, Text, StyleSheet } from 'react-native';
+
+import { NavigatorView, RouteContentProps } from 'react-native-ios-navigator';
+
+// Route - 'routeA'
+// This is the component that gets shown when 'routeA' is pushed. 
+function ExampleRoute(props){
+  return (
+    <SafeAreaView style={styles.routeContainer}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          // when this button is pressed, push a route 
+          // with the "route key" value of 'routeA'.
+          props.navigation.push({
+            routeKey: 'routeA'
+          });
+        }}
+      >
+        <Text style={styles.buttonText}> 
+          Push: 'RouteA' 
+        </Text>
+      </TouchableOpacity>
+    </SafeAreaView>
+  );
+};
+
+export function ExampleA01(){
+  return (
+     <NavigatorView
+      // The object that's passed to the `NavigatorView.routes` 
+      // prop defines what routes can be used in the navigator.
+      //
+      // Note: The object that is passed to this prop is referred to as
+      // the "route map" (e.g. `NavRoutesConfigMap`).
+      routes={{
+        // The key of the property is used as the "route key" of the route.
+        // E.g. so this is a route that has the `routeKey` value of 'routeA'.
+        //
+        // Note: The object that's assigned to the `routeKey` is referred to
+        // as the "route config" (e.g. `NavRouteConfigItem`).
+        routeA: {
+          // Now we need to provide a config... we want to show the 
+          // `ExampleRoute` component when this route is "pushed".
+          //
+          // The `renderRoute` property accepts a function that returns a
+          // component to show in the route.
+          renderRoute: () => (
+            <ExampleRoute/>
+          ),
+        }
+      }}
+      // This prop controls the initial routes to show when the navigator
+      // first mounts.
+      initialRoutes={[{routeKey: 'routeA'}]}
+    />
+  );
+};
+
+```
+
+![GettingStartedGuide-ExampleA01](./docs/assets/GettingStartedGuide-ExampleA01.gif)
+
+
+
+<br>
+
+#### A02 - Routes and Route Config
+
+The "route config", as the name would suggest, is used to configure a route. As such, each route has a corresponding "route config" object.
+
+The route config object's `renderRoute` property  (e.g.`NavRouteConfigItem.renderRoute` ) defines what route to show when it gets pushed.
+
+The route config object can also be customized and configured further via the `defaultRouteOptions` property (e.g. e.g.`NavRouteConfigItem.defaultRouteOptions`).
+
+<br>
+
+[🔗 Full Example](./example/src/routes/GettingStartedGuide/ExampleA02.tsx)
+
+```react
+// Note: Parts that are the same are omitted...
+export function ExampleA02(){
+  return (
+     <NavigatorView
+      // ...
+      routes={{
+        routeA: {
+          // The route can be configured/customized further via the
+          // `NavRouteConfigItem.defaultRouteOptions` property.
+          routeOptionsDefault: {
+            routeTitle: 'Hello World',
+            prompt: 'Lorum Ipsum',
+
+            // disable the "large title" for this route
+            largeTitleDisplayMode: 'never',
+
+            // show a button on the right side of the
+            // navigation bar
+            navBarButtonRightItemsConfig: [{
+              type: 'TEXT',
+              title: 'ABC',
+              tintColor: 'red',
+            }]
+          },
+          renderRoute: () => (
+            <ExampleRoute/>
+          ),
+        }
+      }}
+    />
+  );
+};
+```
+
+![GettingStartedGuide-ExampleA02](./docs/assets/GettingStartedGuide-ExampleA02.png)
+
+<br>
+
+#### A03 - Initial Routes
+
+As mentioned before, the `NavigatorView.initialRoutes` prop controls what routes to show when the navigator first mounts. 
+
+For most cases, you only want one initial route. But you can define multiple initial routes if you want to (e.g. for the purpose of state restoration, etc).
+
+<br>
+
+[🔗 Full Example](./example/src/routes/GettingStartedGuide/ExampleA03.tsx)
+
+```react
+// Note: Parts that are the same are omitted...
+export function ExampleA03(){
+  return (
+     <NavigatorView
+      // ...
+      // show multiple initial routes...
+      initialRoutes={[{
+        routeKey: 'routeA',
+        routeOptions: {
+          routeTitle: '01 (Root)'
+        }
+      }, {
+        routeKey: 'routeA',
+        routeOptions: {
+          routeTitle: '02'
+        }
+      }, {
+        routeKey: 'routeA',
+        routeOptions: {
+          routeTitle: '03'
+        }
+      }, {
+        routeKey: 'routeA',
+        routeOptions: {
+          routeTitle: '04'
+        }
+      }, {
+        routeKey: 'routeA',
+        routeOptions: {
+          routeTitle: '05'
+        }
+      }, {
+        routeKey: 'routeA',
+        routeOptions: {
+          routeTitle: '06'
+        }
+      }]}
+    />
+  );
+};
+
+```
+
+![GettingStartedGuide-ExampleA03](./docs/assets/GettingStartedGuide-ExampleA03.gif)
 
 <br>
 
