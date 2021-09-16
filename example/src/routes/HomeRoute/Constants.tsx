@@ -88,5 +88,8 @@ export const RouteItems = [{
 }, { 
   routeKey: RouteKeys.RouteViewPortalExample01,
   title: 'RouteViewPortal Example'
+}, { 
+  routeKey: RouteKeys.GettingStartedGuide,
+  title: 'GettingStartedGuide'
 }];
 

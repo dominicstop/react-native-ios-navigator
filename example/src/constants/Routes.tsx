@@ -17,13 +17,14 @@ import { NavigatorTest04 } from '../routes/NavigatorTest04';
 import { NavigatorTest05 } from '../routes/NavigatorTest05';
 import { NavigatorTest06 } from '../routes/NavigatorTest06';
 import { NavigatorTest07 } from '../routes/NavigatorTest07';
+import { NavigatorTest08 } from '../routes/NavigatorTest08';
 
 import { NavigatorDemo01 } from '../routes/NavigatorDemo01';
 import { NavigatorDemo02 } from '../routes/NavigatorDemo02';
 
 import { RouteViewPortalExample01 } from '../routes/RouteViewPortalExample01';
 
-import { NavigatorTest08 } from '../routes/NavigatorTest08';
+import { GettingStartedGuide } from '../routes/GettingStartedGuide';
 
 import * as Colors  from '../constants/Colors';
 import * as Helpers from '../functions/Helpers';
@@ -50,6 +51,8 @@ export const RouteKeys = {
   NavigatorShowcase03: 'NavigatorShowcase03',
 
   RouteViewPortalExample01: 'RouteViewPortalExample01',
+
+  GettingStartedGuide: 'GettingStartedGuide',
 };
 
 export const ROUTES: NavRoutesConfigMap = {
@@ -103,6 +106,7 @@ export const ROUTES: NavRoutesConfigMap = {
       <NavigatorShowcase02/>
     ),
   }, 
+
   [RouteKeys.NavigatorShowcase03]: {
     routeOptionsDefault: {
       largeTitleDisplayMode: 'never',
@@ -159,6 +163,7 @@ export const ROUTES: NavRoutesConfigMap = {
       <NavigatorTest08/>
     ),
   },
+
   [RouteKeys.NavigatorDemo01]: {
     routeOptionsDefault: {
       largeTitleDisplayMode: 'never',
@@ -177,9 +182,19 @@ export const ROUTES: NavRoutesConfigMap = {
       />
     ),
   },
+
   [RouteKeys.RouteViewPortalExample01]: {
     renderRoute: () => (
       <RouteViewPortalExample01/>
+    ),
+  },
+
+  [RouteKeys.GettingStartedGuide]: {
+    routeOptionsDefault: {
+      largeTitleDisplayMode: 'never',
+    },
+    renderRoute: () => (
+      <GettingStartedGuide/>
     ),
   }
 };
