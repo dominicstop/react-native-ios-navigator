@@ -1281,6 +1281,64 @@ export function ExampleA03(){
 
 #### The `NavigationObject`
 
+The "navigation object" contains information about the current route, and is also used to send commands to the navigator (e.g. pushing and popping routes, etc).
+
+There are two ways to get the navigation object. The first way is to simply get the navigation object via props.
+
+```javascript
+// 1. your route component will automatically receive the `NavigationObject` via props.
+function ExampleRoute(props){
+  const { navigation } = props;
+  return (
+  	// ...
+  );
+};
+
+// 2. If you are using typescript, you can use (or extend) the `RouteContentProps` type.
+import type { RouteContentProps } from 'react-native-ios-navigator';
+
+function ExampleRoute(props: RouteContentProps){
+  const text = `The current route key is: ${props.navigation.routeKey}`;
+  return (
+  	// ...
+  );
+};
+```
+
+<br>
+
+The second way to get the navigation object is via context.
+
+```jsx
+// 1. For convenience, there's a pre-built hook to get the navigation object
+// via react context.
+import { useNavigation } from 'react-native-ios-navigator';
+
+function ExampleRoute(){
+  const navigation = useNavigation();
+  return (
+  	// ...
+  );
+};
+
+// 2. Or altenatively, you can use the `NavigationContext` directly for more
+// flexibility and control.
+import { NavigationContext } from 'react-native-ios-navigator';
+
+function ExampleRoute(){
+  return (
+    <NavigationContext.Consumer>
+      {(navigation) => (
+        // ...
+  		)}
+    </NavigationContext.Consumer>
+  );
+};
+  
+```
+
+<br>
+
 #### Pushing Routes
 
 #### Forwarding Data To Routes
