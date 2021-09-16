@@ -2,6 +2,8 @@
 
 A native wrapper component around `UINavigationController` for react-native.
 
+![gif-showcase-00](./docs/assets/gif-showcase-00.gif)
+
 ## 🚧⚠️ **Library WIP** ⚠️🚧
 
 Currently in development... 😅 (See [TODO.md](https://github.com/dominicstop/react-native-ios-navigator/blob/master/docs/TODO.md) for current progress).
@@ -104,13 +106,25 @@ yarn add react-native-ios-navigator
 cd ios && pod install
 ```
 
+<br>
 
+📝 **Note**: This library is written in swift, so if you're having troubles building your project, try adding an empty swift file so that Xcode will generate a `bridging-header.h` file for your project.
+
+<br>
+
+### Additional Setup
+
+In your project's `Info.plist` file, set the "View controller-based status bar appearance" key from `NO` to `YES`.
+
+![installation-additional-setup-01](./docs/assets/installation-additional-setup-01.png)
 
 ------
 
 <br><br>
 
 ## C. Basic Usage
+
+This snippet is from the [Navigation Hello World](#a01---navigation-hello-world) section.
 
 ```jsx
 import * as React from 'react';
@@ -138,9 +152,6 @@ export function App() {
       initialRoutes={[{routeKey: 'routeA'}]}
       routes={{
         routeA: {
-          routeOptionsDefault: {
-            routeTitle: 'Route A',
-          },
           renderRoute: () => (
             <ExampleRoute/>
           ),
@@ -151,6 +162,8 @@ export function App() {
 };
 
 ```
+
+![GettingStartedGuide-ExampleA01](./docs/assets/GettingStartedGuide-ExampleA01.gif)
 
 <br>
 
@@ -1085,7 +1098,7 @@ Here's a bare minimum example: a navigator with a single route.
 
 [🔗 Full Example](./example/src/routes/GettingStartedGuide/ExampleA01.tsx)
 
-```react
+```jsx
 import * as React from 'react';
 import { SafeAreaView, TouchableOpacity, Text, StyleSheet } from 'react-native';
 
@@ -1166,7 +1179,7 @@ The route config object can also be customized and configured further via the `d
 
 [🔗 Full Example](./example/src/routes/GettingStartedGuide/ExampleA02.tsx)
 
-```react
+```jsx
 // Note: Parts that are the same are omitted...
 export function ExampleA02(){
   return (
@@ -1215,13 +1228,14 @@ For most cases, you only want one initial route. But you can define multiple ini
 
 [🔗 Full Example](./example/src/routes/GettingStartedGuide/ExampleA03.tsx)
 
-```react
+```jsx
 // Note: Parts that are the same are omitted...
 export function ExampleA03(){
   return (
      <NavigatorView
       // ...
       // show multiple initial routes...
+      // Note: this prop accepts an array of `NavRouteItem` objects
       initialRoutes={[{
         routeKey: 'routeA',
         routeOptions: {
