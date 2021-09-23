@@ -114,9 +114,23 @@ cd ios && pod install
 
 ### Additional Setup
 
-In your project's `Info.plist` file, set the "View controller-based status bar appearance" key from `NO` to `YES`.
+In your project's `Info.plist` file, set the "View controller-based status bar appearance" key from `NO` to `YES`. Toggling this property allows you to set the status bar style on a per-route basis.
 
 ![installation-additional-setup-01](./docs/assets/installation-additional-setup-01.png)
+
+<br>
+
+### Troubleshooting
+
+The following build errors can usually be resolved by adding an empty swift file:
+
+![installation-troubleshooting-00](docs/assets/installation-troubleshooting-00.png)
+
+<br>
+
+However, the older versions of the react-native template (e.g. `0.63` and below) hard codes the swift library search paths to use swift `5.0` (which causes the linker to mismatch the swift system libraries bundled with Xcode + iOS version). To fix this issue, just remove the entries from the project config's library search path:
+
+![installation-troubleshooting-01](docs/assets/installation-troubleshooting-01.png)
 
 ------
 
