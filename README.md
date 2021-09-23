@@ -1180,7 +1180,7 @@ The route config object can also be customized and configured further via the `d
 [🔗 Full Example](./example/src/routes/GettingStartedGuide/ExampleA02.tsx)
 
 ```jsx
-// Note: Parts that are the same are omitted...
+// 📝 Note: for the sake of brevity, some of the code is omitted...
 export function ExampleA02(){
   return (
      <NavigatorView
@@ -1229,11 +1229,12 @@ For most cases, you only want one initial route. But you can define multiple ini
 [🔗 Full Example](./example/src/routes/GettingStartedGuide/ExampleA03.tsx)
 
 ```jsx
-// Note: Parts that are the same are omitted...
+// 📝 Note: for the sake of brevity, some of the code is omitted...
 export function ExampleA03(){
   return (
      <NavigatorView
       // ...
+      //
       // show multiple initial routes...
       // Note: this prop accepts an array of `NavRouteItem` objects
       initialRoutes={[{
@@ -1279,18 +1280,18 @@ export function ExampleA03(){
 
 ### Navigation Commands Basics
 
-#### The `NavigationObject`
+#### B01 – The `NavigationObject`
 
 The "navigation object" contains information about the current route, and is also used to send commands to the navigator (e.g. pushing and popping routes, etc).
 
-There are two ways to get the navigation object. The first way is to simply get the navigation object via props.
+There are two ways to get the navigation object. The first way is to simply get the navigation object via the props:
 
 ```javascript
 // 1. your route component will automatically receive the `NavigationObject` via props.
 function ExampleRoute(props){
   const { navigation } = props;
   return (
-  	// ...
+    // ...
   );
 };
 
@@ -1300,24 +1301,24 @@ import type { RouteContentProps } from 'react-native-ios-navigator';
 function ExampleRoute(props: RouteContentProps){
   const text = `The current route key is: ${props.navigation.routeKey}`;
   return (
-  	// ...
+    // ...
   );
 };
 ```
 
 <br>
 
-The second way to get the navigation object is via context.
+The second way to get the navigation object is via context:
 
 ```jsx
 // 1. For convenience, there's a pre-built hook to get the navigation object
-// via react context.
+// via context.
 import { useNavigation } from 'react-native-ios-navigator';
 
 function ExampleRoute(){
   const navigation = useNavigation();
   return (
-  	// ...
+    // ...
   );
 };
 
@@ -1339,21 +1340,205 @@ function ExampleRoute(){
 
 <br>
 
-#### Pushing Routes
+#### B02 – Pushing Routes
 
-#### Forwarding Data To Routes
+Via the navigation object, you can send commands to the navigator. For example, you can push a route into the navigation stack using the "push" command:
 
-#### Configure Next Routes
+```javascript
+// The push command accepts an object...
+navigation.push({
+  // The "route key" of the route that is to be shown
+  routeKey: 'routeA'
+});
+```
 
-#### Popping Routes
+<br>
 
-#### Extra Options 
+#### B03 - Forwarding Data To Routes
+
+Using the push navigation command, you can send data (i.e. "route props") to the next route. The data can then be read via the navigation object (i.e. `NavigationObject.routeProps`).
+
+<br>
+
+[🔗 Full Example](./example/src/routes/GettingStartedGuide/ExampleB03.tsx)
+
+```jsx
+// 📝 Note: for the sake of brevity, some of the code is omitted...
+function ExampleRoute(props){
+  // Get the count from the prev. route.
+  const prevCount = props.navigation.routeProps?.count ?? 0;
+
+  // Save the count to state
+  const [count] = React.useState(prevCount);
+
+  return (
+    <SafeAreaView style={styles.routeContainer}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          // Push route when this button is pressed...
+          props.navigation.push({
+            routeKey: 'routeA',
+            routeProps: {
+              // ... and send the count to the next route.
+              count: count + 1,
+            },
+            routeOptions: {
+              routeTitle: `Count: ${count}`
+            },
+          });
+        }}
+      >
+        <Text style={styles.buttonText}> 
+          {`Push and Increment Counter`}
+        </Text>
+      </TouchableOpacity>
+    </SafeAreaView>
+  );
+};
+```
+
+![GettingStartedGuide-ExampleB03](./docs/assets/GettingStartedGuide-ExampleB03.gif)
+
+<br>
+
+#### B04 - Configure The Next Routes
+
+The "route options" of a route can also be set via a navigation command. The "route options" provided by the navigation command will be combined with the route's pre-existing route options (i.e. the route options that were provided via the route config: `NavRouteConfigItem.defaultRouteOptions`).
+
+<br>
+
+[🔗 Full Example](./example/src/routes/GettingStartedGuide/ExampleB04.tsx)
+
+```jsx
+// 📝 Note: for the sake of brevity, some of the code is omitted...
+function ExampleRoute(props){
+  return (
+    <SafeAreaView style={styles.routeContainer}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          // Push route when this button is pressed...
+          props.navigation.push({
+            routeKey: 'routeA',
+            // ...and set the route's route options
+            routeOptions: {
+              largeTitleDisplayMode: 'never',
+              routeTitle: 'Hello World',
+              prompt: 'Lorum Ipsum',
+            },
+          });
+        }}
+      >
+        <Text style={styles.buttonText}> 
+          Push: 'RouteA' + Send Route Options 
+        </Text>
+      </TouchableOpacity>
+    </SafeAreaView>
+  );
+};
+
+```
+
+![GettingStartedGuide-ExampleA03](./docs/assets/GettingStartedGuide-ExampleB04.gif)
+
+<br>
+
+#### B05 - Popping Routes
+
+To programmatically pop the current route, you can use the `pop` navigation command.
+
+<br>
+
+[🔗 Full Example](./example/src/routes/GettingStartedGuide/ExampleB05.tsx)
+
+```jsx
+// 📝 Note: for the sake of brevity, some of the code is omitted...
+function ExampleRoute(props){
+  return (
+    <SafeAreaView style={styles.routeContainer}>
+      {/** ... */}
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          // Pop current route when the button is pressed
+          props.navigation.pop();
+        }}
+      >
+        <Text style={styles.buttonText}> 
+          Pop Current Route
+        </Text>
+      </TouchableOpacity>
+    </SafeAreaView>
+  );
+};
+```
+
+![GettingStartedGuide-ExampleA03](./docs/assets/GettingStartedGuide-ExampleB05.gif)
+
+<br>
+
+#### B06 - Extra Options 
+
+Most of the navigation commands can accept extra options. The extra options can be used to enable/disable the transition animation, or provide a custom transition config to use, etc.
+
+<br>
+
+[🔗 Full Example](./example/src/routes/GettingStartedGuide/ExampleB06.tsx)
+
+```jsx
+// 📝 Note: for the sake of brevity, some of the code is omitted...
+function ExampleRoute(props){
+  return (
+    <SafeAreaView style={styles.routeContainer}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          // Push 'routeA' with a custom transition
+          props.navigation.push({
+            routeKey: 'routeA',
+          }, {
+            transitionConfig: {
+              type: 'GlideUp',
+              duration: 0.75
+            }
+          });
+        }}
+      >
+        <Text style={styles.buttonText}> 
+          Push: 'RouteA'
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          // Pop current route w/ a custom transition
+          props.navigation.pop({
+            transitionConfig: {
+              type: 'FlipHorizontal',
+              duration: 0.75,
+            }
+          });
+        }}
+      >
+        <Text style={styles.buttonText}> 
+          Pop Current Route
+        </Text>
+      </TouchableOpacity>
+    </SafeAreaView>
+  );
+};
+```
+
+![GettingStartedGuide-ExampleA03](./docs/assets/GettingStartedGuide-ExampleB06.gif)
 
 <br>
 
 ### Customizations Basics
 
 #### Route Options
+
+#### Navigation Bar Items (Basic)
 
 #### Applying Route Options
 
