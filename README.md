@@ -138,7 +138,7 @@ However, the older versions of the react-native template (e.g. `0.63` and below)
 
 ## C. Basic Usage
 
-This snippet is from the [Navigation Hello World](#a01---navigation-hello-world) section.
+This snippet is an excerpt from the [Navigation Hello World](#a01---navigation-hello-world) section.
 
 ```jsx
 import * as React from 'react';
