@@ -327,6 +327,16 @@
 
 ### Version: `next`
 
+- [x] (Commit: `4bf1c98`) **Fix**: `routeOptions` that is set via `NavigatorView.initialRoutes` not working.
+- [x] (Commit: `71cff3c`) **Fix**: Navigation bar legacy appearance-related regressions/bugs
+	- After the big refactor related to the navigation override logic (i.e. in commit: `5395fb2` on version `0.3.0`), setting the navigation bar shadow via the legacy appearance no longer works properly.
+		- It looks like the height of the shadow image is wrong, it's being set but the height is set to 1 px (might be related to `RNIImageItem`).
+	- The navigation bar legacy appearance config also does not properly reset in certain cases. It seems that the prev. configurations are being carried over unless explicitly overwritten.
+
+<br>
+
+### Version: `0.3.0`
+
 - [x] (Commit: `7cdae0d`) **Refactor**: Re-write error handling — Impl. error codes 
 	* Specific error codes for when a navigator command fails (e.g. library errors, and user errors).
 	* E.g. `ACTIVE_ROUTES_DESYNC`, `INVALID_ROUTE_KEY`, `ROUTE_OUT_OF_BOUNDS`, `MODAL_ACTIVE`,  `UNKNOWN_ERROR`, etc.
