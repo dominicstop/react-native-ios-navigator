@@ -123,6 +123,8 @@ public class RNINavigationControllerConfig {
           let navController = navigatorView.navigationVC
     else { return };
     
+    let isInFocus = routeVC.isLastViewController && routeVC.isPushed;
+    
     // If `routeVC` is a react route, then get the `navBarAppearanceOverrideConfig`.
     let config: RNINavBarAppearance? = config ?? {
       guard let reactRouteVC = routeVC as? RNINavigatorReactRouteViewController,
@@ -150,9 +152,7 @@ public class RNINavigationControllerConfig {
           navBar: navController.navigationBar
         );
         
-        let shouldApply = routeVC.isLastViewController && routeVC.isPushed;
-        
-        if forceApplyLegacyConfig || shouldApply {
+        if forceApplyLegacyConfig || isInFocus {
           // If route is currently active/focused, immediately apply config
           // to the navigation bar
           self.navBarLegacyConfig.applyConfig(to: navController.navigationBar);
@@ -176,6 +176,10 @@ public class RNINavigationControllerConfig {
       || self.navBarLegacyConfig.hasBackgroundImage
       || self.navBarLegacyConfig.hasShadowImage
     );
+    
+    if isInFocus {
+      navController.navigationBar.layoutIfNeeded();
+    };
   };
   
   func makeApplyConfigBlocks(
@@ -351,14 +355,17 @@ class RNINavigationControllerLegacyAppearanceConfig {
     // ---------------------
 
     let nextBackImage = self.backIndicatorImage;
-    let prevBackImage = navBar.backIndicatorImage;
 
     // only apply back image if different...
-    if !RNIUtilities.compareImages(nextBackImage, prevBackImage) {
+    if !RNIUtilities.compareImages(nextBackImage, navBar.backIndicatorImage) {
       navBar.backIndicatorImage               = nextBackImage;
       navBar.backIndicatorTransitionMaskImage = nextBackImage;
     };
-
+    
+    if !RNIUtilities.compareImages(self.shadowImage, navBar.shadowImage) {
+      navBar.shadowImage = self.shadowImage;
+    };
+    
     for metric in UIBarMetrics.allCases {
       let prevBGImage = navBar.backgroundImage(for: metric);
       let nextBGImage = self.backgroundImage[metric];
@@ -366,9 +373,14 @@ class RNINavigationControllerLegacyAppearanceConfig {
       let didBGImageChange =
         !RNIUtilities.compareImages(prevBGImage, nextBGImage);
       
-      if didBGImageChange {
+      // i.e. if prev. set, but now nil
+      let didReset = prevBGImage != nil && nextBGImage == nil;
+      
+      if didBGImageChange || didReset {
         navBar.setBackgroundImage(nextBGImage, for: metric);
       };
     };
+    
+    navBar.setNeedsLayout();
   };
 };

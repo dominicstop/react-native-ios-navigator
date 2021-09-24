@@ -437,17 +437,22 @@ internal class RNINavBarAppearance {
       }();
     };
     
+    /// Copy over the current config to legacy appearance config
     func applyConfig(
       to config: RNINavigationControllerLegacyAppearanceConfig,
       navBar: UINavigationBar
     ){
-      let hasBackground  = self.navBarPreset != .clearBackground;
-      let hasShadow      = self.navBarPreset != .noShadow && hasBackground;
       
+      /// The ff. are use to set the size of the various images
       let statusBarHeight = UIApplication.shared.statusBarFrame.size.height;
+      let navBarHeight    = navBar.frame.height;
+      let navBarWidth     = navBar.frame.width;
       
-      let navBarHeight = navBar.frame.height;
-      let navBarWidth  = navBar.frame.width;
+      let shouldSetBackground = self.navBarPreset != .clearBackground;
+      let shouldSetShadow     = self.navBarPreset != .noShadow && shouldSetBackground;
+      
+      // reset config to default before writing to it
+      config.initializeWithDefaultValues();
       
       // Section: Title Config
       // ---------------------
@@ -476,7 +481,7 @@ internal class RNINavBarAppearance {
       };
       
       /// set/init: `barTintColor`, e.g. the bg color
-      if hasBackground,
+      if shouldSetBackground,
          let barTintColor = self.barTintColor {
         
         config.barTintColor = barTintColor;
@@ -489,14 +494,14 @@ internal class RNINavBarAppearance {
 
       for metric in UIBarMetrics.allCases {
         
-        if hasBackground {
+        if shouldSetBackground {
           // get the matching bg image for the current metric
           let bgImageConfig = self.backgroundImage?.first { metric == $0.0 };
           
           // if no bg image for metric, skip...
           guard let (_, bgImageItem) = bgImageConfig else { continue };
           
-          // set bg image size
+          // provide default size for bg image
           bgImageItem.defaultSize = CGSize(
             width : navBarWidth,
             height: navBarHeight + statusBarHeight
@@ -511,7 +516,13 @@ internal class RNINavBarAppearance {
         };
       };
             
-      if hasShadow {
+      if shouldSetShadow {
+        // provide default size for shadow
+        self.shadowImage?.defaultSize = CGSize(
+          width : navBarWidth,
+          height: navBarHeight
+        );
+        
         config.shadowImage = self.shadowImage?.image;
       };
       
@@ -766,7 +777,6 @@ internal class RNINavBarAppearance {
             self.appearanceConfigScrollEdge?.appearance;
         };
         
-        // refresh the navbar appearance
         navBar.setNeedsLayout();
 
       case .legacy:
@@ -780,8 +790,8 @@ internal class RNINavBarAppearance {
   /// Reset navigation bar/`navigationItem` appearance-related properties and
   /// navigation bar "legacy appearance"-related properties.
   ///
-  /// **Note A**: You need to call `navigationBar.setNeedsLayout` afterwards so
-  /// that the reset will take effect.
+  /// **Note A**: You need to call `navigationBar.layoutIfNeeded()` afterwards
+  /// so that the reset will immediately take effect.
   ///
   /// **Note B**: This will not reset any of the appearance properties (you need
   /// to call `resetValues` first).
@@ -791,6 +801,7 @@ internal class RNINavBarAppearance {
     navigationItem: UINavigationItem? = nil
   ){
     guard let navBar = navBar else { return };
+    
     // since a reset was done, no need to reset on next nav bar update
     self.shouldResetNavBar = false;
     
@@ -807,5 +818,7 @@ internal class RNINavBarAppearance {
     
     // reset legacy appearance
     Self.resetNavBarAppearanceLegacyToDefault(for: navBar);
+    
+    navBar.setNeedsLayout();
   };
 };

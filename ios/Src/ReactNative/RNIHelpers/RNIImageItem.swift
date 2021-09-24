@@ -137,7 +137,7 @@ internal struct RNIImageGradientMaker {
   let startPoint: CGPoint;
   let endPoint  : CGPoint;
   
-  var size        : CGSize!;
+  var size: CGSize;
   let borderRadius: CGFloat;
   
   var gradientLayer: CALayer {
@@ -183,20 +183,20 @@ internal struct RNIImageGradientMaker {
     
     self.endPoint = Self.extractPoint(dict: dict, key: "endPoint")
       ?? PointPresets.bottom.cgPoint;
-      
-    if let width  = dict["width" ] as? CGFloat,
-       let height = dict["height"] as? CGFloat {
-      
-      self.size = CGSize(width: width, height: height);
-    };
+    
+    self.size = CGSize(
+      width : (dict["width" ] as? CGFloat) ?? 0,
+      height: (dict["height"] as? CGFloat) ?? 0
+    );
     
     self.borderRadius = dict["borderRadius"] as? CGFloat ?? 0;
   };
   
-  mutating func setSizeIfNil(_ size: CGSize){
-    if self.size == nil {
-      self.size = size;
-    };
+  mutating func setSizeIfNotSet(_ size: CGSize){
+    self.size = CGSize(
+      width : self.size.width  <= 0 ? size.width  : self.size.width,
+      height: self.size.height <= 0 ? size.height : self.size.height
+    );
   };
   
   func makeImage() -> UIImage {
@@ -294,7 +294,7 @@ internal class RNIImageItem {
               var imageConfig = RNIImageGradientMaker(dict: dict)
         else { return nil };
         
-        imageConfig.setSizeIfNil(self.defaultSize);
+        imageConfig.setSizeIfNotSet(self.defaultSize);
         return imageConfig.makeImage();
     };
   };
