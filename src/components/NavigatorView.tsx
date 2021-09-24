@@ -357,10 +357,10 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
   /** used to set/reset the transition override for the current route  */
   private configureTransitionOverride = (params: Readonly<{
-    isPushing: true,
+    isPushing: true;
     pushConfig?: RouteTransitionConfig;
   } | {
-    isPushing: false,
+    isPushing: false;
     popConfig?: RouteTransitionConfig;
   }>) => {
     let listener: { unsubscribe: () => void } | undefined;
