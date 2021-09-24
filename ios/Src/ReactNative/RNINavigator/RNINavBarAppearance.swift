@@ -445,8 +445,11 @@ internal class RNINavBarAppearance {
       
       /// The ff. are use to set the size of the various images
       let statusBarHeight = UIApplication.shared.statusBarFrame.size.height;
-      let navBarHeight    = navBar.frame.height;
-      let navBarWidth     = navBar.frame.width;
+      
+      /// Note: Sometimes the nav bar size is 0 (e.g. because it's not on screen
+      /// yet), so provide a min. value to use...
+      let navBarHeight = max(navBar.frame.height, 50);
+      let navBarWidth  = max(navBar.frame.width , 75);
       
       let shouldSetBackground = self.navBarPreset != .clearBackground;
       let shouldSetShadow     = self.navBarPreset != .noShadow && shouldSetBackground;

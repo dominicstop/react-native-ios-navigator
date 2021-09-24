@@ -192,10 +192,10 @@ internal struct RNIImageGradientMaker {
     self.borderRadius = dict["borderRadius"] as? CGFloat ?? 0;
   };
   
-  mutating func setSizeIfNotSet(_ size: CGSize){
+  mutating func setSizeIfNotSet(_ newSize: CGSize){
     self.size = CGSize(
-      width : self.size.width  <= 0 ? size.width  : self.size.width,
-      height: self.size.height <= 0 ? size.height : self.size.height
+      width : self.size.width  <= 0 ? newSize.width  : self.size.width,
+      height: self.size.height <= 0 ? newSize.height : self.size.height
     );
   };
   
