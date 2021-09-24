@@ -12,6 +12,7 @@ import { ExampleB03 } from './ExampleB03';
 import { ExampleB04 } from './ExampleB04';
 import { ExampleB05 } from './ExampleB05';
 import { ExampleB06 } from './ExampleB06';
+import { ExampleC01 } from './ExampleC01';
 
 
 export const ExampleContainer: React.FC = (props) => {
@@ -45,6 +46,9 @@ export function GettingStartedGuide(_: RouteContentProps){
       </ExampleContainer>
       <ExampleContainer>
         <ExampleB06/>
+      </ExampleContainer>
+      <ExampleContainer>
+        <ExampleC01/>
       </ExampleContainer>
     </ScrollView>
   );

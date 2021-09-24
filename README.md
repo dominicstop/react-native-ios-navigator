@@ -22,7 +22,7 @@ Currently in development... 😅 (See [TODO.md](https://github.com/dominicstop/r
 
 | Section + Link                                              | Description                                                  |
 | :---------------------------------------------------------- | ------------------------------------------------------------ |
-| ⭐️ [Getting Started Guide](PLACE_HOLDER_LINK)                | Discussion + step by step guide on how to use this library.<br><br>**Related Links**:<br>1️⃣ [Installation](#b-installation)<br>2️⃣ [Basic Usage](#c-basic-usage) |
+| ⭐️ [Getting Started Guide](PLACE_HOLDER_LINK)                | Discussion + step by step guide (w/ accompanying gifs + screenshots) on how to use this library and its various components.<br><br>**Related Links**:<br>1️⃣ [Installation](#b-installation)<br>2️⃣ [Basic Usage](#c-basic-usage) |
 | 💖 [Usage and Examples](#f-usage-and-examples)               | Example usage that covers the various components and functionality of this library. |
 | 💫 [Showcase, Tests, and Demos](#g-showcase-tests-and-demos) | Just some gifs, screenshots + vibes that shows what this library can do. |
 | 📝 [Documentation](#d-documentation)                         | Documentation for all the various components, functions, types, etc.<br><br>**Sub-Section Links**:<br>1️⃣[`NavigatorView` Component](#d11-navigatorview-component)<br>2️⃣[`RouteViewPortal` Component](#d12-routeviewportal-component)<br/>3️⃣[`RouteViewEvents` Component](#d13-routeviewevents-component)<br>4️⃣[`RouteHeaderView` Component](#d14-routeheaderview-component)<br>5️⃣ [Context](#d2-context)<br>6️⃣ [Hooks](#d3-hooks)<br>7️⃣ [Objects and Types](#d4-objects-and-types)<br>8️⃣ [Native-Related](#d6-native-related) |
@@ -128,7 +128,7 @@ The following build errors can usually be resolved by adding an empty swift file
 
 <br>
 
-However, the older versions of the react-native template (e.g. `0.63` and below) hard codes the swift library search paths to use swift `5.0` (which causes the linker to mismatch the swift system libraries bundled with Xcode + iOS version). To fix this issue, just remove the entries from the project config's library search path:
+However, the older versions of the react-native template (e.g. `0.63` and below) hard codes the swift library search paths to use swift `5.0` (which causes the linker to mismatch the swift system libraries bundled with Xcode + iOS version). To fix this issue, just remove the following entries from the project config's library search path:
 
 ![installation-troubleshooting-01](docs/assets/installation-troubleshooting-01.png)
 
@@ -1550,17 +1550,63 @@ function ExampleRoute(props){
 
 ### Customizations Basics
 
-#### Route Options
+#### C01 - Navigator Customization
 
-#### Navigation Bar Items (Basic)
+You can "globally" apply customization on the navigation bar via setting some props on the navigator itself. Navigator-level customizations are "global" in the sense that it'll be applied to all the routes that will be shown in the navigator.
 
-#### Applying Route Options
+<br>
 
-#### Navigator Customization
+[🔗 Full Example](./example/src/routes/GettingStartedGuide/ExampleC01.tsx)
+
+```jsx
+// 📝 Note: for the sake of brevity, some of the code is omitted...
+export function ExampleC01(){
+  return (
+     <NavigatorView
+      // ...
+      // Customize the look of the navigation bar
+      navBarAppearance={{
+        // Use the legacy API (i.e. iOS 12 and below) to style 
+        // the navigation bar
+        mode: 'legacy',
+
+        // Set nav bar bg to red
+        barTintColor: 'red',
+
+        // Make the nav bar title + elements white
+        tintColor: 'white',
+        titleTextAttributes: {
+          color: 'white',
+          fontSize: 16,
+          fontWeight: 'bold',
+        },
+
+        // Add a gradient shadow below the nav bar
+        shadowImage: {
+          type: 'IMAGE_GRADIENT',
+          imageValue: {
+            colors: ['rgba(255,0,0,1)', 'rgba(255,0,0,0)'],
+            type: 'axial',
+            height: 75,
+            startPoint: 'top',
+            endPoint: 'bottom',
+          },
+        },
+      }}
+    />
+  );
+};
+```
+
+![GettingStartedGuide-ExampleC01](./docs/assets/GettingStartedGuide-ExampleC01.png)
+
+<br>
 
 #### Per-Route Customization
 
 #### Dynamic Customizations
+
+#### Navigation Bar Items (Basic)
 
 ------
 
