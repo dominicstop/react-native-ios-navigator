@@ -327,6 +327,17 @@
 
 ### Version: `next`
 
+- [x] Checked if the example project still runs on iOS 15
+	* Project is now built using Xcode 13.
+
+<br>
+
+- [x] (Commit: `507ded1`) **Implement**: Impl. `NavBarAppearancePresets`
+
+<br>
+
+### Version: `0.3.1`
+
 - [x] (Commit: `4bf1c98`) **Fix**: `routeOptions` that is set via `NavigatorView.initialRoutes` not working.
 - [x] (Commit: `71cff3c`) **Fix**: Navigation bar legacy appearance-related regressions/bugs
 	- After the big refactor related to the navigation override logic (i.e. in commit: `5395fb2` on version `0.3.0`), setting the navigation bar shadow via the legacy appearance no longer works properly.
