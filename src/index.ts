@@ -13,6 +13,8 @@ export * from './hooks/useNavigation';
 export * from './context/NavigationContext';
 export * from './context/NavigatorUIConstantsContext';
 
+export * from './constants/NavBarAppearancePresets';
+
 export { NavigatorErrorCodes } from './functions/NavigatorError';
 
 export { RNINavigatorViewConstants as NavigatorViewConstants } from './native_components/RNINavigatorView';

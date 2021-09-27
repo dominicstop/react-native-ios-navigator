@@ -1060,14 +1060,24 @@ Lorum Ipsum<br>
 
 * 📌 **Declaration**: [`NavigatorError`](src/functions/NavigatorError.ts)
 
-##### Object Type: `abc`
-
 Lorum Ipsum<br>
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
 | 🔤 `abc`<br/><br/>⚛️ `abc` |             |
 | 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+
+<br>
+
+####  Constant: `NavBarAppearancePresets`
+
+* 📌 **Declaration**: [`NavBarAppearancePresets`](src/constants/NavBarAppearancePresets.ts)
+
+Lorum Ipsum<br>
+
+| Name and Type                                          | Description |
+| :----------------------------------------------------- | ----------- |
+| 🔤 `hidden`<br/><br/>⚛️ `NavBarAppearanceCombinedConfig` | TBA         |
 
 <br>
 
