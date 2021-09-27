@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Text, Animated, ListRenderItem } from 'react-native';
-import { RouteViewPortal, RouteContentProps, RouteViewEvents } from 'react-native-ios-navigator';
+import { RouteViewPortal, RouteContentProps, RouteViewEvents, NavBarAppearancePresets } from 'react-native-ios-navigator';
 
 import { RouteHeader } from './RouteHeader';
 import { ListItemTrack } from './ListItemTrack';
@@ -9,7 +9,6 @@ import { ListItemTrack } from './ListItemTrack';
 import type { TrackItem } from './SharedTypes';
 
 import * as Colors from '../../constants/Colors';
-import { navBarAppearanceConfigHidden } from '../../constants/Constants';
 
 
 let TRACK_ID_COUNTER = 0;
@@ -188,7 +187,7 @@ export class NavigatorShowcase01 extends React.Component<RouteContentProps, Navi
             largeTitleDisplayMode: 'never',
             statusBarStyle: 'lightContent',
             routeContainerStyle: styles.routeContainerStyle,
-            navBarAppearanceOverride: navBarAppearanceConfigHidden,
+            navBarAppearanceOverride: NavBarAppearancePresets.hidden,
             applyBackButtonConfigToCurrentRoute: true,
             backButtonDisplayMode: 'minimal',
             navBarButtonBackItemConfig: {

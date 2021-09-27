@@ -1,9 +1,8 @@
 import * as React from 'react';
 
 import { StyleSheet, View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
-import { HeaderHeightConfig, HeaderHeightPreset, RouteHeaderView, RouteViewPortal } from 'react-native-ios-navigator';
+import { HeaderHeightConfig, HeaderHeightPreset, RouteHeaderView, RouteViewPortal, NavBarAppearancePresets } from 'react-native-ios-navigator';
 
-import { navBarAppearanceConfigHidden } from '../constants/Constants';
 import { ImageAssets } from '../functions/ImageCache';
 
 
@@ -42,7 +41,7 @@ export function NavigatorTest06(){
             title: '',
             tintColor: 'white',
           },
-          navBarAppearanceOverride: navBarAppearanceConfigHidden,
+          navBarAppearanceOverride: NavBarAppearancePresets.hidden,
         }}
         renderRouteHeader={() => (
           <RouteHeaderView

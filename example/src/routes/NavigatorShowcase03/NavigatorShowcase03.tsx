@@ -2,13 +2,11 @@
 import * as React from 'react';
 import { StyleSheet, View, Text, FlatList, ListRenderItem, TouchableOpacity } from 'react-native';
 
-import { RouteContentProps, RouteViewPortal, RenderNavItem } from 'react-native-ios-navigator';
+import { RouteContentProps, RouteViewPortal, RenderNavItem, NavBarAppearancePresets } from 'react-native-ios-navigator';
 
 import { ListItemObject, LIST_ITEMS } from './Constants';
 import { ListItem } from './ListItem';
 import { RouteHeader } from './RouteHeader';
-
-import { navBarAppearanceConfigHidden } from '../../constants/Constants';
 
 import * as Colors from '../../constants/Colors';
 import type { onChangeSelectedItemTypeIndex } from './ItemTypesMenu';
@@ -122,7 +120,7 @@ export class NavigatorShowcase03 extends React.Component<RouteContentProps, Navi
           renderNavBarTitleItem={this._renderNavBarTitle}
           renderNavBarRightItem={this._renderNavBarRightItem}
           routeOptions={{
-            navBarAppearanceOverride: navBarAppearanceConfigHidden,
+            navBarAppearanceOverride: NavBarAppearancePresets.hidden,
             applyBackButtonConfigToCurrentRoute: true,
             backButtonDisplayMode: 'minimal',
             navBarButtonBackItemConfig: {
