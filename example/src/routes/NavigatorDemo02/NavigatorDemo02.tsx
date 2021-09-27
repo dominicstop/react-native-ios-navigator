@@ -77,20 +77,26 @@ export function NavigatorDemo02(props: RouteContentProps & {
         ref={navRef}
         initialRoutes={[{routeKey: 'BlankRoute'}]}
         navBarAppearance={{
-          mode: 'legacy',
-          barTintColor: currentColor,
-          tintColor: 'white',
-          titleTextAttributes: {
-            color: 'white',
-            fontWeight: 'bold',
-            fontStyle: 'italic',
-            fontSize: 18,
-          }
+          mode: 'appearance',
+          scrollEdgeAppearance: {
+            backgroundColor: currentColor,
+              titleTextAttributes: {
+              color: 'white',
+              fontWeight: 'bold',
+              fontStyle: 'italic',
+              fontSize: 18,
+            },
+          },
         }}
         navBarPrefersLargeTitles={false}
         routes={{
           BlankRoute: {
             routeOptionsDefault: {
+              navBarButtonBackItemConfig: {
+                type: 'TEXT',
+                tintColor: 'white',
+                title: 'Back',
+              },
               backButtonDisplayMode: ((currentIndex % 2 === 0)
                 ? 'default'
                 : 'generic'
@@ -107,10 +113,11 @@ export function NavigatorDemo02(props: RouteContentProps & {
             routeOptionsDefault: {
               navBarButtonRightItemsConfig: [{
                 type: 'IMAGE_SYSTEM',
+                tintColor: 'white',
                 imageValue: ((currentIndex % 2 === 0)
                   ? 'heart'
                   : 'heart.fill'
-                )
+                ),
               }]
             },
             renderRoute: () => (
