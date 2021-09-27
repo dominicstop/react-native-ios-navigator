@@ -44,6 +44,8 @@
 - [ ] Impl. Navigation Bar `mixed` mode (e.g. use legacy and appearance at the same time).
 - [ ] Examples: Update `NavigatorTest02`
 - [ ] Add support for using `RouteHeader` when the navigation bar is hidden.
+- [ ] Fix error recovery sometimes not working when command times out.
+- [ ] Impl. `legacyTintColor` for navigation bar appearance mode.
 
 <br>
 
@@ -332,7 +334,8 @@
 
 <br>
 
-- [x] (Commit: `507ded1`) **Implement**: Impl. `NavBarAppearancePresets`
+- [x] (Commit: `507ded1`) **Implement**: Impl. `NavBarAppearancePresets`.
+- [x] (Commit: `497453d`) **Implement**: Impl. `disableTransparentNavBarScrollEdgeAppearance` `NavigatorView` Prop
 
 <br>
 
