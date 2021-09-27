@@ -549,9 +549,9 @@ extension RNINavigatorReactRouteViewController: RNINavigatorRouteViewDelegate {
       switch mode {
         case .hidden : return true;
         case .visible: return false;
-          
-        #warning("Implement...")
-        case .default:
+        
+        case .`default`:
+          #warning("Implement properly...")
           guard let prevVC = self.previousViewController as? RNINavigatorRouteBaseViewController,
                 let isNavBarHidden = prevVC.navigationConfigOverride.isNavBarHidden
           else { return nil };
