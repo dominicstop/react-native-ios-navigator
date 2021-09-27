@@ -25,6 +25,7 @@ export type RNINavigatorViewProps = {
   initialRouteKeys: Array<string>;
   isInteractivePopGestureEnabled: boolean;
   shouldSwizzleRootViewController: boolean;
+  disableTransparentNavBarScrollEdgeAppearance: boolean;
 
   // Customize the Bar's Appearance
   navBarPrefersLargeTitles: boolean;

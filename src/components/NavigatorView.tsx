@@ -65,6 +65,7 @@ export type NavigatorViewProps = Partial<Pick<RNINavigatorViewProps,
   | 'navBarPrefersLargeTitles' 
   | 'navBarAppearance' 
   | 'isNavBarTranslucent'
+  | 'disableTransparentNavBarScrollEdgeAppearance'
   // events
   | 'onCustomCommandFromNative'
   | 'onNavRouteWillPop'
@@ -1699,6 +1700,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         navigatorID={this.navigatorID}
         isInteractivePopGestureEnabled={props.isInteractivePopGestureEnabled ?? true}
         shouldSwizzleRootViewController={props.shouldSwizzleRootViewController ?? true}
+        disableTransparentNavBarScrollEdgeAppearance={props.disableTransparentNavBarScrollEdgeAppearance ?? true}
         nativeRoutes={this.getNativeRoutes()}
         initialRouteKeys={
           props.initialRoutes.map(route => route.routeKey)

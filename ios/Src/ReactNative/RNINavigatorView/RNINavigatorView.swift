@@ -282,6 +282,8 @@ public final class RNINavigatorView: UIView {
   
   @objc var shouldSwizzleRootViewController: Bool = true;
   
+  @objc var disableTransparentNavBarScrollEdgeAppearance: Bool = true;
+  
   // MARK:- Init/Lifecycle
   // ---------------------
   

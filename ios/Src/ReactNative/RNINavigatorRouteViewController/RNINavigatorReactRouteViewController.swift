@@ -64,8 +64,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
   private weak var searchBarTextField: UITextField?;
   private weak var searchBaPlaceholderLabel: UILabel?;
   
-  
-  
   /// count of how many times this vc has been in "focus"
   private(set) var focusCounter = 0;
   
@@ -104,6 +102,28 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     
     // content is a normal view
     return .view(view: contentView);
+  };
+
+  var shouldDisableTransparentNavBarScrollEdgeAppearance: Bool {
+    guard #available(iOS 15.0, *),
+          let navigatorRef = self.navigatorViewRef
+    else { return false };
+    
+    let largeTitleDisabled =
+      self.navigationItem.largeTitleDisplayMode == .never ||
+      !navigatorRef.navBarPrefersLargeTitles;
+    
+    let disableTransparentNavBarScrollEdgeAppearance =
+      navigatorRef.disableTransparentNavBarScrollEdgeAppearance;
+    
+    let hasScrollEdgeAppearanceConfig =
+      navigatorRef.navBarAppearanceConfig.appearanceConfigScrollEdge != nil ||
+      self.routeView.navBarAppearanceOverrideConfig.appearanceConfigScrollEdge != nil;
+      
+    return
+      largeTitleDisabled &&
+      disableTransparentNavBarScrollEdgeAppearance &&
+      !hasScrollEdgeAppearanceConfig;
   };
   
   // MARK:- View Controller Lifecycle
@@ -168,6 +188,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     
     self.setupSearchController();
     self.setupScrollView();
+    self.disableTransparentNavBarScrollEdgeAppearance();
     
     /// setup for custom pop transition (if any)
     if self.transitionPopConfig.transitionType != .Default {
@@ -496,6 +517,18 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
           LeftEdgeInteractionController(viewController: self);
       };
     };
+  };
+  
+  func disableTransparentNavBarScrollEdgeAppearance(){
+    guard #available(iOS 15.0, *),
+          self.shouldDisableTransparentNavBarScrollEdgeAppearance
+    else { return };
+    
+    let appearance = UINavigationBarAppearance();
+    appearance.configureWithDefaultBackground();
+    appearance.backgroundEffect = UIBlurEffect(style: .systemMaterial);
+    
+    self.navigationItem.scrollEdgeAppearance = appearance;
   };
 };
 

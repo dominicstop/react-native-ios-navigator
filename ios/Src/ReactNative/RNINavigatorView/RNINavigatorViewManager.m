@@ -38,6 +38,7 @@ RCT_EXPORT_VIEW_PROPERTY(isNavBarTranslucent, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(navBarPrefersLargeTitles, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(isInteractivePopGestureEnabled, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(shouldSwizzleRootViewController, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(disableTransparentNavBarScrollEdgeAppearance, BOOL);
 
 // MARK: Navigation Bar: Customization
 RCT_EXPORT_VIEW_PROPERTY(navBarAppearance, NSDictionary);
