@@ -95,7 +95,10 @@ export function NavigatorDemo02(props: RouteContentProps & {
               navBarButtonBackItemConfig: {
                 type: 'TEXT',
                 tintColor: 'white',
-                title: 'Back',
+                title: ((currentIndex % 2 === 0)
+                  ? 'Back'
+                  : null
+                ),
               },
               backButtonDisplayMode: ((currentIndex % 2 === 0)
                 ? 'default'
