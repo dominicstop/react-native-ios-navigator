@@ -39,7 +39,32 @@ Before you use this library, please first consider looking at [`react-navigation
 
 <br>
 
-### A.1. Features 
+### A.1. Motivation 
+
+#### Expose Everything 
+
+This is a wrapper library, so the goal is (for better, or for worse) to expose almost **everything** to react-native.
+
+I tried to expose, in some way or another, all the ways the `UINavigationController`,  `UINavigationBar`, and `UIViewController` could be configured and customized. Unfortunately, this means that the API + documentation is a little dense/complex, and might be a little bit confusing to non-iOS developers (so I tried to include as much explanations, examples + gifs and images as I could).
+
+<br>
+
+#### Resurrecting `NavigatorIOS`
+
+Basically, `react-native` [deprecated](https://archive.reactnative.dev/docs/0.58/navigatorios#docsNav) the built-in [`NavigatorIOS`](https://archive.reactnative.dev/docs/0.57/navigatorios#docsNav) component starting on version `0.58`.
+
+One thing that I liked about `NavigatorIOS` is that it behaved like any regular old `<View/>` component. Which is fun since you can just plop it down anywhere in your app, and it'll just "work" (this included the weird quirk of having multiple navigators 🤷‍♀️).
+
+<br>
+
+#### 📝 Notes
+
+* Modal support is handled via [`react-native-ios-modal`](https://github.com/dominicstop/react-native-ios-modal) (WIP)
+* Adding menu's/submenu's in the navigation bar is handled via [`react-native-ios-context-menu`](https://github.com/dominicstop/react-native-ios-context-menu) (WIP)
+
+<br>
+
+### A.2. Features 
 
 💡 **Tip**: You can also just browse through the gifs/images in the [Showcase, Tests, and Demos](#g-showcase-tests-and-demos) section.
 
@@ -71,23 +96,6 @@ Before you use this library, please first consider looking at [`react-navigation
 * Etc.
 
 <br>
-
-### A.2. Motivation 
-
-Basically, `react-native` [deprecated](https://archive.reactnative.dev/docs/0.58/navigatorios#docsNav) the built-in [`NavigatorIOS`](https://archive.reactnative.dev/docs/0.57/navigatorios#docsNav) component starting on version `0.58`. I really liked that component though; it was very limited, but it was great for simple demos and stuff 😔.
-
-To be fair, `react-navigation` and `react-native-navigation` are far more versatile and powerful anyway, so the deprecation didn't really matter ig.
-
-One thing that I liked about `NavigatorIOS` is that it behaved like any regular old `<View/>` component. Which is fun since you can just plop it down anywhere in your app, and it'll just "work" (this included the weird quirk of having multiple navigators 🤷‍♀️).
-
-So this library is my own attempt to recreate `NavigatorIOS`, but with slightly more features. One thing I tried to do is to expose (almost) all the ways the `UINavigationController` + `UINavigationBar` can be configured/customized.
-
-<br>
-
-#### 📝 Notes
-
-* Modal support is handled via [`react-native-ios-modal`](https://github.com/dominicstop/react-native-ios-modal) (WIP)
-* Adding menu's/submenu's in the navigation bar is handled via [`react-native-ios-context-menu`](https://github.com/dominicstop/react-native-ios-context-menu) (WIP)
 
 ------
 
