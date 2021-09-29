@@ -46,6 +46,8 @@
 - [ ] Add support for using `RouteHeader` when the navigation bar is hidden.
 - [ ] Fix error recovery sometimes not working when command times out.
 - [ ] Impl. `legacyTintColor` for navigation bar appearance mode.
+- [ ] Impl. `compactScrollEdgeAppearance` appearance mode.
+- [ ] Add versions + xcode table
 
 <br>
 
@@ -304,9 +306,6 @@
 ## TODO from Code
 
 - [ ] `TODO (001)`: `RNINavigatorRouteView.cleanup` — Crash sometimes occurring when detaching touch handler.
-- [ ] `TODO (003)`: `RNINavBarAppearance` — Impl. property: `backButtonAppearance`.
-- [ ] `TODO (004)`: `RNINavBarAppearance` — Impl. property: `doneButtonAppearance`.
-- [ ] `TODO (005)`:  `RNINavBarAppearance` — Impl. property: `UIBarButtonItemAppearance`.
 - [ ] `TODO (006)`: `RNINavigatorRouteHeaderView.setup` — Refactor: use view controller containment/child vc.
 - [ ] `TODO (007)`: `RNINavigatorRouteView.insertReactSubview` — use `RNIWrapperView` for `RouteContent` so we can clean this up.
 - [ ] `TODO (008)`: `RNINavigatorReactRouteViewController.overrideIsNavBarHidden` — Bug: when hiding nav bar, scrollview still snaps.
@@ -316,8 +315,6 @@
 - [ ] `TODO (012)`: `NavigatorView._handleOnNativeCommandRequest` — Cleanup: Extract to sep. functions.
 - [ ] `TODO (013)`: `withRouteViewLifecycle` — Delete file + impl.
 - [ ] `TODO (014)`: `NavBarAppearanceBaseConfig` — Rename type to `NavBarAppearanceBaseConfigType` and export
-- [ ] `TODO (015)`: `NavBarBackItemConfig` — Type incomplete, missing back-button related properties + Impl.
-	- Related to: `TODO (003)`, `TODO (004)`, and `TODO (005)`.
 - [ ] `TODO (017)`: `NavigatorView.verifyProps` — Add user-defined type guard
 - [ ] `TODO (018)`: `overrideIsNavBarHidden` — Bug: when hiding nav bar, scrollview still snaps.
 
@@ -335,7 +332,16 @@
 <br>
 
 - [x] (Commit: `507ded1`) **Implement**: Impl. `NavBarAppearancePresets`.
-- [x] (Commit: `497453d`) **Implement**: Impl. `disableTransparentNavBarScrollEdgeAppearance` `NavigatorView` Prop
+- [x] (Commit: `497453d`) **Implement**: Impl. `disableTransparentNavBarScrollEdgeAppearance` `NavigatorView` prop.
+
+<br>
+
+- [x] (Commit: `76b7abe`) Impl. Navigation Bar Buttom Item Appearance
+	- [x] `TODO (003)`: `RNINavBarAppearance` — Impl. property: `backButtonAppearance`.
+	- [x] `TODO (004)`: `RNINavBarAppearance` — Impl. property: `doneButtonAppearance`.
+	- [x] `TODO (005)`:  `RNINavBarAppearance` — Impl. property: `UIBarButtonItemAppearance`.
+	- [x] `TODO (015)`: `NavBarBackItemConfig` — Type incomplete, missing back-button related properties + Impl.
+		- Related to: `TODO (003)`, `TODO (004)`, and `TODO (005)`.
 
 <br>
 
