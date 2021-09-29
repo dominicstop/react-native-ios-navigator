@@ -651,29 +651,35 @@ internal class RNINavBarAppearance {
   
   var appearanceLegacy: NavBarAppearanceLegacyConfig?;
   
-  var appearanceConfigStandard  : NavBarAppearanceConfig!;
-  var appearanceConfigCompact   : NavBarAppearanceConfig?;
-  var appearanceConfigScrollEdge: NavBarAppearanceConfig?;
-  
-  var isCurrentlyUsingNewAppearance: Bool {
-    self.appearanceConfigStandard   != nil ||
-    self.appearanceConfigCompact    != nil ||
-    self.appearanceConfigScrollEdge != nil
-  };
+  var appearanceConfigStandard   : NavBarAppearanceConfig!;
+  var appearanceConfigCompact    : NavBarAppearanceConfig?;
+  var appearanceConfigScrollEdge : NavBarAppearanceConfig?;
+  var appearanceCompactScrollEdge: NavBarAppearanceConfig?;
   
   // MARK:- RNINavBarAppearance - Computed Properties
   // ------------------------------------------------
   
+  var appearanceConfigs: [NavBarAppearanceConfig]? {
+    let configs = [
+      self.appearanceConfigStandard,
+      self.appearanceConfigCompact,
+      self.appearanceConfigScrollEdge,
+      self.appearanceCompactScrollEdge
+    ].compactMap { $0 };
+    
+    return configs.isEmpty ? nil : configs;
+  };
+  
+  var isCurrentlyUsingNewAppearance: Bool {
+    self.appearanceConfigs != nil
+  };
+  
   var appearanceHasBackgroundImage: Bool {
-    self.appearanceConfigStandard?  .hasBackgroundImage ?? false ||
-    self.appearanceConfigCompact?   .hasBackgroundImage ?? false ||
-    self.appearanceConfigScrollEdge?.hasBackgroundImage ?? false
+    self.appearanceConfigs?.allSatisfy { $0.hasBackgroundImage } ?? false
   };
   
   var appearanceHasShadowImage: Bool {
-    self.appearanceConfigStandard?  .hasShadowImage ?? false ||
-    self.appearanceConfigCompact?   .hasShadowImage ?? false ||
-    self.appearanceConfigScrollEdge?.hasShadowImage ?? false
+    self.appearanceConfigs?.allSatisfy { $0.hasShadowImage } ?? false
   };
   
   var hasBackgroundImage: Bool {
@@ -684,6 +690,11 @@ internal class RNINavBarAppearance {
   var hasShadowImage: Bool {
     self.appearanceLegacy?.hasShadowImage ?? false ||
     self.appearanceHasShadowImage
+  };
+  
+  var hasScrollEdgeAppearanceConfig: Bool {
+    self.appearanceConfigScrollEdge  != nil ||
+    self.appearanceCompactScrollEdge != nil
   };
   
   // MARK:- RNINavBarAppearance - Methods
@@ -744,6 +755,16 @@ internal class RNINavBarAppearance {
           return appearance;
         }();
         
+        self.appearanceCompactScrollEdge = {
+          guard let configDict = dict["compactScrollEdgeAppearance"] as? NSDictionary
+          else { return nil };
+          
+          let appearance = NavBarAppearanceConfig(dict: configDict);
+          appearance?.navBarPreset = self.navBarPreset;
+          
+          return appearance;
+        }();
+        
       case .legacy:
         self.appearanceLegacy = NavBarAppearanceLegacyConfig(dict: dict);
     };
@@ -758,9 +779,10 @@ internal class RNINavBarAppearance {
     
     self.appearanceLegacy = nil;
     
-    self.appearanceConfigStandard = nil;
-    self.appearanceConfigCompact = nil;
-    self.appearanceConfigScrollEdge = nil;
+    self.appearanceConfigStandard    = nil;
+    self.appearanceConfigCompact     = nil;
+    self.appearanceConfigScrollEdge  = nil;
+    self.appearanceCompactScrollEdge = nil;
   };
   
   /// Update the navigation bar either using the legacy appearance config,
@@ -785,10 +807,8 @@ internal class RNINavBarAppearance {
         guard #available(iOS 13.0, *) else { return };
         self.didUseNewAppearance = true;
         
-        self.appearanceConfigStandard?.prepareForUpdate(navBar);
-        self.appearanceConfigCompact?.prepareForUpdate(navBar);
-        self.appearanceConfigScrollEdge?.prepareForUpdate(navBar);
-        
+        self.appearanceConfigs?.forEach { $0.prepareForUpdate(navBar) };
+
         let standardConfig = self.appearanceConfigStandard
           // no standard config provided, create a "default" config
           ?? NavBarAppearanceConfig(navBarPreset: self.navBarPreset);
@@ -803,6 +823,11 @@ internal class RNINavBarAppearance {
           navigationItem.scrollEdgeAppearance =
             self.appearanceConfigScrollEdge?.appearance;
           
+          if #available(iOS 15.0, *) {
+            navigationItem.compactScrollEdgeAppearance =
+              self.appearanceCompactScrollEdge?.appearance;
+          };
+          
         } else {
           // update the nav bar appearance directly
           navBar.standardAppearance = standardConfig.appearance;
@@ -812,6 +837,11 @@ internal class RNINavBarAppearance {
           
           navBar.scrollEdgeAppearance =
             self.appearanceConfigScrollEdge?.appearance;
+          
+          if #available(iOS 15.0, *) {
+            navBar.compactScrollEdgeAppearance =
+              self.appearanceCompactScrollEdge?.appearance;
+          };
         };
         
         navBar.setNeedsLayout();

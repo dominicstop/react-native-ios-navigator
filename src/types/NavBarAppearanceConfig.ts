@@ -135,6 +135,9 @@ export type NavBarAppearanceConfig = NavBarAppearanceConfigBase & {
   
   /** The appearance settings to use when the edge of any scroll-able content reaches the matching edge of the navigation bar. */
   scrollEdgeAppearance?: NavBarAppearance;
+
+  /** Requires iOS 15.0 and above. The appearance settings for a compact-height navigation bar when the edge of scrollable content aligns with the edge of the navigation bar. */
+  compactScrollEdgeAppearance?: NavBarAppearance;
 };
 
 export type NavBarAppearanceCombinedConfig = ((

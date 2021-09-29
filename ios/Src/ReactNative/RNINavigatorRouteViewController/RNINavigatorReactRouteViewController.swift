@@ -117,8 +117,8 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       navigatorRef.disableTransparentNavBarScrollEdgeAppearance;
     
     let hasScrollEdgeAppearanceConfig =
-      navigatorRef.navBarAppearanceConfig.appearanceConfigScrollEdge != nil ||
-      self.routeView.navBarAppearanceOverrideConfig.appearanceConfigScrollEdge != nil;
+      navigatorRef.navBarAppearanceConfig.hasScrollEdgeAppearanceConfig ||
+      self.routeView.navBarAppearanceOverrideConfig.hasScrollEdgeAppearanceConfig;
       
     return
       largeTitleDisabled &&
