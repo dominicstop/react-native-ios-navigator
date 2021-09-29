@@ -46,8 +46,8 @@
 - [ ] Add support for using `RouteHeader` when the navigation bar is hidden.
 - [ ] Fix error recovery sometimes not working when command times out.
 - [ ] Impl. `legacyTintColor` for navigation bar appearance mode.
-- [ ] Impl. `compactScrollEdgeAppearance` appearance mode.
 - [ ] Add versions + xcode table
+- [ ] Impl. swift extension  `notEmptyAndAllSatisfy`
 
 <br>
 
@@ -342,6 +342,10 @@
 	- [x] `TODO (005)`:  `RNINavBarAppearance` — Impl. property: `UIBarButtonItemAppearance`.
 	- [x] `TODO (015)`: `NavBarBackItemConfig` — Type incomplete, missing back-button related properties + Impl.
 		- Related to: `TODO (003)`, `TODO (004)`, and `TODO (005)`.
+
+<br>
+
+- [x] (Commit: `7426c01`) Impl. `compactScrollEdgeAppearance` appearance mode.
 
 <br>
 
