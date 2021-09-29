@@ -66,9 +66,9 @@ internal class RNINavBarAppearance {
     // MARK: Button Appearance
     var backIndicatorImage: RNIImageItem?;
     
-    // TODO (003): backButtonAppearance: UIBarButtonItemAppearance
-    // TODO (004): doneButtonAppearance: UIBarButtonItemAppearance
-    // TODO (005): buttonAppearance: UIBarButtonItemAppearance
+    var buttonAppearance    : RNIBarButtonItemAppearance?;
+    var backButtonAppearance: RNIBarButtonItemAppearance?;
+    var doneButtonAppearance: RNIBarButtonItemAppearance?;
     
     // MARK: Computed Properties
     @available(iOS 13.0, *)
@@ -133,9 +133,22 @@ internal class RNINavBarAppearance {
       // --------------------------
       
       let backImage = self.backIndicatorImage?.image;
-      /// NOTE: cannot hide indicator via setting this to `UIImage()` or `nil`
+      
+      /// **NOTE**: cannot hide indicator via setting this to `UIImage()` or `nil`
       appearance.setBackIndicatorImage(backImage, transitionMaskImage: backImage);
-    
+      
+      if let buttonAppearance = self.buttonAppearance {
+        appearance.buttonAppearance = buttonAppearance.create();
+      };
+      
+      if let buttonAppearance = self.backButtonAppearance {
+        appearance.backButtonAppearance = buttonAppearance.create();
+      };
+      
+      if let buttonAppearance = self.doneButtonAppearance {
+        appearance.doneButtonAppearance = buttonAppearance.create();
+      };
+      
       // Section: NavBar Preset
       // ----------------------
       
@@ -277,6 +290,27 @@ internal class RNINavBarAppearance {
         else { return nil };
         
         return imageItem;
+      }();
+      
+      self.buttonAppearance = {
+        guard let dictConfig = dict["buttonAppearance"] as? NSDictionary
+        else { return nil };
+        
+        return RNIBarButtonItemAppearance(dict: dictConfig);
+      }();
+      
+      self.backButtonAppearance = {
+        guard let dictConfig = dict["backButtonAppearance"] as? NSDictionary
+        else { return nil };
+        
+        return RNIBarButtonItemAppearance(dict: dictConfig);
+      }();
+      
+      self.doneButtonAppearance = {
+        guard let dictConfig = dict["doneButtonAppearance"] as? NSDictionary
+        else { return nil };
+        
+        return  RNIBarButtonItemAppearance(dict: dictConfig);
       }();
     };
     

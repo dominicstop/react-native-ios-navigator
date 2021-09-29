@@ -878,6 +878,24 @@ Lorum ipsum<br>
 | 🔤 `largeTitleTextAttributes`<br/><br/>⚛️  `abc`   |             |
 | 🔤 `titlePositionAdjustment`<br/><br/>⚛️  `abc`    |             |
 | 🔤 `backIndicatorImage`<br/><br/>⚛️  `abc`         |             |
+| 🔤 `buttonAppearance`<br/><br/>⚛️  `abc`           |             |
+| 🔤 `backButtonAppearance`<br/><br/>⚛️  `abc`       |             |
+| 🔤 `doneButtonAppearance`<br/><br/>⚛️  `abc`       |             |
+
+<br>
+
+####  Enum: `BarButtonItemAppearance`
+
+* 📌 **Declaration**: [`BarButtonItemAppearance`](src/types/BarButtonItemAppearance.ts)
+
+Lorum Ipsum<br>
+
+| Name and Type            | Description |
+| :----------------------- | ----------- |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+
+<br>
 
 <br>
 

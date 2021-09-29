@@ -1,6 +1,8 @@
 import type { TextStyle } from "react-native";
+
 import type { BlurEffectStyle, DynamicColor, Offset, BarMetrics } from "./MiscTypes";
 import type { ImageItemConfig } from "./ImageItemConfig";
+import type { BarButtonItemAppearance } from "./BarButtonItemAppearance";
 
 
 /** `UIBarStyle`: Defines the stylistic appearance of different types of views */
@@ -32,10 +34,6 @@ export type ViewContentMode =
   | 'scaleAspectFill'
   | 'scaleToFill'
   | 'scaleAspectFit';
-
-// TODO
-type BarButtonItemAppearanceConfig = {
-};
 
 /** A UIBarAppearance object contains the common traits shared by navigation bars, tab bars, and toolbars. */
 type BarAppearance = {
@@ -76,6 +74,15 @@ export type NavBarAppearance = BarAppearance & {
 
   /** The image to display on the leading edge of the back button. */
   backIndicatorImage?: ImageItemConfig;
+
+  /** The appearance attributes for plain bar button items in the navigation bar. */
+  buttonAppearance?: BarButtonItemAppearance;
+
+  /** The appearance attributes for the back button. */
+  backButtonAppearance?: BarButtonItemAppearance;
+
+  /** The appearance attributes for Done buttons. */
+  doneButtonAppearance?: BarButtonItemAppearance;
 };
 
 type NavBarAppearanceConfigBase = {
