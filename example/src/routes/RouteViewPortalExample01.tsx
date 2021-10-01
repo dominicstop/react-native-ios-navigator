@@ -1,12 +1,24 @@
 import * as React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, SafeAreaView } from 'react-native';
 
-import { RouteViewPortal } from 'react-native-ios-navigator';
+import { NavBarAppearance, RouteViewPortal } from 'react-native-ios-navigator';
 
 import * as Colors from '../constants/Colors';
 
 export function RouteViewPortalExample01(){
   const [index, setIndex] = React.useState(0);
+
+  const appearanceConfig: NavBarAppearance = {
+    backgroundColor: Colors.RED.A700,
+    backButtonAppearance: {
+      style: 'plain',
+      normal: {
+        titleTextAttributes: {
+          color: 'white',
+        },
+      },
+    },
+  };
 
   return (
     <SafeAreaView style={styles.routeContainer}>
@@ -14,17 +26,21 @@ export function RouteViewPortalExample01(){
         routeOptions={{
           // Change the navigation bar title text
           routeTitle: `index: ${index}`,
+
           // Disable large tile
           largeTitleDisplayMode: 'never',
-          // Set the navigation bar tint to red
-          navBarAppearanceOverride: {
-            mode: 'legacy',
-            barTintColor: Colors.RED.A700,
-            tintColor: 'white',
-          },
+
           // Set the status bar tint to 'white'
           statusBarStyle: 'lightContent',
+
+          // Set the navigation bar tint to red
+          navBarAppearanceOverride: {
+            mode: 'appearance',
+            standardAppearance: appearanceConfig,
+            scrollEdgeAppearance: appearanceConfig,
+          },
         }}
+
         // Use a custom component for navigation bar title
         renderNavBarTitleItem={({routeOptions}) => (
           <TouchableOpacity 

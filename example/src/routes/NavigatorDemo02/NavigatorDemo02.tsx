@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { View, Text, SafeAreaView, StyleSheet } from 'react-native';
 
-import { NavigatorView, RouteContentProps, useNavRouteEvents } from 'react-native-ios-navigator';
+import { NavBarAppearance, NavigatorView, RouteContentProps, useNavRouteEvents } from 'react-native-ios-navigator';
 
 import { BlankRoute } from './BlankRoute';
 
@@ -71,6 +71,16 @@ export function NavigatorDemo02(props: RouteContentProps & {
     currentIndex % (DemoUtils.colors.length - 1)
   ]);
 
+  const appearanceConfig: NavBarAppearance = {
+    backgroundColor: currentColor,
+    titleTextAttributes: {
+      color: 'white',
+      fontWeight: 'bold',
+      fontStyle: 'italic',
+      fontSize: 18,
+    },
+  };
+
   return(
     <SafeAreaView style={styles.routeRootContainer}>
       <NavigatorView
@@ -78,15 +88,8 @@ export function NavigatorDemo02(props: RouteContentProps & {
         initialRoutes={[{routeKey: 'BlankRoute'}]}
         navBarAppearance={{
           mode: 'appearance',
-          scrollEdgeAppearance: {
-            backgroundColor: currentColor,
-              titleTextAttributes: {
-              color: 'white',
-              fontWeight: 'bold',
-              fontStyle: 'italic',
-              fontSize: 18,
-            },
-          },
+          scrollEdgeAppearance: appearanceConfig,
+          standardAppearance: appearanceConfig,
         }}
         navBarPrefersLargeTitles={false}
         routes={{
