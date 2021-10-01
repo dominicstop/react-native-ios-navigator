@@ -35,11 +35,6 @@ internal class RNIUtilities {
     guard let viewRegistry = getRegistry(forKey: "_viewRegistry")
     else { return };
     
-    #if DEBUG
-    // Protect from: Thread 1: EXC_BAD_ACCESS 
-    let prevCountViewRegistry = NSDictionary(dictionary: viewRegistry).count;
-    #endif
-    
     /// The "react tags" of the views that were removed
     var removedViewTags: [NSNumber] = [];
     
@@ -74,24 +69,9 @@ internal class RNIUtilities {
       guard let shadowViewRegistry = getRegistry(forKey: "_shadowViewRegistry")
       else { return };
       
-      #if DEBUG
-      let prevCountShadowViewRegistry = NSDictionary(dictionary: shadowViewRegistry).count;
-      #endif
-      
       for reactTag in removedViewTags {
         shadowViewRegistry.removeObject(forKey: reactTag);
       };
-      
-      #if DEBUG
-      let nextCountShadowViewRegistry = NSDictionary(dictionary: shadowViewRegistry).count;
-      let delta = prevCountShadowViewRegistry - nextCountShadowViewRegistry;
-      
-      print("LOG - RNIUtilities: recursivelyRemoveFromViewRegistry"
-        + " - removed shadow view count: \(delta)"
-        + " - prevCountShadowViewRegistry: \(prevCountShadowViewRegistry)"
-        + " - nextCountShadowViewRegistry: \(nextCountShadowViewRegistry)"
-      );
-      #endif
     };
     
     DispatchQueue.main.async {
@@ -102,17 +82,6 @@ internal class RNIUtilities {
       RCTExecuteOnUIManagerQueue {
         removeShadowViews();
       };
-
-      #if DEBUG
-      // Protect from: Thread 1: EXC_BAD_ACCESS
-      let nextCountViewRegistry = NSDictionary(dictionary: viewRegistry).count;
-      
-      print("LOG - RNIUtilities: recursivelyRemoveFromViewRegistry"
-        + " - removed views count: \(removedViewTags.count)"
-        + " - prevCountViewRegistry: \(prevCountViewRegistry)"
-        + " - nextCountViewRegistry: \(nextCountViewRegistry)"
-      );
-      #endif
     };
   };
   

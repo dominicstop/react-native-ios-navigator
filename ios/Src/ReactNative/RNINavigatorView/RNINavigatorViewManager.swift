@@ -70,10 +70,6 @@ internal class RNINavigatorViewManager: RCTViewManager, RCTInvalidating {
   // ----------------------
   
   func invalidate() {
-    #if DEBUG
-    print("LOG - RNINavigatorViewManager: invalidate");
-    #endif
-    
     // cleanup - remove all current navigators
     RNINavigatorManager.sharedInstance.cleanup();
   };

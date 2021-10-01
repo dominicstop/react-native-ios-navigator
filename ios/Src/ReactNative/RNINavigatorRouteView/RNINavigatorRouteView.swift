@@ -119,25 +119,9 @@ internal class RNINavigatorRouteView: UIView {
   
   @objc var routeID: NSNumber = -1;
   
-  @objc var routeKey: NSString = "N/A" {
-    didSet {
-      #if DEBUG
-      print("LOG - NativeView, RNINavigatorRouteView prop"
-        + " - didSet, routeKey: \(self.routeKey)"
-      );
-      #endif
-    }
-  };
+  @objc var routeKey: NSString = "N/A";
   
-  @objc var routeIndex: NSNumber = -1 {
-    didSet {
-      #if DEBUG
-      print("LOG - NativeView, RNINavigatorRouteView prop"
-        + " - didSet, routeIndex: \(self.routeIndex)"
-      );
-      #endif
-    }
-  };
+  @objc var routeIndex: NSNumber = -1;
   
   var _statusBarStyle: UIStatusBarStyle = .default;
   @objc var statusBarStyle: NSString? {
@@ -151,14 +135,6 @@ internal class RNINavigatorRouteView: UIView {
         
         return style;
       }();
-      
-      #if DEBUG
-      print("LOG - RNINavigatorRouteView: didSet"
-        + " - statusBarStyle: \(self._statusBarStyle.rawValue)"
-        + " - string: \(self.statusBarStyle ?? "N/A")"
-        + " - prev value: \(oldValue ?? "N/A")"
-      );
-      #endif
       
       self.delegate?
         .didReceiveStatusBarStyle(self._statusBarStyle);
@@ -354,13 +330,6 @@ internal class RNINavigatorRouteView: UIView {
             let prevRouteVC = self.navigatorView?.getSecondToLastRouteVC()
       else { return };
       
-      #if DEBUG
-      print("LOG - RNINavigatorRouteView, didSet"
-        + " - applyBackButtonConfigToCurrentRoute: \(self.applyBackButtonConfigToCurrentRoute)"
-        + " - oldValue: \(oldValue)"
-      );
-      #endif
-      
       if oldValue && !self.applyBackButtonConfigToCurrentRoute {
         // was prev. set to true, and is now false, so reset
         prevRouteVC.resetRouteNavBarBackConfig();
@@ -433,16 +402,6 @@ internal class RNINavigatorRouteView: UIView {
     didSet {
       guard self.navBarAppearanceOverride != oldValue else { return };
       
-      #if DEBUG
-      let dictStr = navBarAppearanceOverride.debugDescription
-        .replacingOccurrences(of: "\n", with: " ")
-        .replacingOccurrences(of: "  ", with: "");
-      
-      print("LOG - NativeView, RNINavigatorRouteView: navBarAppearanceOverride, didSet"
-        + " - dict \(dictStr)"
-      );
-      #endif
-      
       if let dict = self.navBarAppearanceOverride {
         // update nav bar appearance
         self.navBarAppearanceOverrideConfig.updateValues(dict: dict);
@@ -474,12 +433,6 @@ internal class RNINavigatorRouteView: UIView {
       
       self.navigationBarVisibilityMode = visibility;
       
-      #if DEBUG
-      print("LOG - NativeView, RNINavigatorView: navigationBarVisibility, didSet"
-        + " - visibility: \(visibility.rawValue)"
-      );
-      #endif
-      
       // notify delegate of update
       self.delegate?.didReceiveNavBarVisibility(visibility);
     }
@@ -504,15 +457,6 @@ internal class RNINavigatorRouteView: UIView {
     self.bridge = bridge;
     self.touchHandlerRouteContent = RCTTouchHandler(bridge: bridge);
   };
-  
-  #if DEBUG
-  deinit {
-    print("LOG - deinit - NativeView, RNINavigatorRouteView"
-      + " - for routeKey: \(self.routeKey)"
-      + " - routeIndex: \(self.routeIndex)"
-    );
-  };
-  #endif
   
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented");
@@ -547,13 +491,6 @@ internal class RNINavigatorRouteView: UIView {
       #endif
       return;
     };
-    
-    #if DEBUG
-    print("LOG - NativeView, RNINavigatorRouteView"
-      + " - insertReactSubview: \(nativeIDKey.rawValue)!"
-      + " - atIndex: \(atIndex)"
-    );
-    #endif
     
     // TODO: use `RNIWrapperView` for `RouteContent` so we can clean this up
     let wrapperView = subview as? RNIWrapperView;
@@ -610,12 +547,7 @@ internal extension RNINavigatorRouteView {
     
     return leftConfigItems.enumerated().compactMap { (index, item) in
       item.createUIBarButtonItem { [unowned self] in
-        #if DEBUG
-        print("LOG - NativeView, RNINavigatorRouteView"
-          + " - onPress: `leftBarButtonItem`"
-        );
-        #endif
-        
+
         var params      = self.createEventPayload();
         let paramsExtra = $0.makeNavBarItemEventParams();
         
@@ -634,11 +566,6 @@ internal extension RNINavigatorRouteView {
     
     return rightConfigItems.enumerated().compactMap { (index, item) in
       item.createUIBarButtonItem { [unowned self] in
-        #if DEBUG
-        print("LOG - NativeView, RNINavigatorRouteView"
-          + " - onPress: `rightBarButtonItem`"
-        );
-        #endif
         
         var params      = self.createEventPayload();
         let paramsExtra = $0.makeNavBarItemEventParams();

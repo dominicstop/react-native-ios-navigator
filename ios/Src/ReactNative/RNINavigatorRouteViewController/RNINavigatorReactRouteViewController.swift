@@ -170,17 +170,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     if let headerView = self.routeView.reactRouteHeader {
       headerView.setup();
     };
-    
-    #if DEBUG
-    let subviewCount = RNIUtilities.recursivelyGetAllSubviews(for: rootView).count;
-    print("LOG - RNINavigatorReactRouteViewController: loadView"
-      + " - total subviews: \(subviewCount)"
-      + " - wrapperView: \(self.wrapperView?.description ?? "N/A")"
-      + " - headerView: \(self.routeView.reactRouteHeader != nil ? "true" : "false")"
-      + " - statusBarStyleCurrent: \(self.statusBarStyleCurrent.rawValue)"
-      + " - preferredStatusBarStyle: \(self.preferredStatusBarStyle.rawValue)"
-    );
-    #endif
   };
   
   override func viewDidLoad() {
@@ -322,17 +311,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     /// calls the parent impl. (e.g. `RNINavigatorRouteBaseViewController`)
     super.willMove(toParent: parent);
     
-    #if DEBUG
-    print(
-        "LOG - RNINavigatorReactRouteViewController, willMove"
-      + " - toParent, isNil: \(parent == nil)"
-      + " - routeID: \(self.routeID)"
-      + " - routeKey: \(self.routeKey)"
-      + " - routeIndex: \(self.routeIndex)"
-      + " - has routeView: \(self.routeView != nil)"
-    );
-    #endif
-    
     guard let routeView = self.routeView else { return };
     
     if parent == nil {
@@ -356,17 +334,6 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
   override func didMove(toParent parent: UIViewController?){
     /// calls the parent impl. (e.g. `RNINavigatorRouteBaseViewController`)
     super.didMove(toParent: parent);
-    
-    #if DEBUG
-    print(
-        "LOG - RNINavigatorReactRouteViewController, didMove"
-      + " - toParent, isNil: \(parent == nil)"
-      + " - routeView, isNil: \(self.routeView == nil)"
-      + " - routeID: \(self.routeID)"
-      + " - routeKey: \(self.routeKey)"
-      + " - routeIndex: \(self.routeIndex)"
-    );
-    #endif
     
     if parent == nil {
       // this vc 'will' be popped
@@ -754,12 +721,6 @@ extension RNINavigatorReactRouteViewController:
 /// Handle search controller-related events
 extension RNINavigatorReactRouteViewController: UISearchResultsUpdating {
   func updateSearchResults(for searchController: UISearchController) {
-    #if DEBUG
-    print("LOG - RNINavigatorReactRouteViewController, UISearchResultsUpdating: updateSearchResults"
-      + " - searchBar.text: \(searchController.searchBar.text ?? "N/A")"
-      + " - isActive: \(searchController.isActive)"
-    );
-    #endif
     
     self.routeView?.notifyOnUpdateSearchResults(
       searchText: searchController.searchBar.text,
@@ -774,22 +735,10 @@ extension RNINavigatorReactRouteViewController: UISearchResultsUpdating {
 /// Handle search bar-related events
 extension RNINavigatorReactRouteViewController: UISearchBarDelegate {
   func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-    #if DEBUG
-    print("LOG - RNINavigatorReactRouteViewController, UISearchBarDelegate: searchBarCancelButtonClicked"
-      + " - searchBar.text: \(searchBar.text ?? "N/A")"
-    );
-    #endif
-    
     self.routeView?.notifyOnSearchBarCancelButtonClicked();
   };
   
   func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-    #if DEBUG
-    print("LOG - RNINavigatorReactRouteViewController, UISearchBarDelegate: searchBarSearchButtonClicked"
-      + " - searchBar.text: \(searchBar.text ?? "N/A")"
-    );
-    #endif
-    
     self.routeView?.notifyOnSearchBarSearchButtonClicked(
       searchText: searchBar.text
     );

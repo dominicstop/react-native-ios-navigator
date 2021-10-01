@@ -99,13 +99,6 @@ internal class RNIWrapperView: UIView {
     let triggerCleanup = self.willChangeSuperview ? self.didChangeSuperview : true;
     
     if self.window == nil, self.autoCleanupOnWindowNil, triggerCleanup {
-      #if DEBUG
-      print("LOG - RNIWrapperView, didMoveToWindow"
-        + " - for nativeID: \(self.nativeID ?? "N/A")"
-        + " - trigger cleanup"
-      );
-      #endif
-      
       self.cleanup();
     };
     
@@ -139,12 +132,6 @@ internal class RNIWrapperView: UIView {
     guard !self.didTriggerCleanup else { return };
     self.didTriggerCleanup = true;
     
-    #if DEBUG
-    print("LOG - RNIWrapperView, cleanup"
-      + " - for nativeID: \(self.nativeID ?? "N/A")"
-    );
-    #endif
-    
     self.touchHandler.detach(from: self.reactContent);
     
     RNIUtilities.recursivelyRemoveFromViewRegistry(
@@ -157,14 +144,7 @@ internal class RNIWrapperView: UIView {
   // --------------------------
   
   /// Called by `RNIWrapperViewModule.notifyComponentWillUnmount`
-  func onJSComponentWillUnmount(isManuallyTriggered: Bool){
-    #if DEBUG
-    print("LOG - RNIWrapperView, onJSComponentWillUnmount"
-      + " - for nativeID: \(self.nativeID ?? "N/A")"
-      + " - trigger cleanup, autoCleanupOnWindowNil: \(self.autoCleanupOnWindowNil)"
-    );
-    #endif
-    
+  func onJSComponentWillUnmount(isManuallyTriggered: Bool){    
     if self.autoCleanupOnJSUnmount {
       self.cleanup();
     };

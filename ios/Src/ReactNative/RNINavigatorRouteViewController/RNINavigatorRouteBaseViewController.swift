@@ -110,15 +110,6 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
   open override func willMove(toParent parent: UIViewController?){
     super.willMove(toParent: parent);
     
-    #if DEBUG
-    print("LOG - VC, RNINavigatorRouteBaseViewController: willMove"
-      + " - toParent: \(parent == nil ? "N/A" : "VC")"
-      + " - for routeKey: \(self.routeKey)"
-      + " - routeIndex: \(self.routeIndex)"
-      + " - isUserInitiated: \(!self.isToBeRemoved)"
-    );
-    #endif
-    
     if parent == nil {
       // this vc 'will' be popped
       // note: if `isToBeRemoved` is false, then "pop"/back is user initiated.
@@ -137,15 +128,6 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
   
   open override func didMove(toParent parent: UIViewController?) {
     super.didMove(toParent: parent);
-    
-    #if DEBUG
-    print("LOG - VC, RNINavigatorRouteBaseViewController: didMove"
-      + " - toParent: \(parent == nil ? "N/A" : "VC")"
-      + " - for routeKey: \(self.routeKey)"
-      + " - routeIndex: \(self.routeIndex)"
-      + " - isUserInitiated: \(!self.isToBeRemoved)"
-    );
-    #endif
     
     if parent == nil {
       // this vc 'will' be popped

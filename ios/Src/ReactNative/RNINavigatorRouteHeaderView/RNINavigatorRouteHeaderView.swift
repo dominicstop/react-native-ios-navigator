@@ -199,12 +199,6 @@ internal class RNINavigatorRouteHeaderView: RCTView {
       }();
       
       self.refreshHeaderHeight();
-      
-      #if DEBUG
-      print("LOG - RNINavigatorRouteHeaderView: didSet"
-        + " - headerMode: \(self.headerConfig.description)"
-      );
-      #endif
     }
   };
   
@@ -222,13 +216,6 @@ internal class RNINavigatorRouteHeaderView: RCTView {
         
         return config;
       }();
-      
-      #if DEBUG
-      print("LOG - RNINavigatorRouteHeaderView: didSet"
-        + " - headerTopPadding: \(self._headerTopPadding)"
-        + " - newValue: \(String(describing: newValue))"
-      );
-      #endif
       
       self.refreshHeaderTopPadding();
     }
@@ -281,14 +268,6 @@ internal class RNINavigatorRouteHeaderView: RCTView {
     self.notifyForBoundsChange(
       CGRect(origin: .zero, size: newSize)
     );
-    
-    #if DEBUG
-    print("LOG - NativeView, RNINavigatorRouteHeaderView"
-      + " - reactSetFrame"
-      + " - args, frame: \(frame.debugDescription)"
-      + " - newSize: \(newSize.debugDescription)"
-    );
-    #endif
   };
   
   // MARK:- Internal Functions
@@ -361,15 +340,6 @@ internal class RNINavigatorRouteHeaderView: RCTView {
       bottom: 0,
       right : insets.right
     );
-    
-    #if DEBUG
-    print("LOG - RNINavigatorRouteHeaderView: refreshHeaderTopPadding"
-      + " - headerTopPadding: \(self._headerTopPadding)"
-      + " - height: \(presetHeight)"
-      + " - height: \(totalHeight)"
-      + " - insets: \(insets)"
-    );
-    #endif
     
     self.bridge.uiManager.setLocalData(localData, for: self);
   };

@@ -164,13 +164,6 @@ public final class RNINavigatorView: UIView {
             let keys = data.allKeys as? [String]
       else { return };
       
-      #if DEBUG
-      print("LOG - NativeView, RNINavigatorView: nativeRouteData"
-        + " - keys: \(keys)"
-        + " - data: \(data.debugDescription)"
-      );
-      #endif
-      
       for key in keys {
         guard let routeID   = Int(key),
               let routeData = data[key] as? NSDictionary,
@@ -191,6 +184,7 @@ public final class RNINavigatorView: UIView {
             // B - native route for `routeID` not added yet...
             // create/init native route
             let routeVC = vc.init();
+
             routeVC.setRouteID(routeID);
             routeVC.setRouteKey(routeKey);
             
@@ -205,14 +199,6 @@ public final class RNINavigatorView: UIView {
           // could not get/create native route vc
           return nil;
         }() else { continue };
-        
-        #if DEBUG
-        print("LOG - NativeView, RNINavigatorView: nativeRouteData"
-          + " - for routeID: \(routeID)"
-          + " - set routeKey: \(routeKey)"
-          + " - set routeIndex: \(routeIndex)"
-        );
-        #endif
         
         // update route index
         nativeRouteVC.setRouteIndex(routeIndex);
@@ -254,16 +240,6 @@ public final class RNINavigatorView: UIView {
   @objc var navBarAppearance: NSDictionary? {
     didSet {
       guard self.navBarAppearance != oldValue else { return };
-
-      #if DEBUG
-      let dictStr = navBarAppearance.debugDescription
-        .replacingOccurrences(of: "\n", with: " ")
-        .replacingOccurrences(of: "  ", with: "");
-      
-      print("LOG - NativeView, RNINavigatorView: navBarAppearance, didSet"
-        + " - dict \(dictStr)"
-      );
-      #endif
       
       if let dict = self.navBarAppearance {
         // update nav bar appearance
@@ -369,14 +345,6 @@ public final class RNINavigatorView: UIView {
         
         // send event: notify js navigator that a new route view was added
         self.notifyOnNavRouteViewAdded(vc: routeVC);
-        
-        #if DEBUG
-        print("LOG - NativeView, RNINavigatorView: insertReactSubview"
-          + " - atIndex: \(atIndex)"
-          + " - routeView.routeKey: \(routeView.routeKey)"
-          + " - routeView.routeIndex: \(routeView.routeIndex)"
-        );
-        #endif
         
       case .NavBarBackground:
         self.reactNavBarBackground = subview;
@@ -526,18 +494,6 @@ fileprivate extension RNINavigatorView {
     
     let isParentVCTheRootVC = self.window!.rootViewController == parentVC;
     
-    #if DEBUG
-    let isRootRNIViewController = self.window!.rootViewController is RNIRootViewController;
-    
-    print("LOG - NativeView, RNINavigatorView: setupEmbedNavigationControllerToClosestVC"
-      + " - parentVC: \(parentVC)"
-      + " - is parentVC the root VC: \(isParentVCTheRootVC)"
-      + " - is root vc a RNIRootViewController instance: \(isRootRNIViewController)"
-      + " - shouldSwizzleRootViewController: \(self.shouldSwizzleRootViewController)"
-      + " - child vc count: \(parentVC.children.count)"
-    );
-    #endif
-    
     // Needed to support "view controller based status bar style"
     if self.shouldSwizzleRootViewController, isParentVCTheRootVC {
       RNINavigatorManager.sharedInstance.swizzleRootViewController(for: self.window!);
@@ -590,27 +546,11 @@ fileprivate extension RNINavigatorView {
   func removeRouteVC(routeVC: RNINavigatorRouteBaseViewController){
     guard self.routeItemsMap[routeVC.routeID] != nil else { return };
     
-    #if DEBUG
-    let prevCountRouteVCs = self.routeItemsMap.count;
-    #endif
-    
     self.routeItemsMap.removeValue(forKey: routeVC.routeID);
     
     if let reactRouteVC = routeVC as? RNINavigatorReactRouteViewController {
       reactRouteVC.routeView.cleanup();
     };
-    
-    #if DEBUG
-    let nextCountRouteVCs = self.routeItemsMap.count;
-    print("LOG - NativeView, RNINavigatorView: removeRoute"
-      + " - with routeKey: \(routeVC.routeKey)"
-      + " - with routeIndex: \(routeVC.routeIndex)"
-      + " - removing popped route from `routeVCs`"
-      + " - prevCountRouteVCs: \(prevCountRouteVCs)"
-      + " - nextCountRouteVCs: \(nextCountRouteVCs)"
-      + " - routeVCs removed count: \(prevCountRouteVCs - nextCountRouteVCs)"
-    );
-    #endif
   };
   
   func createRouteDataDict(from viewController: UIViewController) -> Dictionary<String, Any> {

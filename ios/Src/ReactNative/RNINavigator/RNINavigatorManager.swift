@@ -34,12 +34,6 @@ public class RNINavigatorManager {
     guard let enumerator = self.navigatorViewInstances.objectEnumerator()
     else { return [] };
     
-    #if DEBUG
-    print("LOG - RNINavigatorManager: getNavigatorViewInstances"
-      + " - enumerator: \(enumerator.underestimatedCount)"
-    );
-    #endif
-    
     return enumerator.compactMap {
       $0 as? RNINavigatorView;
     };
@@ -58,13 +52,6 @@ public class RNINavigatorManager {
   ){
     self.navigatorViewInstances.setObject(instance, forKey: navigatorID);
     self.delegate?.onNavigatorViewAdded(instance, navigatorID.intValue);
-    
-    #if DEBUG
-    print("LOG - RNINavigatorManager: registerNavigatorView"
-      + " - for navigatorID: \(navigatorID)"
-      + " - instance count: \(self.navigatorViewInstances.count)"
-    );
-    #endif
   };
   
   internal func cleanup(){
@@ -95,13 +82,6 @@ public class RNINavigatorManager {
       
       method_exchangeImplementations(originalMethod, swizzledMethod);
     };
-    
-    #if DEBUG
-    print("LOG - RNINavigatorManager: swizzleRootViewController"
-      + " - has baseMethod: \(baseMethod != nil)"
-      + " - has swizzledMethod: \(replacementMethod != nil)"
-    );
-    #endif
   };
   
   internal func setRootViewControllerBackground(for window: UIWindow){
