@@ -317,8 +317,10 @@ internal class RNINavBarAppearance {
     func prepareForUpdate(_ navBar: UINavigationBar){
       let statusBarHeight = UIApplication.shared.statusBarFrame.size.height;
       
-      let navBarHeight = navBar.frame.height;
-      let navBarWidth  = navBar.frame.width;
+      /// Note: Sometimes the nav bar size is 0 (e.g. because it's not on screen
+      /// yet), so provide a min. value to use...
+      let navBarHeight = max(navBar.frame.height, 50);
+      let navBarWidth  = max(navBar.frame.width , 75);
       
       // setup background image size
       self.backgroundImage?.defaultSize = CGSize(
