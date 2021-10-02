@@ -1,24 +1,12 @@
 import * as React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, SafeAreaView } from 'react-native';
 
-import { NavBarAppearance, RouteViewPortal } from 'react-native-ios-navigator';
+import { RouteViewPortal } from 'react-native-ios-navigator';
 
 import * as Colors from '../constants/Colors';
 
 export function RouteViewPortalExample01(){
   const [index, setIndex] = React.useState(0);
-
-  const appearanceConfig: NavBarAppearance = {
-    backgroundColor: Colors.RED.A700,
-    backButtonAppearance: {
-      style: 'plain',
-      normal: {
-        titleTextAttributes: {
-          color: 'white',
-        },
-      },
-    },
-  };
 
   return (
     <SafeAreaView style={styles.routeContainer}>
@@ -32,12 +20,40 @@ export function RouteViewPortalExample01(){
 
           // Set the status bar tint to 'white'
           statusBarStyle: 'lightContent',
-
-          // Set the navigation bar tint to red
+          
           navBarAppearanceOverride: {
             mode: 'appearance',
-            standardAppearance: appearanceConfig,
-            scrollEdgeAppearance: appearanceConfig,
+            useStandardAppearanceAsDefault: true,
+            standardAppearance: {
+
+              // Set the navigation bar tint to red
+              backgroundColor: Colors.RED.A700,
+
+              // Make the back button text white
+              backButtonAppearance: {
+                style: 'plain',
+                normal: {
+                  titleTextAttributes: {
+                    color: 'white',
+                    fontSize: 16,
+                    fontWeight: '600',
+                  },
+                },
+              },
+
+              // Make the back button icon white
+              backIndicatorImage: {
+                type: 'IMAGE_SYSTEM',
+                imageValue: {
+                  systemName: 'chevron.left',
+                  weight: 'semibold',
+                },
+                imageOptions: {
+                  tint: 'white',
+                  renderingMode: 'alwaysOriginal',
+                },
+              },
+            }
           },
         }}
 

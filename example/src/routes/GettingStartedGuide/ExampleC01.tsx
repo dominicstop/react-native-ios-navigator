@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { SafeAreaView, TouchableOpacity, Text, StyleSheet } from 'react-native';
-import { NavBarAppearance, NavigatorView, RouteContentProps } from 'react-native-ios-navigator';
+import { NavigatorView, RouteContentProps } from 'react-native-ios-navigator';
 
 import * as Colors from '../../constants/Colors';
 
@@ -27,30 +27,6 @@ function ExampleRoute(props: RouteContentProps){
 };
 
 export function ExampleC01(){
-  const appearanceConfig: NavBarAppearance = {
-    // Set nav bar bg to red
-    backgroundColor: 'red',
-    
-    // Make the nav bar title white
-    titleTextAttributes: {
-      color: 'white',
-      fontSize: 16,
-      fontWeight: 'bold',
-    },
-
-    // Add a gradient shadow below the nav bar
-    shadowImage: {
-      type: 'IMAGE_GRADIENT',
-      imageValue: {
-        colors: ['rgba(255,0,0,1)', 'rgba(255,0,0,0)'],
-        type: 'axial',
-        height: 75,
-        startPoint: 'top',
-        endPoint: 'bottom',
-      },
-    },
-  };
-
   return (
      <NavigatorView
       routes={{
@@ -67,9 +43,31 @@ export function ExampleC01(){
         // Use the appearance API (i.e. iOS 13 and above) to style
         // the navigation bar
         mode: 'appearance',
+        useStandardAppearanceAsDefault: true,
 
-        standardAppearance: appearanceConfig,
-        scrollEdgeAppearance: appearanceConfig,
+        standardAppearance: {
+          // Set nav bar bg to red
+          backgroundColor: 'red',
+          
+          // Make the nav bar title white
+          titleTextAttributes: {
+            color: 'white',
+            fontSize: 16,
+            fontWeight: 'bold',
+          },
+
+          // Add a gradient shadow below the nav bar
+          shadowImage: {
+            type: 'IMAGE_GRADIENT',
+            imageValue: {
+              colors: ['rgba(255,0,0,1)', 'rgba(255,0,0,0)'],
+              type: 'axial',
+              height: 75,
+              startPoint: 'top',
+              endPoint: 'bottom',
+            },
+          },
+        },
       }}
     />
   );
