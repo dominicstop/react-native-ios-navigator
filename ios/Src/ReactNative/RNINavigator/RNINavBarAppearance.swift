@@ -653,6 +653,8 @@ internal class RNINavBarAppearance {
   
   var appearanceLegacy: NavBarAppearanceLegacyConfig?;
   
+  var useStandardAppearanceAsDefault = false;
+  
   var appearanceConfigStandard   : NavBarAppearanceConfig!;
   var appearanceConfigCompact    : NavBarAppearanceConfig?;
   var appearanceConfigScrollEdge : NavBarAppearanceConfig?;
@@ -727,45 +729,30 @@ internal class RNINavBarAppearance {
     
     switch mode {
       case .appearance:
-        self.appearanceConfigStandard = {
-          guard let configDict = dict["standardAppearance"] as? NSDictionary
-          else { return nil };
-          
-          let appearance = NavBarAppearanceConfig(dict: configDict);
-          appearance?.navBarPreset = self.navBarPreset;
-          
-          return appearance;
-        }();
         
-        self.appearanceConfigCompact = {
-          guard let configDict = dict["compactAppearance"] as? NSDictionary
-          else { return nil };
-          
-          let appearance = NavBarAppearanceConfig(dict: configDict);
-          appearance?.navBarPreset = self.navBarPreset;
-          
-          return appearance;
-        }();
+        self.useStandardAppearanceAsDefault =
+          dict["useStandardAppearanceAsDefault"] as? Bool ?? false;
         
-        self.appearanceConfigScrollEdge = {
-          guard let configDict = dict["scrollEdgeAppearance"] as? NSDictionary
+        func getAppearanceConfig(forKey key: String) -> NavBarAppearanceConfig? {
+          guard let configDict = dict[key] as? NSDictionary,
+                let appearance = NavBarAppearanceConfig(dict: configDict)
           else { return nil };
           
-          let appearance = NavBarAppearanceConfig(dict: configDict);
-          appearance?.navBarPreset = self.navBarPreset;
-          
+          appearance.navBarPreset = self.navBarPreset;
           return appearance;
-        }();
+        };
         
-        self.appearanceCompactScrollEdge = {
-          guard let configDict = dict["compactScrollEdgeAppearance"] as? NSDictionary
-          else { return nil };
-          
-          let appearance = NavBarAppearanceConfig(dict: configDict);
-          appearance?.navBarPreset = self.navBarPreset;
-          
-          return appearance;
-        }();
+        self.appearanceConfigStandard =
+          getAppearanceConfig(forKey: "standardAppearance");
+        
+        self.appearanceConfigCompact =
+          getAppearanceConfig(forKey: "compactAppearance");
+        
+        self.appearanceConfigScrollEdge =
+          getAppearanceConfig(forKey: "scrollEdgeAppearance");
+        
+        self.appearanceCompactScrollEdge =
+          getAppearanceConfig(forKey: "compactScrollEdgeAppearance");
         
       case .legacy:
         self.appearanceLegacy = NavBarAppearanceLegacyConfig(dict: dict);
@@ -780,6 +767,8 @@ internal class RNINavBarAppearance {
     self.navBarPreset = .none;
     
     self.appearanceLegacy = nil;
+    
+    self.useStandardAppearanceAsDefault = true;
     
     self.appearanceConfigStandard    = nil;
     self.appearanceConfigCompact     = nil;
@@ -815,19 +804,22 @@ internal class RNINavBarAppearance {
           // no standard config provided, create a "default" config
           ?? NavBarAppearanceConfig(navBarPreset: self.navBarPreset);
         
+        let defaultAppearance =
+          self.useStandardAppearanceAsDefault ? standardConfig.appearance : nil;
+        
         if let navigationItem = navigationItem {
           // update the nav bar appearance via the `navigationItem`
           navigationItem.standardAppearance = standardConfig.appearance;
           
           navigationItem.compactAppearance =
-            self.appearanceConfigCompact?.appearance;
+            self.appearanceConfigCompact?.appearance ?? defaultAppearance;
           
           navigationItem.scrollEdgeAppearance =
-            self.appearanceConfigScrollEdge?.appearance;
+            self.appearanceConfigScrollEdge?.appearance ?? defaultAppearance;
           
           if #available(iOS 15.0, *) {
             navigationItem.compactScrollEdgeAppearance =
-              self.appearanceCompactScrollEdge?.appearance;
+              self.appearanceCompactScrollEdge?.appearance ?? defaultAppearance;
           };
           
         } else {
@@ -835,14 +827,14 @@ internal class RNINavBarAppearance {
           navBar.standardAppearance = standardConfig.appearance;
           
           navBar.compactAppearance =
-            self.appearanceConfigCompact?.appearance;
+            self.appearanceConfigCompact?.appearance ?? defaultAppearance;
           
           navBar.scrollEdgeAppearance =
-            self.appearanceConfigScrollEdge?.appearance;
+            self.appearanceConfigScrollEdge?.appearance ?? defaultAppearance;
           
           if #available(iOS 15.0, *) {
             navBar.compactScrollEdgeAppearance =
-              self.appearanceCompactScrollEdge?.appearance;
+              self.appearanceCompactScrollEdge?.appearance ?? defaultAppearance;
           };
         };
         

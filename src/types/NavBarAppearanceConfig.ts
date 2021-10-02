@@ -127,6 +127,8 @@ export type NavBarAppearanceLegacyConfig = NavBarAppearanceConfigBase & {
 
 export type NavBarAppearanceConfig = NavBarAppearanceConfigBase & {
 
+  useStandardAppearanceAsDefault?: boolean;
+
   /** The appearance settings for a standard-height navigation bar. */
   standardAppearance?: NavBarAppearance;
 
