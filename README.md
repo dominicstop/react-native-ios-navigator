@@ -354,6 +354,7 @@ As such this component doesn't actually render anything directly, it's merely an
 ![RouteViewPortalExample01](docs/assets/RouteViewPortalExample01-00.gif)
 
 ```jsx
+// 📝 Note: for the sake of brevity, some of the code is omitted...
 export function RouteViewPortalExample01(){
   const [index, setIndex] = React.useState(0);
 
@@ -363,24 +364,57 @@ export function RouteViewPortalExample01(){
         routeOptions={{
           // Change the navigation bar title text
           routeTitle: `index: ${index}`,
+
           // Disable large tile
           largeTitleDisplayMode: 'never',
-          // Set the navigation bar tint to red
-          navBarAppearanceOverride: {
-            mode: 'legacy',
-            barTintColor: Colors.RED.A700,
-            tintColor: 'white',
-          },
+
           // Set the status bar tint to 'white'
           statusBarStyle: 'lightContent',
+          
+          // Customize navigation bar appearance...
+          navBarAppearanceOverride: {
+            mode: 'appearance',
+            useStandardAppearanceAsDefault: true,
+
+            standardAppearance: {
+              // Set the navigation bar tint to red
+              backgroundColor: Colors.RED.A700,
+
+              // Make the back button text white
+              backButtonAppearance: {
+                style: 'plain',
+                normal: {
+                  titleTextAttributes: {
+                    color: 'white',
+                    fontSize: 16,
+                    fontWeight: '600',
+                  },
+                },
+              },
+
+              // Make the back button icon white
+              backIndicatorImage: {
+                type: 'IMAGE_SYSTEM',
+                imageValue: {
+                  systemName: 'chevron.left',
+                  weight: 'semibold',
+                },
+                imageOptions: {
+                  tint: 'white',
+                  renderingMode: 'alwaysOriginal',
+                },
+              },
+            }
+          },
         }}
+
         // Use a custom component for navigation bar title
         renderNavBarTitleItem={({routeOptions}) => (
           <TouchableOpacity 
             style={styles.buttonContainer}
             onPress={() => {
+              // Reset the index when pressed
               setIndex(0);
-              Alert.alert('Index Reset', `Index was reset to 0.`);
             }}
           >
             <Text style={styles.buttonLabel}>
@@ -404,16 +438,16 @@ export function RouteViewPortalExample01(){
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={styles.buttonContainer}
-              onPress={() => {
-                // Increment the index when pressed
-                setIndex(prevIndex => (prevIndex + 1));
-              }}
-          	>
-              <Text style={styles.buttonLabel}>
-                {`++`}
-              </Text>
-          	</TouchableOpacity>
+            style={styles.buttonContainer}
+            onPress={() => {
+              // Increment the index when pressed
+              setIndex(prevIndex => (prevIndex + 1));
+            }}
+          >
+            <Text style={styles.buttonLabel}>
+              {`++`}
+            </Text>
+          </TouchableOpacity>
           </View>
         )}
       />
@@ -1604,30 +1638,32 @@ export function ExampleC01(){
       // ...
       // Customize the look of the navigation bar
       navBarAppearance={{
-        // Use the legacy API (i.e. iOS 12 and below) to style 
+        // Use the appearance API (i.e. iOS 13 and above) to style
         // the navigation bar
-        mode: 'legacy',
+        mode: 'appearance',
+        useStandardAppearanceAsDefault: true,
 
-        // Set nav bar bg to red
-        barTintColor: 'red',
+        standardAppearance: {
+          // Set nav bar bg to red
+          backgroundColor: 'red',
+          
+          // Make the nav bar title white
+          titleTextAttributes: {
+            color: 'white',
+            fontSize: 16,
+            fontWeight: 'bold',
+          },
 
-        // Make the nav bar title + elements white
-        tintColor: 'white',
-        titleTextAttributes: {
-          color: 'white',
-          fontSize: 16,
-          fontWeight: 'bold',
-        },
-
-        // Add a gradient shadow below the nav bar
-        shadowImage: {
-          type: 'IMAGE_GRADIENT',
-          imageValue: {
-            colors: ['rgba(255,0,0,1)', 'rgba(255,0,0,0)'],
-            type: 'axial',
-            height: 75,
-            startPoint: 'top',
-            endPoint: 'bottom',
+          // Add a gradient shadow below the nav bar
+          shadowImage: {
+            type: 'IMAGE_GRADIENT',
+            imageValue: {
+              colors: ['rgba(255,0,0,1)', 'rgba(255,0,0,0)'],
+              type: 'axial',
+              height: 75,
+              startPoint: 'top',
+              endPoint: 'bottom',
+            },
           },
         },
       }}
