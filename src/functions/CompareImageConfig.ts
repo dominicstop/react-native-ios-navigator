@@ -1,7 +1,8 @@
 import fastDeepEqual from "fast-deep-equal";
 import { CompareUtilities, ComparisonConfig } from './CompareUtilities';
+import { compareColor } from './CompareMisc';
 
-import type { ImageItemConfig, ImageGradientConfig, ImageRectConfig } from "../types/ImageItemConfig";
+import type { ImageItemConfig, ImageGradientConfig, ImageRectConfig, ImageSystemConfig, UIImageConfig } from "../types/ImageItemConfig";
 import type { Point, PointPreset } from '../types/MiscTypes';
 
 function comparePointOrPointPreset<T extends Point | PointPreset>(oldItem: T, newItem: T){
@@ -52,14 +53,73 @@ export class CompareImageRectConfig {
   };
 };
 
+export class CompareImageSystemConfig {
+  static propertyMap: ComparisonConfig<ImageSystemConfig> = {
+    systemName       : { mode: 'shallow' },
+    pointSize        : { mode: 'shallow' },
+    weight           : { mode: 'shallow' },
+    scale            : { mode: 'shallow' },
+    hierarchicalColor: { mode: 'shallow' },
+
+    paletteColors: { mode: 'shallowArray' },
+  };
+
+  static compare<T extends ImageSystemConfig>(oldItem: T, newItem: T) {
+    return CompareUtilities.compareObject(this.propertyMap, oldItem, newItem);
+  };
+};
+
+export class CompareUIImageConfig {
+  static propertyMap: ComparisonConfig<UIImageConfig> = {
+    renderingMode: { mode: 'shallow' },
+
+    tint: { 
+      mode: 'custom',
+      customCompare: compareColor,
+    },
+  };
+
+  static compare<T extends UIImageConfig>(oldItem: T, newItem: T){
+    return CompareUtilities.compareObject(
+      CompareUIImageConfig.propertyMap, oldItem, newItem, true
+    );;
+  };
+};
+
 export class CompareImageConfig {
   static compare<T extends ImageItemConfig>(oldItem: T, newItem: T){
     if(oldItem.type !== newItem.type) return false;
-    
+
     switch (oldItem.type) {
-      case 'IMAGE_ASSET' :
-      case 'IMAGE_SYSTEM':
-        return (oldItem.imageValue === (newItem as any).imageValue);
+      case 'IMAGE_REQUIRE': return (
+        CompareUIImageConfig.compare(
+          oldItem.imageOptions, 
+          (newItem as any).imageOptions
+        ) ||
+        fastDeepEqual(
+          oldItem.imageValue,
+          (newItem as any).imageOptions
+        )
+      );
+
+      case 'IMAGE_ASSET' : return (
+        CompareUIImageConfig.compare(
+          oldItem.imageOptions, 
+          (newItem as any).imageOptions
+        ) ||
+        (oldItem.imageValue === (newItem as any).imageValue) 
+      );
+
+      case 'IMAGE_SYSTEM': return (
+        CompareUIImageConfig.compare(
+          oldItem.imageOptions, 
+          (newItem as any).imageOptions
+        ) ||
+        CompareImageSystemConfig.compare(
+          oldItem.imageValue,
+          (newItem as any).imageValue
+        )
+      );
 
       case 'IMAGE_RECT':
         return CompareImageRectConfig.compare(
@@ -73,7 +133,6 @@ export class CompareImageConfig {
           (newItem as any).imageValue
         );
 
-      case 'IMAGE_REQUIRE':
       default:
         return fastDeepEqual(oldItem, newItem);
     };

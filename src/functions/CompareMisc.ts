@@ -1,6 +1,6 @@
 
 import type { Nullish } from 'src/types/UtilityTypes';
-import type { DynamicColor, EdgeInsets } from '../types/MiscTypes';
+import type { DynamicColor, EdgeInsets, Offset } from '../types/MiscTypes';
 
 
 export function compareColor<T extends string | DynamicColor>(a: T, b: T){
@@ -35,5 +35,24 @@ export class CompareEdgeInsets {
     if((a == null) || (b == null)) return false;
 
     return CompareEdgeInsets.compare(a, b);
+  };
+};
+
+export class CompareOffset {
+  static compare<T extends Offset>(a: T, b: T){
+    return (
+      (a.horizontal === b.horizontal) ||
+      (a.vertical   === b.vertical  )
+    );
+  };
+
+  static unwrapAndCompare<T extends CompareOffset>(
+    a: Nullish<T>,
+    b: Nullish<T>
+  ){
+    if((a == null) && (b == null)) return true;
+    if((a == null) || (b == null)) return false;
+
+    return CompareOffset.compare(a, b);
   };
 };

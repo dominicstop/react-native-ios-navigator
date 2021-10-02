@@ -30,6 +30,7 @@ export * from './types/NavigationObject';
 export * from './types/RouteSearchControllerConfig';
 export * from './types/NavBarAppearanceConfig';
 export * from './types/BarButtonItemAppearance';
+export * from './types/BarButtonItemAppearance';
 export * from './types/NavRouteItem';
 export * from './types/NavRouteConfigItem';
 export * from './types/RNINavigatorRouteViewEvents';

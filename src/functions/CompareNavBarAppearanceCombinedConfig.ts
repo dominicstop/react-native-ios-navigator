@@ -1,10 +1,64 @@
 
 import { CompareUtilities, ComparisonConfig } from './CompareUtilities';
 import { CompareImageConfig } from './CompareImageConfig';
+import { compareColor, CompareOffset } from './CompareMisc';
 
 import type { NavBarAppearance, NavBarAppearanceCombinedConfig, NavBarAppearanceConfig, NavBarAppearanceLegacyConfig } from '../types/NavBarAppearanceConfig';
-import { compareColor } from './CompareMisc';
+import type { BarButtonItemAppearance, BarButtonItemStateAppearance } from '../types/BarButtonItemAppearance';
 
+
+export class CompareBarButtonItemStateAppearance {
+  static propertyMap: ComparisonConfig<BarButtonItemStateAppearance> = {
+    titleTextAttributes: { mode: 'deep' },
+
+    titlePositionAdjustment: { 
+      mode: 'custom',
+      customCompare: CompareOffset.compare,
+    },
+    backgroundImagePositionAdjustment: { 
+      mode: 'custom',
+      customCompare: CompareOffset.compare,
+    },
+    backgroundImage: {
+      mode: 'custom',
+      customCompare: CompareImageConfig.compare,
+    },
+  };
+
+  static compare<T extends BarButtonItemStateAppearance>(oldItem: T, newItem: T){
+    return CompareUtilities.compareObject(
+      CompareBarButtonItemStateAppearance.propertyMap, oldItem, newItem, true
+    );
+  };
+};
+
+export class CompareBarButtonItemAppearance {
+  static propertyMap:  ComparisonConfig<BarButtonItemAppearance> = {
+    style: { mode: 'shallow' },
+
+    normal: {
+      mode: 'custom',
+      customCompare: CompareBarButtonItemStateAppearance.compare,
+    },
+    disabled: {
+      mode: 'custom',
+      customCompare: CompareBarButtonItemStateAppearance.compare,
+    },
+    highlighted: {
+      mode: 'custom',
+      customCompare: CompareBarButtonItemStateAppearance.compare,
+    },
+    focused: {
+      mode: 'custom',
+      customCompare: CompareBarButtonItemStateAppearance.compare,
+    },
+  };
+  static compare<T extends BarButtonItemAppearance>(oldItem: T, newItem: T){
+    return CompareUtilities.compareObject(
+      CompareBarButtonItemAppearance.propertyMap, oldItem, newItem, true
+    );;
+  };
+};
 
 export class CompareNavBarAppearance {
   static propertyMap:  ComparisonConfig<NavBarAppearance> = {
@@ -20,11 +74,11 @@ export class CompareNavBarAppearance {
     titleTextAttributes     : { mode: 'shallowObject' },
     largeTitleTextAttributes: { mode: 'shallowObject' },
 
+    // custom compare
     backIndicatorImage: {
       mode: 'custom',
       customCompare: CompareImageConfig.compare,
     },
-    // custom compare
     backgroundImage: {
       mode: 'custom',
       customCompare: CompareImageConfig.compare,
@@ -32,6 +86,18 @@ export class CompareNavBarAppearance {
     shadowImage: {
       mode: 'custom',
       customCompare: CompareImageConfig.compare,
+    },
+    buttonAppearance: {
+      mode: 'custom',
+      customCompare: CompareBarButtonItemAppearance.compare,
+    },
+    backButtonAppearance: {
+      mode: 'custom',
+      customCompare: CompareBarButtonItemAppearance.compare,
+    },
+    doneButtonAppearance: {
+      mode: 'custom',
+      customCompare: CompareBarButtonItemAppearance.compare,
     },
   };
 
@@ -46,6 +112,7 @@ export class CompareNavBarAppearanceConfig {
   static propertyMap: ComparisonConfig<NavBarAppearanceConfig> = {
     // shallow compare 
     navBarPreset: { mode: 'shallow' },
+    useStandardAppearanceAsDefault: { mode: 'shallow' },
 
     // custom compare
     standardAppearance: {
@@ -57,6 +124,10 @@ export class CompareNavBarAppearanceConfig {
       customCompare: CompareNavBarAppearance.compare,
     },
     scrollEdgeAppearance: {
+      mode: 'custom',
+      customCompare: CompareNavBarAppearance.compare,
+    },
+    compactScrollEdgeAppearance: {
       mode: 'custom',
       customCompare: CompareNavBarAppearance.compare,
     },

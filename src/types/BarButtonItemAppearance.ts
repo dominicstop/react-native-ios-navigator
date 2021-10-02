@@ -10,7 +10,7 @@ export type BarButtonItemStates = 'normal' | 'disabled' | 'highlighted' | 'focus
 export type BarButtonItemStyles = 'plain' | 'done';
 
 /** UIBarButtonItemStateAppearance */
-type BarButtonItemStateAppearance = {
+export type BarButtonItemStateAppearance = {
   titleTextAttributes?: TextStyle;
   titlePositionAdjustment?: Offset;
 
