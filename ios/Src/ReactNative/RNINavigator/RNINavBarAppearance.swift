@@ -697,6 +697,7 @@ internal class RNINavBarAppearance {
   };
   
   var hasScrollEdgeAppearanceConfig: Bool {
+    self.useStandardAppearanceAsDefault     ||
     self.appearanceConfigScrollEdge  != nil ||
     self.appearanceCompactScrollEdge != nil
   };
