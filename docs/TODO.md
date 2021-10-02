@@ -2,7 +2,7 @@
 
 ## In Progress
 
-- [ ] **Cleanup**: Remove debug logs in native code. 
+- [ ] Replace usage of `RCTBridgeWillReloadNotification` with invalidate in modules.
 
 <br>
 
@@ -48,6 +48,8 @@
 - [ ] Impl. `legacyTintColor` for navigation bar appearance mode.
 - [ ] Add versions + xcode table
 - [ ] Impl. swift extension  `notEmptyAndAllSatisfy`
+- [ ] Remove TS Enums
+- [ ] Cleanup native comments - remove unnecessary comments
 
 <br>
 
@@ -336,7 +338,7 @@
 
 <br>
 
-- [x] (Commit: `76b7abe`) Impl. Navigation Bar Buttom Item Appearance
+- [x] (Commit: `76b7abe`) **Implement**: Impl. Navigation Bar Buttom Item Appearance
 	- [x] `TODO (003)`: `RNINavBarAppearance` — Impl. property: `backButtonAppearance`.
 	- [x] `TODO (004)`: `RNINavBarAppearance` — Impl. property: `doneButtonAppearance`.
 	- [x] `TODO (005)`:  `RNINavBarAppearance` — Impl. property: `UIBarButtonItemAppearance`.
@@ -345,7 +347,12 @@
 
 <br>
 
-- [x] (Commit: `7426c01`) Impl. `compactScrollEdgeAppearance` appearance mode.
+- [x] (Commit: `7426c01`) **Implement**: Impl. `compactScrollEdgeAppearance` appearance mode.
+- [x] (Commit: `ca5beff`) **Cleanup**: Remove debug logs in native code. 
+- [x] (Commit: `6fce697`) Impl. `NavBarAppearanceConfig.useStandardAppearanceAsDefault`.
+- [x] (Commit:  `b6f1d56`) **Implement**: Update `ImageItemConfig` to support `UIImage.SymbolConfiguration` and options to configure the `UIImage` rendering.
+- [x] (Commit:  `4c6a1f9`) **Fix**: Fix `disableTransparentNavBarScrollEdgeAppearance` being applied to routes that implicitly have a `scrollEdgeAppearance` when  `RNINavBarAppearance.useStandardAppearanceAsDefault` is set to `true`.
+- [x] (Commit:  `df03b7f`) **Cleanup**: Fix Xcode `MARK:-` comments
 
 <br>
 
@@ -402,7 +409,7 @@
 <br>
 
 - [x] (Commit: `5eeb270`) **Examples**: Update `NavigatorTest04`
-- [x] (Commit: `70c12ec`) Fix: Transition pop config via `RouteViewPortal.routeOptions` not being applied when using push + transition config override beforehand.
+- [x] (Commit: `70c12ec`) **Fix**: Transition pop config via `RouteViewPortal.routeOptions` not being applied when using push + transition config override beforehand.
 	- See `NavigatorTest04` while `Use via RouteOptions` is enabled. When popping routes, the chosen transition is not used (it only works for the first item popped).
 	- Debug:
 		- A) Added breakpoint before a route is pushed, then pushed route. 
@@ -422,7 +429,7 @@
 
 <br>
 
-- [x] (Commit: `e89c00c`) Examples: Create `NavigatorShowcase03`
+- [x] (Commit: `e89c00c`) **Examples**: Create `NavigatorShowcase03`
 	- Extra height for navigation bar, tab-bar like appearance.
 
 <br>
@@ -516,7 +523,7 @@
 
 <br>
 
-- [x] (Commit: `8c5d232`) Optimization — Add `shouldComponentUpdate` to `NavigatorRouteView` and `NavigatorView` to prevent excessive renders (especially when manipulating `state.activeRoutes` via the navigation commands).
+- [x] (Commit: `8c5d232`) **Optimization** — Add `shouldComponentUpdate` to `NavigatorRouteView` and `NavigatorView` to prevent excessive renders (especially when manipulating `state.activeRoutes` via the navigation commands).
 
 	* Debug + Investigate
 
