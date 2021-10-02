@@ -1,4 +1,4 @@
-import type { Point, PointPreset } from "./MiscTypes";
+import type { Point, PointPreset, DynamicColor } from "./MiscTypes";
 import type { EnumValueLiteral } from "./UtilityTypes";
 
 
@@ -26,6 +26,52 @@ export type ImageRectConfig = {
   borderRadius?: number;
 };
 
+/** Maps to `UIImage.RenderingMode`*/
+export type ImageRenderingModes = 
+  'automatic' | 'alwaysOriginal' | 'alwaysTemplate';
+
+/** `UIImage`-related */
+export type UIImageConfig = {
+  tint?: string | DynamicColor;
+  renderingMode?: ImageRenderingModes;
+};
+
+export type ImageSymbolWeight = 
+  | 'unspecified'
+  | 'ultraLight'
+  | 'thin'
+  | 'light'
+  | 'regular'
+  | 'medium'
+  | 'semibold'
+  | 'bold'
+  | 'heavy'
+  | 'black';
+
+export type ImageSymbolScale = 
+  | 'default'
+  | 'unspecified'
+  | 'small'
+  | 'medium'
+  | 'large';
+
+/** Maps to `UIImage.SymbolConfiguration` */
+type ImageSystemSymbolConfiguration = {
+  pointSize?: number;
+  weight?: ImageSymbolWeight;
+  scale?: ImageSymbolScale;
+} & ({
+  /** Requires iOS 15+ */
+  hierarchicalColor?: string | DynamicColor;
+} | {
+  /** Requires iOS 15+ */
+  paletteColors?: [string | DynamicColor];
+});
+
+export type ImageSystemConfig = ImageSystemSymbolConfiguration & {
+  systemName: string;
+};
+
 export type ImageGradientConfig = Partial<Pick<ImageRectConfig, 
   | 'width'
   | 'height'
@@ -43,25 +89,35 @@ export type ImageGradientConfig = Partial<Pick<ImageRectConfig,
   type?: 'axial' | 'conic' | 'radial'
 };
 
-
 export type ImageItemConfig = {
   type: EnumValueLiteral<typeof ImageTypes, 'IMAGE_ASSET'>;
   /** The corresponding key of asset item in the asset catalog */
   imageValue: string;
+  imageOptions?: UIImageConfig;
+
 } | {
   type: EnumValueLiteral<typeof ImageTypes, 'IMAGE_SYSTEM'>;
   /** The key/name of the SF Symbols system icon */
-  imageValue: string;
+  imageValue: ImageSystemConfig;
+  imageOptions?: UIImageConfig;
+
 } | {
   type: EnumValueLiteral<typeof ImageTypes, 'IMAGE_REQUIRE'>;
   /** Object returned by `Image.resolveAssetSource()` */
   imageValue: ImageResolvedAssetSource;
+  imageOptions?: UIImageConfig;
+
 } | {
   type: EnumValueLiteral<typeof ImageTypes, 'IMAGE_EMPTY'>;
+
 } | {
   type: EnumValueLiteral<typeof ImageTypes, 'IMAGE_RECT'>;
   imageValue: ImageRectConfig;
+
 } | {
   type: EnumValueLiteral<typeof ImageTypes, 'IMAGE_GRADIENT'>;
   imageValue: ImageGradientConfig;
+  
 };
+
+export type ImageItemConfigTypes = ImageItemConfig['type'];

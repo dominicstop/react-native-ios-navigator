@@ -1,5 +1,5 @@
 import type { DynamicColor, BarMetrics, ControlState, Offset } from "./MiscTypes";
-import type { ImageItemConfig, ImageTypes } from "./ImageItemConfig";
+import type { ImageItemConfig } from "./ImageItemConfig";
 
 //#region - BarButtonItemSystemItem
 type BarButtonItemSystemItem =
@@ -54,15 +54,10 @@ type BarButtonItemSystemItem =
 //#endregion
 
 
-type SupportedImageTypes = {
-  type: ImageTypes.IMAGE_ASSET | "IMAGE_ASSET";
-  imageValue: string;
-} | {
-  type: ImageTypes.IMAGE_SYSTEM | "IMAGE_SYSTEM";
-  imageValue: string;
-} | {
-  type: ImageTypes.IMAGE_EMPTY | "IMAGE_EMPTY";
-};
+type SupportedImageTypes = 
+  | Extract<ImageItemConfig, { type: 'IMAGE_ASSET'  }>
+  | Extract<ImageItemConfig, { type: 'IMAGE_SYSTEM' }>
+  | Extract<ImageItemConfig, { type: 'IMAGE_EMPTY'  }>;
 
 export type NavBarItemConfigBase = SupportedImageTypes | {
   type: "TEXT";

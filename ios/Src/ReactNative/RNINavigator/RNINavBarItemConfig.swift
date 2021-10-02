@@ -228,14 +228,15 @@ internal class RNINavBarItemConfig {
     
     // Section: Image Types
     // --------------------
-
+    
     self.imageItem = {
       guard let imageType = RNIImageItem.ImageType(rawValue: type)
       else { return nil };
       
       return RNIImageItem(
         type: imageType,
-        imageValue: dictionary["imageValue"]
+        imageValue: dictionary["imageValue"],
+        imageOptions: dictionary["imageOptions"] as? NSDictionary
       );
     }();
   };

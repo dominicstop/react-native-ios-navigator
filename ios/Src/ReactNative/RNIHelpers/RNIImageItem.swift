@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 internal struct RNIImageMaker {
 
@@ -217,6 +218,106 @@ internal struct RNIImageGradientMaker {
   };
 };
 
+internal struct RNIImageSystemMaker {
+  let systemName: String;
+  
+  let pointSize: CGFloat?;
+  let weight: String?;
+  let scale: String?;
+  
+  let hierarchicalColor: UIColor?;
+  let paletteColors: [UIColor]?;
+  
+  @available(iOS 13.0, *)
+  var symbolConfigs: [UIImage.SymbolConfiguration] {
+    var configs: [UIImage.SymbolConfiguration] = [];
+    
+    if let pointSize = self.pointSize {
+      configs.append( .init(pointSize: pointSize) );
+    };
+    
+    if let string = self.weight,
+       let weight = UIImage.SymbolWeight(string: string) {
+      
+      configs.append( .init(weight: weight) );
+    };
+    
+    if let string = self.scale,
+       let scale = UIImage.SymbolScale(string: string) {
+      
+      configs.append( .init(scale: scale) );
+    };
+    
+    if #available(iOS 15.0, *),
+       let color = self.hierarchicalColor {
+      
+      configs.append( .init(hierarchicalColor: color) );
+    };
+    
+    if #available(iOS 15.0, *),
+       let colors = self.paletteColors {
+      
+      configs.append( .init(paletteColors: colors) );
+    };
+    
+    return configs;
+  };
+  
+  @available(iOS 13.0, *)
+  var symbolConfig: UIImage.SymbolConfiguration? {
+    var combinedConfig: UIImage.SymbolConfiguration?;
+    
+    for config in symbolConfigs {
+      if let prevCombinedConfig = combinedConfig {
+        combinedConfig = prevCombinedConfig.applying(config);
+        
+      } else {
+        combinedConfig = config;
+      };
+    };
+    
+    return combinedConfig;
+  };
+  
+  @available(iOS 13.0, *)
+  var image: UIImage? {
+    if let symbolConfig = symbolConfig {
+      return UIImage(
+        systemName: self.systemName,
+        withConfiguration: symbolConfig
+      );
+    };
+    
+    return UIImage(systemName: self.systemName);
+  };
+  
+  init?(dict: NSDictionary){
+    guard let systemName = dict["systemName"] as? String
+    else { return nil };
+    
+    self.systemName = systemName;
+    
+    self.pointSize = dict["pointSize"] as? CGFloat;
+    self.weight    = dict["weight"   ] as? String;
+    self.scale     = dict["scale"    ] as? String;
+
+    self.hierarchicalColor = {
+      guard let value = dict["hierarchicalColor"],
+            let color = UIColor.parseColor(value: value)
+      else { return nil };
+      
+      return color;
+    }();
+    
+    self.paletteColors = {
+      guard let items = dict["paletteColors"] as? Array<Any>
+      else { return nil };
+      
+      return items.compactMap { UIColor.parseColor(value: $0) };
+    }();
+  };
+};
+
 internal class RNIImageItem {
   
   static private var imageCache: [String: UIImage] = [:];
@@ -230,34 +331,50 @@ internal class RNIImageItem {
     case IMAGE_GRADIENT;
   };
   
+  // MARK:- Properties
+  // -----------------
+  
   let type: ImageType;
   
-  var useImageCache: Bool?;
+  // MARK: Properties - `imageOptions`-Related
+  // -----------------------------------------
+
+  let tint: UIColor?;
+  let renderingMode: UIImage.RenderingMode;
   
+  // MARK: Properties - Internal/Private
+  // -----------------------------------
+  
+  var useImageCache: Bool?;
   var defaultSize = CGSize(width: 100, height: 100);
   
   private let imageValue: Any?;
   private var imageRequire: UIImage?;
+  
+  // MARK: Properties - Computed
+  // ---------------------------
   
   var shouldUseImageCache: Bool {
     // use cache if image require if `useImageCache` is not set
     self.useImageCache ?? (self.type == .IMAGE_REQUIRE)
   };
   
-  var image: UIImage? {
+  var baseImage: UIImage? {
     switch self.type {
       case .IMAGE_ASSET:
         guard let string = self.imageValue as? String,
               let image  = UIImage(named: string)
         else { return nil };
+        
         return image;
         
       case .IMAGE_SYSTEM:
         guard #available(iOS 13.0, *),
-              let string = self.imageValue as? String,
-              let image  = UIImage(systemName: string)
+              let dict        = self.imageValue as? NSDictionary,
+              let imageConfig = RNIImageSystemMaker(dict: dict)
         else { return nil };
-        return image;
+        
+        return imageConfig.image;
         
       case .IMAGE_REQUIRE:
         guard let dict = self.imageValue as? NSDictionary,
@@ -299,9 +416,42 @@ internal class RNIImageItem {
     };
   };
   
-  init?(type: ImageType, imageValue: Any?){
+  var image: UIImage? {
+    let image = self.baseImage;
+    
+    if #available(iOS 13.0, *), let tint = self.tint {
+      return image?.withTintColor(tint, renderingMode: self.renderingMode);
+      
+    } else if image?.renderingMode != self.renderingMode {
+      return image?.withRenderingMode(self.renderingMode);
+      
+    } else {
+      return image;
+    };
+  };
+  
+  // MARK:- Init
+  // -----------
+  
+  init?(type: ImageType, imageValue: Any?, imageOptions: NSDictionary?){
     self.type = type;
     self.imageValue = imageValue;
+    
+    self.tint = {
+      guard let value = imageOptions?["tint"],
+            let color = UIColor.parseColor(value: value)
+      else { return nil };
+      
+      return color;
+    }();
+    
+    self.renderingMode = {
+      guard let string = imageOptions?["renderingMode"] as? String,
+            let mode   = UIImage.RenderingMode(string: string)
+      else { return .automatic };
+      
+      return mode;
+    }();
   };
   
   convenience init?(dict: NSDictionary){
@@ -309,6 +459,10 @@ internal class RNIImageItem {
           let type       = ImageType(rawValue: typeString)
     else { return nil };
     
-    self.init(type: type, imageValue: dict["imageValue"]);
+    self.init(
+      type: type,
+      imageValue: dict["imageValue"],
+      imageOptions: dict["imageOptions"] as? NSDictionary
+    );
   };
 };
