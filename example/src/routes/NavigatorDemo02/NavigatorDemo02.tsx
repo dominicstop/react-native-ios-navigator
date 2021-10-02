@@ -118,10 +118,12 @@ export function NavigatorDemo02(props: RouteContentProps & {
               navBarButtonRightItemsConfig: [{
                 type: 'IMAGE_SYSTEM',
                 tintColor: 'white',
-                imageValue: ((currentIndex % 2 === 0)
-                  ? 'heart'
-                  : 'heart.fill'
-                ),
+                imageValue: {
+                  systemName: ((currentIndex % 2 === 0)
+                    ? 'heart'
+                    : 'heart.fill'
+                  ),
+                },
               }]
             },
             renderRoute: () => (
