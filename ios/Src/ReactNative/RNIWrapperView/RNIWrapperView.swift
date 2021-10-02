@@ -60,14 +60,14 @@ internal class RNIWrapperView: UIView {
   private var didChangeSuperview = false;
   private var touchHandler: RCTTouchHandler!;
   
-  // MARK:- RN Exported Props
+  // MARK: - RN Exported Props
   // ------------------------
   
   /// When this prop is set to `true`, the JS component will trigger
   /// `shouldNotifyComponentWillUnmount` during `componentWillUnmount`.
   @objc var shouldNotifyComponentWillUnmount: Bool = false;
   
-  // MARK:- Init/Lifecycle
+  // MARK: - Init/Lifecycle
   // ---------------------
   
   init(bridge: RCTBridge) {
@@ -107,7 +107,7 @@ internal class RNIWrapperView: UIView {
     };
   };
   
-  // MARK:- React Lifecycle
+  // MARK: - React Lifecycle
   // ----------------------
   
   override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
@@ -117,7 +117,7 @@ internal class RNIWrapperView: UIView {
     self.touchHandler.attach(to: subview);
   };
   
-  // MARK:- Internal Functions
+  // MARK: - Internal Functions
   // -------------------------
   
   func notifyForBoundsChange(_ newBounds: CGRect){
@@ -140,7 +140,7 @@ internal class RNIWrapperView: UIView {
     );
   };
   
-  // MARK:- Commands For Module
+  // MARK: - Commands For Module
   // --------------------------
   
   /// Called by `RNIWrapperViewModule.notifyComponentWillUnmount`

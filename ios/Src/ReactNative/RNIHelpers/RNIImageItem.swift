@@ -331,7 +331,7 @@ internal class RNIImageItem {
     case IMAGE_GRADIENT;
   };
   
-  // MARK:- Properties
+  // MARK: - Properties
   // -----------------
   
   let type: ImageType;
@@ -430,7 +430,7 @@ internal class RNIImageItem {
     };
   };
   
-  // MARK:- Init
+  // MARK: - Init
   // -----------
   
   init?(type: ImageType, imageValue: Any?, imageOptions: NSDictionary?){

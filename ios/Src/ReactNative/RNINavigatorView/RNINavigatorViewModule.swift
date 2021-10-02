@@ -26,7 +26,7 @@ internal class RNINavigatorViewModule: NSObject {
     );
   };
   
-  // MARK:- Module Commands: Navigator
+  // MARK: - Module Commands: Navigator
   // ---------------------------------
   
   @objc func push(
@@ -338,7 +338,7 @@ internal class RNINavigatorViewModule: NSObject {
     };
   };
   
-  // MARK:- Module Commands: Misc
+  // MARK: - Module Commands: Misc
   // ----------------------------
   
   @objc func getNativeRouteKeys(_ callback: RCTResponseSenderBlock) {

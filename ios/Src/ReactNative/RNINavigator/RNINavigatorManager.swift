@@ -25,7 +25,7 @@ public class RNINavigatorManager {
   private var didTriggerSwizzleRootViewController = false;
   private var didTriggerSetRootViewControllerBackground = false;
   
-  // MARK:- Public Methods
+  // MARK: - Public Methods
   // ---------------------
   
   public var delegate: RNINavigatorManagerDelegate?;
@@ -43,7 +43,7 @@ public class RNINavigatorManager {
     return self.navigatorViewInstances.object(forKey: key as NSNumber);
   };
   
-  // MARK:- Internal Methods
+  // MARK: - Internal Methods
   // -----------------------
   
   internal func registerNavigatorView(
@@ -97,7 +97,7 @@ public class RNINavigatorManager {
   };
 };
 
-// MARK:- RNINavigatorManagerDelegate
+// MARK: - RNINavigatorManagerDelegate
 // ----------------------------------
 
 public protocol RNINavigatorManagerDelegate {

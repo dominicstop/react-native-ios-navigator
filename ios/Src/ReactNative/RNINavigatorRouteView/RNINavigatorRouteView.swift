@@ -10,7 +10,7 @@ import UIKit;
 
 internal class RNINavigatorRouteView: UIView {
   
-  // MARK:- Embedded Types
+  // MARK: - Embedded Types
   // ---------------------
   
   enum NativeIDKeys: String {
@@ -24,7 +24,7 @@ internal class RNINavigatorRouteView: UIView {
     case visible, hidden, `default`;
   };
   
-  // MARK:- Properties
+  // MARK: - Properties
   // -----------------
   
   /// ref to the shared `RCTBridge` instance
@@ -57,7 +57,7 @@ internal class RNINavigatorRouteView: UIView {
   
   private var didSetInitialHeight = false;
   
-  // MARK:- RN Exported Event Props
+  // MARK: - RN Exported Event Props
   // ------------------------------
   
   // MARK: Push/Pop Related Events
@@ -100,7 +100,7 @@ internal class RNINavigatorRouteView: UIView {
   @objc var onSearchBarCancelButtonClicked: RCTBubblingEventBlock?;
   @objc var onSearchBarSearchButtonClicked: RCTBubblingEventBlock?;
   
-  // MARK:- RN Exported Props
+  // MARK: - RN Exported Props
   // ------------------------
   
   /// Note: Some of the exported props can be set to nil, which means that:
@@ -448,7 +448,7 @@ internal class RNINavigatorRouteView: UIView {
     }
   };
   
-  // MARK:- Init/Lifecycle
+  // MARK: - Init/Lifecycle
   // ---------------------
   
   init(bridge: RCTBridge) {
@@ -462,7 +462,7 @@ internal class RNINavigatorRouteView: UIView {
     fatalError("init(coder:) has not been implemented");
   };
   
-  // MARK:- RN Lifecycle
+  // MARK: - RN Lifecycle
   // -------------------
   
   override func reactSetFrame(_ frame: CGRect) {
@@ -523,7 +523,7 @@ internal class RNINavigatorRouteView: UIView {
   };
 };
 
-// MARK:- Convenience Property Wrappers
+// MARK: - Convenience Property Wrappers
 // ------------------------------------
 
 internal extension RNINavigatorRouteView {
@@ -579,7 +579,7 @@ internal extension RNINavigatorRouteView {
   };
 };
 
-// MARK:- Private Functions
+// MARK: - Private Functions
 // ------------------------
 
 private extension RNINavigatorRouteView {
@@ -680,7 +680,7 @@ private extension RNINavigatorRouteView {
   };
 };
 
-// MARK:- Functions for Module
+// MARK: - Functions for Module
 // ---------------------------
 
 internal extension RNINavigatorRouteView {
@@ -710,7 +710,7 @@ internal extension RNINavigatorRouteView {
   };
 };
 
-// MARK:- Internal Functions
+// MARK: - Internal Functions
 // -------------------------
 
 internal extension RNINavigatorRouteView {
@@ -859,7 +859,7 @@ internal extension RNINavigatorRouteView {
   };
 };
 
-// MARK:- RNIWrapperViewDelegate
+// MARK: - RNIWrapperViewDelegate
 // -----------------------------
 
 /// Receive `RNIWrapperView` events

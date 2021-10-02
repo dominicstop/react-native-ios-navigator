@@ -12,7 +12,7 @@ import Foundation
 /// and handles creating them based on the config.
 internal class RNINavBarItemConfig {
   
-  // MARK:- Embedded Types
+  // MARK: - Embedded Types
   // ---------------------
   
   typealias NavBarItemAction = ((_ config: RNINavBarItemConfig) -> ());
@@ -40,7 +40,7 @@ internal class RNINavBarItemConfig {
     offset: UIOffset
   );
   
-  // MARK:- Properties
+  // MARK: - Properties
   // -----------------
     
   // indicates what "type" of nav bar item to create
@@ -113,7 +113,7 @@ internal class RNINavBarItemConfig {
     };
   };
 
-  // MARK:- Init
+  // MARK: - Init
   // -----------
   
   /// Init. from a dictionary
@@ -253,7 +253,7 @@ internal class RNINavBarItemConfig {
     self.init(customView: view);
   };
   
-  // MARK:- Functions
+  // MARK: - Functions
   // ----------------
   
   @objc private func onNavBarItemPressed(_ sender: UIBarButtonItem){

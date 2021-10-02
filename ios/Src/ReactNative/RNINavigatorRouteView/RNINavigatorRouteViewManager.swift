@@ -10,7 +10,7 @@ import Foundation
 @objc(RNINavigatorRouteViewManager)
 internal class RNINavigatorRouteViewManager: RCTViewManager, RCTInvalidating {
   
-  // MARK:- Shared Bridge
+  // MARK: - Shared Bridge
   // --------------------
   
   private static var didSetObserver = false;
@@ -39,7 +39,7 @@ internal class RNINavigatorRouteViewManager: RCTViewManager, RCTInvalidating {
   };
   #endif
   
-  // MARK:- RN Module Setup
+  // MARK: - RN Module Setup
   // ----------------------
   
   override static func requiresMainQueueSetup() -> Bool {
@@ -56,7 +56,7 @@ internal class RNINavigatorRouteViewManager: RCTViewManager, RCTInvalidating {
     return RNINavigatorRouteView(bridge: self.bridge);
   };
   
-  // MARK:- RCTInvalidating
+  // MARK: - RCTInvalidating
   // ----------------------
   
   func invalidate() {

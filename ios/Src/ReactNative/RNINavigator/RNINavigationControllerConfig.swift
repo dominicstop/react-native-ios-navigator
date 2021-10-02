@@ -52,7 +52,7 @@ import Foundation
 ///
 public class RNINavigationControllerConfig {
   
-  // MARK:- Properties
+  // MARK: - Properties
   
   /// As of iOS 13, setting a custom background image or shadow image in the
   /// navigation bar does not transition properly.
@@ -73,7 +73,7 @@ public class RNINavigationControllerConfig {
   var isNavBarHidden: Bool?;
   var allowTouchEventsToPassThroughNavigationBar: Bool?;
   
-  // MARK:- Methods
+  // MARK: - Methods
   // --------------
   
   func applyIsNavBarHidden(
@@ -254,7 +254,7 @@ class RNINavigationControllerLegacyAppearanceConfig {
   var backgroundImage: Dictionary<UIBarMetrics, UIImage> = [:];
   var shadowImage: UIImage?;
   
-  // MARK:- Computed Properties
+  // MARK: - Computed Properties
   // --------------------------
   
   var hasBackgroundImage: Bool {
@@ -265,7 +265,7 @@ class RNINavigationControllerLegacyAppearanceConfig {
     self.shadowImage != nil;
   };
   
-  // MARK:- Functions
+  // MARK: - Functions
   // ----------------
   
   init() {

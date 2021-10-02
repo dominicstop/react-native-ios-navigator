@@ -9,7 +9,7 @@
 
 @interface RCT_EXTERN_MODULE(RNINavigatorRouteViewManager, RCTViewManager)
 
-// MARK:- Export Props - Events
+// MARK: - Export Props - Events
 // ----------------------------
 
 RCT_EXPORT_VIEW_PROPERTY(onRouteWillPush, RCTBubblingEventBlock);
@@ -32,7 +32,7 @@ RCT_EXPORT_VIEW_PROPERTY(onUpdateSearchResults, RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onSearchBarCancelButtonClicked, RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onSearchBarSearchButtonClicked, RCTBubblingEventBlock);
 
-// MARK:- Export Props - Values
+// MARK: - Export Props - Values
 // ----------------------------
 
 RCT_EXPORT_VIEW_PROPERTY(routeID   , NSNumber);

@@ -10,7 +10,7 @@ import Foundation
 
 internal class RNINavigatorRouteHeaderView: RCTView {
   
-  // MARK:- Embedded Types
+  // MARK: - Embedded Types
   // ---------------------
   
   enum HeaderHeightPreset: String, Equatable {
@@ -139,7 +139,7 @@ internal class RNINavigatorRouteHeaderView: RCTView {
     };
   };
   
-  // MARK:- Properties
+  // MARK: - Properties
   // -----------------
   
   var bridge: RCTBridge!;
@@ -153,7 +153,7 @@ internal class RNINavigatorRouteHeaderView: RCTView {
   private var didTriggerSetup = false;
   private var didSetInitialSize = false;
   
-  // MARK:- Computed Properties
+  // MARK: - Computed Properties
   // --------------------------
   
   var isMounted: Bool {
@@ -182,7 +182,7 @@ internal class RNINavigatorRouteHeaderView: RCTView {
     self.routeViewController?.routeView?.navigatorView?.navigationVC
   };
   
-  // MARK:- RN Exported Props
+  // MARK: - RN Exported Props
   // ------------------------
   
   private var headerConfig = HeaderConfig.defaultConfig;
@@ -221,7 +221,7 @@ internal class RNINavigatorRouteHeaderView: RCTView {
     }
   };
   
-  // MARK:- Init/Lifecycle
+  // MARK: - Init/Lifecycle
   // ---------------------
   
   init(bridge: RCTBridge) {
@@ -270,7 +270,7 @@ internal class RNINavigatorRouteHeaderView: RCTView {
     );
   };
   
-  // MARK:- Internal Functions
+  // MARK: - Internal Functions
   // -------------------------
 
   func notifyForBoundsChange(_ newBounds: CGRect){
@@ -444,7 +444,7 @@ internal class RNINavigatorRouteHeaderView: RCTView {
   };
 };
 
-// MARK:- UIScrollViewDelegate
+// MARK: - UIScrollViewDelegate
 // ---------------------------
 
 extension RNINavigatorRouteHeaderView: UIScrollViewDelegate {

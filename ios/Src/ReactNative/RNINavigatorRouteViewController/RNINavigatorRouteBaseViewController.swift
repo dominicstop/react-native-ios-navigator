@@ -20,7 +20,7 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
     var backButtonDisplayMode: UINavigationItem.BackButtonDisplayMode?;
   };
   
-  // MARK:- Properties - References
+  // MARK: - Properties - References
   // ------------------------------
   
   public weak var navigator: RNINavigatorNativeCommands?;
@@ -104,7 +104,7 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
   /// been temporarily modified.
   internal var prevBackItem = BackItemCache();
   
-  // MARK:- View Controller Lifecycle
+  // MARK: - View Controller Lifecycle
   // --------------------------------
   
   open override func willMove(toParent parent: UIViewController?){
@@ -153,7 +153,7 @@ open class RNINavigatorRouteBaseViewController: UIViewController {
     self.applyStatusBarTargetStyle(animated);
   };
   
-  // MARK:- Functions - Public
+  // MARK: - Functions - Public
   // -------------------------
   
   public func setRouteKey(_ routeKey: String){

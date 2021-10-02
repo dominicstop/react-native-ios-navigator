@@ -11,7 +11,7 @@ typealias Completion = () -> Void;
 
 public final class RNINavigatorView: UIView {
   
-  // MARK:- Embedded Types
+  // MARK: - Embedded Types
   // ---------------------
   
   enum NativeIDKeys: String {
@@ -19,7 +19,7 @@ public final class RNINavigatorView: UIView {
     case NavBarBackground;
   };
   
-  // MARK:- Properties - Internal
+  // MARK: - Properties - Internal
   // ---------------------------
 
   /// ref to the shared `RCTBridge` instance
@@ -37,7 +37,7 @@ public final class RNINavigatorView: UIView {
   
   var navigationBarFadeTransition: CATransition?;
   
-  // MARK:- Properties - Private
+  // MARK: - Properties - Private
   // --------------------------
 
   /// The routes added/to be added to the nav. stack.
@@ -56,12 +56,12 @@ public final class RNINavigatorView: UIView {
   // TODO
   private var nativeCommandRequestCompletionMap: Dictionary<String, Completion> = [:];
   
-  // MARK:- Properties - Public
+  // MARK: - Properties - Public
   // --------------------------
   
   public var navigationVC: UINavigationController!;
 
-  // MARK:- Convenient Property Wrappers
+  // MARK: - Convenient Property Wrappers
   // ----------------------------------
   
   var navigationBar: UINavigationBar {
@@ -103,7 +103,7 @@ public final class RNINavigatorView: UIView {
     };
   };
   
-  // MARK:- RN Exported Event Props
+  // MARK: - RN Exported Event Props
   // -----------------------------
   
   /// A `RNINavigatorRouteView` instance was added as a subview.
@@ -133,7 +133,7 @@ public final class RNINavigatorView: UIView {
   
   @objc var onUIConstantsDidChange: RCTBubblingEventBlock?;
   
-  // MARK:- RN Exported Props
+  // MARK: - RN Exported Props
   // ------------------------
   
   @objc public private(set) var navigatorID: NSNumber! {
@@ -260,7 +260,7 @@ public final class RNINavigatorView: UIView {
   
   @objc var disableTransparentNavBarScrollEdgeAppearance: Bool = true;
   
-  // MARK:- Init/Lifecycle
+  // MARK: - Init/Lifecycle
   // ---------------------
   
   init(bridge: RCTBridge) {
@@ -292,7 +292,7 @@ public final class RNINavigatorView: UIView {
     };
   };
   
-  // MARK:- RN Lifecycle
+  // MARK: - RN Lifecycle
   // -------------------
   
   public override func insertReactSubview(_ subview: UIView!, at atIndex: Int) {
@@ -353,7 +353,7 @@ public final class RNINavigatorView: UIView {
     };
   };
   
-  // MARK:- Misc Internals
+  // MARK: - Misc Internals
   // ---------------------
   
   /// remove this view (+ related-views) from the RN view registry
@@ -428,7 +428,7 @@ public final class RNINavigatorView: UIView {
   };
 };
 
-// MARK:- Private Functions
+// MARK: - Private Functions
 // ------------------------
 
 fileprivate extension RNINavigatorView {
@@ -583,7 +583,7 @@ fileprivate extension RNINavigatorView {
   #endif
 };
 
-// MARK:- Functions for Module
+// MARK: - Functions for Module
 // ---------------------------
 
 internal extension RNINavigatorView {
@@ -1094,7 +1094,7 @@ internal extension RNINavigatorView {
   };
 };
 
-// MARK:- Extension: RNINavigatorRouteViewDelegate
+// MARK: - Extension: RNINavigatorRouteViewDelegate
 // -----------------------------------------------
 
 /// receive events from route vc's
@@ -1146,7 +1146,7 @@ extension RNINavigatorView: RNINavigatorRouteViewControllerDelegate {
   };
 };
 
-// MARK:- Extension: RNINavigatorNativeCommands
+// MARK: - Extension: RNINavigatorNativeCommands
 // --------------------------------------------
 
 extension RNINavigatorView: RNINavigatorNativeCommands {
@@ -1225,7 +1225,7 @@ extension RNINavigatorView: RNINavigatorNativeCommands {
   };
 };
 
-// MARK:- Extension: UINavigationControllerDelegate
+// MARK: - Extension: UINavigationControllerDelegate
 // ------------------------------------------------
 
 extension RNINavigatorView: UINavigationControllerDelegate {

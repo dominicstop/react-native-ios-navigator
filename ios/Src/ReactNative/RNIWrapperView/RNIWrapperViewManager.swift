@@ -10,7 +10,7 @@ import Foundation
 @objc(RNIWrapperViewManager)
 internal class RNIWrapperViewManager: RCTViewManager {
   
-  // MARK:- Shared Bridge
+  // MARK: - Shared Bridge
   // --------------------
   
   private static var didSetObserver = false;
@@ -39,7 +39,7 @@ internal class RNIWrapperViewManager: RCTViewManager {
   };
   #endif
   
-  // MARK:- RN Module Setup
+  // MARK: - RN Module Setup
   // ----------------------
   
   override static func requiresMainQueueSetup() -> Bool {

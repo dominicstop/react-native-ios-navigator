@@ -26,7 +26,7 @@ internal class RNINavigatorRouteViewModule: NSObject {
     return false;
   };
   
-  // MARK:- Module Commands
+  // MARK: - Module Commands
   // ----------------------
     
   @objc func setHidesBackButton(

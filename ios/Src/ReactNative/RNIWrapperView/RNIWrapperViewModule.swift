@@ -27,7 +27,7 @@ internal class RNIWrapperViewModule: NSObject {
     return wrapperView;
   };
   
-  // MARK:- Module Commands: Navigator
+  // MARK: - Module Commands: Navigator
   // ---------------------------------
   
   @objc func notifyComponentWillUnmount(

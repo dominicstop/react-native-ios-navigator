@@ -9,7 +9,7 @@
 
 @interface RCT_EXTERN_MODULE(RNINavigatorViewManager, RCTViewManager)
 
-// MARK:- Export Props - Events
+// MARK: - Export Props - Events
 // ----------------------------
 
 RCT_EXPORT_VIEW_PROPERTY(onNavRouteViewAdded, RCTBubblingEventBlock);
@@ -26,7 +26,7 @@ RCT_EXPORT_VIEW_PROPERTY(onNavRouteDidShow, RCTBubblingEventBlock);
 
 RCT_EXPORT_VIEW_PROPERTY(onUIConstantsDidChange, RCTBubblingEventBlock);
 
-// MARK:- Export Props - Values
+// MARK: - Export Props - Values
 // ----------------------------
 
 RCT_EXPORT_VIEW_PROPERTY(navigatorID, NSNumber);

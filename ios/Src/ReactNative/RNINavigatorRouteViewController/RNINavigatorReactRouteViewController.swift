@@ -12,7 +12,7 @@ import UIKit;
 internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewController {
   
 
-  // MARK:- Embedded Types
+  // MARK: - Embedded Types
   // ---------------------
   
   /// The types of "root views" that a `routeView` can have
@@ -35,7 +35,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     };
   };
   
-  // MARK:- Properties
+  // MARK: - Properties
   // -----------------
   
   /// The content to show in the route
@@ -67,7 +67,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
   /// count of how many times this vc has been in "focus"
   private(set) var focusCounter = 0;
   
-  // MARK:- Convenient Property Wrappers
+  // MARK: - Convenient Property Wrappers
   // -----------------------------------
   
   override var routeID: Int {
@@ -126,7 +126,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
       !hasScrollEdgeAppearanceConfig;
   };
   
-  // MARK:- View Controller Lifecycle
+  // MARK: - View Controller Lifecycle
   // --------------------------------
   
   override func loadView() {
@@ -374,7 +374,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     };
   };
   
-  // MARK:- Internal  Functions
+  // MARK: - Internal  Functions
   // --------------------------
   
   /// Override the base impl. so that values used to reset the back config comes
@@ -499,7 +499,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
   };
 };
 
-// MARK:- Extension: RNINavigatorRouteViewDelegate
+// MARK: - Extension: RNINavigatorRouteViewDelegate
 // -----------------------------------------------
 
 /// Receive events from the "route view" that is paired with this vc.
@@ -677,7 +677,7 @@ extension RNINavigatorReactRouteViewController: RNINavigatorRouteViewDelegate {
   };
 };
 
-// MARK:- Extension: UINavigationControllerDelegate
+// MARK: - Extension: UINavigationControllerDelegate
 // ------------------------------------------------
 
 /// Handle custom view controller transitions
@@ -715,7 +715,7 @@ extension RNINavigatorReactRouteViewController:
   };
 };
 
-// MARK:- Extension: UISearchResultsUpdating
+// MARK: - Extension: UISearchResultsUpdating
 // -----------------------------------------
 
 /// Handle search controller-related events
@@ -729,7 +729,7 @@ extension RNINavigatorReactRouteViewController: UISearchResultsUpdating {
   };
 };
 
-// MARK:- Extension: UISearchBarDelegate
+// MARK: - Extension: UISearchBarDelegate
 // -------------------------------------
 
 /// Handle search bar-related events

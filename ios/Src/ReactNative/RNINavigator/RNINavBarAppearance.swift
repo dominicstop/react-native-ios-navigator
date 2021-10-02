@@ -11,7 +11,7 @@ import Foundation
 /// handles applying/resetting the nav bar appearance.
 internal class RNINavBarAppearance {
   
-  // MARK:- Embedded Types
+  // MARK: - Embedded Types
   // ---------------------
   
   /// Defines what parts of navigation bar should be customizable, i.e controls
@@ -591,7 +591,7 @@ internal class RNINavBarAppearance {
     };
   };
   
-  // MARK:- RNINavBarAppearance - Class Methods
+  // MARK: - RNINavBarAppearance - Class Methods
   // ------------------------------------------
   
   /// Reset navigation bar appearance-related properties
@@ -624,7 +624,7 @@ internal class RNINavBarAppearance {
     config.applyConfig(to: navBar);
   };
   
-  // MARK:- RNINavBarAppearance - Properties
+  // MARK: - RNINavBarAppearance - Properties
   // ---------------------------------------
   
   /// indicates whether or not the iOS 13+ appearance API was ever used
@@ -660,7 +660,7 @@ internal class RNINavBarAppearance {
   var appearanceConfigScrollEdge : NavBarAppearanceConfig?;
   var appearanceCompactScrollEdge: NavBarAppearanceConfig?;
   
-  // MARK:- RNINavBarAppearance - Computed Properties
+  // MARK: - RNINavBarAppearance - Computed Properties
   // ------------------------------------------------
   
   var appearanceConfigs: [NavBarAppearanceConfig]? {
@@ -702,7 +702,7 @@ internal class RNINavBarAppearance {
     self.appearanceCompactScrollEdge != nil
   };
   
-  // MARK:- RNINavBarAppearance - Methods
+  // MARK: - RNINavBarAppearance - Methods
   // ------------------------------------
   
   init(dict: NSDictionary?){
