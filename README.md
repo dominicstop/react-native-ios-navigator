@@ -729,12 +729,12 @@ This type is used to create and configure a "JS/React" route.<br>
 
 #####  Object Type: `NavRouteConfigItemNative`
 
-Lorum Ipsum<br>
+This type is used to create and configure a "native" route.<br>
 
-| Name and Type            | Description |
-| :----------------------- | ----------- |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| Name and Type                                     | Description                                                  |
+| :------------------------------------------------ | ------------------------------------------------------------ |
+| 🔤 **Required**: `isNativeRoute`<br/><br/>⚛️ `true` | Used to identify whether the config provided is a "JS/React" route, or a "native" route. This property must be explicitly set to `true`.<br/><br/>Since this type is used to create "native" route, you must explicitly set this property to `true`. |
+| 🔤 `initialRouteProps?`<br/><br/>⚛️ `object`        | Configures the initial "route props" that the native route will receive.<br/><br/>📝 **Note A**: The `initialRouteProps` will be merged and potentially overridden by the following:<br/>1️⃣ `NavigatorView.initialRoutes` prop (i.e. `NavRouteItem.routeProps`).<br/>2️⃣ Via a navigation command, e.g. `push({...routeProps: {...}})`.<br/><br/>📝 **Note B**: The native route (i.e. the `RNINavigatorRouteBaseViewController` instance) can access the "route props" via `self.routeProps` property. |
 
 <br>
 
