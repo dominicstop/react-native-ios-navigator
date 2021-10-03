@@ -36,6 +36,7 @@ export type NavigationObject<T = object> = {
   getNavigatorConstants    : typeof NavigatorView.prototype.getNavigatorConstants;
 
   getActiveRoutes: typeof NavigatorView.prototype.getActiveRoutes;
+  dismissModal   : typeof NavigatorView.prototype.dismissModal;
 
   // route commands
   getRouteOptions: typeof NavigatorRouteView.prototype.getRouteOptions;

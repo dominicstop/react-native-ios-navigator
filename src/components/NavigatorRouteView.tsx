@@ -358,6 +358,7 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
       sendCustomCommandToNative: this._navigatorRef.sendCustomCommandToNative,
       getNavigatorConstants    : this._navigatorRef.getNavigatorConstants,
       getActiveRoutes          : this._navigatorRef.getActiveRoutes,
+      dismissModal             : this._navigatorRef.dismissModal,
       // pass down convenience navigator commands
       replacePreviousRoute: this._navigatorRef.replacePreviousRoute,
       replaceCurrentRoute : this._navigatorRef.replaceCurrentRoute,
