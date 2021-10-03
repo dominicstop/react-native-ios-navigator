@@ -149,8 +149,6 @@ However, the older versions of the react-native template (e.g. `0.63` and below)
 | `next`            | iOS 10 to iOS 15<br>Xcode 13  |
 | `0.3.1` and Below | iOS 10 to iOS 14<br/>Xcode 12 |
 
-
-
 ------
 
 <br><br>
@@ -239,14 +237,14 @@ Each route has a corresponding `RouteOptions` object associated with it. This ob
 | Prop Name and Type                                           | Description                                                  |
 | :----------------------------------------------------------- | :----------------------------------------------------------- |
 | 🔤 **Required**: `routes`<br><br>⚛️ [`NavRoutesConfigMap`](PLACE_HOLDER_LINK) | Configures what routes can be used inside the navigator.<br><br>This prop accepts a `NavRoutesConfigMap` object. This object is a map of `NavRouteConfigItem` objects, where in the key of each property is its `routeKey` (e.g. `{ RouteA: {...}, RouteB: {...} }`).<br><br>These objects are used to create and configure the routes. Those "route config" objects include things like: <br>• **A**. what component to show when the route becomes active (i.e. the `NavRouteConfigItem.renderRoute` property),<br>• **B**. the initial `routeProps` that the route will receive (e.g. `NavRouteConfigItem.initialRouteProps`), and<br>• **C**. other misc. options that'll determine the look of the navigation bar, the route's transitions, etc. (i.e. `NavRouteConfigItem.routeOptionsDefault`). <br><br>📝 **Note**: The `routeKey` for the route config object must be unique for each route item.<br><br>There are actually two types of routes that you can use:<br>• **A**. The first one is a "<u>JS route</u>" (i.e. a route defined in react/js-side using standard react components).<br>• **B**. The second one is a "<u>native route</u>" (i.e. a route defined in the native-side using  native code (e.g. `UIViewController` + storyboards, auto layout, etc).<br><br>📌 For more details check out the [`NavRouteConfigItem`](PLACE_HOLDER_LINK) type, and the [guides](PLACE_HOLDER_LINK) section. |
-| 🔤 [**Required**: `initialRoutes`<br><br>⚛️ `Array<NavRouteItem>`](PLACE_HOLDER_LINK) | Used by the navigator to determine which initial routes to show when the navigator first mounts.<br><br>This prop accepts an array of `NavRouteItem` objects. The `routeKey` values in the objects must match with a route configured in the `routes` prop. <br><br>This prop basically represents the navigation stack during the first mount (e.g. with the first item being the root route, and the last item being the topmost active route).<br><br>For example, if you pass `[[{routeKey: 'A'}, {routeKey: 'B'}]]` as the initial routes, then route "A" will become the root route, and route "B" will become the topmost route. Thus, on the first mount  route "B" will first be shown, and by pressing the back button,  route "B" will be popped, and then route "A" will be shown. <br><br>💡 **Tip**: This behavior of being able to set the initial routes is useful for state-restoration (or for when you want to show a different initial route based on some condition). |
-| 🔤 `style`<br/><br>⚛️ `ViewStyle`                              | The style applied to the the `NavigatorView` component itself.<br><br>📝 **Note**: The layout size of the `NavigatorView` will also determine the layout size of the routes, so if the size of the navigator is 100 x 100, then the routes will also be 100 x 100. |
-| 🔤 `navBarPrefersLargeTitles`<br/><br>⚛️ `boolean`<br><br>✳️ **Default**: `true` on iOS 11+ | Specifies whether or not to use the large title style for the navigation bar title. Defaults to `true` on iOS 11 and above.<br><br>Maps to the [`UINavigationBar.prefersLargeTitle`](https://developer.apple.com/documentation/uikit/uinavigationbar/2908999-preferslargetitles) property,<br><br>📝 **Note**: This prop can be overridden on a per route basis either via `largeTitleDisplayMode` in the `NavigatorView.routes` prop, or via the `RouteViewPortal.routeOptions` prop.<br/> |
+| 🔤 [**Required**: `initialRoutes`<br><br>⚛️  `Array<NavRouteItem>`](PLACE_HOLDER_LINK) | Used by the navigator to determine which initial routes to show when the navigator first mounts.<br><br>This prop accepts an array of `NavRouteItem` objects. The `routeKey` values in the objects must match with a route configured in the `routes` prop. <br><br>This prop basically represents the navigation stack during the first mount (e.g. with the first item being the root route, and the last item being the topmost active route).<br><br>For example, if you pass `[[{routeKey: 'A'}, {routeKey: 'B'}]]` as the initial routes, then route "A" will become the root route, and route "B" will become the topmost route. Thus, on the first mount  route "B" will first be shown, and by pressing the back button,  route "B" will be popped, and then route "A" will be shown. <br><br>💡 **Tip**: This behavior of being able to set the initial routes is useful for state-restoration (or for when you want to show a different initial route based on some condition). |
+| 🔤  `style`<br/><br>⚛️  `ViewStyle`                              | The style applied to the the `NavigatorView` component itself.<br><br>📝 **Note**: The layout size of the `NavigatorView` will also determine the layout size of the routes, so if the size of the navigator is 100 x 100, then the routes will also be 100 x 100. |
+| 🔤  `navBarPrefersLargeTitles`<br/><br>⚛️  `boolean`<br><br>✳️  **Default**: `true` on iOS 11+ | Specifies whether or not to use the large title style for the navigation bar title. Defaults to `true` on iOS 11 and above.<br><br>Maps to the [`UINavigationBar.prefersLargeTitle`](https://developer.apple.com/documentation/uikit/uinavigationbar/2908999-preferslargetitles) property,<br><br>📝 **Note**: This prop can be overridden on a per route basis either via `largeTitleDisplayMode` in the `NavigatorView.routes` prop, or via the `RouteViewPortal.routeOptions` prop.<br/> |
 | 🔤  `navBarAppearance`<br/><br>⚛️ [`NavBarAppearanceCombinedConfig`](PLACE_HOLDER_LINK) | This prop allows for the customization of the [`UINavigationBar`](https://developer.apple.com/documentation/uikit/uinavigationbar). The navigation bar can be customized via two modes, namely:<br>• **A**. "legacy" mode (iOS 12 and below), and<br>• **B**. "appearance" mode (iOS 13 and above).<br><br>The "legacy" mode, as the name would suggest, uses ["legacy customizations"](https://developer.apple.com/documentation/uikit/uinavigationbar/legacy_customizations)  (where in the navigation bar is customized using the old API via directly manipulating the navigation bar object's properties).<br><br>The "appearance" mode on the other hand, uses `UINavigationBarAppearance` to apply customizations for each of the "navigation bar" styles/states, namely:<br>1️⃣  `standardAppearance` (normal height),<br>2️⃣ `compactAppearance` (compact-height, e.g. iPhones in landscape, etc.),<br>3️⃣  `scrollEdgeAppearance` (when the navigation bar doesn't have content behind it and is currently scrolled all the way to the top), and <br>4️⃣ `compactScrollEdgeAppearance` (a combination of compact and scroll edge, requires iOS 15+) .<br><br>📝 **Note**: There is one big caveat though, once "appearance" mode is used, "legacy" mode no longer works (it's some sort of bug in `UIKit`). In other words, switching between the two modes is not supported, only stick to one. When targeting iOS 12 and below, use "legacy", otherwise use "appearance".<br><br>💡 **Tip**: Check the [guides](PLACE_HOLDER_LINK) section for examples on how to customize the navigation bar, or browse the [`NavBarAppearanceCombinedConfig`](PLACE_HOLDER_LINK) object for the full list of properties.<br><br>💡 **Tip**: The navigation bar can also be customized on a per-route basis via the `RouteOptions.navBarAppearanceOverride`. You can set this property either via `routeOptionsDefault` in a route's config (in the `NavigatorView.routes` prop), or via the [`RouteViewPortal`](PLACE_HOLDER_LINK) component using the `RouteViewPortal.routeOptions` prop. |
-| 🔤 `isNavBarTranslucent`<br/><br>⚛️ `boolean`                  | Determines whether or not the the navigation bar is translucent. Maps to [`UINavigationBar.isTranslucent`](https://developer.apple.com/documentation/uikit/uinavigationbar/1624928-istranslucent). |
-| `isInteractivePopGestureEnabled`<br/><br>⚛️ `boolean`         | Enables or disables the `interactivePopGestureRecognizer`. In other words, this prop sets whether swiping on the left edge of the screen will pop the current route. Defaults to `true`. |
-| 🔤 `shouldSwizzleRootViewController`<br/><br>⚛️ `boolean`      | Determines whether or not the root view controller's default implementation is changed at run-time (i.e. "swizzled") to enable certain features (e.g. like enabling "view controller based status bar" via delegating `childForStatusBarStyle` to a child view controller, etc).<br><br>The "injected" implementation is lifted from [`RNIRootViewController`](PLACE_HOLDER_LINK). <br><br>Defaults to `true`, however this will only take effect for the first `NavigatorView` component, and also only if the parent view controller is the same instance as the one in `window.rootViewController`.<br><br>For brownfield projects with native code (or for projects with an existing navigation solution), set this to `false` to disable this behavior. |
-| 🔤 `disableTransparentNavBarScrollEdgeAppearance`<br/><br/>⚛️ `boolean`<br/><br>✳️ **Default**: `true` | In iOS 15+ the navigation bar by default is now configured to have a transparent background until the user scrolls and there's some content behind the navigation bar (i.e. the `scrollEdgeAppearance` is now configured to be transparent by default).<br><br>This prop determines whether or not to apply a  background color to navigation bar using `scrollEdgeAppearance` . Set this to false if you want to keep the default behavior<br><br>📝 **Note A**: You can manually do what this prop does by providing your own `scrollEdgeAppearance` appearance config either globally via the `NavigatorView.navBarAppearance` prop, or on a per-route basis via the `RouteOptions.navBarAppearanceOverride` property.<br/><br/>📝 **Note B**: This prop only takes effect on iOS 15+ and when a route disables the large title. This prop does not affect native routes. |
+| 🔤  `isNavBarTranslucent`<br/><br>⚛️  `boolean`                  | Determines whether or not the the navigation bar is translucent. Maps to [`UINavigationBar.isTranslucent`](https://developer.apple.com/documentation/uikit/uinavigationbar/1624928-istranslucent). |
+| `isInteractivePopGestureEnabled`<br/><br>⚛️  `boolean`         | Enables or disables the `interactivePopGestureRecognizer`. In other words, this prop sets whether swiping on the left edge of the screen will pop the current route. Defaults to `true`. |
+| 🔤  `shouldSwizzleRootViewController`<br/><br>⚛️  `boolean`      | Determines whether or not the root view controller's default implementation is changed at run-time (i.e. "swizzled") to enable certain features (e.g. like enabling "view controller based status bar" via delegating `childForStatusBarStyle` to a child view controller, etc).<br><br>The "injected" implementation is lifted from [`RNIRootViewController`](PLACE_HOLDER_LINK). <br><br>Defaults to `true`, however this will only take effect for the first `NavigatorView` component, and also only if the parent view controller is the same instance as the one in `window.rootViewController`.<br><br>For brownfield projects with native code (or for projects with an existing navigation solution), set this to `false` to disable this behavior. |
+| 🔤  `disableTransparentNavBarScrollEdgeAppearance`<br/><br/>⚛️  `boolean`<br/><br>✳️  **Default**: `true` | In iOS 15+ the navigation bar by default is now configured to have a transparent background until the user scrolls and there's some content behind the navigation bar (i.e. the `scrollEdgeAppearance` is now configured to be transparent by default).<br><br>This prop determines whether or not to apply a  background color to navigation bar using `scrollEdgeAppearance` . Set this to false if you want to keep the default behavior<br><br>📝 **Note A**: You can manually do what this prop does by providing your own `scrollEdgeAppearance` appearance config either globally via the `NavigatorView.navBarAppearance` prop, or on a per-route basis via the `RouteOptions.navBarAppearanceOverride` property.<br/><br/>📝 **Note B**: This prop only takes effect on iOS 15+ and when a route disables the large title. This prop does not affect native routes. |
 
 <br>
 
@@ -254,9 +252,9 @@ Each route has a corresponding `RouteOptions` object associated with it. This ob
 
 | Prop Name and Type                                           | Description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
-| 🔤 `renderNavBarLeftItem`<br><br>⚛️ [`RenderNavItem`](PLACE_HOLDER_LINK) i.e. `(navigation: NavigationObject) => ReactElement ¦ null ¦ undefined`<br/><br/>📌 [`navigation: NavigationObject`](PLACE_HOLDER_LINK) | Sets a default left item for the navigation bar for all the routes.<br><br>📝 **Note A**: The left navigation bar item can be overridden/replaced on a per route basis via `NavRouteConfigItem.renderNavBarLeftItem` in the `NavigatorView.routes` prop, or via  `RouteViewPortal.renderNavBarLeftItem` prop.<br><br>📝 **Note B**: If this prop is used, it'll implicitly set `RouteOptions.navBarButtonLeftItemsConfig` to `{ type: 'CUSTOM' }` for a route's  `routeOptions`. So if the `navBarButtonLeftItemsConfig` is explicitly set to anything other than "custom", then this prop will not do anything.<br><br>📝 **Note C**: If a route's `RouteOptions.leftItemsSupplementBackButton`  is set to `false` (which it isn't by default), then it will replace the back button (i.e. the back button will not be shown). |
-| 🔤 `renderNavBarRightItem`<br/><br>⚛️ [`RenderNavItem`](PLACE_HOLDER_LINK) i.e. `(navigation: NavigationObject) => ReactElement ¦ null ¦ undefined`<br/><br/>📌 [`navigation: NavigationObject`](PLACE_HOLDER_LINK) | Sets a default right item for the navigation bar for all the routes.<br/><br/>📝 **Note A**: The right navigation bar item can be overridden/replaced on a per route basis via `NavRouteConfigItem.renderNavBarRightItem` in the `NavigatorView.routes` prop, or via  `RouteViewPortal.renderNavBarRightItem` prop.<br/><br/>📝 **Note B**: If this prop is used, it'll implicitly set `RouteOptions.navBarButtonRightItemsConfig` to `{ type: 'CUSTOM' }` for a route's  `routeOptions`. So if the `navBarButtonRightItemsConfig` is explicitly set to anything other than "custom", then this prop will not do anything. |
-| 🔤 `renderNavBarTitleItem`<br/><br>⚛️ [`RenderNavItem`](PLACE_HOLDER_LINK) i.e. `(navigation: NavigationObject) => ReactElement ¦ null ¦ undefined`<br/><br/>📌 [`navigation: NavigationObject`](PLACE_HOLDER_LINK) | Sets a default title item for the navigation bar for all the routes.<br/><br/>📝 **Note**: The title navigation bar item can be overridden/replaced on a per route basis via `NavRouteConfigItem.renderNavBarTitleItem` in the `NavigatorView.routes` prop, or via  `RouteViewPortal.renderNavBarTitleItem` prop.<br/><br/>💡 **Tip**: You can access the route's `routeTitle` via the `navigation` object (i.e. `navigation.routeOptions.routeTitle`). |
+| 🔤  `renderNavBarLeftItem`<br><br>⚛️ [`RenderNavItem`](PLACE_HOLDER_LINK) i.e. `(navigation: NavigationObject) => ReactElement ¦ null ¦ undefined`<br/><br/>📌 [`navigation: NavigationObject`](PLACE_HOLDER_LINK) | Sets a default left item for the navigation bar for all the routes.<br><br>📝 **Note A**: The left navigation bar item can be overridden/replaced on a per route basis via `NavRouteConfigItem.renderNavBarLeftItem` in the `NavigatorView.routes` prop, or via  `RouteViewPortal.renderNavBarLeftItem` prop.<br><br>📝 **Note B**: If this prop is used, it'll implicitly set `RouteOptions.navBarButtonLeftItemsConfig` to `{ type: 'CUSTOM' }` for a route's  `routeOptions`. So if the `navBarButtonLeftItemsConfig` is explicitly set to anything other than "custom", then this prop will not do anything.<br><br>📝 **Note C**: If a route's `RouteOptions.leftItemsSupplementBackButton`  is set to `false` (which it isn't by default), then it will replace the back button (i.e. the back button will not be shown). |
+| 🔤  `renderNavBarRightItem`<br/><br>⚛️ [`RenderNavItem`](PLACE_HOLDER_LINK) i.e. `(navigation: NavigationObject) => ReactElement ¦ null ¦ undefined`<br/><br/>📌 [`navigation: NavigationObject`](PLACE_HOLDER_LINK) | Sets a default right item for the navigation bar for all the routes.<br/><br/>📝 **Note A**: The right navigation bar item can be overridden/replaced on a per route basis via `NavRouteConfigItem.renderNavBarRightItem` in the `NavigatorView.routes` prop, or via  `RouteViewPortal.renderNavBarRightItem` prop.<br/><br/>📝 **Note B**: If this prop is used, it'll implicitly set `RouteOptions.navBarButtonRightItemsConfig` to `{ type: 'CUSTOM' }` for a route's  `routeOptions`. So if the `navBarButtonRightItemsConfig` is explicitly set to anything other than "custom", then this prop will not do anything. |
+| 🔤  `renderNavBarTitleItem`<br/><br>⚛️ [`RenderNavItem`](PLACE_HOLDER_LINK) i.e. `(navigation: NavigationObject) => ReactElement ¦ null ¦ undefined`<br/><br/>📌 [`navigation: NavigationObject`](PLACE_HOLDER_LINK) | Sets a default title item for the navigation bar for all the routes.<br/><br/>📝 **Note**: The title navigation bar item can be overridden/replaced on a per route basis via `NavRouteConfigItem.renderNavBarTitleItem` in the `NavigatorView.routes` prop, or via  `RouteViewPortal.renderNavBarTitleItem` prop.<br/><br/>💡 **Tip**: You can access the route's `routeTitle` via the `navigation` object (i.e. `navigation.routeOptions.routeTitle`). |
 
 <br>
 
@@ -264,12 +262,12 @@ Each route has a corresponding `RouteOptions` object associated with it. This ob
 
 | Prop Name and Type                                           | Description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
-| 🔤 `onNavRouteWillPop`<br/><br/>⚛️ [`OnNavRoutePopEvent`](PLACE_HOLDER_LINK)<br><br>📌 [`OnNavRoutePopEventObject`](src/types/RNINavigatorViewEvents.ts) | Event that is triggered when a route is about to be "popped" from the navigation stack (i.e. when the pop transition has started). |
-| 🔤 `onNavRouteDidPop`<br><br>⚛️ [`OnNavRoutePopEvent`](PLACE_HOLDER_LINK)<br><br>📌 [`OnNavRoutePopEventObject`](src/types/RNINavigatorViewEvents.ts) | Event that is triggered when a route has been "popped" from the navigation stack (i.e. the pop transition has already been completed). |
-| 🔤 `onCustomCommandFromNative`<br><br>⚛️ [`OnCustomCommandFromNativeEvent`](PLACE_HOLDER_LINK)<br><br>📌 [`OnCustomCommandFromNativeEventObject`](src/types/RNINavigatorViewEvents.ts) | Event that is triggered from the native-side via the `RNINavigatorNativeCommands.sendCustomCommandToJS` delegate method.<br><br>This event exists to receive custom user-defined commands from a `RNINavigatorView` (i.e. for custom native code integration). |
-| 🔤 `onNavRouteWillShow`<br/><br/>⚛️ [`OnNavRouteWillShowEvent`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnNavRouteWillShowEventObject`](src/types/RNINavigatorViewEvents.ts) | Gets called just before the navigator shows the route (similar to `onRouteWillFocus` event).<br><br>This event maps to [`UINavigationControllerDelegate.navigationController(_:willShow:animated:)`](https://developer.apple.com/documentation/uikit/uinavigationcontrollerdelegate/1621878-navigationcontroller). |
-| 🔤 `onNavRouteDidShow`<br/><br/>⚛️ [`OnNavRouteDidShowEvent`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnNavRouteDidShowEventObject`](src/types/RNINavigatorViewEvents.ts) | Gets called after the navigator shows the route (similar to `onRouteDidFocus` event).<br/><br/>This event maps to [`UINavigationControllerDelegate.navigationController(_:didShow:animated:)`](https://developer.apple.com/documentation/uikit/uinavigationcontrollerdelegate/1621848-navigationcontroller). |
-| 🔤 `onUIConstantsDidChange`<br/><br/>⚛️ [`OnUIConstantsDidChangeEvent`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnUIConstantsDidChangeEventObject`](src/types/RNINavigatorViewEvents.ts) | Gets called whenever the UI-related constants changes (e.g. this event is triggered when the screen rotates, the navigation bar visibility is changed, etc).<br><br>The event object contains the current safe area values, status bar height, and the navigator frame.<br><br>💡 **Tip**: You can also access the UI constants via `NavigatorUIConstantsContext` or via the `useNavigatorUIConstants` hook. |
+| 🔤  `onNavRouteWillPop`<br/><br/>⚛️ [`OnNavRoutePopEvent`](PLACE_HOLDER_LINK)<br><br>📌 [`OnNavRoutePopEventObject`](src/types/RNINavigatorViewEvents.ts) | Event that is triggered when a route is about to be "popped" from the navigation stack (i.e. when the pop transition has started). |
+| 🔤  `onNavRouteDidPop`<br><br>⚛️ [`OnNavRoutePopEvent`](PLACE_HOLDER_LINK)<br><br>📌 [`OnNavRoutePopEventObject`](src/types/RNINavigatorViewEvents.ts) | Event that is triggered when a route has been "popped" from the navigation stack (i.e. the pop transition has already been completed). |
+| 🔤  `onCustomCommandFromNative`<br><br>⚛️ [`OnCustomCommandFromNativeEvent`](PLACE_HOLDER_LINK)<br><br>📌 [`OnCustomCommandFromNativeEventObject`](src/types/RNINavigatorViewEvents.ts) | Event that is triggered from the native-side via the `RNINavigatorNativeCommands.sendCustomCommandToJS` delegate method.<br><br>This event exists to receive custom user-defined commands from a `RNINavigatorView` (i.e. for custom native code integration). |
+| 🔤  `onNavRouteWillShow`<br/><br/>⚛️ [`OnNavRouteWillShowEvent`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnNavRouteWillShowEventObject`](src/types/RNINavigatorViewEvents.ts) | Gets called just before the navigator shows the route (similar to `onRouteWillFocus` event).<br><br>This event maps to [`UINavigationControllerDelegate.navigationController(_:willShow:animated:)`](https://developer.apple.com/documentation/uikit/uinavigationcontrollerdelegate/1621878-navigationcontroller). |
+| 🔤  `onNavRouteDidShow`<br/><br/>⚛️ [`OnNavRouteDidShowEvent`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnNavRouteDidShowEventObject`](src/types/RNINavigatorViewEvents.ts) | Gets called after the navigator shows the route (similar to `onRouteDidFocus` event).<br/><br/>This event maps to [`UINavigationControllerDelegate.navigationController(_:didShow:animated:)`](https://developer.apple.com/documentation/uikit/uinavigationcontrollerdelegate/1621848-navigationcontroller). |
+| 🔤  `onUIConstantsDidChange`<br/><br/>⚛️ [`OnUIConstantsDidChangeEvent`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnUIConstantsDidChangeEventObject`](src/types/RNINavigatorViewEvents.ts) | Gets called whenever the UI-related constants changes (e.g. this event is triggered when the screen rotates, the navigation bar visibility is changed, etc).<br><br>The event object contains the current safe area values, status bar height, and the navigator frame.<br><br>💡 **Tip**: You can also access the UI constants via `NavigatorUIConstantsContext` or via the `useNavigatorUIConstants` hook. |
 
 <br>
 
@@ -279,10 +277,10 @@ Each route has a corresponding `RouteOptions` object associated with it. This ob
 
 | Name                                                         | Description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
-| 🔤 `getActiveRoutes`<br/><br/>⚛️ [`() => Array<NavRouteStackItem>`](PLACE_HOLDER_LINK) | Returns an array of `NavRouteStackItem` objects that represents the current state of the  navigation stack.<br><br>This method is useful for getting the `routeIndex` of a particular route, or for getting the current active routes. |
-| 🔤 `sendCustomCommandToNative`<br/><br/>⚛️ `(commandKey: string, commandData: object ¦ null) => Promise<object ¦ null>` | Will trigger  the `RNINavigatorViewDelegate.didReceiveCustomCommandFromJS` delegate method for the current navigator view instance.<br><br>This method exists to send custom user-defined commands to the `RNINavigatorView`'s delegate (i.e. for custom native code integration).<br><br>📌 Check the [native integration guide](PLACE_HOLDER_LINK) section for more details. |
-| 🔤 `getNavigatorConstants`<br/><br/>⚛️ [`() => Promise<NavigatorConstantsObject>`](PLACE_HOLDER_LINK) | Resolves to an object containing values related to UI (e.g. `navBarHeight`, navigator bounds, `safeAreaInsets`, `statusBarHeight`), and the current state of the navigator (e.g. whether a view controller is being presented modally, the current  `activeRoutes`, the current topmost view controller, and the current visible view controller). |
-| 🔤 `dismissModal`<br/><br/>⚛️ [`(animated: Bool) => Promise<void>`](PLACE_HOLDER_LINK) | This will close any modals that are currently being presented. |
+| 🔤  `getActiveRoutes`<br/><br/>⚛️ [`() => Array<NavRouteStackItem>`](PLACE_HOLDER_LINK) | Returns an array of `NavRouteStackItem` objects that represents the current state of the  navigation stack.<br><br>This method is useful for getting the `routeIndex` of a particular route, or for getting the current active routes. |
+| 🔤  `sendCustomCommandToNative`<br/><br/>⚛️  `(commandKey: string, commandData: object ¦ null) => Promise<object ¦ null>` | Will trigger  the `RNINavigatorViewDelegate.didReceiveCustomCommandFromJS` delegate method for the current navigator view instance.<br><br>This method exists to send custom user-defined commands to the `RNINavigatorView`'s delegate (i.e. for custom native code integration).<br><br>📌 Check the [native integration guide](PLACE_HOLDER_LINK) section for more details. |
+| 🔤  `getNavigatorConstants`<br/><br/>⚛️ [`() => Promise<NavigatorConstantsObject>`](PLACE_HOLDER_LINK) | Resolves to an object containing values related to UI (e.g. `navBarHeight`, navigator bounds, `safeAreaInsets`, `statusBarHeight`), and the current state of the navigator (e.g. whether a view controller is being presented modally, the current  `activeRoutes`, the current topmost view controller, and the current visible view controller). |
+| 🔤  `dismissModal`<br/><br/>⚛️ [`(animated: Bool) => Promise<void>`](PLACE_HOLDER_LINK) | This will close any modals that are currently being presented. |
 
 <br>
 
@@ -298,15 +296,15 @@ Listed in this section are commands that can be called to control the navigator 
 
 | Name and Type                                                | Description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
-| 🔤 `push`<br/><br/>⚛️ `(routeItem, options?) => Promise<void>`<br/><br/>📌 [`routeItem: NavRouteItem`](PLACE_HOLDER_LINK)<br>📌 [`options: NavCommandPushOptions`](PLACE_HOLDER_LINK) | Push a new route into the navigation stack. The `routeItem` to be pushed must be a route that is declared in the `NavigatorView.routes` prop. This command maps to the  [`UINavigationController.pushViewController`](https://developer.apple.com/documentation/uikit/uinavigationcontroller/1621887-pushviewcontroller) method.<br><br>The `routeItem` parameter accepts a `NavRouteItem` object. Via this object you can define what route to show using the `NavRouteItem. routeKey` property. You can also pass data to the new route using the `NavRouteItem.routeProps`  property, or optionally pass new route options via the `NavRouteItem.routeOptions` property.<br><br>💡 **Tip**: You can set a temporary push transition (e.g. `FadePush`, `SlideLeftPush`, etc), or disable the transition animation entirely via the `options` parameter. |
-| 🔤 `pop`<br/><br/>⚛️ `(options?) => Promise<void>`<br/><br/>📌 [`options: NavCommandPopOptions`](PLACE_HOLDER_LINK) | Pop the current active route out of the navigation stack. This command maps to the  [`UINavigationController.popViewController`](https://developer.apple.com/documentation/uikit/uinavigationcontroller/1621886-popviewcontroller) method.<br><br/>💡 **Tip**: You can set a temporary pop transition (e.g. `FadePop`, `SlideLeftPop`, etc.), or disable the transition animations entirely via the `options` parameter. |
-| 🔤 `popToRoot`<br/><br/>⚛️ `(options?) => Promise<void>`<br/><br>📌 [`popToRoot: NavCommandPopOptions`](PLACE_HOLDER_LINK) | Pop all the routes except the first route in the navigation stack. This can be used as a quick way to go back to the root route.<br><br>This command maps to the  [`UINavigationController.popToRootViewController`](https://developer.apple.com/documentation/uikit/uinavigationcontroller/1621855-poptorootviewcontroller) method. |
-| 🔤 `removeRoute`<br/><br/>⚛️ `(routeIndex: number, animated?: boolean = false) => Promise<void>` | Removes a specific route from the navigation stack. The argument passed to `routeIndex` determines which route to remove from the navigation stack (e.g. a value of `0` means to move the root route, and so on).<br><br>• 💡 **Tip**: You can call `getActiveRoutes` to get the current state of the navigation stack.<br><br/>• 💡 **Tip**: This command is useful for situations where in a given route in the navigation stack becomes "stale", i.e. it no longer makes sense to show that route when navigating backwards.<br><br>• An example could be a user navigating from a "registration" route, to a "registration success" route. If the back button is pressed, it doesn't make sense for the "registration" route to appear again, so you remove it from the navigation stack. |
-| 🔤 `removeRoutes`<br/><br/>⚛️ `(routeIndices: number, animated?: boolean = false) => Promise<void>` | Removes  the specified routes from the navigation stack. The argument passed to `routeIndices` determines which routes to remove from the navigation stack, where a value of `0` means to remove the root route, and so on.<br><br>This command is similar to `removeRoute`, but this lets you remove multiple routes at once.<br><br>💡 **Tip**: You can call `getActiveRoutes` to get the current state of the navigation stack.<br><br>💡 **Tip**: Similar to `removeRoute`, this command is useful for selectively removing routes that have gone "stale" all at once. |
-| 🔤 `replaceRoute`<br/><br/>⚛️ `(prevRouteIndex: number, routeItem: NavRouteItem, animated?: boolean = false) => Promise<void>`<br><br>📌 [`routeItem: NavRouteItem`](PLACE_HOLDER_LINK) | Replaces an existing active route in the navigation stack with a new route that matches the  specified `prevRouteIndex` argument.<br><br>A new route will be created based on the specified `routeItem` provided, and it will then be used as the replacement route. <br><br>📝 **Note**: Just like the `push` command, the `routeItem` must be a route that is declared in the `NavigatorView.routes` prop.<br><br>💡 **Tip**: You can call `getActiveRoutes` to get the current state of the navigation stack. |
-| 🔤 `insertRoute`<br/><br/>⚛️ `(routeItem: NavRouteItem, atIndex: number, animated?: boolean = false) => Promise<void>`<br><br>📌 [`routeItem: NavRouteItem`](PLACE_HOLDER_LINK) | Similar to the `push` command, this lets you create a new route based on the provided `routeItem`, and then add it to the navigation stack. But instead of only being able to add routes to the top, this command let's you arbitrarily add a route anywhere in the navigation stack based on the provided `atIndex` argument.<br/><br/>📝 **Note**: The `routeItem` to be added must be a route that is declared in the `NavigatorView.routes` prop, and the `atIndex` argument must not exceed the current size of the stack. |
-| 🔤 `setRoutes`<br/><br/>⚛️ `(transform: SetRoutesTransformCallback, animated?: boolean = false) => Promise<void>`<br><br>📌 [`transform: SetRoutesTransformCallback`](PLACE_HOLDER_LINK)<br>📌 [`NavRouteStackPartialItem`](PLACE_HOLDER_LINK) | Allows for the manipulation of the current routes in the navigation stack. Amongst all the navigation commands, this is the most flexible (and complex) because it allows you to add, remove, reorder, replace, or completely change the current active routes in navigation stack.<br><br>The `transform` parameter accepts a function callback that, when called, will receive an array of objects that represents the current active routes in the navigation stack.<br><br>The `transform` callback must then return an array of route objects that will be used to set the new navigation stack (i.e. the new routes that will replace the current active routes).<br><br>Any of the previous active routes that are not returned from the `transform` callback will be removed from the navigation stack, and conversely, any new routes that weren't in the previous active routes will be created, and then added to the navigation stack.<br><br>📝 **Note**: The `transform` callback will receive an array of [`NavRouteStackPartialItem`](PLACE_HOLDER_LINK) objects that represents the current active routes in the navigation stack. This object has an optional property called `routeID`. The number value in the `routeID` property is auto-generated internally, and acts as a unique identifier for a route (as such, existing active routes in the navigation stack will have an existing associated `routeID`).<br><br>If the `transform` callback returns a `NavRouteStackPartialItem` object that does not have a `routeID`, then it means that it's a new route (i.e. it will create a new route based on that object, and then add it to the navigation stack).<br><br>Conversely, in order to "preserve" an active route and let it  remain in the navigation stack, then simply return that route's corresponding object from the `NavRouteStackPartialItem` items along with its associated  `routeID` value.  <br><br>💡 **Tip**: This command is useful if you need complete control over the navigation stack. Amongst all the other navigation commands, this is the most direct mapping to [`UINavigationController.setViewControllers`](https://developer.apple.com/documentation/uikit/uinavigationcontroller/1621861-setviewcontrollers). Jump to the [`setRoutes` guides section](PLACE_HOLDER_LINK) for usage examples. |
-| 🔤 `setNavigationBarHidden`<br/><br/>⚛️ `(isHidden: boolean, animated: boolean) => Promise<void>` | Programmatically shows or hides the navigation bar. Maps to the [`UINavigationController.setNavigationBarHidden`](https://developer.apple.com/documentation/uikit/uinavigationcontroller/1621885-setnavigationbarhidden) method.<br><br>💡 **Tip**: If you want to immediately hide the navigation bar when a route is pushed (i.e. you don't want the navigation bar to be visible when that route is pushed), you can use the `RouteOptions.navigationBarVisibility` property instead.<br><br>The `navigationBarVisibility` property can either be set via `routeOptionsDefault` (which can be found in the route's config in the `NavigatorView.routes` prop), or via the [`RouteViewPortal`](PLACE_HOLDER_LINK) component using the `RouteViewPortal.routeOptions` prop.<br><br>💡 **Tip**: Like all the other navigation commands, this command is also async. So this command is useful if you want to wait for the navigation bar hide animation to finish first before doing something else. |
+| 🔤  `push`<br/><br/>⚛️  `(routeItem, options?) => Promise<void>`<br/><br/>📌 [`routeItem: NavRouteItem`](PLACE_HOLDER_LINK)<br>📌 [`options: NavCommandPushOptions`](PLACE_HOLDER_LINK) | Push a new route into the navigation stack. The `routeItem` to be pushed must be a route that is declared in the `NavigatorView.routes` prop. This command maps to the  [`UINavigationController.pushViewController`](https://developer.apple.com/documentation/uikit/uinavigationcontroller/1621887-pushviewcontroller) method.<br><br>The `routeItem` parameter accepts a `NavRouteItem` object. Via this object you can define what route to show using the `NavRouteItem. routeKey` property. You can also pass data to the new route using the `NavRouteItem.routeProps`  property, or optionally pass new route options via the `NavRouteItem.routeOptions` property.<br><br>💡 **Tip**: You can set a temporary push transition (e.g. `FadePush`, `SlideLeftPush`, etc), or disable the transition animation entirely via the `options` parameter. |
+| 🔤  `pop`<br/><br/>⚛️  `(options?) => Promise<void>`<br/><br/>📌 [`options: NavCommandPopOptions`](PLACE_HOLDER_LINK) | Pop the current active route out of the navigation stack. This command maps to the  [`UINavigationController.popViewController`](https://developer.apple.com/documentation/uikit/uinavigationcontroller/1621886-popviewcontroller) method.<br><br/>💡 **Tip**: You can set a temporary pop transition (e.g. `FadePop`, `SlideLeftPop`, etc.), or disable the transition animations entirely via the `options` parameter. |
+| 🔤  `popToRoot`<br/><br/>⚛️  `(options?) => Promise<void>`<br/><br>📌 [`popToRoot: NavCommandPopOptions`](PLACE_HOLDER_LINK) | Pop all the routes except the first route in the navigation stack. This can be used as a quick way to go back to the root route.<br><br>This command maps to the  [`UINavigationController.popToRootViewController`](https://developer.apple.com/documentation/uikit/uinavigationcontroller/1621855-poptorootviewcontroller) method. |
+| 🔤  `removeRoute`<br/><br/>⚛️  `(routeIndex: number, animated?: boolean = false) => Promise<void>` | Removes a specific route from the navigation stack. The argument passed to `routeIndex` determines which route to remove from the navigation stack (e.g. a value of `0` means to move the root route, and so on).<br><br>• 💡 **Tip**: You can call `getActiveRoutes` to get the current state of the navigation stack.<br><br/>• 💡 **Tip**: This command is useful for situations where in a given route in the navigation stack becomes "stale", i.e. it no longer makes sense to show that route when navigating backwards.<br><br>• An example could be a user navigating from a "registration" route, to a "registration success" route. If the back button is pressed, it doesn't make sense for the "registration" route to appear again, so you remove it from the navigation stack. |
+| 🔤  `removeRoutes`<br/><br/>⚛️  `(routeIndices: number, animated?: boolean = false) => Promise<void>` | Removes  the specified routes from the navigation stack. The argument passed to `routeIndices` determines which routes to remove from the navigation stack, where a value of `0` means to remove the root route, and so on.<br><br>This command is similar to `removeRoute`, but this lets you remove multiple routes at once.<br><br>💡 **Tip**: You can call `getActiveRoutes` to get the current state of the navigation stack.<br><br>💡 **Tip**: Similar to `removeRoute`, this command is useful for selectively removing routes that have gone "stale" all at once. |
+| 🔤  `replaceRoute`<br/><br/>⚛️  `(prevRouteIndex: number, routeItem: NavRouteItem, animated?: boolean = false) => Promise<void>`<br><br>📌 [`routeItem: NavRouteItem`](PLACE_HOLDER_LINK) | Replaces an existing active route in the navigation stack with a new route that matches the  specified `prevRouteIndex` argument.<br><br>A new route will be created based on the specified `routeItem` provided, and it will then be used as the replacement route. <br><br>📝 **Note**: Just like the `push` command, the `routeItem` must be a route that is declared in the `NavigatorView.routes` prop.<br><br>💡 **Tip**: You can call `getActiveRoutes` to get the current state of the navigation stack. |
+| 🔤  `insertRoute`<br/><br/>⚛️  `(routeItem: NavRouteItem, atIndex: number, animated?: boolean = false) => Promise<void>`<br><br>📌 [`routeItem: NavRouteItem`](PLACE_HOLDER_LINK) | Similar to the `push` command, this lets you create a new route based on the provided `routeItem`, and then add it to the navigation stack. But instead of only being able to add routes to the top, this command let's you arbitrarily add a route anywhere in the navigation stack based on the provided `atIndex` argument.<br/><br/>📝 **Note**: The `routeItem` to be added must be a route that is declared in the `NavigatorView.routes` prop, and the `atIndex` argument must not exceed the current size of the stack. |
+| 🔤  `setRoutes`<br/><br/>⚛️  `(transform: SetRoutesTransformCallback, animated?: boolean = false) => Promise<void>`<br><br>📌 [`transform: SetRoutesTransformCallback`](PLACE_HOLDER_LINK)<br>📌 [`NavRouteStackPartialItem`](PLACE_HOLDER_LINK) | Allows for the manipulation of the current routes in the navigation stack. Amongst all the navigation commands, this is the most flexible (and complex) because it allows you to add, remove, reorder, replace, or completely change the current active routes in navigation stack.<br><br>The `transform` parameter accepts a function callback that, when called, will receive an array of objects that represents the current active routes in the navigation stack.<br><br>The `transform` callback must then return an array of route objects that will be used to set the new navigation stack (i.e. the new routes that will replace the current active routes).<br><br>Any of the previous active routes that are not returned from the `transform` callback will be removed from the navigation stack, and conversely, any new routes that weren't in the previous active routes will be created, and then added to the navigation stack.<br><br>📝 **Note**: The `transform` callback will receive an array of [`NavRouteStackPartialItem`](PLACE_HOLDER_LINK) objects that represents the current active routes in the navigation stack. This object has an optional property called `routeID`. The number value in the `routeID` property is auto-generated internally, and acts as a unique identifier for a route (as such, existing active routes in the navigation stack will have an existing associated `routeID`).<br><br>If the `transform` callback returns a `NavRouteStackPartialItem` object that does not have a `routeID`, then it means that it's a new route (i.e. it will create a new route based on that object, and then add it to the navigation stack).<br><br>Conversely, in order to "preserve" an active route and let it  remain in the navigation stack, then simply return that route's corresponding object from the `NavRouteStackPartialItem` items along with its associated  `routeID` value.  <br><br>💡 **Tip**: This command is useful if you need complete control over the navigation stack. Amongst all the other navigation commands, this is the most direct mapping to [`UINavigationController.setViewControllers`](https://developer.apple.com/documentation/uikit/uinavigationcontroller/1621861-setviewcontrollers). Jump to the [`setRoutes` guides section](PLACE_HOLDER_LINK) for usage examples. |
+| 🔤  `setNavigationBarHidden`<br/><br/>⚛️  `(isHidden: boolean, animated: boolean) => Promise<void>` | Programmatically shows or hides the navigation bar. Maps to the [`UINavigationController.setNavigationBarHidden`](https://developer.apple.com/documentation/uikit/uinavigationcontroller/1621885-setnavigationbarhidden) method.<br><br>💡 **Tip**: If you want to immediately hide the navigation bar when a route is pushed (i.e. you don't want the navigation bar to be visible when that route is pushed), you can use the `RouteOptions.navigationBarVisibility` property instead.<br><br>The `navigationBarVisibility` property can either be set via `routeOptionsDefault` (which can be found in the route's config in the `NavigatorView.routes` prop), or via the [`RouteViewPortal`](PLACE_HOLDER_LINK) component using the `RouteViewPortal.routeOptions` prop.<br><br>💡 **Tip**: Like all the other navigation commands, this command is also async. So this command is useful if you want to wait for the navigation bar hide animation to finish first before doing something else. |
 
 <br>
 
@@ -316,10 +314,10 @@ These are basically "presets" to existing navigation commands i.e. it uses the e
 
 | Name and Type                                                | Description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
-| 🔤 `replacePreviousRoute`<br/><br/>⚛️ `(routeItem: NavRouteItem, animated?: boolean = false) => Promise<void>`<br><br>📌 [`routeItem: NavRouteItem`](PLACE_HOLDER_LINK) | Replaces the previous route in the navigation stack with a new route. |
-| 🔤 `replaceCurrentRoute`<br/><br/>⚛️ `(routeItem: NavRouteItem, animated?: boolean = false) => Promise<void>`<br><br>📌 [`routeItem: NavRouteItem`](PLACE_HOLDER_LINK) | Replaces the current route (i.e. the topmost route) in the navigation stack with a new route. |
-| 🔤 `removePreviousRoute`<br/><br/>⚛️ `(animated?: boolean = false) => Promise<void>` | Removes the previous route in the navigation stack.          |
-| 🔤 `removeAllPrevRoutes`<br/><br/>⚛️ `(animated?: boolean = false) => Promise<void>` | Removes all of the previous routes in the navigation stack.  |
+| 🔤  `replacePreviousRoute`<br/><br/>⚛️  `(routeItem: NavRouteItem, animated?: boolean = false) => Promise<void>`<br><br>📌 [`routeItem: NavRouteItem`](PLACE_HOLDER_LINK) | Replaces the previous route in the navigation stack with a new route. |
+| 🔤  `replaceCurrentRoute`<br/><br/>⚛️  `(routeItem: NavRouteItem, animated?: boolean = false) => Promise<void>`<br><br>📌 [`routeItem: NavRouteItem`](PLACE_HOLDER_LINK) | Replaces the current route (i.e. the topmost route) in the navigation stack with a new route. |
+| 🔤  `removePreviousRoute`<br/><br/>⚛️  `(animated?: boolean = false) => Promise<void>` | Removes the previous route in the navigation stack.          |
+| 🔤  `removeAllPrevRoutes`<br/><br/>⚛️  `(animated?: boolean = false) => Promise<void>` | Removes all of the previous routes in the navigation stack.  |
 
 <br>
 
@@ -351,10 +349,10 @@ As such this component doesn't actually render anything directly, it's merely an
 | Prop Name and Type                                           | Description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
 | 🔤  `routeOptions`<br/><br/>⚛️ [`RouteOptions`](PLACE_HOLDER_LINK) | This prop will override the existing route options that were provided either from **A**. its route config (i.e. the `NavRouteConfigItem.routeOptionsDefault`), or **B**. the route options override provided via a navigation command (e.g. `navigation.push({..., routeOptions: {...}})`).<br><br>This prop is basically just a convenient wrapper around `navigation.setRouteOptions` (i.e. it’s just calling this command on your behalf whenever you provide a new value).<br><br>💡 **Tip**: This prop is useful for dynamically changing the current route options based on some condition.<br><br>For example, you can change the navigation bar title after loading a resource, or temporarily hide the back button while loading, etc. |
-| 🔤 `renderNavBarLeftItem`<br/><br/>⚛️ [`(navigation) => ReactElement`](PLACE_HOLDER_LINK) | This prop is used for rendering a custom left item component in the navigation bar.<br><br>If `leftItemsSupplementBackButton` in `routeOptions`  is set to `true` (which it is by default), then it will replace the back button (i.e. the back button will not be shown).<br><br>📝 **Note**: If this prop is used, it'll implicitly set `navBarButtonLeftItemsConfig` to `{ type: 'CUSTOM' }` for a route's  `routeOptions`. So if the `navBarButtonLeftItemsConfig` is explicitly set to anything other than "custom", then this prop will not do anything. |
-| 🔤 `renderNavBarRightItem`<br/><br/>⚛️ [`(navigation: NavigationObject) => ReactElement`](PLACE_HOLDER_LINK) | This prop is used for rendering a custom right item component in the navigation bar.<br/><br/>📝 **Note**: If this prop is used, it'll implicitly set `navBarButtonRightItemsConfig` to `{ type: 'CUSTOM' }` for a route's  `routeOptions`. So if the `navBarButtonRightItemsConfig` is explicitly set to anything other than "custom", then this prop will not do anything. |
-| 🔤 `renderNavBarTitleItem`<br/><br/>⚛️ [`(navigation: NavigationObject) => ReactElement`](PLACE_HOLDER_LINK) | This prop is used for rendering a custom title item component in the navigation bar.<br><br>💡 **Tip**: You can access the route's `routeTitle` via the `navigation` object (i.e. `navigation.routeOptions.routeTitle`). |
-| 🔤 `renderRouteHeader`<br/><br/>⚛️ [`(navigation: NavigationObject) => ReactElement`](PLACE_HOLDER_LINK) | This prop allows you to render a header at the top of the screen (check out [`NavigatorShowcase01`](PLACE_HOLDER_LINK) and [`NavigatorShowcase02`](PLACE_HOLDER_LINK) for examples).<br><br>This prop accepts a function that must return a [`RouteHeaderView`](PLACE_HOLDER_LINK) as the root element. This component integrates with the route in the native side to enable the header behavior. Check the documentation for [`RouteHeaderView`](PLACE_HOLDER_LINK) for more details. |
+| 🔤  `renderNavBarLeftItem`<br/><br/>⚛️ [`(navigation) => ReactElement`](PLACE_HOLDER_LINK) | This prop is used for rendering a custom left item component in the navigation bar.<br><br>If `leftItemsSupplementBackButton` in `routeOptions`  is set to `true` (which it is by default), then it will replace the back button (i.e. the back button will not be shown).<br><br>📝 **Note**: If this prop is used, it'll implicitly set `navBarButtonLeftItemsConfig` to `{ type: 'CUSTOM' }` for a route's  `routeOptions`. So if the `navBarButtonLeftItemsConfig` is explicitly set to anything other than "custom", then this prop will not do anything. |
+| 🔤  `renderNavBarRightItem`<br/><br/>⚛️ [`(navigation: NavigationObject) => ReactElement`](PLACE_HOLDER_LINK) | This prop is used for rendering a custom right item component in the navigation bar.<br/><br/>📝 **Note**: If this prop is used, it'll implicitly set `navBarButtonRightItemsConfig` to `{ type: 'CUSTOM' }` for a route's  `routeOptions`. So if the `navBarButtonRightItemsConfig` is explicitly set to anything other than "custom", then this prop will not do anything. |
+| 🔤  `renderNavBarTitleItem`<br/><br/>⚛️ [`(navigation: NavigationObject) => ReactElement`](PLACE_HOLDER_LINK) | This prop is used for rendering a custom title item component in the navigation bar.<br><br>💡 **Tip**: You can access the route's `routeTitle` via the `navigation` object (i.e. `navigation.routeOptions.routeTitle`). |
+| 🔤  `renderRouteHeader`<br/><br/>⚛️ [`(navigation: NavigationObject) => ReactElement`](PLACE_HOLDER_LINK) | This prop allows you to render a header at the top of the screen (check out [`NavigatorShowcase01`](PLACE_HOLDER_LINK) and [`NavigatorShowcase02`](PLACE_HOLDER_LINK) for examples).<br><br>This prop accepts a function that must return a [`RouteHeaderView`](PLACE_HOLDER_LINK) as the root element. This component integrates with the route in the native side to enable the header behavior. Check the documentation for [`RouteHeaderView`](PLACE_HOLDER_LINK) for more details. |
 
 <br>
 
@@ -566,8 +564,8 @@ This component uses the "transparent navigation bar" approach. When in use, this
 | Prop Name and Type                                           | Description |
 | :----------------------------------------------------------- | ----------- |
 | 🔤 **Required**: `config`<br/><br/>⚛️ [`RouteHeaderConfig`](PLACE_HOLDER_LINK) | TBA         |
-| 🔤 `headerTopPadding`<br/><br/>⚛️ [`HeaderHeightConfig`](PLACE_HOLDER_LINK) | TBA         |
-| 🔤 `style`<br/><br/>⚛️  `ViewStyle`                            | TBA         |
+| 🔤  `headerTopPadding`<br/><br/>⚛️ [`HeaderHeightConfig`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  `style`<br/><br/>⚛️  `ViewStyle`                            | TBA         |
 
 <br>
 
@@ -579,9 +577,9 @@ Lorum Ipsum<br>
 
 | Name and Type                                                | Description |
 | :----------------------------------------------------------- | ----------- |
-| 🔤 `routeID`<br/><br/>⚛️ `abc`                                 |             |
-| 🔤 `abc`<br/><br/>⚛️ `abc`                                     |             |
-| 🔤 `abc`<br/><br/>⚛️ `abc`                                     |             |
+| 🔤  `routeID`<br/><br/>⚛️  `number`                              | TBA         |
+| 🔤  `navigatorID`<br/><br/>⚛️  `number`                          | TBA         |
+| 🔤  `navigation`<br/><br/>⚛️ [`NavigationObject`](PLACE_HOLDER_LINK) | TBA         |
 
 <br>
 
@@ -589,11 +587,12 @@ Lorum Ipsum<br>
 
 Lorum Ipsum<br>
 
-| Name and Type            | Description |
-| :----------------------- | ----------- |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| Name and Type                                                | Description |
+| :----------------------------------------------------------- | ----------- |
+| 🔤  `navigatorID`<br/><br/>⚛️  `number`                          | TBA         |
+| 🔤  `safeAreaInsets`<br/><br/>⚛️ [`EdgeInsets`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  `statusBarHeight`<br/><br/>⚛️  `number`                      | TBA         |
+| 🔤  `navigatorSize`<br/><br/>⚛️ [`Rect`](PLACE_HOLDER_LINK)     | TBA         |
 
 <br>
 
@@ -613,18 +612,9 @@ This library is written using typescript. As such, all of the objects/types ment
 
 <br>
 
-#### 📄 `TSEventEmitter.ts`
+#### 📄 Object Class: `TSEventEmitter.ts`
 
-* 📌 **Declaration**: [`TSEventEmitter.ts`](src/functions/TSEventEmitter.ts)
-
-#####  Object Class: `TSEventEmitter.ts`
-
-Lorum Ipsum<br>
-
-| Name and Type            | Description |
-| :----------------------- | ----------- |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+See [@dominicstop/ts-event-emitter](https://github.com/dominicstop/ts-event-emitter)<br>
 
 <br>
 
@@ -646,10 +636,10 @@ These events are triggered when the current route is about to be pushed or poppe
 
 | Enum Key and Event Type                                      | Description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
-| 🔤 `onRouteWillPush`<br/><br/>⚛️ [`OnRoutePushEvent`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnRoutePushEventObject`](src/types/RNINavigatorViewEvents.ts) | An event that is triggered when the current route is about to be pushed into the navigation stack (i.e. the push transition has begun). Internally, this event is triggered just before the [`UINavigationController.pushViewController`](https://developer.apple.com/documentation/uikit/uinavigationcontroller/1621887-pushviewcontroller) method is called. |
-| 🔤 `onRouteDidPush`<br/><br/>⚛️ [`OnRoutePushEvent`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnRoutePushEventObject`](src/types/RNINavigatorViewEvents.ts) | An event that is triggered when the current route has been pushed into the navigation stack (i.e. the push transition has ended). This event fires after `onRouteWillPush`. Internally, this event is triggered inside the completion block of the  [`UINavigationController.pushViewController`](https://developer.apple.com/documentation/uikit/uinavigationcontroller/1621887-pushviewcontroller) method. |
-| 🔤 `onRouteWillPop`<br/><br/>⚛️ [`OnRoutePopEvent`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnRoutePopEventObject`](src/types/RNINavigatorViewEvents.ts) | An event that is triggered when a route is about to be popped from the navigation stack (i.e. the pop transition has begun). Internally, this event is triggered by the [`UIViewController.willMove`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621381-willmove) lifecycle method.<br/><br/>💡 **Tip**: The `event.nativeEvent` object has a property called `isUserInitiated`. This property specifies whether the pop transition was initiated by the navigation command (`false`), or if it was initiated by the user (e.g. via the back button or swipe back gesture) (`true`). |
-| 🔤 `onRouteDidPop`<br/><br/>⚛️ [`OnRoutePopEvent`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnRoutePopEventObject`](src/types/RNINavigatorViewEvents.ts) | An event that is triggered when a route has been popped from the navigation stack (i.e. the pop transition has ended). This event fires after `onRouteWillPop`.  Internally, this event is triggered by the [`UIViewController.didMove`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621405-didmove) lifecycle method.<br/><br/>💡 **Tip**: The `event.nativeEvent` object has a property called `isUserInitiated`. This property specifies whether the pop transition was initiated by the navigation command (`false`), or if it was initiated by the user (e.g. via the back button or swipe back gesture) (`true`). |
+| 🔤  `onRouteWillPush`<br/><br/>⚛️ [`OnRoutePushEvent`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnRoutePushEventObject`](src/types/RNINavigatorViewEvents.ts) | An event that is triggered when the current route is about to be pushed into the navigation stack (i.e. the push transition has begun). Internally, this event is triggered just before the [`UINavigationController.pushViewController`](https://developer.apple.com/documentation/uikit/uinavigationcontroller/1621887-pushviewcontroller) method is called. |
+| 🔤  `onRouteDidPush`<br/><br/>⚛️ [`OnRoutePushEvent`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnRoutePushEventObject`](src/types/RNINavigatorViewEvents.ts) | An event that is triggered when the current route has been pushed into the navigation stack (i.e. the push transition has ended). This event fires after `onRouteWillPush`. Internally, this event is triggered inside the completion block of the  [`UINavigationController.pushViewController`](https://developer.apple.com/documentation/uikit/uinavigationcontroller/1621887-pushviewcontroller) method. |
+| 🔤  `onRouteWillPop`<br/><br/>⚛️ [`OnRoutePopEvent`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnRoutePopEventObject`](src/types/RNINavigatorViewEvents.ts) | An event that is triggered when a route is about to be popped from the navigation stack (i.e. the pop transition has begun). Internally, this event is triggered by the [`UIViewController.willMove`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621381-willmove) lifecycle method.<br/><br/>💡 **Tip**: The `event.nativeEvent` object has a property called `isUserInitiated`. This property specifies whether the pop transition was initiated by the navigation command (`false`), or if it was initiated by the user (e.g. via the back button or swipe back gesture) (`true`). |
+| 🔤  `onRouteDidPop`<br/><br/>⚛️ [`OnRoutePopEvent`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnRoutePopEventObject`](src/types/RNINavigatorViewEvents.ts) | An event that is triggered when a route has been popped from the navigation stack (i.e. the pop transition has ended). This event fires after `onRouteWillPop`.  Internally, this event is triggered by the [`UIViewController.didMove`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621405-didmove) lifecycle method.<br/><br/>💡 **Tip**: The `event.nativeEvent` object has a property called `isUserInitiated`. This property specifies whether the pop transition was initiated by the navigation command (`false`), or if it was initiated by the user (e.g. via the back button or swipe back gesture) (`true`). |
 
 <br>
 
@@ -659,10 +649,10 @@ These events are triggered whenever the current route will receive or lose focus
 
 | Enum Key and Event Type                                      | Description                                                  |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| 🔤 `onRouteWillFocus`<br/><br/>⚛️ [`OnRouteFocusBlurEvent`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnRouteFocusBlurEventObject`](src/types/RNINavigatorViewEvents.ts) | An event that is triggered when the current route is about to become in focus (i.e. the pop transition for the topmost route item has begun).<br><br>Internally, this event is triggered by the  [`UIViewController.viewWillAppear`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621510-viewwillappear) lifecycle method.<br><br>📝 **Note**: This event will also fire alongside `onRouteWillPush` (i.e. when the current route is about to become visible for the first time). |
-| 🔤 `onRouteDidFocus`<br/><br/>⚛️ [`OnRouteFocusBlurEvent`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnRouteFocusBlurEventObject`](src/types/RNINavigatorViewEvents.ts) | An event that is triggered when the current route has received focus (i.e. the pop transition for the topmost route item has ended).<br><br>Internally, this event is triggered by the  [`UIViewController.viewDidAppear`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621423-viewdidappear) lifecycle method.<br><br>📝 **Note**: This event will also fire alongside `onRouteDidPush` (i.e. when the current route has become visible for the first time). |
-| 🔤 `onRouteWillBlur`<br/><br/>⚛️ [`OnRouteFocusBlurEvent`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnRouteFocusBlurEventObject`](src/types/RNINavigatorViewEvents.ts) | An event that is triggered when the current route is about to lose focus (i.e. a new route is about to be pushed into the navigation stack).<br><br>Internally, this event is triggered by the  [`UIViewController.viewWillDisappear`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621485-viewwilldisappear)  lifecycle method.<br><br>📝 **Note**: This event will fire alongside `onRouteWillPop` (i.e. when the current route is about to be popped from the navigation stack). |
-| 🔤 `onRouteDidBlur`<br/><br/>⚛️ [`OnRouteFocusBlurEvent`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnRouteFocusBlurEventObject`](src/types/RNINavigatorViewEvents.ts) | An event that is triggered when the current route has lost focus (i.e. a new route has been pushed into the navigation stack).<br><br>Internally, this event is triggered by the  [`UIViewController.viewDidDisappear`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621477-viewdiddisappear)  lifecycle method.<br><br>📝 **Note**: This event will fire alongside `onRouteDidPop` (i.e. when the current route has been popped from the navigation stack). |
+| 🔤  `onRouteWillFocus`<br/><br/>⚛️ [`OnRouteFocusBlurEvent`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnRouteFocusBlurEventObject`](src/types/RNINavigatorViewEvents.ts) | An event that is triggered when the current route is about to become in focus (i.e. the pop transition for the topmost route item has begun).<br><br>Internally, this event is triggered by the  [`UIViewController.viewWillAppear`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621510-viewwillappear) lifecycle method.<br><br>📝 **Note**: This event will also fire alongside `onRouteWillPush` (i.e. when the current route is about to become visible for the first time). |
+| 🔤  `onRouteDidFocus`<br/><br/>⚛️ [`OnRouteFocusBlurEvent`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnRouteFocusBlurEventObject`](src/types/RNINavigatorViewEvents.ts) | An event that is triggered when the current route has received focus (i.e. the pop transition for the topmost route item has ended).<br><br>Internally, this event is triggered by the  [`UIViewController.viewDidAppear`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621423-viewdidappear) lifecycle method.<br><br>📝 **Note**: This event will also fire alongside `onRouteDidPush` (i.e. when the current route has become visible for the first time). |
+| 🔤  `onRouteWillBlur`<br/><br/>⚛️ [`OnRouteFocusBlurEvent`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnRouteFocusBlurEventObject`](src/types/RNINavigatorViewEvents.ts) | An event that is triggered when the current route is about to lose focus (i.e. a new route is about to be pushed into the navigation stack).<br><br>Internally, this event is triggered by the  [`UIViewController.viewWillDisappear`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621485-viewwilldisappear)  lifecycle method.<br><br>📝 **Note**: This event will fire alongside `onRouteWillPop` (i.e. when the current route is about to be popped from the navigation stack). |
+| 🔤  `onRouteDidBlur`<br/><br/>⚛️ [`OnRouteFocusBlurEvent`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnRouteFocusBlurEventObject`](src/types/RNINavigatorViewEvents.ts) | An event that is triggered when the current route has lost focus (i.e. a new route has been pushed into the navigation stack).<br><br>Internally, this event is triggered by the  [`UIViewController.viewDidDisappear`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621477-viewdiddisappear)  lifecycle method.<br><br>📝 **Note**: This event will fire alongside `onRouteDidPop` (i.e. when the current route has been popped from the navigation stack). |
 
 <br>
 
@@ -682,8 +672,8 @@ These events are triggered whenever the current route will receive or lose focus
 
 | Enum Key and Event Type                                      | Description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
-| 🔤 `onPressNavBarLeftItem`<br/><br/>⚛️ [`OnPressNavBarItemEvent`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnPressNavBarItemEventObject`](src/types/RNINavigatorViewEvents.ts) | An event that is triggered when a navigation bar left item is pressed. |
-| 🔤 `onPressNavBarRightItem`<br/><br/>⚛️ [`OnPressNavBarItemEvent`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnPressNavBarItemEventObject`](src/types/RNINavigatorViewEvents.ts) | An event that is triggered when a navigation bar right item is pressed. |
+| 🔤  `onPressNavBarLeftItem`<br/><br/>⚛️ [`OnPressNavBarItemEvent`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnPressNavBarItemEventObject`](src/types/RNINavigatorViewEvents.ts) | An event that is triggered when a navigation bar left item is pressed. |
+| 🔤  `onPressNavBarRightItem`<br/><br/>⚛️ [`OnPressNavBarItemEvent`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnPressNavBarItemEventObject`](src/types/RNINavigatorViewEvents.ts) | An event that is triggered when a navigation bar right item is pressed. |
 
 <br>
 
@@ -693,9 +683,9 @@ These events are related to the route's search bar. A route can be configured to
 
 | Enum Key and Event Type                                      | Description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
-| 🔤 `onUpdateSearchResults`<br/><br/>⚛️ [`OnUpdateSearchResults`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnUpdateSearchResultsEventObject`](src/types/RNINavigatorViewEvents.ts) | An event that is triggered whenever the search bar's text changes. <br><br>Internally, this event is triggered by the [`UISearchResultsUpdating.updateSearchResults`](https://developer.apple.com/documentation/uikit/uisearchresultsupdating/1618658-updatesearchresults) method.<br><br>💡 **Tip**: This event is useful for updating a list of results. The `event.nativeEvent` object will contain the search bar's current text value. Use the search text value to update the list accordingly. |
-| 🔤 `onSearchBarCancelButtonClicked`<br/><br/>⚛️ [`OnSearchBarCancelButtonClicked`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnSearchBarCancelButtonClickedEventObject`](src/types/RNINavigatorViewEvents.ts) | An event that is triggered when the search bar's cancel button is pressed. <br><br>When the cancel button is pressed, the search bar's text field will be cleared (this will trigger `onUpdateSearchResults`). <br><br>Internally, this event is triggered by [`UISearchBarDelegate.searchBarCancelButtonClicked`](https://developer.apple.com/documentation/uikit/uisearchbardelegate/1624314-searchbarcancelbuttonclicked) method.<br><br>📝 **Note**: The search bar's cancel button will only appear when the search bar is in focus (unless specified otherwise via the `RouteSearchControllerConfig.automaticallyShowsCancelButton` property in the route's search config). |
-| 🔤 `onSearchBarSearchButtonClicked`<br/><br/>⚛️ [`onSearchBarSearchButtonClicked`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnSearchBarSearchButtonClickedEventObject`](src/types/RNINavigatorViewEvents.ts) | An event that is triggered when the search button (i.e the return key) is pressed in the iOS keyboard while the search bar is in focus.<br><br>Internally, this event is triggered by [`UISearchBarDelegate.searchBarSearchButtonClicked`](https://developer.apple.com/documentation/uikit/uisearchbardelegate/1624294-searchbarsearchbuttonclicked) method.<br><br>💡 **Tip**: The keyboard's return key label can modified via the search config (i.e. `  RouteSearchControllerConfig.returnKeyType`). |
+| 🔤  `onUpdateSearchResults`<br/><br/>⚛️ [`OnUpdateSearchResults`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnUpdateSearchResultsEventObject`](src/types/RNINavigatorViewEvents.ts) | An event that is triggered whenever the search bar's text changes. <br><br>Internally, this event is triggered by the [`UISearchResultsUpdating.updateSearchResults`](https://developer.apple.com/documentation/uikit/uisearchresultsupdating/1618658-updatesearchresults) method.<br><br>💡 **Tip**: This event is useful for updating a list of results. The `event.nativeEvent` object will contain the search bar's current text value. Use the search text value to update the list accordingly. |
+| 🔤  `onSearchBarCancelButtonClicked`<br/><br/>⚛️ [`OnSearchBarCancelButtonClicked`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnSearchBarCancelButtonClickedEventObject`](src/types/RNINavigatorViewEvents.ts) | An event that is triggered when the search bar's cancel button is pressed. <br><br>When the cancel button is pressed, the search bar's text field will be cleared (this will trigger `onUpdateSearchResults`). <br><br>Internally, this event is triggered by [`UISearchBarDelegate.searchBarCancelButtonClicked`](https://developer.apple.com/documentation/uikit/uisearchbardelegate/1624314-searchbarcancelbuttonclicked) method.<br><br>📝 **Note**: The search bar's cancel button will only appear when the search bar is in focus (unless specified otherwise via the `RouteSearchControllerConfig.automaticallyShowsCancelButton` property in the route's search config). |
+| 🔤  `onSearchBarSearchButtonClicked`<br/><br/>⚛️ [`onSearchBarSearchButtonClicked`](PLACE_HOLDER_LINK)<br/><br/>📌 [`OnSearchBarSearchButtonClickedEventObject`](src/types/RNINavigatorViewEvents.ts) | An event that is triggered when the search button (i.e the return key) is pressed in the iOS keyboard while the search bar is in focus.<br><br>Internally, this event is triggered by [`UISearchBarDelegate.searchBarSearchButtonClicked`](https://developer.apple.com/documentation/uikit/uisearchbardelegate/1624294-searchbarsearchbuttonclicked) method.<br><br>💡 **Tip**: The keyboard's return key label can modified via the search config (i.e. `  RouteSearchControllerConfig.returnKeyType`). |
 
 <br>
 
@@ -717,13 +707,13 @@ This type is used to create and configure a "JS/React" route.<br>
 
 | Name and Type                                                | Description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
-| 🔤 `isNativeRoute?`<br/><br/>⚛️ `false ¦ undefined`            | Used to identify whether the config provided is a "JS/React" route, or a "native" route. This property is optional, you don't have to provide a value.<br><br>Since this type is used to create "JS/React" route, you can only explicitly set this property to `false` or `undefined`. |
-| 🔤 `initialRouteProps?`<br/><br/>⚛️ `object`                   | Configures the initial "route props" that the route will receive.<br/><br/>📝 **Note A**: The `initialRouteProps` will be merged and potentially overridden by the following:<br/>1️⃣ `NavigatorView.initialRoutes` prop (i.e. `NavRouteItem.routeProps`).<br/>2️⃣ Via a navigation command, e.g. `push({...routeProps: {...}})`.<br/><br/>📝 **Note B**: The route's "route props" can be accessed via `NavigationObject.routeProps` (see "[The `NavigationObject`](PLACE_HOLDER_LINK)" section for examples on how to get the route's navigation object). |
-| 🔤 `routeOptionsDefault?`<br/><br/>⚛️ [`RouteOptions`](PLACE_HOLDER_LINK) | Used to set the initial "route options" that the route will receive.<br><br>📝 **Note**: The default route options provided will be merged and potentially overridden by the following:<br>1️⃣ `NavigatorView.initialRoutes` prop (i.e. `NavRouteItem.routeOptions`).<br>2️⃣ Via a navigation command, e.g. `push({...routeOptions: {...}})`.<br>3️⃣ Using the route's `NavigationObject.setRouteOptions(...) `command.<br>4️⃣ Or through the `RouteViewPortal.routeOptions` prop. |
-| 🔤 **Required:** `renderRoute`<br/><br/>⚛️ `(routeItem: NavRouteItem) => ReactElement<RouteContentProps>`<br><br>📌 [`routeItem: NavRouteItem`](PLACE_HOLDER_LINK)<br><br>📌 [`RouteContentProps`](PLACE_HOLDER_LINK) | Configures what component to show when the route becomes active.<br><br>This property accepts a function that returns a react element. The function you pass in will receive a `NavRouteItem` object. The react element returned by the function will be shown when the route becomes active. <br/><br/>The react element that you returned will implicitly receive `RouteContentProps`. In other words, your route will receive the [`NavigationObject`](PLACE_HOLDER_LINK) via props (i.e. `props.navigation`).<br><br>Alternatively, you can also get the `NavigationObject` via `NavigationContext`, or through using the `useNavRouteEvents` hook (see "[The `NavigationObject`](PLACE_HOLDER_LINK)" section for examples). |
-| 🔤 `renderNavBarLeftItem?`<br/><br/>⚛️ [`RenderNavItem`](PLACE_HOLDER_LINK) i.e. `(navigation: NavigationObject) => ReactElement ¦ null ¦ undefined`<br/><br/>📌 [`navigation: NavigationObject`](PLACE_HOLDER_LINK) | Configures what custom react component to show on the left side of navigation bar when the route becomes active.<br/><br>This property accepts a function that returns a react element. The function will receive the `NavigationObject` as an argument. The returned element will be rendered on the left side of the navigation bar.<br><br/>📝 **Note A**: This property overrides the [`NavigatorView.renderNavBarLeftItem`](PLACE_HOLDER_LINK) prop. This property can be overridden via the route's [`RouteViewPortal.renderNavBarLeftItem`](PLACE_HOLDER_LINK) prop.<br><br>📝 **Note B**: If this property is set, it'll implicitly set `RouteOptions.navBarButtonLeftItemsConfig` to `{ type: 'CUSTOM' }` for a route's  `routeOptions`.<br><br>In other words, if the `navBarButtonLeftItemsConfig` property is explicitly set to anything other than "custom", then this prop will not do anything (i.e. no custom component will be rendered for the navigation bar's left item).<br><br>📝 **Note C**: Pressing the custom navigation bar left item component will not trigger the `onPressNavBarLeftItem` event. Handle the touch event yourself (e.g. via a `<Button/>`-like component).<br><br> 📝 **Note D**: If a route's `RouteOptions.leftItemsSupplementBackButton`  is set to `false` (which it isn't by default), then it will replace the back button (i.e. the back button will not be shown). |
-| 🔤 `renderNavBarRightItem?`<br/><br/>⚛️ [`RenderNavItem`](PLACE_HOLDER_LINK) i.e. `(navigation: NavigationObject) => ReactElement ¦ null ¦ undefined`<br/><br/>📌 [`navigation: NavigationObject`](PLACE_HOLDER_LINK) | Configures what custom react component to show on the right side of navigation bar when the route becomes active.<br/><br/>This property accepts a function that returns a react element. The function will receive the `NavigationObject` as an argument. The returned element will be rendered on the left side of the navigation bar.<br/><br/>📝 **Note A**: This property overrides the [`NavigatorView.renderNavBarRightItem`](PLACE_HOLDER_LINK) prop. This property can be overridden via the route's [`RouteViewPortal.renderNavBarRightItem`](PLACE_HOLDER_LINK) prop.<br/><br/>📝 **Note B**: If this property is set, it'll implicitly set `RouteOptions.navBarButtonRightItemsConfig` to `{ type: 'CUSTOM' }` for a route's  `routeOptions`.<br/><br/>In other words, if the `navBarButtonRightItemsConfig` property is explicitly set to anything other than "custom", then this prop will not do anything (i.e. no custom component will be rendered for the navigation bar's left item).<br/><br/>📝 **Note C**: Pressing the custom navigation bar right item component will not trigger the `onPressNavBarRightItem` event. Handle the touch event yourself (e.g. via a `<Button/>`-like component). |
-| 🔤 `renderNavBarTitleItem?`<br/><br/>⚛️ [`RenderNavItem`](PLACE_HOLDER_LINK) i.e. `(navigation: NavigationObject) => ReactElement ¦ null ¦ undefined`<br/><br/>📌 [`navigation: NavigationObject`](PLACE_HOLDER_LINK) | Configures what custom react component to show for the navigation bar's title when the route becomes active.<br/><br/>This property accepts a function that returns a react element. The function will receive the `NavigationObject` as an argument. The returned element will be rendered in the middle of the navigation bar (i.e. as a replacement for the navigation bar title).<br/><br/>📝 **Note**: This property overrides the [`NavigatorView.renderNavBarTitleItem`](PLACE_HOLDER_LINK) prop. This property can be overridden via the route's [`RouteViewPortal.renderNavBarTitleItem`](PLACE_HOLDER_LINK) prop.<br/><br/>💡 **Tip**: You can access the route's `routeTitle` via the `navigation` object (i.e. `navigation.routeOptions.routeTitle`). |
+| 🔤  `isNativeRoute?`<br/><br/>⚛️  `false ¦ undefined`            | Used to identify whether the config provided is a "JS/React" route, or a "native" route. This property is optional, you don't have to provide a value.<br><br>Since this type is used to create "JS/React" route, you can only explicitly set this property to `false` or `undefined`. |
+| 🔤  `initialRouteProps?`<br/><br/>⚛️  `object`                   | Configures the initial "route props" that the route will receive.<br/><br/>📝 **Note A**: The `initialRouteProps` will be merged and potentially overridden by the following:<br/>1️⃣ `NavigatorView.initialRoutes` prop (i.e. `NavRouteItem.routeProps`).<br/>2️⃣ Via a navigation command, e.g. `push({...routeProps: {...}})`.<br/><br/>📝 **Note B**: The route's "route props" can be accessed via `NavigationObject.routeProps` (see "[The `NavigationObject`](PLACE_HOLDER_LINK)" section for examples on how to get the route's navigation object). |
+| 🔤  `routeOptionsDefault?`<br/><br/>⚛️ [`RouteOptions`](PLACE_HOLDER_LINK) | Used to set the initial "route options" that the route will receive.<br><br>📝 **Note**: The default route options provided will be merged and potentially overridden by the following:<br>1️⃣ `NavigatorView.initialRoutes` prop (i.e. `NavRouteItem.routeOptions`).<br>2️⃣ Via a navigation command, e.g. `push({...routeOptions: {...}})`.<br>3️⃣ Using the route's `NavigationObject.setRouteOptions(...) `command.<br>4️⃣ Or through the `RouteViewPortal.routeOptions` prop. |
+| 🔤 **Required:** `renderRoute`<br/><br/>⚛️  `(routeItem: NavRouteItem) => ReactElement<RouteContentProps>`<br><br>📌 [`routeItem: NavRouteItem`](PLACE_HOLDER_LINK)<br><br>📌 [`RouteContentProps`](PLACE_HOLDER_LINK) | Configures what component to show when the route becomes active.<br><br>This property accepts a function that returns a react element. The function you pass in will receive a `NavRouteItem` object. The react element returned by the function will be shown when the route becomes active. <br/><br/>The react element that you returned will implicitly receive `RouteContentProps`. In other words, your route will receive the [`NavigationObject`](PLACE_HOLDER_LINK) via props (i.e. `props.navigation`).<br><br>Alternatively, you can also get the `NavigationObject` via `NavigationContext`, or through using the `useNavRouteEvents` hook (see "[The `NavigationObject`](PLACE_HOLDER_LINK)" section for examples). |
+| 🔤  `renderNavBarLeftItem?`<br/><br/>⚛️ [`RenderNavItem`](PLACE_HOLDER_LINK) i.e. `(navigation: NavigationObject) => ReactElement ¦ null ¦ undefined`<br/><br/>📌 [`navigation: NavigationObject`](PLACE_HOLDER_LINK) | Configures what custom react component to show on the left side of navigation bar when the route becomes active.<br/><br>This property accepts a function that returns a react element. The function will receive the `NavigationObject` as an argument. The returned element will be rendered on the left side of the navigation bar.<br><br/>📝 **Note A**: This property overrides the [`NavigatorView.renderNavBarLeftItem`](PLACE_HOLDER_LINK) prop. This property can be overridden via the route's [`RouteViewPortal.renderNavBarLeftItem`](PLACE_HOLDER_LINK) prop.<br><br>📝 **Note B**: If this property is set, it'll implicitly set `RouteOptions.navBarButtonLeftItemsConfig` to `{ type: 'CUSTOM' }` for a route's  `routeOptions`.<br><br>In other words, if the `navBarButtonLeftItemsConfig` property is explicitly set to anything other than "custom", then this prop will not do anything (i.e. no custom component will be rendered for the navigation bar's left item).<br><br>📝 **Note C**: Pressing the custom navigation bar left item component will not trigger the `onPressNavBarLeftItem` event. Handle the touch event yourself (e.g. via a `<Button/>`-like component).<br><br> 📝 **Note D**: If a route's `RouteOptions.leftItemsSupplementBackButton`  is set to `false` (which it isn't by default), then it will replace the back button (i.e. the back button will not be shown). |
+| 🔤  `renderNavBarRightItem?`<br/><br/>⚛️ [`RenderNavItem`](PLACE_HOLDER_LINK) i.e. `(navigation: NavigationObject) => ReactElement ¦ null ¦ undefined`<br/><br/>📌 [`navigation: NavigationObject`](PLACE_HOLDER_LINK) | Configures what custom react component to show on the right side of navigation bar when the route becomes active.<br/><br/>This property accepts a function that returns a react element. The function will receive the `NavigationObject` as an argument. The returned element will be rendered on the left side of the navigation bar.<br/><br/>📝 **Note A**: This property overrides the [`NavigatorView.renderNavBarRightItem`](PLACE_HOLDER_LINK) prop. This property can be overridden via the route's [`RouteViewPortal.renderNavBarRightItem`](PLACE_HOLDER_LINK) prop.<br/><br/>📝 **Note B**: If this property is set, it'll implicitly set `RouteOptions.navBarButtonRightItemsConfig` to `{ type: 'CUSTOM' }` for a route's  `routeOptions`.<br/><br/>In other words, if the `navBarButtonRightItemsConfig` property is explicitly set to anything other than "custom", then this prop will not do anything (i.e. no custom component will be rendered for the navigation bar's left item).<br/><br/>📝 **Note C**: Pressing the custom navigation bar right item component will not trigger the `onPressNavBarRightItem` event. Handle the touch event yourself (e.g. via a `<Button/>`-like component). |
+| 🔤  `renderNavBarTitleItem?`<br/><br/>⚛️ [`RenderNavItem`](PLACE_HOLDER_LINK) i.e. `(navigation: NavigationObject) => ReactElement ¦ null ¦ undefined`<br/><br/>📌 [`navigation: NavigationObject`](PLACE_HOLDER_LINK) | Configures what custom react component to show for the navigation bar's title when the route becomes active.<br/><br/>This property accepts a function that returns a react element. The function will receive the `NavigationObject` as an argument. The returned element will be rendered in the middle of the navigation bar (i.e. as a replacement for the navigation bar title).<br/><br/>📝 **Note**: This property overrides the [`NavigatorView.renderNavBarTitleItem`](PLACE_HOLDER_LINK) prop. This property can be overridden via the route's [`RouteViewPortal.renderNavBarTitleItem`](PLACE_HOLDER_LINK) prop.<br/><br/>💡 **Tip**: You can access the route's `routeTitle` via the `navigation` object (i.e. `navigation.routeOptions.routeTitle`). |
 
 <br>
 
@@ -733,8 +723,8 @@ This type is used to create and configure a "native" route.<br>
 
 | Name and Type                                     | Description                                                  |
 | :------------------------------------------------ | ------------------------------------------------------------ |
-| 🔤 **Required**: `isNativeRoute`<br/><br/>⚛️ `true` | Used to identify whether the config provided is a "JS/React" route, or a "native" route. This property must be explicitly set to `true`.<br/><br/>Since this type is used to create "native" route, you must explicitly set this property to `true`. |
-| 🔤 `initialRouteProps?`<br/><br/>⚛️ `object`        | Configures the initial "route props" that the native route will receive.<br/><br/>📝 **Note A**: The `initialRouteProps` will be merged and potentially overridden by the following:<br/>1️⃣ `NavigatorView.initialRoutes` prop (i.e. `NavRouteItem.routeProps`).<br/>2️⃣ Via a navigation command, e.g. `push({...routeProps: {...}})`.<br/><br/>📝 **Note B**: The native route (i.e. the `RNINavigatorRouteBaseViewController` instance) can access the "route props" via `self.routeProps` property. |
+| 🔤 **Required**: `isNativeRoute`<br/><br/>⚛️  `true` | Used to identify whether the config provided is a "JS/React" route, or a "native" route. This property must be explicitly set to `true`.<br/><br/>Since this type is used to create "native" route, you must explicitly set this property to `true`. |
+| 🔤  `initialRouteProps?`<br/><br/>⚛️  `object`        | Configures the initial "route props" that the native route will receive.<br/><br/>📝 **Note A**: The `initialRouteProps` will be merged and potentially overridden by the following:<br/>1️⃣ `NavigatorView.initialRoutes` prop (i.e. `NavRouteItem.routeProps`).<br/>2️⃣ Via a navigation command, e.g. `push({...routeProps: {...}})`.<br/><br/>📝 **Note B**: The native route (i.e. the `RNINavigatorRouteBaseViewController` instance) can access the "route props" via `self.routeProps` property. |
 
 <br>
 
@@ -752,51 +742,51 @@ The properties that are related to each other are grouped together into their ow
 
 | Name and Type                                                | Description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
-| 🔤 `statusBarStyle`<br/><br/>⚛️ `abc`                          |                                                              |
-| 🔤 `routeContainerStyle`<br/><br/>⚛️ `abc`                     | Whatever component you return from `renderRoutes` will be wrapped inside a "route container" view. This prop allows you to set the style of that view.<br/><br/>💡 **Tip**: You can use this prop to provide a default background color for all the routes. |
-| 🔤 `automaticallyAddHorizontalSafeAreaInsets`<br/><br/>⚛️ `abc` |                                                              |
+| 🔤  `statusBarStyle?`<br/><br/>⚛️  `StatusBarStyle `             | TBA                                                          |
+| 🔤  `routeContainerStyle?`<br/><br/>⚛️  `ViewStyle`              | Whatever component you return from `renderRoutes` will be wrapped inside a "route container" view. This prop allows you to set the style of that view.<br/><br/>💡 **Tip**: You can use this prop to provide a default background color for all the routes. |
+| 🔤  `automaticallyAddHorizontalSafeAreaInsets?`<br/><br/>⚛️  `boolean` | TBA                                                          |
 
 <br>
 
 ##### `RouteOptions`: Transition Config-Related Properties
 
-| Name and Type                             | Description |
-| :---------------------------------------- | ----------- |
-| 🔤 `transitionConfigPush`<br/><br/>⚛️ `abc` |             |
-| 🔤 `transitionConfigPop`<br/><br/>⚛️ `abc`  |             |
+| Name and Type                                                | Description |
+| :----------------------------------------------------------- | ----------- |
+| 🔤  `transitionConfigPush?`<br/><br/>⚛️  `RouteTransitionConfig` | TBA         |
+| 🔤  `transitionConfigPop?`<br/><br/>⚛️  `RouteTransitionConfig`  | TBA         |
 
 <br>
 
 ##### `RouteOptions`: Navigation Bar Config-Related Properties
 
-| Name and Type                              | Description |
-| :----------------------------------------- | ----------- |
-| 🔤 `routeTitle`<br/><br/>⚛️ `abc`            |             |
-| 🔤 `prompt`<br/><br/>⚛️ `abc`                |             |
-| 🔤 `largeTitleDisplayMode`<br/><br/>⚛️ `abc` |             |
-| 🔤 `searchBarConfig`<br/><br/>⚛️ `abc`       |             |
+| Name and Type                                                | Description |
+| :----------------------------------------------------------- | ----------- |
+| 🔤  `routeTitle?`<br/><br/>⚛️  `string`                          | TBA         |
+| 🔤  `prompt?`<br/><br/>⚛️  `string`                              | TBA         |
+| 🔤  `largeTitleDisplayMode?`<br/><br/>⚛️ [`LargeTitleDisplayMode`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  `searchBarConfig?`<br/><br/>⚛️ [`RouteSearchControllerConfig`](PLACE_HOLDER_LINK) | TBA         |
 
 <br>
 
 ##### `RouteOptions`: Navigation Bar Item Config-Related Properties
 
-| Name and Type                                     | Description |
-| :------------------------------------------------ | ----------- |
-| 🔤 `navBarButtonBackItemConfig`<br/><br/>⚛️ `abc`   |             |
-| 🔤 `navBarButtonLeftItemsConfig`<br/><br/>⚛️ `abc`  |             |
-| 🔤 `navBarButtonRightItemsConfig`<br/><br/>⚛️ `abc` |             |
+| Name and Type                                                | Description |
+| :----------------------------------------------------------- | ----------- |
+| 🔤  `navBarButtonBackItemConfig?`<br/><br/>⚛️ [`NavBarBackItemConfig`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  `navBarButtonLeftItemsConfig?`<br/><br/>⚛️ [`NavBarItemsConfig`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  `navBarButtonRightItemsConfig?`<br/><br/>⚛️ [`NavBarItemsConfig`](PLACE_HOLDER_LINK) | TBA         |
 
 <br>
 
 ##### `RouteOptions`: Navigation Bar Back Item Config-Related Properties
 
-| Name and Type                                            | Description |
-| :------------------------------------------------------- | ----------- |
-| 🔤 `backButtonTitle`<br/><br/>⚛️ `abc`                     |             |
-| 🔤 `hidesBackButton`<br/><br/>⚛️ `abc`                     |             |
-| 🔤 `backButtonDisplayMode`<br/><br/>⚛️ `abc`               |             |
-| 🔤 `leftItemsSupplementBackButton`<br/><br/>⚛️ `abc`       |             |
-| 🔤 `applyBackButtonConfigToCurrentRoute`<br/><br/>⚛️ `abc` |             |
+| Name and Type                                                | Description |
+| :----------------------------------------------------------- | ----------- |
+| 🔤  `backButtonTitle?`<br/><br/>⚛️  `string`                     | TBA         |
+| 🔤  `hidesBackButton?`<br/><br/>⚛️  `boolean`                    | TBA         |
+| 🔤  `backButtonDisplayMode?`<br/><br/>⚛️ [`BackButtonDisplayMode`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  `leftItemsSupplementBackButton?`<br/><br/>⚛️  `boolean`      | TBA         |
+| 🔤  `applyBackButtonConfigToCurrentRoute?`<br/><br/>⚛️  `boolean` | TBA         |
 
 <br>
 
@@ -804,9 +794,9 @@ The properties that are related to each other are grouped together into their ow
 
 | Name and Type                                                | Description |
 | :----------------------------------------------------------- | ----------- |
-| 🔤 `navBarAppearanceOverride`<br/><br/>⚛️ `abc`                |             |
-| 🔤 `navigationBarVisibility`<br/><br/>⚛️ `abc`                 |             |
-| 🔤 `allowTouchEventsToPassThroughNavigationBar`<br/><br/>⚛️ `abc` |             |
+| 🔤  `navBarAppearanceOverride?`<br/><br/>⚛️ [`NavBarAppearanceCombinedConfig`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  `navigationBarVisibility?`<br/><br/>⚛️ [`NavigationBarVisibilityMode`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  `allowTouchEventsToPassThroughNavigationBar?`<br/><br/>⚛️  `boolean` | TBA         |
 
 <br>
 
@@ -818,10 +808,79 @@ The properties that are related to each other are grouped together into their ow
 
 Lorum Ipsum<br>
 
+##### `NavigationObject`: General Properties
+
+| Name and Type                                                | Description |
+| :----------------------------------------------------------- | ----------- |
+| 🔤  `routeKey`<br/><br/>⚛️  `string`                             | TBA         |
+| 🔤  `routeIndex`<br/><br/>⚛️  `number`                           | TBA         |
+| 🔤  `routeProps`<br/><br/>⚛️  `object`                           | TBA         |
+| 🔤  `routeOptions`<br/><br/>⚛️ [`RouteOptions`](PLACE_HOLDER_LINK) | TBA         |
+
+<br>
+
+##### `NavigationObject`: Navigation Commands
+
+See "[`NavigatorView` Navigation Commands](PLACE_HOLDER_LINK)" section for more info.
+
+| Name and Type                                                | Description                                                 |
+| :----------------------------------------------------------- | ----------------------------------------------------------- |
+| 🔤  `push`<br/><br/>⚛️  `(routeItem, options?) => Promise<void>` | Maps to the `NavigatorView.push` command.                   |
+| 🔤  `pop`<br/><br/>⚛️  `(options?) => Promise<void>`           | Maps to the `NavigatorView.pop` command.                    |
+| 🔤  `popToRoot`<br/><br/>⚛️  `(options?) => Promise<void>`     | Maps to the `NavigatorView.popToRoot` command.              |
+| 🔤  `removeRoute`<br/><br/>⚛️  `(routeIndex: number, animated?: boolean = false) => Promise<void>` | Maps to the `NavigatorView.removeRoute` command.            |
+| 🔤  `removeRoutes`<br/><br/>⚛️  `(routeIndices: number, animated?: boolean = false) => Promise<void>` | Maps to the `NavigatorView.removeRoutes` command.           |
+| 🔤  `replaceRoute`<br/><br/>⚛️  `(prevRouteIndex: number, routeItem: NavRouteItem, animated?: boolean = false) => Promise<void>` | Maps to the `NavigatorView.replaceRoute` command.           |
+| 🔤  `insertRoute`<br/><br/>⚛️  `(routeItem: NavRouteItem, atIndex: number, animated?: boolean = false) => Promise<void>` | Maps to the `NavigatorView.insertRoute` command.            |
+| 🔤  `setRoutes`<br/><br/>⚛️  `(transform: SetRoutesTransformCallback, animated?: boolean = false) => Promise<void>` | Maps to the `NavigatorView.setRoutes` command.              |
+| 🔤  `setNavigationBarHidden`<br/><br/>⚛️  `(isHidden: boolean, animated: boolean) => Promise<void>` | Maps to the `NavigatorView.setNavigationBarHidden` command. |
+
+<br>
+
+##### `NavigationObject`: Convenience Navigation Commands
+
+See "[`NavigatorView` Convenience Navigation Commands](PLACE_HOLDER_LINK)" section for more info.
+
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤  `replacePreviousRoute`<br/><br/>⚛️  `(routeItem: NavRouteItem, animated?: boolean = false) => Promise<void>` | Maps to the `NavigatorView.replacePreviousRoute` command. |
+| 🔤  `replaceCurrentRoute`<br/><br/>⚛️  `(routeItem: NavRouteItem, animated?: boolean = false) => Promise<void>` | Maps to the `NavigatorView.replaceCurrentRoute` command. |
+| 🔤  `removePreviousRoute`<br/><br/>⚛️  `(animated?: boolean = false) => Promise<void>` | Maps to the `NavigatorView.removePreviousRoute` command. |
+| 🔤  `removeAllPrevRoutes`<br/><br/>⚛️  `(animated?: boolean = false) => Promise<void>` | Maps to the `NavigatorView.removeAllPrevRoutes` command. |
+
+<br>
+
+##### `NavigationObject`: General/Misc. Navigation Commands
+
+See "[`NavigatorView` General/Misc. Methods](PLACE_HOLDER_LINK)" section for more info.
+
+| Name and Type            | Description |
+| :----------------------- | ----------- |
+| 🔤  `getActiveRoutes`<br/><br/>⚛️ [`() => Array<NavRouteStackItem>`](PLACE_HOLDER_LINK) | Maps to the `NavigatorView.getActiveRoutes` command. |
+| 🔤  `sendCustomCommandToNative`<br/><br/>⚛️  `(commandKey: string, commandData: object ¦ null) => Promise<object ¦ null>` | Maps to the `NavigatorView.sendCustomCommandToNative` command. |
+| 🔤  `getNavigatorConstants`<br/><br/>⚛️ [`() => Promise<NavigatorConstantsObject>`](PLACE_HOLDER_LINK) | Maps to the `NavigatorView.getNavigatorConstants` command. |
+| 🔤  `dismissModal`<br/><br/>⚛️ [`(animated: Bool) => Promise<void>`](PLACE_HOLDER_LINK) | Maps to the `NavigatorView.dismissModal` command. |
+
+<br>
+
+##### `NavigationObject`: Route Commands
+
+| Name and Type            | Description |
+| :----------------------- | ----------- |
+| 🔤  `getRouteOptions`<br/><br/>⚛️  `() => RouteOptions` | TBA |
+| 🔤  `setRouteOptions`<br/><br/>⚛️  `(routeOptions: RouteOptions | null) => void` | TBA |
+| 🔤  `setHidesBackButton`<br/><br/>⚛️  `(isHidden: boolean, animated: boolean) => void` | TBA |
+| 🔤  `getRouteConstants`<br/><br/>⚛️  `() => Promise<RouteConstantsObject>` | TBA |
+
+<br>
+
+##### `NavigationObject`: "Get Ref" Commands
+
+| Name and Type            | Description |
+| :----------------------- | ----------- |
+| 🔤  `getRefToRoute`<br/><br/>⚛️  `() => NavigatorRouteView` | TBA |
+| 🔤  `getRefToNavigator`<br/><br/>⚛️  `() => NavigatorView` | TBA |
+| 🔤  `getRefToNavRouteEmitter`<br/><br/>⚛️  `() => NavigatorRouteViewEventEmitter` | TBA |
 
 <br>
 
@@ -835,19 +894,24 @@ Lorum Ipsum<br>
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤  **Required**: `routeKey`<br/><br/>⚛️  `string` | TBA |
+| 🔤  `routeProps?`<br/><br/>⚛️  `object` | TBA |
+| 🔤  `routeOptions?`<br/><br/>⚛️  `RouteOptions` | TBA |
 
 <br>
 
 ##### Object Type: `NavRouteStackItem`
 
-Represents an active  route item in the navigation stack.<br>
+Represents an active  route item in the navigation stack. This type extends `NavRouteItem`, as such they share the same properties.  <br>
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤  **Required**: `routeKey`<br/><br/>⚛️  `string` | Same as `NavRouteItem.routeKey`. |
+| 🔤  `routeProps?`<br/><br/>⚛️  `object` | Same as `NavRouteItem.routeProps`. |
+| 🔤  `routeOptions?`<br/><br/>⚛️  `RouteOptions` | Same as `NavRouteItem.routeOptions`. |
+| 🔤  `routeID`<br/><br/>⚛️  `number` | TBA |
+| 🔤  `routeIndex`<br/><br/>⚛️  `number` | TBA |
+| 🔤  `isNativeRoute`<br/><br/>⚛️  `boolean` | TBA |
 
 <br>
 
@@ -857,8 +921,8 @@ Used in the `NavigatorView.SetRoutesTransformCallback` function. Represents eith
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| Extends `NavRouteStackItem` | Shares the same properties from `NavRouteStackItem` (and `NavRouteItem`). |
+| 🔤  `routeID?`<br/><br/>⚛️  `number` | TBA |
 
 <br>
 
@@ -902,16 +966,16 @@ const navBarAppearance = {
 
 | Name and Type                                                | Description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
-| 🔤 `navBarPreset`<br/><br/>⚛️  `NavBarPreset` e.g. `'none' ¦ 'noShadow' ¦ 'clearBackground'`<br><br>✳️ **Default**: `none` |                                                              |
-| 🔤 `barStyle`<br/><br/>⚛️  `'default' ¦ 'black'`               |                                                              |
-| 🔤 `titleTextAttributes`<br/><br/>⚛️  `TextStyle`              |                                                              |
-| 🔤 `largeTitleTextAttributes`<br/><br/>⚛️  `TextStyle`         |                                                              |
-| 🔤 `titleVerticalPositionAdjustment`<br/><br/>⚛️ `{ [key in BarMetrics]?: number }`<br><br>📌 [`BarMetrics`](PLACE_HOLDER_LINK) |                                                              |
-| 🔤 `tintColor`<br/><br/>⚛️  `string ¦ DynamicColor`            |                                                              |
-| 🔤 `barTintColor`<br><br>⚛️  `string ¦ DynamicColor`           |                                                              |
-| 🔤 `backIndicatorImage`<br/><br/>⚛️  [`ImageItemConfig`](PLACE_HOLDER_LINK) |                                                              |
-| 🔤 `backgroundImage`<br/><br/>⚛️  `{ [key in BarMetrics]?: ImageItemConfig }`<br><br>📌 [`BarMetrics`](PLACE_HOLDER_LINK)<br>📌 [`ImageItemConfig`](PLACE_HOLDER_LINK) |                                                              |
-| 🔤 `shadowImage`<br/><br/>⚛️  [`ImageItemConfig`](PLACE_HOLDER_LINK) | 📝 **Note**: A custom background image must also be set for the shadow image to take affect. As mentioned in the apple [docs](https://developer.apple.com/documentation/uikit/uinavigationbar/1624963-shadowimage): "To show a custom shadow image, you must also set a custom background image". |
+| 🔤  `navBarPreset`<br/><br/>⚛️  `NavBarPreset` e.g. `'none' ¦ 'noShadow' ¦ 'clearBackground'`<br><br>✳️  **Default**: `none` | TBA                                                          |
+| 🔤  `barStyle`<br/><br/>⚛️  `'default' ¦ 'black'`              | TBA                                                          |
+| 🔤  `titleTextAttributes`<br/><br/>⚛️  `TextStyle`             | TBA                                                          |
+| 🔤  `largeTitleTextAttributes`<br/><br/>⚛️  `TextStyle`        | TBA                                                          |
+| 🔤  `titleVerticalPositionAdjustment`<br/><br/>⚛️  `{ [key in BarMetrics]?: number }`<br><br>📌 [`BarMetrics`](PLACE_HOLDER_LINK) | TBA                                                          |
+| 🔤  `tintColor`<br/><br/>⚛️  `string ¦ DynamicColor`           | TBA                                                          |
+| 🔤  `barTintColor`<br><br>⚛️  `string ¦ DynamicColor`          |                                                              |
+| 🔤  `backIndicatorImage`<br/><br/>⚛️  [`ImageItemConfig`](PLACE_HOLDER_LINK) | TBA                                                          |
+| 🔤  `backgroundImage`<br/><br/>⚛️  `{ [key in BarMetrics]?: ImageItemConfig }`<br><br>📌 [`BarMetrics`](PLACE_HOLDER_LINK)<br>📌 [`ImageItemConfig`](PLACE_HOLDER_LINK) | TBA                                                          |
+| 🔤  `shadowImage`<br/><br/>⚛️  [`ImageItemConfig`](PLACE_HOLDER_LINK) | 📝 **Note**: A custom background image must also be set for the shadow image to take affect. As mentioned in the apple [docs](https://developer.apple.com/documentation/uikit/uinavigationbar/1624963-shadowimage): "To show a custom shadow image, you must also set a custom background image". |
 
 <br>
 
@@ -921,11 +985,11 @@ Lorum ipsum<br>
 
 | Name and Type                                                | Description |
 | :----------------------------------------------------------- | ----------- |
-| 🔤 `navBarPreset`<br><br>⚛️  `NavBarPreset` e.g. `'none' ¦ 'noShadow' ¦ 'clearBackground'`<br><br>✳️ **Default**: `none` |             |
-| 🔤 `standardAppearance`<br/><br/>⚛️  [`NavBarAppearance`](PLACE_HOLDER_LINK) |             |
-| 🔤 `compactAppearance`<br/><br/>⚛️  [`NavBarAppearance`](PLACE_HOLDER_LINK) |             |
-| 🔤 `scrollEdgeAppearance`<br/><br/>⚛️  [`NavBarAppearance`](PLACE_HOLDER_LINK) |             |
-| 🔤 `compactScrollEdgeAppearance`<br/><br/>⚛️  [`NavBarAppearance`](PLACE_HOLDER_LINK) |             |
+| 🔤  `navBarPreset`<br><br>⚛️  `NavBarPreset` e.g. `'none' ¦ 'noShadow' ¦ 'clearBackground'`<br><br>✳️  **Default**: `none` | TBA         |
+| 🔤  `standardAppearance`<br/><br/>⚛️  [`NavBarAppearance`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  `compactAppearance`<br/><br/>⚛️  [`NavBarAppearance`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  `scrollEdgeAppearance`<br/><br/>⚛️  [`NavBarAppearance`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  `compactScrollEdgeAppearance`<br/><br/>⚛️  [`NavBarAppearance`](PLACE_HOLDER_LINK) | TBA         |
 
 <br>
 
@@ -935,19 +999,19 @@ Lorum ipsum<br>
 
 | Name and Type                                    | Description |
 | :----------------------------------------------- | ----------- |
-| 🔤 `baseConfig`<br/><br/>⚛️  `abc`                 |             |
-| 🔤 `backgroundEffect`<br/><br/>⚛️  `abc`           |             |
-| 🔤 `backgroundColor`<br/><br/>⚛️  `abc`            |             |
-| 🔤 `backgroundImage`<br/><br/>⚛️  `abc`            |             |
-| 🔤 `backgroundImageContentMode`<br/><br/>⚛️  `abc` |             |
-| 🔤 `shadowColor`<br/><br/>⚛️  `abc`                |             |
-| 🔤 `titleTextAttributes`<br/><br/>⚛️  `abc`        |             |
-| 🔤 `largeTitleTextAttributes`<br/><br/>⚛️  `abc`   |             |
-| 🔤 `titlePositionAdjustment`<br/><br/>⚛️  `abc`    |             |
-| 🔤 `backIndicatorImage`<br/><br/>⚛️  `abc`         |             |
-| 🔤 `buttonAppearance`<br/><br/>⚛️  `abc`           |             |
-| 🔤 `backButtonAppearance`<br/><br/>⚛️  `abc`       |             |
-| 🔤 `doneButtonAppearance`<br/><br/>⚛️  `abc`       |             |
+| 🔤  `baseConfig`<br/><br/>⚛️  `abc`                 |             |
+| 🔤  `backgroundEffect`<br/><br/>⚛️  `abc`           |             |
+| 🔤  `backgroundColor`<br/><br/>⚛️  `abc`            |             |
+| 🔤  `backgroundImage`<br/><br/>⚛️  `abc`            |             |
+| 🔤  `backgroundImageContentMode`<br/><br/>⚛️  `abc` |             |
+| 🔤  `shadowColor`<br/><br/>⚛️  `abc`                |             |
+| 🔤  `titleTextAttributes`<br/><br/>⚛️  `abc`        |             |
+| 🔤  `largeTitleTextAttributes`<br/><br/>⚛️  `abc`   |             |
+| 🔤  `titlePositionAdjustment`<br/><br/>⚛️  `abc`    |             |
+| 🔤  `backIndicatorImage`<br/><br/>⚛️  `abc`         |             |
+| 🔤  `buttonAppearance`<br/><br/>⚛️  `abc`           |             |
+| 🔤  `backButtonAppearance`<br/><br/>⚛️  `abc`       |             |
+| 🔤  `doneButtonAppearance`<br/><br/>⚛️  `abc`       |             |
 
 <br>
 
@@ -959,8 +1023,8 @@ Lorum Ipsum<br>
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
+| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
 
 <br>
 
@@ -976,8 +1040,8 @@ Lorum Ipsum<br>
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
+| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
 
 <br>
 
@@ -987,8 +1051,8 @@ Lorum Ipsum<br>
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
+| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
 
 <br>
 
@@ -998,8 +1062,8 @@ Lorum Ipsum<br>
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
+| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
 
 <br>
 
@@ -1009,8 +1073,8 @@ Lorum Ipsum<br>
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
+| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
 
 <br>
 
@@ -1024,8 +1088,8 @@ Lorum Ipsum<br>
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
+| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
 
 <br>
 
@@ -1039,8 +1103,8 @@ Lorum Ipsum<br>
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
+| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
 
 <br>
 
@@ -1052,8 +1116,8 @@ Lorum Ipsum<br>
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
+| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
 
 <br>
 
@@ -1065,8 +1129,8 @@ Lorum Ipsum<br>
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
+| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
 
 <br>
 
@@ -1078,8 +1142,8 @@ Lorum Ipsum<br>
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
+| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
 
 <br>
 
@@ -1089,8 +1153,8 @@ Lorum Ipsum<br>
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
+| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
 
 <br>
 
@@ -1104,8 +1168,8 @@ Lorum Ipsum<br>
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
+| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
 
 <br>
 
@@ -1115,8 +1179,8 @@ Lorum Ipsum<br>
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
+| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
 
 <br>
 
@@ -1126,8 +1190,8 @@ Lorum Ipsum<br>
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
+| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
 
 <br>
 
@@ -1137,8 +1201,8 @@ Lorum Ipsum<br>
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
+| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
 
 <br>
 
@@ -1150,8 +1214,8 @@ Lorum Ipsum<br>
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
-| 🔤 `abc`<br/><br/>⚛️ `abc` |             |
+| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
+| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
 
 <br>
 
@@ -1163,7 +1227,7 @@ Lorum Ipsum<br>
 
 | Name and Type                                          | Description |
 | :----------------------------------------------------- | ----------- |
-| 🔤 `hidden`<br/><br/>⚛️ `NavBarAppearanceCombinedConfig` | TBA         |
+| 🔤  `hidden`<br/><br/>⚛️  `NavBarAppearanceCombinedConfig` | TBA         |
 
 <br>
 
