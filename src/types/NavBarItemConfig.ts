@@ -72,11 +72,17 @@ export type NavBarItemConfigCustomBase = {
   type: "CUSTOM";
 };
 
-type BarButtonItemStyle = 
+export type BarButtonItemStyle = 
   /** Glows when tapped. The default item style. */
   | 'plain'
   /** The style for a done button—for example, a button that completes some task and returns to the previous view. */
   | 'done';
+
+export type NavBarItemBackgroundImageConfig = {
+  imageItem: ImageItemConfig;
+  controlState: ControlState;
+  barButtonItemStyle?: BarButtonItemStyle;
+};
 
 /** Specifies the style of an item. */
 export type NavBarItemConfigShared = {
@@ -97,11 +103,7 @@ export type NavBarItemConfigShared = {
 
   /** Sets the background image for a specified state and bar metrics. */
   backgroundImage?: { 
-    [key in BarMetrics]?: {
-      imageItem: ImageItemConfig;
-      controlState: ControlState;
-      barButtonItemStyle?: BarButtonItemStyle;
-    };
+    [key in BarMetrics]?: NavBarItemBackgroundImageConfig;
   };
 
   /** Sets the title offset for specified bar metrics. **/
@@ -115,8 +117,6 @@ export type NavBarItemConfigShared = {
   // };
 };
 
-type ArrayWithOneElement<T> = { 0: T } & Array<T>;
-
 // TODO (015): Incomplete... missing back-button related properties + Impl.
 export type NavBarBackItemConfig =
   & NavBarItemConfigBase
@@ -128,4 +128,4 @@ export type NavBarItemConfig =
 
 export type NavBarItemsConfig = 
   | Array<NavBarItemConfig>
-  | ArrayWithOneElement<NavBarItemConfigCustomBase>;
+  | [NavBarItemConfigCustomBase];
