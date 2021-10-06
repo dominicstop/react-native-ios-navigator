@@ -348,7 +348,7 @@ As such this component doesn't actually render anything directly, it's merely an
 
 | Prop Name and Type                                           | Description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
-| 🔤  `routeOptions`<br/><br/>⚛️ [`RouteOptions`](PLACE_HOLDER_LINK) | This prop will override the existing route options that were provided either from **A**. its route config (i.e. the `NavRouteConfigItem.routeOptionsDefault`), or **B**. the route options override provided via a navigation command (e.g. `navigation.push({..., routeOptions: {...}})`).<br><br>This prop is basically just a convenient wrapper around `navigation.setRouteOptions` (i.e. it’s just calling this command on your behalf whenever you provide a new value).<br><br>💡 **Tip**: This prop is useful for dynamically changing the current route options based on some condition.<br><br>For example, you can change the navigation bar title after loading a resource, or temporarily hide the back button while loading, etc. |
+| 🔤  `routeOptions`<br/><br/>⚛️ [`RouteOptions`](PLACE_HOLDER_LINK) | This prop will override the existing route options that were provided either from: 1️⃣ the route's "route config" in the `NavigatorView.routes` prop  (i.e.  `NavRouteConfigItem.routeOptionsDefault`),<br>2️⃣ the route options provided in the `NavigatorView.initialRoutes` prop (i.e. `NavRouteItem.routeOptions`), or<br>3️⃣ the route options override provided via a navigation command (e.g. `navigation.push({..., routeOptions: {...}})`).<br><br>This prop is basically just a convenient wrapper around `navigation.setRouteOptions` (i.e. it’s just calling this command on your behalf whenever you provide a new value).<br><br>💡 **Tip**: This prop is useful for dynamically changing the current route options based on some condition.<br><br>For example, you can change the navigation bar title after loading a resource, or temporarily hide the back button while loading, etc. |
 | 🔤  `renderNavBarLeftItem`<br/><br/>⚛️ [`(navigation) => ReactElement`](PLACE_HOLDER_LINK) | This prop is used for rendering a custom left item component in the navigation bar.<br><br>If `leftItemsSupplementBackButton` in `routeOptions`  is set to `true` (which it is by default), then it will replace the back button (i.e. the back button will not be shown).<br><br>📝 **Note**: If this prop is used, it'll implicitly set `navBarButtonLeftItemsConfig` to `{ type: 'CUSTOM' }` for a route's  `routeOptions`. So if the `navBarButtonLeftItemsConfig` is explicitly set to anything other than "custom", then this prop will not do anything. |
 | 🔤  `renderNavBarRightItem`<br/><br/>⚛️ [`(navigation: NavigationObject) => ReactElement`](PLACE_HOLDER_LINK) | This prop is used for rendering a custom right item component in the navigation bar.<br/><br/>📝 **Note**: If this prop is used, it'll implicitly set `navBarButtonRightItemsConfig` to `{ type: 'CUSTOM' }` for a route's  `routeOptions`. So if the `navBarButtonRightItemsConfig` is explicitly set to anything other than "custom", then this prop will not do anything. |
 | 🔤  `renderNavBarTitleItem`<br/><br/>⚛️ [`(navigation: NavigationObject) => ReactElement`](PLACE_HOLDER_LINK) | This prop is used for rendering a custom title item component in the navigation bar.<br><br>💡 **Tip**: You can access the route's `routeTitle` via the `navigation` object (i.e. `navigation.routeOptions.routeTitle`). |
@@ -940,8 +940,6 @@ The navigation bar can be customized either via the "legacy" mode (i.e. using th
 
 * There are some things that `legacy` mode can do that `appearance` mode can't (and vice versa). For example, via `legacy` mode, you can set the global tint of all the navigation bar elements via `tintColor`.
 
-
-
 <br>
 
 **Example Snippet**
@@ -966,52 +964,54 @@ const navBarAppearance = {
 
 | Name and Type                                                | Description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
-| 🔤  `navBarPreset`<br/><br/>⚛️  `NavBarPreset` e.g. `'none' ¦ 'noShadow' ¦ 'clearBackground'`<br><br>✳️  **Default**: `none` | TBA                                                          |
-| 🔤  `barStyle`<br/><br/>⚛️  `'default' ¦ 'black'`              | TBA                                                          |
-| 🔤  `titleTextAttributes`<br/><br/>⚛️  `TextStyle`             | TBA                                                          |
-| 🔤  `largeTitleTextAttributes`<br/><br/>⚛️  `TextStyle`        | TBA                                                          |
-| 🔤  `titleVerticalPositionAdjustment`<br/><br/>⚛️  `{ [key in BarMetrics]?: number }`<br><br>📌 [`BarMetrics`](PLACE_HOLDER_LINK) | TBA                                                          |
-| 🔤  `tintColor`<br/><br/>⚛️  `string ¦ DynamicColor`           | TBA                                                          |
-| 🔤  `barTintColor`<br><br>⚛️  `string ¦ DynamicColor`          |                                                              |
-| 🔤  `backIndicatorImage`<br/><br/>⚛️  [`ImageItemConfig`](PLACE_HOLDER_LINK) | TBA                                                          |
-| 🔤  `backgroundImage`<br/><br/>⚛️  `{ [key in BarMetrics]?: ImageItemConfig }`<br><br>📌 [`BarMetrics`](PLACE_HOLDER_LINK)<br>📌 [`ImageItemConfig`](PLACE_HOLDER_LINK) | TBA                                                          |
-| 🔤  `shadowImage`<br/><br/>⚛️  [`ImageItemConfig`](PLACE_HOLDER_LINK) | 📝 **Note**: A custom background image must also be set for the shadow image to take affect. As mentioned in the apple [docs](https://developer.apple.com/documentation/uikit/uinavigationbar/1624963-shadowimage): "To show a custom shadow image, you must also set a custom background image". |
+| 🔤  `navBarPreset?`<br/><br/>⚛️  `NavBarPreset` e.g. `'none' ¦ 'noShadow' ¦ 'clearBackground'`<br><br>✳️  **Default**: `none` | TBA                                                          |
+| 🔤  `barStyle?`<br/><br/>⚛️  `'default' ¦ 'black'`             | TBA                                                          |
+| 🔤  `titleTextAttributes?`<br/><br/>⚛️  `TextStyle`            | TBA                                                          |
+| 🔤  `largeTitleTextAttributes?`<br/><br/>⚛️  `TextStyle`       | TBA                                                          |
+| 🔤  `titleVerticalPositionAdjustment?`<br/><br/>⚛️  `{ [key in BarMetrics]?: number }`<br><br>📌 [`BarMetrics`](PLACE_HOLDER_LINK) | TBA                                                          |
+| 🔤  `tintColor?`<br/><br/>⚛️  `string ¦ DynamicColor`          | TBA                                                          |
+| 🔤  `barTintColor?`<br><br>⚛️  `string ¦ DynamicColor`         | TBA                                                          |
+| 🔤  `backIndicatorImage?`<br/><br/>⚛️  [`ImageItemConfig`](PLACE_HOLDER_LINK) | TBA                                                          |
+| 🔤  `backgroundImage?`<br/><br/>⚛️  `{ [key in BarMetrics]?: ImageItemConfig }`<br><br>📌 [`BarMetrics`](PLACE_HOLDER_LINK)<br>📌 [`ImageItemConfig`](PLACE_HOLDER_LINK) | TBA                                                          |
+| 🔤  `shadowImage?`<br/><br/>⚛️  [`ImageItemConfig`](PLACE_HOLDER_LINK) | 📝 **Note**: A custom background image must also be set for the shadow image to take affect. As mentioned in the apple [docs](https://developer.apple.com/documentation/uikit/uinavigationbar/1624963-shadowimage): "To show a custom shadow image, you must also set a custom background image". |
 
 <br>
 
 ##### Object Type: `NavBarAppearanceConfig`
 
-Lorum ipsum<br>
+Object type that lets you customize the navigation bar using the iOS 13+ "appearance" API.
 
 | Name and Type                                                | Description |
 | :----------------------------------------------------------- | ----------- |
-| 🔤  `navBarPreset`<br><br>⚛️  `NavBarPreset` e.g. `'none' ¦ 'noShadow' ¦ 'clearBackground'`<br><br>✳️  **Default**: `none` | TBA         |
-| 🔤  `standardAppearance`<br/><br/>⚛️  [`NavBarAppearance`](PLACE_HOLDER_LINK) | TBA         |
-| 🔤  `compactAppearance`<br/><br/>⚛️  [`NavBarAppearance`](PLACE_HOLDER_LINK) | TBA         |
-| 🔤  `scrollEdgeAppearance`<br/><br/>⚛️  [`NavBarAppearance`](PLACE_HOLDER_LINK) | TBA         |
-| 🔤  `compactScrollEdgeAppearance`<br/><br/>⚛️  [`NavBarAppearance`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  `navBarPreset?`<br><br>⚛️  `NavBarPreset` i.e. `'none' ¦ 'noShadow' ¦ 'clearBackground'`<br><br>✳️  **Default**: `none` | TBA         |
+| 🔤  `useStandardAppearanceAsDefault?`<br/><br/>⚛️  `boolean`<br/><br/>✳️  **Default**: `false` | TBA         |
+| 🔤  `standardAppearance?`<br/><br/>⚛️  [`NavBarAppearance`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  `compactAppearance?`<br/><br/>⚛️  [`NavBarAppearance`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  `scrollEdgeAppearance?`<br/><br/>⚛️  [`NavBarAppearance`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  `compactScrollEdgeAppearance?`<br/><br/>⚛️  [`NavBarAppearance`](PLACE_HOLDER_LINK) | TBA         |
 
 <br>
 
 ##### Object Type: `NavBarAppearance`
 
-Lorum ipsum<br>
+TBA<br>
 
-| Name and Type                                    | Description |
-| :----------------------------------------------- | ----------- |
-| 🔤  `baseConfig`<br/><br/>⚛️  `abc`                 |             |
-| 🔤  `backgroundEffect`<br/><br/>⚛️  `abc`           |             |
-| 🔤  `backgroundColor`<br/><br/>⚛️  `abc`            |             |
-| 🔤  `backgroundImage`<br/><br/>⚛️  `abc`            |             |
-| 🔤  `backgroundImageContentMode`<br/><br/>⚛️  `abc` |             |
-| 🔤  `shadowColor`<br/><br/>⚛️  `abc`                |             |
-| 🔤  `titleTextAttributes`<br/><br/>⚛️  `abc`        |             |
-| 🔤  `largeTitleTextAttributes`<br/><br/>⚛️  `abc`   |             |
-| 🔤  `titlePositionAdjustment`<br/><br/>⚛️  `abc`    |             |
-| 🔤  `backIndicatorImage`<br/><br/>⚛️  `abc`         |             |
-| 🔤  `buttonAppearance`<br/><br/>⚛️  `abc`           |             |
-| 🔤  `backButtonAppearance`<br/><br/>⚛️  `abc`       |             |
-| 🔤  `doneButtonAppearance`<br/><br/>⚛️  `abc`       |             |
+| Name and Type                                                | Description |
+| :----------------------------------------------------------- | ----------- |
+| 🔤  `baseConfig?`<br/><br/>⚛️  `NavBarAppearanceBaseConfig`    | TBA         |
+| 🔤  `backgroundEffect?`<br/><br/>⚛️  `BlurEffectStyle`         | TBA         |
+| 🔤  `backgroundColor?`<br/><br/>⚛️  `string ¦ DynamicColor`    | TBA         |
+| 🔤  `backgroundImage?`<br/><br/>⚛️  `ImageItemConfig`          | TBA         |
+| 🔤  `backgroundImageContentMode?`<br/><br/>⚛️  `backgroundImageContentMode` | TBA         |
+| 🔤  `shadowColor?`<br/><br/>⚛️  `string ¦ DynamicColor`        | TBA         |
+| 🔤  `shadowImage?`<br/><br/>⚛️  `abc`                          | TBA         |
+| 🔤  `titleTextAttributes?`<br/><br/>⚛️  `TextStyle`            | TBA         |
+| 🔤  `largeTitleTextAttributes?`<br/><br/>⚛️  `TextStyle`       | TBA         |
+| 🔤  `titlePositionAdjustment?`<br/><br/>⚛️  `Offset`           | TBA         |
+| 🔤  `backIndicatorImage?`<br/><br/>⚛️  `ImageItemConfig`       | TBA         |
+| 🔤  `buttonAppearance?`<br/><br/>⚛️  `BarButtonItemAppearance` | TBA         |
+| 🔤  `backButtonAppearance?`<br/><br/>⚛️  `BarButtonItemAppearance` | TBA         |
+| 🔤  `doneButtonAppearance?`<br/><br/>⚛️  `BarButtonItemAppearance` | TBA         |
 
 <br>
 
@@ -1019,12 +1019,15 @@ Lorum ipsum<br>
 
 * 📌 **Declaration**: [`BarButtonItemAppearance`](src/types/BarButtonItemAppearance.ts)
 
-Lorum Ipsum<br>
+TBA<br>
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
-| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
+| 🔤  **Required**: `style`<br/><br/>⚛️  `BarButtonItemStyles` i.e. `plain ¦ done ` | TBA |
+| 🔤  `normal?`<br/><br/>⚛️  `BarButtonItemStateAppearance` | TBA |
+| 🔤  `disabled?`<br/><br/>⚛️  `BarButtonItemStateAppearance` | TBA |
+| 🔤  `highlighted?`<br/><br/>⚛️  `BarButtonItemStateAppearance` | TBA |
+| 🔤  `focused?`<br/><br/>⚛️  `BarButtonItemStateAppearance` | TBA |
 
 <br>
 
@@ -1034,47 +1037,104 @@ Lorum Ipsum<br>
 
 * 📌 **Declaration**: [`NavBarItemConfig.ts`](src/types/NavBarItemConfig.ts)
 
-##### Object Type: `NavBarItemConfig`
+##### Object Type: `NavBarItemConfigBase`
 
-Lorum Ipsum<br>
+This type is an object tagged union type, with the `type` property being the tag that separates the unions. The table below defines the possible valid values that can be assigned to the `type` property.
 
-| Name and Type            | Description |
-| :----------------------- | ----------- |
-| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
-| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
-
-<br>
-
-#####  Object Type: `NavBarBackItemConfig`
-
-Lorum Ipsum<br>
-
-| Name and Type            | Description |
-| :----------------------- | ----------- |
-| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
-| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
+| Name and Type                                                | Description                                                  |
+| :----------------------------------------------------------- | ------------------------------------------------------------ |
+| 🔤  **Required**: `type`<br/><br/>⚛️  `string` i.e. `'TEXT' ¦ 'SYSTEM_ITEM' ¦ 'IMAGE_ASSET' ¦ 'IMAGE_SYSTEM'  ¦ 'IMAGE_EMPTY'` | Configures the type of navigation bar item to create. Also supports  creating navigation bar items based on  `ImageItemConfig`. |
 
 <br>
 
-#####  Object Type: `NavBarItemConfig`
+| Name and Type                                               | Description |
+| :---------------------------------------------------------- | ----------- |
+| 🔤  **Required**: `type`<br/><br/>⚛️   `string` i.e. `'TEXT'` | TBA         |
+| 🔤  **Required**: `title`<br/><br/>⚛️  `string`               | TBA         |
 
-Lorum Ipsum<br>
+<br>
+
+| Name and Type                                                | Description |
+| :----------------------------------------------------------- | ----------- |
+| 🔤  **Required**: `type`<br/><br/>⚛️   `string` i.e. `'SYSTEM_ITEM'` | TBA         |
+| 🔤  `systemItem`<br/><br/>⚛️  `BarButtonItemSystemItem`        | TBA         |
+
+<br>
+
+| Name and Type                                                | Description                                                  |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 🔤  **Required**: `type`<br/><br/>⚛️   `string` i.e.  `'IMAGE_ASSET'` | TBA                                                          |
+| Supports all the properties from a `ImageItemConfig` with:<br/>`{ type: 'IMAGE_ASSET' }`<br/><br/>⚛️  `Extract<ImageItemConfig, { type: 'IMAGE_ASSET' }>` | Jump to the [`ImageItemConfig`](PLACE_HOLDER_LINK) section for more details. |
+
+<br>
+
+| Name and Type                                                | Description                                                  |
+| :----------------------------------------------------------- | ------------------------------------------------------------ |
+| 🔤  **Required**: `type`<br/><br/>⚛️   `string` i.e.  `'IMAGE_SYSTEM'` | TBA                                                          |
+| Supports all the properties from a `ImageItemConfig` with:<br>`{ type: 'IMAGE_SYSTEM' }`<br/><br/>⚛️  `Extract<ImageItemConfig, { type: 'IMAGE_SYSTEM' }>` | Jump to the [`ImageItemConfig`](PLACE_HOLDER_LINK) section for more details. |
+
+<br>
+
+| Name and Type                                                | Description                                                  |
+| :----------------------------------------------------------- | ------------------------------------------------------------ |
+| 🔤  **Required**: `type`<br/><br/>⚛️   `string` i.e.  `'IMAGE_EMPTY'` | TBA                                                          |
+| Supports all the properties from a `ImageItemConfig` with:<br/>`{ type: 'IMAGE_EMPTY' }`<br/><br/>⚛️  `Extract<ImageItemConfig, { type: 'IMAGE_EMPTY' }>` | Jump to the [`ImageItemConfig`](PLACE_HOLDER_LINK) section for more details. |
+
+<br>
+
+#####  Object Type: `NavBarItemConfigShared`
+
+TBA<br>
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
-| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
+| 🔤  `key?`<br/><br/>⚛️  `string` | TBA |
+| 🔤  `tintColor?`<br/><br/>⚛️  `string ¦ DynamicColor` | TBA |
+| 🔤  `barButtonItemStyle?`<br/><br/>⚛️  `BarButtonItemStyle` | TBA |
+| 🔤  `possibleTitles?`<br/><br/>⚛️  `Array<string>` | TBA |
+| 🔤  `width?`<br/><br/>⚛️  `number` | TBA |
+| 🔤  `backgroundImage?`<br/><br/>⚛️  `{ [key in BarMetrics]?: NavBarItemBackgroundImageConfig }`<br/><br/>📌 [`BarMetrics`](PLACE_HOLDER_LINK)<br/>📌 [`NavBarItemBackgroundImageConfig`](PLACE_HOLDER_LINK) | TBA |
+| 🔤  `titlePositionAdjustment?`<br/><br/>⚛️  `{ [key in BarMetrics]?: Offset }`<br/><br>📌 [`BarMetrics`](PLACE_HOLDER_LINK)<br/>📌 [`Offset`](PLACE_HOLDER_LINK) | TBA |
 
 <br>
 
 #####  Object Type: `NavBarItemConfigCustom`
 
-Lorum Ipsum<br>
+TBA<br>
 
-| Name and Type            | Description |
-| :----------------------- | ----------- |
-| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
-| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
+| Name and Type                                                | Description |
+| :----------------------------------------------------------- | ----------- |
+| 🔤  **Required**: `type`<br/><br/>⚛️   `string` i.e.  `CUSTOM` | TBA         |
+
+<br>
+
+##### Object Type: `NavBarItemBackgroundImageConfig`
+
+TBA
+
+| Name and Type                                                | Description |
+| :----------------------------------------------------------- | ----------- |
+| 🔤  **Required**: `imageItem`<br><br> ⚛️   `ImageItemConfig`   | TBA         |
+| 🔤  **Required**: `controlState`<br/><br/> ⚛️   `ControlState` | TBA         |
+| 🔤   `barButtonItemStyle?`<br/><br/> ⚛️   `BarButtonItemStyle` | TBA         |
+
+<br>
+
+#####  Object Type: `NavBarItemConfig`
+
+An intersection type that supports a combination of properties from `NavBarItemConfigBase` and  `NavBarItemConfigShared`,  i.e. equivalent to `NavBarItemConfigBase & NavBarItemConfigShared` in typescript.
+
+<br>
+
+#####  Object Type: `NavBarBackItemConfig`
+
+An intersection type that supports a combination of properties from `NavBarItemConfigBase` and  `NavBarItemConfigShared`,  i.e. equivalent to `NavBarItemConfigBase & NavBarItemConfigShared` in typescript.
+
+<br>
+
+#####  Object Type: `NavBarItemsConfig`
+
+A union type that can either be an array of `NavBarItemConfig` or a tuple containing a single element of `NavBarItemConfigCustomBase`.
 
 <br>
 
@@ -1084,14 +1144,55 @@ Lorum Ipsum<br>
 
 ##### Object Type: `RouteHeaderConfig`
 
-Lorum Ipsum<br>
+This type is an object tagged union type, with the `headerMode` property being the tag that separates the unions. The table below defines the possible valid values that can be assigned to the `headerMode` property.<br>
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
-| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
+| 🔤  **Required**: `headerMode`<br/><br/>⚛️  `string`, ie. `'fixed' | 'resize'` | TBA |
 
 <br>
+
+| Name and Type                                                | Description |
+| :----------------------------------------------------------- | ----------- |
+| 🔤  **Required**: `headerMode`<br/><br/>⚛️  `string` i.e. `fixed` | TBA         |
+| 🔤  `headerHeight?`<br/><br/>⚛️  `HeaderHeightConfig`          | TBA         |
+
+<br>
+
+| Name and Type                                                | Description |
+| :----------------------------------------------------------- | ----------- |
+| 🔤  **Required**: `headerMode`<br/><br/>⚛️  `string` i.e. `resize` | TBA         |
+| 🔤  `headerHeightMin?`<br/><br/>⚛️  `HeaderHeightConfig`       | TBA         |
+| 🔤  `headerHeightMax?`<br/><br/>⚛️  `HeaderHeightConfig`       | TBA         |
+
+<br>
+
+##### Object Type: `HeaderHeightConfig`
+
+TBA
+
+| Name and Type                                              | Description |
+| :--------------------------------------------------------- | ----------- |
+| 🔤  **Required**: `preset`<br><br> ⚛️   `HeaderHeightPreset` | TBA         |
+| 🔤  `offset?`<br/><br/> ⚛️   `number`                        | TBA         |
+
+<br>
+
+##### Union String Type: `HeaderHeightPreset`
+
+TBA
+
+| Name and Type                    | Description |
+| :------------------------------- | ----------- |
+| ⚛️   `navigationBar`              | TBA         |
+| ⚛️   `statusBar`                  | TBA         |
+| ⚛️   `navigationBarWithStatusBar` | TBA         |
+| ⚛️   `safeArea`                   | TBA         |
+| ⚛️   `none`                       | TBA         |
+
+<br>
+
+HeaderHeightConfig
 
 #### 📄 `RouteSearchControllerConfig`
 
@@ -1099,62 +1200,112 @@ Lorum Ipsum<br>
 
 ##### Object Type: `RouteSearchControllerConfig`
 
-Lorum Ipsum<br>
+TBA
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
-| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
+| 🔤  `hidesSearchBarWhenScrolling?`<br/><br/>⚛️  `boolean` | TBA |
+| 🔤  `obscuresBackgroundDuringPresentation?`<br/><br/>⚛️  `boolean` | TBA |
+| 🔤  `hidesNavigationBarDuringPresentation?`<br/><br/>⚛️  `boolean` | TBA |
+| 🔤  `automaticallyShowsCancelButton?`<br/><br/>⚛️  `boolean` | TBA |
+| 🔤  `placeholder?`<br/><br/>⚛️  `string` | TBA |
+| 🔤  `searchBarStyle?`<br/><br/>⚛️  `UISearchBarStyle` | TBA |
+| 🔤  `tintColor?`<br/><br/>⚛️  `string ¦ DynamicColor` | TBA |
+| 🔤  `isTranslucent?`<br/><br/>⚛️  `boolean` | TBA |
+| 🔤  `textColor?`<br/><br/>⚛️  `string ¦ DynamicColor` | TBA |
+| 🔤  `returnKeyType?`<br/><br/>⚛️  `ReturnKeyType` | TBA |
+| 🔤  `searchTextFieldBackgroundColor?`<br/><br/>⚛️  `string ¦ DynamicColor` | TBA |
+| 🔤  `leftIconTintColor`<br/><br/>⚛️  `string ¦ DynamicColor` | TBA |
+| 🔤  `placeholderTextColor`<br/><br/>⚛️  `string ¦ DynamicColor` | TBA |
+
+<br>
+
+#####  Union String Type:  `NativeRouteData`
+
+TBA<br>
+
+| Name and Type  | Description |
+| :------------- | ----------- |
+| ⚛️  `default`   | TBA         |
+| ⚛️  `prominent` | TBA         |
+| ⚛️  `minimal`   | TBA         |
 
 <br>
 
 #### Object Interface: `RouteContentProps`
 
-* 📌 **Declaration**: [`abc`](src/types/abc)
+* 📌 **Declaration**: [`NavigatorRouteView`](src/components/NavigatorRouteView.tsx)
 
-Lorum Ipsum<br>
+TBA<br>
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
-| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
+| 🔤  `navigation?`<br/><br/>⚛️  `NavigationObject` | TBA |
 
 <br>
 
 #### Object Type: `RouteConstantsObject`
 
-* 📌 **Declaration**: [`abc`](src/types/abc)
+* 📌 **Declaration**: [`RNINavigatorRouteViewModule`](src/native_modules/RNINavigatorRouteViewModule)
 
-Lorum Ipsum<br>
+TBA<br>
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
-| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
+| 🔤  `isCurrentlyInFocus`<br/><br/>⚛️  `boolean` | TBA |
+| 🔤  `navBarHeight`<br/><br/>⚛️  `number` | TBA |
+| 🔤  `statusBarHeight`<br/><br/>⚛️  `number` | TBA |
+| 🔤  `navBarWithStatusBarHeight`<br/><br/>⚛️  `number` | TBA |
+| 🔤  `safeAreaInsets`<br/><br/>⚛️  `EdgeInsets` | TBA |
+| 🔤  `bounds`<br/><br/>⚛️  `Rect` | TBA |
 
 <br>
 
 #### Object Type: `NavigatorConstantsObject`
 
-* 📌 **Declaration**: [`abc`](src/types/abc)
-
-Lorum Ipsum<br>
-
-| Name and Type            | Description |
-| :----------------------- | ----------- |
-| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
-| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
-
-<br>
+* 📌 **Declaration**: [`RNINavigatorViewModule`](src/native_modules/RNINavigatorViewModule.ts)
 
 #####  Object Type:  `NativeRouteData`
 
+This type is an object tagged union type, with the `type` property being the tag that separates the unions. The table below defines the possible valid values that can be assigned to the `type` property.
+
+| Name and Type            | Description |
+| :----------------------- | ----------- |
+| 🔤  **Required**: `type`<br/><br/>⚛️  `string` i.e. `'viewController' ¦ 'reactRoute' ¦ 'nativeRoute'` | TBA |
+| 🔤  `abc`<br/><br/>⚛️  `abc` | TBA |
+
+<br>
+
+| Name and Type                                                | Description |
+| :----------------------------------------------------------- | ----------- |
+| 🔤  **Required**: `type`<br/><br/>⚛️  `string` i.e. `'viewController'` | TBA         |
+
+<br>
+
+| Name and Type                                                | Description |
+| :----------------------------------------------------------- | ----------- |
+| 🔤  **Required**: `type`<br/><br/>⚛️  `string` i.e. `'reactRoute ¦ nativeRoute'` | TBA         |
+| 🔤  `routeID`<br/><br/>⚛️  `number`                            | TBA         |
+| 🔤  `routeKey`<br/><br/>⚛️  `string`                           | TBA         |
+| 🔤  `routeIndex`<br/><br/>⚛️  `number`                         | TBA         |
+
+<br>
+
+#####  Object Type:  `NavigatorConstantsObject`
+
 Lorum Ipsum<br>
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
-| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
+| 🔤  `navigatorID`<br/><br/>⚛️  `number` | TBA |
+| 🔤  `navBarHeight`<br/><br/>⚛️  `number` | TBA |
+| 🔤  `statusBarHeight`<br/><br/>⚛️  `number` | TBA |
+| 🔤  `safeAreaInsets`<br/><br/>⚛️  `EdgeInsets` | TBA |
+| 🔤  `bounds`<br/><br/>⚛️  `Rect` | TBA |
+| 🔤  `isPresentingModal`<br/><br/>⚛️  `boolean` | TBA |
+| 🔤  `activeRoutes`<br/><br/>⚛️  `Array<NativeRouteData>` | TBA |
+| 🔤  `topViewController?`<br/><br/>⚛️  `NativeRouteData` | TBA |
+| 🔤  `visibleViewController?`<br/><br/>⚛️  `NativeRouteData` | TBA |
 
 <br>
 
