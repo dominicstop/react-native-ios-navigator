@@ -998,20 +998,20 @@ TBA<br>
 
 | Name and Type                                                | Description |
 | :----------------------------------------------------------- | ----------- |
-| 🔤  `baseConfig?`<br/><br/>⚛️  `NavBarAppearanceBaseConfig`    | TBA         |
-| 🔤  `backgroundEffect?`<br/><br/>⚛️  `BlurEffectStyle`         | TBA         |
+| 🔤  `baseConfig?`<br/><br/>⚛️  `NavBarAppearanceBaseConfig`, i.e. `'defaultBackground' ¦ 'opaqueBackground ¦ 'transparentBackground' ` | TBA         |
+| 🔤  `backgroundEffect?`<br/><br/>⚛️  [`BlurEffectStyle`](PLACE_HOLDER_LINK) | TBA         |
 | 🔤  `backgroundColor?`<br/><br/>⚛️  `string ¦ DynamicColor`    | TBA         |
-| 🔤  `backgroundImage?`<br/><br/>⚛️  `ImageItemConfig`          | TBA         |
-| 🔤  `backgroundImageContentMode?`<br/><br/>⚛️  `backgroundImageContentMode` | TBA         |
+| 🔤  `backgroundImage?`<br/><br/>⚛️  [`ImageItemConfig`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  `backgroundImageContentMode?`<br/><br/>⚛️  [`ViewContentMode`](PLACE_HOLDER_LINK) | TBA         |
 | 🔤  `shadowColor?`<br/><br/>⚛️  `string ¦ DynamicColor`        | TBA         |
-| 🔤  `shadowImage?`<br/><br/>⚛️  `abc`                          | TBA         |
+| 🔤  `shadowImage?`<br/><br/>⚛️  [`ImageItemConfig`](PLACE_HOLDER_LINK) | TBA         |
 | 🔤  `titleTextAttributes?`<br/><br/>⚛️  `TextStyle`            | TBA         |
 | 🔤  `largeTitleTextAttributes?`<br/><br/>⚛️  `TextStyle`       | TBA         |
-| 🔤  `titlePositionAdjustment?`<br/><br/>⚛️  `Offset`           | TBA         |
-| 🔤  `backIndicatorImage?`<br/><br/>⚛️  `ImageItemConfig`       | TBA         |
-| 🔤  `buttonAppearance?`<br/><br/>⚛️  `BarButtonItemAppearance` | TBA         |
-| 🔤  `backButtonAppearance?`<br/><br/>⚛️  `BarButtonItemAppearance` | TBA         |
-| 🔤  `doneButtonAppearance?`<br/><br/>⚛️  `BarButtonItemAppearance` | TBA         |
+| 🔤  `titlePositionAdjustment?`<br/><br/>⚛️  [`Offset`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  `backIndicatorImage?`<br/><br/>⚛️  [`ImageItemConfig`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  `buttonAppearance?`<br/><br/>⚛️  [`BarButtonItemAppearance`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  `backButtonAppearance?`<br/><br/>⚛️  [`BarButtonItemAppearance`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  `doneButtonAppearance?`<br/><br/>⚛️  [`BarButtonItemAppearance`](PLACE_HOLDER_LINK) | TBA         |
 
 <br>
 
@@ -1028,8 +1028,6 @@ TBA<br>
 | 🔤  `disabled?`<br/><br/>⚛️  `BarButtonItemStateAppearance` | TBA |
 | 🔤  `highlighted?`<br/><br/>⚛️  `BarButtonItemStateAppearance` | TBA |
 | 🔤  `focused?`<br/><br/>⚛️  `BarButtonItemStateAppearance` | TBA |
-
-<br>
 
 <br>
 
@@ -1057,7 +1055,7 @@ This type is an object tagged union type, with the `type` property being the tag
 | Name and Type                                                | Description |
 | :----------------------------------------------------------- | ----------- |
 | 🔤  **Required**: `type`<br/><br/>⚛️   `string` i.e. `'SYSTEM_ITEM'` | TBA         |
-| 🔤  `systemItem`<br/><br/>⚛️  `BarButtonItemSystemItem`        | TBA         |
+| 🔤  `systemItem`<br/><br/>⚛️  [`BarButtonItemSystemItem`](PLACE_HOLDER_LINK) | TBA         |
 
 <br>
 
@@ -1084,13 +1082,13 @@ This type is an object tagged union type, with the `type` property being the tag
 
 #####  Object Type: `NavBarItemConfigShared`
 
-TBA<br>
+TBA
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
 | 🔤  `key?`<br/><br/>⚛️  `string` | TBA |
 | 🔤  `tintColor?`<br/><br/>⚛️  `string ¦ DynamicColor` | TBA |
-| 🔤  `barButtonItemStyle?`<br/><br/>⚛️  `BarButtonItemStyle` | TBA |
+| 🔤  `barButtonItemStyle?`<br/><br/>⚛️  [`BarButtonItemStyle`](PLACE_HOLDER_LINK) | TBA |
 | 🔤  `possibleTitles?`<br/><br/>⚛️  `Array<string>` | TBA |
 | 🔤  `width?`<br/><br/>⚛️  `number` | TBA |
 | 🔤  `backgroundImage?`<br/><br/>⚛️  `{ [key in BarMetrics]?: NavBarItemBackgroundImageConfig }`<br/><br/>📌 [`BarMetrics`](PLACE_HOLDER_LINK)<br/>📌 [`NavBarItemBackgroundImageConfig`](PLACE_HOLDER_LINK) | TBA |
@@ -1114,9 +1112,9 @@ TBA
 
 | Name and Type                                                | Description |
 | :----------------------------------------------------------- | ----------- |
-| 🔤  **Required**: `imageItem`<br><br> ⚛️   `ImageItemConfig`   | TBA         |
-| 🔤  **Required**: `controlState`<br/><br/> ⚛️   `ControlState` | TBA         |
-| 🔤   `barButtonItemStyle?`<br/><br/> ⚛️   `BarButtonItemStyle` | TBA         |
+| 🔤  **Required**: `imageItem`<br><br> ⚛️   [`ImageItemConfig`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  **Required**: `controlState`<br/><br/> ⚛️   [`ControlState`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤   `barButtonItemStyle?`<br/><br/> ⚛️   [`BarButtonItemStyle`](PLACE_HOLDER_LINK) | TBA         |
 
 <br>
 
@@ -1155,15 +1153,15 @@ This type is an object tagged union type, with the `headerMode` property being t
 | Name and Type                                                | Description |
 | :----------------------------------------------------------- | ----------- |
 | 🔤  **Required**: `headerMode`<br/><br/>⚛️  `string` i.e. `fixed` | TBA         |
-| 🔤  `headerHeight?`<br/><br/>⚛️  `HeaderHeightConfig`          | TBA         |
+| 🔤  `headerHeight?`<br/><br/>⚛️  [`HeaderHeightConfig`](PLACE_HOLDER_LINK) | TBA         |
 
 <br>
 
 | Name and Type                                                | Description |
 | :----------------------------------------------------------- | ----------- |
 | 🔤  **Required**: `headerMode`<br/><br/>⚛️  `string` i.e. `resize` | TBA         |
-| 🔤  `headerHeightMin?`<br/><br/>⚛️  `HeaderHeightConfig`       | TBA         |
-| 🔤  `headerHeightMax?`<br/><br/>⚛️  `HeaderHeightConfig`       | TBA         |
+| 🔤  `headerHeightMin?`<br/><br/>⚛️  [`HeaderHeightConfig`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  `headerHeightMax?`<br/><br/>⚛️  [`HeaderHeightConfig`](PLACE_HOLDER_LINK) | TBA         |
 
 <br>
 
@@ -1171,10 +1169,10 @@ This type is an object tagged union type, with the `headerMode` property being t
 
 TBA
 
-| Name and Type                                              | Description |
-| :--------------------------------------------------------- | ----------- |
-| 🔤  **Required**: `preset`<br><br> ⚛️   `HeaderHeightPreset` | TBA         |
-| 🔤  `offset?`<br/><br/> ⚛️   `number`                        | TBA         |
+| Name and Type                                                | Description |
+| :----------------------------------------------------------- | ----------- |
+| 🔤  **Required**: `preset`<br><br> ⚛️   [`HeaderHeightPreset`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  `offset?`<br/><br/> ⚛️   `number`                          | TBA         |
 
 <br>
 
@@ -1209,11 +1207,11 @@ TBA
 | 🔤  `hidesNavigationBarDuringPresentation?`<br/><br/>⚛️  `boolean` | TBA |
 | 🔤  `automaticallyShowsCancelButton?`<br/><br/>⚛️  `boolean` | TBA |
 | 🔤  `placeholder?`<br/><br/>⚛️  `string` | TBA |
-| 🔤  `searchBarStyle?`<br/><br/>⚛️  `UISearchBarStyle` | TBA |
+| 🔤  `searchBarStyle?`<br/><br/>⚛️  [`UISearchBarStyle`](PLACE_HOLDER_LINK) | TBA |
 | 🔤  `tintColor?`<br/><br/>⚛️  `string ¦ DynamicColor` | TBA |
 | 🔤  `isTranslucent?`<br/><br/>⚛️  `boolean` | TBA |
 | 🔤  `textColor?`<br/><br/>⚛️  `string ¦ DynamicColor` | TBA |
-| 🔤  `returnKeyType?`<br/><br/>⚛️  `ReturnKeyType` | TBA |
+| 🔤  `returnKeyType?`<br/><br/>⚛️  [`ReturnKeyType`](PLACE_HOLDER_LINK) | TBA |
 | 🔤  `searchTextFieldBackgroundColor?`<br/><br/>⚛️  `string ¦ DynamicColor` | TBA |
 | 🔤  `leftIconTintColor`<br/><br/>⚛️  `string ¦ DynamicColor` | TBA |
 | 🔤  `placeholderTextColor`<br/><br/>⚛️  `string ¦ DynamicColor` | TBA |
@@ -1222,7 +1220,7 @@ TBA
 
 #####  Union String Type:  `NativeRouteData`
 
-TBA<br>
+TBA
 
 | Name and Type  | Description |
 | :------------- | ----------- |
@@ -1240,7 +1238,7 @@ TBA<br>
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤  `navigation?`<br/><br/>⚛️  `NavigationObject` | TBA |
+| 🔤  `navigation?`<br/><br/>⚛️  [`NavigationObject`](PLACE_HOLDER_LINK) | TBA |
 
 <br>
 
@@ -1256,8 +1254,8 @@ TBA<br>
 | 🔤  `navBarHeight`<br/><br/>⚛️  `number` | TBA |
 | 🔤  `statusBarHeight`<br/><br/>⚛️  `number` | TBA |
 | 🔤  `navBarWithStatusBarHeight`<br/><br/>⚛️  `number` | TBA |
-| 🔤  `safeAreaInsets`<br/><br/>⚛️  `EdgeInsets` | TBA |
-| 🔤  `bounds`<br/><br/>⚛️  `Rect` | TBA |
+| 🔤  `safeAreaInsets`<br/><br/>⚛️  [`EdgeInsets`](PLACE_HOLDER_LINK) | TBA |
+| 🔤  `bounds`<br/><br/>⚛️  [`Rect`](PLACE_HOLDER_LINK) | TBA |
 
 <br>
 
@@ -1272,7 +1270,6 @@ This type is an object tagged union type, with the `type` property being the tag
 | Name and Type            | Description |
 | :----------------------- | ----------- |
 | 🔤  **Required**: `type`<br/><br/>⚛️  `string` i.e. `'viewController' ¦ 'reactRoute' ¦ 'nativeRoute'` | TBA |
-| 🔤  `abc`<br/><br/>⚛️  `abc` | TBA |
 
 <br>
 
@@ -1293,19 +1290,19 @@ This type is an object tagged union type, with the `type` property being the tag
 
 #####  Object Type:  `NavigatorConstantsObject`
 
-Lorum Ipsum<br>
+TBA
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
 | 🔤  `navigatorID`<br/><br/>⚛️  `number` | TBA |
 | 🔤  `navBarHeight`<br/><br/>⚛️  `number` | TBA |
 | 🔤  `statusBarHeight`<br/><br/>⚛️  `number` | TBA |
-| 🔤  `safeAreaInsets`<br/><br/>⚛️  `EdgeInsets` | TBA |
-| 🔤  `bounds`<br/><br/>⚛️  `Rect` | TBA |
+| 🔤  `safeAreaInsets`<br/><br/>⚛️  [`EdgeInsets`](PLACE_HOLDER_LINK) | TBA |
+| 🔤  `bounds`<br/><br/>⚛️  [`Rect`](PLACE_HOLDER_LINK) | TBA |
 | 🔤  `isPresentingModal`<br/><br/>⚛️  `boolean` | TBA |
-| 🔤  `activeRoutes`<br/><br/>⚛️  `Array<NativeRouteData>` | TBA |
-| 🔤  `topViewController?`<br/><br/>⚛️  `NativeRouteData` | TBA |
-| 🔤  `visibleViewController?`<br/><br/>⚛️  `NativeRouteData` | TBA |
+| 🔤  `activeRoutes`<br/><br/>⚛️  `Array<NativeRouteData>`<br><br>📌  [`NativeRouteData`](PLACE_HOLDER_LINK) | TBA |
+| 🔤  `topViewController?`<br/><br/>⚛️  [`NativeRouteData`](PLACE_HOLDER_LINK) | TBA |
+| 🔤  `visibleViewController?`<br/><br/>⚛️  [`NativeRouteData`](PLACE_HOLDER_LINK) | TBA |
 
 <br>
 
@@ -1315,45 +1312,105 @@ Lorum Ipsum<br>
 
 ##### Object Type: `ImageItemConfig`
 
-Lorum Ipsum<br>
+This type is an object tagged union type, with the `type` property being the tag that separates the unions. The table below defines the possible valid values that can be assigned to the `type` property.
+
+| Name and Type                                                | Description |
+| :----------------------------------------------------------- | ----------- |
+| 🔤  **Required**: `type`<br/><br/>⚛️  `string` i.e. `'IMAGE_ASSET' ¦ 'IMAGE_SYSTEM' ¦ 'IMAGE_REQUIRE' ¦ 'IMAGE_EMPTY' ¦ 'IMAGE_RECT' ¦ 'IMAGE_GRADIENT' ` | TBA         |
+
+<br>
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
-| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
+| 🔤  **Required**: `type`<br/><br/>⚛️  `string` i.e. `'IMAGE_ASSET' ` | TBA |
+| 🔤  **Required**: `imageValue`<br/><br/>⚛️  `string` | TBA |
+| 🔤  `imageOptions?`<br/><br/>⚛️  [`UIImageConfig`](PLACE_HOLDER_LINK) | TBA |
+
+<br>
+
+| Name and Type                                                | Description |
+| :----------------------------------------------------------- | ----------- |
+| 🔤  **Required**: `type`<br/><br/>⚛️  `string` i.e. `'IMAGE_SYSTEM' ` | TBA         |
+| 🔤  **Required**:  `imageValue`<br/><br/>⚛️  [`ImageSystemConfig`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  `imageOptions?`<br/><br/>⚛️  [`UIImageConfig`](PLACE_HOLDER_LINK) | TBA         |
+
+<br>
+
+| Name and Type                                                | Description |
+| :----------------------------------------------------------- | ----------- |
+| 🔤  **Required**: `type`<br/><br/>⚛️  `string` i.e. `'IMAGE_EMPTY' ` | TBA         |
+
+<br>
+
+| Name and Type                                                | Description |
+| :----------------------------------------------------------- | ----------- |
+| 🔤  **Required**: `type`<br/><br/>⚛️  `string` i.e. `'IMAGE_RECT' ` | TBA         |
+| 🔤  **Required**: `imageValue`<br/><br/>⚛️  [`ImageRectConfig`](PLACE_HOLDER_LINK) | TBA         |
+
+<br>
+
+| Name and Type                                                | Description |
+| :----------------------------------------------------------- | ----------- |
+| 🔤  **Required**: `type`<br/><br/>⚛️  `string` i.e. `'IMAGE_GRADIENT' ` | TBA         |
+| 🔤  `imageValue`<br/><br/>⚛️  [`ImageGradientConfig`](PLACE_HOLDER_LINK) | TBA         |
 
 <br>
 
 #####  Object Type: `ImageResolvedAssetSource`
 
-Lorum Ipsum<br>
+TBA
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
-| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
+| 🔤  `height`<br/><br/>⚛️  `number` | TBA |
+| 🔤  `width`<br/><br/>⚛️  `number` | TBA |
+| 🔤  `scale`<br/><br/>⚛️  `number` | TBA |
+| 🔤  `uri`<br/><br/>⚛️  `string` | TBA |
 
 <br>
 
 #####  Object Type: `ImageRectConfig`
 
-Lorum Ipsum<br>
+TBA
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
-| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
+| 🔤 **Required**:  `width`<br/><br/>⚛️  `number` | TBA |
+| 🔤 **Required**: `height`<br/><br/>⚛️  `number` | TBA |
+| 🔤 **Required**: `fillColor`<br/><br/>⚛️  `string` | TBA |
+| 🔤  `borderRadius?`<br/><br/>⚛️  `number` | TBA |
 
 <br>
 
 #####  Object Type: `ImageGradientConfig`
 
-Lorum Ipsum<br>
+TBA
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
-| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
+| 🔤 **Required**:  `width`<br/><br/>⚛️  `number` | TBA |
+| 🔤 **Required**: `height`<br/><br/>⚛️  `number` | TBA |
+| 🔤  `borderRadius?`<br/><br/>⚛️  `number` | TBA |
+| 🔤  **Required**:  `colors`<br/><br/>⚛️  `Array<string>` | TBA |
+| 🔤  `locations?`<br/><br/>⚛️  `Array<number>` | TBA |
+| 🔤  `startPoint?`<br/><br/>⚛️  `Point ¦ PointPreset`<br><br>📌 [`Point`](PLACE_HOLDER_LINK)<br>📌 [`PointPreset`](PLACE_HOLDER_LINK) | TBA |
+| 🔤  `endPoint?`<br/><br/>⚛️  `Point ¦ PointPreset`<br>📌 [`Point`](PLACE_HOLDER_LINK)<br/>📌 [`PointPreset`](PLACE_HOLDER_LINK) | TBA |
+| 🔤  `type?`<br/><br/>⚛️  `string` i.e. `'axial' ¦ 'conic' ¦ 'radial'` | TBA |
+
+<br>
+
+#####  Object Type: `ImageSystemConfig`
+
+TBA
+
+| Name and Type                                                | Description |
+| :----------------------------------------------------------- | ----------- |
+| 🔤 **Required**:  `systemName`<br/><br/>⚛️  `string`           | TBA         |
+| 🔤 `pointSize?`<br/><br/>⚛️  `number`                          | TBA         |
+| 🔤  `weight?`<br/><br/>⚛️  [`ImageSymbolWeight`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  `scale?`<br/><br/>⚛️  [`ImageSymbolScale`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  `hierarchicalColor?`<br/><br/>⚛️  `Array<string>`          | TBA         |
+| 🔤  `paletteColors?`<br/><br/>⚛️  `string`                     | TBA         |
 
 <br>
 
@@ -1361,30 +1418,37 @@ Lorum Ipsum<br>
 
 * 📌 **Declaration**: [`NavigatorError`](src/functions/NavigatorError.ts)
 
-Lorum Ipsum<br>
+TBA
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
-| 🔤  `abc`<br/><br/>⚛️  `abc` |             |
+| ⚛️  `activeRoutesDeSync` | TBA |
+| ⚛️  `libraryError` | TBA |
+| ⚛️  `invalidRouteID` | TBA |
+| ⚛️  `invalidRouteKey` | TBA |
+| ⚛️  `invalidRouteIndex` | TBA |
+| ⚛️  `invalidReactTag` | TBA |
+| ⚛️  `invalidArguments` | TBA |
+| ⚛️  `routeOutOfBounds` | TBA |
+| ⚛️  `invalidProps` | TBA |
 
 <br>
 
-####  Constant: `NavBarAppearancePresets`
+####  Object Constant: `NavBarAppearancePresets`
 
 * 📌 **Declaration**: [`NavBarAppearancePresets`](src/constants/NavBarAppearancePresets.ts)
 
-Lorum Ipsum<br>
+TBA
 
-| Name and Type                                          | Description |
-| :----------------------------------------------------- | ----------- |
-| 🔤  `hidden`<br/><br/>⚛️  `NavBarAppearanceCombinedConfig` | TBA         |
+| Name and Type | Description |
+| :------------ | ----------- |
+| ⚛️  `hidden`   | TBA         |
 
 <br>
 
 #### Undocumented Types
 
-Lorum Ipsum<br>
+TBA
 
 | Type                                                         | Description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
