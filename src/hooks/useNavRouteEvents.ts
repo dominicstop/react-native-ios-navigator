@@ -13,7 +13,7 @@ export function useNavRouteEvents<
   K extends NavigatorRouteViewEventMap[T]
 >(
   eventName: T,
-  handler: (even: K) => void
+  handler: (event: K) => void
 ){
   const { navigation } = useContext(NavigationContext);
 

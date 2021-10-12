@@ -392,7 +392,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       });
     };
 
-
     return({
       // add some wiggle room
       transitionDuration: (transitionDuration + 250),
@@ -550,7 +549,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       // sync failed
       syncStatus = 'unknown';
     };
-    
+
     return {
       results: syncStatus,
       didDivergeFromNative: 
