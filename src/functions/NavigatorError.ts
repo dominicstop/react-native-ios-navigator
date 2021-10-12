@@ -26,7 +26,7 @@ export class NavigatorError extends Error {
   name: NavigatorErrorCodes | string;
   message: string;
 
-  constructor(error: any){
+  constructor(error: unknown){
     super();
     const errorObj = NavigatorError.parseErrorObject(error);
 
@@ -47,7 +47,10 @@ export class NavigatorError extends Error {
     };
   };
 
-  static isErrorObject(obj: any): obj is Error {
+  static isErrorObject(obj: unknown): obj is Error {
+    if(typeof obj !== 'object') return false;
+    if(obj == null) return false;
+
     return ('name' in obj || 'message' in obj || 'stack' in obj);
   };
 
@@ -56,7 +59,7 @@ export class NavigatorError extends Error {
   };
 
   /// Navigator-related errors thrown from native are JSON strings
-  static parseErrorObject(error: any): NavigatorErrorObject | null {
+  static parseErrorObject(error: unknown): NavigatorErrorObject | null {
     const string = 
       (error instanceof Error   )? error.message :
       (typeof error === 'string')? error : null;
