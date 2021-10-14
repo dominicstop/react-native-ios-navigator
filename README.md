@@ -242,9 +242,9 @@ Each route has a corresponding `RouteOptions` object associated with it. This ob
 | 🔤  `style`<br/><br>⚛️  `ViewStyle`                            | The style applied to the the `NavigatorView` component itself.<br><br>📝 **Note**: The layout size of the `NavigatorView` will also determine the layout size of the routes, so if the size of the navigator is 100 x 100, then the routes will also be 100 x 100. |
 | 🔤  `navBarPrefersLargeTitles`<br/><br>⚛️  `boolean`<br><br>✳️  **Default**: `true` on iOS 11+ | Specifies whether or not to use the large title style for the navigation bar title. Defaults to `true` on iOS 11 and above.<br><br>Maps to the [`UINavigationBar.prefersLargeTitle`](https://developer.apple.com/documentation/uikit/uinavigationbar/2908999-preferslargetitles) property,<br><br>📝 **Note**: This prop can be overridden on a per route basis either via `largeTitleDisplayMode` in the `NavigatorView.routes` prop, or via the `RouteViewPortal.routeOptions` prop.<br/> |
 | 🔤  `navBarAppearance`<br/><br>⚛️ [`NavBarAppearanceCombinedConfig`](PLACE_HOLDER_LINK) | This prop allows for the customization of the [`UINavigationBar`](https://developer.apple.com/documentation/uikit/uinavigationbar). The navigation bar can be customized via two modes, namely:<br>• **A**. "legacy" mode (iOS 12 and below), and<br>• **B**. "appearance" mode (iOS 13 and above).<br><br>The "legacy" mode, as the name would suggest, uses ["legacy customizations"](https://developer.apple.com/documentation/uikit/uinavigationbar/legacy_customizations)  (where in the navigation bar is customized using the old API via directly manipulating the navigation bar object's properties).<br><br>The "appearance" mode on the other hand, uses `UINavigationBarAppearance` to apply customizations for each of the "navigation bar" styles/states, namely:<br>1️⃣  `standardAppearance` (normal height),<br>2️⃣ `compactAppearance` (compact-height, e.g. iPhones in landscape, etc.),<br>3️⃣  `scrollEdgeAppearance` (when the navigation bar doesn't have content behind it and is currently scrolled all the way to the top), and <br>4️⃣ `compactScrollEdgeAppearance` (a combination of compact and scroll edge, requires iOS 15+) .<br><br>📝 **Note**: There is one big caveat though, once "appearance" mode is used, "legacy" mode no longer works (it's some sort of bug in `UIKit`). In other words, switching between the two modes is not supported, only stick to one. When targeting iOS 12 and below, use "legacy", otherwise use "appearance".<br><br>💡 **Tip**: Check the [guides](PLACE_HOLDER_LINK) section for examples on how to customize the navigation bar, or browse the [`NavBarAppearanceCombinedConfig`](PLACE_HOLDER_LINK) object for the full list of properties.<br><br>💡 **Tip**: The navigation bar can also be customized on a per-route basis via the `RouteOptions.navBarAppearanceOverride`. You can set this property either via `routeOptionsDefault` in a route's config (in the `NavigatorView.routes` prop), or via the [`RouteViewPortal`](PLACE_HOLDER_LINK) component using the `RouteViewPortal.routeOptions` prop. |
-| 🔤  `isNavBarTranslucent`<br/><br>⚛️  `boolean`                  | Determines whether or not the the navigation bar is translucent. Maps to [`UINavigationBar.isTranslucent`](https://developer.apple.com/documentation/uikit/uinavigationbar/1624928-istranslucent). |
-| `isInteractivePopGestureEnabled`<br/><br>⚛️  `boolean`         | Enables or disables the `interactivePopGestureRecognizer`. In other words, this prop sets whether swiping on the left edge of the screen will pop the current route. Defaults to `true`. |
-| 🔤  `shouldSwizzleRootViewController`<br/><br>⚛️  `boolean`      | Determines whether or not the root view controller's default implementation is changed at run-time (i.e. "swizzled") to enable certain features (e.g. like enabling "view controller based status bar" via delegating `childForStatusBarStyle` to a child view controller, etc).<br><br>The "injected" implementation is lifted from [`RNIRootViewController`](PLACE_HOLDER_LINK). <br><br>Defaults to `true`, however this will only take effect for the first `NavigatorView` component, and also only if the parent view controller is the same instance as the one in `window.rootViewController`.<br><br>For brownfield projects with native code (or for projects with an existing navigation solution), set this to `false` to disable this behavior. |
+| 🔤  `isNavBarTranslucent`<br/><br>⚛️  `boolean`                | Determines whether or not the the navigation bar is translucent. Maps to [`UINavigationBar.isTranslucent`](https://developer.apple.com/documentation/uikit/uinavigationbar/1624928-istranslucent). |
+| `isInteractivePopGestureEnabled`<br/><br>⚛️  `boolean`        | Enables or disables the `interactivePopGestureRecognizer`. In other words, this prop sets whether swiping on the left edge of the screen will pop the current route. Defaults to `true`. |
+| 🔤  `shouldSwizzleRootViewController`<br/><br>⚛️  `boolean`    | Determines whether or not the root view controller's default implementation is changed at run-time (i.e. "swizzled") to enable certain features (e.g. like enabling "view controller based status bar" via delegating `childForStatusBarStyle` to a child view controller, etc).<br><br>The "injected" implementation is lifted from [`RNIRootViewController`](PLACE_HOLDER_LINK). <br><br>Defaults to `true`, however this will only take effect for the first `NavigatorView` component, and also only if the parent view controller is the same instance as the one in `window.rootViewController`.<br><br>For brownfield projects with native code (or for projects with an existing navigation solution), set this to `false` to disable this behavior. |
 | 🔤  `disableTransparentNavBarScrollEdgeAppearance`<br/><br/>⚛️  `boolean`<br/><br>✳️  **Default**: `true` | In iOS 15+ the navigation bar by default is now configured to have a transparent background until the user scrolls and there's some content behind the navigation bar (i.e. the `scrollEdgeAppearance` is now configured to be transparent by default).<br><br>This prop determines whether or not to apply a  background color to navigation bar using `scrollEdgeAppearance` . Set this to false if you want to keep the default behavior<br><br>📝 **Note A**: You can manually do what this prop does by providing your own `scrollEdgeAppearance` appearance config either globally via the `NavigatorView.navBarAppearance` prop, or on a per-route basis via the `RouteOptions.navBarAppearanceOverride` property.<br/><br/>📝 **Note B**: This prop only takes effect on iOS 15+ and when a route disables the large title. This prop does not affect native routes. |
 
 <br>
@@ -324,9 +324,7 @@ These are basically "presets" to existing navigation commands i.e. it uses the e
 
 #### D.1.2. `RouteViewPortal` Component
 
-The purpose of this component is to allow for the customization of a route after it's been pushed.
-
-* E.g. like dynamically overriding/updating a route's `RouteOptions`, or rendering custom components to show inside the navigation bar, etc. 
+The purpose of this component is to allow for the customization of a route after it's been pushed (e.g. like dynamically overriding/updating a route's `RouteOptions`, or rendering custom components to show inside the navigation bar, etc). 
 
 📝 **Note**: The reason why this component has the "portal" suffix is because it's "transporting" things like the route options and the render props somewhere else.
 
@@ -477,9 +475,7 @@ export function RouteViewPortalExample01(){
 
 #### D.1.3. `RouteViewEvents` Component
 
-This component allows you to subscribe and listen to the route-related events for the current route.
-
-* E.g. these events include things like: when a route is about to be pushed or popped, or when a navigation bar item has been pressed, etc. 
+This component allows you to subscribe and listen to the route-related events for the current route (e.g. these events include things like: when a route is about to be pushed or popped, or when a navigation bar item has been pressed, etc).
 
 Similar to the `RouteViewPortal` component:
 
@@ -487,11 +483,15 @@ Similar to the `RouteViewPortal` component:
 *  **2**. this component is also required to be used inside a route. 
 	* This is because, like the `RouteViewPortal` component, this component also relies on react context to communicate to the parent `NavigatorRouteView` component and receive the route-related events.
 
+
+
 Internally, every route has an associated event emitter (i.e. a  [`NavigatorRouteViewEventEmitter`](PLACE_HOLDER_LINK) instance).
 
 * The route's event emitter can be accessed via the route's navigation object (e.g.  `NavigationObject.getRefToNavRouteEmitter`). 
 * Internally, this component uses the route's event emitter object to subscribe and listen to the route events.
 * 💡 **Tip**: As an alternative, there's also the [`useNavRouteEvents`](PLACE_HOLDER_LINK) hook.
+
+
 
 Here is a list a list of the event props that this component supports. The various route-related events are documented and explained in the [`NavigatorRouteViewEvents`](PLACE_HOLDER_LINK) section.
 
@@ -502,14 +502,20 @@ Here is a list a list of the event props that this component supports. The vario
 	* `onRouteDidPush`
 	* `onRouteWillPop`
 	* `onRouteDidPop`
+	
+	
 * [Focus/Blur-related Events](PLACE_HOLDER_LINK)
 	* `onRouteWillFocus`
 	* `onRouteDidFocus`
 	* `onRouteWillBlur`
 	* `onRouteDidBlur`
+	
+	
 * [Navigation Bar Item-related Events](PLACE_HOLDER_LINK)
 	* `onPressNavBarLeftItem`
 	* `onPressNavBarRightItem`
+	
+	
 * [Search Bar-Related Events](PLACE_HOLDER_LINK)
 	* `onUpdateSearchResults`
 	* `onSearchBarCancelButtonClicked`
@@ -545,12 +551,16 @@ A common UI navigation pattern is having a large header at the very top of the s
 * That header will either remain at a fixed size, or expand and collapse during scrolling.
 * Check out [`NavigatorShowcase01`](PLACE_HOLDER_LINK), [`NavigatorShowcase02`](PLACE_HOLDER_LINK) and [`NavigatorShowcase03`](PLACE_HOLDER_LINK) for some examples.
 
+
+
 The navigation bar cannot be easily customized (this is especially true you're trying to change the height).
 
 * As such, this makes things like extending the navigation bar's height to show some custom UI elements underneath the title bar very difficult.
 * It's also undesirable to create a custom built solution because the built-in navigation bar has a lot of expected native behaviors/functionality that will be hard to re-create (transitions, the back button, etc). 
 * To workaround this, some apps (e.g. spotify's album/playlist screen, etc) will just make the navigation bar's background transparent, and then show their custom UI elements underneath it.
 	* Other apps (like twitter's profile screen) will simply just hide navigation bar entirely, and show their own custom view (you can also do that using this library by pushing a route with `RouteOptions.navigationBarVisibility`).
+
+
 
 
 This component uses the "transparent navigation bar" approach. When in use, this component is displayed behind the navigation bar, and is anchored to the top of the screen.
@@ -574,7 +584,7 @@ This component uses the "transparent navigation bar" approach. When in use, this
 
 #### D.2.1. `NavigationContext`
 
-Lorum Ipsum<br>
+TBA
 
 | Name and Type                                                | Description |
 | :----------------------------------------------------------- | ----------- |
@@ -586,7 +596,7 @@ Lorum Ipsum<br>
 
 #### D.2.2. `NavigatorUIConstantsContext`
 
-Lorum Ipsum<br>
+TBA
 
 | Name and Type                                                | Description |
 | :----------------------------------------------------------- | ----------- |
@@ -613,9 +623,9 @@ This library is written using typescript. As such, all of the objects/types ment
 
 <br>
 
-#### 📄 Object Class: `TSEventEmitter.ts`
+#### 📄 Object Class: `TSEventEmitter`
 
-See [@dominicstop/ts-event-emitter](https://github.com/dominicstop/ts-event-emitter)<br>
+See [@dominicstop/ts-event-emitter](https://github.com/dominicstop/ts-event-emitter) for documentation.
 
 <br>
 
@@ -704,7 +714,7 @@ This type is used to configure a route item. For "JS/React" routes, use `NavRout
 
 ##### Object Type: `NavRouteConfigItemJS`
 
-This type is used to create and configure a "JS/React" route.<br>
+This type is used to create and configure a "JS/React" route.
 
 | Name and Type                                                | Description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
@@ -720,7 +730,7 @@ This type is used to create and configure a "JS/React" route.<br>
 
 #####  Object Type: `NavRouteConfigItemNative`
 
-This type is used to create and configure a "native" route.<br>
+This type is used to create and configure a "native" route.
 
 | Name and Type                                     | Description                                                  |
 | :------------------------------------------------ | ------------------------------------------------------------ |
@@ -807,7 +817,7 @@ The properties that are related to each other are grouped together into their ow
 
 ##### Object Type: `NavigationObject`
 
-Lorum Ipsum<br>
+TBA
 
 ##### `NavigationObject`: General Properties
 
@@ -891,7 +901,7 @@ See "[`NavigatorView` General/Misc. Methods](PLACE_HOLDER_LINK)" section for mor
 
 ##### Object Type: `NavRouteItem`
 
-Lorum Ipsum<br>
+TBA
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
@@ -903,7 +913,7 @@ Lorum Ipsum<br>
 
 ##### Object Type: `NavRouteStackItem`
 
-Represents an active  route item in the navigation stack. This type extends `NavRouteItem`, as such they share the same properties.  <br>
+Represents an active  route item in the navigation stack. This type extends `NavRouteItem`, as such they share the same properties.
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
@@ -918,7 +928,7 @@ Represents an active  route item in the navigation stack. This type extends `Nav
 
 ##### Object Type: `NavRouteStackPartialItem`
 
-Used in the `NavigatorView.SetRoutesTransformCallback` function. Represents either an active route in the navigation stack, or a route that is about to be created and added to the navigation stack. <br>
+Used in the `NavigatorView.SetRoutesTransformCallback` function. Represents either an active route in the navigation stack, or a route that is about to be created and added to the navigation stack.
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
@@ -1020,7 +1030,7 @@ TBA<br>
 
 * 📌 **Declaration**: [`BarButtonItemAppearance`](src/types/BarButtonItemAppearance.ts)
 
-TBA<br>
+TBA
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
@@ -1247,7 +1257,7 @@ TBA<br>
 
 * 📌 **Declaration**: [`RNINavigatorRouteViewModule`](src/native_modules/RNINavigatorRouteViewModule)
 
-TBA<br>
+TBA
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
@@ -2170,11 +2180,15 @@ If you want to run the example app by yourself, please head on over to the [Run 
 
 * `RouteOptions.navBarButtonBackItemConfig`
 	* Cycle through all the example  `NavBarBackItemConfig` configurations. Shows all the ways the back button can be customized. 
+	
 * `RouteOptions.leftItemsSupplementBackButton`
 	* Toggles whether or not to show the back button when there are `RouteOptions.navBarButtonLeftItemsConfig`.
+	
 * `RouteOptions.applyBackButtonConfigToCurrentRoute`
 	* By default, the back button config is applied to next route. This toggles whether or not the back button config is applied to the current route.
+	
 	* If set to `false`, then the "back button"-related configs are applied to the next route.
+	
 * `RouteOptions.hidesBackButton`: Toggle back button visibility.
 * `RouteOptions.backButtonTitle`: Change the back button text.
 
@@ -2244,7 +2258,7 @@ If you want to run the example app by yourself, please head on over to the [Run 
 
 <br>
 
-### `NavigatorTest04
+### `NavigatorTest04`
 
 * 📌 **Declaration**: [`NavigatorTest04.tsx`](example/src/routes/NavigatorTest04/NavigatorTest04.tsx)
 
