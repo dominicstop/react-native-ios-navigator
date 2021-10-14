@@ -1693,6 +1693,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
     return (
       <RNINavigatorView 
+        {...props}
         ref={r => { this.nativeRef = r! }}
         style={style}
         // General config

@@ -1,4 +1,4 @@
-import { ViewStyle, requireNativeComponent, UIManager } from 'react-native';
+import { requireNativeComponent, UIManager, ViewProps } from 'react-native';
 
 import type { OnCustomCommandFromNativeEvent, OnNativeCommandRequestEvent, OnNavRouteDidShowEvent, OnNavRoutePopEvent, OnNavRouteViewAddedEvent, OnNavRouteWillShowEvent, OnSetNativeRoutesEvent, OnUIConstantsDidChangeEvent } from '../types/RNINavigatorViewEvents';
 import type { NavBarAppearanceCombinedConfig } from '../types/NavBarAppearanceConfig';
@@ -15,10 +15,7 @@ export type NativeRouteMap = {
 };
 
 /** `RNINavigatorView` native comp. props */
-export type RNINavigatorViewProps = {
-  style: ViewStyle | Array<ViewStyle>;
-  nativeID?: string;
-  
+export type RNINavigatorViewProps = ViewProps & {
   // General/Misc. Config
   navigatorID: number;
   nativeRoutes: NativeRouteMap;
