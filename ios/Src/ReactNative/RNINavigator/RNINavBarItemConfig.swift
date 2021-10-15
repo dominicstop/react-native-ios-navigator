@@ -99,9 +99,7 @@ internal class RNINavBarItemConfig {
       
       // `RNIImageItem.ImageType` Items
       // Note: Creation of image handled by `RNIImageItem`
-      case .IMAGE_ASSET : fallthrough;
-      case .IMAGE_EMPTY : fallthrough;
-      case .IMAGE_SYSTEM:
+      case .IMAGE_ASSET, .IMAGE_EMPTY, .IMAGE_SYSTEM:
         return UIBarButtonItem(
           image: self.imageItem?.image,
           style: self.barButtonItemStyle,
@@ -162,9 +160,11 @@ internal class RNINavBarItemConfig {
       return keys.compactMap {
         guard let metric     = UIBarMetrics(string: $0),
               let configDict = dict[$0] as? NSDictionary,
+              
               // get image item from config
               let imageDict  = configDict["imageItem"] as? NSDictionary,
               let imageItem  = RNIImageItem(dict: imageDict),
+              
               // get control state from config
               let controlStateString = configDict["controlState"] as? String,
               let controlState       = UIControl.State(string: controlStateString)
