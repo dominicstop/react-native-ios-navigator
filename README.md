@@ -6,7 +6,9 @@ A native wrapper component around `UINavigationController` for react-native.
 
 ## 🚧⚠️ **Library WIP** ⚠️🚧
 
-Currently in development... 😅 (See [TODO.md](https://github.com/dominicstop/react-native-ios-navigator/blob/master/docs/TODO.md) for current progress).
+* Currently in development... 😅 (See [TODO.md](https://github.com/dominicstop/react-native-ios-navigator/blob/master/docs/TODO.md) for current progress). 
+* The documentation is incomplete (some parts/sections are marked as **TBA** i.e. "to be added"). 
+* Some of the links in the documentation are broken (i.e. the URL points to `PLACE_HOLDER_LINK`).
 
 <br>
 
@@ -336,6 +338,8 @@ For some extra background info, the `NavigatorRouteView` component is responsibl
 * **B**. managing the route's lifecycle, and
 * **C**. communicating with the native views/modules, etc.
 
+
+
 As such this component doesn't actually render anything directly, it's merely an intermediate component to pass things along. 
 
 * The components you pass to  the `RouteViewPortal` are actually being rendered in different place in the component tree.
@@ -611,9 +615,19 @@ TBA
 
 #### D.3.1.  `useNavRouteEvents`
 
+TBA
+
+<br>
+
 #### D.3.2.  `useNavigation`
 
+TBA
+
+<br>
+
 #### D.3.2.  `useNavigatorUIConstants`
+
+TBA
 
 <br>
 
