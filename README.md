@@ -149,7 +149,7 @@ However, the older versions of the react-native template (e.g. `0.63` and below)
 
 | Library Version   | Compatibility                 |
 | ----------------- | ----------------------------- |
-| `next`            | iOS 10 to iOS 15<br>Xcode 13  |
+| `0.4.0`+          | iOS 10 to iOS 15<br>Xcode 13  |
 | `0.3.1` and Below | iOS 10 to iOS 14<br/>Xcode 12 |
 
 ------

@@ -355,6 +355,10 @@
 
 ### Version: `next`
 
+<br>
+
+### Version: `0.4.0`
+
 - [x] Checked if the example project still runs on iOS 15
 	* Project is now built using Xcode 13.
 
