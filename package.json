@@ -23,6 +23,7 @@
   ],
   "scripts": {
     "typescript": "tsc --noEmit --project tsconfig.build.json",
+    "typescript-example": "cd example && tsc --noEmit --project tsconfig.json",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "prepare": "bob build",
     "release": "release-it --only-version",
