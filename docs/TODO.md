@@ -66,7 +66,6 @@
 
 <br>
 
-- [ ] Update `NavBarItemConfig` to support creating bar items: [`fixedSpace`](https://developer.apple.com/documentation/uikit/uibarbuttonitem/3600338-fixedspace), [`flexibleSpace`](https://developer.apple.com/documentation/uikit/uibarbuttonitem/3600339-flexiblespace).
 - [ ] Update `NavBarItemConfig` to support multiple custom navigation bar items.
 - [ ] Update `NavBarItemConfig` to support menu and submenu actions.
 
@@ -354,6 +353,8 @@
 ## Completed
 
 ### Version: `next`
+
+- [x] (Commit: `07c048d`) **Implement**: Update `NavBarItemConfig` to support creating  `fixedSpace` and  `flexibleSpace` bar items.
 
 <br>
 
