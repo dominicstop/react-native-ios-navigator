@@ -68,10 +68,6 @@ export type NavBarItemConfigBase = SupportedImageTypes | {
   systemItem: BarButtonItemSystemItem;
 };
 
-export type NavBarItemConfigCustomBase = {
-  type: "CUSTOM";
-};
-
 export type BarButtonItemStyle = 
   /** Glows when tapped. The default item style. */
   | 'plain'
@@ -115,6 +111,10 @@ export type NavBarItemConfigShared = {
   // backgroundVerticalPositionAdjustment?: {
   //   [key in BarMetrics]?: number
   // };
+};
+
+export type NavBarItemConfigCustomBase = {
+  type: "CUSTOM";
 };
 
 // TODO (015): Incomplete... missing back-button related properties + Impl.

@@ -148,7 +148,7 @@ struct RNISearchControllerConfig {
         searchBar.searchTextField.backgroundColor = color
         
       } else if let searchBarTextField = searchBarTextField {
-        // TODO: Handle reset to default...
+        #warning("Handle reset to default...")
         searchBarTextField.backgroundColor = color;
       };
     };
@@ -169,7 +169,7 @@ struct RNISearchControllerConfig {
     if let searchBarTextField = searchBarTextField,
        let searchBarPlaceholderLabel = searchBarPlaceholderLabel {
       
-      // TODO: Handle reset to default...
+      #warning("Handle reset to default + appearance change...")
       if let color = self.leftIconTintColor,
          let searchIcon = searchBarTextField.leftView as? UIImageView {
           
@@ -177,7 +177,7 @@ struct RNISearchControllerConfig {
         searchIcon.tintColor = color;
       };
       
-      // TODO: Handle reset to default...
+      #warning("Handle reset to default...")
       if let color = self.placeholderTextColor {
         searchBarPlaceholderLabel.textColor = color;
       };
