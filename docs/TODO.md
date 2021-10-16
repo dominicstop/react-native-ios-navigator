@@ -50,6 +50,23 @@
 - [ ] Impl. swift extension  `notEmptyAndAllSatisfy`
 - [ ] Remove TS Enums
 - [ ] Cleanup native comments - remove unnecessary comments
+- [ ] Clear route options when `RouteViewPortal` unmounts
+- [ ] support blur for image config.
+- [ ] Make route options provided via `RouteViewPortal` and `setRouteOptions` command separate then combine later.
+- [ ] Add section to README: `RouteOptions` Precedence/Hierarchy
+
+
+
+- [ ] Update legacy `backgroundImage` to support setting [`barPosition`](https://developer.apple.com/documentation/uikit/uinavigationbar/1624968-setbackgroundimage)
+- [ ] Update `NavBarItemConfig` to support configuring [`UIBarItem`](https://developer.apple.com/documentation/uikit/uibaritem) 
+	* (e.g. `isEnabled`, `setTitleTextAttributes`).
+
+- [ ] Update `NavBarItemConfig` to support iOS 15+ [`UIBarButtonItem`](https://developer.apple.com/documentation/uikit/uibarbuttonitem) properties.
+	* e.g. `isSelected`, `changesSelectionAsPrimaryAction`
+
+- [ ] Update `NavBarItemConfig` to support creating bar items: [`fixedSpace`](https://developer.apple.com/documentation/uikit/uibarbuttonitem/3600338-fixedspace), [`flexibleSpace`](https://developer.apple.com/documentation/uikit/uibarbuttonitem/3600339-flexiblespace).
+- [ ] Update `NavBarItemConfig` to support multiple custom navigation bar items.
+- [ ] Update `NavBarItemConfig` to support menu and submenu actions.
 
 <br>
 
@@ -352,7 +369,8 @@
 - [x] (Commit: `6fce697`) Impl. `NavBarAppearanceConfig.useStandardAppearanceAsDefault`.
 - [x] (Commit:  `b6f1d56`) **Implement**: Update `ImageItemConfig` to support `UIImage.SymbolConfiguration` and options to configure the `UIImage` rendering.
 - [x] (Commit:  `4c6a1f9`) **Fix**: Fix `disableTransparentNavBarScrollEdgeAppearance` being applied to routes that implicitly have a `scrollEdgeAppearance` when  `RNINavBarAppearance.useStandardAppearanceAsDefault` is set to `true`.
-- [x] (Commit:  `df03b7f`) **Cleanup**: Fix Xcode `MARK:-` comments
+- [x] (Commit:  `df03b7f`) **Cleanup**: Fix Xcode `MARK:-` comments.
+- [x] (Commit: `0ee17f5`) **Fix**: Navigation bar right item transition — the navigation bar right item slides in from the left when the interactive pop transition is cancelled.
 
 <br>
 
