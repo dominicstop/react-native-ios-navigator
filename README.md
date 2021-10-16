@@ -103,6 +103,7 @@ One thing that I liked about `NavigatorIOS` is that it behaved like any regular 
 
 <br><br>
 
+
 ## B. Installation
 
 ```sh
@@ -199,10 +200,6 @@ export function App() {
 ![GettingStartedGuide-ExampleA01](./docs/assets/GettingStartedGuide-ExampleA01.gif)
 
 <br>
-
-------
-
-<br><br>
 
 ## D. Documentation
 
@@ -487,7 +484,7 @@ Similar to the `RouteViewPortal` component:
 *  **2**. this component is also required to be used inside a route. 
 	* This is because, like the `RouteViewPortal` component, this component also relies on react context to communicate to the parent `NavigatorRouteView` component and receive the route-related events.
 
-
+<br>
 
 Internally, every route has an associated event emitter (i.e. a  [`NavigatorRouteViewEventEmitter`](PLACE_HOLDER_LINK) instance).
 
@@ -495,7 +492,7 @@ Internally, every route has an associated event emitter (i.e. a  [`NavigatorRout
 * Internally, this component uses the route's event emitter object to subscribe and listen to the route events.
 * 💡 **Tip**: As an alternative, there's also the [`useNavRouteEvents`](PLACE_HOLDER_LINK) hook.
 
-
+<br>
 
 Here is a list a list of the event props that this component supports. The various route-related events are documented and explained in the [`NavigatorRouteViewEvents`](PLACE_HOLDER_LINK) section.
 
@@ -507,19 +504,25 @@ Here is a list a list of the event props that this component supports. The vario
 	* `onRouteWillPop`
 	* `onRouteDidPop`
 	
-	
+
+<br>
+
 * [Focus/Blur-related Events](PLACE_HOLDER_LINK)
 	* `onRouteWillFocus`
 	* `onRouteDidFocus`
 	* `onRouteWillBlur`
 	* `onRouteDidBlur`
 	
-	
+
+<br>
+
 * [Navigation Bar Item-related Events](PLACE_HOLDER_LINK)
 	* `onPressNavBarLeftItem`
 	* `onPressNavBarRightItem`
 	
-	
+
+<br>
+
 * [Search Bar-Related Events](PLACE_HOLDER_LINK)
 	* `onUpdateSearchResults`
 	* `onSearchBarCancelButtonClicked`
@@ -555,7 +558,7 @@ A common UI navigation pattern is having a large header at the very top of the s
 * That header will either remain at a fixed size, or expand and collapse during scrolling.
 * Check out [`NavigatorShowcase01`](PLACE_HOLDER_LINK), [`NavigatorShowcase02`](PLACE_HOLDER_LINK) and [`NavigatorShowcase03`](PLACE_HOLDER_LINK) for some examples.
 
-
+<br>
 
 The navigation bar cannot be easily customized (this is especially true you're trying to change the height).
 
@@ -564,7 +567,7 @@ The navigation bar cannot be easily customized (this is especially true you're t
 * To workaround this, some apps (e.g. spotify's album/playlist screen, etc) will just make the navigation bar's background transparent, and then show their custom UI elements underneath it.
 	* Other apps (like twitter's profile screen) will simply just hide navigation bar entirely, and show their own custom view (you can also do that using this library by pushing a route with `RouteOptions.navigationBarVisibility`).
 
-
+<br>
 
 
 This component uses the "transparent navigation bar" approach. When in use, this component is displayed behind the navigation bar, and is anchored to the top of the screen.
@@ -767,8 +770,8 @@ The properties that are related to each other are grouped together into their ow
 
 | Name and Type                                                | Description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
-| 🔤  `statusBarStyle?`<br/><br/>⚛️  `StatusBarStyle `             | TBA                                                          |
-| 🔤  `routeContainerStyle?`<br/><br/>⚛️  `ViewStyle`              | Whatever component you return from `renderRoutes` will be wrapped inside a "route container" view. This prop allows you to set the style of that view.<br/><br/>💡 **Tip**: You can use this prop to provide a default background color for all the routes. |
+| 🔤  `statusBarStyle?`<br/><br/>⚛️  `StatusBarStyle `           | TBA<br><br>📌 Maps to [`UIStatusBarStyle`](https://developer.apple.com/documentation/uikit/uistatusbarstyle) enum in the apple docs. |
+| 🔤  `routeContainerStyle?`<br/><br/>⚛️  `ViewStyle`            | Whatever component you return from `renderRoutes` will be wrapped inside a "route container" view. This prop allows you to set the style of that view.<br/><br/>💡 **Tip**: You can use this prop to provide a default background color for all the routes. |
 | 🔤  `automaticallyAddHorizontalSafeAreaInsets?`<br/><br/>⚛️  `boolean` | TBA                                                          |
 
 <br>
@@ -784,34 +787,34 @@ The properties that are related to each other are grouped together into their ow
 
 ##### `RouteOptions`: Navigation Bar Config-Related Properties
 
-| Name and Type                                                | Description |
-| :----------------------------------------------------------- | ----------- |
-| 🔤  `routeTitle?`<br/><br/>⚛️  `string`                          | TBA         |
-| 🔤  `prompt?`<br/><br/>⚛️  `string`                              | TBA         |
-| 🔤  `largeTitleDisplayMode?`<br/><br/>⚛️ [`LargeTitleDisplayMode`](PLACE_HOLDER_LINK) | TBA         |
-| 🔤  `searchBarConfig?`<br/><br/>⚛️ [`RouteSearchControllerConfig`](PLACE_HOLDER_LINK) | TBA         |
+| Name and Type                                                | Description                                                  |
+| :----------------------------------------------------------- | ------------------------------------------------------------ |
+| 🔤  `routeTitle?`<br/><br/>⚛️  `string`                        | TBA<br/><br/>📌 Maps to [`UINavigationItem.title`](https://developer.apple.com/documentation/uikit/uinavigationitem/1624965-title) property in the apple docs. |
+| 🔤  `prompt?`<br/><br/>⚛️  `string`                            | TBA<br/><br/>📌 Maps to [`UINavigationItem.prompt`](https://developer.apple.com/documentation/uikit/uinavigationitem/1624930-prompt) property in the apple docs. |
+| 🔤  `largeTitleDisplayMode?`<br/><br/>⚛️ [`LargeTitleDisplayMode`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`UINavigationItem.largeTitleDisplayMode`](https://developer.apple.com/documentation/uikit/uinavigationitem/2909056-largetitledisplaymode) property, and the [`UINavigationItem.LargeTitleDisplayMode`](https://developer.apple.com/documentation/uikit/uinavigationitem/largetitledisplaymode) enum in the apple docs. |
+| 🔤  `searchBarConfig?`<br/><br/>⚛️ [`RouteSearchControllerConfig`](PLACE_HOLDER_LINK) | TBA<br/><br/>📝 **Note**: The object provided is used to configure a [`UISearchController`](https://developer.apple.com/documentation/uikit/uisearchcontroller/) + [`UISearchBar`](https://developer.apple.com/documentation/uikit/uisearchbar) instance in the native-side.<br/><br/>📌 Maps to [`UINavigationItem.searchController`](https://developer.apple.com/documentation/uikit/uinavigationitem/2897305-searchcontroller) property in the apple docs. |
 
 <br>
 
 ##### `RouteOptions`: Navigation Bar Item Config-Related Properties
 
-| Name and Type                                                | Description |
-| :----------------------------------------------------------- | ----------- |
-| 🔤  `navBarButtonBackItemConfig?`<br/><br/>⚛️ [`NavBarBackItemConfig`](PLACE_HOLDER_LINK) | TBA         |
-| 🔤  `navBarButtonLeftItemsConfig?`<br/><br/>⚛️ [`NavBarItemsConfig`](PLACE_HOLDER_LINK) | TBA         |
-| 🔤  `navBarButtonRightItemsConfig?`<br/><br/>⚛️ [`NavBarItemsConfig`](PLACE_HOLDER_LINK) | TBA         |
+| Name and Type                                                | Description                                                  |
+| :----------------------------------------------------------- | ------------------------------------------------------------ |
+| 🔤  `navBarButtonBackItemConfig?`<br/><br/>⚛️ [`NavBarBackItemConfig`](PLACE_HOLDER_LINK) | TBA                                                          |
+| 🔤  `navBarButtonLeftItemsConfig?`<br/><br/>⚛️ [`NavBarItemsConfig`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`UINavigationItem.leftBarButtonItems`](https://developer.apple.com/documentation/uikit/uinavigationitem/1624946-leftbarbuttonitems) property in the apple docs. |
+| 🔤  `navBarButtonRightItemsConfig?`<br/><br/>⚛️ [`NavBarItemsConfig`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`UINavigationItem.rightBarButtonItems`](https://developer.apple.com/documentation/uikit/uinavigationitem/1624956-rightbarbuttonitems) property in the apple docs. |
 
 <br>
 
 ##### `RouteOptions`: Navigation Bar Back Item Config-Related Properties
 
-| Name and Type                                                | Description |
-| :----------------------------------------------------------- | ----------- |
-| 🔤  `backButtonTitle?`<br/><br/>⚛️  `string`                     | TBA         |
-| 🔤  `hidesBackButton?`<br/><br/>⚛️  `boolean`                    | TBA         |
-| 🔤  `backButtonDisplayMode?`<br/><br/>⚛️ [`BackButtonDisplayMode`](PLACE_HOLDER_LINK) | TBA         |
-| 🔤  `leftItemsSupplementBackButton?`<br/><br/>⚛️  `boolean`      | TBA         |
-| 🔤  `applyBackButtonConfigToCurrentRoute?`<br/><br/>⚛️  `boolean` | TBA         |
+| Name and Type                                                | Description                                                  |
+| :----------------------------------------------------------- | ------------------------------------------------------------ |
+| 🔤  `backButtonTitle?`<br/><br/>⚛️  `string`                   | TBA<br/><br/>📌 Maps to [`UINavigationItem.backButtonTitle`](https://developer.apple.com/documentation/uikit/uinavigationitem/3600576-backbuttontitle) property in the apple docs. |
+| 🔤  `hidesBackButton?`<br/><br/>⚛️  `boolean`                  | TBA<br/><br/>📌 Maps to [`UINavigationItem.hidesBackButton`](https://developer.apple.com/documentation/uikit/uinavigationitem/1624947-hidesbackbutton?changes=l_8_4) property in the apple docs. |
+| 🔤  `backButtonDisplayMode?`<br/><br/>⚛️ [`BackButtonDisplayMode`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`UINavigationItem.backButtonDisplayMode`](https://developer.apple.com/documentation/uikit/uinavigationitem/3656350-backbuttondisplaymode) property, and [`UINavigationItem.BackButtonDisplayMode`](https://developer.apple.com/documentation/uikit/uinavigationitem/backbuttondisplaymode) enum in the apple docs. |
+| 🔤  `leftItemsSupplementBackButton?`<br/><br/>⚛️  `boolean`    | TBA<br/><br/>📌 Maps to [`UINavigationItem.leftItemsSupplementBackButton`](https://developer.apple.com/documentation/uikit/uinavigationitem/1624933-leftitemssupplementbackbutton) property in the apple docs. |
+| 🔤  `applyBackButtonConfigToCurrentRoute?`<br/><br/>⚛️  `boolean`<br><br>✳️ **Default**: `false` | TBA                                                          |
 
 <br>
 
@@ -946,7 +949,7 @@ Used in the `NavigatorView.SetRoutesTransformCallback` function. Represents eith
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| Extends `NavRouteStackItem` | Shares the same properties from `NavRouteStackItem` (and `NavRouteItem`). |
+| 🤝 Extends `NavRouteStackItem` | Shares the same properties from `NavRouteStackItem` (and `NavRouteItem`). |
 | 🔤  `routeID?`<br/><br/>⚛️  `number` | TBA |
 
 <br>
@@ -990,15 +993,15 @@ const navBarAppearance = {
 | Name and Type                                                | Description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
 | 🔤  `navBarPreset?`<br/><br/>⚛️  `NavBarPreset` e.g. `'none' ¦ 'noShadow' ¦ 'clearBackground'`<br><br>✳️  **Default**: `none` | TBA                                                          |
-| 🔤  `barStyle?`<br/><br/>⚛️  `'default' ¦ 'black'`             | TBA                                                          |
-| 🔤  `titleTextAttributes?`<br/><br/>⚛️  `TextStyle`            | TBA                                                          |
-| 🔤  `largeTitleTextAttributes?`<br/><br/>⚛️  `TextStyle`       | TBA                                                          |
-| 🔤  `titleVerticalPositionAdjustment?`<br/><br/>⚛️  `{ [key in BarMetrics]?: number }`<br><br>📌 [`BarMetrics`](PLACE_HOLDER_LINK) | TBA                                                          |
-| 🔤  `tintColor?`<br/><br/>⚛️  `string ¦ DynamicColor`          | TBA                                                          |
-| 🔤  `barTintColor?`<br><br>⚛️  `string ¦ DynamicColor`         | TBA                                                          |
-| 🔤  `backIndicatorImage?`<br/><br/>⚛️  [`ImageItemConfig`](PLACE_HOLDER_LINK) | TBA                                                          |
-| 🔤  `backgroundImage?`<br/><br/>⚛️  `{ [key in BarMetrics]?: ImageItemConfig }`<br><br>📌 [`BarMetrics`](PLACE_HOLDER_LINK)<br>📌 [`ImageItemConfig`](PLACE_HOLDER_LINK) | TBA                                                          |
-| 🔤  `shadowImage?`<br/><br/>⚛️  [`ImageItemConfig`](PLACE_HOLDER_LINK) | 📝 **Note**: A custom background image must also be set for the shadow image to take affect. As mentioned in the apple [docs](https://developer.apple.com/documentation/uikit/uinavigationbar/1624963-shadowimage): "To show a custom shadow image, you must also set a custom background image". |
+| 🔤  `barStyle?`<br/><br/>⚛️  `BarStyle` e.g.`'default' ¦ 'black'` | TBA<br/><br/>📌 Maps to [`UINavigationBar.barStyle`](https://developer.apple.com/documentation/uikit/uinavigationbar/1624955-barstyle/) property in the apple docs. |
+| 🔤  `titleTextAttributes?`<br/><br/>⚛️  `TextStyle`            | TBA<br/><br/>📌 Maps to [`UINavigationBar.titleTextAttributes`](https://developer.apple.com/documentation/uikit/uinavigationbar/1624953-titletextattributes) property in the apple docs. |
+| 🔤  `largeTitleTextAttributes?`<br/><br/>⚛️  `TextStyle`       | TBA<br/><br/>📌 Maps to [`UINavigationBar.largeTitleTextAttributes`](https://developer.apple.com/documentation/uikit/uinavigationbar/2919946-largetitletextattributes) property in the apple docs. |
+| 🔤  `titleVerticalPositionAdjustment?`<br/><br/>⚛️  `{ [key in BarMetrics]?: number }`<br><br>📌 [`BarMetrics`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`UINavigationBar.setTitleVerticalPositionAdjustment`](https://developer.apple.com/documentation/uikit/uinavigationbar/1624959-settitleverticalpositionadjustme) method in the apple docs. |
+| 🔤  `tintColor?`<br/><br/>⚛️  `string ¦ DynamicColor`          | TBA<br/><br/>📌 Maps to [`UINavigationBar.tintColor`](https://developer.apple.com/documentation/uikit/uinavigationbar/1624937-tintcolor) property in the apple docs. |
+| 🔤  `barTintColor?`<br><br>⚛️  `string ¦ DynamicColor`         | TBA<br/><br/>📝 **Note**: Starting on iOS 15+, when there is no content behind the navigation bar (i.e. when the scroll position is all the way to the top), the navigation bar will not have a background (e.g. the navigation bar is completely see through). The only way to set a background is via explicitly providing a appearance config to  `scrollEdgeAppearance`.<br/><br/>📌 Maps to [`UINavigationBar.barTintColor`](https://developer.apple.com/documentation/uikit/uinavigationbar/1624931-bartintcolor) property in the apple docs. |
+| 🔤  `backIndicatorImage?`<br/><br/>⚛️  [`ImageItemConfig`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`UINavigationBar.backIndicatorImage`](https://developer.apple.com/documentation/uikit/uinavigationbar/1624942-backindicatorimage) property in the apple docs. |
+| 🔤  `backgroundImage?`<br/><br/>⚛️  `{ [key in BarMetrics]?: ImageItemConfig }`<br><br>📌 [`BarMetrics`](PLACE_HOLDER_LINK)<br>📌 [`ImageItemConfig`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`UINavigationBar.setBackgroundImage`](https://developer.apple.com/documentation/uikit/uinavigationbar/1624926-setbackgroundimage) method in the apple docs. |
+| 🔤  `shadowImage?`<br/><br/>⚛️  [`ImageItemConfig`](PLACE_HOLDER_LINK) | TBA<br><br>📝 **Note**: A custom background image must also be set for the shadow image to take affect. As mentioned in the apple [docs](https://developer.apple.com/documentation/uikit/uinavigationbar/1624963-shadowimage): "*To show a custom shadow image, you must also set a custom background image*".<br/><br/>📌 Maps to [`UINavigationBar.shadowImage`](https://developer.apple.com/documentation/uikit/uinavigationbar/1624963-shadowimage) property in the apple docs. |
 
 <br>
 
@@ -1006,14 +1009,14 @@ const navBarAppearance = {
 
 Object type that lets you customize the navigation bar using the iOS 13+ "appearance" API.
 
-| Name and Type                                                | Description |
-| :----------------------------------------------------------- | ----------- |
-| 🔤  `navBarPreset?`<br><br>⚛️  `NavBarPreset` i.e. `'none' ¦ 'noShadow' ¦ 'clearBackground'`<br><br>✳️  **Default**: `none` | TBA         |
-| 🔤  `useStandardAppearanceAsDefault?`<br/><br/>⚛️  `boolean`<br/><br/>✳️  **Default**: `false` | TBA         |
-| 🔤  `standardAppearance?`<br/><br/>⚛️  [`NavBarAppearance`](PLACE_HOLDER_LINK) | TBA         |
-| 🔤  `compactAppearance?`<br/><br/>⚛️  [`NavBarAppearance`](PLACE_HOLDER_LINK) | TBA         |
-| 🔤  `scrollEdgeAppearance?`<br/><br/>⚛️  [`NavBarAppearance`](PLACE_HOLDER_LINK) | TBA         |
-| 🔤  `compactScrollEdgeAppearance?`<br/><br/>⚛️  [`NavBarAppearance`](PLACE_HOLDER_LINK) | TBA         |
+| Name and Type                                                | Description                                                  |
+| :----------------------------------------------------------- | ------------------------------------------------------------ |
+| 🔤  `navBarPreset?`<br><br>⚛️  `NavBarPreset` i.e. `'none' ¦ 'noShadow' ¦ 'clearBackground'`<br><br>✳️  **Default**: `none` | TBA                                                          |
+| 🔤  `useStandardAppearanceAsDefault?`<br/><br/>⚛️  `boolean`<br/><br/>✳️  **Default**: `false` | TBA                                                          |
+| 🔤  `standardAppearance?`<br/><br/>⚛️  [`NavBarAppearance`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`UINavigationBar.standardAppearance`](https://developer.apple.com/documentation/uikit/uinavigationbar/3198028-standardappearance) property in the apple docs. |
+| 🔤  `compactAppearance?`<br/><br/>⚛️  [`NavBarAppearance`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`UINavigationBar.compactAppearance`](https://developer.apple.com/documentation/uikit/uinavigationbar/3198026-compactappearance) property in the apple docs. |
+| 🔤  `scrollEdgeAppearance?`<br/><br/>⚛️  [`NavBarAppearance`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`UINavigationBar.scrollEdgeAppearance`](https://developer.apple.com/documentation/uikit/uinavigationbar/3198027-scrolledgeappearance) property in the apple docs. |
+| 🔤  `compactScrollEdgeAppearance?`<br/><br/>⚛️  [`NavBarAppearance`](PLACE_HOLDER_LINK) | TBA<br/><br/>📝 **Note**: Requires iOS 15+.<br/><br/>📌 Maps to [`UINavigationBar.compactScrollEdgeAppearance`](https://developer.apple.com/documentation/uikit/uinavigationbar/3750865-compactscrolledgeappearance) property in the apple docs. |
 
 <br>
 
@@ -1021,22 +1024,22 @@ Object type that lets you customize the navigation bar using the iOS 13+ "appear
 
 TBA<br>
 
-| Name and Type                                                | Description |
-| :----------------------------------------------------------- | ----------- |
-| 🔤  `baseConfig?`<br/><br/>⚛️  `NavBarAppearanceBaseConfig`, i.e. `'defaultBackground' ¦ 'opaqueBackground ¦ 'transparentBackground' ` | TBA         |
-| 🔤  `backgroundEffect?`<br/><br/>⚛️  [`BlurEffectStyle`](PLACE_HOLDER_LINK) | TBA         |
-| 🔤  `backgroundColor?`<br/><br/>⚛️  `string ¦ DynamicColor`    | TBA         |
-| 🔤  `backgroundImage?`<br/><br/>⚛️  [`ImageItemConfig`](PLACE_HOLDER_LINK) | TBA         |
-| 🔤  `backgroundImageContentMode?`<br/><br/>⚛️  [`ViewContentMode`](PLACE_HOLDER_LINK) | TBA         |
-| 🔤  `shadowColor?`<br/><br/>⚛️  `string ¦ DynamicColor`        | TBA         |
-| 🔤  `shadowImage?`<br/><br/>⚛️  [`ImageItemConfig`](PLACE_HOLDER_LINK) | TBA         |
-| 🔤  `titleTextAttributes?`<br/><br/>⚛️  `TextStyle`            | TBA         |
-| 🔤  `largeTitleTextAttributes?`<br/><br/>⚛️  `TextStyle`       | TBA         |
-| 🔤  `titlePositionAdjustment?`<br/><br/>⚛️  [`Offset`](PLACE_HOLDER_LINK) | TBA         |
-| 🔤  `backIndicatorImage?`<br/><br/>⚛️  [`ImageItemConfig`](PLACE_HOLDER_LINK) | TBA         |
-| 🔤  `buttonAppearance?`<br/><br/>⚛️  [`BarButtonItemAppearance`](PLACE_HOLDER_LINK) | TBA         |
-| 🔤  `backButtonAppearance?`<br/><br/>⚛️  [`BarButtonItemAppearance`](PLACE_HOLDER_LINK) | TBA         |
-| 🔤  `doneButtonAppearance?`<br/><br/>⚛️  [`BarButtonItemAppearance`](PLACE_HOLDER_LINK) | TBA         |
+| Name and Type                                                | Description                                                  |
+| :----------------------------------------------------------- | ------------------------------------------------------------ |
+| 🔤  `baseConfig?`<br/><br/>⚛️  `NavBarAppearanceBaseConfig`, i.e. `'defaultBackground' ¦ 'opaqueBackground ¦ 'transparentBackground' ` | TBA<br/><br/>📌 Maps to either  [`UINavigationBarAppearance.configureWithDefaultBackground`](https://developer.apple.com/documentation/uikit/uibarappearance/3197997-configurewithdefaultbackground), [`UINavigationBarAppearance.configureWithOpaqueBackground`](https://developer.apple.com/documentation/uikit/uibarappearance/3197998-configurewithopaquebackground), or [`UINavigationBarAppearance.configureWithTransparentBackground`](https://developer.apple.com/documentation/uikit/uibarappearance/3197999-configurewithtransparentbackgrou) method in the apple docs. |
+| 🔤  `backgroundEffect?`<br/><br/>⚛️  [`BlurEffectStyle`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`UIBarAppearance.backgroundEffect`](https://developer.apple.com/documentation/uikit/uibarappearance/3197994-backgroundeffect) property in the apple docs. |
+| 🔤  `backgroundColor?`<br/><br/>⚛️  `string ¦ DynamicColor`    | TBA<br/><br/>📌 Maps to [`UIBarAppearance.backgroundColor`](https://developer.apple.com/documentation/uikit/uibarappearance/3197993-backgroundcolor) property in the apple docs. |
+| 🔤  `backgroundImage?`<br/><br/>⚛️  [`ImageItemConfig`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`UIBarAppearance.backgroundImage`](https://developer.apple.com/documentation/uikit/uibarappearance/3197995-backgroundimage) property in the apple docs. |
+| 🔤  `backgroundImageContentMode?`<br/><br/>⚛️  [`ViewContentMode`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`UIBarAppearance.backgroundImageContentMode`](https://developer.apple.com/documentation/uikit/uibarappearance/3197996-backgroundimagecontentmode) property in the apple docs. |
+| 🔤  `shadowColor?`<br/><br/>⚛️  `string ¦ DynamicColor`        | TBA<br/><br/>📌 Maps to [`UIBarAppearance.shadowColor`](https://developer.apple.com/documentation/uikit/uibarappearance/3198008-shadowcolor) property in the apple docs. |
+| 🔤  `shadowImage?`<br/><br/>⚛️  [`ImageItemConfig`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`UIBarAppearance.shadowImage`](https://developer.apple.com/documentation/uikit/uibarappearance/3198009-shadowimage) property in the apple docs. |
+| 🔤  `titleTextAttributes?`<br/><br/>⚛️  `TextStyle`            | TBA<br/><br/>📌 Maps to [`UINavigationBarAppearance.titleTextAttributes`](https://developer.apple.com/documentation/uikit/uinavigationbarappearance/3198039-titletextattributes) property in the apple docs. |
+| 🔤  `largeTitleTextAttributes?`<br/><br/>⚛️  `TextStyle`       | TBA<br/><br/>📌 Maps to [`UINavigationBarAppearance.largeTitleTextAttributes`](https://developer.apple.com/documentation/uikit/uinavigationbarappearance/3198035-largetitletextattributes) property in the apple docs. |
+| 🔤  `titlePositionAdjustment?`<br/><br/>⚛️  [`Offset`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`UINavigationBarAppearance.titlePositionAdjustment`](https://developer.apple.com/documentation/uikit/uinavigationbarappearance/3198038-titlepositionadjustment) property in the apple docs. |
+| 🔤  `backIndicatorImage?`<br/><br/>⚛️  [`ImageItemConfig`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`UINavigationBarAppearance.setBackIndicatorImage`](https://developer.apple.com/documentation/uikit/uinavigationbarappearance/3198037-setbackindicatorimage) method in the apple docs. |
+| 🔤  `buttonAppearance?`<br/><br/>⚛️  [`BarButtonItemAppearance`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`UINavigationBarAppearance.buttonAppearance`](https://developer.apple.com/documentation/uikit/uinavigationbarappearance/3198033-buttonappearance) property in the apple docs. |
+| 🔤  `backButtonAppearance?`<br/><br/>⚛️  [`BarButtonItemAppearance`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`UINavigationBarAppearance.backButtonAppearance`](https://developer.apple.com/documentation/uikit/uinavigationbarappearance/3198030-backbuttonappearance) property in the apple docs. |
+| 🔤  `doneButtonAppearance?`<br/><br/>⚛️  [`BarButtonItemAppearance`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`UINavigationBarAppearance.doneButtonAppearance`](https://developer.apple.com/documentation/uikit/uinavigationbarappearance/3198034-donebuttonappearance) property in the apple docs. |
 
 <br>
 
@@ -1048,11 +1051,11 @@ TBA
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤  **Required**: `style`<br/><br/>⚛️  `BarButtonItemStyles` i.e. `plain ¦ done ` | TBA |
-| 🔤  `normal?`<br/><br/>⚛️  `BarButtonItemStateAppearance` | TBA |
-| 🔤  `disabled?`<br/><br/>⚛️  `BarButtonItemStateAppearance` | TBA |
-| 🔤  `highlighted?`<br/><br/>⚛️  `BarButtonItemStateAppearance` | TBA |
-| 🔤  `focused?`<br/><br/>⚛️  `BarButtonItemStateAppearance` | TBA |
+| 🔤  **Required**: `style`<br/><br/>⚛️  `BarButtonItemStyles` i.e. `plain ¦ done ` | TBA<br/><br/>📌 Maps to [`UIBarButtonItem.Style`](https://developer.apple.com/documentation/uikit/uibarbuttonitem/style) enum in the apple docs. |
+| 🔤  `normal?`<br/><br/>⚛️  `BarButtonItemStateAppearance` | TBA<br/><br/>📌 Maps to [`UIBarButtonItemAppearance.normal`](https://developer.apple.com/documentation/uikit/uibarbuttonitemappearance/3198019-normal) property in the apple docs. |
+| 🔤  `disabled?`<br/><br/>⚛️  `BarButtonItemStateAppearance` | TBA<br/><br/>📌 Maps to [`UIBarButtonItemAppearance.disabled`](https://developer.apple.com/documentation/uikit/uibarbuttonitemappearance/3198012-disabled) property in the apple docs. |
+| 🔤  `highlighted?`<br/><br/>⚛️  `BarButtonItemStateAppearance` | TBA<br/><br/>📌 Maps to [`UIBarButtonItemAppearance.highlighted`](https://developer.apple.com/documentation/uikit/uibarbuttonitemappearance/3198014-highlighted) property in the apple docs. |
+| 🔤  `focused?`<br/><br/>⚛️  `BarButtonItemStateAppearance` | TBA<br/><br/>📌 Maps to [`UIBarButtonItemAppearance.focused`](https://developer.apple.com/documentation/uikit/uibarbuttonitemappearance/3198013-focused) property in the apple docs. |
 
 <br>
 
@@ -1066,42 +1069,42 @@ This type is an object tagged union type, with the `type` property being the tag
 
 | Name and Type                                                | Description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
-| 🔤  **Required**: `type`<br/><br/>⚛️  `string` i.e. `'TEXT' ¦ 'SYSTEM_ITEM' ¦ 'IMAGE_ASSET' ¦ 'IMAGE_SYSTEM'  ¦ 'IMAGE_EMPTY'` | Configures the type of navigation bar item to create. Also supports  creating navigation bar items based on  `ImageItemConfig`. |
+| 🔤  **Required**: `type`<br/><br/>⚛️  `string` i.e. `'TEXT' ¦ 'SYSTEM_ITEM' ¦ 'IMAGE_ASSET' ¦ 'IMAGE_SYSTEM'  ¦ 'IMAGE_EMPTY'` | Configures the type of navigation bar item to create.<br><br> Also supports  creating navigation bar items based on  `ImageItemConfig` (i.e. the string types prefixed with `IMAGE`, e.g. `IMAGE_ASSET`, etc). |
 
 <br>
 
-| Name and Type                                               | Description |
-| :---------------------------------------------------------- | ----------- |
-| 🔤  **Required**: `type`<br/><br/>⚛️   `string` i.e. `'TEXT'` | TBA         |
-| 🔤  **Required**: `title`<br/><br/>⚛️  `string`               | TBA         |
+| Name and Type                                               | Description                                                  |
+| :---------------------------------------------------------- | ------------------------------------------------------------ |
+| 🔤  **Required**: `type`<br/><br/>⚛️   `string` i.e. `'TEXT'` | TBA<br/><br/>📌 Maps to [`UIBarButtonItem.init(title:style:target:action:)`](https://developer.apple.com/documentation/uikit/uibarbuttonitem/1617148-init) constructor in the apple docs. |
+| 🔤  **Required**: `title`<br/><br/>⚛️  `string`               | TBA<br/><br/>📌 Maps to [`UIBarItem.title`](https://developer.apple.com/documentation/uikit/uibaritem/1616412-title) property in the apple docs. |
 
 <br>
 
-| Name and Type                                                | Description |
-| :----------------------------------------------------------- | ----------- |
-| 🔤  **Required**: `type`<br/><br/>⚛️   `string` i.e. `'SYSTEM_ITEM'` | TBA         |
-| 🔤  `systemItem`<br/><br/>⚛️  [`BarButtonItemSystemItem`](PLACE_HOLDER_LINK) | TBA         |
+| Name and Type                                                | Description                                                  |
+| :----------------------------------------------------------- | ------------------------------------------------------------ |
+| 🔤  **Required**: `type`<br/><br/>⚛️   `string` i.e. `'SYSTEM_ITEM'` | TBA<br/><br/>📌 Maps to [`UIBarButtonItem.init(barButtonSystemItem:target:action:)`](https://developer.apple.com/documentation/uikit/uibarbuttonitem/1617153-init) constructor in the apple docs. |
+| 🔤  `systemItem`<br/><br/>⚛️  [`BarButtonItemSystemItem`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`UIBarButtonItem.SystemItem`](https://developer.apple.com/documentation/uikit/uibarbuttonitem/systemitem) enum in the apple docs. |
 
 <br>
 
 | Name and Type                                                | Description                                                  |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | 🔤  **Required**: `type`<br/><br/>⚛️   `string` i.e.  `'IMAGE_ASSET'` | TBA                                                          |
-| Supports all the properties from a `ImageItemConfig` with:<br/>`{ type: 'IMAGE_ASSET' }`<br/><br/>⚛️  `Extract<ImageItemConfig, { type: 'IMAGE_ASSET' }>` | Jump to the [`ImageItemConfig`](PLACE_HOLDER_LINK) section for more details. |
+| Supports all the properties from a `ImageItemConfig` with:<br/>`{ type: 'IMAGE_ASSET' }`<br/><br/>⚛️  `Extract<ImageItemConfig, { type: 'IMAGE_ASSET' }>` | 📌 Jump to the [`ImageItemConfig`](PLACE_HOLDER_LINK) section for more details. |
 
 <br>
 
 | Name and Type                                                | Description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
 | 🔤  **Required**: `type`<br/><br/>⚛️   `string` i.e.  `'IMAGE_SYSTEM'` | TBA                                                          |
-| Supports all the properties from a `ImageItemConfig` with:<br>`{ type: 'IMAGE_SYSTEM' }`<br/><br/>⚛️  `Extract<ImageItemConfig, { type: 'IMAGE_SYSTEM' }>` | Jump to the [`ImageItemConfig`](PLACE_HOLDER_LINK) section for more details. |
+| Supports all the properties from a `ImageItemConfig` with:<br>`{ type: 'IMAGE_SYSTEM' }`<br/><br/>⚛️  `Extract<ImageItemConfig, { type: 'IMAGE_SYSTEM' }>` | 📌 Jump to the [`ImageItemConfig`](PLACE_HOLDER_LINK) section for more details. |
 
 <br>
 
 | Name and Type                                                | Description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
 | 🔤  **Required**: `type`<br/><br/>⚛️   `string` i.e.  `'IMAGE_EMPTY'` | TBA                                                          |
-| Supports all the properties from a `ImageItemConfig` with:<br/>`{ type: 'IMAGE_EMPTY' }`<br/><br/>⚛️  `Extract<ImageItemConfig, { type: 'IMAGE_EMPTY' }>` | Jump to the [`ImageItemConfig`](PLACE_HOLDER_LINK) section for more details. |
+| Supports all the properties from a `ImageItemConfig` with:<br/>`{ type: 'IMAGE_EMPTY' }`<br/><br/>⚛️  `Extract<ImageItemConfig, { type: 'IMAGE_EMPTY' }>` | 📌 Jump to the [`ImageItemConfig`](PLACE_HOLDER_LINK) section for more details. |
 
 <br>
 
@@ -1112,12 +1115,12 @@ TBA
 | Name and Type            | Description |
 | :----------------------- | ----------- |
 | 🔤  `key?`<br/><br/>⚛️  `string` | TBA |
-| 🔤  `tintColor?`<br/><br/>⚛️  `string ¦ DynamicColor` | TBA |
-| 🔤  `barButtonItemStyle?`<br/><br/>⚛️  [`BarButtonItemStyle`](PLACE_HOLDER_LINK) | TBA |
-| 🔤  `possibleTitles?`<br/><br/>⚛️  `Array<string>` | TBA |
-| 🔤  `width?`<br/><br/>⚛️  `number` | TBA |
-| 🔤  `backgroundImage?`<br/><br/>⚛️  `{ [key in BarMetrics]?: NavBarItemBackgroundImageConfig }`<br/><br/>📌 [`BarMetrics`](PLACE_HOLDER_LINK)<br/>📌 [`NavBarItemBackgroundImageConfig`](PLACE_HOLDER_LINK) | TBA |
-| 🔤  `titlePositionAdjustment?`<br/><br/>⚛️  `{ [key in BarMetrics]?: Offset }`<br/><br>📌 [`BarMetrics`](PLACE_HOLDER_LINK)<br/>📌 [`Offset`](PLACE_HOLDER_LINK) | TBA |
+| 🔤  `tintColor?`<br/><br/>⚛️  `string ¦ DynamicColor` | TBA<br/><br/>📌 Maps to [`UIBarButtonItem.tintColor`](https://developer.apple.com/documentation/uikit/uibarbuttonitem/1617135-tintcolor) property in the apple docs. |
+| 🔤  `barButtonItemStyle?`<br/><br/>⚛️  [`BarButtonItemStyle`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`UIBarButtonItem.style`](https://developer.apple.com/documentation/uikit/uibarbuttonitem/1617114-style) property in the apple docs. |
+| 🔤  `possibleTitles?`<br/><br/>⚛️  `Array<string>` | TBA<br/><br/>📌 Maps to [`UIBarButtonItem.possibleTitles`](https://developer.apple.com/documentation/uikit/uibarbuttonitem/1617132-possibletitles) property in the apple docs. |
+| 🔤  `width?`<br/><br/>⚛️  `number` | TBA<br/><br/>📌 Maps to [`UIBarButtonItem.width`](https://developer.apple.com/documentation/uikit/uibarbuttonitem/1617155-width) property in the apple docs. |
+| 🔤  `backgroundImage?`<br/><br/>⚛️  `{ [key in BarMetrics]?: NavBarItemBackgroundImageConfig }`<br/><br/>📌 [`BarMetrics`](PLACE_HOLDER_LINK)<br/>📌 [`NavBarItemBackgroundImageConfig`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`UIBarButtonItem.setBackButtonBackgroundImage(_:for:barMetrics:)`](https://developer.apple.com/documentation/uikit/uibarbuttonitem/1617128-setbackbuttonbackgroundimage) method in the apple docs. |
+| 🔤  `titlePositionAdjustment?`<br/><br/>⚛️  `{ [key in BarMetrics]?: Offset }`<br/><br>📌 [`BarMetrics`](PLACE_HOLDER_LINK)<br/>📌 [`Offset`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`UIBarButtonItem.setBackgroundVerticalPositionAdjustment(_:for:)`](https://developer.apple.com/documentation/uikit/uibarbuttonitem/1617141-setbackgroundverticalpositionadj) method in the apple docs. |
 
 <br>
 
@@ -1135,11 +1138,11 @@ TBA<br>
 
 TBA
 
-| Name and Type                                                | Description |
-| :----------------------------------------------------------- | ----------- |
-| 🔤  **Required**: `imageItem`<br><br> ⚛️   [`ImageItemConfig`](PLACE_HOLDER_LINK) | TBA         |
-| 🔤  **Required**: `controlState`<br/><br/> ⚛️   [`ControlState`](PLACE_HOLDER_LINK) | TBA         |
-| 🔤   `barButtonItemStyle?`<br/><br/> ⚛️   [`BarButtonItemStyle`](PLACE_HOLDER_LINK) | TBA         |
+| Name and Type                                                | Description                                                  |
+| :----------------------------------------------------------- | ------------------------------------------------------------ |
+| 🔤  **Required**: `imageItem`<br><br> ⚛️   [`ImageItemConfig`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to the `backgroundImage` parameter in the [`UIBarButtonItem.setBackgroundImage`](https://developer.apple.com/documentation/uikit/uibarbuttonitem/1617138-setbackgroundimage) command in the apple docs. |
+| 🔤  **Required**: `controlState`<br/><br/> ⚛️   [`ControlState`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to the `state` parameter in the [`UIBarButtonItem.setBackgroundImage`](https://developer.apple.com/documentation/uikit/uibarbuttonitem/1617138-setbackgroundimage) command in the apple docs. |
+| 🔤   `barButtonItemStyle?`<br/><br/> ⚛️   [`BarButtonItemStyle`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to the `barMetrics` parameter in the [`UIBarButtonItem.setBackgroundImage`](https://developer.apple.com/documentation/uikit/uibarbuttonitem/1617138-setbackgroundimage) command in the apple docs. |
 
 <br>
 
@@ -1227,17 +1230,18 @@ TBA
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤  `hidesSearchBarWhenScrolling?`<br/><br/>⚛️  `boolean` | TBA |
-| 🔤  `obscuresBackgroundDuringPresentation?`<br/><br/>⚛️  `boolean` | TBA |
-| 🔤  `hidesNavigationBarDuringPresentation?`<br/><br/>⚛️  `boolean` | TBA |
-| 🔤  `automaticallyShowsCancelButton?`<br/><br/>⚛️  `boolean` | TBA |
-| 🔤  `placeholder?`<br/><br/>⚛️  `string` | TBA |
-| 🔤  `searchBarStyle?`<br/><br/>⚛️  [`UISearchBarStyle`](PLACE_HOLDER_LINK) | TBA |
-| 🔤  `tintColor?`<br/><br/>⚛️  `string ¦ DynamicColor` | TBA |
-| 🔤  `isTranslucent?`<br/><br/>⚛️  `boolean` | TBA |
+| 🔤  `hidesSearchBarWhenScrolling?`<br/><br/>⚛️  `boolean` | TBA<br/><br/>📌 Maps to [`UINavigationItem.hidesSearchBarWhenScrolling`](https://developer.apple.com/documentation/uikit/uinavigationitem/2897296-hidessearchbarwhenscrolling/) property in the apple docs. |
+| 🔤  `obscuresBackgroundDuringPresentation?`<br/><br/>⚛️  `boolean` | TBA<br/><br/>📌 Maps to [`UISearchController.obscuresBackgroundDuringPresentation`](https://developer.apple.com/documentation/uikit/uisearchcontroller/1618656-obscuresbackgroundduringpresenta/) property in the apple docs. |
+| 🔤  `hidesNavigationBarDuringPresentation?`<br/><br/>⚛️  `boolean` | TBA<br/><br/>📌 Maps to [`UISearchController.hidesNavigationBarDuringPresentation`](https://developer.apple.com/documentation/uikit/uisearchcontroller/1618650-hidesnavigationbarduringpresenta) property in the apple docs. |
+| 🔤  `automaticallyShowsCancelButton?`<br/><br/>⚛️  `boolean` | TBA<br/><br/>📌 Maps to [`UISearchController.automaticallyShowsCancelButton`](https://developer.apple.com/documentation/uikit/uisearchcontroller/3152926-automaticallyshowscancelbutton) property in the apple docs. |
+| 🔤  `placeholder?`<br/><br/>⚛️  `string` | TBA<br/><br/>📌 Maps to [`UISearchBar.placeholder`](https://developer.apple.com/documentation/uikit/uisearchbar/1624322-placeholder) property in the apple docs. |
+| 🔤  `barTintColor?`<br/><br/>⚛️  `string ¦ DynamicColor` | TBA<br/><br/>📌 Maps to [`UISearchBar.barTintColor`](https://developer.apple.com/documentation/uikit/uisearchbar/1624295-bartintcolor) property in the apple docs. |
+| 🔤  `searchBarStyle?`<br/><br/>⚛️  [`UISearchBarStyle`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`UISearchBar.searchBarStyle`](https://developer.apple.com/documentation/uikit/uisearchbar/1624281-searchbarstyle) property, and [`UISearchBar.Style`](https://developer.apple.com/documentation/uikit/uisearchbar/style) enum in the apple docs. |
+| 🔤  `tintColor?`<br/><br/>⚛️  `string ¦ DynamicColor` | TBA<br/><br/>📌 Maps to [`UISearchBar.tintColor`](https://developer.apple.com/documentation/uikit/uisearchbar/1624286-tintcolor) property in the apple docs. |
+| 🔤  `isTranslucent?`<br/><br/>⚛️  `boolean` | TBA<br/><br/>📌 Maps to [`UISearchBar.isTranslucent`](https://developer.apple.com/documentation/uikit/uisearchbar/1624321-istranslucent) property in the apple docs. |
 | 🔤  `textColor?`<br/><br/>⚛️  `string ¦ DynamicColor` | TBA |
-| 🔤  `returnKeyType?`<br/><br/>⚛️  [`ReturnKeyType`](PLACE_HOLDER_LINK) | TBA |
-| 🔤  `searchTextFieldBackgroundColor?`<br/><br/>⚛️  `string ¦ DynamicColor` | TBA |
+| 🔤  `returnKeyType?`<br/><br/>⚛️  [`ReturnKeyType`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`UITextInputTraits.returnKeyType`](https://developer.apple.com/documentation/uikit/uitextinputtraits/1624446-returnkeytype) property in the apple docs. |
+| 🔤  `searchTextFieldBackgroundColor?`<br/><br/>⚛️  `string ¦ DynamicColor` | TBA<br/><br/>📝 **Note**: On iOS 13+, this gets applied via the [`UISearchBar.searchTextField`](https://developer.apple.com/documentation/uikit/uisearchbar/3175433-searchtextfield) property, otherwise on iOS 12 and below, it's applied via directly manipulating the `UITextField` subview as a fallback. |
 | 🔤  `leftIconTintColor`<br/><br/>⚛️  `string ¦ DynamicColor` | TBA |
 | 🔤  `placeholderTextColor`<br/><br/>⚛️  `string ¦ DynamicColor` | TBA |
 
@@ -1347,17 +1351,17 @@ This type is an object tagged union type, with the `type` property being the tag
 
 | Name and Type            | Description |
 | :----------------------- | ----------- |
-| 🔤  **Required**: `type`<br/><br/>⚛️  `string` i.e. `'IMAGE_ASSET' ` | TBA |
+| 🔤  **Required**: `type`<br/><br/>⚛️  `string` i.e. `'IMAGE_ASSET' ` | TBA<br/><br/>📌 Maps to [`UIImage.init(named:)`](https://developer.apple.com/documentation/uikit/uiimage/1624146-init) constructor in the apple docs. |
 | 🔤  **Required**: `imageValue`<br/><br/>⚛️  `string` | TBA |
 | 🔤  `imageOptions?`<br/><br/>⚛️  [`UIImageConfig`](PLACE_HOLDER_LINK) | TBA |
 
 <br>
 
-| Name and Type                                                | Description |
-| :----------------------------------------------------------- | ----------- |
-| 🔤  **Required**: `type`<br/><br/>⚛️  `string` i.e. `'IMAGE_SYSTEM' ` | TBA         |
-| 🔤  **Required**:  `imageValue`<br/><br/>⚛️  [`ImageSystemConfig`](PLACE_HOLDER_LINK) | TBA         |
-| 🔤  `imageOptions?`<br/><br/>⚛️  [`UIImageConfig`](PLACE_HOLDER_LINK) | TBA         |
+| Name and Type                                                | Description                                                  |
+| :----------------------------------------------------------- | ------------------------------------------------------------ |
+| 🔤  **Required**: `type`<br/><br/>⚛️  `string` i.e. `'IMAGE_SYSTEM' ` | TBA<br/><br/>📌 Maps to [`UIImage.init(systemName:withConfiguration:)`](https://developer.apple.com/documentation/uikit/uiimage/3294234-init) constructor in the apple docs. |
+| 🔤  **Required**:  `imageValue`<br/><br/>⚛️  [`ImageSystemConfig`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to the `withConfiguration` argument label in the  [`UIImage.init(systemName:withConfiguration:)`](https://developer.apple.com/documentation/uikit/uiimage/3294234-init) constructor in the apple docs. |
+| 🔤  `imageOptions?`<br/><br/>⚛️  [`UIImageConfig`](PLACE_HOLDER_LINK) | TBA                                                          |
 
 <br>
 
@@ -1367,17 +1371,17 @@ This type is an object tagged union type, with the `type` property being the tag
 
 <br>
 
-| Name and Type                                                | Description |
-| :----------------------------------------------------------- | ----------- |
-| 🔤  **Required**: `type`<br/><br/>⚛️  `string` i.e. `'IMAGE_RECT' ` | TBA         |
-| 🔤  **Required**: `imageValue`<br/><br/>⚛️  [`ImageRectConfig`](PLACE_HOLDER_LINK) | TBA         |
+| Name and Type                                                | Description                                                  |
+| :----------------------------------------------------------- | ------------------------------------------------------------ |
+| 🔤  **Required**: `type`<br/><br/>⚛️  `string` i.e. `'IMAGE_RECT' ` | TBA<br/><br/>📝 **Note**: Programmatically creates an image using [`UIGraphicsImageRenderer`](https://developer.apple.com/documentation/uikit/uigraphicsrenderer). |
+| 🔤  **Required**: `imageValue`<br/><br/>⚛️  [`ImageRectConfig`](PLACE_HOLDER_LINK) | TBA                                                          |
 
 <br>
 
-| Name and Type                                                | Description |
-| :----------------------------------------------------------- | ----------- |
-| 🔤  **Required**: `type`<br/><br/>⚛️  `string` i.e. `'IMAGE_GRADIENT' ` | TBA         |
-| 🔤  `imageValue`<br/><br/>⚛️  [`ImageGradientConfig`](PLACE_HOLDER_LINK) | TBA         |
+| Name and Type                                                | Description                                                  |
+| :----------------------------------------------------------- | ------------------------------------------------------------ |
+| 🔤  **Required**: `type`<br/><br/>⚛️  `string` i.e. `'IMAGE_GRADIENT' ` | TBA<br/><br/>📝 **Note**: Programmatically creates an image using [`UIGraphicsImageRenderer`](https://developer.apple.com/documentation/uikit/uigraphicsrenderer). |
+| 🔤  `imageValue`<br/><br/>⚛️  [`ImageGradientConfig`](PLACE_HOLDER_LINK) | TBA                                                          |
 
 <br>
 
@@ -1416,11 +1420,11 @@ TBA
 | 🔤 **Required**:  `width`<br/><br/>⚛️  `number` | TBA |
 | 🔤 **Required**: `height`<br/><br/>⚛️  `number` | TBA |
 | 🔤  `borderRadius?`<br/><br/>⚛️  `number` | TBA |
-| 🔤  **Required**:  `colors`<br/><br/>⚛️  `Array<string>` | TBA |
-| 🔤  `locations?`<br/><br/>⚛️  `Array<number>` | TBA |
-| 🔤  `startPoint?`<br/><br/>⚛️  `Point ¦ PointPreset`<br><br>📌 [`Point`](PLACE_HOLDER_LINK)<br>📌 [`PointPreset`](PLACE_HOLDER_LINK) | TBA |
-| 🔤  `endPoint?`<br/><br/>⚛️  `Point ¦ PointPreset`<br>📌 [`Point`](PLACE_HOLDER_LINK)<br/>📌 [`PointPreset`](PLACE_HOLDER_LINK) | TBA |
-| 🔤  `type?`<br/><br/>⚛️  `string` i.e. `'axial' ¦ 'conic' ¦ 'radial'` | TBA |
+| 🔤  **Required**:  `colors`<br/><br/>⚛️  `Array<string>` | TBA<br/><br/>📌 Maps to [`CAGradientLayer.colors`](https://developer.apple.com/documentation/quartzcore/cagradientlayer/1462403-colors) property in the apple docs. |
+| 🔤  `locations?`<br/><br/>⚛️  `Array<number>` | TBA<br/><br/>📌 Maps to [`CAGradientLayer.locations`](https://developer.apple.com/documentation/quartzcore/cagradientlayer/1462410-locations) property in the apple docs. |
+| 🔤  `startPoint?`<br/><br/>⚛️  `Point ¦ PointPreset`<br><br>📌 [`Point`](PLACE_HOLDER_LINK)<br>📌 [`PointPreset`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`CAGradientLayer.startPoint`](https://developer.apple.com/documentation/quartzcore/cagradientlayer/1462408-startpoint) property in the apple docs. |
+| 🔤  `endPoint?`<br/><br/>⚛️  `Point ¦ PointPreset`<br>📌 [`Point`](PLACE_HOLDER_LINK)<br/>📌 [`PointPreset`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`CAGradientLayer.endPoint`](https://developer.apple.com/documentation/quartzcore/cagradientlayer/1462412-endpoint) property in the apple docs. |
+| 🔤  `type?`<br/><br/>⚛️  `string` i.e. `'axial' ¦ 'conic' ¦ 'radial'` | TBA<br/><br/>📌 Maps to [`CAGradientLayer.type`](https://developer.apple.com/documentation/quartzcore/cagradientlayer/1462413-type) property in the apple docs. |
 
 <br>
 
@@ -1428,14 +1432,14 @@ TBA
 
 TBA
 
-| Name and Type                                                | Description |
-| :----------------------------------------------------------- | ----------- |
-| 🔤 **Required**:  `systemName`<br/><br/>⚛️  `string`           | TBA         |
-| 🔤 `pointSize?`<br/><br/>⚛️  `number`                          | TBA         |
-| 🔤  `weight?`<br/><br/>⚛️  [`ImageSymbolWeight`](PLACE_HOLDER_LINK) | TBA         |
-| 🔤  `scale?`<br/><br/>⚛️  [`ImageSymbolScale`](PLACE_HOLDER_LINK) | TBA         |
-| 🔤  `hierarchicalColor?`<br/><br/>⚛️  `Array<string>`          | TBA         |
-| 🔤  `paletteColors?`<br/><br/>⚛️  `string`                     | TBA         |
+| Name and Type                                                | Description                                                  |
+| :----------------------------------------------------------- | ------------------------------------------------------------ |
+| 🔤 **Required**:  `systemName`<br/><br/>⚛️  `string`           | TBA<br/><br/>📌 Maps to the `systemName` argument label in the [`UIImage.init(systemName:withConfiguration:)`](https://developer.apple.com/documentation/uikit/uiimage/3294234-init) constructor in the apple docs. |
+| 🔤 `pointSize?`<br/><br/>⚛️  `number`                          | TBA<br/><br/>📌 Maps to [`UIImage.SymbolConfiguration.init(pointSize:)`](https://developer.apple.com/documentation/uikit/uiimage/symbolconfiguration/3294241-init) constructor in the apple docs. |
+| 🔤  `weight?`<br/><br/>⚛️  [`ImageSymbolWeight`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`UIImage.SymbolConfiguration.init(weight:)`](https://developer.apple.com/documentation/uikit/uiimage/symbolconfiguration/3294247-init) constructor in the apple docs. |
+| 🔤  `scale?`<br/><br/>⚛️  [`ImageSymbolScale`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`UIImage.SymbolConfiguration.init(scale:)`](https://developer.apple.com/documentation/uikit/uiimage/symbolconfiguration/3294244-init) constructor in the apple docs. |
+| 🔤  `hierarchicalColor?`<br/><br/>⚛️  `Array<string>`          | TBA<br/><br/>📝 **Note A**: Cannot be used at the same time with `paletteColors`  (it's either one or the other).<br><br>📝 **Note B**: Requires iOS 15+.<br/><br/>📌 Maps to [`UIImage.SymbolConfiguration.init(hierarchicalColor:)`](https://developer.apple.com/documentation/uikit/uiimage/symbolconfiguration/3810053-init) constructor in the apple docs. |
+| 🔤  `paletteColors?`<br/><br/>⚛️  `string`                     | TBA<br/><br/>📝 **Note A**: Cannot be used at the same time with `hierarchicalColor`  (it's either one or the other).<br/><br/>📝 **Note B**: Requires iOS 15+.<br/><br/>📌 Maps to [`UIImage.SymbolConfiguration.init(paletteColors:)`](https://developer.apple.com/documentation/uikit/uiimage/symbolconfiguration/3810054-init) constructor in the apple docs. |
 
 <br>
 
