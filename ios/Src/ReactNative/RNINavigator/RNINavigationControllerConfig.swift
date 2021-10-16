@@ -24,7 +24,7 @@ import Foundation
 /// <br>
 ///
 /// * The problem is that the `UINavigationController.isNavigationBarHidden`
-///   property can not be set on per view controller basis.
+///   property can not be set on a per view controller basis.
 ///
 ///   * This is because its a property of `UINavigationController`, and not
 ///     `UINavigationItem` (in other words, its "global" i.e. in the sense that
@@ -53,6 +53,7 @@ import Foundation
 public class RNINavigationControllerConfig {
   
   // MARK: - Properties
+  // ------------------
   
   /// As of iOS 13, setting a custom background image or shadow image in the
   /// navigation bar does not transition properly.
@@ -74,7 +75,7 @@ public class RNINavigationControllerConfig {
   var allowTouchEventsToPassThroughNavigationBar: Bool?;
   
   // MARK: - Methods
-  // --------------
+  // ---------------
   
   func applyIsNavBarHidden(
     for routeVC: RNINavigatorRouteBaseViewController,
