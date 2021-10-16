@@ -55,18 +55,28 @@
 - [ ] Make route options provided via `RouteViewPortal` and `setRouteOptions` command separate then combine later.
 - [ ] Add section to README: `RouteOptions` Precedence/Hierarchy
 
-
-
 - [ ] Update legacy `backgroundImage` to support setting [`barPosition`](https://developer.apple.com/documentation/uikit/uinavigationbar/1624968-setbackgroundimage)
 - [ ] Update `NavBarItemConfig` to support configuring [`UIBarItem`](https://developer.apple.com/documentation/uikit/uibaritem) 
 	* (e.g. `isEnabled`, `setTitleTextAttributes`).
 
+<br>
+
 - [ ] Update `NavBarItemConfig` to support iOS 15+ [`UIBarButtonItem`](https://developer.apple.com/documentation/uikit/uibarbuttonitem) properties.
 	* e.g. `isSelected`, `changesSelectionAsPrimaryAction`
+
+<br>
 
 - [ ] Update `NavBarItemConfig` to support creating bar items: [`fixedSpace`](https://developer.apple.com/documentation/uikit/uibarbuttonitem/3600338-fixedspace), [`flexibleSpace`](https://developer.apple.com/documentation/uikit/uibarbuttonitem/3600339-flexiblespace).
 - [ ] Update `NavBarItemConfig` to support multiple custom navigation bar items.
 - [ ] Update `NavBarItemConfig` to support menu and submenu actions.
+
+<br>
+
+- [ ] Implement `UISearchController.isActive` via module command
+- [ ] Implement `UITextInputTraits` for `UISearchBar`, e.g.  `keyboardType`, `textContentType`, etc.
+- [ ] Implement search module command `getSearchBarState`. Returns object that contains: search bar text, `isActive`,  `isSearchResultsButtonSelected`, `showsCancelButton`, etc.
+- [ ] Implement search module command `setSearchBarState`.
+- [ ] Add missing impl. for `UISearchBar`, e.g. `showsSearchResultsButton`, background images, etc.
 
 <br>
 
