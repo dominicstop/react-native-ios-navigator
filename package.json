@@ -1,6 +1,6 @@
 {
   "name": "react-native-ios-navigator",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "A native wrapper component around `UINavigationController` for react-native ",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
