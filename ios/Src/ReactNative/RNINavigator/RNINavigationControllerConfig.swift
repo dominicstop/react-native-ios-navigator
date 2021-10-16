@@ -117,7 +117,8 @@ public class RNINavigationControllerConfig {
   func applyNavBarAppearance(
     for routeVC: RNINavigatorRouteBaseViewController,
     with config: RNINavBarAppearance?,
-    forceApplyLegacyConfig: Bool = false
+    forceApplyLegacyConfig: Bool = false,
+    triggerLayoutIfNeeded: Bool = true
   ){
     guard let navigatorView = routeVC.navigatorViewRef,
           let navController = navigatorView.navigationVC
@@ -177,11 +178,15 @@ public class RNINavigationControllerConfig {
       || self.navBarLegacyConfig.hasShadowImage
     );
     
-    if isInFocus {
+    if isInFocus && triggerLayoutIfNeeded {
       navController.navigationBar.layoutIfNeeded();
     };
   };
   
+  /// This method is used when a view controller is being transitioned in, e.g. this method is basically  used
+  /// as a shortcut to apply all the "override configs" all at once.
+  ///
+  /// This method will return a tuple of  blocks that when called, will call all the `apply` methods.
   func makeApplyConfigBlocks(
     for routeVC: RNINavigatorRouteBaseViewController,
     isAnimated: Bool
@@ -192,16 +197,26 @@ public class RNINavigationControllerConfig {
     return (
       applyConfig: { [weak self] in
         self?.applyAllowTouchEventsToPassThroughNavigationBar(
-          for: routeVC, forceApplyConfig: true
+          for: routeVC,
+          forceApplyConfig: true
         );
         
         self?.applyIsNavBarHidden(
-          for: routeVC, isAnimated: isAnimated, forceApplyConfig: true
+          for: routeVC,
+          isAnimated: isAnimated,
+          forceApplyConfig: true
         );
       },
       applyAnimatableConfig: { [weak self] in
+        /// Note: do not trigger layout...
+        /// * When a layout is triggered and the transition is cancelled, the navigation bar items gets
+        ///   transitioned in.
+        /// * In other words, this triggers a bug where the navigation bar right item slides in from the left
+        ///   when the interactive pop transition is cancelled.
         self?.applyNavBarAppearance(
-          for: routeVC, with: nil, forceApplyLegacyConfig: true
+          for: routeVC, with: nil,
+          forceApplyLegacyConfig: true,
+          triggerLayoutIfNeeded: false
         );
       }
     );
