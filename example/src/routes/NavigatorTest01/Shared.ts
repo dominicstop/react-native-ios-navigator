@@ -75,6 +75,22 @@ export const navBarItemsConfigs: Config<NavBarItemsConfig> = [{
     tintColor: 'blue'
   }]
 }, {
+  description: "2 nav bar item with `Type: TEXT` + 'Fixed Space' in between",
+  config: [{
+    type: 'TEXT',
+    key: 'A',
+    title: 'Item A',
+    tintColor: 'red',
+  }, {
+    type: 'FIXED_SPACE',
+    width: 25,
+  }, {
+    type: 'TEXT',
+    key: 'B',
+    title: 'Item B',
+    tintColor: 'blue'
+  }]
+}, {
   description: "3 nav bar item with `Type: TEXT` w/ `tintColor` set to red, yellow and blue",
   config: [{
     type: 'TEXT',

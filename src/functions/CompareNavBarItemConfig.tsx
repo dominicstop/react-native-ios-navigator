@@ -17,6 +17,10 @@ class CompareNavBarItemConfigBase {
         if(oldItem.title !== (newItem as any).title) return false;
         break;
 
+      case 'FIXED_SPACE':
+        if(oldItem.width !== (newItem as any).width) return false;
+        break;
+
       // compare `SupportedImageTypes`
       case 'IMAGE_ASSET' :
       case 'IMAGE_SYSTEM':
@@ -41,9 +45,6 @@ class CompareNavBarItemConfigShared {
     },
 
     possibleTitles: { mode: 'shallowArray' },
-
-    backgroundImage: { mode: 'deep' },
-    titlePositionAdjustment: { mode: 'deep' },
   };
   
   static compare<T extends NavBarItemConfigShared>(oldItem: T, newItem: T) {
@@ -55,7 +56,10 @@ export class CompareNavBarItemConfig {
   static compare<T extends NavBarItemConfig>(oldItem: T, newItem: T){
     return(
       CompareNavBarItemConfigBase  .compare(oldItem, newItem) &&
-      CompareNavBarItemConfigShared.compare(oldItem, newItem) 
+      CompareNavBarItemConfigShared.compare(oldItem, newItem) &&
+
+      CompareUtilities.unwrapAndShallowCompareObject(oldItem.backgroundImage        , newItem.backgroundImage        ) &&
+      CompareUtilities.unwrapAndShallowCompareObject(oldItem.titlePositionAdjustment, newItem.titlePositionAdjustment)
     );
   };
 };

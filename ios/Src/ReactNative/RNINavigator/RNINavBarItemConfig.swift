@@ -21,6 +21,8 @@ internal class RNINavBarItemConfig {
     case TEXT;
     case SYSTEM_ITEM;
     case CUSTOM;
+    case FIXED_SPACE;
+    case FLEXIBLE_SPACE;
     
     // Supported `ImageType`'s
     case IMAGE_ASSET;
@@ -93,6 +95,17 @@ internal class RNINavBarItemConfig {
           target: self,
           action: #selector(onNavBarItemPressed(_:))
         );
+        
+      case .FIXED_SPACE:
+        guard #available(iOS 14.0, *),
+              let width = self.width
+        else { return nil };
+        
+        return UIBarButtonItem.fixedSpace(width);
+        
+      case .FLEXIBLE_SPACE:
+        guard #available(iOS 14.0, *) else { return nil };
+        return UIBarButtonItem.flexibleSpace();
     
       case .CUSTOM:
         return UIBarButtonItem(customView: self.customView!);

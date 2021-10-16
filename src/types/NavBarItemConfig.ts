@@ -2,7 +2,7 @@ import type { DynamicColor, BarMetrics, ControlState, Offset } from "./MiscTypes
 import type { ImageItemConfig } from "./ImageItemConfig";
 
 //#region - BarButtonItemSystemItem
-type BarButtonItemSystemItem =
+export type BarButtonItemSystemItem =
   /** The system Done button, localized. */
   | "done"
   /** The system Cancel button, localized. */
@@ -66,7 +66,13 @@ export type NavBarItemConfigBase = SupportedImageTypes | {
   type: "SYSTEM_ITEM";
   /** Defines system-supplied images for bar button items. */
   systemItem: BarButtonItemSystemItem;
-};
+} | {
+  type: "FIXED_SPACE";
+  /** The width of the space.*/
+  width: number;
+} | {
+  type: "FLEXIBLE_SPACE";
+};;
 
 export type BarButtonItemStyle = 
   /** Glows when tapped. The default item style. */
@@ -96,6 +102,18 @@ export type NavBarItemConfigShared = {
 
   /** The width of the item. */
   width?: number;
+};
+
+export type NavBarItemConfigCustomBase = {
+  type: "CUSTOM";
+};
+
+// TODO (015): Incomplete... missing back-button related properties + Impl.
+export type NavBarBackItemConfig = 
+  NavBarItemConfigBase & NavBarItemConfigShared;
+
+export type NavBarItemConfig = 
+  NavBarItemConfigBase & NavBarItemConfigShared & {
 
   /** Sets the background image for a specified state and bar metrics. */
   backgroundImage?: { 
@@ -112,19 +130,6 @@ export type NavBarItemConfigShared = {
   //   [key in BarMetrics]?: number
   // };
 };
-
-export type NavBarItemConfigCustomBase = {
-  type: "CUSTOM";
-};
-
-// TODO (015): Incomplete... missing back-button related properties + Impl.
-export type NavBarBackItemConfig =
-  & NavBarItemConfigBase
-  & NavBarItemConfigShared
-
-export type NavBarItemConfig = 
-  & NavBarItemConfigBase  
-  & NavBarItemConfigShared;
 
 export type NavBarItemsConfig = 
   | Array<NavBarItemConfig>

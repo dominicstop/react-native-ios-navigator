@@ -1069,7 +1069,7 @@ This type is an object tagged union type, with the `type` property being the tag
 
 | Name and Type                                                | Description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
-| 🔤  **Required**: `type`<br/><br/>⚛️  `string` i.e. `'TEXT' ¦ 'SYSTEM_ITEM' ¦ 'IMAGE_ASSET' ¦ 'IMAGE_SYSTEM'  ¦ 'IMAGE_EMPTY'` | Configures the type of navigation bar item to create.<br><br> Also supports  creating navigation bar items based on  `ImageItemConfig` (i.e. the string types prefixed with `IMAGE`, e.g. `IMAGE_ASSET`, etc). |
+| 🔤  **Required**: `type`<br/><br/>⚛️  `string` i.e. `'TEXT' ¦ 'SYSTEM_ITEM' ¦ 'FIXED_SPACE' ¦ 'FLEXIBLE_SPACE' ¦ IMAGE_ASSET' ¦ 'IMAGE_SYSTEM'  ¦ 'IMAGE_EMPTY'` | Configures the type of navigation bar item to create.<br><br> Also supports  creating navigation bar items based on  `ImageItemConfig` (i.e. the string types prefixed with `IMAGE`, e.g. `IMAGE_ASSET`, etc). |
 
 <br>
 
@@ -1084,6 +1084,19 @@ This type is an object tagged union type, with the `type` property being the tag
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
 | 🔤  **Required**: `type`<br/><br/>⚛️   `string` i.e. `'SYSTEM_ITEM'` | TBA<br/><br/>📌 Maps to [`UIBarButtonItem.init(barButtonSystemItem:target:action:)`](https://developer.apple.com/documentation/uikit/uibarbuttonitem/1617153-init) constructor in the apple docs. |
 | 🔤  `systemItem`<br/><br/>⚛️  [`BarButtonItemSystemItem`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`UIBarButtonItem.SystemItem`](https://developer.apple.com/documentation/uikit/uibarbuttonitem/systemitem) enum in the apple docs. |
+
+<br>
+
+| Name and Type                                                | Description                                                  |
+| :----------------------------------------------------------- | ------------------------------------------------------------ |
+| 🔤  **Required**: `type`<br/><br/>⚛️   `string` i.e. `'FIXED_SPACE'` | TBA<br/><br/>📌 Maps to [`UIBarButtonItem.fixedSpace(_:)`](https://developer.apple.com/documentation/uikit/uibarbuttonitem/3600338-fixedspace/) class method in the apple docs. |
+| 🔤  **Required**: `width`<br/><br/>⚛️  `number`                | TBA<br/><br/>📝 **Note**: Requires iOS 14 and above<br><br>📌 Maps to the `width` parameter in the [`UIBarButtonItem.fixedSpace(_:)`](https://developer.apple.com/documentation/uikit/uibarbuttonitem/3600338-fixedspace/) class method in the apple docs. |
+
+<br>
+
+| Name and Type                                                | Description                                                  |
+| :----------------------------------------------------------- | ------------------------------------------------------------ |
+| 🔤  **Required**: `type`<br/><br/>⚛️   `string` i.e. `'FLEXIBLE_SPACE'` | TBA<br/><br/>📝 **Note**: Requires iOS 14 and above.<br><br>📌 Maps to [`UIBarButtonItem.flexibleSpace()`](https://developer.apple.com/documentation/uikit/uibarbuttonitem/3600339-flexiblespace) class method in the apple docs. |
 
 <br>
 
@@ -1119,8 +1132,6 @@ TBA
 | 🔤  `barButtonItemStyle?`<br/><br/>⚛️  [`BarButtonItemStyle`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`UIBarButtonItem.style`](https://developer.apple.com/documentation/uikit/uibarbuttonitem/1617114-style) property in the apple docs. |
 | 🔤  `possibleTitles?`<br/><br/>⚛️  `Array<string>` | TBA<br/><br/>📌 Maps to [`UIBarButtonItem.possibleTitles`](https://developer.apple.com/documentation/uikit/uibarbuttonitem/1617132-possibletitles) property in the apple docs. |
 | 🔤  `width?`<br/><br/>⚛️  `number` | TBA<br/><br/>📌 Maps to [`UIBarButtonItem.width`](https://developer.apple.com/documentation/uikit/uibarbuttonitem/1617155-width) property in the apple docs. |
-| 🔤  `backgroundImage?`<br/><br/>⚛️  `{ [key in BarMetrics]?: NavBarItemBackgroundImageConfig }`<br/><br/>📌 [`BarMetrics`](PLACE_HOLDER_LINK)<br/>📌 [`NavBarItemBackgroundImageConfig`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`UIBarButtonItem.setBackButtonBackgroundImage(_:for:barMetrics:)`](https://developer.apple.com/documentation/uikit/uibarbuttonitem/1617128-setbackbuttonbackgroundimage) method in the apple docs. |
-| 🔤  `titlePositionAdjustment?`<br/><br/>⚛️  `{ [key in BarMetrics]?: Offset }`<br/><br>📌 [`BarMetrics`](PLACE_HOLDER_LINK)<br/>📌 [`Offset`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`UIBarButtonItem.setBackgroundVerticalPositionAdjustment(_:for:)`](https://developer.apple.com/documentation/uikit/uibarbuttonitem/1617141-setbackgroundverticalpositionadj) method in the apple docs. |
 
 <br>
 
@@ -1150,11 +1161,23 @@ TBA
 
 An intersection type that supports a combination of properties from `NavBarItemConfigBase` and  `NavBarItemConfigShared`,  i.e. equivalent to `NavBarItemConfigBase & NavBarItemConfigShared` in typescript.
 
+| Name and Type                                                | Description                                                  |
+| :----------------------------------------------------------- | ------------------------------------------------------------ |
+| 🤝 Extends [`NavBarItemConfigBase`](PLACE_HOLDER_LINK)        | Shares the same properties from `NavBarItemConfigBase` type. |
+| 🤝 Extends [`NavBarItemConfigShared`](PLACE_HOLDER_LINK)      | Shares the same properties from `NavBarItemConfigShared` type. |
+| 🔤  `backgroundImage?`<br/><br/>⚛️  `{ [key in BarMetrics]?: NavBarItemBackgroundImageConfig }`<br/><br/>📌 [`BarMetrics`](PLACE_HOLDER_LINK)<br/>📌 [`NavBarItemBackgroundImageConfig`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`UIBarButtonItem.setBackButtonBackgroundImage(_:for:barMetrics:)`](https://developer.apple.com/documentation/uikit/uibarbuttonitem/1617128-setbackbuttonbackgroundimage) method in the apple docs. |
+| 🔤  `titlePositionAdjustment?`<br/><br/>⚛️  `{ [key in BarMetrics]?: Offset }`<br/><br/>📌 [`BarMetrics`](PLACE_HOLDER_LINK)<br/>📌 [`Offset`](PLACE_HOLDER_LINK) | TBA<br/><br/>📌 Maps to [`UIBarButtonItem.setBackgroundVerticalPositionAdjustment(_:for:)`](https://developer.apple.com/documentation/uikit/uibarbuttonitem/1617141-setbackgroundverticalpositionadj) method in the apple docs. |
+
 <br>
 
 #####  Object Type: `NavBarBackItemConfig`
 
 An intersection type that supports a combination of properties from `NavBarItemConfigBase` and  `NavBarItemConfigShared`,  i.e. equivalent to `NavBarItemConfigBase & NavBarItemConfigShared` in typescript.
+
+| Name and Type                                           | Description                                                  |
+| :------------------------------------------------------ | ------------------------------------------------------------ |
+| 🤝 Extends [`NavBarItemConfigBase`](PLACE_HOLDER_LINK)   | Shares the same properties from `NavBarItemConfigBase` type. |
+| 🤝 Extends [`NavBarItemConfigShared`](PLACE_HOLDER_LINK) | Shares the same properties from `NavBarItemConfigShared` type. |
 
 <br>
 
