@@ -285,32 +285,44 @@ export const navBarItemsConfigs: Config<NavBarItemsConfig> = [{
   description: "A nav bar item with `Type: IMAGE_SYSTEM`, i.e. a SF Symbols icon. iOS 13+",
   config: [{
     type: 'IMAGE_SYSTEM',
-    imageValue: 'trash'
+    imageValue: {
+      systemName: 'trash',
+    },
   }]
 }, {
   description: "A nav bar item with 2 `Type: IMAGE_SYSTEM`, i.e. SF Symbols icons. Requires iOS 13+",
   config: [{
     type: 'IMAGE_SYSTEM',
-    imageValue: 'sunrise',
+    imageValue: {
+      systemName: 'sunrise',
+    },
     tintColor: 'orange',
   }, {
     type: 'IMAGE_SYSTEM',
-    imageValue: 'moon.fill',
+    imageValue: {
+      systemName: 'moon.fill',
+    },
     tintColor: 'purple',
   }]
 }, {
   description: "A nav bar item with 2 `Type: IMAGE_SYSTEM`, i.e. SF Symbols icons. Requires iOS 13+",
   config: [{
     type: 'IMAGE_SYSTEM',
-    imageValue: 'tv.fill',
+    imageValue: {
+      systemName: 'tv.fill',
+    },
     tintColor: 'red',
   }, {
     type: 'IMAGE_SYSTEM',
-    imageValue: 'headphones',
+    imageValue: {
+      systemName: 'headphones',
+    },
     tintColor: 'blue',
   }, {
     type: 'IMAGE_SYSTEM',
-    imageValue: 'airplane',
+    imageValue: {
+      systemName: 'airplane'
+    },
     tintColor: 'yellow',
   }]
 }];
@@ -348,13 +360,17 @@ export const backButtonItemConfigs: Config<NavBarBackItemConfig>= [{
   description: "Custom navbar back item with `Type: IMAGE_SYSTEM`",
   config: {
     type: 'IMAGE_SYSTEM',
-    imageValue: 'mic.fill',
+    imageValue: {
+      systemName: 'mic.fill'
+    },
   }
 }, {
   description: "Custom navbar back item with `Type: SYSTEM_ITEM` that's tinted green",
   config: {
     type: 'IMAGE_SYSTEM',
-    imageValue: 'keyboard',
+    imageValue: {
+      systemName: 'keyboard'
+    },
   }
 }, {
   description: "Custom navbar back item with `Type: IMAGE_EMPTY`",
@@ -403,7 +419,9 @@ export const navBarAppearanceConfigs: Config<NavBarAppearanceConfig> = [{
       },
       backIndicatorImage: {
         type: 'IMAGE_SYSTEM',
-        imageValue: 'trash'
+        imageValue: {
+          systemName: 'trash'
+        },
       },
     }
   }
@@ -425,7 +443,9 @@ export const navBarAppearanceConfigs: Config<NavBarAppearanceConfig> = [{
       },
       backIndicatorImage: {
         type: 'IMAGE_SYSTEM',
-        imageValue: 'arrow.left'
+        imageValue: {
+          systemName: 'arrow.left'
+        },
       },
     }
   },

@@ -92,7 +92,9 @@ export function NavigatorExample01() {
               routeTitle: "Route A",
               navBarButtonBackItemConfig: {
                 type: 'IMAGE_SYSTEM',
-                imageValue: 'trash'
+                imageValue: {
+                  systemName: 'trash',
+                },
               }
             },
             renderRoute: () => (
