@@ -239,7 +239,9 @@ public final class RNINavigatorView: UIView {
   let navBarAppearanceConfig = RNINavBarAppearance(dict: nil);
   @objc var navBarAppearance: NSDictionary? {
     didSet {
-      guard self.navBarAppearance != oldValue else { return };
+      guard !self.didTriggerCleanup,
+            self.navBarAppearance != oldValue
+      else { return };
       
       if let dict = self.navBarAppearance {
         // update nav bar appearance
