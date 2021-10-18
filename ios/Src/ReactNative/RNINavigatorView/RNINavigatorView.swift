@@ -158,61 +158,8 @@ public final class RNINavigatorView: UIView {
       let didChange  = oldValue != self.nativeRoutes;
       let isNotEmpty = self.nativeRoutes.count > 0;
       
-      guard didChange && isNotEmpty,
-            let data = self.nativeRoutes,
-            // js keys are implicitly casted to strings
-            let keys = data.allKeys as? [String]
-      else { return };
-      
-      for key in keys {
-        guard let routeID   = Int(key),
-              let routeData = data[key] as? NSDictionary,
-              // extract route data
-              let routeKey   = routeData["routeKey"  ] as? String,
-              let routeIndex = routeData["routeIndex"] as? Int
-        else { continue };
-        
-        guard let nativeRouteVC: RNINavigatorRouteBaseViewController = {
-          if let routeVC = self.routeItemsMap[routeID],
-             // check if it's a native route
-             routeVC as? RNINavigatorReactRouteViewController == nil {
-            
-            // A - native route for `routeID` already added...
-            return routeVC;
-            
-          } else if let vc = RNINavigatorManager.routeRegistry[routeKey] {
-            // B - native route for `routeID` not added yet...
-            // create/init native route
-            let routeVC = vc.init();
-
-            routeVC.setRouteID(routeID);
-            routeVC.setRouteKey(routeKey);
-            
-            routeVC.delegate = self;
-            routeVC.navigator = self;
-            
-            // add/register native route
-            self.routeItemsMap[routeID] = routeVC;            
-            return routeVC;
-          };
-          
-          // could not get/create native route vc
-          return nil;
-        }() else { continue };
-        
-        // update route index
-        nativeRouteVC.setRouteIndex(routeIndex);
-        
-        // set/update route props
-        if let routeProps = routeData["routeProps"] as? Dictionary<String, Any> {
-          nativeRouteVC.routeProps = routeProps;
-        };
-      };
-      
-      self.setupInitialRoutes();
-      self.onSetNativeRoutes?([
-        "navigatorID": self.navigatorID!
-      ]);
+      guard didChange && isNotEmpty else { return };
+      self.initializeNativeRoutes();
     }
   };
   
@@ -528,6 +475,63 @@ fileprivate extension RNINavigatorView {
     NSLayoutConstraint.activate([
       customNavBarBG.heightAnchor.constraint(equalTo: navBarBGLayer.heightAnchor),
       customNavBarBG.widthAnchor .constraint(equalTo: navBarBGLayer.widthAnchor ),
+    ]);
+  };
+  
+  func initializeNativeRoutes(){
+    // cast js object keys to array of strings
+    guard let keys = self.nativeRoutes.allKeys as? [String]
+    else { return };
+    
+    for key in keys {
+      guard let routeID   = Int(key),
+            let routeData = self.nativeRoutes[key] as? NSDictionary,
+            // extract route data
+            let routeKey   = routeData["routeKey"  ] as? String,
+            let routeIndex = routeData["routeIndex"] as? Int
+      else { continue };
+      
+      guard let nativeRouteVC: RNINavigatorRouteBaseViewController = {
+        if let routeVC = self.routeItemsMap[routeID],
+           // check if it's a native route
+           routeVC as? RNINavigatorReactRouteViewController == nil {
+          
+          // A - native route for `routeID` already added...
+          return routeVC;
+          
+        } else if let vc = RNINavigatorManager.routeRegistry[routeKey] {
+          // B - native route for `routeID` not added yet...
+          // create/init native route
+          let routeVC = vc.init();
+
+          routeVC.setRouteID(routeID);
+          routeVC.setRouteKey(routeKey);
+          
+          routeVC.delegate = self;
+          routeVC.navigator = self;
+          
+          // add/register native route
+          self.routeItemsMap[routeID] = routeVC;
+          return routeVC;
+        };
+        
+        // could not get/create native route vc
+        // fail silently...
+        return nil;
+      }() else { continue };
+      
+      // update route index
+      nativeRouteVC.setRouteIndex(routeIndex);
+      
+      // set/update route props
+      if let routeProps = routeData["routeProps"] as? Dictionary<String, Any> {
+        nativeRouteVC.routeProps = routeProps;
+      };
+    };
+    
+    self.setupInitialRoutes();
+    self.onSetNativeRoutes?([
+      "navigatorID": self.navigatorID!
     ]);
   };
   
