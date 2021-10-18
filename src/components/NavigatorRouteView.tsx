@@ -64,7 +64,7 @@ export type NavigatorRouteViewProps = Pick<RNINavigatorRouteViewProps,
   navigatorID: number;
 
   routeProps: object | null;
-  routeOptionsDefault: RouteOptions | null;
+  routeOptionsDefault : RouteOptions | null;
 
   isInFocus: boolean;
 
@@ -86,7 +86,8 @@ export type NavigatorRouteViewProps = Pick<RNINavigatorRouteViewProps,
 /** `NavigatorView` comp. state */
 type NavigatorRouteViewState = {
   updateIndex: number;
-  routeOptions: Nullish<RouteOptions>;
+  routeOptionsOverride: Nullish<RouteOptions>;
+  routeOptionsPortal: Nullish<RouteOptions>;
   hasRoutePortal: boolean;
 };
 //#endregion
@@ -122,7 +123,8 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
     this.state = {
       updateIndex: 0,
       hasRoutePortal: false,
-      routeOptions: {},
+      routeOptionsOverride: null,
+      routeOptionsPortal: null,
     };
   };
 
@@ -164,8 +166,8 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
       )
       // props: compare "default route options"
       || !CompareRouteOptions.unwrapAndCompare(
-        prevProps.routeOptionsDefault,
-        nextProps.routeOptionsDefault
+        prevProps.routeOptionsDefault ,
+        nextProps.routeOptionsDefault 
       )
     );
   };
@@ -213,10 +215,13 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
   /** Combines all the route configs into one */
   public getRouteOptions = (): RouteOptions => {
     const props = this.props;
-    const portalProps = this._routeViewPortalRef?.props;
+    const state = this.state;
+    
+    const routeOptionsDefault  = props.routeOptionsDefault ;
+    const routeOptionsPortal   = state.routeOptionsPortal;
+    const routeOptionsOverride = state.routeOptionsOverride;
 
-    const { routeOptionsDefault } = this.props;
-    const { routeOptions } = this.state;
+    const portalProps = this._routeViewPortalRef?.props;
 
     // check if portal has custom nav bar items
     const hasNavBarLeftItem  = (portalProps?.renderNavBarLeftItem  != null);
@@ -225,84 +230,99 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
     return {
       // ------------------------------------------------------
       // Technically, this whole thing could be done like this:
-      // `{...routeOptionsDefault, ...routeOptions}`
+      // `{...foo, ...bar, ...baz}`
       // but it's less clear/explicit, idk refactor this later.
       // ------------------------------------------------------
       statusBarStyle: (
-        routeOptions       ?.statusBarStyle ??
-        routeOptionsDefault?.statusBarStyle
+        routeOptionsOverride?.statusBarStyle ??
+        routeOptionsPortal   ?.statusBarStyle ??
+        routeOptionsDefault  ?.statusBarStyle
       ),
       routeContainerStyle: (
-        routeOptions       ?.routeContainerStyle ??
-        routeOptionsDefault?.routeContainerStyle
+        routeOptionsOverride?.routeContainerStyle ??
+        routeOptionsPortal   ?.routeContainerStyle ??
+        routeOptionsDefault  ?.routeContainerStyle
       ),
       automaticallyAddHorizontalSafeAreaInsets: (
-        routeOptions       ?.automaticallyAddHorizontalSafeAreaInsets ??
-        routeOptionsDefault?.automaticallyAddHorizontalSafeAreaInsets ?? true
+        routeOptionsOverride?.automaticallyAddHorizontalSafeAreaInsets ??
+        routeOptionsPortal  ?.automaticallyAddHorizontalSafeAreaInsets ??
+        routeOptionsDefault ?.automaticallyAddHorizontalSafeAreaInsets ?? true
       ),
       // #region - Transition Config |
       // ----------------------------*
       transitionConfigPush: (
-        props.transitionConfigPushOverride        ??
-        routeOptions       ?.transitionConfigPush ??
-        routeOptionsDefault?.transitionConfigPush
+        props.transitionConfigPushOverride         ??
+        routeOptionsOverride?.transitionConfigPush ??
+        routeOptionsPortal  ?.transitionConfigPush ??
+        routeOptionsDefault ?.transitionConfigPush
       ),
       transitionConfigPop: (
-        props.transitionConfigPopOverride        ??
-        routeOptions       ?.transitionConfigPop ??
-        routeOptionsDefault?.transitionConfigPop
+        props.transitionConfigPopOverride         ??
+        routeOptionsOverride?.transitionConfigPop ??
+        routeOptionsPortal  ?.transitionConfigPop ??
+        routeOptionsDefault ?.transitionConfigPop
       ),
       // #endregion -------------*
       // #region - Navbar Config |
       // ------------------------*
       routeTitle: (
-        routeOptions       ?.routeTitle ??
-        routeOptionsDefault?.routeTitle ?? props.routeKey
+        routeOptionsOverride?.routeTitle ??
+        routeOptionsPortal  ?.routeTitle ??
+        routeOptionsDefault ?.routeTitle ?? props.routeKey
       ),
       prompt: (
-        routeOptions       ?.prompt ??
-        routeOptionsDefault?.prompt 
+        routeOptionsOverride?.prompt ??
+        routeOptionsPortal  ?.prompt ??
+        routeOptionsDefault ?.prompt 
       ),
       largeTitleDisplayMode: (
-        routeOptions       ?.largeTitleDisplayMode ??
-        routeOptionsDefault?.largeTitleDisplayMode 
+        routeOptionsOverride?.largeTitleDisplayMode ??
+        routeOptionsPortal  ?.largeTitleDisplayMode ??
+        routeOptionsDefault ?.largeTitleDisplayMode 
       ),
       searchBarConfig: (
-        routeOptions       ?.searchBarConfig ??
-        routeOptionsDefault?.searchBarConfig 
+        routeOptionsOverride?.searchBarConfig ??
+        routeOptionsPortal  ?.searchBarConfig ??
+        routeOptionsDefault ?.searchBarConfig 
       ),
       // #endregion ----------------------------------*
       // #region - `NavigationConfigOverride`-related |
       // ---------------------------------------------*
       navBarAppearanceOverride: (
-        routeOptions       ?.navBarAppearanceOverride ??
-        routeOptionsDefault?.navBarAppearanceOverride 
+        routeOptionsOverride?.navBarAppearanceOverride ??
+        routeOptionsPortal  ?.navBarAppearanceOverride ??
+        routeOptionsDefault ?.navBarAppearanceOverride 
       ),
       navigationBarVisibility: (
-        routeOptions       ?.navigationBarVisibility ??
-        routeOptionsDefault?.navigationBarVisibility 
+        routeOptionsOverride?.navigationBarVisibility ??
+        routeOptionsPortal  ?.navigationBarVisibility ??
+        routeOptionsDefault ?.navigationBarVisibility 
       ),
       allowTouchEventsToPassThroughNavigationBar: (
-        routeOptions       ?.allowTouchEventsToPassThroughNavigationBar ??
-        routeOptionsDefault?.allowTouchEventsToPassThroughNavigationBar
+        routeOptionsOverride?.allowTouchEventsToPassThroughNavigationBar ??
+        routeOptionsPortal  ?.allowTouchEventsToPassThroughNavigationBar ??
+        routeOptionsDefault ?.allowTouchEventsToPassThroughNavigationBar ?? false
       ),
       // #endregion ------------------*
       // #region - Navbar Item Config |
       // -----------------------------*
       navBarButtonBackItemConfig: (
-        routeOptions       ?.navBarButtonBackItemConfig ??
-        routeOptionsDefault?.navBarButtonBackItemConfig
+        routeOptionsOverride?.navBarButtonBackItemConfig ??
+        routeOptionsPortal  ?.navBarButtonBackItemConfig ??
+        routeOptionsDefault ?.navBarButtonBackItemConfig
       ),
       navBarButtonLeftItemsConfig: (
-        routeOptions       ?.navBarButtonLeftItemsConfig ??
-        routeOptionsDefault?.navBarButtonLeftItemsConfig ??
+        routeOptionsOverride?.navBarButtonLeftItemsConfig ??
+        routeOptionsPortal  ?.navBarButtonLeftItemsConfig ??
+        routeOptionsDefault ?.navBarButtonLeftItemsConfig ??
         // custom left bar item was set, so we implicitly/automatically
         // create a `type: CUSTOM` nav bar item config...
         (hasNavBarLeftItem? [{ type: 'CUSTOM' }] : undefined)
       ),
       navBarButtonRightItemsConfig: (
-        routeOptions       ?.navBarButtonRightItemsConfig ??
-        routeOptionsDefault?.navBarButtonRightItemsConfig ??
+        routeOptionsOverride?.navBarButtonRightItemsConfig ??
+        routeOptionsPortal  ?.navBarButtonRightItemsConfig ??
+        routeOptionsDefault ?.navBarButtonRightItemsConfig ??
         // custom right bar item was set, so we implicitly/automatically
         // create a `type: CUSTOM` nav bar item config...
         (hasNavBarRightItem? [{ type: 'CUSTOM' }] : undefined)
@@ -311,24 +331,29 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
       // #region - Navbar back button item config |
       // -----------------------------------------*
       leftItemsSupplementBackButton: (
-        routeOptions       ?.leftItemsSupplementBackButton ??
-        routeOptionsDefault?.leftItemsSupplementBackButton
+        routeOptionsOverride?.leftItemsSupplementBackButton ??
+        routeOptionsPortal  ?.leftItemsSupplementBackButton ??
+        routeOptionsDefault ?.leftItemsSupplementBackButton
       ),
       backButtonTitle: (
-        routeOptions       ?.backButtonTitle ??
-        routeOptionsDefault?.backButtonTitle
+        routeOptionsOverride?.backButtonTitle ??
+        routeOptionsPortal  ?.backButtonTitle ??
+        routeOptionsDefault ?.backButtonTitle
       ),
       backButtonDisplayMode: (
-        routeOptions       ?.backButtonDisplayMode ??
-        routeOptionsDefault?.backButtonDisplayMode
+        routeOptionsOverride?.backButtonDisplayMode ??
+        routeOptionsPortal  ?.backButtonDisplayMode ??
+        routeOptionsDefault ?.backButtonDisplayMode
       ),
       hidesBackButton: (
-        routeOptions       ?.hidesBackButton ??
-        routeOptionsDefault?.hidesBackButton
+        routeOptionsOverride?.hidesBackButton ??
+        routeOptionsPortal  ?.hidesBackButton ??
+        routeOptionsDefault ?.hidesBackButton
       ),
       applyBackButtonConfigToCurrentRoute: (
-        routeOptions       ?.applyBackButtonConfigToCurrentRoute ??
-        routeOptionsDefault?.applyBackButtonConfigToCurrentRoute
+        routeOptionsOverride?.applyBackButtonConfigToCurrentRoute ??
+        routeOptionsPortal  ?.applyBackButtonConfigToCurrentRoute ??
+        routeOptionsDefault ?.applyBackButtonConfigToCurrentRoute
       ),
       // #endregion
     };
@@ -377,10 +402,19 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
   };
   
   public setRouteOptions = async (
-    routeOptions: Nullish<Readonly<RouteOptions>>
+    routeOptionsOverride: Nullish<Readonly<RouteOptions>>
   ) => {
     await Helpers.setStateAsync<NavigatorRouteViewState>(this, (prevState) => ({
-      ...prevState, routeOptions,
+      ...prevState, routeOptionsOverride,
+      updateIndex: (prevState.updateIndex + 1),
+    }));
+  };
+
+  public setPortalRouteOptions = async (
+    routeOptionsPortal: Nullish<Readonly<RouteOptions>>
+  ) => {
+    await Helpers.setStateAsync<NavigatorRouteViewState>(this, (prevState) => ({
+      ...prevState, routeOptionsPortal,
       updateIndex: (prevState.updateIndex + 1),
     }));
   };
@@ -648,9 +682,6 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
           onSearchBarSearchButtonClicked={this._handleOnSearchBarSearchButtonClicked}
           // pass down navbar item config, back button item config, etc.
           {...routeOptions}
-          allowTouchEventsToPassThroughNavigationBar={
-            routeOptions.allowTouchEventsToPassThroughNavigationBar ?? false
-          }
         >
           {this._renderRouteContents(navigation)}
           <RouteComponentsWrapper

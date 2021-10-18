@@ -61,11 +61,8 @@ export class RouteViewPortal extends React.Component<RouteViewPortalProps> {
     routeRef.setRouteViewPortalRef(this);
 
     if(props.routeOptions != null){
-      routeRef.setRouteOptions(props.routeOptions);
+      routeRef.setPortalRouteOptions(props.routeOptions);
     };
-  };
-
-  componentDidMount = () => {
   };
 
   componentDidUpdate = (prevProps: RouteViewPortalProps) => {
@@ -75,7 +72,8 @@ export class RouteViewPortal extends React.Component<RouteViewPortalProps> {
       !CompareRouteOptions.unwrapAndCompare(prevProps.routeOptions, nextProps.routeOptions);
 
     if(didRouteOptionsChange){
-      this.routeRef.setRouteOptions(nextProps.routeOptions);
+      // updating the `routeOptions` will trigger a re-render/update...
+      this.routeRef.setPortalRouteOptions(nextProps.routeOptions);
 
       //#region - 🐞 DEBUG 🐛
       LIB_ENV.debugLog && console.log(
@@ -83,10 +81,9 @@ export class RouteViewPortal extends React.Component<RouteViewPortalProps> {
         + ` - didRouteOptionsChange: ${didRouteOptionsChange? 'true' : 'false'}`
       );
       //#endregion
-    };
 
-    // updating the `routeOptions` will already trigger a re-render/update
-    if(!didRouteOptionsChange){
+    } else {
+      // `routeOptions` did not change, trigger a re-render 
       this.routeRef.updateRouteComponents();
     };
   };
