@@ -142,8 +142,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     this.verifyProps();
 
     this.navigatorID = NAVIGATOR_ID_COUNTER++;
-    console.log('navigatorID: ', this.navigatorID);
-    
 
     this.navStatus = NavStatus.IDLE_INIT;
     this.routesToRemove = [];
