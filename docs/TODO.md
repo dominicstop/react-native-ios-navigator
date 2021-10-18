@@ -353,6 +353,8 @@
 ### Version: `next`
 
 - [x] (Commit: `07c048d`) **Implement**: Update `NavBarItemConfig` to support creating  `fixedSpace` and  `flexibleSpace` bar items.
+- [x] (Commit: `3882792`) **Fix**: `navBarAppearance` being set after unmount, causing a "force unwrap"-related crash.
+- [x] (Commit: `18af2a3`) **Fix**: Crash due to `navigatorID` being forced unwrap in `RNINavigatorView.setupInitialRoutes`.
 
 <br>
 
