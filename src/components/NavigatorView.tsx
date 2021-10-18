@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Platform, StyleSheet, ViewStyle } from 'react-native';
+import { Platform, StyleSheet, ViewProps } from 'react-native';
 
 import { TSEventEmitter } from '@dominicstop/ts-event-emitter';
 
@@ -58,7 +58,7 @@ export type SetRoutesTransformCallback =
 export type NavRoutesConfigMap = { [k: string]: NavRouteConfigItem };
 
 /** `NavigatorView` comp. props */
-export type NavigatorViewProps = Partial<Pick<RNINavigatorViewProps,
+type NavigatorViewBaseProps = Partial<Pick<RNINavigatorViewProps,
   // mirror props from `RNINavigatorViewProps`
   | 'isInteractivePopGestureEnabled' 
   | 'shouldSwizzleRootViewController'
@@ -74,7 +74,6 @@ export type NavigatorViewProps = Partial<Pick<RNINavigatorViewProps,
   | 'onNavRouteDidShow'
   | 'onUIConstantsDidChange'
 >> & {
-  style?: ViewStyle;
 
   // Nav. Route Config
   routes: NavRoutesConfigMap;
@@ -88,6 +87,9 @@ export type NavigatorViewProps = Partial<Pick<RNINavigatorViewProps,
 
   renderNavBarBackground?: () => ReactElement;
 };
+
+export type NavigatorViewProps = 
+  ViewProps & NavigatorViewBaseProps;
 
 /** `NavigatorView` comp. state */
 type NavigatorViewState = Partial<Pick<OnUIConstantsDidChangeEventObject['nativeEvent'],
@@ -140,6 +142,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     this.verifyProps();
 
     this.navigatorID = NAVIGATOR_ID_COUNTER++;
+    console.log('navigatorID: ', this.navigatorID);
+    
 
     this.navStatus = NavStatus.IDLE_INIT;
     this.routesToRemove = [];
@@ -1677,12 +1681,23 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   };
   
   render(){
-    const props = this.props;
+    const {
+      isInteractivePopGestureEnabled,
+      shouldSwizzleRootViewController,
+      navBarPrefersLargeTitles,
+      navBarAppearance,
+      isNavBarTranslucent,
+      disableTransparentNavBarScrollEdgeAppearance,
+      initialRoutes,
+      renderNavBarBackground,
+      ...viewProps
+    } = this.props;
+
     const state = this.state;
 
-    const style = (props.style == null) 
+    const style = (viewProps.style == null) 
       ? styles.navigatorView 
-      : [styles.navigatorView, props.style];
+      : [styles.navigatorView, viewProps.style];
 
     //#region - 🐞 DEBUG 🐛
     LIB_ENV.debugLogRender && console.log(
@@ -1693,22 +1708,21 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
     return (
       <RNINavigatorView 
-        {...props}
         ref={r => { this.nativeRef = r! }}
+        navigatorID={this.navigatorID}
         style={style}
         // General config
-        navigatorID={this.navigatorID}
-        isInteractivePopGestureEnabled={props.isInteractivePopGestureEnabled ?? true}
-        shouldSwizzleRootViewController={props.shouldSwizzleRootViewController ?? true}
-        disableTransparentNavBarScrollEdgeAppearance={props.disableTransparentNavBarScrollEdgeAppearance ?? true}
+        isInteractivePopGestureEnabled={isInteractivePopGestureEnabled ?? true}
+        shouldSwizzleRootViewController={shouldSwizzleRootViewController ?? true}
+        disableTransparentNavBarScrollEdgeAppearance={disableTransparentNavBarScrollEdgeAppearance ?? true}
         nativeRoutes={this.getNativeRoutes()}
         initialRouteKeys={
-          props.initialRoutes.map(route => route.routeKey)
+          initialRoutes.map(route => route.routeKey)
         }
         // Navigation Bar customization
-        isNavBarTranslucent={props.isNavBarTranslucent ?? true}
-        navBarPrefersLargeTitles={props.navBarPrefersLargeTitles ?? true}
-        navBarAppearance={props.navBarAppearance}
+        isNavBarTranslucent={isNavBarTranslucent ?? true}
+        navBarPrefersLargeTitles={navBarPrefersLargeTitles ?? true}
+        navBarAppearance={navBarAppearance}
         // event handlers: push/pop
         onNavRouteWillPop={this._handleOnNavRouteWillPop}
         onNavRouteDidPop={this._handleOnNavRouteDidPop}
@@ -1717,8 +1731,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
         onNativeCommandRequest={this._handleOnNativeCommandRequest}
         onCustomCommandFromNative={this._handleOnCustomCommandFromNative}
         onUIConstantsDidChange={this._handleOnUIConstantsDidChange}
-        onNavRouteWillShow={props.onNavRouteWillShow}
+        onNavRouteWillShow={this._handleOnNavRouteDidShow}
         onNavRouteDidShow={this._handleOnNavRouteDidShow}
+        {...viewProps}
       >
         <NavigatorUIConstantsContext.Provider value={{
           safeAreaInsets : state.safeAreaInsets,
@@ -1726,12 +1741,12 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
           navigatorSize  : state.navigatorSize,
         }}>
           {this._renderRoutes()}
-          {props.renderNavBarBackground && (
+          {renderNavBarBackground && (
             <RNIWrapperView
               style={styles.navBarBackgroundContainer} 
               nativeID={NativeIDKeys.NavBarBackground}
             >
-              {props.renderNavBarBackground()}
+              {renderNavBarBackground()}
             </RNIWrapperView>
           )}
         </NavigatorUIConstantsContext.Provider>
