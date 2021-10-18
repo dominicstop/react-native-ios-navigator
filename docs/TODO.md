@@ -337,14 +337,12 @@
 - [ ] `TODO (006)`: `RNINavigatorRouteHeaderView.setup` — Refactor: use view controller containment/child vc.
 - [ ] `TODO (007)`: `RNINavigatorRouteView.insertReactSubview` — use `RNIWrapperView` for `RouteContent` so we can clean this up.
 - [ ] `TODO (008)`: `RNINavigatorReactRouteViewController.overrideIsNavBarHidden` — Bug: when hiding nav bar, scrollview still snaps.
-- [ ] `TODO (009)`: `RNINavigatorReactRouteViewController.transitionTypePop` — Cleanup `RNINavTransitionConfig`.
 - [ ] `TODO (010)`: `NavRouteConfigItemExtended` — Moved type to `types/InternalTypes.`
 - [ ] `TODO (011)`: `NavigatorView.setRoutes` — Use this command to replace existing native navigation commands.
 - [ ] `TODO (012)`: `NavigatorView._handleOnNativeCommandRequest` — Cleanup: Extract to sep. functions.
 - [ ] `TODO (013)`: `withRouteViewLifecycle` — Delete file + impl.
 - [ ] `TODO (014)`: `NavBarAppearanceBaseConfig` — Rename type to `NavBarAppearanceBaseConfigType` and export
 - [ ] `TODO (017)`: `NavigatorView.verifyProps` — Add user-defined type guard
-- [ ] `TODO (018)`: `overrideIsNavBarHidden` — Bug: when hiding nav bar, scrollview still snaps.
 
 ---
 

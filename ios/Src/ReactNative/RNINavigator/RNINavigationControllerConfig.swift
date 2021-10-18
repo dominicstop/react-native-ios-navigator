@@ -92,7 +92,7 @@ public class RNINavigationControllerConfig {
     let shouldApply = routeVC.isLastViewController && routeVC.isPushed;
     
     if forceApplyConfig || shouldApply {
-      /// TODO (017): Bug - when hiding nav bar, scrollview still snaps
+      /// TODO (007): Bug - when hiding nav bar, scrollview still snaps
       navController.setNavigationBarHidden(isNavBarHidden, animated: isAnimated);
     };
   };
@@ -110,7 +110,6 @@ public class RNINavigationControllerConfig {
     let shouldApply = routeVC.isLastViewController && routeVC.isPushed;
     
     if forceApplyConfig || shouldApply {
-      /// TODO (017): Bug - when hiding nav bar, scrollview still snaps
       navigatorView.allowTouchEventsToPassThroughNavigationBar = flag;
     };
   };
