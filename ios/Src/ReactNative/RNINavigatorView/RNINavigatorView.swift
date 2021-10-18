@@ -382,7 +382,7 @@ public final class RNINavigatorView: UIView {
 
 fileprivate extension RNINavigatorView {
   
-  /// setup - if init., set the initial routes
+  /// setup - if finished init., set the initial routes and show the navigation controller
   func setupInitialRoutes(){
     guard !self.didReceiveAllInitialRoutes else { return };
     
@@ -531,7 +531,9 @@ fileprivate extension RNINavigatorView {
     
     self.setupInitialRoutes();
     self.onSetNativeRoutes?([
-      "navigatorID": self.navigatorID!
+      /// Note: Sometimes the initial native routes will be initialized before the navigator has finished
+      /// initializing, as such the `navigatorID` hasn't been set yet...
+      "navigatorID": self.navigatorID ?? -1
     ]);
   };
   
