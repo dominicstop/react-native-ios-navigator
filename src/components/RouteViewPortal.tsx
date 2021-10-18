@@ -88,6 +88,10 @@ export class RouteViewPortal extends React.Component<RouteViewPortalProps> {
     };
   };
 
+  componentWillUnmount = () => {
+    this.routeRef.setPortalRouteOptions(null);
+  };
+
   render(){
     return null as any;
   };
