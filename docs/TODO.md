@@ -4,6 +4,9 @@
 
 - [ ] Replace usage of `RCTBridgeWillReloadNotification` with invalidate in modules.
 
+	
+
+
 <br>
 
 ## Unsorted
@@ -18,6 +21,10 @@
 
 - [ ] Possibly trigger `syncRoutesFromNative` from native when active routes diverged.
 - [ ] Impl. On Modal Event
+
+	- AFAIK there isn't way to do this without subclassing `UINavigationController` and overriding `present` method.
+	- AFAIK when a modal is presented on a child VC it doesn't trigger the parent VC's `present` method.
+
 - [ ] Refactor: Allow pushing regular `UIViewController` instances
 	-  Refactor native active routes to be `(routeData, UIViewController)`.
 	- Route data is not stored in the properties.
@@ -44,15 +51,18 @@
 - [ ] Impl. Navigation Bar `mixed` mode (e.g. use legacy and appearance at the same time).
 - [ ] Examples: Update `NavigatorTest02`
 - [ ] Add support for using `RouteHeader` when the navigation bar is hidden.
-- [ ] Fix error recovery sometimes not working when command times out.
-- [ ] Impl. `legacyTintColor` for navigation bar appearance mode.
-- [ ] Add versions + xcode table
+- [ ] Impl. `legacyTintColor` for navigation bar appearance mode.>
+
 - [ ] Impl. swift extension  `notEmptyAndAllSatisfy`
 - [ ] Remove TS Enums
 - [ ] Cleanup native comments - remove unnecessary comments
-- [ ] Clear route options when `RouteViewPortal` unmounts
 - [ ] support blur for image config.
-- [ ] Make route options provided via `RouteViewPortal` and `setRouteOptions` command separate then combine later.
+- [ ] Support image type: `LOCAL_URI`
+- [ ] Impl. navigation command: `setRouteOptionsForRoute`
+	* Alt. `getNavigationObjectForRoute(routeKey, routeIndex)`
+
+<br>
+
 - [ ] Add section to README: `RouteOptions` Precedence/Hierarchy
 
 - [ ] Update legacy `backgroundImage` to support setting [`barPosition`](https://developer.apple.com/documentation/uikit/uinavigationbar/1624968-setbackgroundimage)
@@ -76,6 +86,10 @@
 - [ ] Implement search module command `getSearchBarState`. Returns object that contains: search bar text, `isActive`,  `isSearchResultsButtonSelected`, `showsCancelButton`, etc.
 - [ ] Implement search module command `setSearchBarState`.
 - [ ] Add missing impl. for `UISearchBar`, e.g. `showsSearchResultsButton`, background images, etc.
+
+<br>
+
+- [ ] `UIViewController`: `preferredStatusBarUpdateAnimation`, `shouldAutorotate`
 
 <br>
 
@@ -288,17 +302,9 @@
 
 * Back-gesture related bugs.
 
-	- [ ] **Fix**: Starting the back  gesture by slowly swiping left, then immediately swiping right and letting go (i.e. to cancel the back gesture) causes the navigation bar to become transparent with a large title even though the scroll offset isn't at the very top (i.e. the navigation bar flickers, and becomes temporarily see through).
-		* This bug can be reproduced using `NavigatorTest01` route.
-		* In other words, the large title appears even though it shouldn't (due to the current scroll offset).
-		* It's as though the configuration was restored/re-applied when the route was focused again (could be some logic in the VC lifecycle, e.g. `viewWillAppear`, etc).
-		* Might be a bug related to the appearance config restoration logic (i.e. likely related the restoration of the navigation bar from the previous route, or the "re-application" of the current route's config when the swipe back gesture is cancelled and becomes in focus again).
-			* Still persist even after navigator override config refactor in commit `5395fb2`.
-		* Might also be related to `setupScrollView`?
-
-	- [ ] The header custom `backgroundImage` image and `shadowImage` doesn't transition properly, e.g. the `backgroundImage` abruptly disappears, and the `shadowImage` transitions to the wrong height (i.e. the default hair width height, but stretched vertically).
-		* This bug is present in both appearance and appearance legacy mode (so it's a potential bug in UIKit).
-		* Partially fixed in commit `589384c` (i.e. the navigation bar background + shadow now fades in when the transition is cancelled).
+  - [ ] The header custom `backgroundImage` image and `shadowImage` doesn't transition properly, e.g. the `backgroundImage` abruptly disappears, and the `shadowImage` transitions to the wrong height (i.e. the default hair width height, but stretched vertically).
+  	* This bug is present in both appearance and appearance legacy mode (so it's a potential bug in UIKit).
+  	* Partially fixed in commit `589384c` (i.e. the navigation bar background + shadow now fades in when the transition is cancelled).
 
 ---
 
@@ -351,6 +357,17 @@
 ## Completed
 
 ### Version: `next`
+
+<br>
+
+### Version: `0.4.2`
+
+- [x] (Commit: `e8088ae`) **Refactor**: Update `NavigatorRouteView` to separately store the `routeOptions` provided by  `RouteViewPortal` and the `NavigatorRouteView.setRouteOptions` command.
+- [x] (Commit: `2a96717`) **Fix**: Clear `routeOptionsPortal`  when `RouteViewPortal` unmount's.
+
+<br>
+
+### Version: `0.4.1`
 
 - [x] (Commit: `07c048d`) **Implement**: Update `NavBarItemConfig` to support creating  `fixedSpace` and  `flexibleSpace` bar items.
 - [x] (Commit: `3882792`) **Fix**: `navBarAppearance` being set after unmount, causing a "force unwrap"-related crash.
@@ -1106,3 +1123,13 @@ DynamicColorIOS:  {"dynamic": {"dark": "blue", "light": "red"}}
 - [ ] Update `OnRoutePop` to receive `isAnimated` parameter.
 	- Cannot be impl. because `animated` is only available in `willAppear`/`didAppear` and not in `willMove`/`didMove`.
 
+<br>
+
+- [ ] **Fix**: Starting the back  gesture by slowly swiping left, then immediately swiping right and letting go (i.e. to cancel the back gesture) causes the navigation bar to become transparent with a large title even though the scroll offset isn't at the very top (i.e. the navigation bar flickers, and becomes temporarily see through).
+	* This bug can be reproduced using `NavigatorTest01` route.
+	* In other words, the large title appears even though it shouldn't (due to the current scroll offset).
+	* It's as though the configuration was restored/re-applied when the route was focused again (could be some logic in the VC lifecycle, e.g. `viewWillAppear`, etc).
+	* Might be a bug related to the appearance config restoration logic (i.e. likely related the restoration of the navigation bar from the previous route, or the "re-application" of the current route's config when the swipe back gesture is cancelled and becomes in focus again).
+		* Still persist even after navigator override config refactor in commit `5395fb2`.
+	* Might also be related to `setupScrollView`?
+	* As of version `0.4.0` this is no longer reproducible. Might have been fixed in commit `0ee17f5`.
