@@ -235,7 +235,7 @@ Each route has a corresponding `RouteOptions` object associated with it. This ob
 
 | Prop Name and Type                                           | Description                                                  |
 | :----------------------------------------------------------- | :----------------------------------------------------------- |
-| 🔤 **Required**: `routes`<br><br>⚛️ [`NavRoutesConfigMap`](PLACE_HOLDER_LINK) | Configures what routes can be used inside the navigator.<br><br>This prop accepts a `NavRoutesConfigMap` object. This object is a map of `NavRouteConfigItem` objects, where in the key of each property is its `routeKey` (e.g. `{ RouteA: {...}, RouteB: {...} }`).<br><br>These objects are used to create and configure the routes. Those "route config" objects include things like: <br>• **A**. what component to show when the route becomes active (i.e. the `NavRouteConfigItem.renderRoute` property),<br>• **B**. the initial `routeProps` that the route will receive (e.g. `NavRouteConfigItem.initialRouteProps`), and<br>• **C**. other misc. options that'll determine the look of the navigation bar, the route's transitions, etc. (i.e. `NavRouteConfigItem.routeOptionsDefault`). <br><br>📝 **Note**: The `routeKey` for the route config object must be unique for each route item.<br><br>There are actually two types of routes that you can use:<br>• **A**. The first one is a "<u>JS route</u>" (i.e. a route defined in react/js-side using standard react components).<br>• **B**. The second one is a "<u>native route</u>" (i.e. a route defined in the native-side using  native code (e.g. `UIViewController` + storyboards, auto layout, etc).<br><br>📌 For more details check out the [`NavRouteConfigItem`](PLACE_HOLDER_LINK) type, and the [guides](PLACE_HOLDER_LINK) section. |
+| 🔤 **Required**: `routes`<br><br>⚛️ [`NavRoutesConfigMap`](PLACE_HOLDER_LINK) | Configures what routes can be used inside the navigator.<br><br>This prop accepts a `NavRoutesConfigMap` object. This object is a map/dictionary of `NavRouteConfigItem` objects, where in the key of each property is its `routeKey` (e.g. `{ RouteA: {...}, RouteB: {...} }`).<br><br>These objects are used to create and configure the routes. Those "route config" objects include things like: <br>• **A**. what component to show when the route becomes active (i.e. the `NavRouteConfigItem.renderRoute` property),<br>• **B**. the initial `routeProps` that the route will receive (e.g. `NavRouteConfigItem.initialRouteProps`), and<br>• **C**. other misc. options that'll determine the look of the navigation bar, the route's transitions, etc. (i.e. `NavRouteConfigItem.routeOptionsDefault`). <br><br>📝 **Note**: The `routeKey` for the route config object must be unique for each route item.<br><br>There are actually two types of routes that you can use:<br>• **A**. The first one is a "<u>JS route</u>" (i.e. a route defined in react/js-side using standard react components).<br>• **B**. The second one is a "<u>native route</u>" (i.e. a route defined in the native-side using  native code (e.g. `UIViewController` + storyboards, auto layout, etc).<br><br/>📌 **Related Sections**:<br/>•  [`RouteOptions`](PLACE_HOLDER_LINK)<br>•  [`RouteOptions` Precedence](PLACE_HOLDER_LINK)<br>• [`NavRouteConfigItem`](PLACE_HOLDER_LINK) |
 | 🔤 [**Required**: `initialRoutes`<br><br>⚛️  `Array<NavRouteItem>`](PLACE_HOLDER_LINK) | Used by the navigator to determine which initial routes to show when the navigator first mounts.<br><br>This prop accepts an array of `NavRouteItem` objects. The `routeKey` values in the objects must match with a route configured in the `routes` prop. <br><br>This prop basically represents the navigation stack during the first mount (e.g. with the first item being the root route, and the last item being the topmost active route).<br><br>For example, if you pass `[[{routeKey: 'A'}, {routeKey: 'B'}]]` as the initial routes, then route "A" will become the root route, and route "B" will become the topmost route. Thus, on the first mount  route "B" will first be shown, and by pressing the back button,  route "B" will be popped, and then route "A" will be shown. <br><br>💡 **Tip**: This behavior of being able to set the initial routes is useful for state-restoration (or for when you want to show a different initial route based on some condition). |
 | ⚛️ `ViewProps`                                                | This component also supports all the standard props from a `<View/>` component. |
 | 🔤  `style`<br/><br>⚛️  `ViewStyle`                            | The style applied to the the `NavigatorView` component itself.<br><br>📝 **Note**: The layout size of the `NavigatorView` will also determine the layout size of the routes, so if the size of the navigator is 100 x 100, then the routes will also be 100 x 100. |
@@ -327,7 +327,7 @@ The purpose of this component is to allow for the customization of a route after
 
 📝 **Note**: The reason why this component has the "portal" suffix is because it's "transporting" things like the route options and the render props somewhere else.
 
-This component is meant to be used inside a route (i.e. it must be used inside the `renderRoute` function in the `NavigatorView.routes` prop). This is because internally, this component relies on react context to communicate to the parent `NavigatorRouteView` component. 
+This component is meant to be used inside a route (i.e. it must be used inside the `renderRoute` function in the `NavigatorView.routes` prop). This is because internally, this component relies on react context to communicate to the parent route container (i.e.  `NavigatorRouteView`) component. 
 
 For some extra background info, the `NavigatorRouteView` component is responsible for: 
 
@@ -335,11 +335,11 @@ For some extra background info, the `NavigatorRouteView` component is responsibl
 * **B**. managing the route's lifecycle, and
 * **C**. communicating with the native views/modules, etc.
 
-
+<br>
 
 As such this component doesn't actually render anything directly, it's merely an intermediate component to pass things along. 
 
-* The components you pass to  the `RouteViewPortal` are actually being rendered in different place in the component tree.
+* The components you pass to  the `RouteViewPortal` are actually being rendered in a different place in the component tree.
 * Keep this in mind when using things like react context and state (this is a limitation I'm currently trying to fix).
 
 <br>
@@ -348,7 +348,7 @@ As such this component doesn't actually render anything directly, it's merely an
 
 | Prop Name and Type                                           | Description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
-| 🔤  `routeOptions`<br/><br/>⚛️ [`RouteOptions`](PLACE_HOLDER_LINK) | This prop will override the existing route options that were provided either from: 1️⃣ the route's "route config" in the `NavigatorView.routes` prop  (i.e.  `NavRouteConfigItem.routeOptionsDefault`),<br>2️⃣ the route options provided in the `NavigatorView.initialRoutes` prop (i.e. `NavRouteItem.routeOptions`), or<br>3️⃣ the route options override provided via a navigation command (e.g. `navigation.push({..., routeOptions: {...}})`).<br><br>This prop is basically just a convenient wrapper around `navigation.setRouteOptions` (i.e. it’s just calling this command on your behalf whenever you provide a new value).<br><br>💡 **Tip**: This prop is useful for dynamically changing the current route options based on some condition.<br><br>For example, you can change the navigation bar title after loading a resource, or temporarily hide the back button while loading, etc. |
+| 🔤  `routeOptions`<br/><br/>⚛️ [`RouteOptions`](PLACE_HOLDER_LINK) | This prop will override the existing route options that were provided either from: 1️⃣ the route's "route config" in the `NavigatorView.routes` prop  (i.e.  `NavRouteConfigItem.routeOptionsDefault`),<br>2️⃣ the route options provided in the `NavigatorView.initialRoutes` prop (i.e. `NavRouteItem.routeOptions`), or<br>3️⃣ the route options override provided via a navigation command (e.g. `navigation.push({..., routeOptions: {...}})`).<br><br>📝 **Note A**:  The route options provided via this prop can be potentially be overridden by the `navigation.setRouteOptions` command.<br><br/>📝 **Note B**: Internally, this prop is basically just setting the route options for the current route on your behalf whenever you provide a new value (or when the said value changes).<br><br>💡 **Tip**: This prop is useful for dynamically changing the current route options based on some condition.<br><br>For example, you can change the navigation bar title after loading a resource, or temporarily hide the back button while loading, etc.<br><br>📌 **Related Sections**:<br>•  [`RouteOptions` Precedence](PLACE_HOLDER_LINK) |
 | 🔤  `renderNavBarLeftItem`<br/><br/>⚛️ [`(navigation) => ReactElement`](PLACE_HOLDER_LINK) | This prop is used for rendering a custom left item component in the navigation bar.<br><br>If `leftItemsSupplementBackButton` in `routeOptions`  is set to `true` (which it is by default), then it will replace the back button (i.e. the back button will not be shown).<br><br>📝 **Note**: If this prop is used, it'll implicitly set `navBarButtonLeftItemsConfig` to `{ type: 'CUSTOM' }` for a route's  `routeOptions`. So if the `navBarButtonLeftItemsConfig` is explicitly set to anything other than "custom", then this prop will not do anything. |
 | 🔤  `renderNavBarRightItem`<br/><br/>⚛️ [`(navigation: NavigationObject) => ReactElement`](PLACE_HOLDER_LINK) | This prop is used for rendering a custom right item component in the navigation bar.<br/><br/>📝 **Note**: If this prop is used, it'll implicitly set `navBarButtonRightItemsConfig` to `{ type: 'CUSTOM' }` for a route's  `routeOptions`. So if the `navBarButtonRightItemsConfig` is explicitly set to anything other than "custom", then this prop will not do anything. |
 | 🔤  `renderNavBarTitleItem`<br/><br/>⚛️ [`(navigation: NavigationObject) => ReactElement`](PLACE_HOLDER_LINK) | This prop is used for rendering a custom title item component in the navigation bar.<br><br>💡 **Tip**: You can access the route's `routeTitle` via the `navigation` object (i.e. `navigation.routeOptions.routeTitle`). |
@@ -488,6 +488,7 @@ Similar to the `RouteViewPortal` component:
 
 Internally, every route has an associated event emitter (i.e. a  [`NavigatorRouteViewEventEmitter`](PLACE_HOLDER_LINK) instance).
 
+* The "route event emitter" instance, as the name would suggest, emits route-related events. You can use the route event emitter to manually subscribe and listen for events.
 * The route's event emitter can be accessed via the route's navigation object (e.g.  `NavigationObject.getRefToNavRouteEmitter`). 
 * Internally, this component uses the route's event emitter object to subscribe and listen to the route events.
 * 💡 **Tip**: As an alternative, there's also the [`useNavRouteEvents`](PLACE_HOLDER_LINK) hook.
@@ -1526,6 +1527,22 @@ Native/Swift Integration
 #### `RNINavigatorRouteBaseViewController`
 
 #### `RNINavigationControllerConfig`
+
+<br>
+
+### D.7. Articles + Discussions
+
+#### Discussion: `RouteOptions` Precedence
+
+There are multiple ways to set a route's `routeOptions` config, but only one of them will take effect (in other words, a route's `routeOptions` can be overridden when all of the route options are being merged together).  The table below will list the order of precedence in which the `routeOptions` gets applied (ordered by increasing priority).
+
+| Set Route Options Via:                                       | Description                                                  |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 1️⃣ [`NavigatorView.routes`](PLACE_HOLDER_LINK) prop (i.e.  [`NavRouteConfigItem.routeOptionsDefault`](PLACE_HOLDER_LINK) property). | Default route options provided from the navigator route config. |
+| 2️⃣ [`NavigatorView.initialRoutes`](PLACE_HOLDER_LINK) prop (i.e. [`NavRouteItem.routeOptions`](PLACE_HOLDER_LINK) property). | The initial route options can be set via the `initialRoutes` prop. |
+| 3️⃣ `routeOptions` provided via [navigation command](PLACE_HOLDER_LINK), e.g. `navigation.push({..., routeOptions: {...}})`. | Some of the navigation commands lets you set the route options for the route (e.g. `push`, `replaceRoute`, `insertRoute`, `setRoutes`, etc). |
+| 4️⃣ [`RouteViewPortal.routeOptions`](PLACE_HOLDER_LINK) prop.  | The route options can also be dynamically overridden and changed via the `RouteViewPortal`. |
+| 5️⃣ [`NavigationObject.setRouteOptions`](PLACE_HOLDER_LINK) navigation command (e.g. `props.navigation.setRouteOptions` property). | The route options can be overridden via the `setRouteOptions` command from the route's navigation object. |
 
 ------
 
