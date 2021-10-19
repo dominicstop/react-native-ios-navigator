@@ -10,34 +10,7 @@ import Foundation
 @objc(RNINavigatorViewManager)
 internal class RNINavigatorViewManager: RCTViewManager, RCTInvalidating {
   
-  // MARK: - Shared Bridge
-  // --------------------
-  
-  private static var didSetObserver = false;
-  
-  static weak var sharedBridge: RCTBridge? {
-    willSet {
-      #if DEBUG
-      let key = NSNotification.Name(rawValue: "RCTBridgeWillReloadNotification");
-      
-      if !Self.didSetObserver {
-        // bridge set, listen for bridge reload
-        NotificationCenter.default.addObserver(Self.self,
-          selector: #selector(Self.onRCTBridgeWillReloadNotification),
-          name: key,
-          object: nil
-        );
-      };
-      #endif
-    }
-  };
-  
-  #if DEBUG
-  @objc static func onRCTBridgeWillReloadNotification(_ notification: Notification) {
-    /// reset RCTBridge instance
-    Self.sharedBridge = nil;
-  };
-  #endif
+  static var sharedBridge: RCTBridge?;
   
   // MARK: - RN Module Setup
   // ----------------------
@@ -70,6 +43,9 @@ internal class RNINavigatorViewManager: RCTViewManager, RCTInvalidating {
   // ----------------------
   
   func invalidate() {
+    // reset ref to RCTBridge instance
+    Self.sharedBridge = nil;
+    
     // cleanup - remove all current navigators
     RNINavigatorManager.sharedInstance.cleanup();
   };

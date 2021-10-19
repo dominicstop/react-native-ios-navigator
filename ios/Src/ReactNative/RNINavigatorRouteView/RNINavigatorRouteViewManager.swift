@@ -10,34 +10,7 @@ import Foundation
 @objc(RNINavigatorRouteViewManager)
 internal class RNINavigatorRouteViewManager: RCTViewManager, RCTInvalidating {
   
-  // MARK: - Shared Bridge
-  // --------------------
-  
-  private static var didSetObserver = false;
-  
-  static weak var sharedBridge: RCTBridge? {
-    willSet {
-      #if DEBUG
-      let key = NSNotification.Name(rawValue: "RCTBridgeWillReloadNotification");
-      
-      if !Self.didSetObserver {
-        // bridge set, listen for bridge reload
-        NotificationCenter.default.addObserver(Self.self,
-          selector: #selector(Self.onRCTBridgeWillReloadNotification),
-          name: key,
-          object: nil
-        );
-      };
-      #endif
-    }
-  };
-  
-  #if DEBUG
-  @objc static func onRCTBridgeWillReloadNotification(_ notification: Notification) {
-    /// reset RCTBridge instance
-    Self.sharedBridge = nil;
-  };
-  #endif
+  static var sharedBridge: RCTBridge?;
   
   // MARK: - RN Module Setup
   // ----------------------
@@ -59,10 +32,9 @@ internal class RNINavigatorRouteViewManager: RCTViewManager, RCTInvalidating {
   // MARK: - RCTInvalidating
   // ----------------------
   
-  func invalidate() {
-    #if DEBUG
-    print("LOG - RNINavigatorRouteViewManager: invalidate");
-    #endif
+  @objc func invalidate(){
+    /// reset ref to RCTBridge instance
+    Self.sharedBridge = nil;
   };
 };
 

@@ -10,37 +10,10 @@ import Foundation
 @objc(RNIWrapperViewManager)
 internal class RNIWrapperViewManager: RCTViewManager {
   
-  // MARK: - Shared Bridge
-  // --------------------
-  
-  private static var didSetObserver = false;
-  
-  static weak var sharedBridge: RCTBridge? {
-    willSet {
-      #if DEBUG
-      let key = NSNotification.Name(rawValue: "RCTBridgeWillReloadNotification");
-      
-      if !Self.didSetObserver {
-        // bridge set, listen for bridge reload
-        NotificationCenter.default.addObserver(Self.self,
-          selector: #selector(Self.onRCTBridgeWillReloadNotification),
-          name: key,
-          object: nil
-        );
-      };
-      #endif
-    }
-  };
-  
-  #if DEBUG
-  @objc static func onRCTBridgeWillReloadNotification(_ notification: Notification) {
-    /// reset RCTBridge instance
-    Self.sharedBridge = nil;
-  };
-  #endif
+  static var sharedBridge: RCTBridge?;
   
   // MARK: - RN Module Setup
-  // ----------------------
+  // -----------------------
   
   override static func requiresMainQueueSetup() -> Bool {
     // run init in bg thread
@@ -54,6 +27,11 @@ internal class RNIWrapperViewManager: RCTViewManager {
     };
     
     return RNIWrapperView(bridge: self.bridge);
+  };
+  
+  @objc func invalidate(){
+    /// reset ref to RCTBridge instance
+    Self.sharedBridge = nil;
   };
 };
 
