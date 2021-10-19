@@ -2,9 +2,6 @@
 
 ## In Progress
 
-- [ ] Replace usage of `RCTBridgeWillReloadNotification` with invalidate in modules.
-
-	
 
 
 <br>
@@ -63,33 +60,9 @@
 
 <br>
 
-- [ ] Add section to README: `RouteOptions` Precedence/Hierarchy
+* [ ] Update legacy `backgroundImage` to support setting [`barPosition`](https://developer.apple.com/documentation/uikit/uinavigationbar/1624968-setbackgroundimage)
 
-- [ ] Update legacy `backgroundImage` to support setting [`barPosition`](https://developer.apple.com/documentation/uikit/uinavigationbar/1624968-setbackgroundimage)
-- [ ] Update `NavBarItemConfig` to support configuring [`UIBarItem`](https://developer.apple.com/documentation/uikit/uibaritem) 
-	* (e.g. `isEnabled`, `setTitleTextAttributes`).
-
-<br>
-
-- [ ] Update `NavBarItemConfig` to support iOS 15+ [`UIBarButtonItem`](https://developer.apple.com/documentation/uikit/uibarbuttonitem) properties.
-	* e.g. `isSelected`, `changesSelectionAsPrimaryAction`
-
-<br>
-
-- [ ] Update `NavBarItemConfig` to support multiple custom navigation bar items.
-- [ ] Update `NavBarItemConfig` to support menu and submenu actions.
-
-<br>
-
-- [ ] Implement `UISearchController.isActive` via module command
-- [ ] Implement `UITextInputTraits` for `UISearchBar`, e.g.  `keyboardType`, `textContentType`, etc.
-- [ ] Implement search module command `getSearchBarState`. Returns object that contains: search bar text, `isActive`,  `isSearchResultsButtonSelected`, `showsCancelButton`, etc.
-- [ ] Implement search module command `setSearchBarState`.
-- [ ] Add missing impl. for `UISearchBar`, e.g. `showsSearchResultsButton`, background images, etc.
-
-<br>
-
-- [ ] `UIViewController`: `preferredStatusBarUpdateAnimation`, `shouldAutorotate`
+- [ ] Expose `UIViewController` properties as props/route options, e.g.: `preferredStatusBarUpdateAnimation`, `shouldAutorotate`, etc.
 
 <br>
 
@@ -114,6 +87,54 @@
 		- E.g. `react-native-ios-navigator` 0.1.1 = `react-native-shared-utilities` 2.1. 
 		- This could get messy really fast, so every time you make changes to `react-native-shared-utilities`, make sure to update the dependencies as well.
 		- When adding functionality to existing protocols, make sure that they're optional.
+
+<br>
+
+* `UISearchController`/`UISearchBar`-Related.
+	* [ ] **Implement**: Add support for setting the `UISearchBar.searchTextField`'s text style using `RCTTextAttributes`.
+		- `attributedText`, `attributedPlaceholder`.
+		- Get the `defaultTextAttributes` and apply it  as the initial values for `attributedText` + `attributedPlaceholder`.
+		- It turns out `attributedText` and `attributedPlaceholder` accepts a `NSAttributedString` not a dict. of string attributes. So the `RCTTextAttributes` has to be applied during the text input event.
+	* [ ] **Implement**: Add support for programmatically showing/dismissing the search bar.
+		* This can implemented via the [`UISearchController.isActive`](https://developer.apple.com/documentation/uikit/uisearchcontroller/1618659-isactive) property.
+		* Toggle `UISearchController.isActive` via a route module command. This can potentially be done async with the promise resolving when the transition is finished.
+		* Also: this has to be paired with another command that read the current value.
+		* This can be impl. so that it directly maps to a boolean prop, and set the `UISearchController.isActive` in  a property wrapper (i.e. `willSet`/`didSet`).
+			* However, the value from JS and native will always eventually diverge since its not being bi-directionally (e.g. the prop value is `true`, but the search bar can be dismissed by the user so the actual value becomes `false`).
+			* Encountered the same problem with `UINavigationBar.isHidden` or with state-controlled text fields.
+		* Alternatively, the `isActive` property can also be set via `setSearchBarState` command.
+	* [ ] **Implement**: Impl. search route module command `setSearchBarState`.
+		* Set all the "search bar"-related properties that cannot be mapped to a prop (e.g. since some properties can be changed from the native side, causing the JS value to be out of sync since the data flows only in one direction).
+		* Includes: `UISearchController.isActive`, the current value of the search bar text filed, etc.
+	* [ ] **Implement**: Impl. search route module command `getSearchBarState`. 
+		* Returns object that contains: search bar text, `isActive`,  `isSearchResultsButtonSelected`, `showsCancelButton`, etc.
+		* Reads the properties and returns the current state of the search bar.
+	* [ ] **Implement**: Add support for changing the Search Icon in a `UISearchBar`.
+		- Set via `searchBar.setRightImage` (i.e. the `textfield.rightView`  bookmark icon), and `searchBar.setLeftImage`.
+		- [Reference #1](https://betterprogramming.pub/how-to-change-the-search-icon-in-a-uisearchbar-150b775fb6c8), [Reference #2](https://medium.com/flawless-app-stories/customize-uisearchbar-for-different-ios-versions-6ee02f4d4419)
+	* [ ] **Implement**: Add support for `showsBookmarkButton` and `searchBarBookmarkButtonClicked` event.
+		* Maybe also impl. `showsSearchResultsButton`
+	* [ ] **Implement**: Add support for showing a `searchResultsController` + react view
+		-  The react view will  be "provided" by the route via the route portal.
+	* [ ] **Implement**: Add support for configuring/setting the scope bar/`scopeButtonTitles`.
+		* Forward search bar event: `selectedScopeButtonIndexDidChange`.
+	* [ ] **Implement**: Add support for search tokens.
+		* Impl. setting the `tokenBackgroundColor`.
+	* [ ] **Implement**: Expose remaining `UISearchController` events to react e.g. `willDismissSearchController`, `didDismissSearchController`, `willPresentSearchController`, and `didPresentSearchController`.
+	* [ ] **Implement:** Expose `UITextInputTraits`-related properies for `UISearchBar` .
+		* E.g.  `keyboardType`, `textContentType`, etc.
+	* [ ] **Implement**: Add missing impl. for setting the other `UISearchBar` properties, e.g. `showsSearchResultsButton`, background images, etc.
+
+<br>
+
+* `NavBarItemConfig`-Related.
+	* [ ] **Implement**: Update `NavBarItemConfig` to support configuring [`UIBarItem`](https://developer.apple.com/documentation/uikit/uibaritem) 
+		* (e.g. `isEnabled`, `setTitleTextAttributes`).
+	* [ ] **Implement**: Update `NavBarItemConfig` to support iOS 15+ [`UIBarButtonItem`](https://developer.apple.com/documentation/uikit/uibarbuttonitem) properties.
+		* e.g. `isSelected`, `changesSelectionAsPrimaryAction`
+
+	* [ ] **Implement**: Update `NavBarItemConfig` to support multiple custom navigation bar items.
+	* [ ] **Implement**: Update `NavBarItemConfig` to support menu and submenu actions.
 
 <br>
 
@@ -186,34 +207,7 @@
 
 - [ ] **Implement**: `NavigatorView` event: `onRouteFocusWillChange` and `onRouteFocusDidChange`.
 	- Event Args: `nativeEvent.prevInFocus`, and `nativeEvent.nextInFocus`.
-
 - [ ] **Implement**: Update route config (i.e. `NavRouteConfigItemJS`) to accept `renderRouteHeader`.
-
-<br>
-
-* `UISearchController`/`UISearchBar`-Related.
-
-	- [ ] **Implement**: Add support for setting the `UISearchBar.searchTextField`'s text style using `RCTTextAttributes`.
-		- `attributedText`, `attributedPlaceholder`.
-		- Get the `defaultTextAttributes` and apply it  as the initial values for `attributedText` + `attributedPlaceholder`.
-		- It turns out `attributedText` and `attributedPlaceholder` accepts a `NSAttributedString` not a dict. of string attributes. So the `RCTTextAttributes` has to be applied during the text input event.
-
-	* [ ] **Implement**: Add support for programmatically showing/dismissing the search bar.
-		* This can implemented via the [`UISearchController.isActive`](https://developer.apple.com/documentation/uikit/uisearchcontroller/1618659-isactive) property.
-	* [ ] **Implement**: Add support for changing the Search Icon in a `UISearchBar`.
-		- Set via `searchBar.setRightImage` (i.e. the `textfield.rightView`  bookmark icon), and `searchBar.setLeftImage`.
-		- [Reference #1](https://betterprogramming.pub/how-to-change-the-search-icon-in-a-uisearchbar-150b775fb6c8), [Reference #2](https://medium.com/flawless-app-stories/customize-uisearchbar-for-different-ios-versions-6ee02f4d4419)
-
-	- [ ] **Implement**: Add support for `showsBookmarkButton` and `searchBarBookmarkButtonClicked` event.
-		* Maybe also impl. `showsSearchResultsButton`
-
-	* [ ] **Implement**: Add support for showing a `searchResultsController` + react view
-		-  The react view will  be "provided" by the route via the route portal.
-	* [ ] **Implement**: Add support for configuring/setting the scope bar/`scopeButtonTitles`.
-		* Forward search bar event: `selectedScopeButtonIndexDidChange`.
-	* [ ] **Implement**: Add support for search tokens.
-		* Impl. setting the `tokenBackgroundColor`.
-	* [ ] **Implement**: Expose remaining `UISearchController` events to react e.g. `willDismissSearchController`, `didDismissSearchController`, `willPresentSearchController`, and `didPresentSearchController`.
 
 <br>
 
@@ -221,7 +215,7 @@
 	- When a navigation bar item is bigger than the navigation bar, the navigation bar item is clipped.
 	- Setting `navigationBar.clipToBounds` to `false` does nothing (and recursively doing this to its subviews also does nothing).
 		- Disabling `clipToBounds` for all the subviews in `navigationController.view` does nothing.
-		- Setting `overflow: visible` to the `RNIWrapperView` also does nothing.
+		- Setting `overflow: visible` to the `RNIWrapperView` also does nothing
 
 ---
 
@@ -302,7 +296,7 @@
 
 * Back-gesture related bugs.
 
-  - [ ] The header custom `backgroundImage` image and `shadowImage` doesn't transition properly, e.g. the `backgroundImage` abruptly disappears, and the `shadowImage` transitions to the wrong height (i.e. the default hair width height, but stretched vertically).
+  - [ ] **Fix**: The header custom `backgroundImage` image and `shadowImage` doesn't transition properly, e.g. the `backgroundImage` abruptly disappears, and the `shadowImage` transitions to the wrong height (i.e. the default hair width height, but stretched vertically).
   	* This bug is present in both appearance and appearance legacy mode (so it's a potential bug in UIKit).
   	* Partially fixed in commit `589384c` (i.e. the navigation bar background + shadow now fades in when the transition is cancelled).
 
@@ -358,12 +352,15 @@
 
 ### Version: `next`
 
+- [x] (Commit: `91d415d`) **Cleanup**: Replace usage of `RCTBridgeWillReloadNotification` with `invalidate` in the native modules.
+
 <br>
 
 ### Version: `0.4.2`
 
 - [x] (Commit: `e8088ae`) **Refactor**: Update `NavigatorRouteView` to separately store the `routeOptions` provided by  `RouteViewPortal` and the `NavigatorRouteView.setRouteOptions` command.
 - [x] (Commit: `2a96717`) **Fix**: Clear `routeOptionsPortal`  when `RouteViewPortal` unmount's.
+- [x] (Commit: `e65b575`) **Docs**: Add section to README: `RouteOptions` Precedence/Hierarchy.
 
 <br>
 
