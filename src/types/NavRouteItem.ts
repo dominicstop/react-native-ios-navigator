@@ -22,3 +22,11 @@ export type NavRouteStackItem = NavRouteItem & {
 export type NavRouteStackPartialItem = NavRouteItem & {
   routeID?: number;
 };
+
+/** Properties that can be used to identify an active route */
+export type NavRouteStackItemMetadata = 
+  Pick<NavRouteStackItem, 'routeID' | 'routeKey' | 'routeIndex'>;
+
+/** Properties that can be used to identify an active route */
+export type NavRouteStackItemPartialMetadata = 
+  Partial<NavRouteStackItemMetadata>;

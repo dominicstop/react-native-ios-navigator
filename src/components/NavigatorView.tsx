@@ -14,9 +14,10 @@ import type { NavigatorRouteView } from './NavigatorRouteView';
 import { NavigatorUIConstantsContext } from '../context/NavigatorUIConstantsContext';
 
 import type { NavCommandPopOptions, NavCommandPushOptions, RouteTransitionConfig } from '../types/NavigationCommands';
-import type { NavRouteItem, NavRouteStackItem, NavRouteStackPartialItem } from '../types/NavRouteItem';
+import type { NavRouteItem, NavRouteStackItem, NavRouteStackPartialItem, NavRouteStackItemPartialMetadata } from '../types/NavRouteItem';
 import type { RenderNavItem } from '../types/NavTypes';
 import type { NavRouteConfigItem, NavRouteConfigItemJS } from '../types/NavRouteConfigItem';
+import type { NavigationObject } from '../types/NavigationObject';
 
 import { NavigatorViewEventEmitter, NavigatorViewEvents } from '../types/NavigatorViewEventEmitter';
 
@@ -148,7 +149,6 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
     this.emitter = new TSEventEmitter();
     this.queue = new SimpleQueue();
-
 
     this.state = {
       activeRoutes: this.getInitialRoutes(),
@@ -340,6 +340,16 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       ? routeConfig.transitionConfigPush?.duration ?? 0
       : routeConfig.transitionConfigPop ?.duration ?? 0
     );
+  };
+
+  private getRefToRouteView = (
+    routeDetails: NavRouteStackItemPartialMetadata
+  ): NavigatorRouteView | undefined => {
+    const routeStackItem = this.getRouteStackItem(routeDetails);
+
+    if(routeStackItem == null) return undefined;
+
+    return this.routeRefMap[routeStackItem.routeID];
   };
 
   private setNavStatus(navStatus: NavStatus){
@@ -1386,6 +1396,73 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
   // Misc. Navigation Commands
   // -------------------------
+
+  /** 
+   * Based on the provided `routeDetails`, return its corresponding 
+   * `NavRouteStackItem`.
+   * 
+   * Returns `undefined` if no matching `NavRouteStackItem` were found,
+   * or if the provided `routeDetails` are invalid/conflict with one another.
+   * */
+  public getRouteStackItem(
+    routeDetails: NavRouteStackItemPartialMetadata
+  ): NavRouteStackItem | undefined {
+
+    const state = this.state;
+    let stackItem: NavRouteStackItem | undefined;
+
+    // A - Get stackItem
+    // * Based on the stackItem, get the corresponding stackItem
+    
+    if(routeDetails.routeID != null){
+      stackItem = state.activeRoutes
+        .find(item => item.routeIndex === routeDetails.routeIndex);
+    };
+    
+    if(stackItem != null && routeDetails.routeIndex != null){
+      stackItem = state.activeRoutes
+        .find(item => item.routeIndex === routeDetails.routeIndex);
+    };
+
+    if(stackItem != null && routeDetails.routeKey != null){
+      stackItem = state.activeRoutes
+        .find(item => item.routeKey === routeDetails.routeKey);
+    };
+
+    // B - Verify if stackItem matches routeDetails
+    // * Only verify the routeDetails properties if they were provided 
+
+    if(stackItem == null) return undefined;
+
+    const didMatchRouteID = (routeDetails.routeID == null) 
+      ? true : routeDetails.routeID === stackItem.routeID;
+
+    const didMatchRouteKey = (routeDetails.routeKey == null) 
+      ? true : routeDetails.routeKey === stackItem.routeKey;
+
+      const didMatchRouteIndex = (routeDetails.routeIndex == null) 
+      ? true : routeDetails.routeIndex === stackItem.routeIndex;
+
+    const didStackItemMatchRouteDetails = 
+      (didMatchRouteID && didMatchRouteKey && didMatchRouteIndex);
+
+    return didStackItemMatchRouteDetails ? stackItem : undefined;
+  };
+
+  /** 
+   * Based on the provided `routeDetails`, return its corresponding 
+   * `NavigationObject`.
+   * 
+   * Returns `undefined` if no matching `NavigationObject` were found,
+   * or if the provided `routeDetails` are invalid/conflict with one another.
+   * */
+  getNavigationObjectForRoute(
+    routeDetails: NavRouteStackItemPartialMetadata
+  ): NavigationObject | undefined {
+
+    return this.getRefToRouteView(routeDetails)
+      ?.getRouteNavigationObject();
+  };
 
   public sendCustomCommandToNative = async (
     commandKey: string, 
