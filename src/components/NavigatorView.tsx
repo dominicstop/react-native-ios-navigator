@@ -1404,9 +1404,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
    * Returns `undefined` if no matching `NavRouteStackItem` were found,
    * or if the provided `routeDetails` are invalid/conflict with one another.
    * */
-  public getRouteStackItem(
+  public getRouteStackItem = (
     routeDetails: NavRouteStackItemPartialMetadata
-  ): NavRouteStackItem | undefined {
+  ): NavRouteStackItem | undefined => {
 
     const state = this.state;
     let stackItem: NavRouteStackItem | undefined;
@@ -1416,15 +1416,15 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     
     if(routeDetails.routeID != null){
       stackItem = state.activeRoutes
-        .find(item => item.routeIndex === routeDetails.routeIndex);
+        .find(item => item.routeID === routeDetails.routeID);
     };
     
-    if(stackItem != null && routeDetails.routeIndex != null){
+    if(stackItem == null && routeDetails.routeIndex != null){
       stackItem = state.activeRoutes
         .find(item => item.routeIndex === routeDetails.routeIndex);
     };
 
-    if(stackItem != null && routeDetails.routeKey != null){
+    if(stackItem == null && routeDetails.routeKey != null){
       stackItem = state.activeRoutes
         .find(item => item.routeKey === routeDetails.routeKey);
     };
@@ -1456,9 +1456,9 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
    * Returns `undefined` if no matching `NavigationObject` were found,
    * or if the provided `routeDetails` are invalid/conflict with one another.
    * */
-  getNavigationObjectForRoute(
+  getNavigationObjectForRoute = (
     routeDetails: NavRouteStackItemPartialMetadata
-  ): NavigationObject | undefined {
+  ): NavigationObject | undefined => {
 
     return this.getRefToRouteView(routeDetails)
       ?.getRouteNavigationObject();
