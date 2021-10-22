@@ -281,6 +281,8 @@ Each route has a corresponding `RouteOptions` object associated with it. This ob
 | 🔤  `sendCustomCommandToNative`<br/><br/>⚛️  `(commandKey: string, commandData: object ¦ null) => Promise<object ¦ null>` | Will trigger  the `RNINavigatorViewDelegate.didReceiveCustomCommandFromJS` delegate method for the current navigator view instance.<br><br>This method exists to send custom user-defined commands to the `RNINavigatorView`'s delegate (i.e. for custom native code integration).<br><br>📌 Check the [native integration guide](PLACE_HOLDER_LINK) section for more details. |
 | 🔤  `getNavigatorConstants`<br/><br/>⚛️ [`() => Promise<NavigatorConstantsObject>`](PLACE_HOLDER_LINK) | Resolves to an object containing values related to UI (e.g. `navBarHeight`, navigator bounds, `safeAreaInsets`, `statusBarHeight`), and the current state of the navigator (e.g. whether a view controller is being presented modally, the current  `activeRoutes`, the current topmost view controller, and the current visible view controller). |
 | 🔤  `dismissModal`<br/><br/>⚛️ [`(animated: Bool) => Promise<void>`](PLACE_HOLDER_LINK) | This will close any modals that are currently being presented. |
+| 🔤  `getMatchingRouteStackItem`<br/><br/>⚛️ `(routeDetails: NavRouteStackItemPartialMetadata) => NavRouteStackItem ¦ undefined`<br><br>📌 [`routeDetails: NavRouteStackItemPartialMetadata`](PLACE_HOLDER_LINK)<br><br>📌 [`NavRouteStackItem`](PLACE_HOLDER_LINK) | TBA                                                          |
+| 🔤  `getNavigationObjectForRoute`<br/><br/>⚛️ `(routeDetails: NavRouteStackItemPartialMetadata) => NavigationObject ¦ undefined`<br/><br/>📌 [`routeDetails: NavRouteStackItemPartialMetadata`](PLACE_HOLDER_LINK)<br/><br/>📌 [`NavigationObject`](PLACE_HOLDER_LINK) | TBA                                                          |
 
 <br>
 
@@ -318,6 +320,25 @@ These are basically "presets" to existing navigation commands i.e. it uses the e
 | 🔤  `replaceCurrentRoute`<br/><br/>⚛️  `(routeItem: NavRouteItem, animated?: boolean = false) => Promise<void>`<br><br>📌 [`routeItem: NavRouteItem`](PLACE_HOLDER_LINK) | Replaces the current route (i.e. the topmost route) in the navigation stack with a new route. |
 | 🔤  `removePreviousRoute`<br/><br/>⚛️  `(animated?: boolean = false) => Promise<void>` | Removes the previous route in the navigation stack.          |
 | 🔤  `removeAllPrevRoutes`<br/><br/>⚛️  `(animated?: boolean = false) => Promise<void>` | Removes all of the previous routes in the navigation stack.  |
+
+<br>
+
+###### `NavigatorView` Misc. Convenience Commands
+
+TBA
+
+| Name and Type                                                | Description |
+| :----------------------------------------------------------- | ----------- |
+| 🔤  `getRouteStackItemForCurrentRoute`<br/><br/>⚛️  `() => NavRouteStackItem ¦ undefined`<br/><br/>📌 [`NavRouteStackItem`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  `getRouteStackItemForPreviousRoute`<br/><br/>⚛️  `() => NavRouteStackItem ¦ undefined`<br/><br/>📌 [`NavRouteStackItem`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  `getNavigationObjectForCurrentRoute`<br/><br/>⚛️  `() => NavigationObject ¦ undefined`<br/><br/>📌 [`NavigationObject`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  `getNavigationObjectForPreviousRoute`<br/><br/>⚛️  `() => NavigationObject ¦ undefined`<br/><br/>📌 [`NavigationObject`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  `setRouteOptionsForRoute`<br/><br/>⚛️  `(routeDetails: NavRouteStackItemPartialMetadata, routeOptions: RouteOptions) => Promise<void>`<br/><br/>📌 [`routeDetails: NavRouteStackItemPartialMetadata`](PLACE_HOLDER_LINK)<br/>📌 [`routeOptions: RouteOptions`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  `getRouteOptionsForRoute`<br/><br/>⚛️  `() => RouteOptions ¦ undefined`<br/><br/>📌 [`RouteOptions`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  `setRouteOptionsForCurrentRoute`<br/><br/>⚛️  `(routeOptions: RouteOptions) => Promise<void>`<br/><br/>📌 [`routeOptions: RouteOptions`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  `getRouteOptionsForCurrentRoute`<br/><br/>⚛️  `() => RouteOptions ¦ undefined`<br/><br/>📌 [`RouteOptions`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  `setRouteOptionsForPreviousRoute`<br/><br/>⚛️  `(routeOptions: RouteOptions) => Promise<void>`<br/><br/>📌 [`routeOptions: RouteOptions`](PLACE_HOLDER_LINK) | TBA         |
+| 🔤  `getRouteOptionsForPreviousRoute`<br/><br/>⚛️  `() => RouteOptions ¦ undefined`<br/><br/>📌 [`RouteOptions`](PLACE_HOLDER_LINK) | TBA         |
 
 <br>
 
@@ -841,9 +862,10 @@ TBA
 
 | Name and Type                                                | Description |
 | :----------------------------------------------------------- | ----------- |
-| 🔤  `routeKey`<br/><br/>⚛️  `string`                             | TBA         |
-| 🔤  `routeIndex`<br/><br/>⚛️  `number`                           | TBA         |
-| 🔤  `routeProps`<br/><br/>⚛️  `object`                           | TBA         |
+| 🔤  `routeID`<br/><br/>⚛️  `string`                            | TBA         |
+| 🔤  `routeKey`<br/><br/>⚛️  `string`                           | TBA         |
+| 🔤  `routeIndex`<br/><br/>⚛️  `number`                         | TBA         |
+| 🔤  `routeProps`<br/><br/>⚛️  `object`                         | TBA         |
 | 🔤  `routeOptions`<br/><br/>⚛️ [`RouteOptions`](PLACE_HOLDER_LINK) | TBA         |
 
 <br>
@@ -883,12 +905,34 @@ See "[`NavigatorView` Convenience Navigation Commands](PLACE_HOLDER_LINK)" secti
 
 See "[`NavigatorView` General/Misc. Methods](PLACE_HOLDER_LINK)" section for more info.
 
-| Name and Type            | Description |
-| :----------------------- | ----------- |
-| 🔤  `getActiveRoutes`<br/><br/>⚛️ [`() => Array<NavRouteStackItem>`](PLACE_HOLDER_LINK) | Maps to the `NavigatorView.getActiveRoutes` command. |
+| Name and Type                                                | Description                                                  |
+| :----------------------------------------------------------- | ------------------------------------------------------------ |
+| 🔤  `getActiveRoutes`<br/><br/>⚛️ [`() => Array<NavRouteStackItem>`](PLACE_HOLDER_LINK) | Maps to the `NavigatorView.getActiveRoutes` command.         |
 | 🔤  `sendCustomCommandToNative`<br/><br/>⚛️  `(commandKey: string, commandData: object ¦ null) => Promise<object ¦ null>` | Maps to the `NavigatorView.sendCustomCommandToNative` command. |
-| 🔤  `getNavigatorConstants`<br/><br/>⚛️ [`() => Promise<NavigatorConstantsObject>`](PLACE_HOLDER_LINK) | Maps to the `NavigatorView.getNavigatorConstants` command. |
-| 🔤  `dismissModal`<br/><br/>⚛️ [`(animated: Bool) => Promise<void>`](PLACE_HOLDER_LINK) | Maps to the `NavigatorView.dismissModal` command. |
+| 🔤  `getNavigatorConstants`<br/><br/>⚛️ [`() => Promise<NavigatorConstantsObject>`](PLACE_HOLDER_LINK) | Maps to the `NavigatorView.getNavigatorConstants` command.   |
+| 🔤  `dismissModal`<br/><br/>⚛️ [`(animated: Bool) => Promise<void>`](PLACE_HOLDER_LINK) | Maps to the `NavigatorView.dismissModal` command.            |
+| 🔤  `getMatchingRouteStackItem`<br/><br/>⚛️ `(routeDetails: NavRouteStackItemPartialMetadata) => NavRouteStackItem ¦ undefined` | Maps to the `NavigatorView.getMatchingRouteStackItem` command. |
+| 🔤  `getNavigationObjectForRoute`<br/><br/>⚛️ `(routeDetails: NavRouteStackItemPartialMetadata) => NavigationObject ¦ undefined` | Maps to the `NavigatorView.getNavigationObjectForRoute` command. |
+
+<br>
+
+##### `NavigationObject`: Misc. Convenience Commands
+
+See "[`NavigatorView` Misc. Convenience Commands](PLACE_HOLDER_LINK)" section for more info.
+
+
+| Name and Type                                                | Description                                                  |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 🔤  `getRouteStackItemForCurrentRoute`<br/><br/>⚛️  `() => NavRouteStackItem ¦ undefined` | Maps to the `NavigatorView.getRouteStackItemForCurrentRoute` command. |
+| 🔤  `getRouteStackItemForPreviousRoute`<br/><br/>⚛️  `() => NavRouteStackItem ¦ undefined` | Maps to the `NavigatorView.getRouteStackItemForPreviousRoute` command. |
+| 🔤  `getNavigationObjectForCurrentRoute`<br/><br/>⚛️  `() => NavigationObject ¦ undefined` | Maps to the `NavigatorView.getNavigationObjectForCurrentRoute` command. |
+| 🔤  `getNavigationObjectForPreviousRoute`<br/><br/>⚛️  `() => NavigationObject ¦ undefined` | Maps to the `NavigatorView.getNavigationObjectForPreviousRoute` command. |
+| 🔤  `setRouteOptionsForRoute`<br/><br/>⚛️  `(routeDetails: NavRouteStackItemPartialMetadata, routeOptions: RouteOptions) => Promise<void>` | Maps to the `NavigatorView.setRouteOptionsForRoute` command. |
+| 🔤  `getRouteOptionsForRoute`<br/><br/>⚛️  `() => RouteOptions ¦ undefined` | Maps to the `NavigatorView.getRouteOptionsForRoute` command. |
+| 🔤  `setRouteOptionsForCurrentRoute`<br/><br/>⚛️  `(routeOptions: RouteOptions) => Promise<void>` | Maps to the `NavigatorView.setRouteOptionsForCurrentRoute` command. |
+| 🔤  `getRouteOptionsForCurrentRoute`<br/><br/>⚛️  `() => RouteOptions ¦ undefined` | Maps to the `NavigatorView.getRouteOptionsForCurrentRoute` command. |
+| 🔤  `setRouteOptionsForPreviousRoute`<br/><br/>⚛️  `(routeOptions: RouteOptions) => Promise<void>` | Maps to the `NavigatorView.setRouteOptionsForPreviousRoute` command. |
+| 🔤  `getRouteOptionsForPreviousRoute`<br/><br/>⚛️  `() => RouteOptions ¦ undefined` | Maps to the `NavigatorView.getRouteOptionsForPreviousRoute` command. |
 
 <br>
 
