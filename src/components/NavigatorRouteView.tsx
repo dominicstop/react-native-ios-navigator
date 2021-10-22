@@ -387,7 +387,7 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
       getNavigatorConstants      : this._navigatorRef.getNavigatorConstants,
       getActiveRoutes            : this._navigatorRef.getActiveRoutes,
       dismissModal               : this._navigatorRef.dismissModal,
-      getRouteStackItem          : this._navigatorRef.getRouteStackItem,
+      getMatchingRouteStackItem  : this._navigatorRef.getMatchingRouteStackItem,
       getNavigationObjectForRoute: this._navigatorRef.getNavigationObjectForRoute,
 
       // pass down convenience navigator commands

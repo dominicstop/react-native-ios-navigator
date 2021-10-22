@@ -38,7 +38,7 @@ export type NavigationObject<T = object> = Pick<RNINavigatorRouteViewProps,
   | 'getNavigatorConstants'
   | 'getActiveRoutes'
   | 'dismissModal'
-  | 'getRouteStackItem'
+  | 'getMatchingRouteStackItem'
   | 'getNavigationObjectForRoute'
 
 > & Pick<typeof NavigatorRouteView.prototype,

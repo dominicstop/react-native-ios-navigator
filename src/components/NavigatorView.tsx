@@ -345,7 +345,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   private getRefToRouteView = (
     routeDetails: NavRouteStackItemPartialMetadata
   ): NavigatorRouteView | undefined => {
-    const routeStackItem = this.getRouteStackItem(routeDetails);
+    const routeStackItem = this.getMatchingRouteStackItem(routeDetails);
 
     if(routeStackItem == null) return undefined;
 
@@ -1404,7 +1404,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
    * Returns `undefined` if no matching `NavRouteStackItem` were found,
    * or if the provided `routeDetails` are invalid/conflict with one another.
    * */
-  public getRouteStackItem = (
+  public getMatchingRouteStackItem = (
     routeDetails: NavRouteStackItemPartialMetadata
   ): NavRouteStackItem | undefined => {
 
