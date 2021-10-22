@@ -1571,6 +1571,18 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     if(currentRoute == null) return undefined;
     return this.getRouteOptionsForRoute(currentRoute);
   };
+
+  public setRouteOptionsForPreviousRoute = async (
+    routeOptions: Nullish<RouteOptions>
+  ) => {
+    const prevRoute = this.getRouteStackItemForPreviousRoute();
+
+    if(prevRoute == null) throw new Error(
+      `'setRouteOptionsForRoute' Error: Could not get route metadata for the prev. route...`
+    );
+
+    return await this.setRouteOptionsForRoute(prevRoute, routeOptions);
+  };
   //#endregion
 
   //#region - Handlers

@@ -402,10 +402,11 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
       getNavigationObjectForCurrentRoute : this._navigatorRef.getNavigationObjectForCurrentRoute,
       getNavigationObjectForPreviousRoute: this._navigatorRef.getNavigationObjectForPreviousRoute,
 
-      setRouteOptionsForRoute       : this._navigatorRef.setRouteOptionsForRoute,
-      getRouteOptionsForRoute       : this._navigatorRef.getRouteOptionsForRoute,
-      setRouteOptionsForCurrentRoute: this._navigatorRef.setRouteOptionsForCurrentRoute,
-      getRouteOptionsForCurrentRoute: this._navigatorRef.getRouteOptionsForCurrentRoute,
+      setRouteOptionsForRoute        : this._navigatorRef.setRouteOptionsForRoute,
+      getRouteOptionsForRoute        : this._navigatorRef.getRouteOptionsForRoute,
+      setRouteOptionsForCurrentRoute : this._navigatorRef.setRouteOptionsForCurrentRoute,
+      getRouteOptionsForCurrentRoute : this._navigatorRef.getRouteOptionsForCurrentRoute,
+      setRouteOptionsForPreviousRoute: this._navigatorRef.setRouteOptionsForPreviousRoute,
 
       // navigator route commands
       getRouteOptions   : this.getRouteOptions,
