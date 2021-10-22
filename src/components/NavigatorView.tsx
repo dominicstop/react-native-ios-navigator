@@ -1583,6 +1583,13 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
     return await this.setRouteOptionsForRoute(prevRoute, routeOptions);
   };
+
+  public getRouteOptionsForPreviousRoute = (): RouteOptions | undefined => {
+    const prevRoute = this.getRouteStackItemForPreviousRoute();
+
+    if(prevRoute == null) return undefined;
+    return this.getRouteOptionsForRoute(prevRoute);
+  };
   //#endregion
 
   //#region - Handlers
