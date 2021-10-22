@@ -38,7 +38,6 @@ export type NavigatorTest01State = {
   backButtonItemsConfigIndex: number;
   renderNavBarTitleItem: boolean;
 
-
   applyNavBarAppearanceToCurrentRoute?: boolean;
   isUsingLegacyConfig: boolean;
 

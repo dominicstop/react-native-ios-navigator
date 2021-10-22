@@ -671,23 +671,28 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
           nativeID={NativeIDKeys.NavRouteItem}
           routeKey={props.routeKey}
           routeIndex={props.routeIndex}
+
           // Route Native Events: Push/Pop Events
           onRouteWillPop={this._handleOnRouteWillPop}
           onRouteDidPop={this._handleOnRouteDidPop}
           onRouteWillPush={this._handleOnRouteWillPush}
           onRouteDidPush={this._handleOnRouteDidPush}
+
           // Route Native Events: Focus/Blur
           onRouteWillFocus={this._handleOnRouteWillFocus}
           onRouteDidFocus={this._handleOnRouteDidFocus}
           onRouteWillBlur={this._handleOnRouteWillBlur}
           onRouteDidBlur={this._handleOnRouteDidBlur}
+          
           // Route Native Events: Navbar Item `onPress`
           onPressNavBarLeftItem={this._handleOnPressNavBarLeftItem}
           onPressNavBarRightItem={this._handleOnPressNavBarRightItem}
+
           // Route Native Events: Search
           onUpdateSearchResults={this._handleOnUpdateSearchResults}
           onSearchBarCancelButtonClicked={this._handleOnSearchBarCancelButtonClicked}
           onSearchBarSearchButtonClicked={this._handleOnSearchBarSearchButtonClicked}
+          
           // pass down navbar item config, back button item config, etc.
           {...routeOptions}
         >
