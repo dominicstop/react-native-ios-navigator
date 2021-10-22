@@ -6,44 +6,49 @@ import type { NavigatorRouteView } from "../components/NavigatorRouteView";
 import type { RouteOptions } from "./RouteOptions";
 
 import type { NavigatorRouteViewEventEmitter } from "./NavigatorRouteViewEventEmitter";
+import type { RNINavigatorRouteViewProps } from "../native_components/RNINavigatorRouteView";
 
-export type NavigationObject<T = object> = {
-  routeKey    : string;
-  routeIndex  : number;
-  routeProps  : T | null;
-  routeOptions: RouteOptions;
 
+export type NavigationObject<T = object> = Pick<RNINavigatorRouteViewProps, 
+  // route metadata
+  | 'routeID' 
+  | 'routeKey' 
+  | 'routeIndex'
+
+> & Pick<typeof NavigatorView.prototype,
   // navigator commands
-  push        : typeof NavigatorView.prototype.push;
-  pop         : typeof NavigatorView.prototype.pop;
-  popToRoot   : typeof NavigatorView.prototype.popToRoot;
-  removeRoute : typeof NavigatorView.prototype.removeRoute;
-  removeRoutes: typeof NavigatorView.prototype.removeRoutes;
-  replaceRoute: typeof NavigatorView.prototype.replaceRoute;
-  insertRoute : typeof NavigatorView.prototype.insertRoute;
-  setRoutes   : typeof NavigatorView.prototype.setRoutes;
+  | 'push'
+  | 'pop'
+  | 'popToRoot'
+  | 'removeRoute'
+  | 'removeRoutes'
+  | 'replaceRoute'
+  | 'insertRoute'
+  | 'setRoutes'
+  | 'setNavigationBarHidden'
   
-  setNavigationBarHidden: typeof NavigatorView.prototype.setNavigationBarHidden;
-
   // convenience navigator commands
-  replacePreviousRoute: typeof NavigatorView.prototype.replacePreviousRoute;
-  replaceCurrentRoute : typeof NavigatorView.prototype.replaceCurrentRoute;
-  removePreviousRoute : typeof NavigatorView.prototype.removePreviousRoute;
-  removeAllPrevRoutes : typeof NavigatorView.prototype.removeAllPrevRoutes;
+  | 'replacePreviousRoute'
+  | 'replaceCurrentRoute'
+  | 'removePreviousRoute'
+  | 'removeAllPrevRoutes'
 
   // misc. navigator commands
-  sendCustomCommandToNative: typeof NavigatorView.prototype.sendCustomCommandToNative;
-  getNavigatorConstants    : typeof NavigatorView.prototype.getNavigatorConstants;
+  | 'sendCustomCommandToNative'
+  | 'getNavigatorConstants'
+  | 'getActiveRoutes'
+  | 'dismissModal'
 
-  getActiveRoutes: typeof NavigatorView.prototype.getActiveRoutes;
-  dismissModal   : typeof NavigatorView.prototype.dismissModal;
-
+> & Pick<typeof NavigatorRouteView.prototype,
   // route commands
-  getRouteOptions: typeof NavigatorRouteView.prototype.getRouteOptions;
-  setRouteOptions: typeof NavigatorRouteView.prototype.setRouteOptions;
+  | 'getRouteOptions'
+  | 'setRouteOptions'
+  | 'setHidesBackButton'
+  | 'getRouteConstants'
+> & {
 
-  setHidesBackButton: typeof NavigatorRouteView.prototype.setHidesBackButton;
-  getRouteConstants : typeof NavigatorRouteView.prototype.getRouteConstants;
+  routeProps  : T | null;
+  routeOptions: RouteOptions;
 
   // get ref functions
   getRefToRoute          : () => NavigatorRouteView;

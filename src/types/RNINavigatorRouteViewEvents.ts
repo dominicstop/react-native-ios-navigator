@@ -1,14 +1,18 @@
+
+import type { RNINavigatorRouteViewProps } from "../native_components/RNINavigatorRouteView";
+
 /**
  * `RNINavigatorRouteView` Events
  * This file contains all the route-related events and event objects (e.g. push, pop, blur, focus, search, etc).
  */
 
+
 //#region - Event Objects
-type BaseEventObject = {
-  routeID: number;
-  routeKey: string;
-  routeIndex: number;
-};
+type BaseEventObject = Pick<RNINavigatorRouteViewProps,
+  | 'routeID'
+  | 'routeKey'
+  | 'routeIndex'
+>;
 
 export type OnRoutePushEventObject = {
   nativeEvent: BaseEventObject;

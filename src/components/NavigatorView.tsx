@@ -9,19 +9,19 @@ import { NavigatorConstantsObject, RNINavigatorViewModule } from '../native_modu
 
 import { NavigatorRouteViewWrapper } from '../wrapper_components/NavigatorRouteViewWrapper';
 
-import type { NavigatorRouteView } from './NavigatorRouteView';
-
 import { NavigatorUIConstantsContext } from '../context/NavigatorUIConstantsContext';
+
+import type { NavigatorRouteView } from './NavigatorRouteView';
+import type { RNINavigatorRouteViewProps } from '../native_components/RNINavigatorRouteView';
 
 import type { NavCommandPopOptions, NavCommandPushOptions, RouteTransitionConfig } from '../types/NavigationCommands';
 import type { NavRouteItem, NavRouteStackItem, NavRouteStackPartialItem, NavRouteStackItemPartialMetadata } from '../types/NavRouteItem';
 import type { RenderNavItem } from '../types/NavTypes';
 import type { NavRouteConfigItem, NavRouteConfigItemJS } from '../types/NavRouteConfigItem';
 import type { NavigationObject } from '../types/NavigationObject';
+import type { OnUIConstantsDidChangeEventObject, OnNavRouteViewAddedEvent, OnSetNativeRoutesEvent, OnNativeCommandRequestEvent, OnNavRoutePopEvent, OnUIConstantsDidChangeEvent, OnCustomCommandFromNativeEvent, OnNavRouteDidShowEvent } from '../types/RNINavigatorViewEvents';
 
 import { NavigatorViewEventEmitter, NavigatorViewEvents } from '../types/NavigatorViewEventEmitter';
-
-import type { OnUIConstantsDidChangeEventObject, OnNavRouteViewAddedEvent, OnSetNativeRoutesEvent, OnNativeCommandRequestEvent, OnNavRoutePopEvent, OnUIConstantsDidChangeEvent, OnCustomCommandFromNativeEvent, OnNavRouteDidShowEvent } from '../types/RNINavigatorViewEvents';
 
 import * as Helpers from '../functions/Helpers';
 
@@ -49,9 +49,8 @@ enum NavStatus {
 };
 
 // TODO (010): Move to types/InternalTypes
-type NavRouteConfigItemExtended = NavRouteConfigItem & {
-  routeKey: NavRouteItem['routeKey'];
-};
+type NavRouteConfigItemExtended = 
+  NavRouteConfigItem & Pick<RNINavigatorRouteViewProps, 'routeKey'>;
 
 export type SetRoutesTransformCallback = 
   (currentRoutes: readonly NavRouteStackPartialItem[]) => Array<NavRouteStackPartialItem>;
@@ -129,7 +128,8 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   private emitter: NavigatorViewEventEmitter;
 
   /** Used for `removeRouteBatchedFromState`*/
-  private routesToRemove: Array<{routeKey: string, routeIndex: number}>;
+  private routesToRemove: 
+    Array<Pick<RNINavigatorRouteViewProps, 'routeKey' | 'routeIndex'>>;
 
   /** Queue for nav. commands: only 1 command is called at a time */
   private queue: SimpleQueue;
