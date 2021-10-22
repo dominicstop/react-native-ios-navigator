@@ -17,6 +17,7 @@ import { StatusBarStyleConfig } from './StatusBarStyleConfig';
 import { RouteViewConstants } from './RouteViewConstants';
 import { NavigatorViewConstants } from './NavigatorViewConstants';
 import { NavigationCommandsConfig } from './NavigationCommandsConfig';
+import { GetNavigationObjectForRoute } from './GetNavigationObjectForRoute';
 
 import { Spacer } from '../../components/ui/Spacer';
 
@@ -286,6 +287,9 @@ export class NavigatorTest01 extends React.Component<RouteContentProps, Navigato
           />
           <NavigatorViewConstants {...sharedProps}/>
           <NavigationCommandsConfig
+            {...sharedProps}
+          />
+          <GetNavigationObjectForRoute
             {...sharedProps}
           />
           <Spacer space={100}/>
