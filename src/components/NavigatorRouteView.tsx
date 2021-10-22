@@ -396,6 +396,9 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
       removePreviousRoute : this._navigatorRef.removePreviousRoute,
       removeAllPrevRoutes : this._navigatorRef.removeAllPrevRoutes,
 
+      // pass down misc. convenience navigation commands
+      getRouteStackItemForCurrentRoute: this._navigatorRef.getRouteStackItemForCurrentRoute,
+
       // navigator route commands
       getRouteOptions   : this.getRouteOptions,
       setRouteOptions   : this.setRouteOptions,

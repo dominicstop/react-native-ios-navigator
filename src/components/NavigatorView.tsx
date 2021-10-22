@@ -1497,6 +1497,17 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
       animated
     );
   };
+
+  // Misc. Convenience Navigation Commands
+  // -------------------------------------
+
+  getRouteStackItemForCurrentRoute = (): NavRouteStackItem | undefined => {
+    const activeRoutes = this.state.activeRoutes;
+
+    if(activeRoutes.length <= 0) return undefined;
+    return activeRoutes[activeRoutes.length - 1];
+  };
+
   //#endregion
 
   //#region - Handlers
