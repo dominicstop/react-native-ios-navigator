@@ -46,8 +46,10 @@ export type NavigationObject<T = object> = Pick<RNINavigatorRouteViewProps,
   | 'getRouteStackItemForPreviousRoute'
   | 'getNavigationObjectForCurrentRoute'
   | 'getNavigationObjectForPreviousRoute'
+
   | 'setRouteOptionsForRoute'
   | 'getRouteOptionsForRoute'
+  | 'setRouteOptionsForCurrentRoute'
 
 > & Pick<typeof NavigatorRouteView.prototype,
   // route commands
