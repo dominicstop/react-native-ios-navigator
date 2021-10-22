@@ -1522,6 +1522,13 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     return this.getNavigationObjectForRoute({routeID: stackItem.routeID});
   };
 
+  public getNavigationObjectForPreviousRoute = (): NavigationObject | undefined => {
+    const stackItem = this.getRouteStackItemForPreviousRoute();
+    
+    if(stackItem == null) return undefined;
+    return this.getNavigationObjectForRoute({routeID: stackItem.routeID});
+  };
+
   //#endregion
 
   //#region - Handlers
