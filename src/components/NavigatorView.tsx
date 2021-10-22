@@ -1564,6 +1564,13 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
 
     return await this.setRouteOptionsForRoute(currentRoute, routeOptions);
   };
+
+  public getRouteOptionsForCurrentRoute = (): RouteOptions | undefined => {
+    const currentRoute = this.getRouteStackItemForCurrentRoute();
+
+    if(currentRoute == null) return undefined;
+    return this.getRouteOptionsForRoute(currentRoute);
+  };
   //#endregion
 
   //#region - Handlers
