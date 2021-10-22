@@ -1538,7 +1538,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
     const navigation = this.getNavigationObjectForRoute(routeDetails);
 
     if(navigation == null) throw new Error(
-      'No matching route found that matches the provided route metadata...'
+      `'setRouteOptionsForRoute' Error: No matching route found that matches the provided route metadata...`
     );
 
     await navigation.setRouteOptions(routeOptions);
