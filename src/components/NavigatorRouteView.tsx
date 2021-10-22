@@ -403,6 +403,7 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
       getNavigationObjectForPreviousRoute: this._navigatorRef.getNavigationObjectForPreviousRoute,
 
       setRouteOptionsForRoute: this._navigatorRef.setRouteOptionsForRoute,
+      getRouteOptionsForRoute: this._navigatorRef.getRouteOptionsForRoute,
 
       // navigator route commands
       getRouteOptions   : this.getRouteOptions,
