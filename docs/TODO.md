@@ -2,9 +2,6 @@
 
 ## In Progress
 
-* [ ] **Implement**:  Add navigation command:  `getNavigationObjectForRoute(routeKey, routeIndex)`.
-* [ ] **Implement**: Add convenience navigation command: `setRouteOptionsForRoute`.
-
 <br>
 
 ## Unsorted
@@ -336,6 +333,21 @@
 ### Version: `next`
 
 - [x] (Commit: `91d415d`) **Cleanup**: Replace usage of `RCTBridgeWillReloadNotification` with `invalidate` in the native modules.
+- [x] (Commit: `71c0f43`) **Implement**:  Add navigation command:  `getNavigationObjectForRoute`.
+
+<br>
+
+- Implement convenience navigation commands based on `getMatchingRouteStackItem`:
+	* [x] (Commit: `c16be87`) **Implement**:  Add convenience navigation command:  `getRouteStackItemForCurrentRoute`.
+	* [x] (Commit: `8c1ba88`) **Implement**:  Add convenience navigation command:  `getRouteStackItemForPreviousRoute`.
+	* [x] (Commit: `558094a`) **Implement**: Add convenience navigation command: `getNavigationObjectForCurrentRoute`.
+	* [x] (Commit: `e4257d0`) **Implement**: Add convenience navigation command: `getNavigationObjectForPreviousRoute`.
+	* [x] (Commit: `e4257d0`) **Implement**: Add convenience navigation command: `setRouteOptionsForRoute` .
+	* [x] (Commit: `97a0115`) **Implement**: Add convenience navigation command: `getRouteOptionsForRoute`.
+	* [x] (Commit: `222c6b4`) **Implement**: Add convenience navigation command: `setRouteOptionsForCurrentRoute` .
+	* [x] (Commit: `7a25338`) **Implement**: Add convenience navigation command: `getRouteOptionsForCurrentRoute` .
+	* [x] (Commit: `829f16a`) **Implement**: Add convenience navigation command: `setRouteOptionsForPreviousRoute` .
+	* [x] (Commit: `c4d0f80`) **Implement**: Add convenience navigation command: `getRouteOptionsForPreviousRoute` .
 
 <br>
 
