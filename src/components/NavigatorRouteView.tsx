@@ -366,9 +366,11 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
     return {
       routeOptions,
       // pass down route details/data
-      routeKey    : props.routeKey,
-      routeIndex  : props.routeIndex,
-      routeProps  : props.routeProps,
+      routeID   : props.routeID,
+      routeKey  : props.routeKey,
+      routeIndex: props.routeIndex,
+      routeProps: props.routeProps,
+
       // pass down navigator commands
       push        : this._navigatorRef.push,
       pop         : this._navigatorRef.pop,
@@ -379,21 +381,25 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
       insertRoute : this._navigatorRef.insertRoute,
       setRoutes   : this._navigatorRef.setRoutes,
       setNavigationBarHidden: this._navigatorRef.setNavigationBarHidden,
+
       // pass down misc. navigator commands
       sendCustomCommandToNative: this._navigatorRef.sendCustomCommandToNative,
       getNavigatorConstants    : this._navigatorRef.getNavigatorConstants,
       getActiveRoutes          : this._navigatorRef.getActiveRoutes,
       dismissModal             : this._navigatorRef.dismissModal,
+
       // pass down convenience navigator commands
       replacePreviousRoute: this._navigatorRef.replacePreviousRoute,
       replaceCurrentRoute : this._navigatorRef.replaceCurrentRoute,
       removePreviousRoute : this._navigatorRef.removePreviousRoute,
       removeAllPrevRoutes : this._navigatorRef.removeAllPrevRoutes,
+
       // navigator route commands
       getRouteOptions   : this.getRouteOptions,
       setRouteOptions   : this.setRouteOptions,
       setHidesBackButton: this.setHidesBackButton,
       getRouteConstants : this.getRouteConstants,
+      
       // pass down 'get ref' functions
       getRefToRoute          : this._handleGetRefToRoute,
       getRefToNavigator      : props.getRefToNavigator,

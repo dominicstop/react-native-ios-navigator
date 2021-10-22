@@ -42,7 +42,7 @@ export type RNINavigatorRouteViewProps = {
 
   // Transition Config
   transitionConfigPush?: RouteTransitionConfig | null;
-  transitionConfigPop ?: RouteTransitionConfig  | null;
+  transitionConfigPop ?: RouteTransitionConfig | null;
 
   // Navbar Config
   prompt    ?: string | null;

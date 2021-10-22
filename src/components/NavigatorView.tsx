@@ -135,7 +135,7 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   private queue: SimpleQueue;
 
   // note: the key should be the routeID
-  private routeRefMap: {[key: number]: NavigatorRouteView} = {};
+  private routeRefMap: { [key: number]: NavigatorRouteView } = {};
   //#endregion
   
   constructor(props: NavigatorViewProps){
