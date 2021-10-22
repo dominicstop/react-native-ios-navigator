@@ -1501,14 +1501,14 @@ export class NavigatorView extends React.PureComponent<NavigatorViewProps, Navig
   // Misc. Convenience Navigation Commands
   // -------------------------------------
 
-  getRouteStackItemForCurrentRoute = (): NavRouteStackItem | undefined => {
+  public getRouteStackItemForCurrentRoute = (): NavRouteStackItem | undefined => {
     const activeRoutes = this.state.activeRoutes;
 
     if(activeRoutes.length <= 0) return undefined;
     return activeRoutes[activeRoutes.length - 1];
   };
 
-  getRouteStackItemForPreviousRoute = (): NavRouteStackItem | undefined => {
+  public getRouteStackItemForPreviousRoute = (): NavRouteStackItem | undefined => {
     const activeRoutes = this.state.activeRoutes;
     
     if(activeRoutes.length <= 1) return undefined;
