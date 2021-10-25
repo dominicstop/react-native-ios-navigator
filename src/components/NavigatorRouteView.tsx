@@ -103,21 +103,23 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
   private isPushed = false;
 
   // references
-  private _emitter            : NavigatorRouteViewEventEmitter;
-  private _nativeRef         ?: React.Component<RNINavigatorRouteViewProps>;
+  private _emitter: NavigatorRouteViewEventEmitter;
+
   private _navigatorRef       : NavigatorView;
-  private _routeContentRef   ?: ReactElement;
+  private _nativeRef         ?: React.Component<RNINavigatorRouteViewProps>;
   private _routeViewPortalRef?: RouteViewPortal;
 
-  private _routeHeaderWrapperRef    ?: RouteHeaderWrapper;
-  private _routeComponentsWrapperRef?: RouteComponentsWrapper;
+  private _routeContentRef           = React.createRef<ReactElement>();
+  private _routeHeaderWrapperRef     = React.createRef<RouteHeaderWrapper>();
+  private _routeComponentsWrapperRef = React.createRef<RouteComponentsWrapper>();;
   //#endregion
 
   constructor(props: NavigatorRouteViewProps){
     super(props);
 
-    this.routeStatus   = RouteStatus.INIT;
-    this._emitter      = new TSEventEmitter();
+    this.routeStatus = RouteStatus.INIT;
+    this._emitter    = new TSEventEmitter();
+
     this._navigatorRef = props.getRefToNavigator();
 
     this.state = {
@@ -189,8 +191,8 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
     // don't allow update until it's pushed
     if(!this.isPushed) return;
 
-    this._routeComponentsWrapperRef?.requestUpdate();
-    this._routeHeaderWrapperRef    ?.requestUpdate();
+    this._routeHeaderWrapperRef    .current?.requestUpdate();
+    this._routeComponentsWrapperRef.current?.requestUpdate();
   };
 
   //#region - "get ref" Functions
@@ -443,8 +445,8 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
   public setRouteViewPortalRef = (ref: RouteViewPortal) => {
     this._routeViewPortalRef = ref;
 
-    this._routeHeaderWrapperRef    ?.setPortalRef(ref);
-    this._routeComponentsWrapperRef?.setPortalRef(ref);
+    this._routeHeaderWrapperRef    .current?.setPortalRef(ref);
+    this._routeComponentsWrapperRef.current?.setPortalRef(ref);
     
     this.setState({hasRoutePortal: true});
   };
@@ -622,7 +624,7 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
       navigation,
       // store a ref to this element
       ...(Helpers.isClassComponent(routeContent) && {
-        ref: (node: any) => { this._routeContentRef = node }
+        ref: this._routeContentRef,
       }),
     });
 
@@ -646,7 +648,7 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
           >
             {routeContentWithProps}
             <RouteHeaderWrapper
-              ref={r => { this._routeHeaderWrapperRef = r! }}
+              ref={this._routeHeaderWrapperRef}
               navigation={navigation}
               getPortalRef={this.getPortalRef}
             />
@@ -711,7 +713,7 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
         >
           {this._renderRouteContents(navigation)}
           <RouteComponentsWrapper
-            ref={r => { this._routeComponentsWrapperRef = r! }}
+            ref={this._routeComponentsWrapperRef}
             navigation={navigation}
             getPortalRef={this.getPortalRef}
             // render nav bar items
