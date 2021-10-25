@@ -999,6 +999,24 @@ Used in the `NavigatorView.SetRoutesTransformCallback` function. Represents eith
 
 <br>
 
+##### Object Type: `NavRouteStackItemMetadata`
+
+Contains properties that can be used to identify an active route in the navigation stack.
+
+| Name and Type                     | Description |
+| :-------------------------------- | ----------- |
+| 🔤  `routeID`<br/><br/>⚛️  `abc`    | TBA         |
+| 🔤  `routeKey`<br/><br/>⚛️  `abc`   | TBA         |
+| 🔤  `routeIndex`<br/><br/>⚛️  `abc` | TBA         |
+
+<br>
+
+##### Object Type: `NavRouteStackItemMetadata`
+
+Is essentially identical to the [`NavRouteStackItemMetadata`](PLACE_HOLDER_LINK) type, except all the properties are optional (i.e. equivalent to `Partial<NavRouteStackItemMetadata>` in typescript).
+
+<br>
+
 #### 📄 `NavBarAppearanceConfig.ts`
 
 * 📌 **Declaration**: [`NavBarAppearanceConfig.ts`](src/types/NavBarAppearanceConfig.ts)
