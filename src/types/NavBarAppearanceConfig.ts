@@ -12,12 +12,15 @@ type BarStyle = 'default' | 'black';
 type NavBarAppearanceBaseConfig = 
   /** Configures the bar appearance object with default background and shadow values. */
   | 'defaultBackground'
+
   /** Configures the bar appearance object with a set of opaque colors that are appropriate for the current theme. */
   | 'opaqueBackground'
+
   /** Configures the bar appearance object with a transparent background and no shadow. */
   | 'transparentBackground';
 
-export type NavBarPreset = 'none' | 'noShadow' | 'clearBackground';
+export type NavBarPreset = 
+  'none' | 'noShadow' | 'clearBackground';
 
 /** Options to specify how a view adjusts its content when its size changes. */
 export type ViewContentMode = 

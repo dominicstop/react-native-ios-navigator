@@ -20,7 +20,10 @@ export type NavRouteConfigItemNative = NavRouteConfigItemBase & {
 export type NavRouteConfigItemJS = NavRouteConfigItemBase & {
   isNativeRoute?: false | undefined;
   routeOptionsDefault?: RouteOptions;
+
+  // render the route to show in the view controller
   renderRoute: (routeItem: Readonly<NavRouteItem>) => ReactElement<RouteContentProps>;
+
   // render nav bar items
   renderNavBarLeftItem ?: RenderNavItem;
   renderNavBarRightItem?: RenderNavItem;

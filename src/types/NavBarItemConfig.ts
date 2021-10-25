@@ -5,50 +5,73 @@ import type { ImageItemConfig } from "./ImageItemConfig";
 export type BarButtonItemSystemItem =
   /** The system Done button, localized. */
   | "done"
+  
   /** The system Cancel button, localized. */
   | "cancel"
+  
   /** The system Edit button, localized. */
   | "edit"
+  
   /** The system Save button, localized. */
   | "save"
+  
   /** The system plus button containing an icon of a plus sign. */
   | "add"
+  
   /** Blank space to add between other items. The space is distributed equally between the other items. Other item properties are ignored when this value is set. */
   | "flexibleSpace"
+  
   /** Blank space to add between other items. Only the width property is used when this value is set. */
   | "fixedSpace"
+  
   /** The system compose button. */
   | "compose"
+  
   /** The system reply button. */
   | "reply"
+  
   /** The system action button. */
   | "action"
+  
   /** The system organize button. */
   | "organize"
+  
   /** The system bookmarks button. */
   | "bookmarks"
+  
   /** The system search button. */
   | "search"
+  
   /** The system refresh button. */
   | "refresh"
+  
   /** The system stop button. */
   | "stop"
+  
   /** The system camera button. */
   | "camera"
+  
   /** The system trash button. */
   | "trash"
+  
   /** The system play button. */
   | "play"
+  
   /** The system pause button. */
   | "pause"
+  
   /** The system rewind button. */
   | "rewind"
+  
   /** The system fast forward button. */
   | "fastForward"
+  
   /** The system undo button. */
   | "undo"
+  
   /** The system redo button. */
   | "redo"
+  
   /** The system close button. */
   | "close"
 //#endregion
@@ -77,6 +100,7 @@ export type NavBarItemConfigBase = SupportedImageTypes | {
 export type BarButtonItemStyle = 
   /** Glows when tapped. The default item style. */
   | 'plain'
+  
   /** The style for a done button—for example, a button that completes some task and returns to the previous view. */
   | 'done';
 
