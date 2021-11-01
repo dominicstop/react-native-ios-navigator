@@ -42,4 +42,4 @@ export * from './types/NavigatorViewEventEmitter';
 export * from './types/NavigatorRouteViewEventEmitter';
 export * from './types/NavTypes';
 
-export { DynamicColor, Offset } from './types/MiscTypes';
+export { DynamicColor, Offset, ReturnKeyType } from './types/MiscTypes';
