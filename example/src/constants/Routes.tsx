@@ -18,6 +18,7 @@ import { NavigatorTest05 } from '../routes/NavigatorTest05';
 import { NavigatorTest06 } from '../routes/NavigatorTest06';
 import { NavigatorTest07 } from '../routes/NavigatorTest07';
 import { NavigatorTest08 } from '../routes/NavigatorTest08';
+import { NavigatorTest09 } from '../routes/NavigatorTest09';
 
 import { NavigatorDemo01 } from '../routes/NavigatorDemo01';
 import { NavigatorDemo02 } from '../routes/NavigatorDemo02';
@@ -42,6 +43,7 @@ export const RouteKeys = {
   NavigatorTest06: 'NavigatorTest06',
   NavigatorTest07: 'NavigatorTest07',
   NavigatorTest08: 'NavigatorTest08',
+  NavigatorTest09: 'NavigatorTest09',
 
   NavigatorDemo01: 'NavigatorDemo01',
   NavigatorDemo02: 'NavigatorDemo02',
@@ -161,6 +163,11 @@ export const ROUTES: NavRoutesConfigMap = {
     },
     renderRoute: () => (
       <NavigatorTest08/>
+    ),
+  },
+  [RouteKeys.NavigatorTest09]: {
+    renderRoute: () => (
+      <NavigatorTest09/>
     ),
   },
 

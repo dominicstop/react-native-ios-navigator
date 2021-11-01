@@ -68,6 +68,10 @@ export const RouteItems = [{
       `Tester for listening to the different route view events via`
     + `the RouteViewEvents component`
   )
+}, {
+  routeKey: RouteKeys.NavigatorTest09,
+  title: 'Search Tester',
+  desc: 'Tester for configuring a route that has a search bar',
 }, { 
   routeKey: RouteKeys.NavigatorDemo01,
   title: 'Navigator Nested Layout',
