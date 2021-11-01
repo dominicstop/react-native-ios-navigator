@@ -33,7 +33,8 @@ type NavigatorRouteViewWrapperProps = Pick<NavigatorRouteViewProps,
 /**
  * This component is a wrapper for `NavigatorRouteView`.
  * * Responsible for handling the render props (i.e. so that the anon/arrow functions
- * aren't re-created on each re-render).
+ *   aren't re-created on each re-render).
+ * 
  * * Used in `NavigatorView._renderRoutes`.
  */
 export class NavigatorRouteViewWrapper extends React.Component<NavigatorRouteViewWrapperProps> {

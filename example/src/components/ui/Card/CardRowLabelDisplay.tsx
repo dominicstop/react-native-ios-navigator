@@ -36,9 +36,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.INDIGO[100],
     borderRadius: 10,
     alignItems: 'center',
+    justifyContent: 'space-between',
   },
   cardRowLabelDisplayLabelText: {
-    flex: 1,
     fontSize: 16,
     fontWeight: '500',
     color: Colors.PURPLE[1100],
