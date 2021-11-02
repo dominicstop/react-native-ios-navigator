@@ -9,6 +9,10 @@ import Foundation
 
 struct RNISearchControllerConfig {
   
+  private static var defaultPlaceholderTextColor: UIColor?;
+  private static var defaultLeftIconTintColor: UIColor?;
+  private static var defaultSearchBarTextFieldBackgroundColor: UIColor?;
+  
   // MARK: SearchBarConfig
   let placeholder: String?;
   let searchBarStyle: UISearchBar.Style;
@@ -143,13 +147,28 @@ struct RNISearchControllerConfig {
     
     searchBar.returnKeyType = self.returnKeyType ?? .search;
     
-    if let color = self.searchTextFieldBackgroundColor {
-      if #available(iOS 13.0, *) {
-        searchBar.searchTextField.backgroundColor = color
-        
-      } else if let searchBarTextField = searchBarTextField {
-        #warning("Handle reset to default...")
+    if #available(iOS 13.0, *) {
+      // A: Use iOS 13+ API to change the search text field's bg color
+      searchBar.searchTextField.backgroundColor =
+        self.searchTextFieldBackgroundColor;
+      
+    } else if let searchBarTextField = searchBarTextField {
+      // B: Manually change the search text field's bg color
+      
+      // save default color before overriding
+      if Self.defaultSearchBarTextFieldBackgroundColor == nil {
+        Self.defaultSearchBarTextFieldBackgroundColor = searchBarTextField.backgroundColor;
+      };
+      
+      if let color = self.searchTextFieldBackgroundColor {
+        // B1: override bg color
         searchBarTextField.backgroundColor = color;
+        
+      } else {
+        // B2: config did not specify bg color (and search's bg color has been
+        //     changed/overridden), so revert to default value
+        searchBarTextField.backgroundColor =
+          Self.defaultSearchBarTextFieldBackgroundColor;
       };
     };
     
@@ -166,20 +185,43 @@ struct RNISearchControllerConfig {
     };
     
     // MARK: Custom
+    
     if let searchBarTextField = searchBarTextField,
-       let searchBarPlaceholderLabel = searchBarPlaceholderLabel {
+       let searchIcon = searchBarTextField.leftView as? UIImageView {
       
-      #warning("Handle reset to default + appearance change...")
-      if let color = self.leftIconTintColor,
-         let searchIcon = searchBarTextField.leftView as? UIImageView {
-          
-        searchIcon.image = searchIcon.image?.withRenderingMode(.alwaysTemplate);
-        searchIcon.tintColor = color;
+      // save default color before overriding
+      if Self.defaultLeftIconTintColor == nil {
+        Self.defaultLeftIconTintColor = searchIcon.tintColor;
       };
       
-      #warning("Handle reset to default...")
+      if let color = self.leftIconTintColor {
+        // A: override current value with config's value
+        searchIcon.image = searchIcon.image?.withRenderingMode(.alwaysTemplate);
+        searchIcon.tintColor = color;
+        
+      } else {
+        // B: config did not value (and the property has been previously
+        //    changed/overridden), so revert to default value
+        searchIcon.image = searchIcon.image?.withRenderingMode(.alwaysTemplate);
+        searchIcon.tintColor = Self.defaultLeftIconTintColor;
+      };
+    };
+    
+    if let searchBarPlaceholderLabel = searchBarPlaceholderLabel {
+      
+      // save default color before overriding
+      if Self.defaultPlaceholderTextColor == nil {
+        Self.defaultPlaceholderTextColor = searchBarPlaceholderLabel.textColor;
+      };
+      
       if let color = self.placeholderTextColor {
+        // A: override current value with config's value
         searchBarPlaceholderLabel.textColor = color;
+        
+      } else {
+        // B: config did not value (and the property has been previously
+        //    changed/overridden), so revert to default value
+        searchBarPlaceholderLabel.textColor = Self.defaultPlaceholderTextColor;
       };
     };
   };
