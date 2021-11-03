@@ -399,21 +399,23 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     };
   };
   
-  func setupSearchController(){
+  func setupSearchController(searchConfig: RNISearchControllerConfig? = nil){
     guard #available(iOS 11.0, *),
-          let searchConfig = self.routeView?._searchBarConfig
+          let config = searchConfig ?? self.routeView?._searchBarConfig
     else { return };
     
     let searchController = UISearchController(searchResultsController: nil);
-    searchConfig.updateSearchController(searchController);
+    config.updateSearchController(searchController);
     
     searchController.searchResultsUpdater = self;
     searchController.searchBar.delegate = self;
     
     self.navigationItem.searchController = searchController;
     
-    /// Temp. set this flag to false to fix search bar transitions
-    self.navigationItem.hidesSearchBarWhenScrolling = false;
+    if searchConfig == nil {
+      /// Temp. set this flag to false to fix search bar transitions
+      self.navigationItem.hidesSearchBarWhenScrolling = false;
+    };
   };
   
   func refreshSearchController(){
@@ -573,14 +575,21 @@ extension RNINavigatorReactRouteViewController: RNINavigatorRouteViewDelegate {
   };
   
   func didReceiveSearchBarConfig(_ config: RNISearchControllerConfig?){
-    guard #available(iOS 11.0, *) else { return };
+    guard #available(iOS 11.0, *)  else { return };
     
-    guard let config = config,
-          let searchController = self.navigationItem.searchController
-    else {
+    guard let config = config else {
+      // no config provided, remove search controller
       self.navigationItem.searchController = nil;
       return;
     };
+    
+    if self.navigationItem.searchController == nil {
+      // Search controller not yet initialized...
+      self.setupSearchController(searchConfig: config);
+    };
+    
+    guard let searchController = self.navigationItem.searchController
+    else { return };
     
     config.updateSearchController(searchController,
       searchBarTextField: self.searchBarTextField,
