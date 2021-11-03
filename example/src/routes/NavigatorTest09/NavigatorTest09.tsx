@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
-import { RouteViewPortal, RouteContentProps } from 'react-native-ios-navigator';
 
 import { SearchBarConfigBarTintColor } from './SearchBarConfigBarTintColor';
 import { SearchBarConfigPlaceholder } from './SearchBarConfigPlaceholder';
@@ -18,20 +17,12 @@ import { SearchControllerConfigAutomaticallyShowsCancelButton } from './SearchCo
 
 import { CustomSearchBarConfigLeftIconTintColor } from './CustomSearchBarConfigLeftIconTintColor';
 import { CustomSearchBarConfigPlaceholderTextColor } from './CustomSearchBarConfigPlaceholderTextColor';
+import { TestCommandGetRouteSearchControllerState } from './TestCommandGetRouteSearchControllerState';
 
 
-export function NavigatorTest09(props: RouteContentProps){
-  const navigation = props.navigation;
-
+export function NavigatorTest09(){
   return(
     <ScrollView contentContainerStyle={styles.listContentContainer}>
-      <RouteViewPortal
-        routeOptions={{
-          searchBarConfig: {
-            placeholder: 'search'
-          },
-        }}
-      />
       <SearchBarConfigPlaceholder/>
       <SearchBarConfigBarTintColor/>
       <SearchBarConfigBarStyle/>
@@ -48,6 +39,8 @@ export function NavigatorTest09(props: RouteContentProps){
 
       <CustomSearchBarConfigLeftIconTintColor/>
       <CustomSearchBarConfigPlaceholderTextColor/>
+
+      <TestCommandGetRouteSearchControllerState/>
     </ScrollView>
   );
 };
