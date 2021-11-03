@@ -61,6 +61,7 @@ export type NavigationObject<T = object> = Pick<RNINavigatorRouteViewProps,
   | 'setHidesBackButton'
   | 'getRouteConstants'
   | 'getRouteSearchControllerState'
+  | 'setRouteSearchControllerState'
 > & {
 
   routeProps  : T | null;

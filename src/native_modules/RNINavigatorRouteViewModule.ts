@@ -26,6 +26,11 @@ interface RNINavigatorRouteViewModule {
 
   getRouteSearchControllerState(node: number): 
     Promise<RouteSearchControllerState>;
+
+  setRouteSearchControllerState(
+    node: number,
+    state: Partial<RouteSearchControllerState>
+  ): Promise<void>;
 };
 
 const COMPONENT_NAME = 'RNINavigatorRouteViewModule';

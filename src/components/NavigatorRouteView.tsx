@@ -9,6 +9,7 @@ import type { RenderNavItem, RenderRouteContent } from '../types/NavTypes';
 import type { OnRoutePopEvent, OnRoutePushEvent, OnPressNavBarItemEvent, OnRouteFocusEvent, OnRouteBlurEvent, OnUpdateSearchResultsEvent, OnSearchBarCancelButtonClickedEvent, OnSearchBarSearchButtonClickedEvent } from '../types/RNINavigatorRouteViewEvents';
 import type { RouteTransitionConfig } from '../types/NavigationCommands';
 import type { Nullish } from '../types/UtilityTypes';
+import type { RouteSearchControllerState } from '../types/RouteSearchControllerState';
 
 import { NavigatorRouteViewEventEmitter, NavigatorRouteViewEvents } from '../types/NavigatorRouteViewEventEmitter';
 
@@ -417,6 +418,8 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
       setHidesBackButton           : this.setHidesBackButton,
       getRouteConstants            : this.getRouteConstants,
       getRouteSearchControllerState: this.getRouteSearchControllerState,
+      setRouteSearchControllerState: this.setRouteSearchControllerState,
+
       
       // pass down 'get ref' functions
       getRefToRoute          : this._handleGetRefToRoute,
@@ -531,6 +534,38 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
       const result = await Helpers.promiseWithTimeout(1000,
         RNINavigatorRouteViewModule.getRouteSearchControllerState(
           Helpers.getNativeNodeHandle(this._nativeRef)
+        )
+      );
+
+      return result;
+
+    } catch(e){
+      throw new NavigatorError(e);
+    };
+  };
+
+  public setRouteSearchControllerState = async (
+    state: Partial<RouteSearchControllerState>
+  ) => {
+    try {
+      if(!RouteViewUtils.isRouteReady(this.routeStatus)){
+        throw new NavigatorError({
+          code: NavigatorErrorCodes.libraryError,
+          message: "'NavigatorRouteView' is not mounted"
+        });
+      };
+
+      if(this._nativeRef == null){
+        throw new NavigatorError({
+          code: NavigatorErrorCodes.libraryError,
+          message: "'this._nativeRef' is not set"
+        });
+      };
+
+      const result = await Helpers.promiseWithTimeout(1000,
+        RNINavigatorRouteViewModule.setRouteSearchControllerState(
+          Helpers.getNativeNodeHandle(this._nativeRef),
+          state
         )
       );
 
