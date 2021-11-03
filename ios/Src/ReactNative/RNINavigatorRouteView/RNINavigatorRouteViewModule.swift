@@ -50,7 +50,7 @@ internal class RNINavigatorRouteViewModule: NSObject {
         };
         
         routeVC.navigationItem.setHidesBackButton(isHidden, animated: animated){
-          resolve([:]);
+          resolve(nil);
         };
         
       } catch {

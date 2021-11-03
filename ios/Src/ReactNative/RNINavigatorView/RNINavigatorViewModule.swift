@@ -51,7 +51,7 @@ internal class RNINavigatorViewModule: NSObject {
         // forward push command to navigator
         try navigatorView.push(routeID.intValue, options){
           // resolve promise after "push" is complete
-          resolve([:]);
+          resolve(nil);
         };
       } catch {
         let error = error as? RNINavigatorError;
@@ -113,7 +113,7 @@ internal class RNINavigatorViewModule: NSObject {
         };
         
         navigatorView.navigationVC.setNavigationBarHidden(isHidden, animated: animated){
-          resolve([:]);
+          resolve(nil);
         };
         
       } catch {
@@ -143,7 +143,7 @@ internal class RNINavigatorViewModule: NSObject {
               
         // forward "popToRoot" command to navigator
         try navigatorView.popToRoot(options){
-          resolve([:]);
+          resolve(nil);
         };
         
       } catch {
@@ -179,7 +179,7 @@ internal class RNINavigatorViewModule: NSObject {
           routeIndex: routeIndex.intValue,
           isAnimated: animated
         ) {
-          resolve([:]);
+          resolve(nil);
         };
         
       } catch {
@@ -217,7 +217,7 @@ internal class RNINavigatorViewModule: NSObject {
           nextRouteID   : nextRouteID.intValue,
           isAnimated    : animated
         ) {
-          resolve([:]);
+          resolve(nil);
         };
         
       } catch {
@@ -258,7 +258,7 @@ internal class RNINavigatorViewModule: NSObject {
           },
           isAnimated: animated
         ) {
-          resolve([:]);
+          resolve(nil);
         };
         
       } catch {
@@ -294,7 +294,7 @@ internal class RNINavigatorViewModule: NSObject {
           atIndex    : atIndex.intValue,
           isAnimated : animated
         ) {
-          resolve([:]);
+          resolve(nil);
         };
         
       } catch {
@@ -328,7 +328,7 @@ internal class RNINavigatorViewModule: NSObject {
           nextRouteIDs: nextRouteIDs.compactMap { $0 as? Int },
           isAnimated  : animated
         ) {
-          resolve([:]);
+          resolve(nil);
         };
         
       } catch {
@@ -457,7 +457,7 @@ internal class RNINavigatorViewModule: NSObject {
         };
         
         navigatorView.navigationVC.dismiss(animated: animated){
-          resolve([:]);
+          resolve(nil);
         };
         
       } catch {
