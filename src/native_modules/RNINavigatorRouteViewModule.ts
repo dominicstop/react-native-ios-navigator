@@ -1,5 +1,5 @@
 import { NativeModules } from 'react-native';
-import type { EdgeInsets, Rect } from 'src/types/MiscTypes';
+import type { EdgeInsets, Rect } from '../types/MiscTypes';
 
 export type RouteConstantsObject = {
   isCurrentlyInFocus: boolean;
@@ -20,6 +20,5 @@ interface RNINavigatorRouteViewModule {
 
 const COMPONENT_NAME = 'RNINavigatorRouteViewModule';
 
-// Import native component
 export const RNINavigatorRouteViewModule: RNINavigatorRouteViewModule =
   NativeModules[COMPONENT_NAME];

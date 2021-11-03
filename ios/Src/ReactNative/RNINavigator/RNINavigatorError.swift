@@ -11,7 +11,7 @@ import Foundation
 internal struct RNINavigatorError: Error, Codable {
   
   enum ErrorCode: String, Codable, CaseIterable {
-    case activeRoutesDeSync
+    case activeRoutesDeSync;
     case libraryError;
     
     case invalidRouteID;
