@@ -41,5 +41,6 @@ export * from './types/NavigationCommands';
 export * from './types/NavigatorViewEventEmitter';
 export * from './types/NavigatorRouteViewEventEmitter';
 export * from './types/NavTypes';
+export * from './types/RouteSearchControllerState';
 
 export { DynamicColor, Offset, ReturnKeyType } from './types/MiscTypes';

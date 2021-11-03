@@ -412,10 +412,11 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
       getRouteOptionsForPreviousRoute: this._navigatorRef.getRouteOptionsForPreviousRoute,
 
       // navigator route commands
-      getRouteOptions   : this.getRouteOptions,
-      setRouteOptions   : this.setRouteOptions,
-      setHidesBackButton: this.setHidesBackButton,
-      getRouteConstants : this.getRouteConstants,
+      getRouteOptions              : this.getRouteOptions,
+      setRouteOptions              : this.setRouteOptions,
+      setHidesBackButton           : this.setHidesBackButton,
+      getRouteConstants            : this.getRouteConstants,
+      getRouteSearchControllerState: this.getRouteSearchControllerState,
       
       // pass down 'get ref' functions
       getRefToRoute          : this._handleGetRefToRoute,
@@ -500,6 +501,35 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
 
       const result = await Helpers.promiseWithTimeout(1000,
         RNINavigatorRouteViewModule.getRouteConstants(
+          Helpers.getNativeNodeHandle(this._nativeRef)
+        )
+      );
+
+      return result;
+
+    } catch(e){
+      throw new NavigatorError(e);
+    };
+  };
+
+  public getRouteSearchControllerState = async () => {
+    try {
+      if(!RouteViewUtils.isRouteReady(this.routeStatus)){
+        throw new NavigatorError({
+          code: NavigatorErrorCodes.libraryError,
+          message: "'NavigatorRouteView' is not mounted"
+        });
+      };
+
+      if(this._nativeRef == null){
+        throw new NavigatorError({
+          code: NavigatorErrorCodes.libraryError,
+          message: "'this._nativeRef' is not set"
+        });
+      };
+
+      const result = await Helpers.promiseWithTimeout(1000,
+        RNINavigatorRouteViewModule.getRouteSearchControllerState(
           Helpers.getNativeNodeHandle(this._nativeRef)
         )
       );

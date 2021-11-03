@@ -23,4 +23,9 @@ RCT_EXTERN_METHOD(getRouteConstants: (nonnull NSNumber)node
                   resolve: (RCTPromiseResolveBlock *)resolve
                   reject : (RCTPromiseRejectBlock  *)reject);
 
+RCT_EXTERN_METHOD(getRouteSearchControllerState: (nonnull NSNumber)node
+                  // promise blocks -----------------------
+                  resolve: (RCTPromiseResolveBlock *)resolve
+                  reject : (RCTPromiseRejectBlock  *)reject);
+
 @end

@@ -1,5 +1,7 @@
 import { NativeModules } from 'react-native';
+
 import type { EdgeInsets, Rect } from '../types/MiscTypes';
+import type { RouteSearchControllerState } from '../types/RouteSearchControllerState';
 
 export type RouteConstantsObject = {
   isCurrentlyInFocus: boolean;
@@ -13,9 +15,17 @@ export type RouteConstantsObject = {
 };
 
 interface RNINavigatorRouteViewModule {
-  setHidesBackButton(node: number, isHidden: boolean, animated: boolean): Promise<void>;
+  setHidesBackButton(
+    node: number, 
+    isHidden: boolean, 
+    animated: boolean
+  ): Promise<void>;
 
-  getRouteConstants(node: number): Promise<RouteConstantsObject>;
+  getRouteConstants(node: number): 
+    Promise<RouteConstantsObject>;
+
+  getRouteSearchControllerState(node: number): 
+    Promise<RouteSearchControllerState>;
 };
 
 const COMPONENT_NAME = 'RNINavigatorRouteViewModule';

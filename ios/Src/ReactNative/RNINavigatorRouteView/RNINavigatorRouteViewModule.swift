@@ -87,5 +87,51 @@ internal class RNINavigatorRouteViewModule: NSObject {
       };
     };
   };
+  
+  @objc func getRouteSearchControllerState(
+    _ node : NSNumber,
+    // promise blocks ------------------------
+    resolve: @escaping RCTPromiseResolveBlock,
+    reject : @escaping RCTPromiseRejectBlock
+  ){
+    
+    DispatchQueue.main.async {
+      do {
+        // get `RNINavigatorRouteView` instance that matches node/reactTag
+        guard let routeView = self.getRouteView(node) else {
+          throw RNINavigatorError(
+            code: .invalidReactTag,
+            domain: "\(String(describing: Self.self)).\(#function)"
+          );
+        };
+        
+        guard let routeVC = routeView.routeVC else {
+          throw RNINavigatorError(
+            code: .libraryError,
+            domain: "\(String(describing: Self.self)).\(#function)",
+            message: "No corresponding route view controller found for route view"
+          );
+        };
+        
+        guard #available(iOS 11.0, *),
+              let searchVC = routeVC.navigationItem.searchController else {
+          throw RNINavigatorError(
+            code: .libraryError,
+            domain: "\(String(describing: Self.self)).\(#function)",
+            message: "No search controller found for the route view controller"
+          );
+        };
+        
+        let searchVCState =
+          RNIRouteSearchControllerState(searchController: searchVC);
+        
+        resolve(searchVCState.dictionary);
+        
+      } catch {
+        let error = error as? RNINavigatorError;
+        reject(error?.code.rawValue , error?.createJSONString(), nil);
+      };
+    };
+  };
 };
 
