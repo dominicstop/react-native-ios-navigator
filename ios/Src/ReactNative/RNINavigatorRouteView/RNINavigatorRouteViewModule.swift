@@ -33,6 +33,7 @@ internal class RNINavigatorRouteViewModule: NSObject {
     _ node  : NSNumber,
     isHidden: Bool,
     animated: Bool,
+    // promise blocks ------------------------
     resolve : @escaping RCTPromiseResolveBlock,
     reject  : @escaping RCTPromiseRejectBlock
   ){

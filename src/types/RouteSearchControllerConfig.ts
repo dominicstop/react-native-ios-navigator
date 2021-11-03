@@ -45,7 +45,7 @@ type SearchControllerConfig = {
   /** A Boolean indicating whether the underlying content is obscured during a search. */
   obscuresBackgroundDuringPresentation?: boolean;
 
-  /**  Boolean indicating whether the navigation bar should be hidden when searching. */
+  /** Boolean indicating whether the navigation bar should be hidden when searching. */
   hidesNavigationBarDuringPresentation?: boolean;
 
   /** A Boolean indicating whether the search controller manages the visibility of the search bar’s cancel button. Requires iOS 13+ */
