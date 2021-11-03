@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 
+import { RouteViewPortal } from 'react-native-ios-navigator';
+
 import { SearchBarConfigBarTintColor } from './SearchBarConfigBarTintColor';
 import { SearchBarConfigPlaceholder } from './SearchBarConfigPlaceholder';
 import { SearchBarConfigBarStyle } from './SearchBarConfigBarStyle';
@@ -18,30 +20,41 @@ import { SearchControllerConfigAutomaticallyShowsCancelButton } from './SearchCo
 import { CustomSearchBarConfigLeftIconTintColor } from './CustomSearchBarConfigLeftIconTintColor';
 import { CustomSearchBarConfigPlaceholderTextColor } from './CustomSearchBarConfigPlaceholderTextColor';
 import { CommandGetRouteSearchControllerState } from './CommandGetRouteSearchControllerState';
+import { CommandSetRouteSearchControllerState } from './CommandSetRouteSearchControllerState';
 
 
 export function NavigatorTest09(){
   return(
-    <ScrollView contentContainerStyle={styles.listContentContainer}>
-      <SearchBarConfigPlaceholder/>
-      <SearchBarConfigBarTintColor/>
-      <SearchBarConfigBarStyle/>
-      <SearchBarConfigTintColor/>
-      <SearchBarConfigIsTranslucent/>
-      <SearchBarConfigTextColor/>
-      <SearchBarConfigReturnKeyType/>
-      <SearchBarConfigSearchTextFieldBackgroundColor/>
+    <React.Fragment>
+      <RouteViewPortal
+        routeOptions={{
+          searchBarConfig: {
+            placeholder: 'Search'
+          },
+        }}
+      />
+      <ScrollView contentContainerStyle={styles.listContentContainer}>
+        <SearchBarConfigPlaceholder/>
+        <SearchBarConfigBarTintColor/>
+        <SearchBarConfigBarStyle/>
+        <SearchBarConfigTintColor/>
+        <SearchBarConfigIsTranslucent/>
+        <SearchBarConfigTextColor/>
+        <SearchBarConfigReturnKeyType/>
+        <SearchBarConfigSearchTextFieldBackgroundColor/>
 
-      <SearchControllerConfigHidesSearchBarWhenScrolling/>
-      <SearchControllerConfigObscuresBackgroundDuringPresentation/>
-      <SearchControllerConfigHidesNavigationBarDuringPresentation/>
-      <SearchControllerConfigAutomaticallyShowsCancelButton/>
+        <SearchControllerConfigHidesSearchBarWhenScrolling/>
+        <SearchControllerConfigObscuresBackgroundDuringPresentation/>
+        <SearchControllerConfigHidesNavigationBarDuringPresentation/>
+        <SearchControllerConfigAutomaticallyShowsCancelButton/>
 
-      <CustomSearchBarConfigLeftIconTintColor/>
-      <CustomSearchBarConfigPlaceholderTextColor/>
+        <CustomSearchBarConfigLeftIconTintColor/>
+        <CustomSearchBarConfigPlaceholderTextColor/>
 
-      <CommandGetRouteSearchControllerState/>
-    </ScrollView>
+        <CommandGetRouteSearchControllerState/>
+        <CommandSetRouteSearchControllerState/>
+      </ScrollView>
+    </React.Fragment>
   );
 };
 

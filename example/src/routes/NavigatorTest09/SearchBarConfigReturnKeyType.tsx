@@ -35,7 +35,7 @@ export function SearchBarConfigReturnKeyType(){
     <CardBody>
       <CardTitle
         title={'Set'}
-        pillTitle={'searchBarStyle'}
+        pillTitle={'returnKeyType'}
         subtitle={`Set SearchBarConfig.returnKeyType`}
       />
       <CardRowLabelDisplay
