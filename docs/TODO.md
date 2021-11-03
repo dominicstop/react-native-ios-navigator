@@ -362,6 +362,10 @@
 
 <br>
 
+- [x] (Commit: `c7fe3f9`): **Fix**: Fix route search controller not being created/initialized properly when `RouteOptions.searchBarConfig` is set after the route has already been pushed.
+
+<br>
+
 ### Version: `0.4.2`
 
 - [x] (Commit: `e8088ae`) **Refactor**: Update `NavigatorRouteView` to separately store the `routeOptions` provided by  `RouteViewPortal` and the `NavigatorRouteView.setRouteOptions` command.
