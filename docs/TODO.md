@@ -2,9 +2,16 @@
 
 ## In Progress
 
+* [ ] **Implement**: Impl. search route module command `setSearchBarState`.
+	* Set all the "search bar"-related properties that cannot be mapped to a prop (e.g. since some properties can be changed from the native side, causing the JS value to be out of sync since the data flows only in one direction).
+	* Includes: `UISearchController.isActive`, the current value of the search bar text filed, etc.
+
 <br>
 
 ## Unsorted
+
+- [ ] 
+- [ ] `isTranslucent` not working.
 
 - [ ] **Implement**: Update `RNIImageItem`: Make width/height optional (e.g. rely on `defaultSize`)
 - [ ] **Cleanup**: Rewrite  `getSecondToLastRouteVC`
@@ -68,17 +75,11 @@
 	* [ ] **Implement**: Add support for programmatically showing/dismissing the search bar.
 		* This can implemented via the [`UISearchController.isActive`](https://developer.apple.com/documentation/uikit/uisearchcontroller/1618659-isactive) property.
 		* Toggle `UISearchController.isActive` via a route module command. This can potentially be done async with the promise resolving when the transition is finished.
-		* Also: this has to be paired with another command that read the current value.
+		* Also: this has to be paired with another command that reads the current value.
 		* This can be impl. so that it directly maps to a boolean prop, and set the `UISearchController.isActive` in  a property wrapper (i.e. `willSet`/`didSet`).
-			* However, the value from JS and native will always eventually diverge since its not being bi-directionally (e.g. the prop value is `true`, but the search bar can be dismissed by the user so the actual value becomes `false`).
+			* However, the value from JS and native will always eventually diverge since its not being set bi-directionally (e.g. the prop value is `true`, but the search bar can be dismissed by the user so the actual value becomes `false`).
 			* Encountered the same problem with `UINavigationBar.isHidden` or with state-controlled text fields.
 		* Alternatively, the `isActive` property can also be set via `setSearchBarState` command.
-	* [ ] **Implement**: Impl. search route module command `setSearchBarState`.
-		* Set all the "search bar"-related properties that cannot be mapped to a prop (e.g. since some properties can be changed from the native side, causing the JS value to be out of sync since the data flows only in one direction).
-		* Includes: `UISearchController.isActive`, the current value of the search bar text filed, etc.
-	* [ ] **Implement**: Impl. search route module command `getSearchBarState`. 
-		* Returns object that contains: search bar text, `isActive`,  `isSearchResultsButtonSelected`, `showsCancelButton`, etc.
-		* Reads the properties and returns the current state of the search bar.
 	* [ ] **Implement**: Add support for changing the Search Icon in a `UISearchBar`.
 		- Set via `searchBar.setRightImage` (i.e. the `textfield.rightView`  bookmark icon), and `searchBar.setLeftImage`.
 		- [Reference #1](https://betterprogramming.pub/how-to-change-the-search-icon-in-a-uisearchbar-150b775fb6c8), [Reference #2](https://medium.com/flawless-app-stories/customize-uisearchbar-for-different-ios-versions-6ee02f4d4419)
@@ -87,13 +88,15 @@
 	* [ ] **Implement**: Add support for showing a `searchResultsController` + react view
 		-  The react view will  be "provided" by the route via the route portal.
 	* [ ] **Implement**: Add support for configuring/setting the scope bar/`scopeButtonTitles`.
-		* Forward search bar event: `selectedScopeButtonIndexDidChange`.
-	* [ ] **Implement**: Add support for search tokens.
-		* Impl. setting the `tokenBackgroundColor`.
+		* Also, forward search bar event: `selectedScopeButtonIndexDidChange`.
+	* [ ] **Implement**: Impl. support for configuring `UISearchTextField`: e.g. add support for search tokens.
+		* Impl. setting the `tokenBackgroundColor`, etc,
 	* [ ] **Implement**: Expose remaining `UISearchController` events to react e.g. `willDismissSearchController`, `didDismissSearchController`, `willPresentSearchController`, and `didPresentSearchController`.
 	* [ ] **Implement:** Expose `UITextInputTraits`-related properies for `UISearchBar` .
 		* E.g.  `keyboardType`, `textContentType`, etc.
-	* [ ] **Implement**: Add missing impl. for setting the other `UISearchBar` properties, e.g. `showsSearchResultsButton`, background images, etc.
+	* [ ] **Implement**: Add missing impl. for setting the other `UISearchBar` properties, e.g. `showsSearchResultsButton`, `prompt`,  background images, etc.
+	* [ ] **Implement**: Add support for `inputAssistantItem` (iPad only).
+	* [ ] **Implement**: Add support for `inputAccessoryView`.
 
 <br>
 
@@ -348,6 +351,14 @@
 	* [x] (Commit: `7a25338`) **Implement**: Add convenience navigation command: `getRouteOptionsForCurrentRoute` .
 	* [x] (Commit: `829f16a`) **Implement**: Add convenience navigation command: `setRouteOptionsForPreviousRoute` .
 	* [x] (Commit: `c4d0f80`) **Implement**: Add convenience navigation command: `getRouteOptionsForPreviousRoute` .
+
+<br>
+
+- [x] (Commit: `4766bf8`) **Fix**: Fixed `RNISearchControllerConfig` reset logic (e.g. `placeholderTextColor`, `leftIconTintColor`, etc).
+
+* [x] (Commit: `bc03f8b`) **Implement**: Impl. search route module command `getRouteSearchControllerState`. 
+	* Returns object that contains: search bar text, `isActive`,  `isSearchResultsButtonSelected`, `showsCancelButton`, etc.
+	* Reads the properties and returns the current state of the search bar.
 
 <br>
 
