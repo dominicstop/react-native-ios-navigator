@@ -17,7 +17,7 @@ import { SearchControllerConfigAutomaticallyShowsCancelButton } from './SearchCo
 
 import { CustomSearchBarConfigLeftIconTintColor } from './CustomSearchBarConfigLeftIconTintColor';
 import { CustomSearchBarConfigPlaceholderTextColor } from './CustomSearchBarConfigPlaceholderTextColor';
-import { TestCommandGetRouteSearchControllerState } from './TestCommandGetRouteSearchControllerState';
+import { CommandGetRouteSearchControllerState } from './CommandGetRouteSearchControllerState';
 
 
 export function NavigatorTest09(){
@@ -40,7 +40,7 @@ export function NavigatorTest09(){
       <CustomSearchBarConfigLeftIconTintColor/>
       <CustomSearchBarConfigPlaceholderTextColor/>
 
-      <TestCommandGetRouteSearchControllerState/>
+      <CommandGetRouteSearchControllerState/>
     </ScrollView>
   );
 };

@@ -6,7 +6,7 @@ import { CardBody, CardTitle, CardButton } from '../../components/ui/Card';
 import { ObjectPropertyDisplay } from '../../components/ui/ObjectPropertyDisplay';
 
 
-export function TestCommandGetRouteSearchControllerState(){
+export function CommandGetRouteSearchControllerState(){
   const navigation = useNavigation();
   
   const [results, setResults] = 
