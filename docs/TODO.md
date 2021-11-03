@@ -2,10 +2,6 @@
 
 ## In Progress
 
-* [ ] **Implement**: Impl. search route module command `setSearchBarState`.
-	* Set all the "search bar"-related properties that cannot be mapped to a prop (e.g. since some properties can be changed from the native side, causing the JS value to be out of sync since the data flows only in one direction).
-	* Includes: `UISearchController.isActive`, the current value of the search bar text filed, etc.
-
 <br>
 
 ## Unsorted
@@ -363,6 +359,10 @@
 <br>
 
 - [x] (Commit: `c7fe3f9`): **Fix**: Fix route search controller not being created/initialized properly when `RouteOptions.searchBarConfig` is set after the route has already been pushed.
+
+* [x] (Commit: `77ccc0c`) **Implement**: Impl. search route module command `setSearchBarState`.
+	* Set all the "search bar"-related properties that cannot be mapped to a prop (e.g. since some properties can be changed from the native side, causing the JS value to be out of sync since the data flows only in one direction).
+	* Includes: `UISearchController.isActive`, the current value of the search bar text filed, etc.
 
 <br>
 
