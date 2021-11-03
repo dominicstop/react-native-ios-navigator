@@ -943,7 +943,9 @@ See "[`NavigatorView` Misc. Convenience Commands](PLACE_HOLDER_LINK)" section fo
 | 🔤  `getRouteOptions`<br/><br/>⚛️  `() => RouteOptions` | TBA |
 | 🔤  `setRouteOptions`<br/><br/>⚛️  `(routeOptions: RouteOptions | null) => void` | TBA |
 | 🔤  `setHidesBackButton`<br/><br/>⚛️  `(isHidden: boolean, animated: boolean) => void` | TBA |
-| 🔤  `getRouteConstants`<br/><br/>⚛️  `() => Promise<RouteConstantsObject>` | TBA |
+| 🔤  `getRouteConstants`<br/><br/>⚛️  `() => Promise<RouteConstantsObject>`<br><br>📌 [`RouteConstantsObject`](PLACE_HOLDER_LINK) | TBA |
+| 🔤  `getRouteSearchControllerState`<br/><br/>⚛️  `() => Promise<RouteSearchControllerState>`<br/><br/>📌 [`RouteSearchControllerState`](PLACE_HOLDER_LINK) | TBA<br/><br/>📝 **Note**: Command will fail if the current route does not have a search config (i.e. `RouteOptions.searchBarConfig`), so make sure to provide a search config first.<br/><br/>💡 **Tip**: You can use this command to get the current text in the search bar, see whether the search bar is active or not, etc. |
+| 🔤  `getRouteSearchControllerState`<br/><br/>⚛️  `(state: Partial<RouteSearchControllerState>) => Promise<void>`<br/><br/>📌 [`RouteSearchControllerState`](PLACE_HOLDER_LINK) | TBA<br><br>📝 **Note**: Command will fail if the current route does not have a search config (i.e. `RouteOptions.searchBarConfig`), so make sure to provide a search config first.<br><br>💡 **Tip**: You can use this command to set the current text in the search bar, toggle whether the search bar is active, etc. |
 
 <br>
 
@@ -1304,8 +1306,6 @@ TBA
 
 <br>
 
-HeaderHeightConfig
-
 #### 📄 `RouteSearchControllerConfig`
 
 * 📌 **Declaration**: [`RouteSearchControllerConfig`](src/types/RouteSearchControllerConfig.ts)
@@ -1418,6 +1418,42 @@ TBA
 | 🔤  `activeRoutes`<br/><br/>⚛️  `Array<NativeRouteData>`<br><br>📌  [`NativeRouteData`](PLACE_HOLDER_LINK) | TBA |
 | 🔤  `topViewController?`<br/><br/>⚛️  [`NativeRouteData`](PLACE_HOLDER_LINK) | TBA |
 | 🔤  `visibleViewController?`<br/><br/>⚛️  [`NativeRouteData`](PLACE_HOLDER_LINK) | TBA |
+
+<br>
+
+#### 📄 `RouteSearchControllerState.ts`
+
+* 📌 **Declaration**: [`RouteSearchControllerState.ts`](src/types/RouteSearchControllerState.ts)
+
+##### Object Type: `SearchBarState`
+
+TBA
+
+| Name and Type                                            | Description                                                  |
+| :------------------------------------------------------- | ------------------------------------------------------------ |
+| 🔤  `text`<br/><br/>⚛️  `string`                           | TBA<br><br>📌 Maps to [`UISearchBar.text`](https://developer.apple.com/documentation/uikit/uisearchbar/1624282-text) property in the apple docs. |
+| 🔤  `showsBookmarkButton`<br/><br/>⚛️  `boolean`           | TBA<br/><br/>📌 Maps to [`UISearchBar.showsBookmarkButton`](https://developer.apple.com/documentation/uikit/uisearchbar/1624298-showsbookmarkbutton) property in the apple docs. |
+| 🔤  `showsCancelButton`<br/><br/>⚛️  `boolean`             | TBA<br/><br/>📌 Maps to [`UISearchBar.showsCancelButton`](https://developer.apple.com/documentation/uikit/uisearchbar/1624283-showscancelbutton) property in the apple docs. |
+| 🔤  `showsSearchResultsButton`<br/><br/>⚛️  `boolean`      | TBA<br/><br/>📌 Maps to [`UISearchBar.showsSearchResultsButton`](https://developer.apple.com/documentation/uikit/uisearchbar/1624273-showssearchresultsbutton) property in the apple docs. |
+| 🔤  `showsScopeBar`<br/><br/>⚛️  `boolean`                 | TBA<br/><br/>📌 Maps to [`UISearchBar.showsScopeBar`](https://developer.apple.com/documentation/uikit/uisearchbar/1624319-showsscopebar) property in the apple docs. |
+| 🔤  `selectedScopeButtonIndex`<br/><br/>⚛️  `number`       | TBA<br/><br/>📌 Maps to [`UISearchBar.selectedScopeButtonIndex`](https://developer.apple.com/documentation/uikit/uisearchbar/1624287-selectedscopebuttonindex) property in the apple docs. |
+| 🔤  `isSearchResultsButtonSelected`<br/><br/>⚛️  `boolean` | TBA<br/><br/>📌 Maps to [`UISearchBar.isSearchResultsButtonSelected`](https://developer.apple.com/documentation/uikit/uisearchbar/1624285-issearchresultsbuttonselected) property in the apple docs. |
+
+<br>
+
+##### Object Type: `SearchControllerState`
+
+TBA
+
+| Name and Type                       | Description                                                  |
+| :---------------------------------- | ------------------------------------------------------------ |
+| 🔤  `isActive`<br/><br/>⚛️  `boolean` | TBA<br/><br/>📌 Maps to [`UISearchController.isActive`](https://developer.apple.com/documentation/uikit/uisearchcontroller/1618659-isactive) property in the apple docs. |
+
+<br>
+
+##### Object Type: `RouteSearchControllerState`
+
+An intersection type that supports a combination of properties from `SearchBarState` and  `SearchControllerState`,  i.e. equivalent to `SearchBarState & SearchControllerState` in typescript.
 
 <br>
 
