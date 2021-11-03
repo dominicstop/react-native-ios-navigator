@@ -44,7 +44,7 @@ internal class RNINavigatorViewModule: NSObject {
         guard let navigatorView = self.getNavigatorView(node) else {
           throw RNINavigatorError(
             code: .invalidReactTag,
-            domain: "RNINavigatorViewModule.push"
+            domain: "\(String(describing: Self.self)).\(#function)"
           );
         };
       
@@ -74,7 +74,7 @@ internal class RNINavigatorViewModule: NSObject {
         guard let navigatorView = self.getNavigatorView(node) else {
           throw RNINavigatorError(
             code: .invalidReactTag,
-            domain: "RNINavigatorViewModule.pop"
+            domain: "\(String(describing: Self.self)).\(#function)"
           );
         };
 
@@ -108,7 +108,7 @@ internal class RNINavigatorViewModule: NSObject {
         guard let navigatorView = self.getNavigatorView(node) else {
           throw RNINavigatorError(
             code: .invalidReactTag,
-            domain: "RNINavigatorViewModule.setNavigationBarHidden"
+            domain: "\(String(describing: Self.self)).\(#function)"
           );
         };
         
@@ -137,7 +137,7 @@ internal class RNINavigatorViewModule: NSObject {
         guard let navigatorView = self.getNavigatorView(node) else {
           throw RNINavigatorError(
             code: .invalidReactTag,
-            domain: "RNINavigatorViewModule.popToRoot"
+            domain: "\(String(describing: Self.self)).\(#function)"
           );
         };
               
@@ -169,7 +169,7 @@ internal class RNINavigatorViewModule: NSObject {
         guard let navigatorView = self.getNavigatorView(node) else {
           throw RNINavigatorError(
             code: .invalidReactTag,
-            domain: "RNINavigatorViewModule.removeRoute"
+            domain: "\(String(describing: Self.self)).\(#function)"
           );
         };
     
@@ -206,7 +206,7 @@ internal class RNINavigatorViewModule: NSObject {
         guard let navigatorView = self.getNavigatorView(node) else {
           throw RNINavigatorError(
             code: .invalidReactTag,
-            domain: "RNINavigatorViewModule.replaceRoute"
+            domain: "\(String(describing: Self.self)).\(#function)"
           );
         };
     
@@ -242,7 +242,7 @@ internal class RNINavigatorViewModule: NSObject {
         guard let navigatorView = self.getNavigatorView(node) else {
           throw RNINavigatorError(
             code: .invalidReactTag,
-            domain: "RNINavigatorViewModule.removeRoutes"
+            domain: "\(String(describing: Self.self)).\(#function)"
           );
         };
     
@@ -284,7 +284,7 @@ internal class RNINavigatorViewModule: NSObject {
         guard let navigatorView = self.getNavigatorView(node) else {
           throw RNINavigatorError(
             code: .invalidReactTag,
-            domain: "RNINavigatorViewModule.insertRoute"
+            domain: "\(String(describing: Self.self)).\(#function)"
           );
         };
     
@@ -319,7 +319,7 @@ internal class RNINavigatorViewModule: NSObject {
         guard let navigatorView = self.getNavigatorView(node) else {
           throw RNINavigatorError(
             code: .invalidReactTag,
-            domain: "RNINavigatorViewModule.setRoutes"
+            domain: "\(String(describing: Self.self)).\(#function)"
           );
         };
     
@@ -362,7 +362,7 @@ internal class RNINavigatorViewModule: NSObject {
         guard let navigatorView = self.getNavigatorView(node) else {
           throw RNINavigatorError(
             code: .invalidReactTag,
-            domain: "RNINavigatorViewModule.sendCustomCommandToNative"
+            domain: "\(String(describing: Self.self)).\(#function)"
           );
         };
         
@@ -397,7 +397,7 @@ internal class RNINavigatorViewModule: NSObject {
         guard let navigatorView = self.getNavigatorView(node) else {
           throw RNINavigatorError(
             code: .invalidReactTag,
-            domain: "RNINavigatorViewModule.getNavigatorConstants"
+            domain: "\(String(describing: Self.self)).\(#function)"
           );
         };
         
@@ -425,7 +425,7 @@ internal class RNINavigatorViewModule: NSObject {
         guard let navigatorView = self.getNavigatorView(node) else {
           throw RNINavigatorError(
             code: .invalidReactTag,
-            domain: "RNINavigatorViewModule.getNavigatorActiveRoutes"
+            domain: "\(String(describing: Self.self)).\(#function)"
           );
         };
         
@@ -452,7 +452,7 @@ internal class RNINavigatorViewModule: NSObject {
         guard let navigatorView = self.getNavigatorView(node) else {
           throw RNINavigatorError(
             code: .invalidReactTag,
-            domain: "RNINavigatorViewModule.dismissModal"
+            domain: "\(String(describing: Self.self)).\(#function)"
           );
         };
         

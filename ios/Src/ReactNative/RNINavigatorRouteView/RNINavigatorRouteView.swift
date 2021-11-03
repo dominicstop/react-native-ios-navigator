@@ -689,7 +689,7 @@ internal extension RNINavigatorRouteView {
     guard let routeVC = self.routeVC else {
       throw RNINavigatorError(
         code: .libraryError,
-        domain: "RNINavigatorRouteView.getConstants",
+        domain: "\(String(describing: Self.self)).\(#function)",
         message:
           "No corresponding 'routeVC' found for the route view."
         + " The route view may not be completely initialized yet."

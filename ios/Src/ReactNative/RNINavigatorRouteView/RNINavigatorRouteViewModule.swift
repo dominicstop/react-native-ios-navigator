@@ -27,7 +27,7 @@ internal class RNINavigatorRouteViewModule: NSObject {
   };
   
   // MARK: - Module Commands
-  // ----------------------
+  // -----------------------
     
   @objc func setHidesBackButton(
     _ node  : NSNumber,
@@ -44,7 +44,7 @@ internal class RNINavigatorRouteViewModule: NSObject {
         else {
           throw RNINavigatorError(
             code: .invalidReactTag,
-            domain: "RNINavigatorRouteViewModule.setHidesBackButton",
+            domain: "\(String(describing: Self.self)).\(#function)",
             message: "no corresponding 'routeVC' found for the 'routeView'"
           );
         };
@@ -73,7 +73,7 @@ internal class RNINavigatorRouteViewModule: NSObject {
         guard let routeView = self.getRouteView(node) else {
           throw RNINavigatorError(
             code: .invalidReactTag,
-            domain: "RNINavigatorRouteViewModule.getRouteConstants"
+            domain: "\(String(describing: Self.self)).\(#function)"
           );
         };
         
