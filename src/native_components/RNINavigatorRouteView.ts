@@ -3,7 +3,7 @@ import { requireNativeComponent, ViewStyle } from 'react-native';
 import type { NavBarBackItemConfig, NavBarItemsConfig } from '../types/NavBarItemConfig';
 import type { NavBarAppearanceCombinedConfig } from '../types/NavBarAppearanceConfig';
 import type { RouteSearchControllerConfig } from '../types/RouteSearchControllerConfig';
-import type { OnPressNavBarItemEvent, OnRouteFocusEvent, OnRouteBlurEvent, OnRoutePopEvent, OnRoutePushEvent, OnSearchBarCancelButtonClickedEvent, OnSearchBarSearchButtonClickedEvent, OnUpdateSearchResultsEvent } from '../types/RNINavigatorRouteViewEvents';
+import type { OnPressNavBarItemEvent, OnRouteFocusEvent, OnRouteBlurEvent, OnRoutePopEvent, OnRoutePushEvent, OnSearchBarCancelButtonClickedEvent, OnSearchBarSearchButtonClickedEvent, OnUpdateSearchResultsEvent, OnWillDismissSearchControllerEvent, OnDidDismissSearchControllerEvent, OnWillPresentSearchControllerEvent, OnDidPresentSearchControllerEvent } from '../types/RNINavigatorRouteViewEvents';
 import type { RouteTransitionConfig } from '../types/NavigationCommands';
 
 
@@ -122,6 +122,14 @@ export type RNINavigatorRouteViewProps = {
   
   /** The search button (usually in the keyboard) was tapped. */
   onSearchBarSearchButtonClicked?: OnSearchBarSearchButtonClickedEvent;
+
+  onWillDismissSearchController?: OnWillDismissSearchControllerEvent;
+
+  onDidDismissSearchController?: OnDidDismissSearchControllerEvent;
+
+  onWillPresentSearchController?: OnWillPresentSearchControllerEvent;
+
+  onDidPresentSearchController?: OnDidPresentSearchControllerEvent;
 };
 
 export const RNINavigatorRouteView = 

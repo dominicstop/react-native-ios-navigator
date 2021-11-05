@@ -14,6 +14,9 @@ type BaseEventObject = Pick<RNINavigatorRouteViewProps,
   | 'routeIndex'
 >;
 
+// Route Lifecycle-Related Events
+// ------------------------------
+
 export type OnRoutePushEventObject = {
   nativeEvent: BaseEventObject;
 };
@@ -37,6 +40,9 @@ export type OnRouteBlurEventObject = {
   };
 };
 
+// Navigation Bar Item-Related Events
+// ----------------------------------
+
 export type OnPressNavBarItemEventObject = {
   nativeEvent: BaseEventObject & { 
     key  : string;
@@ -44,6 +50,9 @@ export type OnPressNavBarItemEventObject = {
     index: string;
   };
 }; 
+
+// Search Releated Events
+// ----------------------
 
 export type OnUpdateSearchResultsEventObject = {
   nativeEvent: BaseEventObject & { 
@@ -61,9 +70,38 @@ export type OnSearchBarSearchButtonClickedEventObject = {
     text?: string;
   };
 };
+
+export type OnWillDismissSearchControllerEventObject = {
+  nativeEvent: BaseEventObject & {
+    text?: string;
+  };
+};
+
+export type OnDidDismissSearchControllerEventObject = {
+  nativeEvent: BaseEventObject & {
+    text?: string;
+  };
+};
+
+export type OnWillPresentSearchControllerEventObject = {
+  nativeEvent: BaseEventObject & {
+    text?: string;
+  };
+};
+
+export type OnDidPresentSearchControllerEventObject = {
+  nativeEvent: BaseEventObject & {
+    text?: string;
+  };
+};
+
 //#endregion
 
 //#region - Event Handler Types
+
+// Route Lifecycle-Related Events
+// ------------------------------
+
 export type OnRoutePushEvent = (
   event: Readonly<OnRoutePushEventObject>
 ) => void;
@@ -80,9 +118,15 @@ export type OnRoutePopEvent = (
   event: Readonly<OnRoutePopEventObject>
 ) => void;
 
+// Navigation Bar Item-Related Events
+// ----------------------------------
+
 export type OnPressNavBarItemEvent = (
   event: Readonly<OnPressNavBarItemEventObject>
 ) => void;
+
+// Search Releated Events
+// ----------------------
 
 export type OnUpdateSearchResultsEvent = (
   event: Readonly<OnUpdateSearchResultsEventObject>
@@ -95,4 +139,21 @@ export type OnSearchBarCancelButtonClickedEvent = (
 export type OnSearchBarSearchButtonClickedEvent = (
   event: Readonly<OnSearchBarSearchButtonClickedEventObject>
 ) => void;
+
+export type OnWillDismissSearchControllerEvent = (
+  event: Readonly<OnWillDismissSearchControllerEventObject>
+) => void;
+
+export type OnDidDismissSearchControllerEvent = (
+  event: Readonly<OnDidDismissSearchControllerEventObject>
+) => void;
+
+export type OnWillPresentSearchControllerEvent = (
+  event: Readonly<OnWillPresentSearchControllerEventObject>
+) => void;
+
+export type OnDidPresentSearchControllerEvent = (
+  event: Readonly<OnDidPresentSearchControllerEventObject>
+) => void;
+
 //#endregion

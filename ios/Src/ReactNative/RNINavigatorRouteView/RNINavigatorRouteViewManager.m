@@ -32,6 +32,12 @@ RCT_EXPORT_VIEW_PROPERTY(onUpdateSearchResults, RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onSearchBarCancelButtonClicked, RCTBubblingEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onSearchBarSearchButtonClicked, RCTBubblingEventBlock);
 
+RCT_EXPORT_VIEW_PROPERTY(onWillDismissSearchController, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onDidDismissSearchController , RCTBubblingEventBlock);
+
+RCT_EXPORT_VIEW_PROPERTY(onWillPresentSearchController, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onDidPresentSearchController , RCTBubblingEventBlock);
+
 // MARK: - Export Props - Values
 // ----------------------------
 

@@ -407,6 +407,7 @@ internal class RNINavigatorReactRouteViewController: RNINavigatorRouteBaseViewCo
     let searchController = UISearchController(searchResultsController: nil);
     config.updateSearchController(searchController);
     
+    searchController.delegate = self;
     searchController.searchResultsUpdater = self;
     searchController.searchBar.delegate = self;
     
@@ -727,7 +728,6 @@ extension RNINavigatorReactRouteViewController:
 // MARK: - Extension: UISearchResultsUpdating
 // -----------------------------------------
 
-/// Handle search controller-related events
 extension RNINavigatorReactRouteViewController: UISearchResultsUpdating {
   func updateSearchResults(for searchController: UISearchController) {
     
@@ -741,7 +741,6 @@ extension RNINavigatorReactRouteViewController: UISearchResultsUpdating {
 // MARK: - Extension: UISearchBarDelegate
 // -------------------------------------
 
-/// Handle search bar-related events
 extension RNINavigatorReactRouteViewController: UISearchBarDelegate {
   func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
     self.routeView?.notifyOnSearchBarCancelButtonClicked();
@@ -750,6 +749,35 @@ extension RNINavigatorReactRouteViewController: UISearchBarDelegate {
   func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
     self.routeView?.notifyOnSearchBarSearchButtonClicked(
       searchText: searchBar.text
+    );
+  };
+};
+
+// MARK: - Extension: UISearchControllerDelegate
+// ---------------------------------------------
+
+extension RNINavigatorReactRouteViewController: UISearchControllerDelegate {
+  func willDismissSearchController(_ searchController: UISearchController){
+    self.routeView?.notifyOnWillDismissSearchController(
+      searchText: searchController.searchBar.text
+    );
+  };
+  
+  func didDismissSearchController(_ searchController: UISearchController){
+    self.routeView?.notifyOnDidDismissSearchController(
+      searchText: searchController.searchBar.text
+    );
+  };
+  
+  func willPresentSearchController(_ searchController: UISearchController){
+    self.routeView?.notifyOnWillPresentSearchController(
+      searchText: searchController.searchBar.text
+    );
+  };
+  
+  func didPresentSearchController(_ searchController: UISearchController){
+    self.routeView?.notifyOnDidPresentSearchController(
+      searchText: searchController.searchBar.text
     );
   };
 };

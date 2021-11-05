@@ -1,9 +1,8 @@
 
 import React from 'react';
 
-
 import type { NavigatorRouteView } from '../components/NavigatorRouteView';
-import type { OnRoutePopEvent, OnRoutePushEvent, OnRouteFocusEvent, OnRouteBlurEvent, OnPressNavBarItemEvent, OnUpdateSearchResultsEvent, OnSearchBarCancelButtonClickedEvent, OnSearchBarSearchButtonClickedEvent } from '../types/RNINavigatorRouteViewEvents';
+import type { OnRoutePopEvent, OnRoutePushEvent, OnRouteFocusEvent, OnRouteBlurEvent, OnPressNavBarItemEvent, OnUpdateSearchResultsEvent, OnSearchBarCancelButtonClickedEvent, OnSearchBarSearchButtonClickedEvent, OnWillDismissSearchControllerEvent, OnDidDismissSearchControllerEvent, OnWillPresentSearchControllerEvent, OnDidPresentSearchControllerEvent } from '../types/RNINavigatorRouteViewEvents';
 
 import { NavigatorRouteViewEventEmitter, NavigatorRouteViewEvents } from '../types/NavigatorRouteViewEventEmitter';
 
@@ -27,8 +26,16 @@ type RouteViewEventsProps = {
   onPressNavBarLeftItem ?: OnPressNavBarItemEvent;
   onPressNavBarRightItem?: OnPressNavBarItemEvent;
 
-  // search events
+  // search lifecycle events
   onUpdateSearchResults?: OnUpdateSearchResultsEvent;
+
+  onWillDismissSearchController?: OnWillDismissSearchControllerEvent;
+  onDidDismissSearchController?: OnDidDismissSearchControllerEvent;
+
+  onWillPresentSearchController?: OnWillPresentSearchControllerEvent;
+  onDidPresentSearchController?: OnDidPresentSearchControllerEvent;
+
+  // search events
   onSearchBarCancelButtonClicked?: OnSearchBarCancelButtonClickedEvent;
   onSearchBarSearchButtonClicked?: OnSearchBarSearchButtonClickedEvent;
 };
@@ -123,6 +130,26 @@ export class RouteViewEvents extends React.Component<RouteViewEventsProps> {
       NavigatorRouteViewEvents.onSearchBarSearchButtonClicked,
       this._handleOnSearchBarSearchButtonClicked
     );
+
+    routeEmitterRef.addListener(
+      NavigatorRouteViewEvents.onWillDismissSearchController,
+      this._handleOnWillDismissSearchController
+    );
+
+    routeEmitterRef.addListener(
+      NavigatorRouteViewEvents.onDidDismissSearchController,
+      this._handleOnDidDismissSearchController
+    );
+
+    routeEmitterRef.addListener(
+      NavigatorRouteViewEvents.onWillPresentSearchController,
+      this._handleOnWillPresentSearchController
+    );
+
+    routeEmitterRef.addListener(
+      NavigatorRouteViewEvents.onDidPresentSearchController,
+      this._handleOnDidPresentSearchController
+    );
   };
 
   componentWillUnmount(){
@@ -176,6 +203,26 @@ export class RouteViewEvents extends React.Component<RouteViewEventsProps> {
     routeEmitterRef.removeListener(
       NavigatorRouteViewEvents.onPressNavBarRightItem,
       this._handleOnPressNavBarRightItem
+    );
+
+    routeEmitterRef.removeListener(
+      NavigatorRouteViewEvents.onWillDismissSearchController,
+      this._handleOnWillDismissSearchController
+    );
+
+    routeEmitterRef.removeListener(
+      NavigatorRouteViewEvents.onDidDismissSearchController,
+      this._handleOnDidDismissSearchController
+    );
+
+    routeEmitterRef.removeListener(
+      NavigatorRouteViewEvents.onWillPresentSearchController,
+      this._handleOnWillPresentSearchController
+    );
+
+    routeEmitterRef.removeListener(
+      NavigatorRouteViewEvents.onDidPresentSearchController,
+      this._handleOnDidPresentSearchController
     );
   };
 
@@ -232,6 +279,23 @@ export class RouteViewEvents extends React.Component<RouteViewEventsProps> {
   _handleOnSearchBarSearchButtonClicked: OnSearchBarSearchButtonClickedEvent = (params) => {
     this.props.onSearchBarSearchButtonClicked?.(params);
   };
+
+  _handleOnWillDismissSearchController: OnWillDismissSearchControllerEvent = (params) => {
+    this.props.onWillDismissSearchController?.(params);
+  };
+
+  _handleOnDidDismissSearchController: OnDidDismissSearchControllerEvent = (params) => {
+    this.props.onDidDismissSearchController?.(params);
+  };
+
+  _handleOnWillPresentSearchController: OnWillPresentSearchControllerEvent = (params) => {
+    this.props.onWillPresentSearchController?.(params);
+  };
+
+  _handleOnDidPresentSearchController: OnDidPresentSearchControllerEvent = (params) => {
+    this.props.onDidPresentSearchController?.(params);
+  };
+
   //#endregion
 
   render(){

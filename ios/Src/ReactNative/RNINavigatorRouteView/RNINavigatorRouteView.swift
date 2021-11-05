@@ -100,6 +100,12 @@ internal class RNINavigatorRouteView: UIView {
   @objc var onSearchBarCancelButtonClicked: RCTBubblingEventBlock?;
   @objc var onSearchBarSearchButtonClicked: RCTBubblingEventBlock?;
   
+  @objc var onWillDismissSearchController: RCTBubblingEventBlock?;
+  @objc var onDidDismissSearchController: RCTBubblingEventBlock?;
+  
+  @objc var onWillPresentSearchController: RCTBubblingEventBlock?;
+  @objc var onDidPresentSearchController: RCTBubblingEventBlock?;
+  
   // MARK: - RN Exported Props
   // ------------------------
   
@@ -711,92 +717,9 @@ internal extension RNINavigatorRouteView {
 };
 
 // MARK: - Internal Functions
-// -------------------------
+// --------------------------
 
 internal extension RNINavigatorRouteView {
-  
-  func setInitialSize(_ newBounds: CGRect){
-    self.didSetInitialHeight = true;
-    self.notifyForBoundsChange(newBounds);
-  };
-  
-  /// Notify `RouteView`'s bounds had changed and resize
-  func notifyForBoundsChange(_ newBounds: CGRect){
-    guard let bridge    = self.bridge,
-          let reactView = self.reactRouteContent
-    else { return };
-    
-    let didChangeSize =
-         self.bounds.width  != newBounds.size.width
-      || self.bounds.height != newBounds.size.height
-      || reactView.bounds.width  != newBounds.size.width
-      || reactView.bounds.height != newBounds.size.height;
-    
-    if didChangeSize {
-      // update react view's size
-      self.bounds = newBounds;
-      bridge.uiManager.setSize(newBounds.size, for: reactView);
-    };
-  };
-  
-  /// notify js `RNINavigatorRouteView` that its about to be/has been pushed
-  func notifyOnRoutePush(isDone: Bool){
-    let dict = self.createEventPayload();
-    
-    // send event
-    (isDone ? self.onRouteDidPush : self.onRouteWillPush)?(dict);
-  };
-  
-  /// notify js `RNINavigatorRouteView` that its about to be popped
-  func notifyOnRoutePop(isDone: Bool, isUserInitiated: Bool){
-    var dict = self.createEventPayload();
-    dict["isUserInitiated"] = isUserInitiated;
-    
-    // send event
-    (isDone ? self.onRouteDidPop : self.onRouteWillPop)?(dict);
-  };
-  
-  func notifyOnRouteFocus(isDone: Bool, isAnimated: Bool, isFirstFocus: Bool){
-    var dict = self.createEventPayload();
-    dict["isAnimated"] = isAnimated;
-    dict["isFirstFocus"] = isFirstFocus;
-    
-    // send event
-    (isDone ? self.onRouteDidFocus : self.onRouteWillFocus)?(dict);
-  };
-  
-  func notifyOnRouteBlur(isDone: Bool, isAnimated: Bool){
-    var dict = self.createEventPayload();
-    dict["isAnimated"] = isAnimated;
-    
-    // send event
-    (isDone ? self.onRouteDidBlur : self.onRouteWillBlur)?(dict);
-  };
-  
-  func notifyOnUpdateSearchResults(searchText: String?, isActive: Bool){
-    var dict = self.createEventPayload();
-    dict["isActive"] = isActive;
-    
-    if let searchText = searchText {
-      dict["text"] = searchText;
-    };
-    
-    self.onUpdateSearchResults?(dict);
-  };
-  
-  func notifyOnSearchBarCancelButtonClicked(){
-    self.onSearchBarCancelButtonClicked?(self.createEventPayload());
-  };
-  
-  func notifyOnSearchBarSearchButtonClicked(searchText: String?){
-    var dict = self.createEventPayload();
-    
-    if let searchText = searchText {
-      dict["text"] = searchText;
-    };
-    
-    self.onSearchBarSearchButtonClicked?(dict);
-  };
   
   /// Once we're done w/ this "route view" (e.g. it has been popped or removed),
   /// then we need to cleanup to prevent this instance from leaking.
@@ -856,6 +779,138 @@ internal extension RNINavigatorRouteView {
     self.reactNavBarLeftItem  = nil;
     self.reactNavBarRightItem = nil;
     self.reactNavBarTitleItem = nil;
+  };
+  
+  func setInitialSize(_ newBounds: CGRect){
+    self.didSetInitialHeight = true;
+    self.notifyForBoundsChange(newBounds);
+  };
+  
+  /// Notify `RouteView`'s bounds had changed and resize
+  func notifyForBoundsChange(_ newBounds: CGRect){
+    guard let bridge    = self.bridge,
+          let reactView = self.reactRouteContent
+    else { return };
+    
+    let didChangeSize =
+         self.bounds.width  != newBounds.size.width
+      || self.bounds.height != newBounds.size.height
+      || reactView.bounds.width  != newBounds.size.width
+      || reactView.bounds.height != newBounds.size.height;
+    
+    if didChangeSize {
+      // update react view's size
+      self.bounds = newBounds;
+      bridge.uiManager.setSize(newBounds.size, for: reactView);
+    };
+  };
+  
+  // MARK: - Route Lifecycle Events
+  // ------------------------------
+  
+  /// notify js `RNINavigatorRouteView` that its about to be/has been pushed
+  func notifyOnRoutePush(isDone: Bool){
+    let dict = self.createEventPayload();
+    
+    // send event
+    (isDone ? self.onRouteDidPush : self.onRouteWillPush)?(dict);
+  };
+  
+  /// notify js `RNINavigatorRouteView` that its about to be popped
+  func notifyOnRoutePop(isDone: Bool, isUserInitiated: Bool){
+    var dict = self.createEventPayload();
+    dict["isUserInitiated"] = isUserInitiated;
+    
+    // send event
+    (isDone ? self.onRouteDidPop : self.onRouteWillPop)?(dict);
+  };
+  
+  func notifyOnRouteFocus(isDone: Bool, isAnimated: Bool, isFirstFocus: Bool){
+    var dict = self.createEventPayload();
+    dict["isAnimated"] = isAnimated;
+    dict["isFirstFocus"] = isFirstFocus;
+    
+    // send event
+    (isDone ? self.onRouteDidFocus : self.onRouteWillFocus)?(dict);
+  };
+  
+  func notifyOnRouteBlur(isDone: Bool, isAnimated: Bool){
+    var dict = self.createEventPayload();
+    dict["isAnimated"] = isAnimated;
+    
+    // send event
+    (isDone ? self.onRouteDidBlur : self.onRouteWillBlur)?(dict);
+  };
+  
+  // MARK: - Search-Related Events
+  // -----------------------------
+  
+  func notifyOnSearchBarCancelButtonClicked(){
+    self.onSearchBarCancelButtonClicked?(self.createEventPayload());
+  };
+  
+  func notifyOnSearchBarSearchButtonClicked(searchText: String?){
+    var dict = self.createEventPayload();
+    
+    if let searchText = searchText {
+      dict["text"] = searchText;
+    };
+    
+    self.onSearchBarSearchButtonClicked?(dict);
+  };
+  
+  // MARK: - Search Lifecycle-Related Events
+  // ---------------------------------------
+  
+  func notifyOnUpdateSearchResults(searchText: String?, isActive: Bool){
+    var dict = self.createEventPayload();
+    dict["isActive"] = isActive;
+    
+    if let searchText = searchText {
+      dict["text"] = searchText;
+    };
+    
+    self.onUpdateSearchResults?(dict);
+  };
+  
+  func notifyOnWillDismissSearchController(searchText: String?){
+    var dict = self.createEventPayload();
+    
+    if let searchText = searchText {
+      dict["text"] = searchText;
+    };
+    
+    self.onWillDismissSearchController?(dict);
+  };
+  
+  func notifyOnDidDismissSearchController(searchText: String?){
+    var dict = self.createEventPayload();
+    
+    if let searchText = searchText {
+      dict["text"] = searchText;
+    };
+    
+    self.onDidDismissSearchController?(dict);
+  };
+  
+  func notifyOnWillPresentSearchController(searchText: String?){
+    var dict = self.createEventPayload();
+    
+    if let searchText = searchText {
+      dict["text"] = searchText;
+    };
+    
+    self.onWillPresentSearchController?(dict);
+  };
+  
+  func notifyOnDidPresentSearchController(searchText: String?){
+    var dict = self.createEventPayload();
+    
+    if let searchText = searchText {
+      dict["text"] = searchText;
+    };
+    
+    self.onDidPresentSearchController?(dict);
   };
 };
 

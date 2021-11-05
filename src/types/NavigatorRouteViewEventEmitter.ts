@@ -2,7 +2,7 @@
 
 import type { TSEventEmitter } from '@dominicstop/ts-event-emitter';
 
-import type { OnPressNavBarItemEventObject, OnRouteFocusEventObject, OnRouteBlurEventObject, OnRoutePopEventObject, OnRoutePushEventObject, OnSearchBarCancelButtonClickedEventObject, OnSearchBarSearchButtonClickedEventObject, OnUpdateSearchResultsEventObject } from "./RNINavigatorRouteViewEvents";
+import type { OnPressNavBarItemEventObject, OnRouteFocusEventObject, OnRouteBlurEventObject, OnRoutePopEventObject, OnRoutePushEventObject, OnSearchBarCancelButtonClickedEventObject, OnSearchBarSearchButtonClickedEventObject, OnUpdateSearchResultsEventObject, OnWillDismissSearchControllerEventObject, OnDidDismissSearchControllerEventObject, OnWillPresentSearchControllerEventObject, OnDidPresentSearchControllerEventObject } from "./RNINavigatorRouteViewEvents";
 import type { KeyMapType } from "./UtilityTypes";
 
 export enum NavigatorRouteViewEvents {
@@ -27,6 +27,11 @@ export enum NavigatorRouteViewEvents {
   
   onSearchBarCancelButtonClicked = "onSearchBarCancelButtonClicked",
   onSearchBarSearchButtonClicked = "onSearchBarSearchButtonClicked",
+
+  onWillDismissSearchController = "onWillDismissSearchController",
+  onDidDismissSearchController  = "onDidDismissSearchController" ,
+  onWillPresentSearchController = "onWillPresentSearchController",
+  onDidPresentSearchController  = "onDidPresentSearchController" ,
 };
 
 export type NavigatorRouteViewEventMap = KeyMapType<NavigatorRouteViewEvents, {
@@ -46,6 +51,11 @@ export type NavigatorRouteViewEventMap = KeyMapType<NavigatorRouteViewEvents, {
   onUpdateSearchResults         : OnUpdateSearchResultsEventObject;
   onSearchBarCancelButtonClicked: OnSearchBarCancelButtonClickedEventObject;
   onSearchBarSearchButtonClicked: OnSearchBarSearchButtonClickedEventObject;
+
+  onWillDismissSearchController: OnWillDismissSearchControllerEventObject;
+  onDidDismissSearchController : OnDidDismissSearchControllerEventObject;
+  onWillPresentSearchController: OnWillPresentSearchControllerEventObject;
+  onDidPresentSearchController : OnDidPresentSearchControllerEventObject;
 }>;
 
 export type NavigatorRouteViewEventEmitter = 

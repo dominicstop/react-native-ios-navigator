@@ -6,7 +6,7 @@ import { TSEventEmitter } from '@dominicstop/ts-event-emitter';
 import type { NavigationObject } from '../types/NavigationObject';
 import type { RouteOptions } from '../types/RouteOptions';
 import type { RenderNavItem, RenderRouteContent } from '../types/NavTypes';
-import type { OnRoutePopEvent, OnRoutePushEvent, OnPressNavBarItemEvent, OnRouteFocusEvent, OnRouteBlurEvent, OnUpdateSearchResultsEvent, OnSearchBarCancelButtonClickedEvent, OnSearchBarSearchButtonClickedEvent } from '../types/RNINavigatorRouteViewEvents';
+import type { OnRoutePopEvent, OnRoutePushEvent, OnPressNavBarItemEvent, OnRouteFocusEvent, OnRouteBlurEvent, OnUpdateSearchResultsEvent, OnSearchBarCancelButtonClickedEvent, OnSearchBarSearchButtonClickedEvent, OnWillDismissSearchControllerEvent, OnDidDismissSearchControllerEvent, OnWillPresentSearchControllerEvent, OnDidPresentSearchControllerEvent } from '../types/RNINavigatorRouteViewEvents';
 import type { RouteTransitionConfig } from '../types/NavigationCommands';
 import type { Nullish } from '../types/UtilityTypes';
 import type { RouteSearchControllerState } from '../types/RouteSearchControllerState';
@@ -676,6 +676,29 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
     this._emitter.emit(NavigatorRouteViewEvents.onSearchBarSearchButtonClicked, event);
   };
 
+  private _handleOnWillDismissSearchController: OnWillDismissSearchControllerEvent = (event) => {
+    if(this.props.routeID !== event.nativeEvent.routeID) return;
+
+    this._emitter.emit(NavigatorRouteViewEvents.onWillDismissSearchController, event);
+  };
+
+  private _handleOnDidDismissSearchController: OnDidDismissSearchControllerEvent = (event) => {
+    if(this.props.routeID !== event.nativeEvent.routeID) return;
+
+    this._emitter.emit(NavigatorRouteViewEvents.onDidDismissSearchController, event);
+  };
+
+  private _handleOnWillPresentSearchController: OnWillPresentSearchControllerEvent = (event) => {
+    if(this.props.routeID !== event.nativeEvent.routeID) return;
+
+    this._emitter.emit(NavigatorRouteViewEvents.onWillPresentSearchController, event);
+  };
+
+  private _handleOnDidPresentSearchController: OnDidPresentSearchControllerEvent = (event) => {
+    if(this.props.routeID !== event.nativeEvent.routeID) return;
+
+    this._emitter.emit(NavigatorRouteViewEvents.onDidPresentSearchController, event);
+  };
   //#endregion
   
   private _renderRouteContents = (navigation: NavigationObject) => {
@@ -772,7 +795,11 @@ export class NavigatorRouteView extends React.Component<NavigatorRouteViewProps,
           onUpdateSearchResults={this._handleOnUpdateSearchResults}
           onSearchBarCancelButtonClicked={this._handleOnSearchBarCancelButtonClicked}
           onSearchBarSearchButtonClicked={this._handleOnSearchBarSearchButtonClicked}
-          
+          onWillDismissSearchController={this._handleOnWillDismissSearchController}
+          onDidDismissSearchController={this._handleOnDidDismissSearchController}
+          onWillPresentSearchController={this._handleOnWillPresentSearchController}
+          onDidPresentSearchController={this._handleOnDidPresentSearchController}
+                    
           // pass down navbar item config, back button item config, etc.
           {...routeOptions}
         >
