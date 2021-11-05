@@ -244,7 +244,7 @@ Each route has a corresponding `RouteOptions` object associated with it. This ob
 | 🔤  `isNavBarTranslucent`<br/><br>⚛️  `boolean`                | Determines whether or not the the navigation bar is translucent. Maps to [`UINavigationBar.isTranslucent`](https://developer.apple.com/documentation/uikit/uinavigationbar/1624928-istranslucent). |
 | `isInteractivePopGestureEnabled`<br/><br>⚛️  `boolean`        | Enables or disables the `interactivePopGestureRecognizer`. In other words, this prop sets whether swiping on the left edge of the screen will pop the current route. Defaults to `true`. |
 | 🔤  `shouldSwizzleRootViewController`<br/><br>⚛️  `boolean`    | Determines whether or not the root view controller's default implementation is changed at run-time (i.e. "swizzled") to enable certain features (e.g. like enabling "view controller based status bar" via delegating `childForStatusBarStyle` to a child view controller, etc).<br><br>The "injected" implementation is lifted from [`RNIRootViewController`](PLACE_HOLDER_LINK). <br><br>Defaults to `true`, however this will only take effect for the first `NavigatorView` component, and also only if the parent view controller is the same instance as the one in `window.rootViewController`.<br><br>For brownfield projects with native code (or for projects with an existing navigation solution), set this to `false` to disable this behavior. |
-| 🔤  `disableTransparentNavBarScrollEdgeAppearance`<br/><br/>⚛️  `boolean`<br/><br>✳️  **Default**: `true` | In iOS 15+ the navigation bar by default is now configured to have a transparent background until the user scrolls and there's some content behind the navigation bar (i.e. the `scrollEdgeAppearance` is now configured to be transparent by default).<br><br>This prop determines whether or not to apply a  background color to navigation bar using `scrollEdgeAppearance` . Set this to false if you want to keep the default behavior<br><br>📝 **Note A**: You can manually do what this prop does by providing your own `scrollEdgeAppearance` appearance config either globally via the `NavigatorView.navBarAppearance` prop, or on a per-route basis via the `RouteOptions.navBarAppearanceOverride` property.<br/><br/>📝 **Note B**: This prop only takes effect on iOS 15+ and when a route disables the large title. This prop does not affect native routes. |
+| 🔤  `disableTransparentNavBarScrollEdgeAppearance`<br/><br/>⚛️  `boolean`<br/><br>✳️  **Default**: `true` | In iOS 15+ the navigation bar by default is now configured to have a transparent background until the user scrolls and there's some content behind the navigation bar (i.e. the `scrollEdgeAppearance` is now configured to be transparent by default).<br><br>This prop determines whether or not to apply a  background to navigation bar using `scrollEdgeAppearance` . Set this to false if you want to keep the default behavior<br><br>📝 **Note A**: You can manually do what this prop does by providing your own `scrollEdgeAppearance` appearance config either globally via the `NavigatorView.navBarAppearance` prop, or on a per-route basis via the `RouteOptions.navBarAppearanceOverride` property.<br/><br/>📝 **Note B**: This prop only takes effect on iOS 15+ and when a route disables the large title. This prop does not affect native routes. |
 
 <br>
 
@@ -327,18 +327,18 @@ These are basically "presets" to existing navigation commands i.e. it uses the e
 
 TBA
 
-| Name and Type                                                | Description |
-| :----------------------------------------------------------- | ----------- |
-| 🔤  `getRouteStackItemForCurrentRoute`<br/><br/>⚛️  `() => NavRouteStackItem ¦ undefined`<br/><br/>📌 [`NavRouteStackItem`](PLACE_HOLDER_LINK) | TBA         |
-| 🔤  `getRouteStackItemForPreviousRoute`<br/><br/>⚛️  `() => NavRouteStackItem ¦ undefined`<br/><br/>📌 [`NavRouteStackItem`](PLACE_HOLDER_LINK) | TBA         |
-| 🔤  `getNavigationObjectForCurrentRoute`<br/><br/>⚛️  `() => NavigationObject ¦ undefined`<br/><br/>📌 [`NavigationObject`](PLACE_HOLDER_LINK) | TBA         |
-| 🔤  `getNavigationObjectForPreviousRoute`<br/><br/>⚛️  `() => NavigationObject ¦ undefined`<br/><br/>📌 [`NavigationObject`](PLACE_HOLDER_LINK) | TBA         |
-| 🔤  `setRouteOptionsForRoute`<br/><br/>⚛️  `(routeDetails: NavRouteStackItemPartialMetadata, routeOptions: RouteOptions) => Promise<void>`<br/><br/>📌 [`routeDetails: NavRouteStackItemPartialMetadata`](PLACE_HOLDER_LINK)<br/>📌 [`routeOptions: RouteOptions`](PLACE_HOLDER_LINK) | TBA         |
-| 🔤  `getRouteOptionsForRoute`<br/><br/>⚛️  `() => RouteOptions ¦ undefined`<br/><br/>📌 [`RouteOptions`](PLACE_HOLDER_LINK) | TBA         |
-| 🔤  `setRouteOptionsForCurrentRoute`<br/><br/>⚛️  `(routeOptions: RouteOptions) => Promise<void>`<br/><br/>📌 [`routeOptions: RouteOptions`](PLACE_HOLDER_LINK) | TBA         |
-| 🔤  `getRouteOptionsForCurrentRoute`<br/><br/>⚛️  `() => RouteOptions ¦ undefined`<br/><br/>📌 [`RouteOptions`](PLACE_HOLDER_LINK) | TBA         |
-| 🔤  `setRouteOptionsForPreviousRoute`<br/><br/>⚛️  `(routeOptions: RouteOptions) => Promise<void>`<br/><br/>📌 [`routeOptions: RouteOptions`](PLACE_HOLDER_LINK) | TBA         |
-| 🔤  `getRouteOptionsForPreviousRoute`<br/><br/>⚛️  `() => RouteOptions ¦ undefined`<br/><br/>📌 [`RouteOptions`](PLACE_HOLDER_LINK) | TBA         |
+| Name and Type                                                | Description                                                  |
+| :----------------------------------------------------------- | ------------------------------------------------------------ |
+| 🔤  `getRouteStackItemForCurrentRoute`<br/><br/>⚛️  `() => NavRouteStackItem ¦ undefined`<br/><br/>📌 [`NavRouteStackItem`](PLACE_HOLDER_LINK) | TBA<br><br>📝 **Note**: Internally, this command uses the `getMatchingRouteStackItem` command to get the navigation stack item for the current active route. |
+| 🔤  `getRouteStackItemForPreviousRoute`<br/><br/>⚛️  `() => NavRouteStackItem ¦ undefined`<br/><br/>📌 [`NavRouteStackItem`](PLACE_HOLDER_LINK) | TBA<br/><br/>📝 **Note**: Internally, this command uses the `getMatchingRouteStackItem` command to get the navigation stack item for the previous active route. |
+| 🔤  `getNavigationObjectForCurrentRoute`<br/><br/>⚛️  `() => NavigationObject ¦ undefined`<br/><br/>📌 [`NavigationObject`](PLACE_HOLDER_LINK) | TBA<br/><br/>📝 **Note**: Internally, this command uses the `getNavigationObjectForRoute` command to get the navigation object for the current active route. |
+| 🔤  `getNavigationObjectForPreviousRoute`<br/><br/>⚛️  `() => NavigationObject ¦ undefined`<br/><br/>📌 [`NavigationObject`](PLACE_HOLDER_LINK) | TBA<br/><br/>📝 **Note**: Internally, this command uses the `getNavigationObjectForRoute` command to get the navigation object for the previous active route |
+| 🔤  `setRouteOptionsForRoute`<br/><br/>⚛️  `(routeDetails: NavRouteStackItemPartialMetadata, routeOptions: RouteOptions) => Promise<void>`<br/><br/>📌 [`routeDetails: NavRouteStackItemPartialMetadata`](PLACE_HOLDER_LINK)<br/>📌 [`routeOptions: RouteOptions`](PLACE_HOLDER_LINK) | TBA<br/><br/>📝 **Note**: Internally, this uses the route's navigation object to apply the route options (i.e. this command is equivalent to using the `NavigationObject.setRouteOptions` route command).<br/><br/>📝 **Note**: Internally, this command uses the `getNavigationObjectForRoute` command to get the route's matching `NavigationObject`. It then uses the navigation object to call `NavigationObject.setRouteOptions`. |
+| 🔤  `getRouteOptionsForRoute`<br/><br/>⚛️  `() => RouteOptions ¦ undefined`<br/><br/>📌 [`RouteOptions`](PLACE_HOLDER_LINK) | TBA<br/><br/>📝 **Note**: Internally, this command uses the `getNavigationObjectForRoute` command to get the navigation object for the corresponding route. It then returns the value in `NavigationObject.routeOptions`. |
+| 🔤  `setRouteOptionsForCurrentRoute`<br/><br/>⚛️  `(routeOptions: RouteOptions) => Promise<void>`<br/><br/>📌 [`routeOptions: RouteOptions`](PLACE_HOLDER_LINK) | TBA<br><br>📝 **Note**: Internally, this uses the route's navigation object to apply the route options (i.e. this command is equivalent to using the `NavigationObject.setRouteOptions` route command).<br/><br/>📝 **Note**: Internally, this uses the  `getNavigationObjectForCurrentRoute` command to get the navigation object for the current active route. It then uses the navigation object to call `NavigationObject.setRouteOptions`. |
+| 🔤  `getRouteOptionsForCurrentRoute`<br/><br/>⚛️  `() => RouteOptions ¦ undefined`<br/><br/>📌 [`RouteOptions`](PLACE_HOLDER_LINK) | TBA<br/><br/>📝 **Note**: Internally, this command uses the `getNavigationObjectForRoute` command to get the navigation object for the current active route. It then returns the value in `NavigationObject.routeOptions`. |
+| 🔤  `setRouteOptionsForPreviousRoute`<br/><br/>⚛️  `(routeOptions: RouteOptions) => Promise<void>`<br/><br/>📌 [`routeOptions: RouteOptions`](PLACE_HOLDER_LINK) | TBA<br/><br/>📝 **Note**: Internally, this uses the route's navigation object to apply the route options (i.e. this command is equivalent to using the `NavigationObject.setRouteOptions` route command).<br/><br/>📝 **Note**: Internally, this uses the `getNavigationObjectForPreviousRoute` command to get the navigation object for the previous active route It then uses the navigation object to call `NavigationObject.setRouteOptions`. |
+| 🔤  `getRouteOptionsForPreviousRoute`<br/><br/>⚛️  `() => RouteOptions ¦ undefined`<br/><br/>📌 [`RouteOptions`](PLACE_HOLDER_LINK) | TBA<br/><br/>📝 **Note**: Internally, this command uses the `getNavigationObjectForRoute` command to get the navigation object for the previous active route. It then returns the value in `NavigationObject.routeOptions`. |
 
 <br>
 
@@ -945,7 +945,7 @@ See "[`NavigatorView` Misc. Convenience Commands](PLACE_HOLDER_LINK)" section fo
 | 🔤  `setHidesBackButton`<br/><br/>⚛️  `(isHidden: boolean, animated: boolean) => void` | TBA |
 | 🔤  `getRouteConstants`<br/><br/>⚛️  `() => Promise<RouteConstantsObject>`<br><br>📌 [`RouteConstantsObject`](PLACE_HOLDER_LINK) | TBA |
 | 🔤  `getRouteSearchControllerState`<br/><br/>⚛️  `() => Promise<RouteSearchControllerState>`<br/><br/>📌 [`RouteSearchControllerState`](PLACE_HOLDER_LINK) | TBA<br/><br/>📝 **Note**: Command will fail if the current route does not have a search config (i.e. `RouteOptions.searchBarConfig`), so make sure to provide a search config first.<br/><br/>💡 **Tip**: You can use this command to get the current text in the search bar, see whether the search bar is active or not, etc. |
-| 🔤  `getRouteSearchControllerState`<br/><br/>⚛️  `(state: Partial<RouteSearchControllerState>) => Promise<void>`<br/><br/>📌 [`RouteSearchControllerState`](PLACE_HOLDER_LINK) | TBA<br><br>📝 **Note**: Command will fail if the current route does not have a search config (i.e. `RouteOptions.searchBarConfig`), so make sure to provide a search config first.<br><br>💡 **Tip**: You can use this command to set the current text in the search bar, toggle whether the search bar is active, etc. |
+| 🔤  `setRouteSearchControllerState`<br/><br/>⚛️  `(state: Partial<RouteSearchControllerState>) => Promise<void>`<br/><br/>📌 [`RouteSearchControllerState`](PLACE_HOLDER_LINK) | TBA<br><br>📝 **Note**: Command will fail if the current route does not have a search config (i.e. `RouteOptions.searchBarConfig`), so make sure to provide a search config first.<br><br>💡 **Tip**: You can use this command to set the current text in the search bar, toggle whether the search bar is active, etc. |
 
 <br>
 
@@ -1632,15 +1632,21 @@ Native/Swift Integration
 
 #### Discussion: `RouteOptions` Precedence
 
-There are multiple ways to set a route's `routeOptions` config, but only one of them will take effect (in other words, a route's `routeOptions` can be overridden when all of the route options are being merged together).  The table below will list the order of precedence in which the `routeOptions` gets applied (ordered by increasing priority).
+Every route has a corresponding "route options" configuration, and there are multiple ways to provide a "route options" configuration for a given route. At the end, all of the various "route options" are combined together as a single object, and is then applied to the route.
+
+This means that a given "route options" configuration can be overridden by another configuration. The table below will list the order of precedence in which the `routeOptions` gets applied (ordered by increasing priority).
 
 | Set Route Options Via:                                       | Description                                                  |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| 1️⃣ [`NavigatorView.routes`](PLACE_HOLDER_LINK) prop (i.e.  [`NavRouteConfigItem.routeOptionsDefault`](PLACE_HOLDER_LINK) property). | Default route options provided from the navigator route config. |
-| 2️⃣ [`NavigatorView.initialRoutes`](PLACE_HOLDER_LINK) prop (i.e. [`NavRouteItem.routeOptions`](PLACE_HOLDER_LINK) property). | The initial route options can be set via the `initialRoutes` prop. |
-| 3️⃣ `routeOptions` provided via [navigation command](PLACE_HOLDER_LINK), e.g. `navigation.push({..., routeOptions: {...}})`. | Some of the navigation commands lets you set the route options for the route (e.g. `push`, `replaceRoute`, `insertRoute`, `setRoutes`, etc). |
-| 4️⃣ [`RouteViewPortal.routeOptions`](PLACE_HOLDER_LINK) prop.  | The route options can also be dynamically overridden and changed via the `RouteViewPortal`. |
-| 5️⃣ [`NavigationObject.setRouteOptions`](PLACE_HOLDER_LINK) navigation command (e.g. `props.navigation.setRouteOptions` property). | The route options can be overridden via the `setRouteOptions` command from the route's navigation object. |
+| 1️⃣ [`NavigatorView.routes`](PLACE_HOLDER_LINK) prop (i.e. via the  [`NavRouteConfigItem.routeOptionsDefault`](PLACE_HOLDER_LINK) property). | Default route options provided from the navigator route config (the lowest priority). |
+| 2️⃣ [`NavigatorView.initialRoutes`](PLACE_HOLDER_LINK) prop (i.e. via the [`NavRouteItem.routeOptions`](PLACE_HOLDER_LINK) property). | The initial route options can be set via the `initialRoutes` prop. |
+| 3️⃣ `routeOptions` provided via a [navigation command](PLACE_HOLDER_LINK), e.g. `navigation.push({..., routeOptions: {...}})`. | Some of the navigation commands lets you specify the route options for the route (e.g. `push`, `replaceRoute`, `insertRoute`, `setRoutes`, etc). |
+| 4️⃣ [`RouteViewPortal.routeOptions`](PLACE_HOLDER_LINK) prop.  | The route options can also be dynamically overridden and changed via the `RouteViewPortal` component. |
+| 5️⃣ [`NavigationObject.setRouteOptions`](PLACE_HOLDER_LINK) navigation command (e.g. `props.navigation.setRouteOptions` property). | The route options can be overridden via the `setRouteOptions` command from the route's navigation object (the highest priority).<br><br>📝 **Note**: Some of the commands in the ["misc. convenience navigation commands"](PLACE_HOLDER_LINK) section (e.g. `setRouteOptionsForRoute`, `setRouteOptionsForCurrentRoute`, `setRouteOptionsForPreviousRoute`, etc) uses this command to apply the route options, as such by extension, it will also override all of the previous route options provided. |
+
+<br>
+
+#### Discussion: 
 
 ------
 
@@ -1648,7 +1654,7 @@ There are multiple ways to set a route's `routeOptions` config, but only one of 
 
 ## E. Getting Started Guide
 
-### A01 - Navigation Hello World 
+### Navigation Hello World 
 
 Here's a bare minimum example: a navigator with a single route.
 
@@ -1686,20 +1692,24 @@ function ExampleRoute(props){
 export function ExampleA01(){
   return (
      <NavigatorView
-      // The object that's passed to the `NavigatorView.routes` 
-      // prop defines what routes can be used in the navigator.
+      // The object that's passed to the `NavigatorView.routes` prop
+      // defines what routes can be used in the navigator.
       //
-      // Note: The object that is passed to this prop is referred to as
-      // the "route map" (e.g. `NavRoutesConfigMap`).
+      // The object that is passed to this prop is referred to as the
+      // "route map" (i.e. `NavRoutesConfigMap`).
+      //
+      // The "route map" object defines what route to show for a given
+      // "route key".
+      // 
+      // The object that's assigned to the "route key" is referred to
+      // as the "route config" (i.e. `NavRouteConfigItem`).
+      //
+      // In other words, each "route key" in the "route map" has a 
+      // corresponding "route config" that defines what route to show.
       routes={{
-        // The key of the property is used as the "route key" of the route.
-        // E.g. so this is a route that has the `routeKey` value of 'routeA'.
-        //
-        // Note: The object that's assigned to the `routeKey` is referred to
-        // as the "route config" (e.g. `NavRouteConfigItem`).
+        // This route has a "route key" value of `routeA`.
         routeA: {
-          // Now we need to provide a config... we want to show the 
-          // `ExampleRoute` component when this route is "pushed".
+          // show the `ExampleRoute` component when this route is "pushed".
           //
           // The `renderRoute` property accepts a function that returns a
           // component to show in the route.
@@ -1710,6 +1720,8 @@ export function ExampleA01(){
       }}
       // This prop controls the initial routes to show when the navigator
       // first mounts.
+      //
+      // In this case we want to show `routeA` first.
       initialRoutes={[{routeKey: 'routeA'}]}
     />
   );
@@ -1723,13 +1735,13 @@ export function ExampleA01(){
 
 <br>
 
-#### A02 - Routes and Route Config
+#### Routes and Route Config
 
-The "route config", as the name would suggest, is used to configure a route. As such, each route has a corresponding "route config" object.
+The "route config", as the name would suggest, is an object that is used to configure a route. Each route has a corresponding "route config" object.
 
 The route config object's `renderRoute` property  (e.g.`NavRouteConfigItem.renderRoute` ) defines what route to show when it gets pushed.
 
-The route config object can also be customized and configured further via the `defaultRouteOptions` property (e.g. e.g.`NavRouteConfigItem.defaultRouteOptions`).
+Via the route config object, a route  can also be customized and configured further via the `NavRouteConfigItem.defaultRouteOptions` property (e.g.`NavRouteConfigItem.defaultRouteOptions`).
 
 <br>
 
@@ -1774,7 +1786,7 @@ export function ExampleA02(){
 
 <br>
 
-#### A03 - Initial Routes
+#### Initial Routes
 
 As mentioned before, the `NavigatorView.initialRoutes` prop controls what routes to show when the navigator first mounts. 
 
@@ -1836,9 +1848,9 @@ export function ExampleA03(){
 
 ### Navigation Commands Basics
 
-#### B01 – The `NavigationObject`
+#### The `NavigationObject`
 
-The "navigation object" contains information about the current route, and is also used to send commands to the navigator (e.g. pushing and popping routes, etc).
+The "navigation object" contains: <br>**A**. Information about the current route (e.g. `routeKey`, `routeOptions`, etc).,<br>**B**. Commands to control the navigator (e.g. pushing and popping routes, etc).,<br>**C**. Commands to configure the current route (e.g. `setRouteOptions`, etc).
 
 There are two ways to get the navigation object. The first way is to simply get the navigation object via the props:
 
@@ -1896,7 +1908,7 @@ function ExampleRoute(){
 
 <br>
 
-#### B02 – Pushing Routes
+#### Pushing Routes
 
 Via the navigation object, you can send commands to the navigator. For example, you can push a route into the navigation stack using the "push" command:
 
@@ -1910,7 +1922,7 @@ navigation.push({
 
 <br>
 
-#### B03 - Forwarding Data To Routes
+#### Forwarding Data To Routes
 
 Using the push navigation command, you can send data (i.e. "route props") to the next route. The data can then be read via the navigation object (i.e. `NavigationObject.routeProps`).
 
@@ -1958,9 +1970,9 @@ function ExampleRoute(props){
 
 <br>
 
-#### B04 - Configure The Next Routes
+#### Configuring The Next Routes
 
-The "route options" of a route can also be set via a navigation command. The "route options" provided by the navigation command will be combined with the route's pre-existing route options (i.e. the route options that were provided via the route config: `NavRouteConfigItem.defaultRouteOptions`).
+The "route options" of a route can also be set via a navigation command. The "route options" provided by the navigation command will be combined with the route's existing route options (i.e. the route options that were provided via the route config: `NavRouteConfigItem.defaultRouteOptions`).
 
 <br>
 
@@ -2000,7 +2012,7 @@ function ExampleRoute(props){
 
 <br>
 
-#### B05 - Popping Routes
+#### Popping Routes
 
 To programmatically pop the current route, you can use the `pop` navigation command.
 
@@ -2034,7 +2046,7 @@ function ExampleRoute(props){
 
 <br>
 
-#### B06 - Extra Options 
+#### Navigation Command Extra Options 
 
 Most of the navigation commands can accept extra options. The extra options can be used to enable/disable the transition animation, or provide a custom transition config to use, etc.
 
@@ -2092,7 +2104,7 @@ function ExampleRoute(props){
 
 ### Customizations Basics
 
-#### C01 - Navigator Customization
+#### Navigator Customization
 
 You can "globally" apply customization on the navigation bar via setting some props on the navigator itself. Navigator-level customizations are "global" in the sense that it'll be applied to all the routes that will be shown in the navigator.
 
