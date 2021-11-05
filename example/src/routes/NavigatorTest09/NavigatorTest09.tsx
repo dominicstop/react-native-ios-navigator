@@ -3,6 +3,8 @@ import { ScrollView, StyleSheet } from 'react-native';
 
 import { RouteViewPortal } from 'react-native-ios-navigator';
 
+import { SearchEventsList } from './SearchEventsList';
+
 import { SearchBarConfigBarTintColor } from './SearchBarConfigBarTintColor';
 import { SearchBarConfigPlaceholder } from './SearchBarConfigPlaceholder';
 import { SearchBarConfigBarStyle } from './SearchBarConfigBarStyle';
@@ -29,11 +31,13 @@ export function NavigatorTest09(){
       <RouteViewPortal
         routeOptions={{
           searchBarConfig: {
-            placeholder: 'Search'
+            placeholder: 'Search',
           },
         }}
       />
       <ScrollView contentContainerStyle={styles.listContentContainer}>
+        <SearchEventsList/>
+
         <SearchBarConfigPlaceholder/>
         <SearchBarConfigBarTintColor/>
         <SearchBarConfigBarStyle/>
