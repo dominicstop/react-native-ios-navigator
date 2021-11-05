@@ -6,8 +6,7 @@
 
 ## Unsorted
 
-- [ ] 
-- [ ] `isTranslucent` not working.
+- [ ] Search bar `isTranslucent` not working.
 
 - [ ] **Implement**: Update `RNIImageItem`: Make width/height optional (e.g. rely on `defaultSize`)
 - [ ] **Cleanup**: Rewrite  `getSecondToLastRouteVC`
@@ -87,7 +86,6 @@
 		* Also, forward search bar event: `selectedScopeButtonIndexDidChange`.
 	* [ ] **Implement**: Impl. support for configuring `UISearchTextField`: e.g. add support for search tokens.
 		* Impl. setting the `tokenBackgroundColor`, etc,
-	* [ ] **Implement**: Expose remaining `UISearchController` events to react e.g. `willDismissSearchController`, `didDismissSearchController`, `willPresentSearchController`, and `didPresentSearchController`.
 	* [ ] **Implement:** Expose `UITextInputTraits`-related properies for `UISearchBar` .
 		* E.g.  `keyboardType`, `textContentType`, etc.
 	* [ ] **Implement**: Add missing impl. for setting the other `UISearchBar` properties, e.g. `showsSearchResultsButton`, `prompt`,  background images, etc.
@@ -138,6 +136,8 @@
 	* [ ] **Implement**: Add support image type: `LOCAL_URI`
 
 <br>
+
+- [ ] **Implement**: Add support for `UISplitViewController`.
 
 - [ ] **Implement**: Support for pushing native routes with `routeOptions`.
 
@@ -363,6 +363,10 @@
 * [x] (Commit: `77ccc0c`) **Implement**: Impl. search route module command `setSearchBarState`.
 	* Set all the "search bar"-related properties that cannot be mapped to a prop (e.g. since some properties can be changed from the native side, causing the JS value to be out of sync since the data flows only in one direction).
 	* Includes: `UISearchController.isActive`, the current value of the search bar text filed, etc.
+
+<br>
+
+* [x] (Commit: `5dc9a7e`) **Implement**: Expose remaining `UISearchController` events to react e.g. `willDismissSearchController`, `didDismissSearchController`, `willPresentSearchController`, and `didPresentSearchController`.
 
 <br>
 
