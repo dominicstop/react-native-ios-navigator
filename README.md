@@ -1894,7 +1894,7 @@ function ExampleRoute(props: RouteContentProps){
 
 <br>
 
-The second way to get the navigation object is via context:
+The second way to get the navigation object is via using context:
 
 ```jsx
 // 1. For convenience, there's a pre-built hook to get the navigation object
@@ -1928,7 +1928,9 @@ function ExampleRoute(){
 
 #### Pushing Routes
 
-Via the navigation object, you can send commands to the navigator. For example, you can push a route into the navigation stack using the "push" command:
+Via the navigation object, you can send commands to the navigator. In other words, you can control the navigator via the navigation object.
+
+ For example, you can push a new route into the navigation stack using the "push" command:
 
 ```javascript
 // The push command accepts an object...
@@ -1940,9 +1942,11 @@ navigation.push({
 
 <br>
 
-#### Forwarding Data To Routes
+#### Forwarding Data To Routes (Via `push`)
 
 Using the push navigation command, you can send data (i.e. "route props") to the next route. The data can then be read via the navigation object (i.e. `NavigationObject.routeProps`).
+
+In other words, the "route props" allows you to transfer information to the next route. In the example below a counter is displayed. The `count` value is then incremented whenever a new route is pushed into the navigation stack. As such, for each time a new route that is pushed into the stack, the counter increments by 1.
 
 <br>
 
@@ -1988,9 +1992,15 @@ function ExampleRoute(props){
 
 <br>
 
-#### Configuring The Next Routes
+#### Configuring The Next Routes (Via `push`)
 
-The "route options" of a route can also be set via a navigation command. The "route options" provided by the navigation command will be combined with the route's existing route options (i.e. the route options that were provided via the route config: `NavRouteConfigItem.defaultRouteOptions`).
+Setting the "route options" of a route allows you to customize its appearance and behavior. As discussed in the earlier sections, when creating the configuration of a route in the `NavigatorView.routes` prop, you can optionally provide a `RouteOptions` configuration object via the `NavRouteConfigItemJS.defaultRouteOptions` property.
+
+But there are [other ways](PLACE_HOLDER_LINK-route_option_precedence) to provide a route with a `RouteOptions` config. For example, some of the navigation commands lets you set the route's route options. One such navigation command is `push`.
+
+The route options that you provide via the push command will be combined with that route's initial route options (i.e. the route options that were provided via the route config: `NavRouteConfigItemJS.defaultRouteOptions`).
+
+In the example below, we set the new route's `routeTitle` and also provide a `prompt` message to display in the navigation bar.
 
 <br>
 
@@ -2030,9 +2040,15 @@ function ExampleRoute(props){
 
 <br>
 
+#### Configuring The Previous Route
+
+TBA
+
+<br>
+
 #### Popping Routes
 
-To programmatically pop the current route, you can use the `pop` navigation command.
+The current route can be popped by tapping the back button in the navigation bar. To programmatically pop the current route, you can use the `pop` navigation command.
 
 <br>
 
@@ -2064,9 +2080,11 @@ function ExampleRoute(props){
 
 <br>
 
-#### Navigation Command Extra Options 
+#### Navigation Command Extra Options (`push` and `pop`)
 
-Most of the navigation commands can accept extra options. The extra options can be used to enable/disable the transition animation, or provide a custom transition config to use, etc.
+Some of the navigation command accepts extra options. For example, the extra options for  `push` and `pop` navigation  command allows you to enable/disable the transition animation, or provide a custom transition config, etc.
+
+In the example below, we provide a transition config for the `push` and `pop` command so that the route has a different enter and exit transition.
 
 <br>
 
@@ -2124,7 +2142,11 @@ function ExampleRoute(props){
 
 #### Navigator Customization
 
-You can "globally" apply customization on the navigation bar via setting some props on the navigator itself. Navigator-level customizations are "global" in the sense that it'll be applied to all the routes that will be shown in the navigator.
+One of the ways a route's navigation bar can be customized is via setting the navigator's `NavigatorView.navBarAppearance` prop. 
+
+Navigator-level customizations (i.e. customizations applied via the `NavigatorView.navBarAppearance` prop) are applied directly to the navigator instance itself, as such, it will become the default appearance for every route pushed into the navigation stack. 
+
+In the example below, the navigation bar is configured to have red background color with a red shadow and white title.
 
 <br>
 
@@ -2180,7 +2202,13 @@ export function ExampleC01(){
 
 #### Dynamic Customizations
 
-#### Navigation Bar Items (Basic)
+##### Dynamic Customizations — Via `setRouteOptions`
+
+##### Dynamic Customizations — Via `RouteViewPortal`
+
+<br>
+
+#### Navigation Bar Items: Adding Buttons To The Navigation Bar
 
 ------
 
@@ -2188,7 +2216,7 @@ export function ExampleC01(){
 
 ## F. Usage and Examples
 
-### F.1. Navigation Bar Customizations
+### General Navigation Bar Customization
 
 #### Navigation Bar: Appearance/Legacy API
 
@@ -2196,17 +2224,25 @@ export function ExampleC01(){
 
 ##### Navigation Bar — Appearance Customizations
 
+##### Applying The Navigation Bar Customizations (`routeOptions`)
+
 <br>
 
 #### Navigation Bar: Custom Bar Items
 
-#### Navigation Bar: Search Bar
+#### Navigation Bar: Adding A Search Bar
 
-#### Navigation Bar: `RouteHeaderView`
+#### Navigation Bar: Extra Navigation Bar Height (`RouteHeaderView`)
+
+#### Navigation Bar: Expandable Headers (`RouteHeaderView`)
+
+#### Navigation Bar: Customizing The Back Button
+
+#### Hiding The Navigation Bar
 
 <br>
 
-### F.2. Navigation Commands
+### Navigation Commands
 
 [Navigation Command List](#navigatorview-navigation-commands)
 
@@ -2232,7 +2268,7 @@ export function ExampleC01(){
 
 <br>
 
-### F.3. Navigation Events 
+### Navigation Events 
 
 #### `NavigatorView` Events 
 
@@ -2252,7 +2288,7 @@ export function ExampleC01(){
 
 <br>
 
-### F.4. Native Integration
+### Native Integration
 
 #### Creating Native Routes 
 
