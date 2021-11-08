@@ -2,6 +2,8 @@
 
 ## In Progress
 
+* [ ] **Implement**: Impl. setting `showsSearchResultsButton`  for `UISearchBar`.
+
 <br>
 
 ## Unsorted
@@ -67,14 +69,6 @@
 		- `attributedText`, `attributedPlaceholder`.
 		- Get the `defaultTextAttributes` and apply it  as the initial values for `attributedText` + `attributedPlaceholder`.
 		- It turns out `attributedText` and `attributedPlaceholder` accepts a `NSAttributedString` not a dict. of string attributes. So the `RCTTextAttributes` has to be applied during the text input event.
-	* [ ] **Implement**: Add support for programmatically showing/dismissing the search bar.
-		* This can implemented via the [`UISearchController.isActive`](https://developer.apple.com/documentation/uikit/uisearchcontroller/1618659-isactive) property.
-		* Toggle `UISearchController.isActive` via a route module command. This can potentially be done async with the promise resolving when the transition is finished.
-		* Also: this has to be paired with another command that reads the current value.
-		* This can be impl. so that it directly maps to a boolean prop, and set the `UISearchController.isActive` in  a property wrapper (i.e. `willSet`/`didSet`).
-			* However, the value from JS and native will always eventually diverge since its not being set bi-directionally (e.g. the prop value is `true`, but the search bar can be dismissed by the user so the actual value becomes `false`).
-			* Encountered the same problem with `UINavigationBar.isHidden` or with state-controlled text fields.
-		* Alternatively, the `isActive` property can also be set via `setSearchBarState` command.
 	* [ ] **Implement**: Add support for changing the Search Icon in a `UISearchBar`.
 		- Set via `searchBar.setRightImage` (i.e. the `textfield.rightView`  bookmark icon), and `searchBar.setLeftImage`.
 		- [Reference #1](https://betterprogramming.pub/how-to-change-the-search-icon-in-a-uisearchbar-150b775fb6c8), [Reference #2](https://medium.com/flawless-app-stories/customize-uisearchbar-for-different-ios-versions-6ee02f4d4419)
@@ -88,7 +82,7 @@
 		* Impl. setting the `tokenBackgroundColor`, etc,
 	* [ ] **Implement:** Expose `UITextInputTraits`-related properies for `UISearchBar` .
 		* E.g.  `keyboardType`, `textContentType`, etc.
-	* [ ] **Implement**: Add missing impl. for setting the other `UISearchBar` properties, e.g. `showsSearchResultsButton`, `prompt`,  background images, etc.
+	* [ ] **Implement**: Add missing impl. for setting the other `UISearchBar` properties, e.g. background images, etc.
 	* [ ] **Implement**: Add support for `inputAssistantItem` (iPad only).
 	* [ ] **Implement**: Add support for `inputAccessoryView`.
 
@@ -363,10 +357,21 @@
 * [x] (Commit: `77ccc0c`) **Implement**: Impl. search route module command `setSearchBarState`.
 	* Set all the "search bar"-related properties that cannot be mapped to a prop (e.g. since some properties can be changed from the native side, causing the JS value to be out of sync since the data flows only in one direction).
 	* Includes: `UISearchController.isActive`, the current value of the search bar text filed, etc.
+	* [x] **Implement**: Add support for programmatically showing/dismissing the search bar.
+		* This can implemented via the [`UISearchController.isActive`](https://developer.apple.com/documentation/uikit/uisearchcontroller/1618659-isactive) property.
+		* Toggle `UISearchController.isActive` via a route module command. This can potentially be done async with the promise resolving when the transition is finished.
+		* Also: this has to be paired with another command that reads the current value.
+		* This can be impl. so that it directly maps to a boolean prop, and set the `UISearchController.isActive` in  a property wrapper (i.e. `willSet`/`didSet`).
+			* However, the value from JS and native will always eventually diverge since its not being set bi-directionally (e.g. the prop value is `true`, but the search bar can be dismissed by the user so the actual value becomes `false`).
+			* Encountered the same problem with `UINavigationBar.isHidden` or with state-controlled text fields.
+		* Alternatively, the `isActive` property can also be set via `setSearchBarState` command.
 
 <br>
 
 * [x] (Commit: `5dc9a7e`) **Implement**: Expose remaining `UISearchController` events to react e.g. `willDismissSearchController`, `didDismissSearchController`, `willPresentSearchController`, and `didPresentSearchController`.
+
+* [x] (Commit: `f25a3e8`) **Implement**: Impl. setting `prompt` for `UISearchBar`.
+	* Note: Setting the prompt does nothing...
 
 <br>
 
