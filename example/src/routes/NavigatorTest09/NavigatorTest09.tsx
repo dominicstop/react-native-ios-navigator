@@ -6,6 +6,7 @@ import { RouteViewPortal } from 'react-native-ios-navigator';
 import { SearchEventsList } from './SearchEventsList';
 
 import { SearchBarConfigBarTintColor } from './SearchBarConfigBarTintColor';
+import { SearchBarConfigPrompt } from './SearchBarConfigPrompt';
 import { SearchBarConfigPlaceholder } from './SearchBarConfigPlaceholder';
 import { SearchBarConfigBarStyle } from './SearchBarConfigBarStyle';
 import { SearchBarConfigTintColor } from './SearchBarConfigTintColor';
@@ -39,6 +40,7 @@ export function NavigatorTest09(){
         <SearchEventsList/>
 
         <SearchBarConfigPlaceholder/>
+        <SearchBarConfigPrompt/>
         <SearchBarConfigBarTintColor/>
         <SearchBarConfigBarStyle/>
         <SearchBarConfigTintColor/>
