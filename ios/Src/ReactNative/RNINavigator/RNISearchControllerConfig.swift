@@ -15,6 +15,8 @@ struct RNISearchControllerConfig {
   
   // MARK: SearchBarConfig
   let placeholder: String?;
+  let prompt: String?;
+  
   let searchBarStyle: UISearchBar.Style;
   let isTranslucent: Bool?;
   
@@ -40,6 +42,8 @@ struct RNISearchControllerConfig {
   init(from dict: NSDictionary) {
     // MARK: SearchBarConfig
     self.placeholder = dict["placeholder"] as? String;
+    
+    self.prompt = dict["prompt"] as? String;
     
     self.searchBarStyle = {
       guard let string = dict["placeholder"] as? String,
@@ -130,13 +134,14 @@ struct RNISearchControllerConfig {
     let searchBar = searchController.searchBar;
     
     // MARK: SearchBarConfig
-    searchBar.placeholder    = self.placeholder;
+    searchBar.placeholder = self.placeholder;
+    searchBar.prompt      = self.prompt;
+    
     searchBar.searchBarStyle = self.searchBarStyle;
+    searchBar.isTranslucent  = self.isTranslucent ?? true;
     
     searchBar.tintColor    = self.tintColor;
     searchBar.barTintColor = self.barTintColor;
-    
-    searchBar.isTranslucent = self.isTranslucent ?? true;
     
     if #available(iOS 13.0, *) {
       searchBar.searchTextField.textColor = self.textColor;

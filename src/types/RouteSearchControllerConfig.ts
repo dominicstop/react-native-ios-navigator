@@ -17,6 +17,9 @@ type SearchBarConfig = {
   /** The string that is displayed when there is no other text in the text field. */
   placeholder?: string;
 
+  /** A single line of text displayed at the top of the search bar. */
+  prompt?: string;
+
   /** The tint color to apply to the search bar background. */
   barTintColor?: string | DynamicColor;
 
